@@ -732,8 +732,8 @@ $('.bg-cover').css('background-image', 'url(/medias/banner/' + new Date().getDay
             
             
             
-            <a href="/tags/EACL/" target="_blank">
-                <span class="chip center-align waves-effect waves-light chip-default">EACL</span>
+            <a href="/tags/ICLR/" target="_blank">
+                <span class="chip center-align waves-effect waves-light chip-default">ICLR</span>
             </a>
             
             
@@ -744,8 +744,8 @@ $('.bg-cover').css('background-image', 'url(/medias/banner/' + new Date().getDay
             
             
             
-            <a href="/tags/ICLR/" target="_blank">
-                <span class="chip center-align waves-effect waves-light chip-default">ICLR</span>
+            <a href="/tags/EACL/" target="_blank">
+                <span class="chip center-align waves-effect waves-light chip-default">EACL</span>
             </a>
             
             
@@ -756,14 +756,14 @@ $('.bg-cover').css('background-image', 'url(/medias/banner/' + new Date().getDay
             
             
             
-            <a href="/tags/TACL/" target="_blank">
-                <span class="chip center-align waves-effect waves-light chip-default">TACL</span>
+            <a href="/tags/LSTM/" target="_blank">
+                <span class="chip center-align waves-effect waves-light chip-default">LSTM</span>
             </a>
             
             
             
-            <a href="/tags/LSTM/" target="_blank">
-                <span class="chip center-align waves-effect waves-light chip-default">LSTM</span>
+            <a href="/tags/TACL/" target="_blank">
+                <span class="chip center-align waves-effect waves-light chip-default">TACL</span>
             </a>
             
             
@@ -802,18 +802,6 @@ $('.bg-cover').css('background-image', 'url(/medias/banner/' + new Date().getDay
             
             <a href="/tags/Concrete-Mathematics/" target="_blank">
                 <span class="chip center-align waves-effect waves-light chip-default">Concrete Mathematics</span>
-            </a>
-            
-            
-            
-            <a href="/tags/COLING/" target="_blank">
-                <span class="chip center-align waves-effect waves-light chip-default">COLING</span>
-            </a>
-            
-            
-            
-            <a href="/tags/dynet/" target="_blank">
-                <span class="chip center-align waves-effect waves-light chip-default">dynet</span>
             </a>
             
             
@@ -878,6 +866,18 @@ $('.bg-cover').css('background-image', 'url(/medias/banner/' + new Date().getDay
             
             
             
+            <a href="/tags/COLING/" target="_blank">
+                <span class="chip center-align waves-effect waves-light chip-default">COLING</span>
+            </a>
+            
+            
+            
+            <a href="/tags/dynet/" target="_blank">
+                <span class="chip center-align waves-effect waves-light chip-default">dynet</span>
+            </a>
+            
+            
+            
             <a href="/tags/Hexo/" target="_blank">
                 <span class="chip center-align waves-effect waves-light chip-default">Hexo</span>
             </a>
@@ -914,6 +914,47 @@ $('.bg-cover').css('background-image', 'url(/medias/banner/' + new Date().getDay
 </div>
                 
 
+                
+                
+<div id="myGallery" class="my-gallery">
+    <div class="title center-align" data-aos="zoom-in-up">
+        <i class="fa fa-photo"></i>&nbsp;&nbsp;相册
+    </div>
+    <div class="row">
+        
+        
+        <div class="photo col s12 m6 l4" data-aos="fade-up">
+            <div class="img-item" data-src="/medias/featureimages/0.jpg">
+                <img src="/medias/featureimages/0.jpg" class="responsive-img">
+            </div>
+        </div>
+        
+        <div class="photo col s12 m6 l4" data-aos="fade-up">
+            <div class="img-item" data-src="/medias/featureimages/1.jpg">
+                <img src="/medias/featureimages/1.jpg" class="responsive-img">
+            </div>
+        </div>
+        
+        <div class="photo col s12 m6 l4" data-aos="fade-up">
+            <div class="img-item" data-src="/medias/featureimages/2.jpg">
+                <img src="/medias/featureimages/2.jpg" class="responsive-img">
+            </div>
+        </div>
+        
+        
+    </div>
+</div>
+
+<script>
+    $(function () {
+        let animateClass = 'animated pulse';
+        $('#myGallery .photo').hover(function () {
+            $(this).addClass(animateClass);
+        }, function () {
+            $(this).removeClass(animateClass);
+        });
+    });
+</script>
                 
 
             </div>
