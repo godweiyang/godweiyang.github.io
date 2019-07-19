@@ -509,7 +509,7 @@ $(function () {
         volume: Number('0.7'),
         listFolded: 'false' === 'true',
         listMaxHeight: '',
-        audio: JSON.parse('[{"name":"倒数","artist":"邓紫棋","url":"http://www.ytmp3.cn/down/52564.mp3","cover":"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1563568131238&di=23ae51dda700bd4e3b624f66af1289f7&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201808%2F11%2F20180811021949_fVEST.jpeg"},{"name":"一路向北","artist":"周杰伦","url":"http://www.ytmp3.cn/down/69847.mp3","cover":"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1563566810433&di=68b80a762a497648670ef0df46ee8f57&imgtype=0&src=http%3A%2F%2F03imgmini.eastday.com%2Fmobile%2F20180918%2F20180918205448_99dfb333ca34518cb96823defa4c68c9_1.jpeg"}]')
+        audio: JSON.parse('[{"name":"倒数","artist":"邓紫棋","url":"https://www.ytmp3.cn/down/52564.mp3","cover":"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1563568131238&di=23ae51dda700bd4e3b624f66af1289f7&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201808%2F11%2F20180811021949_fVEST.jpeg"},{"name":"一路向北","artist":"周杰伦","url":"https://www.ytmp3.cn/down/69847.mp3","cover":"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1563566810433&di=68b80a762a497648670ef0df46ee8f57&imgtype=0&src=http%3A%2F%2F03imgmini.eastday.com%2Fmobile%2F20180918%2F20180918205448_99dfb333ca34518cb96823defa4c68c9_1.jpeg"}]')
     });
 });
 </script>
@@ -586,6 +586,31 @@ $(function () {
     
     
     <div class="col s12 m6" data-aos="zoom-in-up">
+        <div class="post-card" style="background-image: url('/medias/featureimages/3.jpg')">
+            <div class="post-body">
+                <div class="post-categories">
+                    
+                    <a href="/categories/软件/" class="category" target="_blank">软件</a>
+                    
+                </div>
+                <a href="/2017/10/02/sublime/" target="_blank">
+                    <h3 class="post-title">Sublime Text安装与配置教程</h3>
+                </a>
+                <p class="post-description">
+                    
+                        Sublime Text是我一直使用的代码编辑器，我喜爱它的原因就是好看啊！当然打开速度毋庸置疑啦，毕竟不是IDE。这里我把我的安装与配置步
+                    
+                </p>
+                <a href="/2017/10/02/sublime/" target="_blank"
+                        class="read-more btn waves-effect waves-light" style="background: linear-gradient(to right, #1AD6FD 0%, #1D62F0 100%)">
+                    <i class="icon fa fa-eye fa-fw"></i>阅读更多
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    
+    <div class="col s12 m6" data-aos="zoom-in-up">
         <div class="post-card" style="background-image: url('/medias/featureimages/6.jpg')">
             <div class="post-body">
                 <div class="post-categories">
@@ -604,31 +629,6 @@ $(function () {
                     
                 </p>
                 <a href="/2018/04/13/hexo-blog/" target="_blank"
-                        class="read-more btn waves-effect waves-light" style="background: linear-gradient(to right, #1AD6FD 0%, #1D62F0 100%)">
-                    <i class="icon fa fa-eye fa-fw"></i>阅读更多
-                </a>
-            </div>
-        </div>
-    </div>
-    
-    
-    <div class="col s12 m6" data-aos="zoom-in-up">
-        <div class="post-card" style="background-image: url('/medias/featureimages/3.jpg')">
-            <div class="post-body">
-                <div class="post-categories">
-                    
-                    <a href="/categories/软件/" class="category" target="_blank">软件</a>
-                    
-                </div>
-                <a href="/2017/10/02/sublime/" target="_blank">
-                    <h3 class="post-title">Sublime Text安装与配置教程</h3>
-                </a>
-                <p class="post-description">
-                    
-                        Sublime Text是我一直使用的代码编辑器，我喜爱它的原因就是好看啊！当然打开速度毋庸置疑啦，毕竟不是IDE。这里我把我的安装与配置步
-                    
-                </p>
-                <a href="/2017/10/02/sublime/" target="_blank"
                         class="read-more btn waves-effect waves-light" style="background: linear-gradient(to right, #FFCC00 0%, #FF9500 100%)">
                     <i class="icon fa fa-eye fa-fw"></i>阅读更多
                 </a>
@@ -1573,6 +1573,19 @@ $(function () {
 
 <div class="progress-bar"></div>
 
+<script >
+    $(document).ready(function() {
+        var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+        var countOffset = 20000;  // 初始化首次数据
+       function fixCount() {                   
+         if ($("#busuanzi_container_site_pv").css("display") != "none")
+           {
+              $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); // 加上初始数据 
+              clearInterval(int); // 停止检测
+         }  
+     }           
+    });
+</script>
 
 <!-- 搜索遮罩框 -->
 <div id="searchModal" class="modal">

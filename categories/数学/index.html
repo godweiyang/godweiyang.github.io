@@ -351,19 +351,19 @@ $('.bg-cover').css('background-image', 'url(/medias/banner/' + new Date().getDay
                 </a>
                 
                 
-                <a href="/categories/问答系统/" title="问答系统: 1">
+                <a href="/categories/NLP/" title="NLP: 1">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            style="background-color: #D7BDE2;">问答系统
+                            style="background-color: #D7BDE2;">NLP
                         <span class="tag-length">1</span>
                     </span>
                 </a>
                 
                 
-                <a href="/categories/NLP/" title="NLP: 1">
+                <a href="/categories/问答系统/" title="问答系统: 1">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            style="background-color: #A3E4D7;">NLP
+                            style="background-color: #A3E4D7;">问答系统
                         <span class="tag-length">1</span>
                     </span>
                 </a>
@@ -378,20 +378,20 @@ $('.bg-cover').css('background-image', 'url(/medias/banner/' + new Date().getDay
                 </a>
                 
                 
-                <a href="/categories/强化学习/" title="强化学习: 1">
+                <a href="/categories/软件/" title="软件: 5">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            style="background-color: #F8C471;">强化学习
-                        <span class="tag-length">1</span>
+                            style="background-color: #F8C471;">软件
+                        <span class="tag-length">5</span>
                     </span>
                 </a>
                 
                 
-                <a href="/categories/软件/" title="软件: 5">
+                <a href="/categories/强化学习/" title="强化学习: 1">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            style="background-color: #F9E79F;">软件
-                        <span class="tag-length">5</span>
+                            style="background-color: #F9E79F;">强化学习
+                        <span class="tag-length">1</span>
                     </span>
                 </a>
                 
@@ -1151,6 +1151,19 @@ LR序列表示对于任意分数$\frac{a}{b}$，我们从$\frac{1}{1}$开始走�
 
 <div class="progress-bar"></div>
 
+<script >
+    $(document).ready(function() {
+        var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+        var countOffset = 20000;  // 初始化首次数据
+       function fixCount() {                   
+         if ($("#busuanzi_container_site_pv").css("display") != "none")
+           {
+              $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); // 加上初始数据 
+              clearInterval(int); // 停止检测
+         }  
+     }           
+    });
+</script>
 
 <!-- 搜索遮罩框 -->
 <div id="searchModal" class="modal">
