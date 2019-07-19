@@ -19,7 +19,7 @@ CKY算法或维特比inside算法是成分句法分析的主要方法之一，�
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>K-best Iterative Viterbi Parsing | WeiYang Blog</title>
+    <title>K-best Iterative Viterbi Parsing | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -48,7 +48,7 @@ CKY算法或维特比inside算法是成分句法分析的主要方法之一，�
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -111,7 +111,7 @@ CKY算法或维特比inside算法是成分句法分析的主要方法之一，�
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -450,27 +450,27 @@ CKY算法或维特比inside算法是成分句法分析的主要方法之一，�
 <p>本文用到的inside和outside算法之前已经介绍过了，详见<a href="http://godweiyang.com/2018/04/19/inside-outside/">PCFG中inside和outside算法详解</a>。</p>
 <h1 id="算法框架"><a href="#算法框架" class="headerlink" title="算法框架"></a>算法框架</h1><hr>
 <h2 id="分层聚类"><a href="#分层聚类" class="headerlink" title="分层聚类"></a>分层聚类</h2><p>首先提出分层聚类的概念。</p>
-<p><img src="1.jpg" alt><br>如上图所示，原来的类别标记有很多，将他们聚类成几个小类，再将这几个小类聚成更小的类，依次下去，最后类别标记会少很多很多。<br><img src="2.jpg" alt><br>以上图为例，<script type="math/tex">{X_1}{\rm{ = \{ }}A,B{\rm{\} ,}}{X_2}{\rm{ = \{ }}C,D{\rm{\} }}</script>，聚类之后的分析表为b图，原始的分析表为a图，聚类之后的表（下面叫<strong>粗表</strong>）b唯一对应了聚类之前的表（下面叫<strong>原始表</strong>）a，而反过来原始表a能对应多种不同的粗表b。</p>
-<h2 id="形式化定义"><a href="#形式化定义" class="headerlink" title="形式化定义"></a>形式化定义</h2><p>我们将类别分为<script type="math/tex">m + 1</script>层，分别表示为<script type="math/tex">{N_0} \ldots {N_m}</script>，那么第<script type="math/tex">m</script>层的类别集合<script type="math/tex">N_m</script>就是原始的类别集合，而<script type="math/tex">0</script>到<script type="math/tex">m - 1</script>层的类别就称之为<strong>收缩符号</strong>。</p>
-<p>对于<script type="math/tex">0 \le i \le j \le m</script>，我们定义<script type="math/tex">{\pi _{i \to j}}:{N_i} \mapsto \Im ({N_j})</script>，其中<script type="math/tex">\Im ({N_j})</script>就是<script type="math/tex">N_j</script>的一个子集。该式将<script type="math/tex">N_i</script>中的一个类别<script type="math/tex">X_i</script>映射为了<script type="math/tex">N_j</script>中所有聚类为<script type="math/tex">X_i</script>的类别集合。</p>
-<p>举个例子吧，在第一张图中，<script type="math/tex">{\pi _{1 \to 2}}(ADJ\\_) = \{ JJ,JJR,JJS\}</script>。如果<script type="math/tex">i = j</script>，那么<script type="math/tex">{\pi _{i \to j}}(A) = \{ A\}</script>。</p>
-<p>那么对于<script type="math/tex">{X_i} \in {N_i},{X_j} \in {N_j},{X_k} \in {N_k}</script>，我们定义产生式<script type="math/tex">{X_i} \to {X_j}{X_k}</script>的概率为：<br>\[\log q({X_i} \to {X_j}{X_k}) = \mathop {\max }\limits_{\scriptstyle A \in {\pi _{i \to m}}({X_i})\atop{\scriptstyle B \in {\pi _{j \to m}}({X_j})\atop\scriptstyle C \in {\pi _{k \to m}}({X_k})}} \log q(A \to BC)\]<br>也就是说，粗表中的每一棵句法树都给出了它在原始表中的句法树的分数的上界，通俗说就是，如果把粗表中的收缩符号全部替换成原始表中的符号，那么新的句法树的分数一定会小于等于粗表中的句法树。</p>
+<p><img src="1.jpg" alt><br>如上图所示，原来的类别标记有很多，将他们聚类成几个小类，再将这几个小类聚成更小的类，依次下去，最后类别标记会少很多很多。<br><img src="2.jpg" alt><br>以上图为例，${X_1}{\rm{ = \{ }}A,B{\rm{\} ,}}{X_2}{\rm{ = \{ }}C,D{\rm{\} }}$，聚类之后的分析表为b图，原始的分析表为a图，聚类之后的表（下面叫<strong>粗表</strong>）b唯一对应了聚类之前的表（下面叫<strong>原始表</strong>）a，而反过来原始表a能对应多种不同的粗表b。</p>
+<h2 id="形式化定义"><a href="#形式化定义" class="headerlink" title="形式化定义"></a>形式化定义</h2><p>我们将类别分为$m + 1$层，分别表示为${N_0} \ldots {N_m}$，那么第$m$层的类别集合$N_m$就是原始的类别集合，而$0$到$m - 1$层的类别就称之为<strong>收缩符号</strong>。</p>
+<p>对于$0 \le i \le j \le m$，我们定义${\pi _{i \to j}}:{N_i} \mapsto \Im ({N_j})$，其中$\Im ({N_j})$就是$N_j$的一个子集。该式将$N_i$中的一个类别$X_i$映射为了$N_j$中所有聚类为$X_i$的类别集合。</p>
+<p>举个例子吧，在第一张图中，${\pi _{1 \to 2}}(ADJ\_) = \{ JJ,JJR,JJS\} $。如果$i = j$，那么${\pi _{i \to j}}(A) = \{ A\} $。</p>
+<p>那么对于${X_i} \in {N_i},{X_j} \in {N_j},{X_k} \in {N_k}$，我们定义产生式${X_i} \to {X_j}{X_k}$的概率为：<br>\[\log q({X_i} \to {X_j}{X_k}) = \mathop {\max }\limits_{\scriptstyle A \in {\pi _{i \to m}}({X_i})\atop{\scriptstyle B \in {\pi _{j \to m}}({X_j})\atop\scriptstyle C \in {\pi _{k \to m}}({X_k})}} \log q(A \to BC)\]<br>也就是说，粗表中的每一棵句法树都给出了它在原始表中的句法树的分数的上界，通俗说就是，如果把粗表中的收缩符号全部替换成原始表中的符号，那么新的句法树的分数一定会小于等于粗表中的句法树。</p>
 <h2 id="引理"><a href="#引理" class="headerlink" title="引理"></a>引理</h2><blockquote>
-<p>如果粗表中的最优句法树<script type="math/tex">{\hat d}</script>不包含任意收缩符号，那么它等价于原始表中的最优句法树。</p>
+<p>如果粗表中的最优句法树${\hat d}$不包含任意收缩符号，那么它等价于原始表中的最优句法树。</p>
 </blockquote>
-<p><strong>证明：</strong><br>令<script type="math/tex">Y</script>等于原始表中的句法树集合，<script type="math/tex">Y' \subset Y</script>等于没有出现在粗表中，但是出现在原始表中的句法树集合，<script type="math/tex">{Y''}</script>等于粗表中的句法树集合。</p>
-<p>那么对于每一个句法树<script type="math/tex">d \in Y'</script>，都存在唯一的句法树<script type="math/tex">d' \in Y''</script>与之对应。所以可以推出：<br>\[\forall d \in Y,\exists d’ \in Y’’,s(d) \le s(d’) &lt; s(\hat d)\]<br>这就意味着<script type="math/tex">\hat d</script>也是原始表中的最优句法树。</p>
+<p><strong>证明：</strong><br>令$Y$等于原始表中的句法树集合，$Y’ \subset Y$等于没有出现在粗表中，但是出现在原始表中的句法树集合，${Y’’}$等于粗表中的句法树集合。</p>
+<p>那么对于每一个句法树$d \in Y’$，都存在唯一的句法树$d’ \in Y’’$与之对应。所以可以推出：<br>\[\forall d \in Y,\exists d’ \in Y’’,s(d) \le s(d’) &lt; s(\hat d)\]<br>这就意味着$\hat d$也是原始表中的最优句法树。</p>
 <h2 id="伪代码"><a href="#伪代码" class="headerlink" title="伪代码"></a>伪代码</h2><p><img src="3.jpg" alt></p>
 <ul>
-<li><p><script type="math/tex">lb</script>初始化为句法树的最优得分或者负无穷，其中<code>det()</code>用来求解句法树的最优得分，但是没有必要真的求出最优句法树，只需要在每个结点处保留得分最高的边即可。尽管这样得出来的句法树基本不是最高的，但是能够缩小<script type="math/tex">lb</script>范围即可。</p>
+<li><p>$lb$初始化为句法树的最优得分或者负无穷，其中<code>det()</code>用来求解句法树的最优得分，但是没有必要真的求出最优句法树，只需要在每个结点处保留得分最高的边即可。尽管这样得出来的句法树基本不是最高的，但是能够缩小$lb$范围即可。</p>
 </li>
 <li><p><code>init-chart()</code>首先初始化分析表，全部初始化为收缩符号。</p>
 </li>
-<li><p>然后开始迭代过程，首先执行维特比inside算法，也就是CKY算法<code>Viterbi-inside()</code>，得到最优句法树<script type="math/tex">\hat d</script>。</p>
+<li><p>然后开始迭代过程，首先执行维特比inside算法，也就是CKY算法<code>Viterbi-inside()</code>，得到最优句法树$\hat d$。</p>
 </li>
 <li><p>如果最优句法树不含有任意收缩符号，那么迭代结束，直接返回该句法树。</p>
 </li>
-<li><p>否则的话，更新<script type="math/tex">lb</script>为最优句法树的分数<code>best()</code>。</p>
+<li><p>否则的话，更新$lb$为最优句法树的分数<code>best()</code>。</p>
 </li>
 <li><p><code>expand-chart()</code>将所有收缩符号替换为下一层的收缩符号。</p>
 </li>
@@ -480,10 +480,9 @@ CKY算法或维特比inside算法是成分句法分析的主要方法之一，�
 </li>
 </ul>
 <h2 id="剪枝过程"><a href="#剪枝过程" class="headerlink" title="剪枝过程"></a>剪枝过程</h2><p>算法的重要部分就是<code>prune-chart()</code>剪枝过程，这里要详细讲一下。</p>
-<p>对于一条边<script type="math/tex">e = (A,i,j)</script>，定义<script type="math/tex">\alpha \beta (e) = \alpha (e) + \beta (e)</script>为含有边<script type="math/tex">e</script>的句法树的最大分数。那么如果</p>
-<p><script type="math/tex">\alpha \beta (e) < lb</script>，这条边<script type="math/tex">e</script>就没有搜索的必要了，可以从分析表中去掉。</p>
-<p>但是每次迭代都从原始表中计算<script type="math/tex">\alpha \beta (e)</script>值太麻烦了，可以在每次迭代的时候计算粗表中的值：<br>\[\alpha \beta (e) \le \hat \alpha (e) + \hat \beta (e) = \hat {\alpha \beta} (e)\]</p>
-<p>所以当<script type="math/tex">\hat {\alpha \beta} (e) < lb</script>时，从分析表中删除这条边。虽然搜索空间减少了，但是不影响算法的迭代轮数。</p>
+<p>对于一条边$e = (A,i,j)$，定义$\alpha \beta (e) = \alpha (e) + \beta (e)$为含有边$e$的句法树的最大分数。那么如果<br>$\alpha \beta (e) &lt; lb$，这条边$e$就没有搜索的必要了，可以从分析表中去掉。</p>
+<p>但是每次迭代都从原始表中计算$\alpha \beta (e)$值太麻烦了，可以在每次迭代的时候计算粗表中的值：<br>\[\alpha \beta (e) \le \hat \alpha (e) + \hat \beta (e) = \hat {\alpha \beta} (e)\]</p>
+<p>所以当$\hat {\alpha \beta} (e) &lt; lb$时，从分析表中删除这条边。虽然搜索空间减少了，但是不影响算法的迭代轮数。</p>
 <p>虽然在<code>expand-chart()</code>这一步要扩展收缩符号为下一层所有符号，但是实际运行起来时间比普通的CKY算法大大减少。</p>
 <h2 id="K-best扩展"><a href="#K-best扩展" class="headerlink" title="K-best扩展"></a>K-best扩展</h2><p><img src="4.jpg" alt></p>
 <p>基本框架和1-best是一样的，主要思路就是首先求出最优句法树，如果包含收缩符号，那么就下面步骤和1-best一样。否则的话求出后面k-1棵最优的句法树，如果都不包含收缩符号，直接返回k-best棵句法树。否则从中选出最好的一棵含有收缩符号的句法树，下面的步骤和1-best一样。</p>
@@ -655,7 +654,7 @@ CKY算法或维特比inside算法是成分句法分析的主要方法之一，�
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2018/04/24/ivp-eacl17/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -735,7 +734,7 @@ CKY算法或维特比inside算法是成分句法分析的主要方法之一，�
 
 欧几里得数
 首先我们来证明一下，素数有无穷多个。
-假设素数只有k个，分别为2,3, \ldots ,{P_k}，那么我们构造下面的数字：\[M = 2 \cdot 3 \cdot  \ldots  \cdot {P_k} + 1\]显然
+假设素数只有$k$个，分别为$2,3, \ldots ,{P_k}$，那么我们构造下面的数字：\[M = 2 \cdot 3 \cdot  \ldots  \cdot {P_k} + 1
                         
                     </div>
                     <div class="publish-info">
@@ -860,8 +859,8 @@ CKY算法或维特比inside算法是成分句法分析的主要方法之一，�
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -983,7 +982,7 @@ CKY算法或维特比inside算法是成分句法分析的主要方法之一，�
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

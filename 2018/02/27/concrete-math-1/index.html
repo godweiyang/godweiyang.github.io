@@ -20,7 +20,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>具体数学-第1课（递归求解实际问题） | WeiYang Blog</title>
+    <title>具体数学-第1课（递归求解实际问题） | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -49,7 +49,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -112,7 +112,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -408,14 +408,14 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                        522
+                        525
                     </div>
                     
 
                     
                     <div class="info-break-policy">
                         <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                        1 分
+                        2 分
                     </div>
                     
                 
@@ -436,12 +436,12 @@
 <p>这学期提前选修了研究生的课程：具体数学、人工智能前沿、NLP讨论班，就随便记记具体数学每一节课所学的东西吧。</p>
 <p>第一节课讲的都是一些很简单的东西，这里就一带而过了。</p>
 <h1 id="汉诺塔问题"><a href="#汉诺塔问题" class="headerlink" title="汉诺塔问题"></a>汉诺塔问题</h1><hr>
-<p>这是个老生常谈的问题了，n个盘子，3个柱子的汉诺塔问题，最少移动次数记为<script type="math/tex">T(n)</script>。<br>那么\[T(n)=2T(n-1)+1\]<br>边界条件为<script type="math/tex">T(0)=0</script>。<br>解出\[T(n)=2^n-1\]<br>验证可以采用数学归纳法，这里就不多说了。</p>
+<p>这是个老生常谈的问题了，n个盘子，3个柱子的汉诺塔问题，最少移动次数记为$T(n)$。<br>那么\[T(n)=2T(n-1)+1\]<br>边界条件为$T(0)=0$。<br>解出\[T(n)=2^n-1\]<br>验证可以采用数学归纳法，这里就不多说了。</p>
 <h1 id="直线分割平面问题"><a href="#直线分割平面问题" class="headerlink" title="直线分割平面问题"></a>直线分割平面问题</h1><hr>
-<p>这也是个高中问题了，n条直线最多分割平面为几部分，记为<script type="math/tex">L(n)</script>。<br>那么\[L(n)=L(n-1)+n\]<br>边界条件为<script type="math/tex">L(0)=1</script>。<br>解出\[L(n)=n(n+1)/2+1\]</p>
-<p>这题有个扩展，n个V型最多分割平面为几部分？<br>解决思路如下：<br><img src="1.jpg" alt><br>如上图所示，将V型补全（红色虚线部分），那么就转化为了<script type="math/tex">2n</script>条直线划分平面数，那么n个V型划分数只要减去<script type="math/tex">2n</script>就行了，所以答案为：<br>\[Z(n)=L(2n)-2n=2n^2-n+1\]</p>
+<p>这也是个高中问题了，n条直线最多分割平面为几部分，记为$L(n)$。<br>那么\[L(n)=L(n-1)+n\]<br>边界条件为$L(0)=1$。<br>解出\[L(n)=n(n+1)/2+1\]</p>
+<p>这题有个扩展，n个V型最多分割平面为几部分？<br>解决思路如下：<br><img src="1.jpg" alt><br>如上图所示，将V型补全（红色虚线部分），那么就转化为了$2n$条直线划分平面数，那么n个V型划分数只要减去$2n$就行了，所以答案为：<br>\[Z(n)=L(2n)-2n=2n^2-n+1\]</p>
 <h1 id="约瑟夫环问题"><a href="#约瑟夫环问题" class="headerlink" title="约瑟夫环问题"></a>约瑟夫环问题</h1><hr>
-<p>这个问题暴力求解的话模拟就行了，复杂度是<script type="math/tex">O(n^2)</script>的，这里探索一种直接求解的方法。<br>分两种情况讨论：<br>当有<script type="math/tex">2n</script>个人时，踢掉<script type="math/tex">n</script>个人之后，情况如下图所示<br><img src="2.jpg" alt><br>观察对应关系可以得出<br>\[J(2n)=2J(n)-1\]<br>同理，当有<script type="math/tex">2n+1</script>个人时，踢掉<script type="math/tex">n+1</script>个人之后，情况如下图所示<br><img src="3.jpg" alt><br>观察对应关系可以得出<br>\[J(2n+1)=2J(n)+1\]<br>边界条件为<br>\[J(1)=1\]<br>这个递推式很难求解，但是枚举出前面几项可以发现，如果令<script type="math/tex">n=2^m+l</script>，其中<script type="math/tex">2^m</script>是小于等于<script type="math/tex">n</script>的最大2的幂，那么<br>\[J(n)=2l+1\]<br>正确性可以通过数学归纳法求证。</p>
+<p>这个问题暴力求解的话模拟就行了，复杂度是$O(n^2)$的，这里探索一种直接求解的方法。<br>分两种情况讨论：<br>当有$2n$个人时，踢掉$n$个人之后，情况如下图所示<br><img src="2.jpg" alt><br>观察对应关系可以得出<br>\[J(2n)=2J(n)-1\]<br>同理，当有$2n+1$个人时，踢掉$n+1$个人之后，情况如下图所示<br><img src="3.jpg" alt><br>观察对应关系可以得出<br>\[J(2n+1)=2J(n)+1\]<br>边界条件为<br>\[J(1)=1\]<br>这个递推式很难求解，但是枚举出前面几项可以发现，如果令$n=2^m+l$，其中$2^m$是小于等于$n$的最大2的幂，那么<br>\[J(n)=2l+1\]<br>正确性可以通过数学归纳法求证。</p>
 <p>第一节课就讲了这么多，约瑟夫环还有很多问题值得探讨，下节课继续。。。</p>
 
             </div>
@@ -605,7 +605,7 @@
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2018/02/27/concrete-math-1/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -821,8 +821,8 @@ ECNU18_Spring_SeminarECNU NLP group learn
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -944,7 +944,7 @@ ECNU18_Spring_SeminarECNU NLP group learn
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

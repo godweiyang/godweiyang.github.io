@@ -18,7 +18,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Constituency Parsing with a Self-Attentive Encoder | WeiYang Blog</title>
+    <title>Constituency Parsing with a Self-Attentive Encoder | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -47,7 +47,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -110,7 +110,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -445,92 +445,88 @@
 
 <p><strong>论文地址：</strong><a href="https://arxiv.org/pdf/1805.01052.pdf" target="_blank" rel="noopener">Constituency Parsing with a Self-Attentive Encoder</a><br><strong>代码地址：</strong><a href="https://github.com/nikitakit/self-attentive-parser" target="_blank" rel="noopener">github</a></p>
 <p>今天要介绍的这篇论文是成分句法分析领域目前的state-of-the-art，结果最高的几篇paper可以参见ruder在github整理的列表：<a href="https://github.com/sebastianruder/NLP-progress/blob/master/constituency_parsing.md" target="_blank" rel="noopener">github</a>。<br>下面就是成分句法分析目前排名：</p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
 <th>Model</th>
-<th style="text-align:center">F1 score</th>
+<th align="center">F1 score</th>
 <th>Paper / Source</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>Self-attentive encoder + ELMo (Kitaev and Klein, 2018)</td>
-<td style="text-align:center">95.13</td>
+<td align="center">95.13</td>
 <td><a href="https://arxiv.org/abs/1805.01052" target="_blank" rel="noopener">Constituency Parsing with a Self-Attentive Encoder</a></td>
 </tr>
 <tr>
 <td>Model combination (Fried et al., 2017)</td>
-<td style="text-align:center">94.66</td>
+<td align="center">94.66</td>
 <td><a href="https://arxiv.org/abs/1707.03058" target="_blank" rel="noopener">Improving Neural Parsing by Disentangling Model Combination and Reranking Effects</a></td>
 </tr>
 <tr>
 <td>In-order (Liu and Zhang, 2017)</td>
-<td style="text-align:center">94.2</td>
+<td align="center">94.2</td>
 <td><a href="http://aclweb.org/anthology/Q17-1029" target="_blank" rel="noopener">In-Order Transition-based Constituent Parsing</a></td>
 </tr>
 <tr>
 <td>Semi-supervised LSTM-LM (Choe and Charniak, 2016)</td>
-<td style="text-align:center">93.8</td>
+<td align="center">93.8</td>
 <td><a href="http://www.aclweb.org/anthology/D16-1257" target="_blank" rel="noopener">Parsing as Language Modeling</a></td>
 </tr>
 <tr>
 <td>Stack-only RNNG (Kuncoro et al., 2017)</td>
-<td style="text-align:center">93.6</td>
+<td align="center">93.6</td>
 <td><a href="https://arxiv.org/abs/1611.05774" target="_blank" rel="noopener">What Do Recurrent Neural Network Grammars Learn About Syntax?</a></td>
 </tr>
 <tr>
 <td>RNN Grammar (Dyer et al., 2016)</td>
-<td style="text-align:center">﻿93.3</td>
+<td align="center">93.3</td>
 <td><a href="https://www.aclweb.org/anthology/N16-1024" target="_blank" rel="noopener">Recurrent Neural Network Grammars</a></td>
 </tr>
 <tr>
 <td>Transformer (Vaswani et al., 2017)</td>
-<td style="text-align:center">92.7</td>
+<td align="center">92.7</td>
 <td><a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">Attention Is All You Need</a></td>
 </tr>
 <tr>
 <td>Semi-supervised LSTM (Vinyals et al., 2015)</td>
-<td style="text-align:center">92.1</td>
+<td align="center">92.1</td>
 <td><a href="https://papers.nips.cc/paper/5635-grammar-as-a-foreign-language.pdf" target="_blank" rel="noopener">Grammar as a Foreign Language</a></td>
 </tr>
 <tr>
 <td>Self-trained parser (McClosky et al., 2006)</td>
-<td style="text-align:center">92.1</td>
+<td align="center">92.1</td>
 <td><a href="https://pdfs.semanticscholar.org/6f0f/64f0dab74295e5eb139c160ed79ff262558a.pdf" target="_blank" rel="noopener">Effective Self-Training for Parsing</a></td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><hr>
 <p>本篇论文将之前<a href="http://godweiyang.com/2018/06/28/ACL17-ConParsing/">A Minimal Span-Based Neural Constituency Parser</a>这篇论文中模型的编码器部分由LSTM替换为了Self-Attentive，来捕捉句子单词内容(content)与位置(position)之间的联系。实验结果可以达到93.55%的F1值，如果再加上预训练的词向量ELMo，那么F1值可以提升到95.13%。这是目前效果最好的一个模型了。</p>
 <p>Attention的主要想法借鉴了谷歌的神作：<a href="https://arxiv.org/pdf/1706.03762.pdf" target="_blank" rel="noopener">Attention Is All You Need</a>，这篇论文网上也有很多讲解了，我挑选了一篇讲解比较好的，大家可以先看看：<a href="https://yq.aliyun.com/articles/342508?utm_content=m_39938" target="_blank" rel="noopener">Attention Is All You Need</a>。</p>
 <h1 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h1><hr>
-<h2 id="基本模型"><a href="#基本模型" class="headerlink" title="基本模型"></a>基本模型</h2><p>这部分详见我之前写的一篇笔记：<a href="http://godweiyang.com/2018/06/28/ACL17-ConParsing/">A Minimal Span-Based Neural Constituency Parser</a>，解码器部分和之前模型基本一致。本文主要探讨的是编码器的构造，也就是如何求出每个span的向量表示，从而得到span的得分<script type="math/tex">s(i,j,l)</script>，然后应用解码器进行解码，生成成分句法分析树。</p>
-<h2 id="词向量表示"><a href="#词向量表示" class="headerlink" title="词向量表示"></a>词向量表示</h2><p>第<script type="math/tex">t</script>个单词的词向量由三个部分组成：</p>
+<h2 id="基本模型"><a href="#基本模型" class="headerlink" title="基本模型"></a>基本模型</h2><p>这部分详见我之前写的一篇笔记：<a href="http://godweiyang.com/2018/06/28/ACL17-ConParsing/">A Minimal Span-Based Neural Constituency Parser</a>，解码器部分和之前模型基本一致。本文主要探讨的是编码器的构造，也就是如何求出每个span的向量表示，从而得到span的得分$s(i,j,l)$，然后应用解码器进行解码，生成成分句法分析树。</p>
+<h2 id="词向量表示"><a href="#词向量表示" class="headerlink" title="词向量表示"></a>词向量表示</h2><p>第$t$个单词的词向量由三个部分组成：</p>
 <ul>
-<li>word embdding：<script type="math/tex">w_t</script>，这部分可以用随机初始化的向量，也可以用CharLSTM，也可以用预训练的词向量。</li>
-<li>tag embdding：<script type="math/tex">m_t</script></li>
-<li>位置向量：<script type="math/tex">p_t</script></li>
+<li>word embdding：$w_t$，这部分可以用随机初始化的向量，也可以用CharLSTM，也可以用预训练的词向量。</li>
+<li>tag embdding：$m_t$</li>
+<li>位置向量：$p_t$</li>
 </ul>
 <p>最终词向量为三部分的加和：<br>\[z_t = w_t + m_t + p_t\]</p>
 <h2 id="Self-Attentive"><a href="#Self-Attentive" class="headerlink" title="Self-Attentive"></a>Self-Attentive</h2><p>模型结构如下图所示：<br><img src="1.png" alt><br>这一部分是不同位置单词互相联系的唯一方式，采用谷歌<a href="https://arxiv.org/pdf/1706.03762.pdf" target="_blank" rel="noopener">Attention Is All You Need</a>中的Self-Attentive模型。</p>
-<p>模型一共由8个SingleHead组成，每个SingleHead结构如下图：<br><img src="2.png" alt><br>计算方式如下：<br>\[{\rm{SingleHead}}(X) = \left[ { {\rm{Softmax}}\left( {\frac{ {Q{K^{\rm{T}}}}}{ {\sqrt { {d_k}} }}} \right)V} \right]{W_o}\]<br>其中<script type="math/tex">Q = X{W_Q};K = X{W_K};V = X{W_V}</script>，而<script type="math/tex">W_O</script>用来将输出映射到与输入相同的维度。</p>
-<p>详细分析一下计算过程，首先输入矩阵<script type="math/tex">X = [{z_1},{z_2}, \ldots ,{z_T}]</script>是由一个句子中所有词向量组成的矩阵，拼接在一起是为了并行，加快计算速度，<script type="math/tex">X \in {\mathbb{R}^{T \times {d_{ {model}}}}}</script>。</p>
-<p>然后将<script type="math/tex">X</script>映射为三个矩阵，query矩阵<script type="math/tex">Q</script>，key矩阵<script type="math/tex">K</script>，value矩阵<script type="math/tex">V</script>，其中<script type="math/tex">Q,K \in {\mathbb{R}^{ {d_{ {model}}} \times {d_k}}}</script>。</p>
-<p>我们想要计算单词<script type="math/tex">i</script>和单词<script type="math/tex">j</script>之间的Attention大小，可以用两者query向量和key向量元素乘得到：<br>\[p(i \to j) \propto \exp \left( {\frac{ { {q_i} \cdot {k_j}}}{ {\sqrt { {d_k}} }}} \right)\]<br>所有单词的value向量乘以单词<script type="math/tex">i</script>对它的Attention值，加权求和之后得到的结果就是单词<script type="math/tex">i</script>最后的向量表示：<br>\[{ {\bar v}_i} = \sum\nolimits_j {p(i \to j){v_j}} \]<br>最后乘以<script type="math/tex">W_O</script>映射到与输入<script type="math/tex">X</script>相同的维度。</p>
-<p>整个过程如果写成矩阵形式就是最开始的那个矩阵式子。注意到式子中<script type="math/tex">Q{K^{\rm{T}}} \in {\mathbb{R}^{ {\rm{T \times T}}}}</script>，矩阵中的每个元素恰好就是Attention值<script type="math/tex">p(i \to j)</script>。<script type="math/tex">\sqrt { {d_k}}</script>是归一化因子。</p>
+<p>模型一共由8个SingleHead组成，每个SingleHead结构如下图：<br><img src="2.png" alt><br>计算方式如下：<br>\[{\rm{SingleHead}}(X) = \left[ { {\rm{Softmax}}\left( {\frac{ {Q{K^{\rm{T}}}}}{ {\sqrt { {d_k}} }}} \right)V} \right]{W_o}\]<br>其中$Q = X{W_Q};K = X{W_K};V = X{W_V}$，而$W_O$用来将输出映射到与输入相同的维度。</p>
+<p>详细分析一下计算过程，首先输入矩阵$X = [{z_1},{z_2}, \ldots ,{z_T}]$是由一个句子中所有词向量组成的矩阵，拼接在一起是为了并行，加快计算速度，$X \in {\mathbb{R}^{T \times {d_{ {model}}}}}$。</p>
+<p>然后将$X$映射为三个矩阵，query矩阵$Q$，key矩阵$K$，value矩阵$V$，其中$Q,K \in {\mathbb{R}^{ {d_{ {model}}} \times {d_k}}}$。</p>
+<p>我们想要计算单词$i$和单词$j$之间的Attention大小，可以用两者query向量和key向量元素乘得到：<br>\[p(i \to j) \propto \exp \left( {\frac{ { {q_i} \cdot {k_j}}}{ {\sqrt { {d_k}} }}} \right)\]<br>所有单词的value向量乘以单词$i$对它的Attention值，加权求和之后得到的结果就是单词$i$最后的向量表示：<br>\[{ {\bar v}_i} = \sum\nolimits_j {p(i \to j){v_j}} \]<br>最后乘以$W_O$映射到与输入$X$相同的维度。</p>
+<p>整个过程如果写成矩阵形式就是最开始的那个矩阵式子。注意到式子中$Q{K^{\rm{T}}} \in {\mathbb{R}^{ {\rm{T \times T}}}}$，矩阵中的每个元素恰好就是Attention值$p(i \to j)$。$\sqrt { {d_k}}$是归一化因子。</p>
 <p>最后将8个SingleHead的结果求和得到MultiHead结果，注意这8个SingleHead参数不共享：<br>\[{\rm{MultiHead(}}X) = \sum\limits_{i = 1}^8 { {\rm{SingleHea}}{ {\rm{d}}^{(i)}}(X)} \]</p>
-<p>注意到Attention模型有一个很严重的问题，就是无论单词的顺序是怎么样的，都不影响最终的结果。所以在输入中要添加位置向量<script type="math/tex">p_t</script>，否则之后会有实验表明，不加的话效果大大下降。</p>
+<p>注意到Attention模型有一个很严重的问题，就是无论单词的顺序是怎么样的，都不影响最终的结果。所以在输入中要添加位置向量$p_t$，否则之后会有实验表明，不加的话效果大大下降。</p>
 <p>图一中还有一个前馈神经网络的部分，使用的是一个双层前馈神经网络：<br>\[{\rm{FeedForward}}(x) = {W_2}{\rm{relu}}({W_1}x + {b_1}) + {b_2}\]</p>
-<h2 id="Span得分"><a href="#Span得分" class="headerlink" title="Span得分"></a>Span得分</h2><p>最终的span得分计算方式如下：<br>\[s(i,j, \cdot ) = {M_2}{\rm{relu}}({\rm{LayerNorm}}({M_1}v + {c_1})) + {c_2}\]<br>其中<script type="math/tex">v</script>就是短语的向量表示，由之前的每个单词的向量输出得到：<br>\[v = [{ {\vec y}_j} - { {\vec y}_i},{ {\mathord{\buildrel{\lower3pt\hbox{$\scriptscriptstyle\leftarrow$}} \over y} }_{j + 1}} - { {\mathord{\buildrel{\lower3pt\hbox{$\scriptscriptstyle\leftarrow$}} \over y} }_{i + 1}}]\]<br>在之前的LSTM模型中前向后向表示很容易得到，在这里只能通过将输出向量一分为二，一半作为前向表示，一半作为后向表示，实际实现中，偶数维度作为前向表示，奇数维度作为后向表示。</p>
+<h2 id="Span得分"><a href="#Span得分" class="headerlink" title="Span得分"></a>Span得分</h2><p>最终的span得分计算方式如下：<br>\[s(i,j, \cdot ) = {M_2}{\rm{relu}}({\rm{LayerNorm}}({M_1}v + {c_1})) + {c_2}\]<br>其中$v$就是短语的向量表示，由之前的每个单词的向量输出得到：<br>\[v = [{ {\vec y}_j} - { {\vec y}_i},{ {\mathord{\buildrel{\lower3pt\hbox{$\scriptscriptstyle\leftarrow$}} \over y} }_{j + 1}} - { {\mathord{\buildrel{\lower3pt\hbox{$\scriptscriptstyle\leftarrow$}} \over y} }_{i + 1}}]\]<br>在之前的LSTM模型中前向后向表示很容易得到，在这里只能通过将输出向量一分为二，一半作为前向表示，一半作为后向表示，实际实现中，偶数维度作为前向表示，奇数维度作为后向表示。</p>
 <h1 id="模型分析"><a href="#模型分析" class="headerlink" title="模型分析"></a>模型分析</h1><hr>
 <h2 id="Content-vs-Position-Attention"><a href="#Content-vs-Position-Attention" class="headerlink" title="Content vs Position Attention"></a>Content vs Position Attention</h2><p>之前的模型中，我们采用元素加将三个输入向量求和作为输入，期待模型自己训练出它们之间的权重，将它们很好地分开，但是实际上效果并不好。</p>
 <p>下面论文做了许多实验来探讨content和position的重要性。</p>
-<p>首先修改模型输入，令<script type="math/tex">Q=PW_Q,K=PW_K</script>，也就是丢弃了content信息，但是最后结果只下降了0.27个百分点，说明了content信息对模型影响不是很大。</p>
+<p>首先修改模型输入，令$Q=PW_Q,K=PW_K$，也就是丢弃了content信息，但是最后结果只下降了0.27个百分点，说明了content信息对模型影响不是很大。</p>
 <p>然后为了验证是不是元素加导致content和position信息混合在一起模型无法分开，实验将输入向量显示分开，输入改为<br>\[z_t=[w_t+m_t;p_t]\]<br>但是实验结果只下降了0.07个百分点，说明不是这个因素导致的。事实上元素加和拼接操作在高维度上面是相似的，特别是之后立即乘上了一个矩阵，这就会混合里面的信息。</p>
-<p>所以最好的解决办法就是将content和position向量分开计算attention，最后求和。这样attention矩阵就可以表示为：<br>\[QK^{\rm{T}} = {Q_c}K_c^{\rm{T}} + {Q_p}K_p^{\rm{T}}\]<br>这时的权重矩阵<script type="math/tex">W</script>就可以写为<br>\[W = \left[ {\begin{array}{*{20}{c}}{ {W_c}}&amp;0\\0&amp;{ {W_p}}\end{array}} \right]\]</p>
+<p>所以最好的解决办法就是将content和position向量分开计算attention，最后求和。这样attention矩阵就可以表示为：<br>\[QK^{\rm{T}} = {Q_c}K_c^{\rm{T}} + {Q_p}K_p^{\rm{T}}\]<br>这时的权重矩阵$W$就可以写为<br>\[W = \left[ {\begin{array}{*{20}{c}}{ {W_c}}&amp;0\\0&amp;{ {W_p}}\end{array}} \right]\]</p>
 <p>通过将content和position信息分开，模型的效果从92.67%提升到了93.15%，模型示意图如下：<br><img src="3.png" alt></p>
 <p>最后的实验在测试阶段的8层模型中，每一层手动选择采不采用content或者position attention，实验结果如下：<br><img src="4.png" alt><br>可以发现，不用position信息的话结果大大下降，接近传统的CKY算法，这也说明了普通的CKY算法是无法捕捉到全局的信息的。还有就是content信息主要作用在最后几层，这也说明了前面几层有点类似于扩张卷积网络。</p>
 <h2 id="窗口Attention"><a href="#窗口Attention" class="headerlink" title="窗口Attention"></a>窗口Attention</h2><p>这一部分也不是什么新鲜玩意了，谷歌的论文中也有提到，主要思想就是限制attention的范围，每个单词只与周围窗口大小内的单词进行计算。在本文中还提出一个relaxed变体，就是除了窗口大小范围外，再加入首尾各两个单词进行attention操作。</p>
@@ -714,7 +710,7 @@
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2018/07/04/acl18-attconparsing/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -943,8 +939,8 @@
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -1066,7 +1062,7 @@
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

@@ -17,7 +17,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Top-down Tree Long Short-Term Memory Networks | WeiYang Blog</title>
+    <title>Top-down Tree Long Short-Term Memory Networks | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -46,7 +46,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -109,7 +109,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -417,7 +417,7 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                        932
+                        942
                     </div>
                     
 
@@ -445,10 +445,10 @@
 <p>这次介绍的仍然是树状LSTM，但是这次是在依存句法树上做的LSTM。主要功能就是给定一个句子的依存句法树，预测这个句子的生成概率。实验主要是在Microsoft Sentence Completion Challenge上面进行的，取得了不错的效果。不仅如此，这个模型还可以对依存句法分析产生的依存句法树进行重排序，从而提升依存句法分析的效果。（PS. 又让我联想到了我的毕业论文，用SU-RNN对PCFG产生的成分句法树进行重排序。。。。。。都是泪，代码还没开始动。）</p>
 <h1 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h1><hr>
 <p>首先介绍几个概念。</p>
-<h3 id="依存路径"><a href="#依存路径" class="headerlink" title="依存路径"></a>依存路径</h3><p><img src="1.png" alt><br>如上图所示，虚线箭头就是依存树中的箭头，其中<script type="math/tex">w_0</script>就是<script type="math/tex">w_1</script>到<script type="math/tex">w_n</script>的head结点。那么<script type="math/tex">w_1</script>就是<script type="math/tex">w_0</script>左边的第一个结点，边<script type="math/tex">(w_0,w_1)</script>类型叫做<script type="math/tex">LEFT</script>边，而继续向左，例如边<script type="math/tex">(w_{k-1},w_k)</script>类型叫做<script type="math/tex">NX-LEFT</script>边。同理，向右的边也有两种类型<script type="math/tex">RIGHT</script>和<script type="math/tex">NX-RIGHT</script>。</p>
-<p>那么依存路径<script type="math/tex">\mathcal D(w)</script>定义为从<script type="math/tex">ROOT</script>结点到<script type="math/tex">w</script>结点的路径，注意不是原来依存树的路径哦。具体计算方式如下：<br><img src="2.png" alt><br>以上图为例，原来<script type="math/tex">w_0</script>到<script type="math/tex">w_n</script>的路径为<script type="math/tex">{w_0} \to {w_n}</script>，而现在变成了<script type="math/tex">{w_0} \to {w_1} \to {w_2} \to  \ldots  \to {w_n}</script>。</p>
-<p>那么给定依存树<script type="math/tex">T</script>，句子<script type="math/tex">S</script>的概率可以表示为<br><img src="3.png" alt><br>由于每个句子都有<script type="math/tex">ROOT</script>，所以就不需要计算它的概率了。<script type="math/tex">w</script>按照树<script type="math/tex">T</script>的宽度优先搜索顺序访问。</p>
-<h3 id="树状LSTMs"><a href="#树状LSTMs" class="headerlink" title="树状LSTMs"></a>树状LSTMs</h3><p>那么问题就是如何计算<script type="math/tex">P(w|\mathcal D(w))</script>了。我们定义4种LSTM：GEN-L,GEN-R,GEN-NX-L,GEN-NX-R，分别用来表示上文中提到的四种类型的边：LEFT,RIGHT,NX-LEFT,NX-RIGHT。</p>
+<h3 id="依存路径"><a href="#依存路径" class="headerlink" title="依存路径"></a>依存路径</h3><p><img src="1.png" alt><br>如上图所示，虚线箭头就是依存树中的箭头，其中$w_0$就是$w_1$到$w_n$的head结点。那么$w_1$就是$w_0$左边的第一个结点，边$(w_0,w_1)$类型叫做$LEFT$边，而继续向左，例如边$(w_{k-1},w_k)$类型叫做$NX-LEFT$边。同理，向右的边也有两种类型$RIGHT$和$NX-RIGHT$。</p>
+<p>那么依存路径$\mathcal D(w)$定义为从$ROOT$结点到$w$结点的路径，注意不是原来依存树的路径哦。具体计算方式如下：<br><img src="2.png" alt><br>以上图为例，原来$w_0$到$w_n$的路径为${w_0} \to {w_n}$，而现在变成了${w_0} \to {w_1} \to {w_2} \to  \ldots  \to {w_n}$。</p>
+<p>那么给定依存树$T$，句子$S$的概率可以表示为<br><img src="3.png" alt><br>由于每个句子都有$ROOT$，所以就不需要计算它的概率了。$w$按照树$T$的宽度优先搜索顺序访问。</p>
+<h3 id="树状LSTMs"><a href="#树状LSTMs" class="headerlink" title="树状LSTMs"></a>树状LSTMs</h3><p>那么问题就是如何计算$P(w|\mathcal D(w))$了。我们定义4种LSTM：GEN-L,GEN-R,GEN-NX-L,GEN-NX-R，分别用来表示上文中提到的四种类型的边：LEFT,RIGHT,NX-LEFT,NX-RIGHT。</p>
 <p>每个结点的表示如下计算：</p>
 <p><img src="4.png" alt><br>概率表示为：<br><img src="5.png" alt></p>
 <p>注意这里为了简化计算，省略了全部的偏移向量。</p>
@@ -622,7 +622,7 @@
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2018/01/15/paperdaily-4/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -831,8 +831,8 @@
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -954,7 +954,7 @@
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

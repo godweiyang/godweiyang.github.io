@@ -18,7 +18,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Ubuntu16.04下Nvidia+Cuda8.0+Dynet安装教程 | WeiYang Blog</title>
+    <title>Ubuntu16.04下Nvidia+Cuda8.0+Dynet安装教程 | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -47,7 +47,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -110,7 +110,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -402,7 +402,7 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                        639
+                        637
                     </div>
                     
 
@@ -439,8 +439,7 @@
 blacklist nouveau
 blacklist rivafb
 blacklist nvidiafb
-blacklist rivatv
-</code></pre><p>执行<code>sudo update-initramfs -u</code>并重启<code>reboot</code>。</p>
+blacklist rivatv</code></pre><p>执行<code>sudo update-initramfs -u</code>并重启<code>reboot</code>。</p>
 <p>按<code>ctrl+alt+f1</code>，登录命令行界面。</p>
 <p>执行<code>sudo service lightdm stop</code></p>
 <p>进入NVIDIA.run目录，运行<code>sudo sh ./NVIDIA.run –no-x-check –no-nouveau-check –no-opengl-files</code></p>
@@ -451,22 +450,19 @@ blacklist rivatv
 <p>执行<code>sudo sh cuda.run</code>，注意中间问你要不要安装驱动程序，选择no</p>
 <p>执行<code>sudo gedit /etc/profile</code><br>添加下列语句并保存：</p>
 <pre><code>export PATH=/usr/local/cuda-8.0/bin:$PATH
-export LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64$LD_LIBRARY_PATH
-</code></pre><p>重启，打开<code>/NVIDIA_CUDA-8.0_Samples/1_Utilities/deviceQuery</code></p>
+export LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64$LD_LIBRARY_PATH</code></pre><p>重启，打开<code>/NVIDIA_CUDA-8.0_Samples/1_Utilities/deviceQuery</code></p>
 <p>执行<code>sudo make</code>和<code>./deviceQuery</code>，如果出现显卡信息，那么cuda安装成功了。</p>
 <h1 id="Dynet安装"><a href="#Dynet安装" class="headerlink" title="Dynet安装"></a>Dynet安装</h1><hr>
 <p>首先安装Anaconda，过程就不说了，直接运行shell脚本就行了。</p>
 <p>然后重要的地方来了，创建虚拟环境，在虚拟环境里安装dynet！！！</p>
 <p>执行</p>
 <pre><code>conda create --name python2 python=2 cython numpy
-source activate python2
-</code></pre><p>然后CPU版本的话很简单，直接执行<code>pip install dynet</code>就行了。</p>
+source activate python2</code></pre><p>然后CPU版本的话很简单，直接执行<code>pip install dynet</code>就行了。</p>
 <p>GPU版本执行<code>BACKEND=cuda pip install git+https://github.com/clab/dynet#egg=dynet -i https://pypi.tuna.tsinghua.edu.cn/simple</code>。</p>
 <p>然后就成功啦，但是运行dynet程序的时候还是会报错，找不到libcudart库，这时执行下面三条语句就行了：</p>
 <pre><code>sudo cp /usr/local/cuda-8.0/lib64/libcudart.so.8.0 /usr/local/lib/libcudart.so.8.0 &amp;&amp; sudo ldconfig
 sudo cp /usr/local/cuda-8.0/lib64/libcublas.so.8.0 /usr/local/lib/libcublas.so.8.0 &amp;&amp; sudo ldconfig
-sudo cp /usr/local/cuda-8.0/lib64/libcurand.so.8.0 /usr/local/lib/libcurand.so.8.0 &amp;&amp; sudo ldconfig
-</code></pre><p>然后终于可以运行了，感动哭了。。。</p>
+sudo cp /usr/local/cuda-8.0/lib64/libcurand.so.8.0 /usr/local/lib/libcurand.so.8.0 &amp;&amp; sudo ldconfig</code></pre><p>然后终于可以运行了，感动哭了。。。</p>
 
             </div>
             <hr/>
@@ -629,7 +625,7 @@ sudo cp /usr/local/cuda-8.0/lib64/libcurand.so.8.0 /usr/local/lib/libcurand.so.8
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2018/03/09/nvidia-cuda-dynet/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -708,7 +704,7 @@ sudo cp /usr/local/cuda-8.0/lib64/libcurand.so.8.0 /usr/local/lib/libcurand.so.8
                             
 
 今天讲了一种将递归式转化为求和的方法。
-考虑如下递归式：\[{a_n}{T_n} = {b_n}{T_{n - 1}} + {c_n}\]两边同时乘以s_n得到：\[{s_n}{a_n}{T_n} = {s_n}{b_n}{T_{n -
+考虑如下递归式：\[{a_n}{T_n} = {b_n}{T_{n - 1}} + {c_n}\]两边同时乘以$s_n$得到：\[{s_n}{a_n}{T_n} = {s_n}{b_n}{T_{n
                         
                     </div>
                     <div class="publish-info">
@@ -833,8 +829,8 @@ sudo cp /usr/local/cuda-8.0/lib64/libcurand.so.8.0 /usr/local/lib/libcurand.so.8
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -956,7 +952,7 @@ sudo cp /usr/local/cuda-8.0/lib64/libcurand.so.8.0 /usr/local/lib/libcurand.so.8
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

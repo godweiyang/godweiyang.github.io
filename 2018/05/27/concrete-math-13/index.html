@@ -20,7 +20,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>具体数学-第13课（组合数各种性质） | WeiYang Blog</title>
+    <title>具体数学-第13课（组合数各种性质） | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -49,7 +49,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -112,7 +112,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -408,7 +408,7 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                        1.4k
+                        1.5k
                     </div>
                     
 
@@ -445,15 +445,15 @@
 <p>\[\sum\limits_{k \le m} {\left( {\begin{array}{*{20}{c}}r\\k\end{array}} \right){ {( - 1)}^k}}  = {( - 1)^m}\left( {\begin{array}{*{20}{c}}{r - 1}\\m\end{array}} \right)\]<br>这就说明了杨辉三角同一行的前面若干项交错和是可以求得的，但是它们的直接和是无法求出的。</p>
 <h1 id="性质4"><a href="#性质4" class="headerlink" title="性质4"></a>性质4</h1><hr>
 <p>\[\sum\limits_{k \le m} {\left( {\begin{array}{*{20}{c}}{m + r}\\k\end{array}} \right){x^k}{y^{m - k}} = \sum\limits_{k \le m} {\left( {\begin{array}{*{20}{c}}{ - r}\\k\end{array}} \right){ {( - x)}^k}{ {(x + y)}^{m - k}}} } \]<br>证明可以通过令<br>\[{S_m} = \sum\limits_{k \le m} {\left( {\begin{array}{*{20}{c}}{m + r}\\k\end{array}} \right){x^k}{y^{m - k}}}  = \sum\limits_{k \le m} {\left( {\begin{array}{*{20}{c}}{m + r - 1}\\k\end{array}} \right){x^k}{y^{m - k}}}  + \sum\limits_{k \le m} {\left( {\begin{array}{*{20}{c}}{m + r - 1}\\{k - 1}\end{array}} \right){x^k}{y^{m - k}}} \]<br>将左边表示成递归式的形式，同理如果右边可以表示成相同的递归式，那么左右就相等了。</p>
-<p>性质4看起来特别复杂，那么它有什么用呢？如果令<script type="math/tex">x</script>和<script type="math/tex">y</script>等于不同的值，那么就可以得到许多不同的恒等式。</p>
+<p>性质4看起来特别复杂，那么它有什么用呢？如果令$x$和$y$等于不同的值，那么就可以得到许多不同的恒等式。</p>
 <h1 id="性质5"><a href="#性质5" class="headerlink" title="性质5"></a>性质5</h1><hr>
-<p>令<script type="math/tex">x =  - 1,y = 1</script>可以得到<br>\[\sum\limits_{k \le m} {\left( {\begin{array}{*{20}{c}}{m + r}\\k\end{array}} \right){ {( - 1)}^k}}  = \left( {\begin{array}{*{20}{c}}{ - r}\\m\end{array}} \right)\]<br>这其实就是性质3的特例。</p>
+<p>令$x =  - 1,y = 1$可以得到<br>\[\sum\limits_{k \le m} {\left( {\begin{array}{*{20}{c}}{m + r}\\k\end{array}} \right){ {( - 1)}^k}}  = \left( {\begin{array}{*{20}{c}}{ - r}\\m\end{array}} \right)\]<br>这其实就是性质3的特例。</p>
 <h1 id="性质6"><a href="#性质6" class="headerlink" title="性质6"></a>性质6</h1><hr>
-<p>令<script type="math/tex">x = y = 1,r = m + 1</script>可以得到<br>\[\sum\limits_{k \le m} {\left( {\begin{array}{*{20}{c}}{2m + 1}\\k\end{array}} \right)}  = \sum\limits_{k \le m} {\left( {\begin{array}{*{20}{c}}{m + k}\\k\end{array}} \right){2^{m - k}}} \]<br>左边就是杨辉三角一行中左边一半的和，所以可以得到<br>\[\sum\limits_{k \le m} {\left( {\begin{array}{*{20}{c}}{m + k}\\k\end{array}} \right){2^{ - k}}} {\rm{ = }}{2^m}\]</p>
+<p>令$x = y = 1,r = m + 1$可以得到<br>\[\sum\limits_{k \le m} {\left( {\begin{array}{*{20}{c}}{2m + 1}\\k\end{array}} \right)}  = \sum\limits_{k \le m} {\left( {\begin{array}{*{20}{c}}{m + k}\\k\end{array}} \right){2^{m - k}}} \]<br>左边就是杨辉三角一行中左边一半的和，所以可以得到<br>\[\sum\limits_{k \le m} {\left( {\begin{array}{*{20}{c}}{m + k}\\k\end{array}} \right){2^{ - k}}} {\rm{ = }}{2^m}\]</p>
 <h1 id="性质7"><a href="#性质7" class="headerlink" title="性质7"></a>性质7</h1><hr>
-<p>\[\left( {\begin{array}{*{20}{c}}r\\m\end{array}} \right)\left( {\begin{array}{*{20}{c}}m\\k\end{array}} \right) = \left( {\begin{array}{*{20}{c}}r\\k\end{array}} \right)\left( {\begin{array}{*{20}{c}}{r - k}\\{m - k}\end{array}} \right)\]<br>这个公式可以形象理解为，从<script type="math/tex">r</script>个物品中取<script type="math/tex">m</script>个，再从这<script type="math/tex">m</script>个中取<script type="math/tex">k</script>个的方法数等于从<script type="math/tex">r</script>个物品中取<script type="math/tex">k</script>个，再从剩下的<script type="math/tex">r-k</script>个中取<script type="math/tex">m-k</script>个的方法数。证明的话直接用定义可证。</p>
+<p>\[\left( {\begin{array}{*{20}{c}}r\\m\end{array}} \right)\left( {\begin{array}{*{20}{c}}m\\k\end{array}} \right) = \left( {\begin{array}{*{20}{c}}r\\k\end{array}} \right)\left( {\begin{array}{*{20}{c}}{r - k}\\{m - k}\end{array}} \right)\]<br>这个公式可以形象理解为，从$r$个物品中取$m$个，再从这$m$个中取$k$个的方法数等于从$r$个物品中取$k$个，再从剩下的$r-k$个中取$m-k$个的方法数。证明的话直接用定义可证。</p>
 <h1 id="性质8"><a href="#性质8" class="headerlink" title="性质8"></a>性质8</h1><hr>
-<p>之前介绍了二项式系数，那么可以推广到任意<script type="math/tex">m</script>个未知数，它的展开式为<br>\[{({x_1} + {x_2} +  \cdots  + {x_m})^n} = \sum\limits_{\scriptstyle0 \le {a_1},{a_2}, \cdots ,{a_m} \le n\atop\scriptstyle{a_1} + {a_2} +  \cdots  + {a_m} = n} {\left( {\begin{array}{*{20}{c}}{ {a_1} + {a_2} +  \cdots  + {a_m}}\\{ {a_1},{a_2}, \cdots ,{a_m}}\end{array}} \right)} {x_1}^{ {a_1}}{x_2}^{ {a_2}} \cdots {x_m}^{ {a_m}}\]<br>其中<br>\[\left( {\begin{array}{*{20}{c}}{ {a_1} + {a_2} +  \cdots  + {a_m}}\\{ {a_1},{a_2}, \cdots ,{a_m}}\end{array}} \right) = \left( {\begin{array}{*{20}{c}}{ {a_1} + {a_2} +  \cdots  + {a_m}}\\{ {a_2} +  \cdots  + {a_m}}\end{array}} \right) \cdots \left( {\begin{array}{*{20}{c}}{ {a_{m - 1}} + {a_m}}\\{ {a_m}}\end{array}} \right)\]</p>
+<p>之前介绍了二项式系数，那么可以推广到任意$m$个未知数，它的展开式为<br>\[{({x_1} + {x_2} +  \cdots  + {x_m})^n} = \sum\limits_{\scriptstyle0 \le {a_1},{a_2}, \cdots ,{a_m} \le n\atop\scriptstyle{a_1} + {a_2} +  \cdots  + {a_m} = n} {\left( {\begin{array}{*{20}{c}}{ {a_1} + {a_2} +  \cdots  + {a_m}}\\{ {a_1},{a_2}, \cdots ,{a_m}}\end{array}} \right)} {x_1}^{ {a_1}}{x_2}^{ {a_2}} \cdots {x_m}^{ {a_m}}\]<br>其中<br>\[\left( {\begin{array}{*{20}{c}}{ {a_1} + {a_2} +  \cdots  + {a_m}}\\{ {a_1},{a_2}, \cdots ,{a_m}}\end{array}} \right) = \left( {\begin{array}{*{20}{c}}{ {a_1} + {a_2} +  \cdots  + {a_m}}\\{ {a_2} +  \cdots  + {a_m}}\end{array}} \right) \cdots \left( {\begin{array}{*{20}{c}}{ {a_{m - 1}} + {a_m}}\\{ {a_m}}\end{array}} \right)\]</p>
 <h1 id="性质9"><a href="#性质9" class="headerlink" title="性质9"></a>性质9</h1><hr>
 <p>范德蒙德卷积式：<br>\[\sum\limits_k {\left( {\begin{array}{*{20}{c}}r\\{m + k}\end{array}} \right)} \left( {\begin{array}{*{20}{c}}s\\{n - k}\end{array}} \right) = \left( {\begin{array}{*{20}{c}}{r + s}\\{m + n}\end{array}} \right)\]<br>很多公式都可以通过替换其中的一些变量推导得到：<br>\[\begin{array}{l}\sum\limits_k {\left( {\begin{array}{*{20}{c}}l\\{m + k}\end{array}} \right)} \left( {\begin{array}{*{20}{c}}s\\{n + k}\end{array}} \right) = \left( {\begin{array}{*{20}{c}}{l + s}\\{l - m + n}\end{array}} \right)\\\sum\limits_k {\left( {\begin{array}{*{20}{c}}l\\{m + k}\end{array}} \right)} \left( {\begin{array}{*{20}{c}}{s + k}\\n\end{array}} \right){( - 1)^k} = {( - 1)^{l + m}}\left( {\begin{array}{*{20}{c}}{s - m}\\{n - l}\end{array}} \right)\\\sum\limits_{k \le l} {\left( {\begin{array}{*{20}{c}}{l - k}\\m\end{array}} \right)} \left( {\begin{array}{*{20}{c}}s\\{k - n}\end{array}} \right){( - 1)^k} = {( - 1)^{l + m}}\left( {\begin{array}{*{20}{c}}{s - m - 1}\\{l - m - n}\end{array}} \right)\\\sum\limits_{0 \le k \le l} {\left( {\begin{array}{*{20}{c}}{l - k}\\m\end{array}} \right)} \left( {\begin{array}{*{20}{c}}{q + k}\\n\end{array}} \right) = \left( {\begin{array}{*{20}{c}}{l + q + 1}\\{m + n + 1}\end{array}} \right)\end{array}\]</p>
 <h1 id="例题1"><a href="#例题1" class="headerlink" title="例题1"></a>例题1</h1><hr>
@@ -622,7 +622,7 @@
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2018/05/27/concrete-math-13/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -827,8 +827,8 @@
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -950,7 +950,7 @@
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

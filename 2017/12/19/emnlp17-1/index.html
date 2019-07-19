@@ -19,7 +19,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Cross-Lingual Transfer Learning for POS Tagging without Cross-Lingual Resources | WeiYang Blog</title>
+    <title>Cross-Lingual Transfer Learning for POS Tagging without Cross-Lingual Resources | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -48,7 +48,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -111,7 +111,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -453,10 +453,9 @@
 <p>之前正好才看过一篇Yang et al. (2017)的论文Transfer Learning for Sequence Tagging with Hierarchical Recurrent Networks，还写了博客笔记<a href="http://godweiyang.com/2017/11/13/ICLR17-1/">[传送门]</a>。然而本文上来就说，他的模型不好！因为他的模型共享了字符层，其他层都是独立的，这样就导致了两种字符没有交集的语言迁移会很困难。<br>于是本文提出了基于一个公有LSTM和一个私有LSTM的模型。不过，我还是没明白这个字符层和前文批判的那个有啥区别。。。</p>
 <h1 id="2-模型"><a href="#2-模型" class="headerlink" title="2 模型"></a>2 模型</h1><hr>
 <p>模型结构如下图所示：<br><img src="1.png" alt></p>
-<h3 id="跨语言训练"><a href="#跨语言训练" class="headerlink" title="跨语言训练"></a>跨语言训练</h3><p>整体训练过程是这样的：首先输入一个句子，对于每个单词中的每个字符，输入到双向LSTM中，取前向后向LSTM的最后一个隐含层输出，连接到一起来作为词的表示。然后输入到公有和私有LSTM中训练，最后的损失函数有三个。<br>图中蓝色部分是公有部分，红色部分是私有部分。紫色部分是不同语言预测出的结果，三个红色方框是三个损失函数。<br>其中softmax层的损失函数定义为：<br><img src="2.png" alt></p>
-<p><script type="math/tex">S</script>是句子个数，<script type="math/tex">N</script>是当前句子单词数，<script type="math/tex">{p_{i,j}}</script>第<script type="math/tex">i</script>个句子的第<script type="math/tex">j</script>个标签，<script type="math/tex">{\hat p_{i,j}}</script>是预测标签。</p>
-<h3 id="语言对抗训练"><a href="#语言对抗训练" class="headerlink" title="语言对抗训练"></a>语言对抗训练</h3><p>为了让公有的LSTM部分变得语言无关，所以要对他进行语言对抗训练。<br>首先对公有LSTM的输出进行CNN/MaxPool编码（其实就是每一个维度取最大值），三个卷积层，得到三个向量，再连接到一起得到最终的向量表示，经过一个梯度反转层，最后输入到语言鉴别器。<br>这个语言鉴别器就是一个单隐含层的全连接的神经网络，激活函数用的是Leaky ReLU，具体就是当x&gt;=0时，f(x)=x；当x&lt;0时，f(x)=ax，这里a取0.2。<br>最后得到的损失函数定义为：<br><img src="3.png" alt><br>其中<script type="math/tex">{l_{i}}</script>是第i个句子的语言，<script type="math/tex">{\hat l_{i}}</script>是预测出的语言（原文说的是softmax输出的标签？？？这里不是很理解）。<br>由于经过了梯度反转层，所以这个语言鉴别器并不能鉴别出是哪一种语言，反而对两种语言的界限混淆了，使得它变得越来越语言无关了。</p>
-<h3 id="双向语言模型"><a href="#双向语言模型" class="headerlink" title="双向语言模型"></a>双向语言模型</h3><p>这个就不用多说了，很多地方都用到了，之前的两篇半监督序列标注的论文也都提到了加入语言模型来提升效果，而且注意的是，就算是没有标注的数据也可以加入进语言模型的训练。<br>语言模型的损失函数定义为：<br><img src="4.png" alt><br>其中f和b分别代表前向和后向LSTM输出。<br>最终，三个损失函数合并起来定义一个总的损失函数：<br><img src="5.png" alt><br>其中<script type="math/tex">\lambda</script>随着训练进行缓慢的从0上升到1，这是为了增加额外损失函数的训练稳定性。<br>而<script type="math/tex">w_{s}</script>是为了给源语言和目标语言不同的权重的，当训练目标语言是，权重为1，否则权重为目标语言训练集大小/源语言训练集大小。</p>
+<h3 id="跨语言训练"><a href="#跨语言训练" class="headerlink" title="跨语言训练"></a>跨语言训练</h3><p>整体训练过程是这样的：首先输入一个句子，对于每个单词中的每个字符，输入到双向LSTM中，取前向后向LSTM的最后一个隐含层输出，连接到一起来作为词的表示。然后输入到公有和私有LSTM中训练，最后的损失函数有三个。<br>图中蓝色部分是公有部分，红色部分是私有部分。紫色部分是不同语言预测出的结果，三个红色方框是三个损失函数。<br>其中softmax层的损失函数定义为：<br><img src="2.png" alt><br>$S$是句子个数，$N$是当前句子单词数，${p_{i,j}}$第$i$个句子的第$j$个标签，${\hat p_{i,j}}$是预测标签。</p>
+<h3 id="语言对抗训练"><a href="#语言对抗训练" class="headerlink" title="语言对抗训练"></a>语言对抗训练</h3><p>为了让公有的LSTM部分变得语言无关，所以要对他进行语言对抗训练。<br>首先对公有LSTM的输出进行CNN/MaxPool编码（其实就是每一个维度取最大值），三个卷积层，得到三个向量，再连接到一起得到最终的向量表示，经过一个梯度反转层，最后输入到语言鉴别器。<br>这个语言鉴别器就是一个单隐含层的全连接的神经网络，激活函数用的是Leaky ReLU，具体就是当x&gt;=0时，f(x)=x；当x&lt;0时，f(x)=ax，这里a取0.2。<br>最后得到的损失函数定义为：<br><img src="3.png" alt><br>其中${l_{i}}$是第i个句子的语言，${\hat l_{i}}$是预测出的语言（原文说的是softmax输出的标签？？？这里不是很理解）。<br>由于经过了梯度反转层，所以这个语言鉴别器并不能鉴别出是哪一种语言，反而对两种语言的界限混淆了，使得它变得越来越语言无关了。</p>
+<h3 id="双向语言模型"><a href="#双向语言模型" class="headerlink" title="双向语言模型"></a>双向语言模型</h3><p>这个就不用多说了，很多地方都用到了，之前的两篇半监督序列标注的论文也都提到了加入语言模型来提升效果，而且注意的是，就算是没有标注的数据也可以加入进语言模型的训练。<br>语言模型的损失函数定义为：<br><img src="4.png" alt><br>其中f和b分别代表前向和后向LSTM输出。<br>最终，三个损失函数合并起来定义一个总的损失函数：<br><img src="5.png" alt><br>其中$\lambda $随着训练进行缓慢的从0上升到1，这是为了增加额外损失函数的训练稳定性。<br>而$w_{s}$是为了给源语言和目标语言不同的权重的，当训练目标语言是，权重为1，否则权重为目标语言训练集大小/源语言训练集大小。</p>
 <h1 id="3-实验"><a href="#3-实验" class="headerlink" title="3 实验"></a>3 实验</h1><p>实验针对目标语言训练句子数为1280、320和32分别做了对比。<br>其中1280个句子的结果如下：<br><img src="6.png" alt><br>可以看出加入迁移学习后结果提升还是比较大的，表格中c表示公有LSTM，l表示语言模型，p表示私有LSTM，a表示语言对抗训练。本文的模型(c,p,l+a)结果是最好的。<br>320个句子的结果如下：<br><img src="7.png" alt><br>依然有提升，但是提升很不明显了，而且有几种语言直接采用私有LSTM+语言模型效果反而最好。原因就是目标语言的训练数据太少了，不足以训练出完美的公有和私有模型。<br>32个句子的训练数据就没有放出具体结果，结果依然有略微提升的，但是已经可以忽略不计了。<br>反过来思考，如果用上全部的目标语言训练数据，那么出来的结果会怎么样？事实是反而下降了，还不如直接用私有LSTM。<br>最后还做了一个实验，就是用多种不同的源语言+目标语言来训练模型，发现效果比用单种源语言效果好。</p>
 
             </div>
@@ -620,7 +619,7 @@
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2017/12/19/emnlp17-1/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -848,8 +847,8 @@
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -971,7 +970,7 @@
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

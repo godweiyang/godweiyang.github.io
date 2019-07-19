@@ -15,7 +15,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>词性标注+语言模型简易实现 | WeiYang Blog</title>
+    <title>词性标注+语言模型简易实现 | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -44,7 +44,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -107,7 +107,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -422,7 +422,7 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                        10 分
+                        11 分
                     </div>
                     
                 
@@ -492,8 +492,7 @@ one NOUN
 who PRON
 understands VERB
 you PRON
-. PUNC
-</code></pre><p>第二组：</p>
+. PUNC</code></pre><p>第二组：</p>
 <pre><code>DEBUG = False
 HASLM = False
 LM_EPOCH = 5
@@ -545,396 +544,394 @@ one NOUN
 who PRON
 understands VERB
 you PRON
-. PUNC
-</code></pre><p>可以看出来，加了CRF（第一组）效果反而差了一点点，对最后例句的词性标注唯一的区别在于”am”是助动词AUX还是动词VERB，我发现训练集里两种都有，区别也不大。</p>
+. PUNC</code></pre><p>可以看出来，加了CRF（第一组）效果反而差了一点点，对最后例句的词性标注唯一的区别在于”am”是助动词AUX还是动词VERB，我发现训练集里两种都有，区别也不大。</p>
 <p>完整代码：</p>
-<pre class=" language-lang-python"><code class="language-lang-python">from collections import Counter, defaultdict
-from itertools import count
-import random
-import dynet as dy
-import numpy as np
+<pre class=" language-python"><code class="language-python"><span class="token keyword">from</span> collections <span class="token keyword">import</span> Counter<span class="token punctuation">,</span> defaultdict
+<span class="token keyword">from</span> itertools <span class="token keyword">import</span> count
+<span class="token keyword">import</span> random
+<span class="token keyword">import</span> dynet <span class="token keyword">as</span> dy
+<span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
 
-DEBUG = False
-HASLM = False
-LM_EPOCH = 5
-TAG_EPOCH = 10
+DEBUG <span class="token operator">=</span> <span class="token boolean">False</span>
+HASLM <span class="token operator">=</span> <span class="token boolean">False</span>
+LM_EPOCH <span class="token operator">=</span> <span class="token number">5</span>
+TAG_EPOCH <span class="token operator">=</span> <span class="token number">10</span>
 
-# CRF parameters
-MAX_LIK_ITERS = 3
-SMALL_NUMBER = -1e10
-MARGIN = 0
+<span class="token comment" spellcheck="true"># CRF parameters</span>
+MAX_LIK_ITERS <span class="token operator">=</span> <span class="token number">3</span>
+SMALL_NUMBER <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1e10</span>
+MARGIN <span class="token operator">=</span> <span class="token number">0</span>
 
-lm_train_file = "LM_TRAIN"
-lm_test_file = "LM_DEV"
-train_file = "TAG_TRAIN"
-dev_file = "TAG_DEV"
+lm_train_file <span class="token operator">=</span> <span class="token string">"LM_TRAIN"</span>
+lm_test_file <span class="token operator">=</span> <span class="token string">"LM_DEV"</span>
+train_file <span class="token operator">=</span> <span class="token string">"TAG_TRAIN"</span>
+dev_file <span class="token operator">=</span> <span class="token string">"TAG_DEV"</span>
 
-if DEBUG:
-    lm_train_file += "_SMALL"
-    lm_test_file += "_SMALL"
-    train_file += "_SMALL"
-    dev_file += "_SMALL"
+<span class="token keyword">if</span> DEBUG<span class="token punctuation">:</span>
+    lm_train_file <span class="token operator">+=</span> <span class="token string">"_SMALL"</span>
+    lm_test_file <span class="token operator">+=</span> <span class="token string">"_SMALL"</span>
+    train_file <span class="token operator">+=</span> <span class="token string">"_SMALL"</span>
+    dev_file <span class="token operator">+=</span> <span class="token string">"_SMALL"</span>
 
-# Language Model
-print "--------Language Model Training--------"
+<span class="token comment" spellcheck="true"># Language Model</span>
+<span class="token keyword">print</span> <span class="token string">"--------Language Model Training--------"</span>
 
-def read_lm(fname):
-    with file(fname) as fh:
-        for line in fh:
-            sent = line.strip().split()
-            sent.append("<s>")
-            yield sent
+<span class="token keyword">def</span> <span class="token function">read_lm</span><span class="token punctuation">(</span>fname<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">with</span> file<span class="token punctuation">(</span>fname<span class="token punctuation">)</span> <span class="token keyword">as</span> fh<span class="token punctuation">:</span>
+        <span class="token keyword">for</span> line <span class="token keyword">in</span> fh<span class="token punctuation">:</span>
+            sent <span class="token operator">=</span> line<span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            sent<span class="token punctuation">.</span>append<span class="token punctuation">(</span><span class="token string">"&lt;s>"</span><span class="token punctuation">)</span>
+            <span class="token keyword">yield</span> sent
 
-lm_train = list(read_lm(lm_train_file))
-lm_test = list(read_lm(lm_test_file))
-lm_words = []
+lm_train <span class="token operator">=</span> list<span class="token punctuation">(</span>read_lm<span class="token punctuation">(</span>lm_train_file<span class="token punctuation">)</span><span class="token punctuation">)</span>
+lm_test <span class="token operator">=</span> list<span class="token punctuation">(</span>read_lm<span class="token punctuation">(</span>lm_test_file<span class="token punctuation">)</span><span class="token punctuation">)</span>
+lm_words <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
 
-for sent in lm_train:
-    for w in sent:
-        lm_words.append(w)
+<span class="token keyword">for</span> sent <span class="token keyword">in</span> lm_train<span class="token punctuation">:</span>
+    <span class="token keyword">for</span> w <span class="token keyword">in</span> sent<span class="token punctuation">:</span>
+        lm_words<span class="token punctuation">.</span>append<span class="token punctuation">(</span>w<span class="token punctuation">)</span>
 
-lm_words.append("_UNK_")
+lm_words<span class="token punctuation">.</span>append<span class="token punctuation">(</span><span class="token string">"_UNK_"</span><span class="token punctuation">)</span>
 
-lm_w2i = defaultdict(count(0).next)
-for word in lm_words:
-    lm_w2i[word]
-lm_i2w = {i:w for w, i in lm_w2i.iteritems()}
+lm_w2i <span class="token operator">=</span> defaultdict<span class="token punctuation">(</span>count<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">.</span>next<span class="token punctuation">)</span>
+<span class="token keyword">for</span> word <span class="token keyword">in</span> lm_words<span class="token punctuation">:</span>
+    lm_w2i<span class="token punctuation">[</span>word<span class="token punctuation">]</span>
+lm_i2w <span class="token operator">=</span> <span class="token punctuation">{</span>i<span class="token punctuation">:</span>w <span class="token keyword">for</span> w<span class="token punctuation">,</span> i <span class="token keyword">in</span> lm_w2i<span class="token punctuation">.</span>iteritems<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">}</span>
 
-lm_nwords = len(lm_w2i)
-lm_model = dy.Model()
-lm_trainer = dy.AdamTrainer(lm_model)
-lm_WORDS_LOOKUP = lm_model.add_lookup_parameters((lm_nwords, 64))
-lm_RNN = dy.LSTMBuilder(1, 64, 128, lm_model)
-lm_pW = lm_model.add_parameters((lm_nwords, 128))
-lm_pb = lm_model.add_parameters(lm_nwords)
+lm_nwords <span class="token operator">=</span> len<span class="token punctuation">(</span>lm_w2i<span class="token punctuation">)</span>
+lm_model <span class="token operator">=</span> dy<span class="token punctuation">.</span>Model<span class="token punctuation">(</span><span class="token punctuation">)</span>
+lm_trainer <span class="token operator">=</span> dy<span class="token punctuation">.</span>AdamTrainer<span class="token punctuation">(</span>lm_model<span class="token punctuation">)</span>
+lm_WORDS_LOOKUP <span class="token operator">=</span> lm_model<span class="token punctuation">.</span>add_lookup_parameters<span class="token punctuation">(</span><span class="token punctuation">(</span>lm_nwords<span class="token punctuation">,</span> <span class="token number">64</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+lm_RNN <span class="token operator">=</span> dy<span class="token punctuation">.</span>LSTMBuilder<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">64</span><span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">,</span> lm_model<span class="token punctuation">)</span>
+lm_pW <span class="token operator">=</span> lm_model<span class="token punctuation">.</span>add_parameters<span class="token punctuation">(</span><span class="token punctuation">(</span>lm_nwords<span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+lm_pb <span class="token operator">=</span> lm_model<span class="token punctuation">.</span>add_parameters<span class="token punctuation">(</span>lm_nwords<span class="token punctuation">)</span>
 
-def calc_lm_loss(sent):
-    dy.renew_cg()
-    W = dy.parameter(lm_pW)
-    b = dy.parameter(lm_pb)
-    f_init = lm_RNN.initial_state()
+<span class="token keyword">def</span> <span class="token function">calc_lm_loss</span><span class="token punctuation">(</span>sent<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    dy<span class="token punctuation">.</span>renew_cg<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    W <span class="token operator">=</span> dy<span class="token punctuation">.</span>parameter<span class="token punctuation">(</span>lm_pW<span class="token punctuation">)</span>
+    b <span class="token operator">=</span> dy<span class="token punctuation">.</span>parameter<span class="token punctuation">(</span>lm_pb<span class="token punctuation">)</span>
+    f_init <span class="token operator">=</span> lm_RNN<span class="token punctuation">.</span>initial_state<span class="token punctuation">(</span><span class="token punctuation">)</span>
 
-    wids = []
-    for w in sent:
-        if w in lm_words:
-            wids.append(lm_w2i[w])
-        else:
-            wids.append(lm_w2i["_UNK_"])
+    wids <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token keyword">for</span> w <span class="token keyword">in</span> sent<span class="token punctuation">:</span>
+        <span class="token keyword">if</span> w <span class="token keyword">in</span> lm_words<span class="token punctuation">:</span>
+            wids<span class="token punctuation">.</span>append<span class="token punctuation">(</span>lm_w2i<span class="token punctuation">[</span>w<span class="token punctuation">]</span><span class="token punctuation">)</span>
+        <span class="token keyword">else</span><span class="token punctuation">:</span>
+            wids<span class="token punctuation">.</span>append<span class="token punctuation">(</span>lm_w2i<span class="token punctuation">[</span><span class="token string">"_UNK_"</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
 
-    s = f_init.add_input(lm_WORDS_LOOKUP[wids[-1]])
+    s <span class="token operator">=</span> f_init<span class="token punctuation">.</span>add_input<span class="token punctuation">(</span>lm_WORDS_LOOKUP<span class="token punctuation">[</span>wids<span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
 
-    losses = []
-    for wid in wids:
-        score = W * s.output() + b
-        loss = dy.pickneglogsoftmax(score, wid)
-        losses.append(loss)
-        s = s.add_input(lm_WORDS_LOOKUP[wid])
+    losses <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token keyword">for</span> wid <span class="token keyword">in</span> wids<span class="token punctuation">:</span>
+        score <span class="token operator">=</span> W <span class="token operator">*</span> s<span class="token punctuation">.</span>output<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> b
+        loss <span class="token operator">=</span> dy<span class="token punctuation">.</span>pickneglogsoftmax<span class="token punctuation">(</span>score<span class="token punctuation">,</span> wid<span class="token punctuation">)</span>
+        losses<span class="token punctuation">.</span>append<span class="token punctuation">(</span>loss<span class="token punctuation">)</span>
+        s <span class="token operator">=</span> s<span class="token punctuation">.</span>add_input<span class="token punctuation">(</span>lm_WORDS_LOOKUP<span class="token punctuation">[</span>wid<span class="token punctuation">]</span><span class="token punctuation">)</span>
 
-    return dy.esum(losses)
+    <span class="token keyword">return</span> dy<span class="token punctuation">.</span>esum<span class="token punctuation">(</span>losses<span class="token punctuation">)</span>
 
-def calc_lm_embdding(words):
-    dy.renew_cg()
-    f_init = lm_RNN.initial_state()
-    wids = []
-    for w in words:
-        if w in lm_words:
-            wids.append(lm_w2i[w])
-        else:
-            wids.append(lm_w2i["_UNK_"])
-    wids.append(lm_w2i["<s>"])
-    s = f_init.add_input(lm_WORDS_LOOKUP[wids[-1]])
-    outputs = []
-    for wid in wids:
-        outputs.append(s.output().value())
-        s = s.add_input(lm_WORDS_LOOKUP[wid]) 
-    return outputs
+<span class="token keyword">def</span> <span class="token function">calc_lm_embdding</span><span class="token punctuation">(</span>words<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    dy<span class="token punctuation">.</span>renew_cg<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    f_init <span class="token operator">=</span> lm_RNN<span class="token punctuation">.</span>initial_state<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    wids <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token keyword">for</span> w <span class="token keyword">in</span> words<span class="token punctuation">:</span>
+        <span class="token keyword">if</span> w <span class="token keyword">in</span> lm_words<span class="token punctuation">:</span>
+            wids<span class="token punctuation">.</span>append<span class="token punctuation">(</span>lm_w2i<span class="token punctuation">[</span>w<span class="token punctuation">]</span><span class="token punctuation">)</span>
+        <span class="token keyword">else</span><span class="token punctuation">:</span>
+            wids<span class="token punctuation">.</span>append<span class="token punctuation">(</span>lm_w2i<span class="token punctuation">[</span><span class="token string">"_UNK_"</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    wids<span class="token punctuation">.</span>append<span class="token punctuation">(</span>lm_w2i<span class="token punctuation">[</span><span class="token string">"&lt;s>"</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    s <span class="token operator">=</span> f_init<span class="token punctuation">.</span>add_input<span class="token punctuation">(</span>lm_WORDS_LOOKUP<span class="token punctuation">[</span>wids<span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    outputs <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token keyword">for</span> wid <span class="token keyword">in</span> wids<span class="token punctuation">:</span>
+        outputs<span class="token punctuation">.</span>append<span class="token punctuation">(</span>s<span class="token punctuation">.</span>output<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>value<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        s <span class="token operator">=</span> s<span class="token punctuation">.</span>add_input<span class="token punctuation">(</span>lm_WORDS_LOOKUP<span class="token punctuation">[</span>wid<span class="token punctuation">]</span><span class="token punctuation">)</span> 
+    <span class="token keyword">return</span> outputs
 
-if HASLM:
-    for ITER in xrange(LM_EPOCH):
-        lm_num_tagged = lm_cum_loss = 0
-        random.shuffle(lm_train)
-        i = 0
-        for s in lm_train:
-            loss_exp = calc_lm_loss(s)
-            lm_cum_loss += loss_exp.scalar_value()
-            lm_num_tagged += len(s)
-            loss_exp.backward()
-            lm_trainer.update()
-            if DEBUG == False:
-                i += 1
-                if i % 100 == 0:
-                    print "train loss ", i, ": ", lm_cum_loss / lm_num_tagged
+<span class="token keyword">if</span> HASLM<span class="token punctuation">:</span>
+    <span class="token keyword">for</span> ITER <span class="token keyword">in</span> xrange<span class="token punctuation">(</span>LM_EPOCH<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        lm_num_tagged <span class="token operator">=</span> lm_cum_loss <span class="token operator">=</span> <span class="token number">0</span>
+        random<span class="token punctuation">.</span>shuffle<span class="token punctuation">(</span>lm_train<span class="token punctuation">)</span>
+        i <span class="token operator">=</span> <span class="token number">0</span>
+        <span class="token keyword">for</span> s <span class="token keyword">in</span> lm_train<span class="token punctuation">:</span>
+            loss_exp <span class="token operator">=</span> calc_lm_loss<span class="token punctuation">(</span>s<span class="token punctuation">)</span>
+            lm_cum_loss <span class="token operator">+=</span> loss_exp<span class="token punctuation">.</span>scalar_value<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            lm_num_tagged <span class="token operator">+=</span> len<span class="token punctuation">(</span>s<span class="token punctuation">)</span>
+            loss_exp<span class="token punctuation">.</span>backward<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            lm_trainer<span class="token punctuation">.</span>update<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token keyword">if</span> DEBUG <span class="token operator">==</span> <span class="token boolean">False</span><span class="token punctuation">:</span>
+                i <span class="token operator">+=</span> <span class="token number">1</span>
+                <span class="token keyword">if</span> i <span class="token operator">%</span> <span class="token number">100</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">:</span>
+                    <span class="token keyword">print</span> <span class="token string">"train loss "</span><span class="token punctuation">,</span> i<span class="token punctuation">,</span> <span class="token string">": "</span><span class="token punctuation">,</span> lm_cum_loss <span class="token operator">/</span> lm_num_tagged
 
-        dev_loss = dev_words = 0
-        i = 0
-        for sent in lm_test:
-            loss_exp = calc_lm_loss(sent)
-            dev_loss += loss_exp.scalar_value()
-            dev_words += len(sent)
-            # if DEBUG == False:
-            #     i += 1
-            #     if i % 100 == 0:
-            #         print "dev loss ", i, ": ", dev_loss / dev_words
-        print "epoch %r finished" % ITER
-        print "total train loss: ", lm_cum_loss / lm_num_tagged
-        print "total dev loss: ", dev_loss / dev_words
+        dev_loss <span class="token operator">=</span> dev_words <span class="token operator">=</span> <span class="token number">0</span>
+        i <span class="token operator">=</span> <span class="token number">0</span>
+        <span class="token keyword">for</span> sent <span class="token keyword">in</span> lm_test<span class="token punctuation">:</span>
+            loss_exp <span class="token operator">=</span> calc_lm_loss<span class="token punctuation">(</span>sent<span class="token punctuation">)</span>
+            dev_loss <span class="token operator">+=</span> loss_exp<span class="token punctuation">.</span>scalar_value<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            dev_words <span class="token operator">+=</span> len<span class="token punctuation">(</span>sent<span class="token punctuation">)</span>
+            <span class="token comment" spellcheck="true"># if DEBUG == False:</span>
+            <span class="token comment" spellcheck="true">#     i += 1</span>
+            <span class="token comment" spellcheck="true">#     if i % 100 == 0:</span>
+            <span class="token comment" spellcheck="true">#         print "dev loss ", i, ": ", dev_loss / dev_words</span>
+        <span class="token keyword">print</span> <span class="token string">"epoch %r finished"</span> <span class="token operator">%</span> ITER
+        <span class="token keyword">print</span> <span class="token string">"total train loss: "</span><span class="token punctuation">,</span> lm_cum_loss <span class="token operator">/</span> lm_num_tagged
+        <span class="token keyword">print</span> <span class="token string">"total dev loss: "</span><span class="token punctuation">,</span> dev_loss <span class="token operator">/</span> dev_words
 
-# Tagger
-print "--------Sequence Tagger Training--------"
+<span class="token comment" spellcheck="true"># Tagger</span>
+<span class="token keyword">print</span> <span class="token string">"--------Sequence Tagger Training--------"</span>
 
-def read(fname):
-    with file(fname) as fh:
-        for line in fh:
-            line = line.strip().split()
-            sent = [tuple(x.rsplit("/", 1)) for x in line]
-            yield sent
+<span class="token keyword">def</span> <span class="token function">read</span><span class="token punctuation">(</span>fname<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">with</span> file<span class="token punctuation">(</span>fname<span class="token punctuation">)</span> <span class="token keyword">as</span> fh<span class="token punctuation">:</span>
+        <span class="token keyword">for</span> line <span class="token keyword">in</span> fh<span class="token punctuation">:</span>
+            line <span class="token operator">=</span> line<span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            sent <span class="token operator">=</span> <span class="token punctuation">[</span>tuple<span class="token punctuation">(</span>x<span class="token punctuation">.</span>rsplit<span class="token punctuation">(</span><span class="token string">"/"</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">for</span> x <span class="token keyword">in</span> line<span class="token punctuation">]</span>
+            <span class="token keyword">yield</span> sent
 
-train = list(read(train_file))
-dev = list(read(dev_file))
-words = []
-tags = []
-chars = set()
-wc = Counter()
-for sent in train:
-    for w, p in sent:
-        words.append(w)
-        tags.append(p)
-        chars.update(w)
-        wc[w] += 1
+train <span class="token operator">=</span> list<span class="token punctuation">(</span>read<span class="token punctuation">(</span>train_file<span class="token punctuation">)</span><span class="token punctuation">)</span>
+dev <span class="token operator">=</span> list<span class="token punctuation">(</span>read<span class="token punctuation">(</span>dev_file<span class="token punctuation">)</span><span class="token punctuation">)</span>
+words <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+tags <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+chars <span class="token operator">=</span> set<span class="token punctuation">(</span><span class="token punctuation">)</span>
+wc <span class="token operator">=</span> Counter<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">for</span> sent <span class="token keyword">in</span> train<span class="token punctuation">:</span>
+    <span class="token keyword">for</span> w<span class="token punctuation">,</span> p <span class="token keyword">in</span> sent<span class="token punctuation">:</span>
+        words<span class="token punctuation">.</span>append<span class="token punctuation">(</span>w<span class="token punctuation">)</span>
+        tags<span class="token punctuation">.</span>append<span class="token punctuation">(</span>p<span class="token punctuation">)</span>
+        chars<span class="token punctuation">.</span>update<span class="token punctuation">(</span>w<span class="token punctuation">)</span>
+        wc<span class="token punctuation">[</span>w<span class="token punctuation">]</span> <span class="token operator">+=</span> <span class="token number">1</span>
 
-words.append("_UNK_")
-words.append("_S_")
-tags.append("_S_")
-chars.add("<*>")
+words<span class="token punctuation">.</span>append<span class="token punctuation">(</span><span class="token string">"_UNK_"</span><span class="token punctuation">)</span>
+words<span class="token punctuation">.</span>append<span class="token punctuation">(</span><span class="token string">"_S_"</span><span class="token punctuation">)</span>
+tags<span class="token punctuation">.</span>append<span class="token punctuation">(</span><span class="token string">"_S_"</span><span class="token punctuation">)</span>
+chars<span class="token punctuation">.</span>add<span class="token punctuation">(</span><span class="token string">"&lt;*>"</span><span class="token punctuation">)</span>
 
-w2i = defaultdict(count(0).next)
-for word in words:
-    w2i[word]
-i2w = {i:w for w, i in w2i.iteritems()}
+w2i <span class="token operator">=</span> defaultdict<span class="token punctuation">(</span>count<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">.</span>next<span class="token punctuation">)</span>
+<span class="token keyword">for</span> word <span class="token keyword">in</span> words<span class="token punctuation">:</span>
+    w2i<span class="token punctuation">[</span>word<span class="token punctuation">]</span>
+i2w <span class="token operator">=</span> <span class="token punctuation">{</span>i<span class="token punctuation">:</span>w <span class="token keyword">for</span> w<span class="token punctuation">,</span> i <span class="token keyword">in</span> w2i<span class="token punctuation">.</span>iteritems<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">}</span>
 
-t2i = defaultdict(count(0).next)
-for tag in tags:
-    t2i[tag]
-i2t = {i:w for w, i in t2i.iteritems()}
+t2i <span class="token operator">=</span> defaultdict<span class="token punctuation">(</span>count<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">.</span>next<span class="token punctuation">)</span>
+<span class="token keyword">for</span> tag <span class="token keyword">in</span> tags<span class="token punctuation">:</span>
+    t2i<span class="token punctuation">[</span>tag<span class="token punctuation">]</span>
+i2t <span class="token operator">=</span> <span class="token punctuation">{</span>i<span class="token punctuation">:</span>w <span class="token keyword">for</span> w<span class="token punctuation">,</span> i <span class="token keyword">in</span> t2i<span class="token punctuation">.</span>iteritems<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">}</span>
 
-c2i = defaultdict(count(0).next)
-for char in chars:
-    c2i[char]
-i2c = {i:w for w, i in c2i.iteritems()}
+c2i <span class="token operator">=</span> defaultdict<span class="token punctuation">(</span>count<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">.</span>next<span class="token punctuation">)</span>
+<span class="token keyword">for</span> char <span class="token keyword">in</span> chars<span class="token punctuation">:</span>
+    c2i<span class="token punctuation">[</span>char<span class="token punctuation">]</span>
+i2c <span class="token operator">=</span> <span class="token punctuation">{</span>i<span class="token punctuation">:</span>w <span class="token keyword">for</span> w<span class="token punctuation">,</span> i <span class="token keyword">in</span> c2i<span class="token punctuation">.</span>iteritems<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">}</span>
 
-UNK = w2i["_UNK_"]
-S_W = w2i["_S_"]
-S_T = t2i["_S_"]
+UNK <span class="token operator">=</span> w2i<span class="token punctuation">[</span><span class="token string">"_UNK_"</span><span class="token punctuation">]</span>
+S_W <span class="token operator">=</span> w2i<span class="token punctuation">[</span><span class="token string">"_S_"</span><span class="token punctuation">]</span>
+S_T <span class="token operator">=</span> t2i<span class="token punctuation">[</span><span class="token string">"_S_"</span><span class="token punctuation">]</span>
 
-nwords = len(w2i)
-ntags  = len(t2i)
-nchars  = len(c2i)
+nwords <span class="token operator">=</span> len<span class="token punctuation">(</span>w2i<span class="token punctuation">)</span>
+ntags  <span class="token operator">=</span> len<span class="token punctuation">(</span>t2i<span class="token punctuation">)</span>
+nchars  <span class="token operator">=</span> len<span class="token punctuation">(</span>c2i<span class="token punctuation">)</span>
 
-model = dy.Model()
-trainer = dy.AdamTrainer(model)
-WORDS_LOOKUP = model.add_lookup_parameters((nwords, 128))
-CHARS_LOOKUP = model.add_lookup_parameters((nchars, 20))
-TRANS_LOOKUP = model.add_lookup_parameters((ntags, ntags))
-pH = model.add_parameters((32, 50*2))
-pO = model.add_parameters((ntags, 32))
+model <span class="token operator">=</span> dy<span class="token punctuation">.</span>Model<span class="token punctuation">(</span><span class="token punctuation">)</span>
+trainer <span class="token operator">=</span> dy<span class="token punctuation">.</span>AdamTrainer<span class="token punctuation">(</span>model<span class="token punctuation">)</span>
+WORDS_LOOKUP <span class="token operator">=</span> model<span class="token punctuation">.</span>add_lookup_parameters<span class="token punctuation">(</span><span class="token punctuation">(</span>nwords<span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+CHARS_LOOKUP <span class="token operator">=</span> model<span class="token punctuation">.</span>add_lookup_parameters<span class="token punctuation">(</span><span class="token punctuation">(</span>nchars<span class="token punctuation">,</span> <span class="token number">20</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+TRANS_LOOKUP <span class="token operator">=</span> model<span class="token punctuation">.</span>add_lookup_parameters<span class="token punctuation">(</span><span class="token punctuation">(</span>ntags<span class="token punctuation">,</span> ntags<span class="token punctuation">)</span><span class="token punctuation">)</span>
+pH <span class="token operator">=</span> model<span class="token punctuation">.</span>add_parameters<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token number">32</span><span class="token punctuation">,</span> <span class="token number">50</span><span class="token operator">*</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+pO <span class="token operator">=</span> model<span class="token punctuation">.</span>add_parameters<span class="token punctuation">(</span><span class="token punctuation">(</span>ntags<span class="token punctuation">,</span> <span class="token number">32</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
 
-fwdRNN = dy.LSTMBuilder(2, 128, 50, model)
-bwdRNN = dy.LSTMBuilder(2, 128, 50, model)
-if HASLM:
-    fwdRNN = dy.LSTMBuilder(2, 256, 50, model)
-    bwdRNN = dy.LSTMBuilder(2, 256, 50, model)
+fwdRNN <span class="token operator">=</span> dy<span class="token punctuation">.</span>LSTMBuilder<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">,</span> <span class="token number">50</span><span class="token punctuation">,</span> model<span class="token punctuation">)</span>
+bwdRNN <span class="token operator">=</span> dy<span class="token punctuation">.</span>LSTMBuilder<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">,</span> <span class="token number">50</span><span class="token punctuation">,</span> model<span class="token punctuation">)</span>
+<span class="token keyword">if</span> HASLM<span class="token punctuation">:</span>
+    fwdRNN <span class="token operator">=</span> dy<span class="token punctuation">.</span>LSTMBuilder<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">256</span><span class="token punctuation">,</span> <span class="token number">50</span><span class="token punctuation">,</span> model<span class="token punctuation">)</span>
+    bwdRNN <span class="token operator">=</span> dy<span class="token punctuation">.</span>LSTMBuilder<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">256</span><span class="token punctuation">,</span> <span class="token number">50</span><span class="token punctuation">,</span> model<span class="token punctuation">)</span>
 
-cFwdRNN = dy.LSTMBuilder(1, 20, 64, model)
-cBwdRNN = dy.LSTMBuilder(1, 20, 64, model)
+cFwdRNN <span class="token operator">=</span> dy<span class="token punctuation">.</span>LSTMBuilder<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">20</span><span class="token punctuation">,</span> <span class="token number">64</span><span class="token punctuation">,</span> model<span class="token punctuation">)</span>
+cBwdRNN <span class="token operator">=</span> dy<span class="token punctuation">.</span>LSTMBuilder<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">20</span><span class="token punctuation">,</span> <span class="token number">64</span><span class="token punctuation">,</span> model<span class="token punctuation">)</span>
 
-def word_rep(w, cf_init, cb_init):
-    if wc[w] > 5:
-        w_index = w2i[w]
-        return WORDS_LOOKUP[w_index]
-    else:
-        pad_char = c2i["<*>"]
-        char_ids = [pad_char] + [c2i[c] for c in w] + [pad_char]
-        char_embs = [CHARS_LOOKUP[cid] for cid in char_ids]
-        fw_exps = cf_init.transduce(char_embs)
-        bw_exps = cb_init.transduce(reversed(char_embs))
-        return dy.concatenate([ fw_exps[-1], bw_exps[-1] ])
+<span class="token keyword">def</span> <span class="token function">word_rep</span><span class="token punctuation">(</span>w<span class="token punctuation">,</span> cf_init<span class="token punctuation">,</span> cb_init<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> wc<span class="token punctuation">[</span>w<span class="token punctuation">]</span> <span class="token operator">></span> <span class="token number">5</span><span class="token punctuation">:</span>
+        w_index <span class="token operator">=</span> w2i<span class="token punctuation">[</span>w<span class="token punctuation">]</span>
+        <span class="token keyword">return</span> WORDS_LOOKUP<span class="token punctuation">[</span>w_index<span class="token punctuation">]</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        pad_char <span class="token operator">=</span> c2i<span class="token punctuation">[</span><span class="token string">"&lt;*>"</span><span class="token punctuation">]</span>
+        char_ids <span class="token operator">=</span> <span class="token punctuation">[</span>pad_char<span class="token punctuation">]</span> <span class="token operator">+</span> <span class="token punctuation">[</span>c2i<span class="token punctuation">[</span>c<span class="token punctuation">]</span> <span class="token keyword">for</span> c <span class="token keyword">in</span> w<span class="token punctuation">]</span> <span class="token operator">+</span> <span class="token punctuation">[</span>pad_char<span class="token punctuation">]</span>
+        char_embs <span class="token operator">=</span> <span class="token punctuation">[</span>CHARS_LOOKUP<span class="token punctuation">[</span>cid<span class="token punctuation">]</span> <span class="token keyword">for</span> cid <span class="token keyword">in</span> char_ids<span class="token punctuation">]</span>
+        fw_exps <span class="token operator">=</span> cf_init<span class="token punctuation">.</span>transduce<span class="token punctuation">(</span>char_embs<span class="token punctuation">)</span>
+        bw_exps <span class="token operator">=</span> cb_init<span class="token punctuation">.</span>transduce<span class="token punctuation">(</span>reversed<span class="token punctuation">(</span>char_embs<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span> dy<span class="token punctuation">.</span>concatenate<span class="token punctuation">(</span><span class="token punctuation">[</span> fw_exps<span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> bw_exps<span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token punctuation">]</span><span class="token punctuation">)</span>
 
-def build_tagging_graph(words):
-    lm_wembs = []
-    if HASLM:
-        lm_wembs = calc_lm_embdding(words)
+<span class="token keyword">def</span> <span class="token function">build_tagging_graph</span><span class="token punctuation">(</span>words<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    lm_wembs <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token keyword">if</span> HASLM<span class="token punctuation">:</span>
+        lm_wembs <span class="token operator">=</span> calc_lm_embdding<span class="token punctuation">(</span>words<span class="token punctuation">)</span>
 
-    dy.renew_cg()
-    H = dy.parameter(pH)
-    O = dy.parameter(pO)
+    dy<span class="token punctuation">.</span>renew_cg<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    H <span class="token operator">=</span> dy<span class="token punctuation">.</span>parameter<span class="token punctuation">(</span>pH<span class="token punctuation">)</span>
+    O <span class="token operator">=</span> dy<span class="token punctuation">.</span>parameter<span class="token punctuation">(</span>pO<span class="token punctuation">)</span>
 
-    f_init = fwdRNN.initial_state()
-    b_init = bwdRNN.initial_state()
-    cf_init = cFwdRNN.initial_state()
-    cb_init = cBwdRNN.initial_state()
+    f_init <span class="token operator">=</span> fwdRNN<span class="token punctuation">.</span>initial_state<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    b_init <span class="token operator">=</span> bwdRNN<span class="token punctuation">.</span>initial_state<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    cf_init <span class="token operator">=</span> cFwdRNN<span class="token punctuation">.</span>initial_state<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    cb_init <span class="token operator">=</span> cBwdRNN<span class="token punctuation">.</span>initial_state<span class="token punctuation">(</span><span class="token punctuation">)</span>
 
-    wembs = [word_rep(w, cf_init, cb_init) for w in words]
-    if HASLM:
-        wembs1 = []
-        for lmw, w in zip(lm_wembs, wembs):
-            wv = w.value()
-            wv.extend(lmw)
-            wembs1.append(wv)
-        wembs = [dy.inputTensor(w) for w in wembs1]
-    wembs = [dy.noise(we, 0.1) for we in wembs]
+    wembs <span class="token operator">=</span> <span class="token punctuation">[</span>word_rep<span class="token punctuation">(</span>w<span class="token punctuation">,</span> cf_init<span class="token punctuation">,</span> cb_init<span class="token punctuation">)</span> <span class="token keyword">for</span> w <span class="token keyword">in</span> words<span class="token punctuation">]</span>
+    <span class="token keyword">if</span> HASLM<span class="token punctuation">:</span>
+        wembs1 <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+        <span class="token keyword">for</span> lmw<span class="token punctuation">,</span> w <span class="token keyword">in</span> zip<span class="token punctuation">(</span>lm_wembs<span class="token punctuation">,</span> wembs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            wv <span class="token operator">=</span> w<span class="token punctuation">.</span>value<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            wv<span class="token punctuation">.</span>extend<span class="token punctuation">(</span>lmw<span class="token punctuation">)</span>
+            wembs1<span class="token punctuation">.</span>append<span class="token punctuation">(</span>wv<span class="token punctuation">)</span>
+        wembs <span class="token operator">=</span> <span class="token punctuation">[</span>dy<span class="token punctuation">.</span>inputTensor<span class="token punctuation">(</span>w<span class="token punctuation">)</span> <span class="token keyword">for</span> w <span class="token keyword">in</span> wembs1<span class="token punctuation">]</span>
+    wembs <span class="token operator">=</span> <span class="token punctuation">[</span>dy<span class="token punctuation">.</span>noise<span class="token punctuation">(</span>we<span class="token punctuation">,</span> <span class="token number">0.1</span><span class="token punctuation">)</span> <span class="token keyword">for</span> we <span class="token keyword">in</span> wembs<span class="token punctuation">]</span>
 
-    fw_exps = f_init.transduce(wembs)
-    bw_exps = b_init.transduce(reversed(wembs))
-    bi_exps = [dy.concatenate([f, b]) for f, b in zip(fw_exps, reversed(bw_exps))]
+    fw_exps <span class="token operator">=</span> f_init<span class="token punctuation">.</span>transduce<span class="token punctuation">(</span>wembs<span class="token punctuation">)</span>
+    bw_exps <span class="token operator">=</span> b_init<span class="token punctuation">.</span>transduce<span class="token punctuation">(</span>reversed<span class="token punctuation">(</span>wembs<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    bi_exps <span class="token operator">=</span> <span class="token punctuation">[</span>dy<span class="token punctuation">.</span>concatenate<span class="token punctuation">(</span><span class="token punctuation">[</span>f<span class="token punctuation">,</span> b<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token keyword">for</span> f<span class="token punctuation">,</span> b <span class="token keyword">in</span> zip<span class="token punctuation">(</span>fw_exps<span class="token punctuation">,</span> reversed<span class="token punctuation">(</span>bw_exps<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
 
-    exps = []
-    for x in bi_exps:
-        r_t = O * (dy.tanh(H * x))
-        exps.append(r_t)
+    exps <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token keyword">for</span> x <span class="token keyword">in</span> bi_exps<span class="token punctuation">:</span>
+        r_t <span class="token operator">=</span> O <span class="token operator">*</span> <span class="token punctuation">(</span>dy<span class="token punctuation">.</span>tanh<span class="token punctuation">(</span>H <span class="token operator">*</span> x<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        exps<span class="token punctuation">.</span>append<span class="token punctuation">(</span>r_t<span class="token punctuation">)</span>
 
-    return exps
+    <span class="token keyword">return</span> exps
 
-def viterbi_decoding(vecs, gold_tags = []):
-    # Initialize
-    init_prob = [SMALL_NUMBER] * ntags
-    init_prob[S_T] = 0
-    for_expr = dy.inputVector(init_prob)
-    best_ids = []
-    trans_exprs = [TRANS_LOOKUP[tid] for tid in range(ntags)]
-    # Perform the forward pass through the sentence
-    for i, vec in enumerate(vecs):
-        my_best_ids = []
-        my_best_exprs = []
-        for next_tag in range(ntags):
-            # Calculate vector for single next tag
-            next_single_expr = for_expr + trans_exprs[next_tag]
-            next_single = next_single_expr.npvalue()
-            # Find and save the best score
-            my_best_id = np.argmax(next_single)
-            my_best_ids.append(my_best_id)
-            my_best_exprs.append(dy.pick(next_single_expr, my_best_id))
-        # Concatenate the scores for all vectors together
-        for_expr = dy.concatenate(my_best_exprs) + vec
-        # Give a bonus to all but the correct tag if using margin
-        if MARGIN != 0 and len(gold_tags) != 0:
-            adjust = [MARGIN] * ntags
-            adjust[t2i[gold_tags[i]]] = 0
-            for_expr = for_expr + dy.inputVector(adjust)
-        # Save the best ids
-        best_ids.append(my_best_ids)
-    # Perform the final step to the sentence terminal symbol
-    next_single_expr = for_expr + trans_exprs[S_T]
-    next_single = next_single_expr.npvalue()
-    my_best_id = np.argmax(next_single)
-    best_expr = dy.pick(next_single_expr, my_best_id)
-    # Perform the reverse pass
-    best_path = [i2t[my_best_id]]
-    for my_best_ids in reversed(best_ids):
-        my_best_id = my_best_ids[my_best_id]
-        best_path.append(i2t[my_best_id])
-    best_path.pop() # Remove final <s>
-    best_path.reverse()
-    # Return the best path and best score as an expression
-    return best_path, best_expr
+<span class="token keyword">def</span> <span class="token function">viterbi_decoding</span><span class="token punctuation">(</span>vecs<span class="token punctuation">,</span> gold_tags <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token comment" spellcheck="true"># Initialize</span>
+    init_prob <span class="token operator">=</span> <span class="token punctuation">[</span>SMALL_NUMBER<span class="token punctuation">]</span> <span class="token operator">*</span> ntags
+    init_prob<span class="token punctuation">[</span>S_T<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span>
+    for_expr <span class="token operator">=</span> dy<span class="token punctuation">.</span>inputVector<span class="token punctuation">(</span>init_prob<span class="token punctuation">)</span>
+    best_ids <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    trans_exprs <span class="token operator">=</span> <span class="token punctuation">[</span>TRANS_LOOKUP<span class="token punctuation">[</span>tid<span class="token punctuation">]</span> <span class="token keyword">for</span> tid <span class="token keyword">in</span> range<span class="token punctuation">(</span>ntags<span class="token punctuation">)</span><span class="token punctuation">]</span>
+    <span class="token comment" spellcheck="true"># Perform the forward pass through the sentence</span>
+    <span class="token keyword">for</span> i<span class="token punctuation">,</span> vec <span class="token keyword">in</span> enumerate<span class="token punctuation">(</span>vecs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        my_best_ids <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+        my_best_exprs <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+        <span class="token keyword">for</span> next_tag <span class="token keyword">in</span> range<span class="token punctuation">(</span>ntags<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token comment" spellcheck="true"># Calculate vector for single next tag</span>
+            next_single_expr <span class="token operator">=</span> for_expr <span class="token operator">+</span> trans_exprs<span class="token punctuation">[</span>next_tag<span class="token punctuation">]</span>
+            next_single <span class="token operator">=</span> next_single_expr<span class="token punctuation">.</span>npvalue<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token comment" spellcheck="true"># Find and save the best score</span>
+            my_best_id <span class="token operator">=</span> np<span class="token punctuation">.</span>argmax<span class="token punctuation">(</span>next_single<span class="token punctuation">)</span>
+            my_best_ids<span class="token punctuation">.</span>append<span class="token punctuation">(</span>my_best_id<span class="token punctuation">)</span>
+            my_best_exprs<span class="token punctuation">.</span>append<span class="token punctuation">(</span>dy<span class="token punctuation">.</span>pick<span class="token punctuation">(</span>next_single_expr<span class="token punctuation">,</span> my_best_id<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token comment" spellcheck="true"># Concatenate the scores for all vectors together</span>
+        for_expr <span class="token operator">=</span> dy<span class="token punctuation">.</span>concatenate<span class="token punctuation">(</span>my_best_exprs<span class="token punctuation">)</span> <span class="token operator">+</span> vec
+        <span class="token comment" spellcheck="true"># Give a bonus to all but the correct tag if using margin</span>
+        <span class="token keyword">if</span> MARGIN <span class="token operator">!=</span> <span class="token number">0</span> <span class="token operator">and</span> len<span class="token punctuation">(</span>gold_tags<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">:</span>
+            adjust <span class="token operator">=</span> <span class="token punctuation">[</span>MARGIN<span class="token punctuation">]</span> <span class="token operator">*</span> ntags
+            adjust<span class="token punctuation">[</span>t2i<span class="token punctuation">[</span>gold_tags<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span>
+            for_expr <span class="token operator">=</span> for_expr <span class="token operator">+</span> dy<span class="token punctuation">.</span>inputVector<span class="token punctuation">(</span>adjust<span class="token punctuation">)</span>
+        <span class="token comment" spellcheck="true"># Save the best ids</span>
+        best_ids<span class="token punctuation">.</span>append<span class="token punctuation">(</span>my_best_ids<span class="token punctuation">)</span>
+    <span class="token comment" spellcheck="true"># Perform the final step to the sentence terminal symbol</span>
+    next_single_expr <span class="token operator">=</span> for_expr <span class="token operator">+</span> trans_exprs<span class="token punctuation">[</span>S_T<span class="token punctuation">]</span>
+    next_single <span class="token operator">=</span> next_single_expr<span class="token punctuation">.</span>npvalue<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    my_best_id <span class="token operator">=</span> np<span class="token punctuation">.</span>argmax<span class="token punctuation">(</span>next_single<span class="token punctuation">)</span>
+    best_expr <span class="token operator">=</span> dy<span class="token punctuation">.</span>pick<span class="token punctuation">(</span>next_single_expr<span class="token punctuation">,</span> my_best_id<span class="token punctuation">)</span>
+    <span class="token comment" spellcheck="true"># Perform the reverse pass</span>
+    best_path <span class="token operator">=</span> <span class="token punctuation">[</span>i2t<span class="token punctuation">[</span>my_best_id<span class="token punctuation">]</span><span class="token punctuation">]</span>
+    <span class="token keyword">for</span> my_best_ids <span class="token keyword">in</span> reversed<span class="token punctuation">(</span>best_ids<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        my_best_id <span class="token operator">=</span> my_best_ids<span class="token punctuation">[</span>my_best_id<span class="token punctuation">]</span>
+        best_path<span class="token punctuation">.</span>append<span class="token punctuation">(</span>i2t<span class="token punctuation">[</span>my_best_id<span class="token punctuation">]</span><span class="token punctuation">)</span>
+    best_path<span class="token punctuation">.</span>pop<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true"># Remove final &lt;s></span>
+    best_path<span class="token punctuation">.</span>reverse<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token comment" spellcheck="true"># Return the best path and best score as an expression</span>
+    <span class="token keyword">return</span> best_path<span class="token punctuation">,</span> best_expr
 
-def forced_decoding(vecs, tags):
-    # Initialize
-    for_expr = dy.scalarInput(0)
-    for_tag = S_T
-    # Perform the forward pass through the sentence
-    for i, vec in enumerate(vecs): 
-        my_tag = t2i[tags[i]]
-        for_expr = for_expr + dy.pick(TRANS_LOOKUP[my_tag], for_tag) + vec[my_tag]
-        for_tag = my_tag
-    for_expr = for_expr + dy.pick(TRANS_LOOKUP[S_T], for_tag)
-    return for_expr
+<span class="token keyword">def</span> <span class="token function">forced_decoding</span><span class="token punctuation">(</span>vecs<span class="token punctuation">,</span> tags<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token comment" spellcheck="true"># Initialize</span>
+    for_expr <span class="token operator">=</span> dy<span class="token punctuation">.</span>scalarInput<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
+    for_tag <span class="token operator">=</span> S_T
+    <span class="token comment" spellcheck="true"># Perform the forward pass through the sentence</span>
+    <span class="token keyword">for</span> i<span class="token punctuation">,</span> vec <span class="token keyword">in</span> enumerate<span class="token punctuation">(</span>vecs<span class="token punctuation">)</span><span class="token punctuation">:</span> 
+        my_tag <span class="token operator">=</span> t2i<span class="token punctuation">[</span>tags<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">]</span>
+        for_expr <span class="token operator">=</span> for_expr <span class="token operator">+</span> dy<span class="token punctuation">.</span>pick<span class="token punctuation">(</span>TRANS_LOOKUP<span class="token punctuation">[</span>my_tag<span class="token punctuation">]</span><span class="token punctuation">,</span> for_tag<span class="token punctuation">)</span> <span class="token operator">+</span> vec<span class="token punctuation">[</span>my_tag<span class="token punctuation">]</span>
+        for_tag <span class="token operator">=</span> my_tag
+    for_expr <span class="token operator">=</span> for_expr <span class="token operator">+</span> dy<span class="token punctuation">.</span>pick<span class="token punctuation">(</span>TRANS_LOOKUP<span class="token punctuation">[</span>S_T<span class="token punctuation">]</span><span class="token punctuation">,</span> for_tag<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> for_expr
 
-def viterbi_sent_loss(words, tags):
-    vecs = build_tagging_graph(words)
-    viterbi_tags, viterbi_score = viterbi_decoding(vecs, tags)
-    if viterbi_tags != tags:
-        reference_score = forced_decoding(vecs, tags)
-        return viterbi_score - reference_score
-    else:
-        return dy.scalarInput(0)
+<span class="token keyword">def</span> <span class="token function">viterbi_sent_loss</span><span class="token punctuation">(</span>words<span class="token punctuation">,</span> tags<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    vecs <span class="token operator">=</span> build_tagging_graph<span class="token punctuation">(</span>words<span class="token punctuation">)</span>
+    viterbi_tags<span class="token punctuation">,</span> viterbi_score <span class="token operator">=</span> viterbi_decoding<span class="token punctuation">(</span>vecs<span class="token punctuation">,</span> tags<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> viterbi_tags <span class="token operator">!=</span> tags<span class="token punctuation">:</span>
+        reference_score <span class="token operator">=</span> forced_decoding<span class="token punctuation">(</span>vecs<span class="token punctuation">,</span> tags<span class="token punctuation">)</span>
+        <span class="token keyword">return</span> viterbi_score <span class="token operator">-</span> reference_score
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> dy<span class="token punctuation">.</span>scalarInput<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
 
-def sent_loss(words, tags):
-    vecs = build_tagging_graph(words)
-    errs = []
-    for v,t in zip(vecs,tags):
-        tid = t2i[t]
-        err = dy.pickneglogsoftmax(v, tid)
-        errs.append(err)
-    return dy.esum(errs)
+<span class="token keyword">def</span> <span class="token function">sent_loss</span><span class="token punctuation">(</span>words<span class="token punctuation">,</span> tags<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    vecs <span class="token operator">=</span> build_tagging_graph<span class="token punctuation">(</span>words<span class="token punctuation">)</span>
+    errs <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token keyword">for</span> v<span class="token punctuation">,</span>t <span class="token keyword">in</span> zip<span class="token punctuation">(</span>vecs<span class="token punctuation">,</span>tags<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        tid <span class="token operator">=</span> t2i<span class="token punctuation">[</span>t<span class="token punctuation">]</span>
+        err <span class="token operator">=</span> dy<span class="token punctuation">.</span>pickneglogsoftmax<span class="token punctuation">(</span>v<span class="token punctuation">,</span> tid<span class="token punctuation">)</span>
+        errs<span class="token punctuation">.</span>append<span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> dy<span class="token punctuation">.</span>esum<span class="token punctuation">(</span>errs<span class="token punctuation">)</span>
 
-def tag_sent(words):
-    vecs = build_tagging_graph(words)
-    vecs = [dy.softmax(v) for v in vecs]
-    probs = [v.npvalue() for v in vecs]
-    tags = []
-    for prb in probs:
-        tag = np.argmax(prb)
-        tags.append(i2t[tag])
-    return tags
+<span class="token keyword">def</span> <span class="token function">tag_sent</span><span class="token punctuation">(</span>words<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    vecs <span class="token operator">=</span> build_tagging_graph<span class="token punctuation">(</span>words<span class="token punctuation">)</span>
+    vecs <span class="token operator">=</span> <span class="token punctuation">[</span>dy<span class="token punctuation">.</span>softmax<span class="token punctuation">(</span>v<span class="token punctuation">)</span> <span class="token keyword">for</span> v <span class="token keyword">in</span> vecs<span class="token punctuation">]</span>
+    probs <span class="token operator">=</span> <span class="token punctuation">[</span>v<span class="token punctuation">.</span>npvalue<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">for</span> v <span class="token keyword">in</span> vecs<span class="token punctuation">]</span>
+    tags <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token keyword">for</span> prb <span class="token keyword">in</span> probs<span class="token punctuation">:</span>
+        tag <span class="token operator">=</span> np<span class="token punctuation">.</span>argmax<span class="token punctuation">(</span>prb<span class="token punctuation">)</span>
+        tags<span class="token punctuation">.</span>append<span class="token punctuation">(</span>i2t<span class="token punctuation">[</span>tag<span class="token punctuation">]</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> tags
 
-for ITER in xrange(TAG_EPOCH):
-    num_tagged = cum_loss = 0
-    random.shuffle(train)
-    i = 0
-    for s in train:
-        words = [w for w, t in s]
-        golds = [t for w, t in s]
+<span class="token keyword">for</span> ITER <span class="token keyword">in</span> xrange<span class="token punctuation">(</span>TAG_EPOCH<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    num_tagged <span class="token operator">=</span> cum_loss <span class="token operator">=</span> <span class="token number">0</span>
+    random<span class="token punctuation">.</span>shuffle<span class="token punctuation">(</span>train<span class="token punctuation">)</span>
+    i <span class="token operator">=</span> <span class="token number">0</span>
+    <span class="token keyword">for</span> s <span class="token keyword">in</span> train<span class="token punctuation">:</span>
+        words <span class="token operator">=</span> <span class="token punctuation">[</span>w <span class="token keyword">for</span> w<span class="token punctuation">,</span> t <span class="token keyword">in</span> s<span class="token punctuation">]</span>
+        golds <span class="token operator">=</span> <span class="token punctuation">[</span>t <span class="token keyword">for</span> w<span class="token punctuation">,</span> t <span class="token keyword">in</span> s<span class="token punctuation">]</span>
 
-        if ITER < MAX_LIK_ITERS:
-            loss_exp =  sent_loss(words, golds)
-        else:
-            loss_exp =  viterbi_sent_loss(words, golds)
-        cum_loss += loss_exp.scalar_value()
-        num_tagged += len(golds)
-        loss_exp.backward()
-        trainer.update()
-        if DEBUG == False:
-            i += 1
-            if i % 1000 == 0:
-                print "train loss ", i, ": ", cum_loss / num_tagged
+        <span class="token keyword">if</span> ITER <span class="token operator">&lt;</span> MAX_LIK_ITERS<span class="token punctuation">:</span>
+            loss_exp <span class="token operator">=</span>  sent_loss<span class="token punctuation">(</span>words<span class="token punctuation">,</span> golds<span class="token punctuation">)</span>
+        <span class="token keyword">else</span><span class="token punctuation">:</span>
+            loss_exp <span class="token operator">=</span>  viterbi_sent_loss<span class="token punctuation">(</span>words<span class="token punctuation">,</span> golds<span class="token punctuation">)</span>
+        cum_loss <span class="token operator">+=</span> loss_exp<span class="token punctuation">.</span>scalar_value<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        num_tagged <span class="token operator">+=</span> len<span class="token punctuation">(</span>golds<span class="token punctuation">)</span>
+        loss_exp<span class="token punctuation">.</span>backward<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        trainer<span class="token punctuation">.</span>update<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> DEBUG <span class="token operator">==</span> <span class="token boolean">False</span><span class="token punctuation">:</span>
+            i <span class="token operator">+=</span> <span class="token number">1</span>
+            <span class="token keyword">if</span> i <span class="token operator">%</span> <span class="token number">1000</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">:</span>
+                <span class="token keyword">print</span> <span class="token string">"train loss "</span><span class="token punctuation">,</span> i<span class="token punctuation">,</span> <span class="token string">": "</span><span class="token punctuation">,</span> cum_loss <span class="token operator">/</span> num_tagged
 
-    good_sent = bad_sent = good = bad = 0.0
-    i = 0
-    for sent in dev:
-        words = [w for w, t in sent]
-        golds = [t for w, t in sent]
-        if ITER < MAX_LIK_ITERS:
-            tags = tag_sent(words)
-        else:
-            vecs = build_tagging_graph(words)
-            tags, loss_exp = viterbi_decoding(vecs)
-        if tags == golds: good_sent += 1
-        else: bad_sent += 1
-        for go, gu in zip(golds, tags):
-            if go == gu: good += 1
-            else: bad += 1
-        # if DEBUG == False:
-        #     i += 1
-        #     if i % 1000 == 0:
-        #         print "F1 ", i, ": ", good / (good + bad)
-    print "epoch %r finished" % ITER
-    print "total loss: ", cum_loss / num_tagged
-    print "total F1: ", good / (good + bad), good_sent / (good_sent + bad_sent)
+    good_sent <span class="token operator">=</span> bad_sent <span class="token operator">=</span> good <span class="token operator">=</span> bad <span class="token operator">=</span> <span class="token number">0.0</span>
+    i <span class="token operator">=</span> <span class="token number">0</span>
+    <span class="token keyword">for</span> sent <span class="token keyword">in</span> dev<span class="token punctuation">:</span>
+        words <span class="token operator">=</span> <span class="token punctuation">[</span>w <span class="token keyword">for</span> w<span class="token punctuation">,</span> t <span class="token keyword">in</span> sent<span class="token punctuation">]</span>
+        golds <span class="token operator">=</span> <span class="token punctuation">[</span>t <span class="token keyword">for</span> w<span class="token punctuation">,</span> t <span class="token keyword">in</span> sent<span class="token punctuation">]</span>
+        <span class="token keyword">if</span> ITER <span class="token operator">&lt;</span> MAX_LIK_ITERS<span class="token punctuation">:</span>
+            tags <span class="token operator">=</span> tag_sent<span class="token punctuation">(</span>words<span class="token punctuation">)</span>
+        <span class="token keyword">else</span><span class="token punctuation">:</span>
+            vecs <span class="token operator">=</span> build_tagging_graph<span class="token punctuation">(</span>words<span class="token punctuation">)</span>
+            tags<span class="token punctuation">,</span> loss_exp <span class="token operator">=</span> viterbi_decoding<span class="token punctuation">(</span>vecs<span class="token punctuation">)</span>
+        <span class="token keyword">if</span> tags <span class="token operator">==</span> golds<span class="token punctuation">:</span> good_sent <span class="token operator">+=</span> <span class="token number">1</span>
+        <span class="token keyword">else</span><span class="token punctuation">:</span> bad_sent <span class="token operator">+=</span> <span class="token number">1</span>
+        <span class="token keyword">for</span> go<span class="token punctuation">,</span> gu <span class="token keyword">in</span> zip<span class="token punctuation">(</span>golds<span class="token punctuation">,</span> tags<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">if</span> go <span class="token operator">==</span> gu<span class="token punctuation">:</span> good <span class="token operator">+=</span> <span class="token number">1</span>
+            <span class="token keyword">else</span><span class="token punctuation">:</span> bad <span class="token operator">+=</span> <span class="token number">1</span>
+        <span class="token comment" spellcheck="true"># if DEBUG == False:</span>
+        <span class="token comment" spellcheck="true">#     i += 1</span>
+        <span class="token comment" spellcheck="true">#     if i % 1000 == 0:</span>
+        <span class="token comment" spellcheck="true">#         print "F1 ", i, ": ", good / (good + bad)</span>
+    <span class="token keyword">print</span> <span class="token string">"epoch %r finished"</span> <span class="token operator">%</span> ITER
+    <span class="token keyword">print</span> <span class="token string">"total loss: "</span><span class="token punctuation">,</span> cum_loss <span class="token operator">/</span> num_tagged
+    <span class="token keyword">print</span> <span class="token string">"total F1: "</span><span class="token punctuation">,</span> good <span class="token operator">/</span> <span class="token punctuation">(</span>good <span class="token operator">+</span> bad<span class="token punctuation">)</span><span class="token punctuation">,</span> good_sent <span class="token operator">/</span> <span class="token punctuation">(</span>good_sent <span class="token operator">+</span> bad_sent<span class="token punctuation">)</span>
 
-def tagging(sentence):
-    words = sentence.strip().split()
-    if TAG_EPOCH <= MAX_LIK_ITERS:
-        tags = tag_sent(words)
-    else:
-        vecs = build_tagging_graph(words)
-        tags, loss_exp = viterbi_decoding(vecs)
-    for w, t in zip(words, tags):
-        print w, t
+<span class="token keyword">def</span> <span class="token function">tagging</span><span class="token punctuation">(</span>sentence<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    words <span class="token operator">=</span> sentence<span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> TAG_EPOCH <span class="token operator">&lt;=</span> MAX_LIK_ITERS<span class="token punctuation">:</span>
+        tags <span class="token operator">=</span> tag_sent<span class="token punctuation">(</span>words<span class="token punctuation">)</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        vecs <span class="token operator">=</span> build_tagging_graph<span class="token punctuation">(</span>words<span class="token punctuation">)</span>
+        tags<span class="token punctuation">,</span> loss_exp <span class="token operator">=</span> viterbi_decoding<span class="token punctuation">(</span>vecs<span class="token punctuation">)</span>
+    <span class="token keyword">for</span> w<span class="token punctuation">,</span> t <span class="token keyword">in</span> zip<span class="token punctuation">(</span>words<span class="token punctuation">,</span> tags<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span> w<span class="token punctuation">,</span> t
 
-if __name__ == '__main__':
-    sentence = "if you could see that i am the one who understands you ."
-    tagging(sentence)
-</code></pre>
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
+    sentence <span class="token operator">=</span> <span class="token string">"if you could see that i am the one who understands you ."</span>
+    tagging<span class="token punctuation">(</span>sentence<span class="token punctuation">)</span></code></pre>
 
             </div>
             <hr/>
@@ -1097,7 +1094,7 @@ if __name__ == '__main__':
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2018/01/01/pos-lm/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -1329,8 +1326,8 @@ Semi-supervised Lear
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -1452,7 +1449,7 @@ Semi-supervised Lear
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

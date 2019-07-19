@@ -19,7 +19,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>毕业论文代码实现思路 | WeiYang Blog</title>
+    <title>毕业论文代码实现思路 | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -48,7 +48,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -111,7 +111,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -451,11 +451,11 @@
 <h1 id="训练"><a href="#训练" class="headerlink" title="训练"></a>训练</h1><hr>
 <p>这部分大部分代码是自己写的，也有一部分是从CKY算法代码修改得到的。</p>
 <p>首先将数据集中出现的所有单词和词向量数组下标一一映射，词性类别也做一个映射吧。</p>
-<p>然后初始化神经网络的各个参数，要训练的权值矩阵一共有两个，<script type="math/tex">W</script>和<script type="math/tex">d</script>，接下来就是训练了。</p>
-<p>训练过程是这样的，采用了动态规划的思想，用三个维度<script type="math/tex">i</script>，<script type="math/tex">j</script>，<script type="math/tex">A</script>来表示这个句子从第<script type="math/tex">i</script>个位置到第<script type="math/tex">j</script>个位置且类别为<script type="math/tex">A</script>的信息。<br>用<script type="math/tex">e(i,j,A)</script>作为每个结点的向量表示，然后对他的儿子的所有情况进行遍历：<br>\[e(i,j,A) = \tanh (W \cdot [e(i,k,B),e(k,j,C)]) + type[A]\]<br>然后计算这个节点的分数：<br>\[s(i,j,A) = d \cdot e(i,j,A)\]<br>找出能使得分数最大的那个分割点和对应的类别，保存下来。</p>
+<p>然后初始化神经网络的各个参数，要训练的权值矩阵一共有两个，$W$和$d$，接下来就是训练了。</p>
+<p>训练过程是这样的，采用了动态规划的思想，用三个维度$i$，$j$，$A$来表示这个句子从第$i$个位置到第$j$个位置且类别为$A$的信息。<br>用$e(i,j,A)$作为每个结点的向量表示，然后对他的儿子的所有情况进行遍历：<br>\[e(i,j,A) = \tanh (W \cdot [e(i,k,B),e(k,j,C)]) + type[A]\]<br>然后计算这个节点的分数：<br>\[s(i,j,A) = d \cdot e(i,j,A)\]<br>找出能使得分数最大的那个分割点和对应的类别，保存下来。</p>
 <p>这样动态规划做好之后一棵树实际上就已经建好了，再回溯生成这棵树就好了。</p>
 <p>但是这棵树很不准确的，刚开始就是随意生成的，所以要和标准树进行对比，计算出损失函数进行反向传播。</p>
-<p>所以接下来用当前的权值矩阵计算出标准树的分数，然后对刚刚生成的结果和这个标准括号序列进行对比，我就直接粗暴统计出两个字符串有多少位置不同，记为<script type="math/tex">cnt</script>。</p>
+<p>所以接下来用当前的权值矩阵计算出标准树的分数，然后对刚刚生成的结果和这个标准括号序列进行对比，我就直接粗暴统计出两个字符串有多少位置不同，记为$cnt$。</p>
 <p>总的损失函数就是：<br>\[\left| {result - gold + cnt} \right|\]<br>然后进行反向传播就行了。</p>
 <h1 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h1><hr>
 <p>在测试集上面直接照搬训练过程代码就行了，按照动态规划生成一棵树就行了。</p>
@@ -465,8 +465,8 @@
 <ul>
 <li>动态规划结合一个节点的两个子节点的时候，现在还只是直接连接的，准备将其改成LSTM的结点函数。</li>
 <li>改成LSTM的话就有左右结点的顺序问题，准备再加一个维度，0和1分别表示左右儿子的顺序。</li>
-<li>我在<script type="math/tex">e(i,j,A) = \tanh (W \cdot [e(i,k,B),e(k,j,C)]) + type[A]</script>加了一个<script type="math/tex">type[A]</script>，其实原来没有这个的，但是不加会出现一个很大的问题，就是会出现A1-&gt;B,C和A2-&gt;B,C这两种情况，但是不加的话两种情况算出的分数是一样的，先入为主，后算的那种就永远不会考虑了。所以我强行加上了父节点类型向量，来区别这两种情况。但是具体怎么加还没有个说法，我只是随便试试。</li>
-<li>关于损失函数，论文里写的就是<script type="math/tex">result - gold + cnt</script>，但是这样并不能保证非负，我就强行加上了一个绝对值。貌似也可以收敛了，到底应该怎么搞不清楚。</li>
+<li>我在$e(i,j,A) = \tanh (W \cdot [e(i,k,B),e(k,j,C)]) + type[A]$加了一个$type[A]$，其实原来没有这个的，但是不加会出现一个很大的问题，就是会出现A1-&gt;B,C和A2-&gt;B,C这两种情况，但是不加的话两种情况算出的分数是一样的，先入为主，后算的那种就永远不会考虑了。所以我强行加上了父节点类型向量，来区别这两种情况。但是具体怎么加还没有个说法，我只是随便试试。</li>
+<li>关于损失函数，论文里写的就是$result - gold + cnt$，但是这样并不能保证非负，我就强行加上了一个绝对值。貌似也可以收敛了，到底应该怎么搞不清楚。</li>
 </ul>
 
             </div>
@@ -630,7 +630,7 @@
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2018/02/26/biyelunwen/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -831,8 +831,8 @@
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -954,7 +954,7 @@
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

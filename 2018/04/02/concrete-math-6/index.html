@@ -11,9 +11,8 @@
 
 上节课讲到下降阶乘幂和差分运算，这节课继续讲它和差分的各种性质。
 性质1
-首先在后面章节会证明，{(x + y)^{\underline{m}}}的二项展开形式和普通的{(x + y)^m}是一样的，这里提一下，暂时用不到。
-性质2
-接">
+首先在后面章节会证明，${(x + y)^{\underline{m}}}$的二项展开形式和普通的${(x + y)^m}$是一样的，这里提一下，暂时用不到。
+性">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -21,7 +20,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>具体数学-第6课（下降阶乘幂） | WeiYang Blog</title>
+    <title>具体数学-第6课（下降阶乘幂） | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -50,7 +49,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -113,7 +112,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -436,17 +435,17 @@
 
 <p>上节课讲到下降阶乘幂和差分运算，这节课继续讲它和差分的各种性质。</p>
 <h1 id="性质1"><a href="#性质1" class="headerlink" title="性质1"></a>性质1</h1><hr>
-<p>首先在后面章节会证明，<script type="math/tex">{(x + y)^{\underline{m}}}</script>的二项展开形式和普通的<script type="math/tex">{(x + y)^m}</script>是一样的，这里提一下，暂时用不到。</p>
+<p>首先在后面章节会证明，${(x + y)^{\underline{m}}}$的二项展开形式和普通的${(x + y)^m}$是一样的，这里提一下，暂时用不到。</p>
 <h1 id="性质2"><a href="#性质2" class="headerlink" title="性质2"></a>性质2</h1><hr>
 <p>接下来给出下降阶乘幂为负数的定义：<br>\[{x^{ \underline{- m}}} = \frac{1}{ {(x + 1)(x + 2) \ldots (x + m)}}\]</p>
 <h1 id="性质3"><a href="#性质3" class="headerlink" title="性质3"></a>性质3</h1><hr>
-<p>和普通幂<script type="math/tex">{x^{m + n}} = {x^m}{x^n}</script>不同，下降阶乘幂有如下性质：<br>\[{x^{\underline{m + n}}} = {x^{\underline{m}}}{(x - m)^{\underline{n}}}\]</p>
+<p>和普通幂${x^{m + n}} = {x^m}{x^n}$不同，下降阶乘幂有如下性质：<br>\[{x^{\underline{m + n}}} = {x^{\underline{m}}}{(x - m)^{\underline{n}}}\]</p>
 <h1 id="性质4"><a href="#性质4" class="headerlink" title="性质4"></a>性质4</h1><hr>
 <p>上一节课说到，定义下降阶乘幂的好处就是为了求差分方便，下降阶乘幂的差分为：<br>\[\Delta ({x^{\underline{m}}}) = m{x^{\underline{ {m - 1}}}}\]<br>反之，类比不定积分，它的不定和为：<br>\[\sum\nolimits_a^b { {x^{\underline{m}}}\delta x}  = \left. {\frac{ { {x^{\underline{m + 1}}}}}{ {m + 1}}} \right|_a^b\]</p>
-<p>但是这里<script type="math/tex">m \ne  - 1</script>，那要是<script type="math/tex">m =  - 1</script>怎么办呢？<br>直接运用差分定义可以求出<br>\[\begin{array}{l}{x^{ \underline{- 1}}} = \frac{1}{ {x + 1}} = \Delta f(x) = f(x + 1) - f(x)\\ \Rightarrow f(x) = {H_x}\end{array}\]</p>
+<p>但是这里$m \ne  - 1$，那要是$m =  - 1$怎么办呢？<br>直接运用差分定义可以求出<br>\[\begin{array}{l}{x^{ \underline{- 1}}} = \frac{1}{ {x + 1}} = \Delta f(x) = f(x + 1) - f(x)\\ \Rightarrow f(x) = {H_x}\end{array}\]</p>
 <p>所以<br>\[\sum\nolimits_a^b { {x^{\underline{m}}}\delta x}  = \left\{ {\begin{array}{*{20}{c}}{\left. {\frac{ { {x^{\underline{m + 1}}}}}{ {m + 1}}} \right|_a^b,m \ne  - 1}\\{\left. { {H_x}} \right|_a^b,m =  - 1}\end{array}} \right.\]</p>
 <h1 id="性质5"><a href="#性质5" class="headerlink" title="性质5"></a>性质5</h1><hr>
-<p>在微积分里面，<script type="math/tex">e^x</script>的导数是它自身。那么什么函数的差分是自身呢？<br>通过定义可以很容易算出来：<br>\[\begin{array}{l}f(x + 1) - f(x) = f(x)\\ \Rightarrow f(x + 1) = 2f(x)\\ \Rightarrow f(x) = {2^x}\end{array}\]</p>
+<p>在微积分里面，$e^x$的导数是它自身。那么什么函数的差分是自身呢？<br>通过定义可以很容易算出来：<br>\[\begin{array}{l}f(x + 1) - f(x) = f(x)\\ \Rightarrow f(x + 1) = 2f(x)\\ \Rightarrow f(x) = {2^x}\end{array}\]</p>
 <p>进一步推广可以得到：<br>\[\Delta ({c^x}) = {c^{x + 1}} - {c^x} = (c - 1){c^x}\]<br>所以得到如下一种新的等比数列计算方式：<br>\[\sum\limits_{a \le k &lt; b} { {c^k}}  = \sum\nolimits_a^b { {c^x}\delta x}  = \left. {\frac{ { {c^x}}}{ {c - 1}}} \right|_a^b = \frac{ { {c^b} - {c^a}}}{ {c - 1}}\]</p>
 <h1 id="性质6"><a href="#性质6" class="headerlink" title="性质6"></a>性质6</h1><hr>
 <p>结合律和分配律在差分运算里也适用。<br>\[\begin{array}{l}\Delta (cf) = c\Delta (f)\\\Delta (f + g) = \Delta (f) + \Delta (g)\end{array}\]</p>
@@ -454,13 +453,13 @@
 <p>类似分部积分，这里也可以分部来求差分。<br>\[\begin{array}{l}\Delta (u(x)v(x)) = u(x + 1)v(x + 1) - u(x)v(x)\\ = u(x + 1)v(x + 1) - u(x)v(x + 1) + u(x)v(x + 1) - u(x)v(x)\\ = [u(x + 1) - u(x)]v(x + 1) + u(x)[v(x + 1) - v(x)]\\ = u(x)\Delta (v(x)) + v(x + 1)\Delta (u(x))\end{array}\]<br>这里给出一个新的记号叫做移位运算：<br>\[Ef(x) = f(x + 1)\]<br>所以就得到了差分的分部运算法则：<br>\[\Delta (uv) = u\Delta (v) + Ev\Delta (u)\]<br>对两边求和，又可以得到不定求和的分部运算法则：<br>\[\sum {u\Delta (v)}  = uv - \sum {Ev\Delta (u)} \]</p>
 <p>这个分部法则非常有用，下面举两个例子来说明一下怎么用。</p>
 <h2 id="例1"><a href="#例1" class="headerlink" title="例1"></a>例1</h2><p>一道老题，计算：<br>\[\sum\limits_{k = 0}^n {k{2^k}} \]<br>首先计算<br>\[\sum {x{2^x}\delta x} \]<br>在这里可以令<br>\[u = x,v = {2^x}\]<br>所以<br>\[\sum {x{2^x}\delta x}  = x{2^x} - \sum { {2^{x + 1}}\delta x}  = x{2^x} - {2^{x + 1}} + C\]<br>那么求和式就可以转化为不定求和来算了：<br>\[\begin{array}{l}\sum\limits_{k = 0}^n {k{2^k}}  = \sum\nolimits_0^{n + 1} {x{2^x}\delta x} \\ = \left. {x{2^x} - {2^{x + 1}}} \right|_0^{n + 1}\\ = (n - 1){2^{n + 1}} + 2\end{array}\]</p>
-<h2 id="例2"><a href="#例2" class="headerlink" title="例2"></a>例2</h2><p>计算<br>\[\sum\limits_{0 \le k &lt; n} {k{H_k}} \]<br>首先计算<br>\[\sum {x{H_x}\delta x} \]<br>这里注意要令<br>\[u = {H_x},\Delta v = x\]<br>不能倒过来哦，因为<script type="math/tex">H_x</script>的不定和很难求出来的。所以<br>\[\begin{array}{l}\sum {x{H_x}\delta x}  = \frac{ { {x^{\underline{2}}}}}{2}{H_x} - \sum {\frac{ { { {(x + 1)}^{\underline{2}}}}}{2}} {x^{ \underline{- 1}}}\delta x\\ = \frac{ { {x^{\underline{2}}}}}{2}{H_x} - \frac{1}{2}\sum { {x^{\underline{1}}}\delta x} \\ = \frac{ { {x^{\underline{2}}}}}{2}{H_x} - \frac{ { {x^{\underline{2}}}}}{4} + C\end{array}\]</p>
+<h2 id="例2"><a href="#例2" class="headerlink" title="例2"></a>例2</h2><p>计算<br>\[\sum\limits_{0 \le k &lt; n} {k{H_k}} \]<br>首先计算<br>\[\sum {x{H_x}\delta x} \]<br>这里注意要令<br>\[u = {H_x},\Delta v = x\]<br>不能倒过来哦，因为$H_x$的不定和很难求出来的。所以<br>\[\begin{array}{l}\sum {x{H_x}\delta x}  = \frac{ { {x^{\underline{2}}}}}{2}{H_x} - \sum {\frac{ { { {(x + 1)}^{\underline{2}}}}}{2}} {x^{ \underline{- 1}}}\delta x\\ = \frac{ { {x^{\underline{2}}}}}{2}{H_x} - \frac{1}{2}\sum { {x^{\underline{1}}}\delta x} \\ = \frac{ { {x^{\underline{2}}}}}{2}{H_x} - \frac{ { {x^{\underline{2}}}}}{4} + C\end{array}\]</p>
 <p>所以<br>\[\sum\limits_{0 \le k &lt; n} {k{H_k}}  = \sum\nolimits_0^n {x{H_x}\delta x}  = \frac{ { {n^{\underline{2}}}}}{2}({H_n} - \frac{1}{2})\]</p>
 <h1 id="无限求和"><a href="#无限求和" class="headerlink" title="无限求和"></a>无限求和</h1><hr>
 <p>回顾一下以前我们是怎么计算下面求和式的。<br>\[S = {\rm{1}} + \frac{1}{2} + \frac{1}{4} +  \cdots \]<br>首先两边同时乘2，得到：<br>\[2S = 2 + {\rm{1}} + \frac{1}{2} + \frac{1}{4} +  \cdots  = 2 + S\]<br>解出<br>\[S = 2\]</p>
-<p>那么可不可以用同样的方法计算下面式子呢？<br>\[T = 1 + 2 + 4 + 8 +  \cdots \]<br>两边同时乘2，得到：<br>\[2T = 2 + 4 + 8 +  \cdots  = T - 1\]<br>解出<br>\[T = -1\]<br>显然不可能，因为这里的<script type="math/tex">T</script>是发散的，所以不能这么求。那么如何用一般的方法来求解呢？</p>
-<p>首先我们只考虑正数求和，求解<script type="math/tex">\sum\limits_{k \in K} { {a_k}}</script>，其中<script type="math/tex">K</script>是一个无限集合。<br>那么，如果存在<script type="math/tex">A</script>，使得对任意<script type="math/tex">F \subset K</script>，都有<br>\[\sum\limits_{k \in F} { {a_k}}  \le A\]<br>那么我们说这个最小的<script type="math/tex">A</script>就是<script type="math/tex">\sum\limits_{k \in K} { {a_k}}</script>的结果。<br>如果不存在这么一个<script type="math/tex">A</script>，那么这个求和式就是发散的，即结果为正无穷。</p>
-<p>一般使用中，对于<script type="math/tex">K = N</script>，我们可以令<script type="math/tex">F = \{ 0,1,2, \ldots ,n\}</script><br>所以<br>\[\sum\limits_{k \ge 0} { {a_k}}  = \mathop {\lim }\limits_{n \to \infty } \sum\limits_{k = 0}^n { {a_k}} \]</p>
+<p>那么可不可以用同样的方法计算下面式子呢？<br>\[T = 1 + 2 + 4 + 8 +  \cdots \]<br>两边同时乘2，得到：<br>\[2T = 2 + 4 + 8 +  \cdots  = T - 1\]<br>解出<br>\[T = -1\]<br>显然不可能，因为这里的$T$是发散的，所以不能这么求。那么如何用一般的方法来求解呢？</p>
+<p>首先我们只考虑正数求和，求解$\sum\limits_{k \in K} { {a_k}} $，其中$K$是一个无限集合。<br>那么，如果存在$A$，使得对任意$F \subset K$，都有<br>\[\sum\limits_{k \in F} { {a_k}}  \le A\]<br>那么我们说这个最小的$A$就是$\sum\limits_{k \in K} { {a_k}} $的结果。<br>如果不存在这么一个$A$，那么这个求和式就是发散的，即结果为正无穷。</p>
+<p>一般使用中，对于$K = N$，我们可以令$F = \{ 0,1,2, \ldots ,n\} $<br>所以<br>\[\sum\limits_{k \ge 0} { {a_k}}  = \mathop {\lim }\limits_{n \to \infty } \sum\limits_{k = 0}^n { {a_k}} \]</p>
 <p>举两个例子，比如<br>\[\sum\limits_{k \ge 0} { {x^k}}  = \mathop {\lim }\limits_{n \to \infty } \frac{ {1 - {x^{n + 1}}}}{ {1 - x}} = \left\{ {\begin{array}{*{20}{c}}{\frac{1}{ {1 - x}},0 \le x &lt; 1}\\{\infty ,x \ge 1}\end{array}} \right.\]<br>再如：<br>\[\sum\limits_{k \ge 0} {\frac{1}{ {(k + 1)(k + 2)}}}  = \sum\limits_{k \ge 0} { {k^{ \underline{- 2}}}}  = \mathop {\lim }\limits_{n \to \infty } \sum\limits_{k = 0}^n { {k^{ \underline{- 2}}}}  = \mathop {\lim }\limits_{n \to \infty } \left. {\frac{ { {k^{ \underline{- 1}}}}}{ { - 1}}} \right|_0^{n + 1} = 1\]</p>
 <p>剩下的问题就是如何求有正有负的和式？</p>
 <p>可以考虑的方案就是用不同的配对，将正负组合在一起，从而相消求和。</p>
@@ -631,7 +630,7 @@
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2018/04/02/concrete-math-6/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -712,7 +711,7 @@
 首先声明一下，最近这段时间忙毕设，没时间更新博客了，大家见谅。
 今天这节课开始讲解取整相关知识，主要是数论相关的了。
 符号定义
-向下取整函数\left\lfloor x \right\rfloor定义为小于等于x的最大整数。向上取整函数
+向下取整函数$\left\lfloor x \right\rfloor $定义为小于等于$x$的最大整数。向
                         
                     </div>
                     <div class="publish-info">
@@ -834,8 +833,8 @@
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -957,7 +956,7 @@
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

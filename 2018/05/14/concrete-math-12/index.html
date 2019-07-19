@@ -21,7 +21,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>具体数学-第12课（数论进阶与组合数入门） | WeiYang Blog</title>
+    <title>具体数学-第12课（数论进阶与组合数入门） | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -50,7 +50,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -113,7 +113,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -438,29 +438,29 @@
 <p>这节课内容太多了，再加上感冒身体不舒服，下面的定理就不一一证明了，大家可以自行练习。以后有空我会补上的！</p>
 </blockquote>
 <h1 id="例题1"><a href="#例题1" class="headerlink" title="例题1"></a>例题1</h1><hr>
-<p>首先接着上节课同余继续讲，在<a href="http://godweiyang.com/2018/04/23/concrete-math-9/">第三章例题2</a>中，我们遗留了一个问题：对于如下序列<br>\[0\bmod m,n\bmod m,2n\bmod m, \ldots ,(m - 1)n\bmod m\]<br>它的值就是<br>\[0,d,2d, \ldots ,(m/d - 1)d\]<br>的某个排列，并且重复了<script type="math/tex">d</script>次。其中<script type="math/tex">d = gcd(m, n)</script></p>
-<p>首先我们有如下同余式：<br>\[jn \equiv kn(\bmod m) \Leftrightarrow j(n/d) \equiv k(n/d)(\bmod m/d)\]<br>这就可以看出该序列的确是重复出现了<script type="math/tex">d</script>次，那么剩下的问题就是证明这<script type="math/tex">m/d</script>个数恰好就是<br>\[\{ 0,d,2d, \ldots ,m - d\} \]<br>的某个排列。<br>令<script type="math/tex">m = m'd,n = n'd</script>，所以有<br>\[kn\bmod m = d(kn’\bmod m’)\]<br>所以我们只考虑<script type="math/tex">m \bot n</script>的情形，在此情形下，我们可以得到<br>\[jn \equiv kn(\bmod m) \Leftrightarrow j \equiv k(\bmod m)\]<br>由此可以看出，这<script type="math/tex">m-1</script>个数一定就是<br>\[\{ 0,1,2, \ldots ,m - 1\} \]<br>至此得证。</p>
+<p>首先接着上节课同余继续讲，在<a href="http://godweiyang.com/2018/04/23/concrete-math-9/">第三章例题2</a>中，我们遗留了一个问题：对于如下序列<br>\[0\bmod m,n\bmod m,2n\bmod m, \ldots ,(m - 1)n\bmod m\]<br>它的值就是<br>\[0,d,2d, \ldots ,(m/d - 1)d\]<br>的某个排列，并且重复了$d$次。其中$d = gcd(m, n)$</p>
+<p>首先我们有如下同余式：<br>\[jn \equiv kn(\bmod m) \Leftrightarrow j(n/d) \equiv k(n/d)(\bmod m/d)\]<br>这就可以看出该序列的确是重复出现了$d$次，那么剩下的问题就是证明这$m/d$个数恰好就是<br>\[\{ 0,d,2d, \ldots ,m - d\} \]<br>的某个排列。<br>令$m = m’d,n = n’d$，所以有<br>\[kn\bmod m = d(kn’\bmod m’)\]<br>所以我们只考虑$m \bot n$的情形，在此情形下，我们可以得到<br>\[jn \equiv kn(\bmod m) \Leftrightarrow j \equiv k(\bmod m)\]<br>由此可以看出，这$m-1$个数一定就是<br>\[\{ 0,1,2, \ldots ,m - 1\} \]<br>至此得证。</p>
 <p>下面介绍几个著名的数论定理。</p>
 <h1 id="费马最后定理"><a href="#费马最后定理" class="headerlink" title="费马最后定理"></a>费马最后定理</h1><hr>
-<p>对于所有的正整数<script type="math/tex">a,b,c,n>2</script>，有<br>\[{a^n} + {b^n} \ne {c^n}\]</p>
+<p>对于所有的正整数$a,b,c,n&gt;2$，有<br>\[{a^n} + {b^n} \ne {c^n}\]</p>
 <h1 id="费马小定理"><a href="#费马小定理" class="headerlink" title="费马小定理"></a>费马小定理</h1><hr>
-<p>如果<script type="math/tex">n \bot p</script>，那么有<br>\[{n^{p - 1}} \equiv 1(\bmod p)\]</p>
+<p>如果$n \bot p$，那么有<br>\[{n^{p - 1}} \equiv 1(\bmod p)\]</p>
 <p>证明也很好证。</p>
 <p>之前证过了，序列<br>\[n\bmod p,2n\bmod p, \ldots ,(p - 1)n\bmod p\]<br>结果就是<br>\[1,2, \ldots ,p-1\]<br>的某个排列，所以有<br>\[n \cdot (2n) \cdot  \ldots  \cdot ((p - 1)n) \equiv (p - 1)!\]<br>所以<br>\[(p - 1)!{n^{p - 1}} \equiv (p - 1)!(\bmod p)\]<br>所以<br>\[{n^{p - 1}} \equiv 1(\bmod p)\]</p>
 <h1 id="欧拉函数"><a href="#欧拉函数" class="headerlink" title="欧拉函数"></a>欧拉函数</h1><hr>
-<p>定义<script type="math/tex">\varphi (m)</script>为小于<script type="math/tex">m</script>且与其互素的正整数个数。</p>
-<p>所以我们有欧拉定理<br>\[{n^{\varphi (m)}} \equiv 1(\bmod m)\]<br>其中<script type="math/tex">n \bot m</script>，可以发现，当<script type="math/tex">m</script>是素数时，欧拉定理就是费马小定理，所以欧拉定理是费马小定理的推广形式。</p>
+<p>定义$\varphi (m)$为小于$m$且与其互素的正整数个数。</p>
+<p>所以我们有欧拉定理<br>\[{n^{\varphi (m)}} \equiv 1(\bmod m)\]<br>其中$n \bot m$，可以发现，当$m$是素数时，欧拉定理就是费马小定理，所以欧拉定理是费马小定理的推广形式。</p>
 <p>欧拉定理有很多有趣的性质，这里就不一一介绍了，详情见<a href="https://blog.csdn.net/howe_young/article/details/50282775" target="_blank" rel="noopener">博客地址</a>。</p>
 <h1 id="莫比乌斯函数"><a href="#莫比乌斯函数" class="headerlink" title="莫比乌斯函数"></a>莫比乌斯函数</h1><hr>
-<p>定义莫比乌斯函数<script type="math/tex">\mu (m)</script>为<br>\[\sum\limits_{d|m} {\mu (d)}  = [m = 1]\]</p>
+<p>定义莫比乌斯函数$\mu (m)$为<br>\[\sum\limits_{d|m} {\mu (d)}  = [m = 1]\]</p>
 <p>这个定义看起来很奇怪是不是？其实这是一个递归定义，可以递归地计算得到所有的值。</p>
 <p>这个函数有什么用呢？主要用来进行莫比乌斯反演：<br>\[g(m) = \sum\limits_{d|m} {f(d)}  \Leftrightarrow f(m) = \sum\limits_{d|m} {\mu (d)g(\frac{m}{d})} \]</p>
 <p>详细的性质及应用也不介绍了，给大家推荐一个牛逼的博客<a href="https://blog.csdn.net/acdreamers/article/details/8542292" target="_blank" rel="noopener">博客地址</a>，我当时学ACM的时候这部分都是看着他的学的。</p>
 <h1 id="组合数入门"><a href="#组合数入门" class="headerlink" title="组合数入门"></a>组合数入门</h1><hr>
-<p>定义组合数<script type="math/tex">\left( {\begin{array}{c}n\\k\end{array}} \right)</script>为从<script type="math/tex">n</script>个物品中取出<script type="math/tex">k</script>个物品的方法数，具体计算为<br>\[\left( {\begin{array}{c}n\\k\end{array}} \right) = \frac{ {n(n - 1) \ldots (n - k + 1)}}{ {k(k - 1) \ldots 1}}\]</p>
+<p>定义组合数$\left( {\begin{array}{c}n\\k\end{array}} \right)$为从$n$个物品中取出$k$个物品的方法数，具体计算为<br>\[\left( {\begin{array}{c}n\\k\end{array}} \right) = \frac{ {n(n - 1) \ldots (n - k + 1)}}{ {k(k - 1) \ldots 1}}\]</p>
 <p>推广到实数领域，定义<br>\[\left( {\begin{array}{c}r\\k\end{array}} \right) = \left\{ {\begin{array}{c}{\frac{ {r(r - 1) \ldots (r - k + 1)}}{ {k(k - 1) \ldots 1}} = \frac{ { {r^{\underline{k}}}}}{ {k!}},k \ge 0}\\{0,k &lt; 0}\end{array}} \right.\]</p>
 <p>下面介绍一些组合数性质。</p>
-<h2 id="性质1"><a href="#性质1" class="headerlink" title="性质1"></a>性质1</h2><p>\[\left( {\begin{array}{c}n\\k\end{array}} \right) = \left( {\begin{array}{c}n\\{n - k}\end{array}} \right),n,k \in \mathbb{Z},n \ge 0\]<br>这里为什么要限定<script type="math/tex">n \ge 0</script>呢？举个例子，如果<script type="math/tex">n = -1</script>，那么有<br>\[\left( {\begin{array}{c}{ - 1}\\k\end{array}} \right) \ne \left( {\begin{array}{c}{ - 1}\\{ - 1 - k}\end{array}} \right)\]<br>因为左边等于<script type="math/tex">{( - 1)^k}</script>，而右边等于<script type="math/tex">{( - 1)^{-1-k}}</script>。</p>
+<h2 id="性质1"><a href="#性质1" class="headerlink" title="性质1"></a>性质1</h2><p>\[\left( {\begin{array}{c}n\\k\end{array}} \right) = \left( {\begin{array}{c}n\\{n - k}\end{array}} \right),n,k \in \mathbb{Z},n \ge 0\]<br>这里为什么要限定$n \ge 0$呢？举个例子，如果$n = -1$，那么有<br>\[\left( {\begin{array}{c}{ - 1}\\k\end{array}} \right) \ne \left( {\begin{array}{c}{ - 1}\\{ - 1 - k}\end{array}} \right)\]<br>因为左边等于${( - 1)^k}$，而右边等于${( - 1)^{-1-k}}$。</p>
 <h2 id="性质2"><a href="#性质2" class="headerlink" title="性质2"></a>性质2</h2><p>\[\left( {\begin{array}{c}r\\k\end{array}} \right) = \frac{r}{k}\left( {\begin{array}{c}{r - 1}\\{k - 1}\end{array}} \right)\]</p>
 <h2 id="性质3"><a href="#性质3" class="headerlink" title="性质3"></a>性质3</h2><p>\[(r - k)\left( {\begin{array}{c}r\\k\end{array}} \right) = r\left( {\begin{array}{c}{r - 1}\\k\end{array}} \right)\]</p>
 <h2 id="性质4"><a href="#性质4" class="headerlink" title="性质4"></a>性质4</h2><p>\[\left( {\begin{array}{c}r\\k\end{array}} \right) = \left( {\begin{array}{c}{r - 1}\\k\end{array}} \right) + \left( {\begin{array}{c}{r - 1}\\{k - 1}\end{array}} \right)\]<br>这条性质可以通过性质3和性质4两边分别相加得到。</p>
@@ -635,7 +635,7 @@
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2018/05/14/concrete-math-12/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -773,7 +773,7 @@
 
 Stern-Brocot树
 我们接着上节课讲到的Stern-Brocot树继续往下讲。
-LR序列表示对于任意分数\frac{a}{b}，我们从\frac{1}{1}开始走到它所在的结点。如果向左走就记为L，向右走记为R，最终可以得到一个
+LR序列表示对于任意分数$\frac{a}{b}$，我们从$\frac{1}{1}$开始走到它所在的结点。如果向左走就记为L，向右走记为R，最终可以
                         
                     </div>
                     <div class="publish-info">
@@ -840,8 +840,8 @@ LR序列表示对于任意分数\frac{a}{b}，我们从\frac{1}{1}开始走到�
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -963,7 +963,7 @@ LR序列表示对于任意分数\frac{a}{b}，我们从\frac{1}{1}开始走到�
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

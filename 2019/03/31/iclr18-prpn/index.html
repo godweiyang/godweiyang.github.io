@@ -19,7 +19,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Neural Language Modeling by Jointly Learning Syntax and Lexicon | WeiYang Blog</title>
+    <title>Neural Language Modeling by Jointly Learning Syntax and Lexicon | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -48,7 +48,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -111,7 +111,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -460,35 +460,35 @@
 <p>最后模型训练好之后，用Parsing Network学习到的句法距离就可以产生出无监督的句法树，当然这里只能产生unlabeled的句法树，也就是说，无监督的成分句法分析都是只评测unlabeled F1值，因为nonterminal信息实在是无法无监督的预测出来，除非结合外部标注器或者人工制定规则？</p>
 <p><strong>由于我觉得这篇论文写作有点粗糙，很多地方写的很乱，甚至还有公式变量和图片不对应，所以下面的公式我有些自行修改过了，如果觉得有疑问的，可以参考原文，并且告诉我。</strong></p>
 <h1 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h1><hr>
-<p>下图是一个输入句子及其对应的句法树示例：<br><img src="1.png" alt><br>其中实线表示成分句法树的结构，而虚线表示同一棵子树的若干个子结点之间的联系。我们用<script type="math/tex">(x_0, x_1, \ldots, x_n)</script>表示输入句子，用<script type="math/tex">y_i</script>表示句法树中的某一个结点，用<script type="math/tex">r</script>表示根结点。定义<script type="math/tex">y_i</script>所表示的短语范围是<script type="math/tex">(l(y_i), r(y_i))</script>，例如在上图中<script type="math/tex">y_1</script>表示的范围是<script type="math/tex">(2, 6)</script>，所以有<script type="math/tex">l(y_1) = 2</script>和<script type="math/tex">r(y_1) = 6</script>。</p>
-<p>下图是模型的Reading Network和Predict Network大致框架：<br><img src="2.png" alt><br>其中实线表示Reading Network中RNN每个时刻的输入依赖于之前的哪些时刻，虚线表示Predict Network中预测下一个词时需要考虑哪些时刻的隐含层输出(<strong>这里有个小错误，图中最上面一行函数参数从<script type="math/tex">m_3</script>开始，但实际上虚线表明应该从<script type="math/tex">m_2</script>开始</strong>)。</p>
-<p>首先是Parsing Network。这种和之前状态的连接在这里被叫做“跨越连接”（skip connection），而具体和哪些状态连接，就要用到门<script type="math/tex">g_i^t</script>，表示当前处在<script type="math/tex">t</script>时刻，和之前的第<script type="math/tex">i</script>时刻有没有关联，有就是1，没有就是0。在这里先定义变量<script type="math/tex">l_t</script>为<script type="math/tex">x_t</script>和之前最远到哪个位置的单词有关联，分成两种情况：</p>
+<p>下图是一个输入句子及其对应的句法树示例：<br><img src="1.png" alt><br>其中实线表示成分句法树的结构，而虚线表示同一棵子树的若干个子结点之间的联系。我们用$(x_0, x_1, \ldots, x_n)$表示输入句子，用$y_i$表示句法树中的某一个结点，用$r$表示根结点。定义$y_i$所表示的短语范围是$(l(y_i), r(y_i))$，例如在上图中$y_1$表示的范围是$(2, 6)$，所以有$l(y_1) = 2$和$r(y_1) = 6$。</p>
+<p>下图是模型的Reading Network和Predict Network大致框架：<br><img src="2.png" alt><br>其中实线表示Reading Network中RNN每个时刻的输入依赖于之前的哪些时刻，虚线表示Predict Network中预测下一个词时需要考虑哪些时刻的隐含层输出(<strong>这里有个小错误，图中最上面一行函数参数从$m_3$开始，但实际上虚线表明应该从$m_2$开始</strong>)。</p>
+<p>首先是Parsing Network。这种和之前状态的连接在这里被叫做“跨越连接”（skip connection），而具体和哪些状态连接，就要用到门$g_i^t$，表示当前处在$t$时刻，和之前的第$i$时刻有没有关联，有就是1，没有就是0。在这里先定义变量$l_t$为$x_t$和之前最远到哪个位置的单词有关联，分成两种情况：</p>
 <ul>
-<li>如果<script type="math/tex">x_t</script>不是某个子树最左边的叶子结点，那么<script type="math/tex">l_t</script>就定义为它的父结点的最左边那个叶子结点，也就是<script type="math/tex">x_t</script>最左边那个兄弟结点。比如上图中的<script type="math/tex">x_4</script>，因为它在子树中位于中间，所以<script type="math/tex">l_4 = 3</script>，也就是说它最远和<script type="math/tex">x_3</script>有一定关联，而再往前的单词由于不在同一个短语里，关联就不大了。</li>
-<li>如果<script type="math/tex">x_t</script>是某一个子树<script type="math/tex">y_i</script>最左边的子结点，那么<script type="math/tex">l_t</script>就定义为<script type="math/tex">y_i</script>最左边那个兄弟结点的最左边的叶子结点。比如上图中<script type="math/tex">l_3 = 2</script>，因为<script type="math/tex">x_3</script>是<script type="math/tex">y_3</script>的最左边的子结点，而<script type="math/tex">y_2</script>是<script type="math/tex">y_3</script>最左边的兄弟结点，<script type="math/tex">x_2</script>又是<script type="math/tex">y_2</script>最左边的叶子结点，也就是说<script type="math/tex">x_3</script>最远和之前的<script type="math/tex">x_2</script>有关联，它们共同组成了更大的短语<script type="math/tex">y_1</script>。（<strong>这里定义又不是很严谨，例如对于上面那个例子，<script type="math/tex">x_2</script>既是<script type="math/tex">y_1</script>又是<script type="math/tex">y_2</script>的最左子结点，这种情况下不能按照<script type="math/tex">y_2</script>来计算，因为它没有最左的兄弟结点！所以按照<script type="math/tex">y_1</script>来算的话得到<script type="math/tex">l_2 = 0</script>。</strong>）</li>
+<li>如果$x_t$不是某个子树最左边的叶子结点，那么$l_t$就定义为它的父结点的最左边那个叶子结点，也就是$x_t$最左边那个兄弟结点。比如上图中的$x_4$，因为它在子树中位于中间，所以$l_4 = 3$，也就是说它最远和$x_3$有一定关联，而再往前的单词由于不在同一个短语里，关联就不大了。</li>
+<li>如果$x_t$是某一个子树$y_i$最左边的子结点，那么$l_t$就定义为$y_i$最左边那个兄弟结点的最左边的叶子结点。比如上图中$l_3 = 2$，因为$x_3$是$y_3$的最左边的子结点，而$y_2$是$y_3$最左边的兄弟结点，$x_2$又是$y_2$最左边的叶子结点，也就是说$x_3$最远和之前的$x_2$有关联，它们共同组成了更大的短语$y_1$。（<strong>这里定义又不是很严谨，例如对于上面那个例子，$x_2$既是$y_1$又是$y_2$的最左子结点，这种情况下不能按照$y_2$来计算，因为它没有最左的兄弟结点！所以按照$y_1$来算的话得到$l_2 = 0$。</strong>）</li>
 </ul>
-<p>根据这个<script type="math/tex">l_t</script>就可以将<script type="math/tex">g_i^t</script>定义为：<br>\[<br>g_i^t = \left\{ {\begin{array}{}{1,{l_t} \le i &lt; t}\\{0,0 &lt; i &lt; {l_t}}\end{array}} \right.<br>\]<br>但是因为这是离散的决策，没法传递梯度，所以之后会介绍用概率来替代这里的0和1。</p>
-<p>然后是Reading Network。得到了gates之后，就可以修改RNN，用下面公式计算<script type="math/tex">t</script>时刻的隐含层状态：<br>\[<br>m_t = h(x_t, m_0, \ldots, m_{t-1}, g_0^t, \ldots, g_{t-1}^t)<br>\]<br>具体是怎么使用这个gates的，后面再具体介绍，反正只要知道多考虑了很多个历史状态就行了，每个状态都有一个权重，表示考虑了多少。</p>
-<p>最后就是Predict Network，用来预测下一个单词<script type="math/tex">x_{t+1}</script>，用到的是历史多个隐含层状态信息：<br>\[<br>p(x_{t+1} | x_0, \ldots, x_t) \approx p(x_{t+1} ; f(m_0, \ldots, m_t, g_0^{t+1}, \ldots, g_t^{t+1}))<br>\]<br>这里后面也会具体讲到。</p>
+<p>根据这个$l_t$就可以将$g_i^t$定义为：<br>\[<br>g_i^t = \left\{ {\begin{array}{}{1,{l_t} \le i &lt; t}\\{0,0 &lt; i &lt; {l_t}}\end{array}} \right.<br>\]<br>但是因为这是离散的决策，没法传递梯度，所以之后会介绍用概率来替代这里的0和1。</p>
+<p>然后是Reading Network。得到了gates之后，就可以修改RNN，用下面公式计算$t$时刻的隐含层状态：<br>\[<br>m_t = h(x_t, m_0, \ldots, m_{t-1}, g_0^t, \ldots, g_{t-1}^t)<br>\]<br>具体是怎么使用这个gates的，后面再具体介绍，反正只要知道多考虑了很多个历史状态就行了，每个状态都有一个权重，表示考虑了多少。</p>
+<p>最后就是Predict Network，用来预测下一个单词$x_{t+1}$，用到的是历史多个隐含层状态信息：<br>\[<br>p(x_{t+1} | x_0, \ldots, x_t) \approx p(x_{t+1} ; f(m_0, \ldots, m_t, g_0^{t+1}, \ldots, g_t^{t+1}))<br>\]<br>这里后面也会具体讲到。</p>
 <h1 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h1><hr>
 <p><strong>这里我不按照论文上的顺序讲，论文是倒序，变量定义都得看完整篇论文才出来，实在是看的太杂乱了。。。</strong></p>
-<h2 id="Parsing-Network"><a href="#Parsing-Network" class="headerlink" title="Parsing Network"></a>Parsing Network</h2><p><strong>第1步：</strong><br>首先第一步要预测出相邻两个单词的句法距离，用宽度为<script type="math/tex">L+1</script>的卷积核来对单词进行卷积。例如要预测<script type="math/tex">x_i</script>和<script type="math/tex">x_{i-1}</script>的句法距离，那么就对<script type="math/tex">x_{i-L}, x_{i-L+1}, \ldots, x_i</script>进行卷积（其实就是两层前馈神经网络），得到如下输出（<strong>注意原文中这一段里的词向量<script type="math/tex">e</script>应该都是<script type="math/tex">x</script>，有误</strong>）：<br>\[<br>\begin{array}{}{h_i = {\rm ReLU}(W_c \left[ {\begin{array}{*{20}{c}}e_{i-L}\\e_{i-L+1}\\ \cdots\\ e_i \end{array}} \right] + b_c)} \\ {d_i = {\rm ReLU}(W_dh_i+b_d)}\end{array}<br>\]<br>当然了，第二行也可以看做是窗口大小为1的卷积核，第一个单词之前要补上<script type="math/tex">L-1</script>个0。</p>
+<h2 id="Parsing-Network"><a href="#Parsing-Network" class="headerlink" title="Parsing Network"></a>Parsing Network</h2><p><strong>第1步：</strong><br>首先第一步要预测出相邻两个单词的句法距离，用宽度为$L+1$的卷积核来对单词进行卷积。例如要预测$x_i$和$x_{i-1}$的句法距离，那么就对$x_{i-L}, x_{i-L+1}, \ldots, x_i$进行卷积（其实就是两层前馈神经网络），得到如下输出（<strong>注意原文中这一段里的词向量$e$应该都是$x$，有误</strong>）：<br>\[<br>\begin{array}{}{h_i = {\rm ReLU}(W_c \left[ {\begin{array}{*{20}{c}}e_{i-L}\\e_{i-L+1}\\ \cdots\\ e_i \end{array}} \right] + b_c)} \\ {d_i = {\rm ReLU}(W_dh_i+b_d)}\end{array}<br>\]<br>当然了，第二行也可以看做是窗口大小为1的卷积核，第一个单词之前要补上$L-1$个0。</p>
 <p>最后得到的句法距离反映出了相邻两个词之间的语义相关程度，如果距离比较大，说明两个词可能位于两个不同的短语中，否则就位于同一个短语。一个形象化的句法距离就是相邻两个单词的最近公共祖先的高度。</p>
 <p>下面这个图就是一个例子，卷积核窗口宽度为2：<br><img src="3.png" alt></p>
-<p><strong>第2步：</strong><br>然后就可以根据句法距离，求出<script type="math/tex">x_t</script>最远到哪个位置有联系。用<script type="math/tex">\alpha_j^t</script>来衡量<script type="math/tex">x_t</script>与<script type="math/tex">x_j</script>的分别与前一个单词的句法距离的差距：<br>\[<br>\alpha_j^t = \frac{ {\rm hardtanh}((d_t - d_j) \cdot \tau) + 1}{2}<br>\]<br>这里的<script type="math/tex">{\rm hardtanh}</script>就是当输入大于1或者小于-1时，截取掉，给它限制在-1到1这个范围内，所以最后<script type="math/tex">\alpha</script>的范围就是0到1。可以看出，如果<script type="math/tex">\alpha_j^t</script>很大，那么<script type="math/tex">d_t</script>就大于<script type="math/tex">d_j</script>，否则的话<script type="math/tex">d_t</script>就小于<script type="math/tex">d_j</script>。这也很合乎直观上的认知，如果<script type="math/tex">d_t</script>大于<script type="math/tex">d_j</script>，那么说明<script type="math/tex">x_j</script>和<script type="math/tex">x_{j-1}</script>的最近公共祖先的高度比较低，那么说明<script type="math/tex">x_j</script>和<script type="math/tex">x_t</script>在同一棵子树中，差值自然大，反之的话<script type="math/tex">x_j</script>是当前子树的最左边的子结点，差值就很小。</p>
-<p>所以模型只需要一步步往左寻找第一个<script type="math/tex">\alpha_j^t</script>最接近0的点，也就是之前提到过的<script type="math/tex">l_t</script>。为了实现这个目标，可以定义<script type="math/tex">l_t = i</script>的概率为：<br>\[<br>p(l_t = i | x_0, \ldots, x_t) = (1 - \alpha_i^t) \prod_{j=i+1}^{t-1} {\alpha_j^t}<br>\]<br>为什么这么设计呢？其实还是很有道理的。概率越大的话，说明<script type="math/tex">\alpha_i^t</script>越小，而其他的<script type="math/tex">\alpha_j^t</script>越大，这就印证了上面提出的观点。而如果取<script type="math/tex">l_t > i</script>的话，<script type="math/tex">1 - \alpha_i^t</script>一定很小，会拉低概率；反之取<script type="math/tex">l_t < i</script>的话，会乘上一个很小的项<script type="math/tex">\alpha_i^t</script>，也会拉低概率。所以取<script type="math/tex">l_t = i</script>就是最优的。</p>
-<p><strong>第3步：</strong><br>我们的最终目的是求出门<script type="math/tex">g_i^t</script>，也就是<script type="math/tex">x_t</script>与<script type="math/tex">x_i</script>的相关度。在之前的动机中，直接将<script type="math/tex">l_t</script>之后的设为1，之前的设为0，但是这样是离散序列，无法传播梯度，所以这里采用另一种方法来求。注意到只有<script type="math/tex">p(l_t = i | x_0, \ldots, x_t)</script>接近于1，而其他的概率都接近于0，所以只需要用概率密度函数来作为<script type="math/tex">g_i^t</script>就行了：<br>\[<br>g_i^t = P(l_t \le i) = \prod_{j=i+1}^{t-1} {\alpha_j^t}<br>\]<br>注意到这个概率密度函数在<script type="math/tex">i < l_t</script>时值基本很小接近于0，而大于等于它时很大，越来越接近于1。这和设计的初衷已经很像了，所以可以近似用来作为<script type="math/tex">g_i^t</script>。</p>
+<p><strong>第2步：</strong><br>然后就可以根据句法距离，求出$x_t$最远到哪个位置有联系。用$\alpha_j^t$来衡量$x_t$与$x_j$的分别与前一个单词的句法距离的差距：<br>\[<br>\alpha_j^t = \frac{ {\rm hardtanh}((d_t - d_j) \cdot \tau) + 1}{2}<br>\]<br>这里的${\rm hardtanh}$就是当输入大于1或者小于-1时，截取掉，给它限制在-1到1这个范围内，所以最后$\alpha$的范围就是0到1。可以看出，如果$\alpha_j^t$很大，那么$d_t$就大于$d_j$，否则的话$d_t$就小于$d_j$。这也很合乎直观上的认知，如果$d_t$大于$d_j$，那么说明$x_j$和$x_{j-1}$的最近公共祖先的高度比较低，那么说明$x_j$和$x_t$在同一棵子树中，差值自然大，反之的话$x_j$是当前子树的最左边的子结点，差值就很小。</p>
+<p>所以模型只需要一步步往左寻找第一个$\alpha_j^t$最接近0的点，也就是之前提到过的$l_t$。为了实现这个目标，可以定义$l_t = i$的概率为：<br>\[<br>p(l_t = i | x_0, \ldots, x_t) = (1 - \alpha_i^t) \prod_{j=i+1}^{t-1} {\alpha_j^t}<br>\]<br>为什么这么设计呢？其实还是很有道理的。概率越大的话，说明$\alpha_i^t$越小，而其他的$\alpha_j^t$越大，这就印证了上面提出的观点。而如果取$l_t &gt; i$的话，$1 - \alpha_i^t$一定很小，会拉低概率；反之取$l_t &lt; i$的话，会乘上一个很小的项$\alpha_i^t$，也会拉低概率。所以取$l_t = i$就是最优的。</p>
+<p><strong>第3步：</strong><br>我们的最终目的是求出门$g_i^t$，也就是$x_t$与$x_i$的相关度。在之前的动机中，直接将$l_t$之后的设为1，之前的设为0，但是这样是离散序列，无法传播梯度，所以这里采用另一种方法来求。注意到只有$p(l_t = i | x_0, \ldots, x_t)$接近于1，而其他的概率都接近于0，所以只需要用概率密度函数来作为$g_i^t$就行了：<br>\[<br>g_i^t = P(l_t \le i) = \prod_{j=i+1}^{t-1} {\alpha_j^t}<br>\]<br>注意到这个概率密度函数在$i &lt; l_t$时值基本很小接近于0，而大于等于它时很大，越来越接近于1。这和设计的初衷已经很像了，所以可以近似用来作为$g_i^t$。</p>
 <p><strong>这里要提几点证明，可看可不看。</strong></p>
 <p><strong>证明开始</strong></p>
 <hr>
-<p>首先这个概率<script type="math/tex">p(l_t = i | x_0, \ldots, x_t)</script>的形式其实是一个狄利克雷过程，有两个特殊值要定义一下，一个是<script type="math/tex">l_t = t-1</script>时，概率为：<br>\[<br>p(l_t = t - 1 | x_0, \ldots, x_t) = (1 - \alpha_{t - 1}^t)<br>\]<br>还有就是当<script type="math/tex">l_t = 0</script>时，因为<script type="math/tex">d_0</script>实际不存在，所以定义为句法距离无穷大，那么<script type="math/tex">\alpha_0^t</script>定义为0，所以概率为：<br>\[<br>p(l_t = 0 | x_0, \ldots, x_t) = \prod_{j=1}^{t-1} {\alpha_j^t}<br>\]<br>然后可以求出<script type="math/tex">g_i^t</script>的期望（<strong>这里论文中又写的一塌糊涂，符号定义都不统一。。。</strong>）：<br>\[<br>\mathbb E(g_i^t) = \prod_{j=1}^{t-1} {\alpha_j^t} + (1 - \alpha_1^t)\prod_{j=2}^{t-1} {\alpha_j^t} + \ldots + (1 - \alpha_i^t)\prod_{j=i+1}^{t-1} {\alpha_j^t}<br>\]<br>进一步可以写为：<br>\[<br>\mathbb E(g_i^t) = \sum_{j=0}^i {p(l_t = j | x_0, \dots, x_t)} = P(l_t \le i)<br>\]<br>上面的求和裂项相消可以得到：<br>\[<br>P(l_t \le i) = \prod_{j=i+1}^{t-1} {\alpha_j^t}<br>\]<br>这里也可以验证出<script type="math/tex">P(l_t < t) = 1</script>，所以最终得到下面的门是正确的：<br>\[<br>g_i^t = \prod_{j=i+1}^{t-1} {\alpha_j^t}<br>\]</p>
-<p>然后要证明的就是根据这个策略求出的两个单词的关联区间没有交叉（但是可以完全覆盖）。首先放宽一下条件，证明当<script type="math/tex">\alpha_j^t</script>只取0或者1时，性质成立，也就是定义（<strong>这里原文又打错了。。。</strong>）：<br>\[<br>\alpha_j^t = \frac{ {\rm sign}(d_t - d_j) + 1}{2}<br>\]<br>也就是在原来的定义中令<script type="math/tex">\tau</script>为正无穷。这样的话如果<script type="math/tex">d_t > d_j</script>，那么<script type="math/tex">\alpha_j^t</script>就是1，否则就是0。放宽了条件之后，<script type="math/tex">g_i^t</script>取值就只有1和0了，所以求出的<script type="math/tex">l_t</script>一定是满足句法距离<script type="math/tex">d_i > d_t</script>所有位置中最右边的一个。而对于所有的<script type="math/tex">l_t < i < t</script>，都满足<script type="math/tex">d_i < d_t</script>。证明也很简单，假设存在两个单词<script type="math/tex">x_v</script>和<script type="math/tex">x_n</script>，其中<script type="math/tex">v < n</script>，它俩的关联区间交叉了，那么假设<script type="math/tex">x_v</script>的<script type="math/tex">l_t</script>为<script type="math/tex">u</script>，而<script type="math/tex">x_n</script>的<script type="math/tex">l_t</script>为<script type="math/tex">m</script>，所以<script type="math/tex">u < m < v < n</script>。那么根据定义，有：<br>\[<br>\begin{array}{} {d_u &gt; d_v &gt; d_m \\ d_m &gt; d_n &gt; d_v} \end{array}<br>\]<br>这两个式子显然矛盾，所以证明了在宽松的条件下，这个不交叉的性质是成立的。</p>
-<p>另一个极端是令<script type="math/tex">\tau = 0</script>，这种情况下<script type="math/tex">\alpha_j^t = \frac{1}{2}</script>，最终算下来<script type="math/tex">g_i^t</script>是一个首项为<script type="math/tex">\frac{1}{2^{t-1}}</script>公比为2的等比数列。这里的话论文里说最终会形成一棵所有叶子结点都直接连接在根结点上面的句法树，但是我是没看出来为什么，首先这种情况下句法距离<script type="math/tex">d</script>对最终的损失函数没有影响了，所以梯度无法传播回来，句法距离<script type="math/tex">d</script>应该只受到词向量影响了，最终就是一个普通的语言模型，句法距离最终会是什么样子谁也不知道。</p>
-<p>在具体实现时，将<script type="math/tex">\tau</script>设为一个中间值，但是这样会产生交叉的关联区间，所以测试的时候再将其设为正无穷。</p>
+<p>首先这个概率$p(l_t = i | x_0, \ldots, x_t)$的形式其实是一个狄利克雷过程，有两个特殊值要定义一下，一个是$l_t = t-1$时，概率为：<br>\[<br>p(l_t = t - 1 | x_0, \ldots, x_t) = (1 - \alpha_{t - 1}^t)<br>\]<br>还有就是当$l_t = 0$时，因为$d_0$实际不存在，所以定义为句法距离无穷大，那么$\alpha_0^t$定义为0，所以概率为：<br>\[<br>p(l_t = 0 | x_0, \ldots, x_t) = \prod_{j=1}^{t-1} {\alpha_j^t}<br>\]<br>然后可以求出$g_i^t$的期望（<strong>这里论文中又写的一塌糊涂，符号定义都不统一。。。</strong>）：<br>\[<br>\mathbb E(g_i^t) = \prod_{j=1}^{t-1} {\alpha_j^t} + (1 - \alpha_1^t)\prod_{j=2}^{t-1} {\alpha_j^t} + \ldots + (1 - \alpha_i^t)\prod_{j=i+1}^{t-1} {\alpha_j^t}<br>\]<br>进一步可以写为：<br>\[<br>\mathbb E(g_i^t) = \sum_{j=0}^i {p(l_t = j | x_0, \dots, x_t)} = P(l_t \le i)<br>\]<br>上面的求和裂项相消可以得到：<br>\[<br>P(l_t \le i) = \prod_{j=i+1}^{t-1} {\alpha_j^t}<br>\]<br>这里也可以验证出$P(l_t &lt; t) = 1$，所以最终得到下面的门是正确的：<br>\[<br>g_i^t = \prod_{j=i+1}^{t-1} {\alpha_j^t}<br>\]</p>
+<p>然后要证明的就是根据这个策略求出的两个单词的关联区间没有交叉（但是可以完全覆盖）。首先放宽一下条件，证明当$\alpha_j^t$只取0或者1时，性质成立，也就是定义（<strong>这里原文又打错了。。。</strong>）：<br>\[<br>\alpha_j^t = \frac{ {\rm sign}(d_t - d_j) + 1}{2}<br>\]<br>也就是在原来的定义中令$\tau$为正无穷。这样的话如果$d_t &gt; d_j$，那么$\alpha_j^t$就是1，否则就是0。放宽了条件之后，$g_i^t$取值就只有1和0了，所以求出的$l_t$一定是满足句法距离$d_i &gt; d_t$所有位置中最右边的一个。而对于所有的$l_t &lt; i &lt; t$，都满足$d_i &lt; d_t$。证明也很简单，假设存在两个单词$x_v$和$x_n$，其中$v &lt; n$，它俩的关联区间交叉了，那么假设$x_v$的$l_t$为$u$，而$x_n$的$l_t$为$m$，所以$u &lt; m &lt; v &lt; n$。那么根据定义，有：<br>\[<br>\begin{array}{} {d_u &gt; d_v &gt; d_m \\ d_m &gt; d_n &gt; d_v} \end{array}<br>\]<br>这两个式子显然矛盾，所以证明了在宽松的条件下，这个不交叉的性质是成立的。</p>
+<p>另一个极端是令$\tau = 0$，这种情况下$\alpha_j^t = \frac{1}{2}$，最终算下来$g_i^t$是一个首项为$\frac{1}{2^{t-1}}$公比为2的等比数列。这里的话论文里说最终会形成一棵所有叶子结点都直接连接在根结点上面的句法树，但是我是没看出来为什么，首先这种情况下句法距离$d$对最终的损失函数没有影响了，所以梯度无法传播回来，句法距离$d$应该只受到词向量影响了，最终就是一个普通的语言模型，句法距离最终会是什么样子谁也不知道。</p>
+<p>在具体实现时，将$\tau$设为一个中间值，但是这样会产生交叉的关联区间，所以测试的时候再将其设为正无穷。</p>
 <p><strong>证明结束</strong></p>
 <hr>
-<h2 id="Reading-Network"><a href="#Reading-Network" class="headerlink" title="Reading Network"></a>Reading Network</h2><p>上面的Parsing Network求了半天就是为了得到这个gates <script type="math/tex">g_j^t</script>，然后怎么使用呢？既然是语言模型，下面当然要用LSTM来对句子进行编码了。众所周知，在LSTM中有两个隐含层状态<script type="math/tex">h</script>和<script type="math/tex">c</script>，所以在这里不直接使用上一个时刻传过来的状态，而是用历史所有时刻的状态信息，再与gates加权后输入到下一时刻。在论文中并没有直接使用gates作为权重，而是计算了一个新的权重，这里称作结构化attention：<br>\[<br>\begin{array}{} {k_t = W_h h_{t-1} + W_x x_t \\ \tilde s_i^t = {\rm softmax}(\frac{h_i k_t^{T}}{\sqrt {\delta_k}})} \end{array}<br>\]<br>当然这还不是最终的权重，再通过加入gates，定义一个新的结构化intra-attention：<br>\[<br>s_i^t = \frac{g_i^t \tilde s_i^t}{\sum_i g_i^t}<br>\]<br>上面两个式子我也不是很清楚怎么解释，反正最后就用这个权重来对历史状态进行编码：<br>\[<br>\left[ \begin{array}{*{c}}{\tilde h_t \\ \tilde c_t}\end{array} \right] = \sum_{i=1}^{t-1} {s_i^t \cdot m_i} = \sum_{i=1}^{t-1} {s_i^t \cdot \left[ \begin{array}{*{c}}{h_i \\ c_i}\end{array} \right]}<br>\]<br>最后将加权求和后的隐含层状态作为下一个时刻的隐含层输入，得到新的隐含层表示。</p>
-<h2 id="Predict-Network"><a href="#Predict-Network" class="headerlink" title="Predict Network"></a>Predict Network</h2><p>最后就是预测下一个单词是什么了，这里并没有直接用下一时刻<script type="math/tex">t + 1</script>的隐含层输出来预测，还是采用了attention，但是存在一个问题，<script type="math/tex">g_j^{t+1}</script>的值依赖于<script type="math/tex">d_{t+1}</script>，也就是依赖于<script type="math/tex">x_{t+1}</script>，但是这是我们需要预测的，那怎么办呢？论文中就直接用另一套参数直接预测出一个临时的<script type="math/tex">d_{t+1}'</script>：<br>\[<br>d_{t+1}’ = {\rm ReLU}(W_d’h_t + b_d’)<br>\]<br>最后对历史状态加权求和，然后用一个前馈神经网络预测下一个单词：<br>\[<br>f(m_0, \ldots, m_t, g_0^{t+1}, \ldots, g_t^{t+1}) = \hat f([h_{l:t-1}, h_t])<br>\]</p>
+<h2 id="Reading-Network"><a href="#Reading-Network" class="headerlink" title="Reading Network"></a>Reading Network</h2><p>上面的Parsing Network求了半天就是为了得到这个gates $g_j^t$，然后怎么使用呢？既然是语言模型，下面当然要用LSTM来对句子进行编码了。众所周知，在LSTM中有两个隐含层状态$h$和$c$，所以在这里不直接使用上一个时刻传过来的状态，而是用历史所有时刻的状态信息，再与gates加权后输入到下一时刻。在论文中并没有直接使用gates作为权重，而是计算了一个新的权重，这里称作结构化attention：<br>\[<br>\begin{array}{} {k_t = W_h h_{t-1} + W_x x_t \\ \tilde s_i^t = {\rm softmax}(\frac{h_i k_t^{T}}{\sqrt {\delta_k}})} \end{array}<br>\]<br>当然这还不是最终的权重，再通过加入gates，定义一个新的结构化intra-attention：<br>\[<br>s_i^t = \frac{g_i^t \tilde s_i^t}{\sum_i g_i^t}<br>\]<br>上面两个式子我也不是很清楚怎么解释，反正最后就用这个权重来对历史状态进行编码：<br>\[<br>\left[ \begin{array}{*{c}}{\tilde h_t \\ \tilde c_t}\end{array} \right] = \sum_{i=1}^{t-1} {s_i^t \cdot m_i} = \sum_{i=1}^{t-1} {s_i^t \cdot \left[ \begin{array}{*{c}}{h_i \\ c_i}\end{array} \right]}<br>\]<br>最后将加权求和后的隐含层状态作为下一个时刻的隐含层输入，得到新的隐含层表示。</p>
+<h2 id="Predict-Network"><a href="#Predict-Network" class="headerlink" title="Predict Network"></a>Predict Network</h2><p>最后就是预测下一个单词是什么了，这里并没有直接用下一时刻$t + 1$的隐含层输出来预测，还是采用了attention，但是存在一个问题，$g_j^{t+1}$的值依赖于$d_{t+1}$，也就是依赖于$x_{t+1}$，但是这是我们需要预测的，那怎么办呢？论文中就直接用另一套参数直接预测出一个临时的$d_{t+1}’$：<br>\[<br>d_{t+1}’ = {\rm ReLU}(W_d’h_t + b_d’)<br>\]<br>最后对历史状态加权求和，然后用一个前馈神经网络预测下一个单词：<br>\[<br>f(m_0, \ldots, m_t, g_0^{t+1}, \ldots, g_t^{t+1}) = \hat f([h_{l:t-1}, h_t])<br>\]</p>
 <h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><hr>
 <p>具体实验设置啥的去看论文吧，这里就贴几个结果图解释一下。</p>
 <p><img src="4.jpg" alt><br>上面这个是字符级别的语言模型的结果，PRPN取得了SOTA的结果。</p>
@@ -660,7 +660,7 @@
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2019/03/31/iclr18-prpn/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -891,8 +891,8 @@
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -1014,7 +1014,7 @@
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

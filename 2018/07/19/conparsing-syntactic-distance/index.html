@@ -19,7 +19,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Straight to the Tree： Constituency Parsing with Neural Syntactic Distance | WeiYang Blog</title>
+    <title>Straight to the Tree： Constituency Parsing with Neural Syntactic Distance | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -48,7 +48,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -111,7 +111,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -450,25 +450,25 @@
 <p>主要思想是通过预测一个实值向量来构造出成分句法树，该实值向量表示的就是成分句法树的所有split，并且按照中序遍历给出，具体细节之后会讲到。这个方法之前没有见过，很有新意，效果也很不错，虽然比不上之前讲的基于span的方法，但是该模型最大的优点就是可以并行，时间复杂度低。</p>
 <p>近些年来，成分句法分析模型大多是通过学习出词和短语的表示，然后用基于转移的或者基于chart的方法进行句法分析，亦或者是上一篇笔记中提到的top-down方法。但是这一类方法都有一些不可避免的缺点，比如基于转移的方法，通过预测转移序列来生成句法分析树，但是一棵句法分析树可能对应着多棵不同的转移序列，所以训练的时候可能产生错误，可以通过动态Oracle技术解决。基于chart的模型缺点就是速度太慢。</p>
 <p>本文提出了一种新的概念叫做“syntactic distance”，以下称作句法距离，这个概念首次提出是2017年一篇语言模型的论文中的，本文将其用在了句法分析中。主要思想是这样的：对于一棵二叉树，它的中序遍历的split序列和二叉树是唯一对应的，所以只需要预测这个split序列就行了，而每个split就是用句法距离来表示。下图就是一棵句法树对应的句法距离：<br><img src="1.png" alt><br>这棵树有两个split，第一个split的高度更高，所以对应的句法距离数值更大。</p>
-<p>最后通过top-down顺序进行解码，解码时间复杂度为<script type="math/tex">O(n\log n)</script>。最后模型在PTB上取得了91.8的F1值，CTB上取得了86.5的F1值。</p>
+<p>最后通过top-down顺序进行解码，解码时间复杂度为$O(n\log n)$。最后模型在PTB上取得了91.8的F1值，CTB上取得了86.5的F1值。</p>
 <h1 id="Syntactic-Distances"><a href="#Syntactic-Distances" class="headerlink" title="Syntactic Distances"></a>Syntactic Distances</h1><hr>
-<p>一棵句法树的句法距离如下定义：<br>对于句法分析树<script type="math/tex">T</script>，它的叶子结点也就是句子为<script type="math/tex">({w_0}, \ldots ,{w_n})</script>，记叶子结点<script type="math/tex">w_i,w_j</script>的最近公共祖先LCA为<script type="math/tex">\tilde d_j^i</script>，那么句法树<script type="math/tex">T</script>的句法距离定义为任意向量<script type="math/tex">d = ({d_1}, \ldots ,{d_n})</script>，并且满足<br>\[sign({d_i} - {d_j}) = sign(\tilde d_i^{i - 1} - \tilde d_j^{j - 1})\]<br>这个定义可能看起来比较难理解，通俗一点讲就是，<script type="math/tex">({d_1}, \ldots ,{d_n})</script>中任意一对元素的大小关系和<script type="math/tex">(\tilde d_1^0, \ldots ,\tilde d_n^{n - 1})</script>中下标相同的一对元素的大小关系是完全一样的，也就是说，句法距离大小反映的是一个句子两两相邻元素的LCA的高度大小。</p>
-<p>还用上面那张图举个例子，<script type="math/tex">\tilde d_1^0 = 2,\tilde d_2^1 = 1</script>，那么它的句法距离<script type="math/tex">d=(d_1,d_2)</script>就是满足<script type="math/tex">d_1>d_2</script>的任意向量。</p>
+<p>一棵句法树的句法距离如下定义：<br>对于句法分析树$T$，它的叶子结点也就是句子为$({w_0}, \ldots ,{w_n})$，记叶子结点$w_i,w_j$的最近公共祖先LCA为$\tilde d_j^i$，那么句法树$T$的句法距离定义为任意向量$d = ({d_1}, \ldots ,{d_n})$，并且满足<br>\[sign({d_i} - {d_j}) = sign(\tilde d_i^{i - 1} - \tilde d_j^{j - 1})\]<br>这个定义可能看起来比较难理解，通俗一点讲就是，$({d_1}, \ldots ,{d_n})$中任意一对元素的大小关系和$(\tilde d_1^0, \ldots ,\tilde d_n^{n - 1})$中下标相同的一对元素的大小关系是完全一样的，也就是说，句法距离大小反映的是一个句子两两相邻元素的LCA的高度大小。</p>
+<p>还用上面那张图举个例子，$\tilde d_1^0 = 2,\tilde d_2^1 = 1$，那么它的句法距离$d=(d_1,d_2)$就是满足$d_1&gt;d_2$的任意向量。</p>
 <p>这样就可以将一棵句法树唯一对应到一个句法距离的序列，只要预测这个序列就可以得到句法树了，这比预测span集合更加直接。</p>
-<p>那么训练的时候如何将句法树转化为句法距离呢？这里只考虑二叉树，下面的算法1给出了伪代码，将句法树转化为三元组<script type="math/tex">(d,c,t)</script>。其中<script type="math/tex">d</script>是两两相邻的叶子结点的LCA的高度向量，可以证明，这和中序遍历得到的结点顺序完全相同。<script type="math/tex">c</script>是与之顺序相同的结点的label向量。<script type="math/tex">t</script>是叶子结点从左向右的tag标签向量。<br><img src="2.png" alt><br>从算法中可以看出，采用自顶向下递归的形式，叶子结点高度为0，不存在句法距离和label。而内结点的高度等于左右儿子高度较大的一个加1，句法距离为左儿子句法距离拼接上自身句法距离再拼接上右儿子句法距离，label也是如此。</p>
-<p>那么如果得到了一棵句法树的三元组<script type="math/tex">(d,c,t)</script>，如何还原出这棵句法树呢？算法2给出了构造方法，其实类似于之前那篇论文的top-down方法。<br><img src="3.png" alt><br>原理很简单，只要在每一步寻找<script type="math/tex">d</script>中最大的元素，也就是寻找高度最大的内结点，该内结点对应的下标就是句法树的split，然后对左右子树递归解析就行了。时间复杂度只要<script type="math/tex">O(n\log n)</script>，而之前的top-down模型时间复杂度为<script type="math/tex">O(n^2)</script>。<br><img src="4.png" alt><br>上图是构造句法树的一个例子，和之前一样，通过<script type="math/tex">\emptyset</script>的label隐式的将句法树二叉化了，一元还是处理成新的label。图中的矩形高度就代表了句法距离的大小，可以看出，除了<script type="math/tex">d_0,d_5</script>这两个句子开始结束标记的句法距离以外，<script type="math/tex">d_1</script>最大，所以句法树的split就是<script type="math/tex">w_0</script>和<script type="math/tex">w_1</script>，然后对右子树递归分析。</p>
-<p>在子树递归过程中，可以并行计算，理论上时间复杂度可以降到<script type="math/tex">O(\log n)</script>，但是句子长度过短的话，是否与cpu通讯时间都要大于这个数量级了呢？这个并行的意义还有待商榷。</p>
+<p>那么训练的时候如何将句法树转化为句法距离呢？这里只考虑二叉树，下面的算法1给出了伪代码，将句法树转化为三元组$(d,c,t)$。其中$d$是两两相邻的叶子结点的LCA的高度向量，可以证明，这和中序遍历得到的结点顺序完全相同。$c$是与之顺序相同的结点的label向量。$t$是叶子结点从左向右的tag标签向量。<br><img src="2.png" alt><br>从算法中可以看出，采用自顶向下递归的形式，叶子结点高度为0，不存在句法距离和label。而内结点的高度等于左右儿子高度较大的一个加1，句法距离为左儿子句法距离拼接上自身句法距离再拼接上右儿子句法距离，label也是如此。</p>
+<p>那么如果得到了一棵句法树的三元组$(d,c,t)$，如何还原出这棵句法树呢？算法2给出了构造方法，其实类似于之前那篇论文的top-down方法。<br><img src="3.png" alt><br>原理很简单，只要在每一步寻找$d$中最大的元素，也就是寻找高度最大的内结点，该内结点对应的下标就是句法树的split，然后对左右子树递归解析就行了。时间复杂度只要$O(n\log n)$，而之前的top-down模型时间复杂度为$O(n^2)$。<br><img src="4.png" alt><br>上图是构造句法树的一个例子，和之前一样，通过$\emptyset$的label隐式的将句法树二叉化了，一元还是处理成新的label。图中的矩形高度就代表了句法距离的大小，可以看出，除了$d_0,d_5$这两个句子开始结束标记的句法距离以外，$d_1$最大，所以句法树的split就是$w_0$和$w_1$，然后对右子树递归分析。</p>
+<p>在子树递归过程中，可以并行计算，理论上时间复杂度可以降到$O(\log n)$，但是句子长度过短的话，是否与cpu通讯时间都要大于这个数量级了呢？这个并行的意义还有待商榷。</p>
 <h1 id="训练"><a href="#训练" class="headerlink" title="训练"></a>训练</h1><hr>
-<h2 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h2><p>下面的问题就是给出一个句子，如何学习出它的三元组<script type="math/tex">(d,c,t)</script>呢？</p>
+<h2 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h2><p>下面的问题就是给出一个句子，如何学习出它的三元组$(d,c,t)$呢？</p>
 <p>首先将每个单词的词向量和tag向量拼接作为输入，然后送入一个Bi-LSTM，得到隐含层输出为<br>\[h_0^w, \ldots ,h_n^w = {\rm{BiLST}}{ {\rm{M}}_w}([e_0^w,e_0^t], \ldots ,[e_n^w,e_n^t])\]</p>
-<p>对于每个单词，可能存在一元结点，也可能不存在，不存在的话就标记为<script type="math/tex">\emptyset</script>，用一个前馈神经网络和softmax预测每个单词的一元结点：<br>\[p(c_i^w|w) = {\rm{softmax(FF}}_c^w(h_i^w))\]</p>
+<p>对于每个单词，可能存在一元结点，也可能不存在，不存在的话就标记为$\emptyset$，用一个前馈神经网络和softmax预测每个单词的一元结点：<br>\[p(c_i^w|w) = {\rm{softmax(FF}}_c^w(h_i^w))\]</p>
 <p>为了得到每个split的表示，对两两相邻单词进行卷积：<br>\[g_1^s, \ldots ,g_n^s = {\rm{CONV(}}h_0^w, \ldots ,h_n^w)\]<br>注意输出比输入少一个，因为split数量比单词少一个。</p>
 <p>然后再将输出通过一层Bi-LSTM，得到最终的split表示：<br>\[h_1^s, \ldots ,h_n^s = {\rm{BiLST}}{ {\rm{M}}_s}(g_1^s, \ldots ,g_n^s)\]<br>当然这里也可以选择采用self-attention，详见我的上一篇博客。</p>
 <p>最后将输出通过一个两层前馈神经网络，得到每个split的句法距离值：<br>\[{ {\hat d}_i} = {\rm{F}}{ {\rm{F}}_d}(h_i^s)\]</p>
 <p>每个内结点的label同样用一个前馈神经网络和softmax预测：<br>\[p(c_i^s|w) = {\rm{softmax(FF}}_c^s(h_i^s))\]</p>
-<h2 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h2><p>对于训练样例<script type="math/tex">\left\{ {\left\langle { {d_k},{c_k},{t_k},{w_k}} \right\rangle } \right\}\_{k = 1}^K</script>，它的损失函数就是<script type="math/tex">d</script>和<script type="math/tex">c</script>的损失函数之和。</p>
-<p>对于<script type="math/tex">c</script>，因为用的是softmax预测的，所以直接用交叉熵即可得到损失<script type="math/tex">{L_{ {\rm{label}}}}</script>。</p>
-<p>对于<script type="math/tex">d</script>，可以用均方误差：<br>\[L_{dist}^{mse} = \sum\limits_i { { {({d_i} - { {\hat d}_i})}^2}} \]<br>然而我们并不在意句法距离的绝对值大小，我们只要它的相对大小是正确的即可，所以均方误差在这里不是很合适，可以换成如下损失函数：<br>\[L_{dist}^{rank} = \sum\limits_{i,j &gt; i} {\max (0,1 - sign({d_i} - {d_j})({ {\hat d}_i} - { {\hat d}_j}))} \]</p>
+<h2 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h2><p>对于训练样例$\left\{ {\left\langle { {d_k},{c_k},{t_k},{w_k}} \right\rangle } \right\}_{k = 1}^K$，它的损失函数就是$d$和$c$的损失函数之和。</p>
+<p>对于$c$，因为用的是softmax预测的，所以直接用交叉熵即可得到损失${L_{ {\rm{label}}}}$。</p>
+<p>对于$d$，可以用均方误差：<br>\[L_{dist}^{mse} = \sum\limits_i { { {({d_i} - { {\hat d}_i})}^2}} \]<br>然而我们并不在意句法距离的绝对值大小，我们只要它的相对大小是正确的即可，所以均方误差在这里不是很合适，可以换成如下损失函数：<br>\[L_{dist}^{rank} = \sum\limits_{i,j &gt; i} {\max (0,1 - sign({d_i} - {d_j})({ {\hat d}_i} - { {\hat d}_j}))} \]</p>
 <p>最后总的损失函数为：<br>\[L = {L_{ {\rm{label}}}} + L_{dist}^{rank}\]</p>
 <p>下面这张图形象的说明了模型的结构，由下往上，第一层圆圈是单词之间的LSTM，然后每个单词上面的五边形是前馈神经网络用来预测一元label，两个相邻单词之间的三角形是卷积，卷积得到的结果再通过一个LSTM得到split表示，最后每个split上面有两个五边形，一个是前馈神经网络用来预测label，另一个是前馈神经网络用来预测句法距离。<br><img src="5.png" alt></p>
 <h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><hr>
@@ -645,7 +645,7 @@
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2018/07/19/conparsing-syntactic-distance/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -868,8 +868,8 @@
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -991,7 +991,7 @@
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

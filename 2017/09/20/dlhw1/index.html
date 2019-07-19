@@ -17,7 +17,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>吴恩达深度学习公开课第二周编程练习1 | WeiYang Blog</title>
+    <title>吴恩达深度学习公开课第二周编程练习1 | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -46,7 +46,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -109,7 +109,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -431,12 +431,12 @@
                 <p>这次编程练习是吴恩达深度学习公开课第二周的配套练习，地址：<a href="https://www.coursera.org/learn/neural-networks-deep-learning" target="_blank" rel="noopener">coursera</a>。</p>
 <h1 id="1-Building-basic-functions-with-numpy"><a href="#1-Building-basic-functions-with-numpy" class="headerlink" title="1 - Building basic functions with numpy"></a>1 - Building basic functions with numpy</h1><hr>
 <h2 id="1-1-sigmoid-function-np-exp"><a href="#1-1-sigmoid-function-np-exp" class="headerlink" title="1.1 - sigmoid function, np.exp()"></a>1.1 - sigmoid function, np.exp()</h2><p>Exercise: Build a function that returns the sigmoid of a real number x. Use <code>math.exp(x)</code> for the exponential function.</p>
-<pre class=" language-lang-python"><code class="language-lang-python"># GRADED FUNCTION: basic_sigmoid
+<pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># GRADED FUNCTION: basic_sigmoid</span>
 
-import math
+<span class="token keyword">import</span> math
 
-def basic_sigmoid(x):
-    """
+<span class="token keyword">def</span> <span class="token function">basic_sigmoid</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""
     Compute sigmoid of x.
 
     Arguments:
@@ -444,23 +444,22 @@ def basic_sigmoid(x):
 
     Return:
     s -- sigmoid(x)
-    """
+    """</span>
 
-    ### START CODE HERE ### (≈ 1 line of code)
-    s = 1 / (1 + math.exp(-x))
-    ### END CODE HERE ###
+    <span class="token comment" spellcheck="true">### START CODE HERE ### (≈ 1 line of code)</span>
+    s <span class="token operator">=</span> <span class="token number">1</span> <span class="token operator">/</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">+</span> math<span class="token punctuation">.</span>exp<span class="token punctuation">(</span><span class="token operator">-</span>x<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token comment" spellcheck="true">### END CODE HERE ###</span>
 
-    return s
+    <span class="token keyword">return</span> s
 
-basic_sigmoid(3)
-</code></pre>
+basic_sigmoid<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span></code></pre>
 <p>Exercise: Implement the sigmoid function using <code>numpy</code>.</p>
-<pre class=" language-lang-python"><code class="language-lang-python"># GRADED FUNCTION: sigmoid
+<pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># GRADED FUNCTION: sigmoid</span>
 
-import numpy as np # this means you can access numpy functions by writing np.function() instead of numpy.function()
+<span class="token keyword">import</span> numpy <span class="token keyword">as</span> np <span class="token comment" spellcheck="true"># this means you can access numpy functions by writing np.function() instead of numpy.function()</span>
 
-def sigmoid(x):
-    """
+<span class="token keyword">def</span> <span class="token function">sigmoid</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""
     Compute the sigmoid of x
 
     Arguments:
@@ -468,22 +467,21 @@ def sigmoid(x):
 
     Return:
     s -- sigmoid(x)
-    """
+    """</span>
 
-    ### START CODE HERE ### (≈ 1 line of code)
-    s = 1 / (1 + np.exp(-x))
-    ### END CODE HERE ###
+    <span class="token comment" spellcheck="true">### START CODE HERE ### (≈ 1 line of code)</span>
+    s <span class="token operator">=</span> <span class="token number">1</span> <span class="token operator">/</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">+</span> np<span class="token punctuation">.</span>exp<span class="token punctuation">(</span><span class="token operator">-</span>x<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token comment" spellcheck="true">### END CODE HERE ###</span>
 
-    return s
+    <span class="token keyword">return</span> s
 
-x = np.array([1, 2, 3])
-sigmoid(x)
-</code></pre>
+x <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+sigmoid<span class="token punctuation">(</span>x<span class="token punctuation">)</span></code></pre>
 <h2 id="1-2-Sigmoid-gradient"><a href="#1-2-Sigmoid-gradient" class="headerlink" title="1.2 - Sigmoid gradient"></a>1.2 - Sigmoid gradient</h2><p>Exercise: Implement the function <code>sigmoid_grad()</code> to compute the gradient of the sigmoid function with respect to its input x. The formula is:<br>\[sigmoid\_derivative(x) = \sigma’(x) = \sigma(x) (1 - \sigma(x))\]</p>
-<pre class=" language-lang-python"><code class="language-lang-python"># GRADED FUNCTION: sigmoid_derivative
+<pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># GRADED FUNCTION: sigmoid_derivative</span>
 
-def sigmoid_derivative(x):
-    """
+<span class="token keyword">def</span> <span class="token function">sigmoid_derivative</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""
     Compute the gradient (also called the slope or derivative) of the sigmoid function with respect to its input x.
     You can store the output of the sigmoid function into variables and then use it to calculate the gradient.
 
@@ -492,55 +490,53 @@ def sigmoid_derivative(x):
 
     Return:
     ds -- Your computed gradient.
-    """
+    """</span>
 
-    ### START CODE HERE ### (≈ 2 lines of code)
-    s = sigmoid(x)
-    ds = s * (1 - s)
-    ### END CODE HERE ###
+    <span class="token comment" spellcheck="true">### START CODE HERE ### (≈ 2 lines of code)</span>
+    s <span class="token operator">=</span> sigmoid<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+    ds <span class="token operator">=</span> s <span class="token operator">*</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">-</span> s<span class="token punctuation">)</span>
+    <span class="token comment" spellcheck="true">### END CODE HERE ###</span>
 
-    return ds
+    <span class="token keyword">return</span> ds
 
-x = np.array([1, 2, 3])
-print ("sigmoid_derivative(x) = " + str(sigmoid_derivative(x)))
-</code></pre>
+x <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span> <span class="token punctuation">(</span><span class="token string">"sigmoid_derivative(x) = "</span> <span class="token operator">+</span> str<span class="token punctuation">(</span>sigmoid_derivative<span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
 <h2 id="1-3-Reshaping-arrays"><a href="#1-3-Reshaping-arrays" class="headerlink" title="1.3 - Reshaping arrays"></a>1.3 - Reshaping arrays</h2><p>Exercise: Implement <code>image2vector()</code> that takes an input of shape (length, height, 3) and returns a vector of shape (length*height*3, 1). </p>
-<pre class=" language-lang-python"><code class="language-lang-python"># GRADED FUNCTION: image2vector
-def image2vector(image):
-    """
+<pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># GRADED FUNCTION: image2vector</span>
+<span class="token keyword">def</span> <span class="token function">image2vector</span><span class="token punctuation">(</span>image<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""
     Argument:
     image -- a numpy array of shape (length, height, depth)
 
     Returns:
     v -- a vector of shape (length*height*depth, 1)
-    """
+    """</span>
 
-    ### START CODE HERE ### (≈ 1 line of code)
-    v = image.reshape(image.shape[0]*image.shape[1]*image.shape[2], 1)
-    ### END CODE HERE ###
+    <span class="token comment" spellcheck="true">### START CODE HERE ### (≈ 1 line of code)</span>
+    v <span class="token operator">=</span> image<span class="token punctuation">.</span>reshape<span class="token punctuation">(</span>image<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token operator">*</span>image<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token operator">*</span>image<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
+    <span class="token comment" spellcheck="true">### END CODE HERE ###</span>
 
-    return v
+    <span class="token keyword">return</span> v
 
-# This is a 3 by 3 by 2 array, typically images will be (num_px_x, num_px_y,3) where 3 represents the RGB values
-image = np.array([[[ 0.67826139,  0.29380381],
-        [ 0.90714982,  0.52835647],
-        [ 0.4215251 ,  0.45017551]],
+<span class="token comment" spellcheck="true"># This is a 3 by 3 by 2 array, typically images will be (num_px_x, num_px_y,3) where 3 represents the RGB values</span>
+image <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token number">0.67826139</span><span class="token punctuation">,</span>  <span class="token number">0.29380381</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span> <span class="token number">0.90714982</span><span class="token punctuation">,</span>  <span class="token number">0.52835647</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span> <span class="token number">0.4215251</span> <span class="token punctuation">,</span>  <span class="token number">0.45017551</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
 
-       [[ 0.92814219,  0.96677647],
-        [ 0.85304703,  0.52351845],
-        [ 0.19981397,  0.27417313]],
+       <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token number">0.92814219</span><span class="token punctuation">,</span>  <span class="token number">0.96677647</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span> <span class="token number">0.85304703</span><span class="token punctuation">,</span>  <span class="token number">0.52351845</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span> <span class="token number">0.19981397</span><span class="token punctuation">,</span>  <span class="token number">0.27417313</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
 
-       [[ 0.60659855,  0.00533165],
-        [ 0.10820313,  0.49978937],
-        [ 0.34144279,  0.94630077]]])
+       <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token number">0.60659855</span><span class="token punctuation">,</span>  <span class="token number">0.00533165</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span> <span class="token number">0.10820313</span><span class="token punctuation">,</span>  <span class="token number">0.49978937</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span> <span class="token number">0.34144279</span><span class="token punctuation">,</span>  <span class="token number">0.94630077</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
 
-print ("image2vector(image) = " + str(image2vector(image)))
-</code></pre>
+<span class="token keyword">print</span> <span class="token punctuation">(</span><span class="token string">"image2vector(image) = "</span> <span class="token operator">+</span> str<span class="token punctuation">(</span>image2vector<span class="token punctuation">(</span>image<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
 <h2 id="1-4-Normalizing-rows"><a href="#1-4-Normalizing-rows" class="headerlink" title="1.4 - Normalizing rows"></a>1.4 - Normalizing rows</h2><p>Exercise: Implement <code>normalizeRows()</code> to normalize the rows of a matrix. After applying this function to an input matrix x, each row of x should be a vector of unit length (meaning length 1).</p>
-<pre class=" language-lang-python"><code class="language-lang-python"># GRADED FUNCTION: normalizeRows
+<pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># GRADED FUNCTION: normalizeRows</span>
 
-def normalizeRows(x):
-    """
+<span class="token keyword">def</span> <span class="token function">normalizeRows</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""
     Implement a function that normalizes each row of the matrix x (to have unit length).
 
     Argument:
@@ -548,28 +544,27 @@ def normalizeRows(x):
 
     Returns:
     x -- The normalized (by row) numpy matrix. You are allowed to modify x.
-    """
+    """</span>
 
-    ### START CODE HERE ### (≈ 2 lines of code)
-    # Compute x_norm as the norm 2 of x. Use np.linalg.norm(..., ord = 2, axis = ..., keepdims = True)
-    x_norm = np.linalg.norm(x, axis = 1, keepdims = True)
+    <span class="token comment" spellcheck="true">### START CODE HERE ### (≈ 2 lines of code)</span>
+    <span class="token comment" spellcheck="true"># Compute x_norm as the norm 2 of x. Use np.linalg.norm(..., ord = 2, axis = ..., keepdims = True)</span>
+    x_norm <span class="token operator">=</span> np<span class="token punctuation">.</span>linalg<span class="token punctuation">.</span>norm<span class="token punctuation">(</span>x<span class="token punctuation">,</span> axis <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">,</span> keepdims <span class="token operator">=</span> <span class="token boolean">True</span><span class="token punctuation">)</span>
 
-    # Divide x by its norm.
-    x = x / x_norm
-    ### END CODE HERE ###
+    <span class="token comment" spellcheck="true"># Divide x by its norm.</span>
+    x <span class="token operator">=</span> x <span class="token operator">/</span> x_norm
+    <span class="token comment" spellcheck="true">### END CODE HERE ###</span>
 
-    return x
+    <span class="token keyword">return</span> x
 
-x = np.array([
-    [0, 3, 4],
-    [1, 6, 4]])
-print("normalizeRows(x) = " + str(normalizeRows(x)))
-</code></pre>
+x <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span>
+    <span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"normalizeRows(x) = "</span> <span class="token operator">+</span> str<span class="token punctuation">(</span>normalizeRows<span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
 <h2 id="1-5-Broadcasting-and-the-softmax-function"><a href="#1-5-Broadcasting-and-the-softmax-function" class="headerlink" title="1.5 - Broadcasting and the softmax function"></a>1.5 - Broadcasting and the softmax function</h2><p>Exercise: Implement a <code>softmax</code> function using numpy. You can think of softmax as a normalizing function used when your algorithm needs to classify two or more classes. You will learn more about softmax in the second course of this specialization.</p>
-<pre class=" language-lang-python"><code class="language-lang-python"># GRADED FUNCTION: softmax
+<pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># GRADED FUNCTION: softmax</span>
 
-def softmax(x):
-    """Calculates the softmax for each row of the input x.
+<span class="token keyword">def</span> <span class="token function">softmax</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""Calculates the softmax for each row of the input x.
 
     Your code should work for a row vector and also for matrices of shape (n, m).
 
@@ -578,74 +573,71 @@ def softmax(x):
 
     Returns:
     s -- A numpy matrix equal to the softmax of x, of shape (n,m)
-    """
+    """</span>
 
-    ### START CODE HERE ### (≈ 3 lines of code)
-    # Apply exp() element-wise to x. Use np.exp(...).
-    x_exp = np.exp(x)
+    <span class="token comment" spellcheck="true">### START CODE HERE ### (≈ 3 lines of code)</span>
+    <span class="token comment" spellcheck="true"># Apply exp() element-wise to x. Use np.exp(...).</span>
+    x_exp <span class="token operator">=</span> np<span class="token punctuation">.</span>exp<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
 
-    # Create a vector x_sum that sums each row of x_exp. Use np.sum(..., axis = 1, keepdims = True).
-    x_sum = np.sum(x_exp, axis=1, keepdims=True)
+    <span class="token comment" spellcheck="true"># Create a vector x_sum that sums each row of x_exp. Use np.sum(..., axis = 1, keepdims = True).</span>
+    x_sum <span class="token operator">=</span> np<span class="token punctuation">.</span>sum<span class="token punctuation">(</span>x_exp<span class="token punctuation">,</span> axis<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> keepdims<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
 
-    # Compute softmax(x) by dividing x_exp by x_sum. It should automatically use numpy broadcasting.
-    s = x_exp / x_sum
+    <span class="token comment" spellcheck="true"># Compute softmax(x) by dividing x_exp by x_sum. It should automatically use numpy broadcasting.</span>
+    s <span class="token operator">=</span> x_exp <span class="token operator">/</span> x_sum
 
-    ### END CODE HERE ###
+    <span class="token comment" spellcheck="true">### END CODE HERE ###</span>
 
-    return s
+    <span class="token keyword">return</span> s
 
-x = np.array([
-    [9, 2, 5, 0, 0],
-    [7, 5, 0, 0 ,0]])
-print("softmax(x) = " + str(softmax(x)))
-</code></pre>
+x <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span>
+    <span class="token punctuation">[</span><span class="token number">9</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span> <span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"softmax(x) = "</span> <span class="token operator">+</span> str<span class="token punctuation">(</span>softmax<span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
 <h1 id="2-Vectorization"><a href="#2-Vectorization" class="headerlink" title="2 - Vectorization"></a>2 - Vectorization</h1><hr>
 <h2 id="2-1-Implement-the-L1-and-L2-loss-functions"><a href="#2-1-Implement-the-L1-and-L2-loss-functions" class="headerlink" title="2.1 - Implement the L1 and L2 loss functions"></a>2.1 - Implement the L1 and L2 loss functions</h2><p>Exercise: Implement the numpy vectorized version of the <code>L1</code> loss. You may find the function <code>abs(x)</code> (absolute value of x) useful.</p>
-<pre class=" language-lang-python"><code class="language-lang-python"># GRADED FUNCTION: L1
+<pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># GRADED FUNCTION: L1</span>
 
-def L1(yhat, y):
-    """
+<span class="token keyword">def</span> <span class="token function">L1</span><span class="token punctuation">(</span>yhat<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""
     Arguments:
     yhat -- vector of size m (predicted labels)
     y -- vector of size m (true labels)
 
     Returns:
     loss -- the value of the L1 loss function defined above
-    """
+    """</span>
 
-    ### START CODE HERE ### (≈ 1 line of code)
-    loss = np.sum(abs(y - yhat))
-    ### END CODE HERE ###
+    <span class="token comment" spellcheck="true">### START CODE HERE ### (≈ 1 line of code)</span>
+    loss <span class="token operator">=</span> np<span class="token punctuation">.</span>sum<span class="token punctuation">(</span>abs<span class="token punctuation">(</span>y <span class="token operator">-</span> yhat<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token comment" spellcheck="true">### END CODE HERE ###</span>
 
-    return loss
+    <span class="token keyword">return</span> loss
 
-yhat = np.array([.9, 0.2, 0.1, .4, .9])
-y = np.array([1, 0, 0, 1, 1])
-print("L1 = " + str(L1(yhat,y)))
-</code></pre>
-<p>Exercise: Implement the numpy vectorized version of the <code>L2</code> loss. There are several way of implementing the <code>L2</code> loss but you may find the function <code>np.dot()</code> useful. As a reminder, if <script type="math/tex">x = [x_1, x_2, ..., x_n]</script>, then <code>np.dot(x,x)</code> = <script type="math/tex">\sum_{j=0}^n x_j^{2}</script></p>
-<pre class=" language-lang-python"><code class="language-lang-python"># GRADED FUNCTION: L2
+yhat <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">.</span><span class="token number">9</span><span class="token punctuation">,</span> <span class="token number">0.2</span><span class="token punctuation">,</span> <span class="token number">0.1</span><span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token number">9</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+y <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"L1 = "</span> <span class="token operator">+</span> str<span class="token punctuation">(</span>L1<span class="token punctuation">(</span>yhat<span class="token punctuation">,</span>y<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
+<p>Exercise: Implement the numpy vectorized version of the <code>L2</code> loss. There are several way of implementing the <code>L2</code> loss but you may find the function <code>np.dot()</code> useful. As a reminder, if $x = [x_1, x_2, …, x_n]$, then <code>np.dot(x,x)</code> = $\sum_{j=0}^n x_j^{2}$</p>
+<pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># GRADED FUNCTION: L2</span>
 
-def L2(yhat, y):
-    """
+<span class="token keyword">def</span> <span class="token function">L2</span><span class="token punctuation">(</span>yhat<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""
     Arguments:
     yhat -- vector of size m (predicted labels)
     y -- vector of size m (true labels)
 
     Returns:
     loss -- the value of the L2 loss function defined above
-    """
+    """</span>
 
-    ### START CODE HERE ### (≈ 1 line of code)
-    loss = np.sum(np.dot(y - yhat, y - yhat))
-    ### END CODE HERE ###
+    <span class="token comment" spellcheck="true">### START CODE HERE ### (≈ 1 line of code)</span>
+    loss <span class="token operator">=</span> np<span class="token punctuation">.</span>sum<span class="token punctuation">(</span>np<span class="token punctuation">.</span>dot<span class="token punctuation">(</span>y <span class="token operator">-</span> yhat<span class="token punctuation">,</span> y <span class="token operator">-</span> yhat<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token comment" spellcheck="true">### END CODE HERE ###</span>
 
-    return loss
+    <span class="token keyword">return</span> loss
 
-yhat = np.array([.9, 0.2, 0.1, .4, .9])
-y = np.array([1, 0, 0, 1, 1])
-print("L2 = " + str(L2(yhat,y)))
-</code></pre>
+yhat <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">.</span><span class="token number">9</span><span class="token punctuation">,</span> <span class="token number">0.2</span><span class="token punctuation">,</span> <span class="token number">0.1</span><span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token number">9</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+y <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"L2 = "</span> <span class="token operator">+</span> str<span class="token punctuation">(</span>L2<span class="token punctuation">(</span>yhat<span class="token punctuation">,</span>y<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
 
             </div>
             <hr/>
@@ -808,7 +800,7 @@ print("L2 = " + str(L2(yhat,y)))
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2017/09/20/dlhw1/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -945,7 +937,7 @@ imp
 
 2.1 二分分类
 
-二分类问题就是给定一个输入x，预测它的标签y是0还是1。拿预测一张图片是不是猫来举例子，一张图片大小为{\rm{64}} \times {\rm{64}}，将它转化为三个矩阵分
+二分类问题就是给定一个输入$x$，预测它的标签$y$是0还是1。拿预测一张图片是不是猫来举例子，一张图片大小为${\rm{64}} \times {\rm{64}}$，将它转化
                         
                     </div>
                     <div class="publish-info">
@@ -1012,8 +1004,8 @@ imp
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -1135,7 +1127,7 @@ imp
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

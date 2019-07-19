@@ -19,7 +19,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>具体数学-第8课（取整进阶） | WeiYang Blog</title>
+    <title>具体数学-第8课（取整进阶） | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -48,7 +48,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -111,7 +111,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -434,74 +434,71 @@
 
 <p>今天主要讲了取整与递归式的结合，还有取模的相关知识。</p>
 <h1 id="例题1"><a href="#例题1" class="headerlink" title="例题1"></a>例题1</h1><hr>
-<p>给出下列递归式：<br>\[\begin{array}{l}{K_0}{\rm{ = }}1\\{K_{n + 1}} = 1 + \min (2{K_{\left\lfloor {n/2} \right\rfloor }},3{K_{\left\lfloor {n/3} \right\rfloor }}),n \ge 0\end{array}\]<br>现在不要求你求解，要你证明：<br>\[{K_n} \ge n\]<br>首先想到的就是数学归纳法，假设对于任意<script type="math/tex">k \le n</script>，都有<script type="math/tex">{K_k} \ge k</script>，那么：<br>\[\begin{array}{l}{K_{n + 1}} = 1 + \min (2{K_{\left\lfloor {n/2} \right\rfloor }},3{K_{\left\lfloor {n/3} \right\rfloor }})\\ \ge 1 + \min (2\left\lfloor {\frac{n}{2}} \right\rfloor ,3\left\lfloor {\frac{n}{3}} \right\rfloor )\end{array}\]<br>如果<script type="math/tex">n = 2k</script>，那么<script type="math/tex">{K_{n + 1}} \ge 1 + n</script>。<br>如果<script type="math/tex">n = 2k + 1</script>，那么<script type="math/tex">{K_{n + 1}} \ge n</script>，这时不成立。</p>
+<p>给出下列递归式：<br>\[\begin{array}{l}{K_0}{\rm{ = }}1\\{K_{n + 1}} = 1 + \min (2{K_{\left\lfloor {n/2} \right\rfloor }},3{K_{\left\lfloor {n/3} \right\rfloor }}),n \ge 0\end{array}\]<br>现在不要求你求解，要你证明：<br>\[{K_n} \ge n\]<br>首先想到的就是数学归纳法，假设对于任意$k \le n$，都有${K_k} \ge k$，那么：<br>\[\begin{array}{l}{K_{n + 1}} = 1 + \min (2{K_{\left\lfloor {n/2} \right\rfloor }},3{K_{\left\lfloor {n/3} \right\rfloor }})\\ \ge 1 + \min (2\left\lfloor {\frac{n}{2}} \right\rfloor ,3\left\lfloor {\frac{n}{3}} \right\rfloor )\end{array}\]<br>如果$n = 2k$，那么${K_{n + 1}} \ge 1 + n$。<br>如果$n = 2k + 1$，那么${K_{n + 1}} \ge n$，这时不成立。</p>
 <p>所以数学归纳法无法证明，今后我们会用其他方法来证明这个式子。</p>
 <h1 id="约瑟夫环新解"><a href="#约瑟夫环新解" class="headerlink" title="约瑟夫环新解"></a>约瑟夫环新解</h1><hr>
 <p>还记得约瑟夫环问题吗？详见<a href="http://godweiyang.com/2018/02/27/concrete-math-1/">第一节课</a>。</p>
-<p>这里我们继续推广到一般情况，如果有<script type="math/tex">n</script>个人，每隔<script type="math/tex">q</script>个人踢掉一个人，最后剩下的是几号？</p>
-<p>初始编号为<script type="math/tex">1 \ldots n</script>，现在考虑一种新的编号方式。</p>
-<p>第一个人不会被踢掉，编号加<script type="math/tex">1</script>，变成<script type="math/tex">n + 1</script>，然后第二个人编号变为<script type="math/tex">n + 2</script>，直到第<script type="math/tex">q</script>个人，他被踢掉了。</p>
-<p>然后第<script type="math/tex">q + 1</script>个人编号继续加<script type="math/tex">1</script>，变成了<script type="math/tex">n + q</script>，依次下去。</p>
-<p>考虑当前踢到的人编号为<script type="math/tex">kq</script>，那么此时已经踢掉了<script type="math/tex">k</script>个人，所以接下去的人新的编号为<script type="math/tex">n + k(q - 1) + 1 \ldots</script>。</p>
-<p>所以编号为<script type="math/tex">kq+d</script>的人编号变成了<script type="math/tex">n + k(q - 1) + d</script>，其中<script type="math/tex">1 \le d < q</script>。</p>
-<p>直到最后，可以发现活下来的人编号为<script type="math/tex">qn</script>，问题是怎么根据这个编号推出他原来的编号？</p>
-<p>以<script type="math/tex">n = 10</script>，<script type="math/tex">q = 3</script>为例，下图就是每个人新的编号：<br><img src="1.jpg" alt></p>
+<p>这里我们继续推广到一般情况，如果有$n$个人，每隔$q$个人踢掉一个人，最后剩下的是几号？</p>
+<p>初始编号为$1 \ldots n$，现在考虑一种新的编号方式。</p>
+<p>第一个人不会被踢掉，编号加$1$，变成$n + 1$，然后第二个人编号变为$n + 2$，直到第$q$个人，他被踢掉了。</p>
+<p>然后第$q + 1$个人编号继续加$1$，变成了$n + q$，依次下去。</p>
+<p>考虑当前踢到的人编号为$kq$，那么此时已经踢掉了$k$个人，所以接下去的人新的编号为$n + k(q - 1) + 1 \ldots$。</p>
+<p>所以编号为$kq+d$的人编号变成了$n + k(q - 1) + d$，其中$1 \le d &lt; q$。</p>
+<p>直到最后，可以发现活下来的人编号为$qn$，问题是怎么根据这个编号推出他原来的编号？</p>
+<p>以$n = 10$，$q = 3$为例，下图就是每个人新的编号：<br><img src="1.jpg" alt></p>
 <p>令<br>\[N = n + k(q - 1) + d\]<br>所以他上一次的编号是<br>\[kq + d = kq + N - n - k(q - 1) = k + N - n\]<br>因为<br>\[k = \frac{ {N - n - d}}{ {q - 1}} = \left\lfloor {\frac{ {N - n - 1}}{ {q - 1}}} \right\rfloor \]<br>所以上一次编号可以写为<br>\[\left\lfloor {\frac{ {N - n - 1}}{ {q - 1}}} \right\rfloor  + N - n\]</p>
 <p>因此最后存活的人编号可以用如下的算法计算：</p>
 <pre><code>N = qn
 while N &gt; n:
     N = k + N - n
-ans = N
-</code></pre><p>其中<script type="math/tex">k = \left\lfloor {\frac{ {N - n - 1}}{ {q - 1}}} \right\rfloor</script></p>
-<p>如果我们用<script type="math/tex">D = qn + 1 - N</script>替代<script type="math/tex">N</script>，将会进一步简化算法：<br>\[\begin{array}{l}D = qn + 1 - N\\ = qn + 1 - \left( {\left\lfloor {\frac{ {(qn + 1 - D) - n - 1}}{ {q - 1}}} \right\rfloor  + qn + 1 - D - n} \right)\\ = n + D - \left\lfloor {\frac{ {(q - 1)n - D}}{ {q - 1}}} \right\rfloor \\ = D - \left\lfloor {\frac{ { - D}}{ {q - 1}}} \right\rfloor \\ = D + \left\lceil {\frac{D}{ {q - 1}}} \right\rceil \\ = \left\lceil {\frac{q}{ {q - 1}}D} \right\rceil \end{array}\]</p>
+ans = N</code></pre><p>其中$k = \left\lfloor {\frac{ {N - n - 1}}{ {q - 1}}} \right\rfloor $</p>
+<p>如果我们用$D = qn + 1 - N$替代$N$，将会进一步简化算法：<br>\[\begin{array}{l}D = qn + 1 - N\\ = qn + 1 - \left( {\left\lfloor {\frac{ {(qn + 1 - D) - n - 1}}{ {q - 1}}} \right\rfloor  + qn + 1 - D - n} \right)\\ = n + D - \left\lfloor {\frac{ {(q - 1)n - D}}{ {q - 1}}} \right\rfloor \\ = D - \left\lfloor {\frac{ { - D}}{ {q - 1}}} \right\rfloor \\ = D + \left\lceil {\frac{D}{ {q - 1}}} \right\rceil \\ = \left\lceil {\frac{q}{ {q - 1}}D} \right\rceil \end{array}\]</p>
 <p>算法伪代码如下：</p>
 <pre><code>D = 1
 while D &lt;= (q-1)n:
     D = k
-ans = qn + 1 - D
-</code></pre><p>其中<script type="math/tex">k = \left\lceil {\frac{q}{ {q - 1}}D} \right\rceil</script></p>
+ans = qn + 1 - D</code></pre><p>其中$k = \left\lceil {\frac{q}{ {q - 1}}D} \right\rceil $</p>
 <h1 id="模的性质"><a href="#模的性质" class="headerlink" title="模的性质"></a>模的性质</h1><hr>
 <h2 id="定义与性质"><a href="#定义与性质" class="headerlink" title="定义与性质"></a>定义与性质</h2><p>模定义如下：<br>\[x\bmod y = x - y\left\lfloor {\frac{x}{y}} \right\rfloor \]<br>特别的<br>\[x\bmod 0 = x\]</p>
-<p>与此类似，定义一个与模类似的运算：<br>\[x{\rm{ mumble }}y = y\left\lceil {\frac{x}{y}} \right\rceil  - x\]<br>形象理解如下图所示：<br><img src="2.jpg" alt><br>圆的周长是<script type="math/tex">y</script>，一共走过的路长（红色+绿色部分）是<script type="math/tex">x</script>，所以<script type="math/tex">x\bmod y</script>就是绿色部分，<script type="math/tex">x{\rm{ mumble }}y</script>就是一圈长度减去绿色部分。</p>
+<p>与此类似，定义一个与模类似的运算：<br>\[x{\rm{ mumble }}y = y\left\lceil {\frac{x}{y}} \right\rceil  - x\]<br>形象理解如下图所示：<br><img src="2.jpg" alt><br>圆的周长是$y$，一共走过的路长（红色+绿色部分）是$x$，所以$x\bmod y$就是绿色部分，$x{\rm{ mumble }}y$就是一圈长度减去绿色部分。</p>
 <p>模有一些性质：<br>\[c(x\bmod y) = (cx)\bmod (cy)\]</p>
-<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><p>考虑如下问题，怎么平均分配<script type="math/tex">n</script>个东西给<script type="math/tex">m</script>个人？</p>
-<p>很容易想到，首先分给每个人<script type="math/tex">\left\lfloor {\frac{n}{m}} \right\rfloor</script>个东西，剩下<script type="math/tex">n\bmod m</script>件东西分给前<script type="math/tex">n\bmod m</script>个人，一人多一件就行。</p>
-<p>概括起来就是，前<script type="math/tex">n\bmod m</script>个人，每人<script type="math/tex">\left\lceil {\frac{n}{m}} \right\rceil</script>件，剩下的人，每人<script type="math/tex">\left\lfloor {\frac{n}{m}} \right\rfloor</script>件。</p>
+<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><p>考虑如下问题，怎么平均分配$n$个东西给$m$个人？</p>
+<p>很容易想到，首先分给每个人$\left\lfloor {\frac{n}{m}} \right\rfloor $个东西，剩下$n\bmod m$件东西分给前$n\bmod m$个人，一人多一件就行。</p>
+<p>概括起来就是，前$n\bmod m$个人，每人$\left\lceil {\frac{n}{m}} \right\rceil $件，剩下的人，每人$\left\lfloor {\frac{n}{m}} \right\rfloor $件。</p>
 <p>那有没有办法统一表示呢？有的，每个人分到的件数为<br>\[\left\lceil {\frac{ {n - k + 1}}{m}} \right\rceil ,1 \le k \le m\]</p>
-<p>为什么呢？假设<br>\[n = qm + r,0 \le r &lt; m\]<br>那么<br>\[\begin{array}{l}\left\lceil {\frac{ {n - k + 1}}{m}} \right\rceil  = \left\lceil {\frac{ {qm + r - k + 1}}{m}} \right\rceil \\ = q + \left\lceil {\frac{ {r - k + 1}}{m}} \right\rceil \end{array}\]<br>当<script type="math/tex">1 \le k \le r</script>时，<br>\[\left\lceil {\frac{ {n - k + 1}}{m}} \right\rceil  = 1\]<br>当<script type="math/tex">r < k \le m</script>时，<br>\[\left\lceil {\frac{ {n - k + 1}}{m}} \right\rceil  = 0\]</p>
+<p>为什么呢？假设<br>\[n = qm + r,0 \le r &lt; m\]<br>那么<br>\[\begin{array}{l}\left\lceil {\frac{ {n - k + 1}}{m}} \right\rceil  = \left\lceil {\frac{ {qm + r - k + 1}}{m}} \right\rceil \\ = q + \left\lceil {\frac{ {r - k + 1}}{m}} \right\rceil \end{array}\]<br>当$1 \le k \le r$时，<br>\[\left\lceil {\frac{ {n - k + 1}}{m}} \right\rceil  = 1\]<br>当$r &lt; k \le m$时，<br>\[\left\lceil {\frac{ {n - k + 1}}{m}} \right\rceil  = 0\]</p>
 <p>得证，因此可以得到如下等式：<br>\[n = \left\lceil {\frac{n}{m}} \right\rceil  + \left\lceil {\frac{ {n - 1}}{m}} \right\rceil  +  \cdots  + \left\lceil {\frac{ {n - m + 1}}{m}} \right\rceil \]</p>
-<p>由<script type="math/tex">n = \left\lfloor {\frac{n}{2}} \right\rfloor  + \left\lceil {\frac{n}{2}} \right\rceil</script><br>可以进一步将其转换为下取整形式：<br>\[n = \left\lfloor {\frac{n}{m}} \right\rfloor  + \left\lfloor {\frac{ {n + 1}}{m}} \right\rfloor  +  \cdots  + \left\lfloor {\frac{ {n + m - 1}}{m}} \right\rfloor \]</p>
-<p>令<script type="math/tex">n = \left\lfloor {mx} \right\rfloor</script><br>我们得到了一个令人惊奇的等式：<br>\[\left\lfloor {mx} \right\rfloor  = \left\lfloor x \right\rfloor  + \left\lfloor {x + \frac{1}{m}} \right\rfloor  +  \cdots  + \left\lfloor {x + \frac{ {m - 1}}{m}} \right\rfloor \]</p>
+<p>由$n = \left\lfloor {\frac{n}{2}} \right\rfloor  + \left\lceil {\frac{n}{2}} \right\rceil $<br>可以进一步将其转换为下取整形式：<br>\[n = \left\lfloor {\frac{n}{m}} \right\rfloor  + \left\lfloor {\frac{ {n + 1}}{m}} \right\rfloor  +  \cdots  + \left\lfloor {\frac{ {n + m - 1}}{m}} \right\rfloor \]</p>
+<p>令$n = \left\lfloor {mx} \right\rfloor $<br>我们得到了一个令人惊奇的等式：<br>\[\left\lfloor {mx} \right\rfloor  = \left\lfloor x \right\rfloor  + \left\lfloor {x + \frac{1}{m}} \right\rfloor  +  \cdots  + \left\lfloor {x + \frac{ {m - 1}}{m}} \right\rfloor \]</p>
 <h1 id="HDU3089"><a href="#HDU3089" class="headerlink" title="HDU3089"></a>HDU3089</h1><hr>
 <p>最后用今天介绍的约瑟夫环算法来解决一道经典的ACM题！题目链接：<a href="http://acm.hdu.edu.cn/showproblem.php?pid=3089" target="_blank" rel="noopener">杭电3089</a>。</p>
 <p>C++代码如下：</p>
-<pre class=" language-lang-cpp"><code class="language-lang-cpp">#include<bits/stdc++.h>
-using namespace std;
+<pre class=" language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span><span class="token string">&lt;bits/stdc++.h></span></span>
+<span class="token keyword">using</span> <span class="token keyword">namespace</span> std<span class="token punctuation">;</span>
 
-typedef long long LL;
+<span class="token keyword">typedef</span> <span class="token keyword">long</span> <span class="token keyword">long</span> LL<span class="token punctuation">;</span>
 
-LL Ceil(LL x, LL y) {
-    if (x % y == 0) return x / y;
-    return x / y + 1;
-}
+LL <span class="token function">Ceil</span><span class="token punctuation">(</span>LL x<span class="token punctuation">,</span> LL y<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>x <span class="token operator">%</span> y <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token keyword">return</span> x <span class="token operator">/</span> y<span class="token punctuation">;</span>
+    <span class="token keyword">return</span> x <span class="token operator">/</span> y <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
 
-LL J(LL n, LL q) {
-    LL D = 1, end = (q - 1) * n;
-    while (D <= end) {
-        D = Ceil(q * D, q - 1);
-    }
-    return q * n + 1 - D;
-}
+LL <span class="token function">J</span><span class="token punctuation">(</span>LL n<span class="token punctuation">,</span> LL q<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    LL D <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">,</span> end <span class="token operator">=</span> <span class="token punctuation">(</span>q <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">*</span> n<span class="token punctuation">;</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span>D <span class="token operator">&lt;=</span> end<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        D <span class="token operator">=</span> <span class="token function">Ceil</span><span class="token punctuation">(</span>q <span class="token operator">*</span> D<span class="token punctuation">,</span> q <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> q <span class="token operator">*</span> n <span class="token operator">+</span> <span class="token number">1</span> <span class="token operator">-</span> D<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
 
-int main() {
-    LL n, q;
-    while (~scanf("%lld%lld", &n, &q)) {
-        printf("%lld\n", J(n, q));
-    }
-    return 0;
-}
-</code></pre>
-<p>比网上各种快速算法还要快哦，理论时间复杂度是<script type="math/tex">\log n</script>的。</p>
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    LL n<span class="token punctuation">,</span> q<span class="token punctuation">;</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token operator">~</span><span class="token function">scanf</span><span class="token punctuation">(</span><span class="token string">"%lld%lld"</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>n<span class="token punctuation">,</span> <span class="token operator">&amp;</span>q<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%lld\n"</span><span class="token punctuation">,</span> <span class="token function">J</span><span class="token punctuation">(</span>n<span class="token punctuation">,</span> q<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>比网上各种快速算法还要快哦，理论时间复杂度是$\log n$的。</p>
 
             </div>
             <hr/>
@@ -664,7 +661,7 @@ int main() {
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2018/04/16/concrete-math-8/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -872,8 +869,8 @@ inside-outside算法是用来预测一棵句法分析树的概率的算法，算
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -995,7 +992,7 @@ inside-outside算法是用来预测一棵句法分析树的概率的算法，算
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

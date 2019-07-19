@@ -18,7 +18,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>In-Order Transition-based Constituent Parsing | WeiYang Blog</title>
+    <title>In-Order Transition-based Constituent Parsing | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -47,7 +47,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -110,7 +110,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -425,7 +425,7 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                        8 分
+                        9 分
                     </div>
                     
                 
@@ -445,64 +445,60 @@
 
 <p><strong>论文地址：</strong><a href="https://www.aclweb.org/anthology/Q/Q17/Q17-1029.pdf" target="_blank" rel="noopener">In-Order Transition-based Constituent Parsing</a><br><strong>代码地址：</strong><a href="https://github.com/LeonCrashCode/InOrderParser" target="_blank" rel="noopener">github</a></p>
 <p>今天要介绍的这篇论文是成分句法分析领域目前的第三名，结果最高的几篇paper可以参见ruder在github整理的列表：<a href="https://github.com/sebastianruder/NLP-progress/blob/master/constituency_parsing.md" target="_blank" rel="noopener">github</a>。<br>下面就是成分句法分析目前排名：</p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
 <th>Model</th>
-<th style="text-align:center">F1 score</th>
+<th align="center">F1 score</th>
 <th>Paper / Source</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>Self-attentive encoder + ELMo (Kitaev and Klein, 2018)</td>
-<td style="text-align:center">95.13</td>
+<td align="center">95.13</td>
 <td><a href="https://arxiv.org/abs/1805.01052" target="_blank" rel="noopener">Constituency Parsing with a Self-Attentive Encoder</a></td>
 </tr>
 <tr>
 <td>Model combination (Fried et al., 2017)</td>
-<td style="text-align:center">94.66</td>
+<td align="center">94.66</td>
 <td><a href="https://arxiv.org/abs/1707.03058" target="_blank" rel="noopener">Improving Neural Parsing by Disentangling Model Combination and Reranking Effects</a></td>
 </tr>
 <tr>
 <td>In-order (Liu and Zhang, 2017)</td>
-<td style="text-align:center">94.2</td>
+<td align="center">94.2</td>
 <td><a href="http://aclweb.org/anthology/Q17-1029" target="_blank" rel="noopener">In-Order Transition-based Constituent Parsing</a></td>
 </tr>
 <tr>
 <td>Semi-supervised LSTM-LM (Choe and Charniak, 2016)</td>
-<td style="text-align:center">93.8</td>
+<td align="center">93.8</td>
 <td><a href="http://www.aclweb.org/anthology/D16-1257" target="_blank" rel="noopener">Parsing as Language Modeling</a></td>
 </tr>
 <tr>
 <td>Stack-only RNNG (Kuncoro et al., 2017)</td>
-<td style="text-align:center">93.6</td>
+<td align="center">93.6</td>
 <td><a href="https://arxiv.org/abs/1611.05774" target="_blank" rel="noopener">What Do Recurrent Neural Network Grammars Learn About Syntax?</a></td>
 </tr>
 <tr>
 <td>RNN Grammar (Dyer et al., 2016)</td>
-<td style="text-align:center">﻿93.3</td>
+<td align="center">93.3</td>
 <td><a href="https://www.aclweb.org/anthology/N16-1024" target="_blank" rel="noopener">Recurrent Neural Network Grammars</a></td>
 </tr>
 <tr>
 <td>Transformer (Vaswani et al., 2017)</td>
-<td style="text-align:center">92.7</td>
+<td align="center">92.7</td>
 <td><a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">Attention Is All You Need</a></td>
 </tr>
 <tr>
 <td>Semi-supervised LSTM (Vinyals et al., 2015)</td>
-<td style="text-align:center">92.1</td>
+<td align="center">92.1</td>
 <td><a href="https://papers.nips.cc/paper/5635-grammar-as-a-foreign-language.pdf" target="_blank" rel="noopener">Grammar as a Foreign Language</a></td>
 </tr>
 <tr>
 <td>Self-trained parser (McClosky et al., 2006)</td>
-<td style="text-align:center">92.1</td>
+<td align="center">92.1</td>
 <td><a href="https://pdfs.semanticscholar.org/6f0f/64f0dab74295e5eb139c160ed79ff262558a.pdf" target="_blank" rel="noopener">Effective Self-Training for Parsing</a></td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><hr>
 <p>基于转移的成分句法分析主要分为两种：</p>
 <ul>
@@ -512,8 +508,8 @@
 <p>本文的模型就对这两种方法进行了改进，采用中序遍历（in-order）的顺序来生成句法树。单模型最终取得了91.8的F1值（貌似也不是特别高？），采用监督重排序之后F1值提升到了93.6，采用半监督重排序之后F1值提升到了94.2。所以看起来还是重排序起了很大的作用。</p>
 <h1 id="基于转移的成分句法分析"><a href="#基于转移的成分句法分析" class="headerlink" title="基于转移的成分句法分析"></a>基于转移的成分句法分析</h1><hr>
 <p>首先简要介绍一下这三种基于转移的句法分析方法。</p>
-<h2 id="自底向上的转移系统"><a href="#自底向上的转移系统" class="headerlink" title="自底向上的转移系统"></a>自底向上的转移系统</h2><p>自底向上的转移系统是基于后序遍历的，例如对于下图这棵句法树，算法产生结点的顺序为3、4、5、2、7、9、10、8、6、11、1。<br><img src="1.jpg" alt><br>a图是未经二叉化的句法树，b图是二叉化之后的句法树，二叉化之后的结点要用l和r来区分头结点。其实不二叉化也是可以的，伯克利一帮人的做法就是用<script type="math/tex">\emptyset</script>来作为临时结点，构造树的时候去掉就行了。</p>
-<p>句法分析系统如下：<br><img src="2.jpg" alt><br>每个时刻的状态用三元组<script type="math/tex">[\sigma ,i,f]</script>来表示，分别表示栈中元素、buffer的第一个元素在句子中的下标、句法分析结束标记。系统一共有四个操作：</p>
+<h2 id="自底向上的转移系统"><a href="#自底向上的转移系统" class="headerlink" title="自底向上的转移系统"></a>自底向上的转移系统</h2><p>自底向上的转移系统是基于后序遍历的，例如对于下图这棵句法树，算法产生结点的顺序为3、4、5、2、7、9、10、8、6、11、1。<br><img src="1.jpg" alt><br>a图是未经二叉化的句法树，b图是二叉化之后的句法树，二叉化之后的结点要用l和r来区分头结点。其实不二叉化也是可以的，伯克利一帮人的做法就是用$\emptyset $来作为临时结点，构造树的时候去掉就行了。</p>
+<p>句法分析系统如下：<br><img src="2.jpg" alt><br>每个时刻的状态用三元组$[\sigma ,i,f]$来表示，分别表示栈中元素、buffer的第一个元素在句子中的下标、句法分析结束标记。系统一共有四个操作：</p>
 <ul>
 <li>SHIFT： 从buffer中移进一个单词到栈里。</li>
 <li>REDUCE-L/R-X：将栈顶两个结点归约为一个父结点X。</li>
@@ -540,16 +536,14 @@
 <li>FINISH：句法分析结束。</li>
 </ul>
 <p>上面那个句法树按照该模型分析的话过程如下：<br><img src="7.jpg" alt></p>
-<p>该转移系统还有很多变体。对于短语(S, a, b, c, d)，可以令它在栈中S结点之前的子结点个数为<script type="math/tex">k</script>，例如对于上面的中序转移系统，栈里存放顺序是“a S b c d”，那么<script type="math/tex">k = 1</script>，如果栈里存放顺序是“a b S c d”，那么<script type="math/tex">k = 2</script>。而对于自底向上的转移系统，<script type="math/tex">k</script>就是正无穷，对于自顶向下的转移系统，<script type="math/tex">k</script>就是0。</p>
+<p>该转移系统还有很多变体。对于短语(S, a, b, c, d)，可以令它在栈中S结点之前的子结点个数为$k$，例如对于上面的中序转移系统，栈里存放顺序是“a S b c d”，那么$k = 1$，如果栈里存放顺序是“a b S c d”，那么$k = 2$。而对于自底向上的转移系统，$k$就是正无穷，对于自顶向下的转移系统，$k$就是0。</p>
 <h1 id="句法分析模型"><a href="#句法分析模型" class="headerlink" title="句法分析模型"></a>句法分析模型</h1><hr>
 <p>对于每一个状态，模型采用三个LSTM来预测当前步动作，结构如下图所示：<br><img src="8.jpg" alt><br>一个LSTM用来对栈顶元素进行编码，一个LSTM用来对buffer中所有元素进行编码，一个LSTM用来对之前预测完毕的所有动作进行编码。</p>
-<h2 id="单词表示"><a href="#单词表示" class="headerlink" title="单词表示"></a>单词表示</h2><p>对于每个单词，用预训练词向量、随机初始化词向量、POS向量拼接起来，然后经过一个前馈神经网络来作为最终的单词表示：<br>\[{x_i} = f({W_{input}}[{e_{ {p_i}}};{\bar e_{ {w_i}}};{e_{ {w_i}}}] + {b_{input}})\]<br>其中<script type="math/tex">{e_{ {p_i}}}</script>表示POS为<script type="math/tex">p_i</script>的向量，<script type="math/tex">{\bar e_{ {w_i}}}</script>表示单词<script type="math/tex">w_i</script>的预训练词向量，<script type="math/tex">{e_{ {w_i}}}</script>表示单词<script type="math/tex">w_i</script>的随机初始化词向量。<script type="math/tex">f</script>函数通常取ReLU。</p>
-<h2 id="栈里的短语表示"><a href="#栈里的短语表示" class="headerlink" title="栈里的短语表示"></a>栈里的短语表示</h2><p>对于自顶向下和in-order的转移系统，由于不需要二叉化，所以采用如下图所示的LSTM来对栈里的短语进行编码：<br><img src="9.jpg" alt><br>具体的短语表示为：<br>\[{s_{comp}} = (LST{M_f}[{e_{nt}},{s_0}, \ldots ,{s_m}];LST{M_b}[{e_{nt}},{s_m}, \ldots ,{s_0}])\]<br>其中<script type="math/tex">{e_{nt}}</script>是父结点的向量表示，其他都是子结点的短语表示。</p>
+<h2 id="单词表示"><a href="#单词表示" class="headerlink" title="单词表示"></a>单词表示</h2><p>对于每个单词，用预训练词向量、随机初始化词向量、POS向量拼接起来，然后经过一个前馈神经网络来作为最终的单词表示：<br>\[{x_i} = f({W_{input}}[{e_{ {p_i}}};{\bar e_{ {w_i}}};{e_{ {w_i}}}] + {b_{input}})\]<br>其中${e_{ {p_i}}}$表示POS为$p_i$的向量，${\bar e_{ {w_i}}}$表示单词$w_i$的预训练词向量，${e_{ {w_i}}}$表示单词$w_i$的随机初始化词向量。$f$函数通常取ReLU。</p>
+<h2 id="栈里的短语表示"><a href="#栈里的短语表示" class="headerlink" title="栈里的短语表示"></a>栈里的短语表示</h2><p>对于自顶向下和in-order的转移系统，由于不需要二叉化，所以采用如下图所示的LSTM来对栈里的短语进行编码：<br><img src="9.jpg" alt><br>具体的短语表示为：<br>\[{s_{comp}} = (LST{M_f}[{e_{nt}},{s_0}, \ldots ,{s_m}];LST{M_b}[{e_{nt}},{s_m}, \ldots ,{s_0}])\]<br>其中${e_{nt}}$是父结点的向量表示，其他都是子结点的短语表示。</p>
 <p>而作为对比实验，自底向上的转移系统因为是二叉树，所以LSTM略有不同，结构图如下所示：<br><img src="12.jpg" alt><br>唯一的区别就是不管你短语的单词顺序如何，都要把中心词也就是头结点放在前面。</p>
 <h2 id="贪心动作预测"><a href="#贪心动作预测" class="headerlink" title="贪心动作预测"></a>贪心动作预测</h2><p>上面的两个小节将buffer和栈里的元素都进行了编码，最后就要对当前状态进行动作预测了。</p>
-<p>假设第<script type="math/tex">k</script>个状态为<script type="math/tex">[{s_j}, \ldots ,{s_0},i,false]</script>，那么当前状态每个动作的概率为：<br>\[p = SOFTMAX(W[{h_{stk}};{h_{buf}};{h_{ah}}] + b)\]<br>其中<script type="math/tex">{h_{stk}}</script>是栈里的LSTM编码结果：<br>\[{h_{stk}} = LSTM[{s_0}, \ldots ,{s_j}]\]</p>
-<p><script type="math/tex">{h_{buf}}</script>是buffer里的LSTM编码结果：<br>\[{h_{buf}} = LSTM[{x_i}, \ldots ,{x_n}]\]</p>
-<p><script type="math/tex">{h_{ah}}</script>是之前动作序列的LSTM编码结果：<br>\[{h_{ah}} = LSTM[{e_{ac{t_k}}}, \ldots ,{e_{ac{t_0}}}]\]</p>
+<p>假设第$k$个状态为$[{s_j}, \ldots ,{s_0},i,false]$，那么当前状态每个动作的概率为：<br>\[p = SOFTMAX(W[{h_{stk}};{h_{buf}};{h_{ah}}] + b)\]<br>其中${h_{stk}}$是栈里的LSTM编码结果：<br>\[{h_{stk}} = LSTM[{s_0}, \ldots ,{s_j}]\]<br>${h_{buf}}$是buffer里的LSTM编码结果：<br>\[{h_{buf}} = LSTM[{x_i}, \ldots ,{x_n}]\]<br>${h_{ah}}$是之前动作序列的LSTM编码结果：<br>\[{h_{ah}} = LSTM[{e_{ac{t_k}}}, \ldots ,{e_{ac{t_0}}}]\]</p>
 <p>最终的损失函数采用交叉熵：<br>\[L(\theta ) =  - \sum\limits_i {\sum\limits_j {\log {p_{ {a_{ij}}}}} }  + \frac{\lambda }{2}{\Vert \theta  \Vert ^2}\]</p>
 <h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><hr>
 <p>实验的超参数设置如下：<br><img src="10.jpg" alt><br>经过对比实验可以发现，结果比自底向上和自顶向下的转移系统都要略高一点，就算加上了重排序，还是略高一点。单模型的话，和2017年之前的结果相比的确是最高的，但是91.8的F1值现在看来不是特别高了，毕竟伯克利基于CKY算法的chart-parser都已经到了92多甚至93了。</p>
@@ -723,7 +717,7 @@
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2018/08/28/tacl17-conparsing/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -868,8 +862,8 @@
                     <div class="summary block-with-text">
                         
                             问题描述
-有K个赌博机，每个赌博机有一定概率P吐出硬币，但是我们不知道这个概率是多少，每个赌博机吐出的硬币价值V也是不一样的，现在有T次机会选择赌博机，怎么选才能使得到的硬币总价值最大？
-在下面的不同算法实现中，统一设定\[\begin{a
+有$K$个赌博机，每个赌博机有一定概率$P$吐出硬币，但是我们不知道这个概率是多少，每个赌博机吐出的硬币价值$V$也是不一样的，现在有$T$次机会选择赌博机，怎么选才能使得到的硬币总价值最大？
+在下面的不同算法实现中，统一设定\[
                         
                     </div>
                     <div class="publish-info">
@@ -940,8 +934,8 @@
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -1063,7 +1057,7 @@
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

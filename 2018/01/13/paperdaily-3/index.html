@@ -16,7 +16,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Head-Lexicalized Bidirectional Tree LSTMs | WeiYang Blog</title>
+    <title>Head-Lexicalized Bidirectional Tree LSTMs | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -45,7 +45,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -108,7 +108,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -416,7 +416,7 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                        800
+                        801
                     </div>
                     
 
@@ -443,21 +443,21 @@
 <p>好了，今天开始恢复吧（说不准过两天我又鸽了，嘻嘻嘻）。</p>
 <p>今天要讲的这篇是TACL2017的，是关于树状LSTM的。</p>
 <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><hr>
-<p>前两年已经有人提出了树状LSTM的概念，之前一直不知道是个啥高大上的结构。其实就是递归神经网络中的结点单元替换成LSTM的结点单元。那有人要问了，LSTM不是有<script type="math/tex">x</script>输入吗，还有一个<script type="math/tex">h_{t-1}</script>输入，那这树状的哪来这两个输入？其实很简单，只要把这两个输入替换成左右儿子的输出表示就行了。瞬间感觉也没啥意思，就是换了结点函数，使得树状LSTM具有了遗忘功能，从而能够处理很长的句子罢了。</p>
+<p>前两年已经有人提出了树状LSTM的概念，之前一直不知道是个啥高大上的结构。其实就是递归神经网络中的结点单元替换成LSTM的结点单元。那有人要问了，LSTM不是有$x$输入吗，还有一个$h_{t-1}$输入，那这树状的哪来这两个输入？其实很简单，只要把这两个输入替换成左右儿子的输出表示就行了。瞬间感觉也没啥意思，就是换了结点函数，使得树状LSTM具有了遗忘功能，从而能够处理很长的句子罢了。</p>
 <p>今天介绍的这篇paper就是在这基础上做了两点改进。</p>
 <ul>
-<li>除了左右儿子作为输入之外，还增加了<script type="math/tex">x</script>输入。<script type="math/tex">x</script>是啥呢？就是左右儿子中的头结点，头结点的话传统方法是根据规则来判断谁是头结点的，这里省去了这些复杂的步骤，直接将头结点的判断丢进神经网络中训练。</li>
-<li>增加了反向的树状LSTM，也就是top-down的LSTM。那有人就很好奇了，一个结点分解成两个结点，怎么可能？其实从头结点到任意一个其他结点的路径都可以看成一个独立的LSTM，如果向左参数就是<script type="math/tex">U_L</script>，否则就是<script type="math/tex">U_R</script>。</li>
+<li>除了左右儿子作为输入之外，还增加了$x$输入。$x$是啥呢？就是左右儿子中的头结点，头结点的话传统方法是根据规则来判断谁是头结点的，这里省去了这些复杂的步骤，直接将头结点的判断丢进神经网络中训练。</li>
+<li>增加了反向的树状LSTM，也就是top-down的LSTM。那有人就很好奇了，一个结点分解成两个结点，怎么可能？其实从头结点到任意一个其他结点的路径都可以看成一个独立的LSTM，如果向左参数就是$U_L$，否则就是$U_R$。</li>
 </ul>
 <h1 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h1><hr>
 <p><img src="1.png" alt><br>图1是序列LSTM和树状LSTM的结构区别，这个树状LSTM是之前传统的树状LSTM，不带head结点的。</p>
 <p>之前的基本的树状LSTM的结点单元的具体公式如下：<br><img src="5.png" alt><br>具体我就不解释了（懒。。。），自行类比序列LSTM。</p>
 <p>加入head结点之后，公式区别如下（加粗所示）：<br><img src="2.png" alt><br><img src="3.png" alt><br><img src="4.png" alt></p>
-<p>那么top-down是怎么做的呢？<br><img src="6.png" alt><br>这里可以看出来，向左向右是用的两套不同的参数。注意到，top-down方向的LSTM前提是一定要用head机制作为支撑！不然头结点的<script type="math/tex">x</script>算不出来的话是没有办法计算的哦。</p>
+<p>那么top-down是怎么做的呢？<br><img src="6.png" alt><br>这里可以看出来，向左向右是用的两套不同的参数。注意到，top-down方向的LSTM前提是一定要用head机制作为支撑！不然头结点的$x$算不出来的话是没有办法计算的哦。</p>
 <p>具体训练过程等等就不再阐述了。</p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><hr>
 <p>这个模型主要是用在了文本分类和情感分类上，我在想能不能用在我的毕设上面。</p>
-<p>我觉得head机制可以加进去，但是反向LSTM貌似是不可行的，因为这里的短语结构树全部是给定的，所以向下计算知道什么时候停止。但是我是做句法分析任务的，没有给定句法树，向下计算无法知道什么时候停止扩展，情况有无数种！向上计算倒是无所谓，最多卡特兰数级别，加上动态规划，可以缩小到<script type="math/tex">n\log n</script>级别。</p>
+<p>我觉得head机制可以加进去，但是反向LSTM貌似是不可行的，因为这里的短语结构树全部是给定的，所以向下计算知道什么时候停止。但是我是做句法分析任务的，没有给定句法树，向下计算无法知道什么时候停止扩展，情况有无数种！向上计算倒是无所谓，最多卡特兰数级别，加上动态规划，可以缩小到$n\log n$级别。</p>
 
             </div>
             <hr/>
@@ -620,7 +620,7 @@
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2018/01/13/paperdaily-3/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -842,8 +842,8 @@
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -965,7 +965,7 @@
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

@@ -20,7 +20,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>具体数学-第9课（取整进阶与数论入门） | WeiYang Blog</title>
+    <title>具体数学-第9课（取整进阶与数论入门） | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -49,7 +49,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -112,7 +112,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -437,34 +437,34 @@
 <p>首先还是以一道例题开始我们今天的课程。</p>
 <h1 id="例题1"><a href="#例题1" class="headerlink" title="例题1"></a>例题1</h1><hr>
 <p>求和：<br>\[\sum\limits_{0 \le k &lt; n} {\left\lfloor {\sqrt k } \right\rfloor } \]</p>
-<h2 id="方法1"><a href="#方法1" class="headerlink" title="方法1"></a>方法1</h2><p>首先令<script type="math/tex">m = \left\lfloor {\sqrt k } \right\rfloor</script><br>那么有<br>\[\begin{array}{l}\sum\limits_{0 \le k &lt; n} {\left\lfloor {\sqrt k } \right\rfloor }  = \sum\limits_{k,m \ge 0} {m\left[ {k &lt; n} \right]\left[ {m = \left\lfloor {\sqrt k } \right\rfloor } \right]} \\ = \sum\limits_{k,m \ge 0} {m\left[ {k &lt; n} \right]\left[ {m \le \sqrt k  &lt; m + 1} \right]} \\ = \sum\limits_{k,m \ge 0} {m\left[ {k &lt; n} \right]\left[ { {m^2} \le k &lt; { {(m + 1)}^2}} \right]} \\ = \sum\limits_{k,m \ge 0} {m\left[ { {m^2} \le k &lt; { {(m + 1)}^2} \le n} \right]} \\ + \sum\limits_{k,m \ge 0} {m\left[ { {m^2} \le k &lt; n &lt; { {(m + 1)}^2}} \right]} \end{array}\]<br>我们先算左半部分，先假设<script type="math/tex">n = {a^2}</script>，那么有<br>\[\begin{array}{l}\sum\limits_{k,m \ge 0} {m\left[ { {m^2} \le k &lt; { {(m + 1)}^2} \le {a^2}} \right]} \\ = \sum\limits_{m \ge 0} {m(2m + 1)\left[ {m &lt; a} \right]} \\ = \frac{1}{6}(4a + 1)a(a - 1)\end{array}\]<br>而对于一般的<script type="math/tex">n</script>，令<script type="math/tex">a = \left\lfloor {\sqrt n } \right\rfloor</script>，我们只需要计算<script type="math/tex">{a^2} \le k < n</script>的部分，而这部分<script type="math/tex">\sqrt k  = a</script>，所以结果为<script type="math/tex">(n - {a^2})a</script>。</p>
+<h2 id="方法1"><a href="#方法1" class="headerlink" title="方法1"></a>方法1</h2><p>首先令$m = \left\lfloor {\sqrt k } \right\rfloor $<br>那么有<br>\[\begin{array}{l}\sum\limits_{0 \le k &lt; n} {\left\lfloor {\sqrt k } \right\rfloor }  = \sum\limits_{k,m \ge 0} {m\left[ {k &lt; n} \right]\left[ {m = \left\lfloor {\sqrt k } \right\rfloor } \right]} \\ = \sum\limits_{k,m \ge 0} {m\left[ {k &lt; n} \right]\left[ {m \le \sqrt k  &lt; m + 1} \right]} \\ = \sum\limits_{k,m \ge 0} {m\left[ {k &lt; n} \right]\left[ { {m^2} \le k &lt; { {(m + 1)}^2}} \right]} \\ = \sum\limits_{k,m \ge 0} {m\left[ { {m^2} \le k &lt; { {(m + 1)}^2} \le n} \right]} \\ + \sum\limits_{k,m \ge 0} {m\left[ { {m^2} \le k &lt; n &lt; { {(m + 1)}^2}} \right]} \end{array}\]<br>我们先算左半部分，先假设$n = {a^2}$，那么有<br>\[\begin{array}{l}\sum\limits_{k,m \ge 0} {m\left[ { {m^2} \le k &lt; { {(m + 1)}^2} \le {a^2}} \right]} \\ = \sum\limits_{m \ge 0} {m(2m + 1)\left[ {m &lt; a} \right]} \\ = \frac{1}{6}(4a + 1)a(a - 1)\end{array}\]<br>而对于一般的$n$，令$a = \left\lfloor {\sqrt n } \right\rfloor $，我们只需要计算${a^2} \le k &lt; n$的部分，而这部分$\sqrt k  = a$，所以结果为$(n - {a^2})a$。</p>
 <p>所以总的结果为：<br>\[\sum\limits_{0 \le k &lt; n} {\left\lfloor {\sqrt k } \right\rfloor }  = na - \frac{1}{3}{a^3} - \frac{1}{2}{a^2} - \frac{1}{6}a,a = \left\lfloor {\sqrt n } \right\rfloor \]</p>
-<p>这里解释一下为什么没有算右半部分？因为右半部分就是<script type="math/tex">{a^2} \le k < n</script>的这部分，已经计算过了。</p>
-<h2 id="方法2"><a href="#方法2" class="headerlink" title="方法2"></a>方法2</h2><p>因为<script type="math/tex">\left\lfloor x \right\rfloor  = \sum\nolimits_j {\left[ {1 \le j \le x} \right]}</script>，所以可以将原式替换掉，还是令<script type="math/tex">n = {a^2}</script>，然后如下计算：<br>\[\begin{array}{l}\sum\limits_{0 \le k &lt; n} {\left\lfloor {\sqrt k } \right\rfloor }  = \sum\limits_{j,k} {\left[ {1 \le j \le \sqrt k } \right]\left[ {0 \le k &lt; {a^2}} \right]} \\ = \sum\limits_{1 \le j &lt; a} {\sum\limits_k {\left[ { {j^2} \le k &lt; {a^2}} \right]} } \\ = \sum\limits_{1 \le j &lt; a} {({a^2} - {j^2})}  = {a^3} - \frac{1}{3}a(a + \frac{1}{2})(a + 1)\end{array}\]<br>其中第二行交换了变量计算顺序。</p>
+<p>这里解释一下为什么没有算右半部分？因为右半部分就是${a^2} \le k &lt; n$的这部分，已经计算过了。</p>
+<h2 id="方法2"><a href="#方法2" class="headerlink" title="方法2"></a>方法2</h2><p>因为$\left\lfloor x \right\rfloor  = \sum\nolimits_j {\left[ {1 \le j \le x} \right]} $，所以可以将原式替换掉，还是令$n = {a^2}$，然后如下计算：<br>\[\begin{array}{l}\sum\limits_{0 \le k &lt; n} {\left\lfloor {\sqrt k } \right\rfloor }  = \sum\limits_{j,k} {\left[ {1 \le j \le \sqrt k } \right]\left[ {0 \le k &lt; {a^2}} \right]} \\ = \sum\limits_{1 \le j &lt; a} {\sum\limits_k {\left[ { {j^2} \le k &lt; {a^2}} \right]} } \\ = \sum\limits_{1 \le j &lt; a} {({a^2} - {j^2})}  = {a^3} - \frac{1}{3}a(a + \frac{1}{2})(a + 1)\end{array}\]<br>其中第二行交换了变量计算顺序。</p>
 <h1 id="定理1"><a href="#定理1" class="headerlink" title="定理1"></a>定理1</h1><hr>
-<p>这里直接介绍一个定理，就不证明了，过程比较复杂：<br>\[\mathop {\lim }\limits_{n \to \infty } \frac{1}{n}\sum\limits_{0 \le k &lt; n} {f(\{ k\alpha \} )}  = \int_0^1 {f(x)dx} \]<br>其中<script type="math/tex">\alpha</script>是一个无理数。</p>
-<p>这个公式说明了，无理数<script type="math/tex">\alpha</script>的整数倍的小数部分均匀分布在<script type="math/tex">(0,1)</script>之间。</p>
+<p>这里直接介绍一个定理，就不证明了，过程比较复杂：<br>\[\mathop {\lim }\limits_{n \to \infty } \frac{1}{n}\sum\limits_{0 \le k &lt; n} {f(\{ k\alpha \} )}  = \int_0^1 {f(x)dx} \]<br>其中$\alpha $是一个无理数。</p>
+<p>这个公式说明了，无理数$\alpha $的整数倍的小数部分均匀分布在$(0,1)$之间。</p>
 <p>这就给了我们一个启示，我们可以用它来生成随机数啊！其他用处还有很多，自己想咯。</p>
 <h1 id="例题2"><a href="#例题2" class="headerlink" title="例题2"></a>例题2</h1><hr>
-<p>求如下和式：<br>\[\sum\limits_{0 \le k &lt; m} {\left\lfloor {\frac{ {nk + x}}{m}} \right\rfloor } \]<br>其中整数<script type="math/tex">m > 0</script>，<script type="math/tex">n</script>也是整数。</p>
-<p>通过枚举<script type="math/tex">m = 1,2,3, \ldots</script>，可以发现和式满足如下形式：<br>\[a\left\lfloor {\frac{x}{a}} \right\rfloor  + bn + c\]<br>那么怎么计算出来呢？</p>
+<p>求如下和式：<br>\[\sum\limits_{0 \le k &lt; m} {\left\lfloor {\frac{ {nk + x}}{m}} \right\rfloor } \]<br>其中整数$m &gt; 0$，$n$也是整数。</p>
+<p>通过枚举$m = 1,2,3, \ldots $，可以发现和式满足如下形式：<br>\[a\left\lfloor {\frac{x}{a}} \right\rfloor  + bn + c\]<br>那么怎么计算出来呢？</p>
 <p>首先做一个变形：<br>\[\left\lfloor {\frac{ {x + kn}}{m}} \right\rfloor  = \left\lfloor {\frac{ {x + kn\bmod m}}{m}} \right\rfloor  + \frac{ {kn}}{m} - \frac{ {kn\bmod m}}{m}\]<br>这就将原来的和式分为了三个部分求和。</p>
-<p><strong>第一个部分为：</strong><br>\[\left\lfloor {\frac{x}{m}} \right\rfloor  + \left\lfloor {\frac{ {x + n\bmod m}}{m}} \right\rfloor  +  \cdots  + \left\lfloor {\frac{ {x + (m - 1)n\bmod m}}{m}} \right\rfloor \]<br>具体怎么算留到下一章节，这里通过枚举可以发现它的值是有周期的，周期重复次数是<script type="math/tex">d = \gcd (m,n)</script>。所以算出来结果为：<br>\[\begin{array}{l}d\left( {\left\lfloor {\frac{x}{m}} \right\rfloor  + \left\lfloor {\frac{ {x + d}}{m}} \right\rfloor  +  \cdots  + \left\lfloor {\frac{ {x + m - d}}{m}} \right\rfloor } \right)\\ = d\left( {\left\lfloor {\frac{ {x/d}}{ {m/d}}} \right\rfloor  + \left\lfloor {\frac{ {x/d + 1}}{ {m/d}}} \right\rfloor  +  \cdots  + \left\lfloor {\frac{ {x/d + m/d - 1}}{ {m/d}}} \right\rfloor } \right)\\ = d\left\lfloor {\frac{x}{d}} \right\rfloor \end{array}\]<br><strong>第二个部分为：</strong><br>\[\sum\limits_{0 \le k &lt; m} {\frac{ {kn}}{m}}  = \frac{ {(m - 1)n}}{2}\]<br><strong>第三个部分为：</strong><br>\[d\left( {\frac{0}{m} + \frac{d}{m} +  \cdots  + \frac{ {m - d}}{m}} \right) = \frac{ {m - d}}{2}\]</p>
+<p><strong>第一个部分为：</strong><br>\[\left\lfloor {\frac{x}{m}} \right\rfloor  + \left\lfloor {\frac{ {x + n\bmod m}}{m}} \right\rfloor  +  \cdots  + \left\lfloor {\frac{ {x + (m - 1)n\bmod m}}{m}} \right\rfloor \]<br>具体怎么算留到下一章节，这里通过枚举可以发现它的值是有周期的，周期重复次数是$d = \gcd (m,n)$。所以算出来结果为：<br>\[\begin{array}{l}d\left( {\left\lfloor {\frac{x}{m}} \right\rfloor  + \left\lfloor {\frac{ {x + d}}{m}} \right\rfloor  +  \cdots  + \left\lfloor {\frac{ {x + m - d}}{m}} \right\rfloor } \right)\\ = d\left( {\left\lfloor {\frac{ {x/d}}{ {m/d}}} \right\rfloor  + \left\lfloor {\frac{ {x/d + 1}}{ {m/d}}} \right\rfloor  +  \cdots  + \left\lfloor {\frac{ {x/d + m/d - 1}}{ {m/d}}} \right\rfloor } \right)\\ = d\left\lfloor {\frac{x}{d}} \right\rfloor \end{array}\]<br><strong>第二个部分为：</strong><br>\[\sum\limits_{0 \le k &lt; m} {\frac{ {kn}}{m}}  = \frac{ {(m - 1)n}}{2}\]<br><strong>第三个部分为：</strong><br>\[d\left( {\frac{0}{m} + \frac{d}{m} +  \cdots  + \frac{ {m - d}}{m}} \right) = \frac{ {m - d}}{2}\]</p>
 <p>所以总的结果为：<br>\[\sum\limits_{0 \le k &lt; m} {\left\lfloor {\frac{ {nk + x}}{m}} \right\rfloor }  = d\left\lfloor {\frac{x}{d}} \right\rfloor  + \frac{ {(m - 1)n}}{2} + \frac{ {d - m}}{2}\]</p>
-<p>这里我们对结果稍稍变形，可以得到另一个结果：<br>\[\begin{array}{l}\sum\limits_{0 \le k &lt; m} {\left\lfloor {\frac{ {nk + x}}{m}} \right\rfloor }  = d\left\lfloor {\frac{x}{d}} \right\rfloor  + \frac{ {(m - 1)(n - 1)}}{2} + \frac{ {m - 1}}{2} + \frac{ {d - m}}{2}\\ = d\left\lfloor {\frac{x}{d}} \right\rfloor  + \frac{ {(m - 1)(n - 1)}}{2} + \frac{ {d - 1}}{2}\end{array}\]<br>可以发现，<script type="math/tex">m</script>和<script type="math/tex">n</script>是对称的！所以可以得到如下结论：<br>\[\sum\limits_{0 \le k &lt; m} {\left\lfloor {\frac{ {nk + x}}{m}} \right\rfloor }  = \sum\limits_{0 \le k &lt; n} {\left\lfloor {\frac{ {mk + x}}{n}} \right\rfloor } \]<br>这有什么用呢？当<script type="math/tex">m</script>特别大、<script type="math/tex">n</script>很小的时候可以大大减少项的个数！</p>
-<p>如果我们令<script type="math/tex">n=1</script>，就会发现，得到的式子和之前证过的一个式子一模一样！<br>\[\sum\limits_{0 \le k &lt; m} {\left\lfloor {\frac{ {k + x}}{m}} \right\rfloor }  = \left\lfloor x \right\rfloor \]</p>
+<p>这里我们对结果稍稍变形，可以得到另一个结果：<br>\[\begin{array}{l}\sum\limits_{0 \le k &lt; m} {\left\lfloor {\frac{ {nk + x}}{m}} \right\rfloor }  = d\left\lfloor {\frac{x}{d}} \right\rfloor  + \frac{ {(m - 1)(n - 1)}}{2} + \frac{ {m - 1}}{2} + \frac{ {d - m}}{2}\\ = d\left\lfloor {\frac{x}{d}} \right\rfloor  + \frac{ {(m - 1)(n - 1)}}{2} + \frac{ {d - 1}}{2}\end{array}\]<br>可以发现，$m$和$n$是对称的！所以可以得到如下结论：<br>\[\sum\limits_{0 \le k &lt; m} {\left\lfloor {\frac{ {nk + x}}{m}} \right\rfloor }  = \sum\limits_{0 \le k &lt; n} {\left\lfloor {\frac{ {mk + x}}{n}} \right\rfloor } \]<br>这有什么用呢？当$m$特别大、$n$很小的时候可以大大减少项的个数！</p>
+<p>如果我们令$n=1$，就会发现，得到的式子和之前证过的一个式子一模一样！<br>\[\sum\limits_{0 \le k &lt; m} {\left\lfloor {\frac{ {k + x}}{m}} \right\rfloor }  = \left\lfloor x \right\rfloor \]</p>
 <p>到这里为止，第三章取整就讲完了，下面开始讲第四章数论部分。</p>
 <h1 id="数论相关性质"><a href="#数论相关性质" class="headerlink" title="数论相关性质"></a>数论相关性质</h1><hr>
-<h2 id="整除定义"><a href="#整除定义" class="headerlink" title="整除定义"></a>整除定义</h2><p>\[m|n \Leftrightarrow m &gt; 0,n = mk,k \in \mathbb{Z}\]<br>注意这里整除的定义中要求<script type="math/tex">m>0</script>。</p>
+<h2 id="整除定义"><a href="#整除定义" class="headerlink" title="整除定义"></a>整除定义</h2><p>\[m|n \Leftrightarrow m &gt; 0,n = mk,k \in \mathbb{Z}\]<br>注意这里整除的定义中要求$m&gt;0$。</p>
 <h2 id="最大公约数和最小公倍数"><a href="#最大公约数和最小公倍数" class="headerlink" title="最大公约数和最小公倍数"></a>最大公约数和最小公倍数</h2><p>定义我就不说了，大家应该都知道的。</p>
 <h2 id="欧几里得定理"><a href="#欧几里得定理" class="headerlink" title="欧几里得定理"></a>欧几里得定理</h2><p>又叫辗转相除法，就是用来求最大公约数的。<br>\[\begin{array}{l}\gcd (0,n) = n\\\gcd (m,n) = \gcd (n\bmod m,m)\end{array}\]</p>
 <h2 id="扩展欧几里得定理"><a href="#扩展欧几里得定理" class="headerlink" title="扩展欧几里得定理"></a>扩展欧几里得定理</h2><p>在用欧几里得定理求到最大公约数之后，反过来可以将最大公约数表示为两个数的线性和：<br>\[\gcd (m,n) = m’m + n’n\]</p>
-<h2 id="性质1"><a href="#性质1" class="headerlink" title="性质1"></a>性质1</h2><p>如果<script type="math/tex">k|m,k|n</script>，那么<script type="math/tex">k|gcd(m,n)</script>。</p>
+<h2 id="性质1"><a href="#性质1" class="headerlink" title="性质1"></a>性质1</h2><p>如果$k|m,k|n$，那么$k|gcd(m,n)$。</p>
 <h2 id="性质2"><a href="#性质2" class="headerlink" title="性质2"></a>性质2</h2><p>\[\sum\limits_{m|n} { {a_m}}  = \sum\limits_{m|n} { {a_{n/m}}} \]<br>这个就是用了交换律，按照因子顺序倒过来算。</p>
-<h2 id="性质3"><a href="#性质3" class="headerlink" title="性质3"></a>性质3</h2><p>\[\sum\limits_{m|n} { {a_m}}  = \sum\limits_k {\sum\limits_{m &gt; 0} { {a_m}[n = mk]} } \]<br>这个虽然变成了二重求和，但是对于每个<script type="math/tex">k</script>，其实只有一个<script type="math/tex">m</script>有效。</p>
+<h2 id="性质3"><a href="#性质3" class="headerlink" title="性质3"></a>性质3</h2><p>\[\sum\limits_{m|n} { {a_m}}  = \sum\limits_k {\sum\limits_{m &gt; 0} { {a_m}[n = mk]} } \]<br>这个虽然变成了二重求和，但是对于每个$k$，其实只有一个$m$有效。</p>
 <h2 id="性质4"><a href="#性质4" class="headerlink" title="性质4"></a>性质4</h2><p>\[\sum\limits_{m|n} {\sum\limits_{k|m} { {a_{k,m}}} }  = \sum\limits_{k|n} {\sum\limits_{l|(n/k)} { {a_{k,kl}}} } \]<br>这个一眼就不一定能看出来了。</p>
 <p>左边等于：<br>\[\begin{array}{l}\sum\limits_{m|n} {\sum\limits_{k|m} { {a_{k,m}}} }  = \sum\limits_{j,l} {\sum\limits_{k,m &gt; 0} { {a_{k,m}}[n = jm][m = kl]} } \\ = \sum\limits_j {\sum\limits_{k,l &gt; 0} { {a_{k,kl}}[n = jkl]} } \end{array}\]<br>右边等于：<br>\[\begin{array}{l}\sum\limits_{k|n} {\sum\limits_{l|(n/k)} { {a_{k,kl}}} }  = \sum\limits_{j,m} {\sum\limits_{k,l &gt; 0} { {a_{k,kl}}[n = jk][n/k = ml]} } \\ = \sum\limits_m {\sum\limits_{k,l &gt; 0} { {a_{k,kl}}[n = mlk]} } \end{array}\]<br>可以看出左右两边相等。</p>
-<h2 id="算数基本定理"><a href="#算数基本定理" class="headerlink" title="算数基本定理"></a>算数基本定理</h2><p>一个整数可以唯一表示为若干个素数乘积：<br>\[n = \prod\limits_p { {p^{ {n_p}}}} ,{n_p} \ge 0\]<br>所以用指数形式来表示一个整数<script type="math/tex">n</script>，例如<script type="math/tex">18 = {2^1} \times {3^2}</script>，那么<script type="math/tex">18</script>可以表示为：<br>\[ &lt; 1,2,0,0, \ldots  &gt; \]<br>最大公约数和最小公倍数也能很方便的用指数形式计算：<br>其中最大公约数的每个素数的指数等于两个数对应指数最小值，最小公倍数的每个素数的指数等于两个数对应指数最大值。</p>
+<h2 id="算数基本定理"><a href="#算数基本定理" class="headerlink" title="算数基本定理"></a>算数基本定理</h2><p>一个整数可以唯一表示为若干个素数乘积：<br>\[n = \prod\limits_p { {p^{ {n_p}}}} ,{n_p} \ge 0\]<br>所以用指数形式来表示一个整数$n$，例如$18 = {2^1} \times {3^2}$，那么$18$可以表示为：<br>\[ &lt; 1,2,0,0, \ldots  &gt; \]<br>最大公约数和最小公倍数也能很方便的用指数形式计算：<br>其中最大公约数的每个素数的指数等于两个数对应指数最小值，最小公倍数的每个素数的指数等于两个数对应指数最大值。</p>
 
             </div>
             <hr/>
@@ -627,7 +627,7 @@
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2018/04/23/concrete-math-9/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -775,8 +775,8 @@ CKY算法或维特比inside算法是成分句法分析的主要方法之一，�
                             
 
 题3
-题目求\left\lfloor {nx} \right\rfloor  = n\left\lfloor x \right\rfloor的充要条件。解答因为
-\[x = \left\lfloor x \right\rfloor  +
+题目求$\left\lfloor {nx} \right\rfloor  = n\left\lfloor x \right\rfloor $的充要条件。解答因为
+\[x = \left\lfloor x \right\rfloor
                         
                     </div>
                     <div class="publish-info">
@@ -843,8 +843,8 @@ CKY算法或维特比inside算法是成分句法分析的主要方法之一，�
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -966,7 +966,7 @@ CKY算法或维特比inside算法是成分句法分析的主要方法之一，�
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

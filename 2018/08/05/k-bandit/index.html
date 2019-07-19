@@ -8,8 +8,8 @@
     <meta name="baidu-site-verification" content="rlXUrNbP8h">
     <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
     <meta name="description" content="问题描述
-有K个赌博机，每个赌博机有一定概率P吐出硬币，但是我们不知道这个概率是多少，每个赌博机吐出的硬币价值V也是不一样的，现在有T次机会选择赌博机，怎么选才能使得到的硬币总价值最大？
-在下面的不同算法实现中，统一设定\[\begin{a">
+有$K$个赌博机，每个赌博机有一定概率$P$吐出硬币，但是我们不知道这个概率是多少，每个赌博机吐出的硬币价值$V$也是不一样的，现在有$T$次机会选择赌博机，怎么选才能使得到的硬币总价值最大？
+在下面的不同算法实现中，统一设定\[">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -17,7 +17,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>K-bandit Algorithm | WeiYang Blog</title>
+    <title>K-bandit Algorithm | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -46,7 +46,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -109,7 +109,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -409,7 +409,7 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                        751
+                        755
                     </div>
                     
 
@@ -433,7 +433,7 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h1><hr>
-<p>有<script type="math/tex">K</script>个赌博机，每个赌博机有一定概率<script type="math/tex">P</script>吐出硬币，但是我们不知道这个概率是多少，每个赌博机吐出的硬币价值<script type="math/tex">V</script>也是不一样的，现在有<script type="math/tex">T</script>次机会选择赌博机，怎么选才能使得到的硬币总价值最大？</p>
+<p>有$K$个赌博机，每个赌博机有一定概率$P$吐出硬币，但是我们不知道这个概率是多少，每个赌博机吐出的硬币价值$V$也是不一样的，现在有$T$次机会选择赌博机，怎么选才能使得到的硬币总价值最大？</p>
 <p>在下面的不同算法实现中，统一设定<br>\[\begin{array}{l}K = 5 \\ P = [0.1,0.9,0.3,0.2,0.7] \\ V = [5,3,1,7,4] \\ T = 1000000\end{array}\]<br>可以计算出，这种情况下：</p>
 <ol>
 <li>如果每次都选期望价值最高的4号赌博机，可以获得的最高总价值为2800000。</li>
@@ -442,121 +442,118 @@
 </ol>
 <h1 id="探索与利用算法"><a href="#探索与利用算法" class="headerlink" title="探索与利用算法"></a>探索与利用算法</h1><hr>
 <h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>“仅探索”（exploration-only）算法就是将机会平均分配给每一个赌博机，随机挑选赌博机。<br>“仅利用”（exploitation-only）算法就是选取当前平均价值最高的那台赌博机。</p>
-<h2 id="实现代码"><a href="#实现代码" class="headerlink" title="实现代码"></a>实现代码</h2><pre class=" language-lang-python"><code class="language-lang-python">#!/usr/bin/python
-# -*- coding: UTF-8 -*-
-import random
-import numpy as np
+<h2 id="实现代码"><a href="#实现代码" class="headerlink" title="实现代码"></a>实现代码</h2><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true">#!/usr/bin/python</span>
+<span class="token comment" spellcheck="true"># -*- coding: UTF-8 -*-</span>
+<span class="token keyword">import</span> random
+<span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
 
-def R(k, P, V):
-    if random.random() < P[k]:
-        return V[k]
-    else:
-        return 0
+<span class="token keyword">def</span> <span class="token function">R</span><span class="token punctuation">(</span>k<span class="token punctuation">,</span> P<span class="token punctuation">,</span> V<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> random<span class="token punctuation">.</span>random<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;</span> P<span class="token punctuation">[</span>k<span class="token punctuation">]</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> V<span class="token punctuation">[</span>k<span class="token punctuation">]</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token number">0</span>
 
-def exploration_bandit(K, P, V, R, T):
-    r = 0
-    for t in range(T):
-        k = random.randint(0, K - 1)
-        v = R(k, P, V)
-        r += v
-    return r
+<span class="token keyword">def</span> <span class="token function">exploration_bandit</span><span class="token punctuation">(</span>K<span class="token punctuation">,</span> P<span class="token punctuation">,</span> V<span class="token punctuation">,</span> R<span class="token punctuation">,</span> T<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    r <span class="token operator">=</span> <span class="token number">0</span>
+    <span class="token keyword">for</span> t <span class="token keyword">in</span> range<span class="token punctuation">(</span>T<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        k <span class="token operator">=</span> random<span class="token punctuation">.</span>randint<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> K <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span>
+        v <span class="token operator">=</span> R<span class="token punctuation">(</span>k<span class="token punctuation">,</span> P<span class="token punctuation">,</span> V<span class="token punctuation">)</span>
+        r <span class="token operator">+=</span> v
+    <span class="token keyword">return</span> r
 
-def main():
-    K = 5
-    P = np.array([0.1, 0.9, 0.3, 0.2, 0.7])
-    V = np.array([5, 3, 1, 7, 4])
-    T = 1000000
-    print exploration_bandit(K, P, V, R, T)
+<span class="token keyword">def</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    K <span class="token operator">=</span> <span class="token number">5</span>
+    P <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">0.1</span><span class="token punctuation">,</span> <span class="token number">0.9</span><span class="token punctuation">,</span> <span class="token number">0.3</span><span class="token punctuation">,</span> <span class="token number">0.2</span><span class="token punctuation">,</span> <span class="token number">0.7</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    V <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    T <span class="token operator">=</span> <span class="token number">1000000</span>
+    <span class="token keyword">print</span> exploration_bandit<span class="token punctuation">(</span>K<span class="token punctuation">,</span> P<span class="token punctuation">,</span> V<span class="token punctuation">,</span> R<span class="token punctuation">,</span> T<span class="token punctuation">)</span>
 
-if __name__ == '__main__':
-    main()
-</code></pre>
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
+    main<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
 <p>代码运行结果为：获得总价值1538893。</p>
-<h1 id="varepsilon贪心算法"><a href="#varepsilon贪心算法" class="headerlink" title="\varepsilon贪心算法"></a><script type="math/tex">\varepsilon</script>贪心算法</h1><hr>
-<h2 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h2><h2 id="实现代码-1"><a href="#实现代码-1" class="headerlink" title="实现代码"></a>实现代码</h2><pre class=" language-lang-python"><code class="language-lang-python">#!/usr/bin/python
-# -*- coding: UTF-8 -*-
-import random
-import numpy as np
+<h1 id="varepsilon-贪心算法"><a href="#varepsilon-贪心算法" class="headerlink" title="$\varepsilon $贪心算法"></a>$\varepsilon $贪心算法</h1><hr>
+<h2 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h2><h2 id="实现代码-1"><a href="#实现代码-1" class="headerlink" title="实现代码"></a>实现代码</h2><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true">#!/usr/bin/python</span>
+<span class="token comment" spellcheck="true"># -*- coding: UTF-8 -*-</span>
+<span class="token keyword">import</span> random
+<span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
 
-def R(k, P, V):
-    if random.random() < P[k]:
-        return V[k]
-    else:
-        return 0
+<span class="token keyword">def</span> <span class="token function">R</span><span class="token punctuation">(</span>k<span class="token punctuation">,</span> P<span class="token punctuation">,</span> V<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> random<span class="token punctuation">.</span>random<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;</span> P<span class="token punctuation">[</span>k<span class="token punctuation">]</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> V<span class="token punctuation">[</span>k<span class="token punctuation">]</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token number">0</span>
 
-def eplison_bandit(K, P, V, R, T):
-    r = 0
-    Q = np.zeros(K)
-    count = np.zeros(K)
-    for t in range(T):
-        eplison = 1. / np.sqrt(t + 1)
-        if random.random() < eplison:
-            k = random.randint(0, K - 1)
-        else:
-            k = np.argmax(Q)
-        v = R(k, P, V)
-        r += v
-        Q[k] += (v - Q[k]) / (count[k] + 1)
-        count[k] += 1
-    return r
+<span class="token keyword">def</span> <span class="token function">eplison_bandit</span><span class="token punctuation">(</span>K<span class="token punctuation">,</span> P<span class="token punctuation">,</span> V<span class="token punctuation">,</span> R<span class="token punctuation">,</span> T<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    r <span class="token operator">=</span> <span class="token number">0</span>
+    Q <span class="token operator">=</span> np<span class="token punctuation">.</span>zeros<span class="token punctuation">(</span>K<span class="token punctuation">)</span>
+    count <span class="token operator">=</span> np<span class="token punctuation">.</span>zeros<span class="token punctuation">(</span>K<span class="token punctuation">)</span>
+    <span class="token keyword">for</span> t <span class="token keyword">in</span> range<span class="token punctuation">(</span>T<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        eplison <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">.</span> <span class="token operator">/</span> np<span class="token punctuation">.</span>sqrt<span class="token punctuation">(</span>t <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> random<span class="token punctuation">.</span>random<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;</span> eplison<span class="token punctuation">:</span>
+            k <span class="token operator">=</span> random<span class="token punctuation">.</span>randint<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> K <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span>
+        <span class="token keyword">else</span><span class="token punctuation">:</span>
+            k <span class="token operator">=</span> np<span class="token punctuation">.</span>argmax<span class="token punctuation">(</span>Q<span class="token punctuation">)</span>
+        v <span class="token operator">=</span> R<span class="token punctuation">(</span>k<span class="token punctuation">,</span> P<span class="token punctuation">,</span> V<span class="token punctuation">)</span>
+        r <span class="token operator">+=</span> v
+        Q<span class="token punctuation">[</span>k<span class="token punctuation">]</span> <span class="token operator">+=</span> <span class="token punctuation">(</span>v <span class="token operator">-</span> Q<span class="token punctuation">[</span>k<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token punctuation">(</span>count<span class="token punctuation">[</span>k<span class="token punctuation">]</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span>
+        count<span class="token punctuation">[</span>k<span class="token punctuation">]</span> <span class="token operator">+=</span> <span class="token number">1</span>
+    <span class="token keyword">return</span> r
 
-def main():
-    K = 5
-    P = np.array([0.1, 0.9, 0.3, 0.2, 0.7])
-    V = np.array([5, 3, 1, 7, 4])
-    T = 1000000
-    print eplison_bandit(K, P, V, R, T)
+<span class="token keyword">def</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    K <span class="token operator">=</span> <span class="token number">5</span>
+    P <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">0.1</span><span class="token punctuation">,</span> <span class="token number">0.9</span><span class="token punctuation">,</span> <span class="token number">0.3</span><span class="token punctuation">,</span> <span class="token number">0.2</span><span class="token punctuation">,</span> <span class="token number">0.7</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    V <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    T <span class="token operator">=</span> <span class="token number">1000000</span>
+    <span class="token keyword">print</span> eplison_bandit<span class="token punctuation">(</span>K<span class="token punctuation">,</span> P<span class="token punctuation">,</span> V<span class="token punctuation">,</span> R<span class="token punctuation">,</span> T<span class="token punctuation">)</span>
 
-if __name__ == '__main__':
-    main()
-</code></pre>
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
+    main<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
 <p>代码运行结果为：获得总价值2795546。</p>
 <h1 id="Softmax算法"><a href="#Softmax算法" class="headerlink" title="Softmax算法"></a>Softmax算法</h1><hr>
-<h2 id="原理-2"><a href="#原理-2" class="headerlink" title="原理"></a>原理</h2><h2 id="实现代码-2"><a href="#实现代码-2" class="headerlink" title="实现代码"></a>实现代码</h2><pre class=" language-lang-python"><code class="language-lang-python">#!/usr/bin/python
-# -*- coding: UTF-8 -*-
-import random
-import numpy as np
+<h2 id="原理-2"><a href="#原理-2" class="headerlink" title="原理"></a>原理</h2><h2 id="实现代码-2"><a href="#实现代码-2" class="headerlink" title="实现代码"></a>实现代码</h2><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true">#!/usr/bin/python</span>
+<span class="token comment" spellcheck="true"># -*- coding: UTF-8 -*-</span>
+<span class="token keyword">import</span> random
+<span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
 
-def softmax(x):
-    return np.exp(x) / np.sum(np.exp(x))
+<span class="token keyword">def</span> <span class="token function">softmax</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> np<span class="token punctuation">.</span>exp<span class="token punctuation">(</span>x<span class="token punctuation">)</span> <span class="token operator">/</span> np<span class="token punctuation">.</span>sum<span class="token punctuation">(</span>np<span class="token punctuation">.</span>exp<span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">)</span>
 
-def R(k, P, V):
-    if random.random() < P[k]:
-        return V[k]
-    else:
-        return 0
+<span class="token keyword">def</span> <span class="token function">R</span><span class="token punctuation">(</span>k<span class="token punctuation">,</span> P<span class="token punctuation">,</span> V<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> random<span class="token punctuation">.</span>random<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;</span> P<span class="token punctuation">[</span>k<span class="token punctuation">]</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> V<span class="token punctuation">[</span>k<span class="token punctuation">]</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token number">0</span>
 
-def eplison_bandit(K, P, V, R, T, tau=0.1):
-    r = 0
-    Q = np.zeros(K)
-    count = np.zeros(K)
-    for t in range(T):
-        p = softmax(Q / tau)
-        rand = random.random()
-        total = 0.0
-        for i in range(K):
-            total += p[i]
-            if total >= rand:
-                k = i
-                break
-        v = R(k, P, V)
-        r += v
-        Q[k] += (v - Q[k]) / (count[k] + 1)
-        count[k] += 1
-    return r
+<span class="token keyword">def</span> <span class="token function">eplison_bandit</span><span class="token punctuation">(</span>K<span class="token punctuation">,</span> P<span class="token punctuation">,</span> V<span class="token punctuation">,</span> R<span class="token punctuation">,</span> T<span class="token punctuation">,</span> tau<span class="token operator">=</span><span class="token number">0.1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    r <span class="token operator">=</span> <span class="token number">0</span>
+    Q <span class="token operator">=</span> np<span class="token punctuation">.</span>zeros<span class="token punctuation">(</span>K<span class="token punctuation">)</span>
+    count <span class="token operator">=</span> np<span class="token punctuation">.</span>zeros<span class="token punctuation">(</span>K<span class="token punctuation">)</span>
+    <span class="token keyword">for</span> t <span class="token keyword">in</span> range<span class="token punctuation">(</span>T<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        p <span class="token operator">=</span> softmax<span class="token punctuation">(</span>Q <span class="token operator">/</span> tau<span class="token punctuation">)</span>
+        rand <span class="token operator">=</span> random<span class="token punctuation">.</span>random<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        total <span class="token operator">=</span> <span class="token number">0.0</span>
+        <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span>K<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            total <span class="token operator">+=</span> p<span class="token punctuation">[</span>i<span class="token punctuation">]</span>
+            <span class="token keyword">if</span> total <span class="token operator">>=</span> rand<span class="token punctuation">:</span>
+                k <span class="token operator">=</span> i
+                <span class="token keyword">break</span>
+        v <span class="token operator">=</span> R<span class="token punctuation">(</span>k<span class="token punctuation">,</span> P<span class="token punctuation">,</span> V<span class="token punctuation">)</span>
+        r <span class="token operator">+=</span> v
+        Q<span class="token punctuation">[</span>k<span class="token punctuation">]</span> <span class="token operator">+=</span> <span class="token punctuation">(</span>v <span class="token operator">-</span> Q<span class="token punctuation">[</span>k<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token punctuation">(</span>count<span class="token punctuation">[</span>k<span class="token punctuation">]</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span>
+        count<span class="token punctuation">[</span>k<span class="token punctuation">]</span> <span class="token operator">+=</span> <span class="token number">1</span>
+    <span class="token keyword">return</span> r
 
-def main():
-    K = 5
-    P = np.array([0.1, 0.9, 0.3, 0.2, 0.7])
-    V = np.array([5, 3, 1, 7, 4])
-    T = 1000000
-    tau = 0.1
-    print eplison_bandit(K, P, V, R, T, tau)
+<span class="token keyword">def</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    K <span class="token operator">=</span> <span class="token number">5</span>
+    P <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">0.1</span><span class="token punctuation">,</span> <span class="token number">0.9</span><span class="token punctuation">,</span> <span class="token number">0.3</span><span class="token punctuation">,</span> <span class="token number">0.2</span><span class="token punctuation">,</span> <span class="token number">0.7</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    V <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    T <span class="token operator">=</span> <span class="token number">1000000</span>
+    tau <span class="token operator">=</span> <span class="token number">0.1</span>
+    <span class="token keyword">print</span> eplison_bandit<span class="token punctuation">(</span>K<span class="token punctuation">,</span> P<span class="token punctuation">,</span> V<span class="token punctuation">,</span> R<span class="token punctuation">,</span> T<span class="token punctuation">,</span> tau<span class="token punctuation">)</span>
 
-if __name__ == '__main__':
-    main()
-</code></pre>
-<p>代码运行结果为：<script type="math/tex">tau=0.01</script>时，获得总价值1397795。<script type="math/tex">tau=0.1</script>时，获得总价值2798372。当然随机性很大，每次运行结果都会不同</p>
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
+    main<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+<p>代码运行结果为：$tau=0.01$时，获得总价值1397795。$tau=0.1$时，获得总价值2798372。当然随机性很大，每次运行结果都会不同</p>
 
             </div>
             <hr/>
@@ -719,7 +716,7 @@ if __name__ == '__main__':
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2018/08/05/k-bandit/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -942,8 +939,8 @@ if __name__ == '__main__':
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -1065,7 +1062,7 @@ if __name__ == '__main__':
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

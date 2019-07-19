@@ -18,7 +18,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>具体数学-第14课（牛顿级数和生成函数） | WeiYang Blog</title>
+    <title>具体数学-第14课（牛顿级数和生成函数） | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -47,7 +47,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -110,7 +110,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -432,14 +432,14 @@
                 <div align="middle"><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=26492802&auto=1&height=66"></iframe></div>
 
 <h1 id="牛顿级数"><a href="#牛顿级数" class="headerlink" title="牛顿级数"></a>牛顿级数</h1><hr>
-<p>多项式函数的一般表示形式为：<br>\[f(x) = {a_d}{x^d} + {a_{d - 1}}{x^{d - 1}} +  \cdots  + {a_1}{x^1} + {a_0}{x^0}\]<br>也可以将其表示为下降阶乘幂的形式：<br>\[f(x) = {b_d}{x^\underline{d}} + {b_{d - 1}}{x^{\underline{d - 1}}} +  \cdots  + {b_1}{x^\underline{1}} + {b_0}{x^\underline{0}}\]<br>这种表示的好处是，求差分更加方便：<br>\[\Delta (f(x)) = {b_d}d{x^{\underline{d - 1}}} + {b_{d - 1}}(d - 1){x^{\underline {d - 2} }} +  \cdots  + {b_1}{x^\underline{0}}\]<br>因为有<br>\[\left( {\begin{array}{*{20}{c}}x\\k\end{array}} \right) = \frac{ { {x^\underline{k}}}}{ {k!}}\]<br>所以多项式又可以表示为组合数的形式，也被叫做牛顿级数：<br>\[f(x) = {c_d}\left( {\begin{array}{*{20}{c}}x\\d\end{array}} \right) + {c_{d - 1}}\left( {\begin{array}{*{20}{c}}x\\{d - 1}\end{array}} \right) +  \cdots  + {c_1}\left( {\begin{array}{*{20}{c}}x\\1\end{array}} \right) + {c_0}\left( {\begin{array}{*{20}{c}}x\\0\end{array}} \right)\]<br>这种形式的差分也特别简单，因为有<br>\[\Delta \left( {\left( {\begin{array}{*{20}{c}}x\\k\end{array}} \right)} \right) = \left( {\begin{array}{*{20}{c}}x\\{k - 1}\end{array}} \right)\]<br>所以<script type="math/tex">n</script>阶差分可以写为：<br>\[{\Delta ^n}(f(x)) = {c_d}\left( {\begin{array}{*{20}{c}}x\\{d - n}\end{array}} \right) + {c_{d - 1}}\left( {\begin{array}{*{20}{c}}x\\{d - 1 - n}\end{array}} \right) +  \cdots  + {c_1}\left( {\begin{array}{*{20}{c}}x\\{1 - n}\end{array}} \right) + {c_0}\left( {\begin{array}{*{20}{c}}x\\{ - n}\end{array}} \right)\]<br>所以有：<br>\[{\Delta ^n}(f(0)) = \left\{ {\begin{array}{*{20}{c}}{ {c_n},n \le d}\\{0,n &gt; d}\end{array}} \right.\]<br>所以牛顿级数又可以写为：<br>\[f(x) = {\Delta ^d}(f(0))\left( {\begin{array}{*{20}{c}}x\\d\end{array}} \right) + {\Delta ^{d - 1}}(f(0))\left( {\begin{array}{*{20}{c}}x\\{d - 1}\end{array}} \right) +  \cdots  + \Delta (f(0))\left( {\begin{array}{*{20}{c}}x\\1\end{array}} \right) + f(0){c_0}\left( {\begin{array}{*{20}{c}}x\\0\end{array}} \right)\]<br>这个形式是不是很像泰勒展开？</p>
+<p>多项式函数的一般表示形式为：<br>\[f(x) = {a_d}{x^d} + {a_{d - 1}}{x^{d - 1}} +  \cdots  + {a_1}{x^1} + {a_0}{x^0}\]<br>也可以将其表示为下降阶乘幂的形式：<br>\[f(x) = {b_d}{x^\underline{d}} + {b_{d - 1}}{x^{\underline{d - 1}}} +  \cdots  + {b_1}{x^\underline{1}} + {b_0}{x^\underline{0}}\]<br>这种表示的好处是，求差分更加方便：<br>\[\Delta (f(x)) = {b_d}d{x^{\underline{d - 1}}} + {b_{d - 1}}(d - 1){x^{\underline {d - 2} }} +  \cdots  + {b_1}{x^\underline{0}}\]<br>因为有<br>\[\left( {\begin{array}{*{20}{c}}x\\k\end{array}} \right) = \frac{ { {x^\underline{k}}}}{ {k!}}\]<br>所以多项式又可以表示为组合数的形式，也被叫做牛顿级数：<br>\[f(x) = {c_d}\left( {\begin{array}{*{20}{c}}x\\d\end{array}} \right) + {c_{d - 1}}\left( {\begin{array}{*{20}{c}}x\\{d - 1}\end{array}} \right) +  \cdots  + {c_1}\left( {\begin{array}{*{20}{c}}x\\1\end{array}} \right) + {c_0}\left( {\begin{array}{*{20}{c}}x\\0\end{array}} \right)\]<br>这种形式的差分也特别简单，因为有<br>\[\Delta \left( {\left( {\begin{array}{*{20}{c}}x\\k\end{array}} \right)} \right) = \left( {\begin{array}{*{20}{c}}x\\{k - 1}\end{array}} \right)\]<br>所以$n$阶差分可以写为：<br>\[{\Delta ^n}(f(x)) = {c_d}\left( {\begin{array}{*{20}{c}}x\\{d - n}\end{array}} \right) + {c_{d - 1}}\left( {\begin{array}{*{20}{c}}x\\{d - 1 - n}\end{array}} \right) +  \cdots  + {c_1}\left( {\begin{array}{*{20}{c}}x\\{1 - n}\end{array}} \right) + {c_0}\left( {\begin{array}{*{20}{c}}x\\{ - n}\end{array}} \right)\]<br>所以有：<br>\[{\Delta ^n}(f(0)) = \left\{ {\begin{array}{*{20}{c}}{ {c_n},n \le d}\\{0,n &gt; d}\end{array}} \right.\]<br>所以牛顿级数又可以写为：<br>\[f(x) = {\Delta ^d}(f(0))\left( {\begin{array}{*{20}{c}}x\\d\end{array}} \right) + {\Delta ^{d - 1}}(f(0))\left( {\begin{array}{*{20}{c}}x\\{d - 1}\end{array}} \right) +  \cdots  + \Delta (f(0))\left( {\begin{array}{*{20}{c}}x\\1\end{array}} \right) + f(0){c_0}\left( {\begin{array}{*{20}{c}}x\\0\end{array}} \right)\]<br>这个形式是不是很像泰勒展开？</p>
 <h1 id="生成函数"><a href="#生成函数" class="headerlink" title="生成函数"></a>生成函数</h1><hr>
-<p>对于无限序列<script type="math/tex">\left\langle { {a_0},{a_1},{a_2}, \ldots } \right\rangle</script>，定义它的生成函数为：<br>\[A(z) = {a_0} + {a_1}z + {a_2}{z^2} +  \cdots  = \sum\limits_{k \ge 0} { {a_k}{z^k}} \]<br>定义一个函数用来表示<script type="math/tex">z^n</script>的系数：<br>\[[{z^n}]A(z) = {a_n}\]<br>两个生成函数相乘的结果为：<br>\[A(z)B(z) = \sum\limits_{k \ge 0} {\sum\limits_{i = 0}^k { {a_i}{b_{k - i}}} {z^k}} \]<br>考虑下面的二项展开：<br>\[{(1 + z)^r} = \sum\limits_{k \ge 0} {\left( {\begin{array}{*{20}{c}}r\\k\end{array}} \right){z^k}} \]<br>可以发现这就是序列<script type="math/tex">\left\langle {\left( {\begin{array}{\*{20}{c}}r\\0\end{array}} \right),\left( {\begin{array}{\*{20}{c}}r\\1\end{array}} \right),\left( {\begin{array}{\*{20}{c}}r\\2\end{array}} \right), \ldots } \right\rangle</script>的生成函数。<br>替换变量可以得到：<br>\[{(1 + z)^s} = \sum\limits_{k \ge 0} {\left( {\begin{array}{*{20}{c}}s\\k\end{array}} \right){z^k}} \]<br>两个式子相乘可以得到：<br>\[{(1 + z)^r}{(1 + z)^s} = {(1 + z)^{r + s}}\]<br>等式两边<script type="math/tex">z^n</script>的系数相等，于是：<br>\[\sum\limits_{k = 0}^n {\left( {\begin{array}{*{20}{c}}r\\k\end{array}} \right)\left( {\begin{array}{*{20}{c}}s\\{n - k}\end{array}} \right)}  = \left( {\begin{array}{*{20}{c}}{r + s}\\n\end{array}} \right)\]<br>这和上节课讲到的范德蒙德卷积公式类似！这里是用生成函数证出来的。</p>
-<p>同理根据<br>\[{(1 + z)^r}{(1 - z)^r} = {(1 - {z^2})^r}\]<br>可以得到<br>\[\sum\limits_{k = 0}^n {\left( {\begin{array}{*{20}{c}}r\\k\end{array}} \right)\left( {\begin{array}{*{20}{c}}r\\{n - k}\end{array}} \right)} {( - 1)^k} = {( - 1)^{n/2}}\left( {\begin{array}{*{20}{c}}r\\{n/2}\end{array}} \right)[n是偶数]\]<br>下面是一个重要的生成函数：<br>\[\frac{1}{ {1 - z}} = 1 + z + {z^2} + {z^3} +  \cdots  = \sum\limits_{k \ge 0} { {z^k}} \]<br>它其实就是序列<script type="math/tex">\left\langle { {1},{1},{1}, \ldots } \right\rangle</script>的生成函数。</p>
+<p>对于无限序列$\left\langle { {a_0},{a_1},{a_2}, \ldots } \right\rangle $，定义它的生成函数为：<br>\[A(z) = {a_0} + {a_1}z + {a_2}{z^2} +  \cdots  = \sum\limits_{k \ge 0} { {a_k}{z^k}} \]<br>定义一个函数用来表示$z^n$的系数：<br>\[[{z^n}]A(z) = {a_n}\]<br>两个生成函数相乘的结果为：<br>\[A(z)B(z) = \sum\limits_{k \ge 0} {\sum\limits_{i = 0}^k { {a_i}{b_{k - i}}} {z^k}} \]<br>考虑下面的二项展开：<br>\[{(1 + z)^r} = \sum\limits_{k \ge 0} {\left( {\begin{array}{*{20}{c}}r\\k\end{array}} \right){z^k}} \]<br>可以发现这就是序列$\left\langle {\left( {\begin{array}{*{20}{c}}r\\0\end{array}} \right),\left( {\begin{array}{*{20}{c}}r\\1\end{array}} \right),\left( {\begin{array}{*{20}{c}}r\\2\end{array}} \right), \ldots } \right\rangle $的生成函数。<br>替换变量可以得到：<br>\[{(1 + z)^s} = \sum\limits_{k \ge 0} {\left( {\begin{array}{*{20}{c}}s\\k\end{array}} \right){z^k}} \]<br>两个式子相乘可以得到：<br>\[{(1 + z)^r}{(1 + z)^s} = {(1 + z)^{r + s}}\]<br>等式两边$z^n$的系数相等，于是：<br>\[\sum\limits_{k = 0}^n {\left( {\begin{array}{*{20}{c}}r\\k\end{array}} \right)\left( {\begin{array}{*{20}{c}}s\\{n - k}\end{array}} \right)}  = \left( {\begin{array}{*{20}{c}}{r + s}\\n\end{array}} \right)\]<br>这和上节课讲到的范德蒙德卷积公式类似！这里是用生成函数证出来的。</p>
+<p>同理根据<br>\[{(1 + z)^r}{(1 - z)^r} = {(1 - {z^2})^r}\]<br>可以得到<br>\[\sum\limits_{k = 0}^n {\left( {\begin{array}{*{20}{c}}r\\k\end{array}} \right)\left( {\begin{array}{*{20}{c}}r\\{n - k}\end{array}} \right)} {( - 1)^k} = {( - 1)^{n/2}}\left( {\begin{array}{*{20}{c}}r\\{n/2}\end{array}} \right)[n是偶数]\]<br>下面是一个重要的生成函数：<br>\[\frac{1}{ {1 - z}} = 1 + z + {z^2} + {z^3} +  \cdots  = \sum\limits_{k \ge 0} { {z^k}} \]<br>它其实就是序列$\left\langle { {1},{1},{1}, \ldots } \right\rangle $的生成函数。</p>
 <h1 id="生成函数应用"><a href="#生成函数应用" class="headerlink" title="生成函数应用"></a>生成函数应用</h1><hr>
 <p>那么生成函数有什么应用呢？一个很重要的应用就是用来求解递归式。</p>
 <p>例如大家很熟悉的斐波那契数列：<br>\[\begin{array}{l}{g_0} = 0;{g_1} = 1\\{g_n} = {g_{n - 1}} + {g_{n - 2}},n \ge 2\end{array}\]</p>
-<p>首先为了统一表示，将递归式改写为如下形式：<br>\[{g_n} = {g_{n - 1}} + {g_{n - 2}} + [n = 1]\]<br>然后两边同时乘以<script type="math/tex">z^n</script>，得到：<br>\[{g_n}{z^n} = {g_{n - 1}}{z^n} + {g_{n - 2}}{z^n} + [n = 1]{z^n}\]<br>两边对指标<script type="math/tex">n</script>同时求和，可以得到：<br>\[G(z) = zG(z) + {z^2}G(z) + z\]<br>所以<br>\[G(z) = \frac{z}{ {1 - z - {z^2}}}\]<br>最后只要将<script type="math/tex">\frac{z}{ {1 - z - {z^2}}}</script>表示成多项式的形式就行了，<script type="math/tex">[{z^n}]\frac{z}{ {1 - z - {z^2}}}</script>就是斐波那契数列的通项公式了。</p>
+<p>首先为了统一表示，将递归式改写为如下形式：<br>\[{g_n} = {g_{n - 1}} + {g_{n - 2}} + [n = 1]\]<br>然后两边同时乘以$z^n$，得到：<br>\[{g_n}{z^n} = {g_{n - 1}}{z^n} + {g_{n - 2}}{z^n} + [n = 1]{z^n}\]<br>两边对指标$n$同时求和，可以得到：<br>\[G(z) = zG(z) + {z^2}G(z) + z\]<br>所以<br>\[G(z) = \frac{z}{ {1 - z - {z^2}}}\]<br>最后只要将$\frac{z}{ {1 - z - {z^2}}}$表示成多项式的形式就行了，$[{z^n}]\frac{z}{ {1 - z - {z^2}}}$就是斐波那契数列的通项公式了。</p>
 
             </div>
             <hr/>
@@ -602,7 +602,7 @@
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2018/05/28/concrete-math-14/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -681,7 +681,7 @@
                             
 
 4.
-题目：通过上指标翻转计算出\left( {\begin{array}{\*{20}{c}}{ - 1}\\k\end{array}} \right)。解答：如果k \ge 0，那么\[\left( {\begin{array}{*
+题目：通过上指标翻转计算出$\left( {\begin{array}{*{20}{c}}{ - 1}\\k\end{array}} \right)$。解答：如果$k \ge 0$，那么\[\left( {\begin{array
                         
                     </div>
                     <div class="publish-info">
@@ -806,8 +806,8 @@
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -929,7 +929,7 @@
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

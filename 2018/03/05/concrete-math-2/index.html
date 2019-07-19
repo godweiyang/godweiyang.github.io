@@ -10,7 +10,7 @@
     <meta name="description" content="
 
 今天主要讲了关于递推式和求和的一些方法，主要是成套方法。
-约瑟夫环推广上一节课说到，约瑟夫环问题的解是\[f(n) = 2l + 1\]其中n = {2^m} + l将n写成二进制可以发现，f(n)就是n的二进制循环左移1位。现在做一下">
+约瑟夫环推广上一节课说到，约瑟夫环问题的解是\[f(n) = 2l + 1\]其中$n = {2^m} + l$将$n$写成二进制可以发现，$f(n)$就是$n$的二进制循环左移">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -18,7 +18,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>具体数学-第2课（成套方法求解递归式） | WeiYang Blog</title>
+    <title>具体数学-第2课（成套方法求解递归式） | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -47,7 +47,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -110,7 +110,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -406,7 +406,7 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                        526
+                        528
                     </div>
                     
 
@@ -432,9 +432,9 @@
                 <div align="middle"><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=316275&auto=1&height=66"></iframe></div>
 
 <p>今天主要讲了关于递推式和求和的一些方法，主要是成套方法。</p>
-<h1 id="约瑟夫环推广"><a href="#约瑟夫环推广" class="headerlink" title="约瑟夫环推广"></a>约瑟夫环推广</h1><p>上一节课说到，约瑟夫环问题的解是<br>\[f(n) = 2l + 1\]<br>其中<script type="math/tex">n = {2^m} + l</script><br>将<script type="math/tex">n</script>写成二进制可以发现，<script type="math/tex">f(n)</script>就是<script type="math/tex">n</script>的二进制循环左移1位。<br>现在做一下推广，求解如下递推式：<br>\[\begin{array}{l}f(1) = \alpha \\f(2n) = 2f(n) + \beta \\f(2n + 1) = 2f(n) + \gamma \end{array}\]<br>可以设<br>\[f(n) = A(n)\alpha  + B(n)\beta  + C(n)\gamma \]<br>同样，令<script type="math/tex">n = {2^m} + l</script><br>可以解出<br>\[\begin{array}{l}A(n) = {2^m}\\B(n) = {2^m} - 1 - l\\C(n) = l\end{array}\]<br>再从二进制角度理解一下，将递推式继续推广：<br>\[\begin{array}{l}f(j) = {\alpha _j},1 \le j &lt; d\\f(dn + j) = cf(n) + {\beta _j},0 \le j \le d,n \ge 1\end{array}\]<br>可以得到解为<br>\[f({({b_m}{b_{m - 1}} \ldots {b_1}{b_0})_d}) = {({\alpha _{ {b_m}}}{\beta _{ {b_{m - 1}}}}{\beta _{ {b_{m - 2}}}} \ldots {\beta _{ {b_1}}}{\beta _{ {b_0}}})_c}\]</p>
-<h1 id="递推式求和"><a href="#递推式求和" class="headerlink" title="递推式求和"></a>递推式求和</h1><p>求解如下递推式：<br>\[\begin{array}{l}{R_0} = \alpha \\{R_n} = {R_{n - 1}} + \beta n + \gamma \end{array}\]<br>用成套方法求解，设<br>\[{R_n} = A(n)\alpha  + B(n)\beta  + C(n)\gamma \]<br>首先令<script type="math/tex">{R_n} = 1</script>，可以得到<script type="math/tex">\alpha  = 1,\beta  = 0,\gamma  = 0</script>，所以<script type="math/tex">A(n) = 1</script>。<br>再令<script type="math/tex">{R_n} = n</script>，可以得到<script type="math/tex">\alpha  = 0,\beta  = 0,\gamma  = 1</script>，所以<script type="math/tex">C(n) = n</script>。<br>最后令<script type="math/tex">{R_n} = {n^2}</script>，可以得到<script type="math/tex">\alpha  = 0,\beta  = 2,\gamma  =  - 1</script>，所以<script type="math/tex">2B(n) - C(n) = {n^2}</script>，所以<script type="math/tex">B(n) = ({n^2} + n)/2</script></p>
-<p>再来一个更复杂的递推式：<br>\[\begin{array}{l}{R_0} = \alpha \\{R_n} = 2{R_{n - 1}} + \beta n + \gamma \end{array}\]<br>同样的方法，设<br>\[{R_n} = A(n)\alpha  + B(n)\beta  + C(n)\gamma \]<br>首先令<script type="math/tex">{R_n} = 1</script>，可以得到<script type="math/tex">\alpha  = 1,\beta  = 0,\gamma  = -1</script>，所以<script type="math/tex">A(n) - C(n) = 1</script>。<br>再令<script type="math/tex">{R_n} = n</script>，可以得到<script type="math/tex">\alpha  = 0,\beta  = -1,\gamma  = 2</script>，所以<script type="math/tex">2C(n) - B(n) = n</script>。<br>这时候能不能令<script type="math/tex">{R_n} = {n^2}</script>呢？答案是不能，因为如果<script type="math/tex">{R_n} = {n^2}</script>，那么<br>\[{n^2} = 2{(n - 1)^2} + \beta n + \gamma \]显然不可能成立。<br>观察系数，可以令<script type="math/tex">{R_n} = 2^n</script>，可以得到<script type="math/tex">\alpha  = 1,\beta  = 0,\gamma  = 0</script>，所以<script type="math/tex">A(n) = 2^n</script>。<br>所以<br>\[A(n) = {2^n},B(n) = {2^{n + 1}} - n + 2,C(n) = {2^n} + 1\]</p>
+<h1 id="约瑟夫环推广"><a href="#约瑟夫环推广" class="headerlink" title="约瑟夫环推广"></a>约瑟夫环推广</h1><p>上一节课说到，约瑟夫环问题的解是<br>\[f(n) = 2l + 1\]<br>其中$n = {2^m} + l$<br>将$n$写成二进制可以发现，$f(n)$就是$n$的二进制循环左移1位。<br>现在做一下推广，求解如下递推式：<br>\[\begin{array}{l}f(1) = \alpha \\f(2n) = 2f(n) + \beta \\f(2n + 1) = 2f(n) + \gamma \end{array}\]<br>可以设<br>\[f(n) = A(n)\alpha  + B(n)\beta  + C(n)\gamma \]<br>同样，令$n = {2^m} + l$<br>可以解出<br>\[\begin{array}{l}A(n) = {2^m}\\B(n) = {2^m} - 1 - l\\C(n) = l\end{array}\]<br>再从二进制角度理解一下，将递推式继续推广：<br>\[\begin{array}{l}f(j) = {\alpha _j},1 \le j &lt; d\\f(dn + j) = cf(n) + {\beta _j},0 \le j \le d,n \ge 1\end{array}\]<br>可以得到解为<br>\[f({({b_m}{b_{m - 1}} \ldots {b_1}{b_0})_d}) = {({\alpha _{ {b_m}}}{\beta _{ {b_{m - 1}}}}{\beta _{ {b_{m - 2}}}} \ldots {\beta _{ {b_1}}}{\beta _{ {b_0}}})_c}\]</p>
+<h1 id="递推式求和"><a href="#递推式求和" class="headerlink" title="递推式求和"></a>递推式求和</h1><p>求解如下递推式：<br>\[\begin{array}{l}{R_0} = \alpha \\{R_n} = {R_{n - 1}} + \beta n + \gamma \end{array}\]<br>用成套方法求解，设<br>\[{R_n} = A(n)\alpha  + B(n)\beta  + C(n)\gamma \]<br>首先令${R_n} = 1$，可以得到$\alpha  = 1,\beta  = 0,\gamma  = 0$，所以$A(n) = 1$。<br>再令${R_n} = n$，可以得到$\alpha  = 0,\beta  = 0,\gamma  = 1$，所以$C(n) = n$。<br>最后令${R_n} = {n^2}$，可以得到$\alpha  = 0,\beta  = 2,\gamma  =  - 1$，所以$2B(n) - C(n) = {n^2}$，所以$B(n) = ({n^2} + n)/2$</p>
+<p>再来一个更复杂的递推式：<br>\[\begin{array}{l}{R_0} = \alpha \\{R_n} = 2{R_{n - 1}} + \beta n + \gamma \end{array}\]<br>同样的方法，设<br>\[{R_n} = A(n)\alpha  + B(n)\beta  + C(n)\gamma \]<br>首先令${R_n} = 1$，可以得到$\alpha  = 1,\beta  = 0,\gamma  = -1$，所以$A(n) - C(n) = 1$。<br>再令${R_n} = n$，可以得到$\alpha  = 0,\beta  = -1,\gamma  = 2$，所以$2C(n) - B(n) = n$。<br>这时候能不能令${R_n} = {n^2}$呢？答案是不能，因为如果${R_n} = {n^2}$，那么<br>\[{n^2} = 2{(n - 1)^2} + \beta n + \gamma \]显然不可能成立。<br>观察系数，可以令${R_n} = 2^n$，可以得到$\alpha  = 1,\beta  = 0,\gamma  = 0$，所以$A(n) = 2^n$。<br>所以<br>\[A(n) = {2^n},B(n) = {2^{n + 1}} - n + 2,C(n) = {2^n} + 1\]</p>
 
             </div>
             <hr/>
@@ -597,7 +597,7 @@
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2018/03/05/concrete-math-2/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -806,8 +806,8 @@ ECNU18_Spring_SeminarECNU NLP group learn
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -929,7 +929,7 @@ ECNU18_Spring_SeminarECNU NLP group learn
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

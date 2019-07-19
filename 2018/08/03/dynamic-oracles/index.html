@@ -19,7 +19,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Deep Understanding of Dynamic Oracle in Constituent Parsing | WeiYang Blog</title>
+    <title>Deep Understanding of Dynamic Oracle in Constituent Parsing | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -48,7 +48,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -111,7 +111,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -442,52 +442,52 @@
 
 <p>本文将从定义到证明，一步步理清成分句法分析中用到的Dynamic Oracle函数。参考了James Cross在2016年发表在EMNLP上面的论文：<a href="https://www.aclweb.org/anthology/D/D16/D16-1001.pdf" target="_blank" rel="noopener">论文地址</a>，该论文还是当年的best paper。</p>
 <h1 id="成分句法分析系统"><a href="#成分句法分析系统" class="headerlink" title="成分句法分析系统"></a>成分句法分析系统</h1><hr>
-<p>首先本文用到的成分句法分析系统是基于span-based的转移系统，在这里只做简略介绍，详见<a href="http://ir.library.oregonstate.edu/downloads/0g354j52q" target="_blank" rel="noopener">Parsing with Recurrent Neural Networks</a>。<br><img src="1.png" alt><br>上图展示了该转移系统的转移过程，其中结构化预测只用到了shift(sh)和combine(comb)两种动作，因为stack中存放的是span的左右边界下标，所以comb动作不需要区分左右，这与另一种转移系统的reduce动作不同。而对于label的预测，如果栈首的span不构成短语结点，那么就预测为nolabel，否则就预测为<script type="math/tex">\_i{X_j}</script>。</p>
-<p>每个时刻的状态用三元组<script type="math/tex">\left\langle {z,\sigma ,t} \right\rangle</script>表示，分别表示第几个动作、栈（span的split序列）、当前已生成的结点<script type="math/tex">\_i{X_j}</script>集合。注意到对于长度为<script type="math/tex">n</script>的句子，只需要用<script type="math/tex">4n-2</script>个动作就可以分析出句法树了，并且第偶数个动作做结构预测（sh和comb），第奇数个动作做label预测。<br><img src="2.png" alt><br>上图是一个转移的具体例子，下面将全部以这个句子为例进行介绍。注意到多叉树隐式的转化为了二叉树，临时结点预测为nolabel。</p>
+<p>首先本文用到的成分句法分析系统是基于span-based的转移系统，在这里只做简略介绍，详见<a href="http://ir.library.oregonstate.edu/downloads/0g354j52q" target="_blank" rel="noopener">Parsing with Recurrent Neural Networks</a>。<br><img src="1.png" alt><br>上图展示了该转移系统的转移过程，其中结构化预测只用到了shift(sh)和combine(comb)两种动作，因为stack中存放的是span的左右边界下标，所以comb动作不需要区分左右，这与另一种转移系统的reduce动作不同。而对于label的预测，如果栈首的span不构成短语结点，那么就预测为nolabel，否则就预测为$_i{X_j}$。</p>
+<p>每个时刻的状态用三元组$\left\langle {z,\sigma ,t} \right\rangle $表示，分别表示第几个动作、栈（span的split序列）、当前已生成的结点$_i{X_j}$集合。注意到对于长度为$n$的句子，只需要用$4n-2$个动作就可以分析出句法树了，并且第偶数个动作做结构预测（sh和comb），第奇数个动作做label预测。<br><img src="2.png" alt><br>上图是一个转移的具体例子，下面将全部以这个句子为例进行介绍。注意到多叉树隐式的转化为了二叉树，临时结点预测为nolabel。</p>
 <h1 id="Dynamic-Oracle"><a href="#Dynamic-Oracle" class="headerlink" title="Dynamic Oracle"></a>Dynamic Oracle</h1><hr>
 <p>Dynamic Oracle是Goldberg和Nivre在2013年总结出来的，发表在TACL上面：<a href="https://www.aclweb.org/anthology/Q/Q13/Q13-1033.pdf" target="_blank" rel="noopener">Training Deterministic Parsers with Non-Deterministic Oracles</a>。</p>
 <p>提出的动机就是为了解决测试阶段贪心预测错误导致误差越来越大的问题。在训练的时候，原来的静态Oracle方法就是每一步都严格按照标准树的动作来进行预测，最终拟合得和标准树动作序列相同，但是测试的时候没有标准树了，如果某一步预测错误，可能会到达一个训练中没有出现过的状态，那就会导致之后的预测越来越错。所以就提出了Dynamic Oracle的技巧，在训练过程中的每一步预测，不再局限于标准树中的一个动作，而扩展为一个动作集合，只要采取集合中的动作，那么最终得到的动作序列一定也是最优的。</p>
 <p>这种方法主要用于贪心的预测方法，例如本文的转移系统就是在每一步贪心的预测当前动作，再如之前介绍过的成分句法分析top-down模型<a href="https://www.aclweb.org/anthology/P/P17/P17-1076.pdf" target="_blank" rel="noopener">A Minimal Span-Based Neural Constituency Parser</a>中，自顶向下贪心的选择每一个span的最佳split，也要用到Dynamic Oracle来防止错误扩大。之前的博客有过专门介绍，可以去翻看一下：<a href="https://godweiyang.com/2018/06/28/ACL17-ConParsing/#top-down解码模型">Dynamic Oracle</a></p>
 <p>下面就将从定义、证明等方面来详细阐述Dynamic Oracle。</p>
 <h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><hr>
-<p><strong>定义1：</strong> 定义<script type="math/tex">c{ \vdash \_\tau }c'</script>为状态<script type="math/tex">c</script>经过动作<script type="math/tex">\tau</script>之后转移到状态<script type="math/tex">{c'}</script>，写成函数的形式就是<script type="math/tex">c' = \tau ({c})</script>。另外定义<script type="math/tex">\vdash</script>为所有动作<script type="math/tex">\tau</script>的并集，也就是状态<script type="math/tex">c</script>经过任意动作之后转移到状态<script type="math/tex">{c'}</script>。定义<script type="math/tex">{ \vdash ^\*}</script>为<script type="math/tex">\vdash</script>的自反和传递闭包。</p>
-<p><strong>定义2（派生树/可到达树）：</strong> 定义<script type="math/tex">D({c})</script>为从状态<script type="math/tex">c</script>出发，最终可以产生的句法树的集合，即<br>\[D({c}) = \left\{ {t|c{ \vdash ^*}\left\langle {z,\sigma ,t} \right\rangle } \right\}\]<br>也可以称作“派生树”或者“可到达树”。</p>
-<p><strong>定义3（<script type="math/tex">F_1</script>值）：</strong> 定义预测树<script type="math/tex">t</script>关于标准树<script type="math/tex">t_G</script>的<script type="math/tex">F_1</script>值为<br>\[{F_1}(t) = \frac{ {rp}}{ {r + p}}\]<br>其中<script type="math/tex">r = \frac{ {\left| {t \cap {t_G}} \right|}}{ {\left| { {t_G}} \right|}},p = \frac{ {\left| {t \cap {t_G}} \right|}}{ {\left| t \right|}}</script>。</p>
-<p><strong>定义4：</strong> 将<script type="math/tex">F_1</script>扩展为状态<script type="math/tex">c</script>的函数，定义<script type="math/tex">{F_1}({c})</script>为从状态<script type="math/tex">c</script>出发可以产生的<script type="math/tex">F_1</script>值最高的句法树的<script type="math/tex">F_1</script>值，即<br>\[{F_1}(c) = {\max _{t \in D(c)}}{F_1}(t)\]</p>
-<p><strong>定义5（oracle）：</strong> 定义状态<script type="math/tex">c</script>的oracle为使状态<script type="math/tex">c</script>转移过后最优<script type="math/tex">F_1</script>值不变的动作集合，即<br>\[oracle(c) = \left\{ {\tau |{F_1}(\tau (c)) = {F_1}(c)} \right\}\]<br>至于这个集合该怎么求解，下面将会讲到。</p>
-<p><strong>定义6（span包含）：</strong> span<script type="math/tex">(i,j)</script>被span<script type="math/tex">(p,q)</script>包含，当且仅当<script type="math/tex">p \le i < j \le q</script>，记为<br>\[(i,j) \preceq (p,q)\]</p>
-<p><strong>定义7（严格包含）：</strong> span<script type="math/tex">(i,j)</script>被span<script type="math/tex">(p,q)</script>严格包含，当且仅当<script type="math/tex">(i,j) \preceq (p,q)</script>，并且<script type="math/tex">(i,j) \ne (p,q)</script>，记为<br>\[(i,j) \prec (p,q)\]<br>同样可以将偏序关系从span扩展到类别，即<script type="math/tex">\_i{X_j}{ \prec \_p}{Y_q}</script>，当且仅当<script type="math/tex">(i,j) \prec (p,q)</script>。</p>
-<p><strong>定义8（可到达类别）：</strong> 对于任意状态<script type="math/tex">c = \left\langle {z,\sigma |i|j,t} \right\rangle</script>，定义它的可到达类别集合为<br>\[reach(c) = left(c) \cup right(c)\]<br>其中左右可到达类别集合又分别定义为<br>\[\begin{array}{l}left(c) = \left\{ {_p{X_q} \in {t_G}|(i,j) \prec (p,q),p \in \sigma |i} \right\}\\right(c) = \left\{ {_p{X_q} \in {t_G}|p \ge j} \right\}\end{array}\]<br>光看定义可能有点生涩，通俗理解就是，<script type="math/tex">left(c)</script>为标准树中包含span<script type="math/tex">(i,j)</script>的类别集合，并且类别的左端点与栈中的span没有交叉，也就是说类别的左端点就是栈中除了<script type="math/tex">j</script>以外的其余split中的某一个。而<script type="math/tex">right(c)</script>为标准树中还处于队列中没有进栈的类别集合。<br><img src="3.png" alt><br>如上图所示，还以之前的句法树为例，现在的状态为<script type="math/tex">\left\langle {10,[0,1,2,4],\left\{ {\_0N{P_1}} \right\}} \right\rangle</script>，此时的栈顶span<script type="math/tex">(i,j)=(2,4)</script>，也就是红色梯形部分，那么<script type="math/tex">left(c)</script>就是深蓝色类别，<script type="math/tex">right(c)</script>就是天蓝色类别。而灰色类别因为与红色类别交叉了，所以属于不可到达类别，而标准树中还有一个类别<script type="math/tex">\_0N{P_1}</script>由于已经被识别出来了，所以也属于不可到达类别。</p>
-<p>上面定义是基于动作序号为偶数的情况，而对于动作序号为奇数的情况，也就是预测label的动作，只需要将偏序<script type="math/tex">\prec</script>修改为<script type="math/tex">\preceq</script>即可，因为转移过后span依然是本身，所以不是严格包含关系。</p>
-<p>特殊情况（初始值）：<br>\[reach(\left\langle {0,[0],\emptyset } \right\rangle ) = {t_G}\]<br>很显然，初始时<script type="math/tex">t_G</script>中所有类别都属于<script type="math/tex">right(c)</script>。</p>
-<p>最后需要注意的一点是，根据以上定义有<br>\[reach(c) \cap t = \emptyset ,reach(c) \subseteq {t_G} - t\]<br>这一点也是很显然的，<script type="math/tex">left(c)</script>都是严格包含span<script type="math/tex">(i,j)</script>的，所以与<script type="math/tex">t</script>不存在交集，而<script type="math/tex">right(c)</script>在队列里，更不可能存在交集，观察上面的例子会更加好理解。</p>
-<p><strong>定义9（next类别）：</strong> 对于任意状态<script type="math/tex">c = \left\langle {z,\sigma |i|j,t} \right\rangle</script>，上面已经定义了它的可到达类别集合，最后再定义它的下一个可到达类别为严格包含span<script type="math/tex">(i,j)</script>的可到达类别集合（即<script type="math/tex">left(c)</script>）中偏序关系最小的类别<br>\[next(c) = {\min _ \prec }left(c)\]</p>
+<p><strong>定义1：</strong> 定义$c{ \vdash _\tau }c’$为状态$c$经过动作$\tau $之后转移到状态${c’}$，写成函数的形式就是$c’ = \tau ({c})$。另外定义$ \vdash $为所有动作$\tau $的并集，也就是状态$c$经过任意动作之后转移到状态${c’}$。定义${ \vdash ^*}$为$ \vdash $的自反和传递闭包。</p>
+<p><strong>定义2（派生树/可到达树）：</strong> 定义$D({c})$为从状态$c$出发，最终可以产生的句法树的集合，即<br>\[D({c}) = \left\{ {t|c{ \vdash ^*}\left\langle {z,\sigma ,t} \right\rangle } \right\}\]<br>也可以称作“派生树”或者“可到达树”。</p>
+<p><strong>定义3（$F_1$值）：</strong> 定义预测树$t$关于标准树$t_G$的$F_1$值为<br>\[{F_1}(t) = \frac{ {rp}}{ {r + p}}\]<br>其中$r = \frac{ {\left| {t \cap {t_G}} \right|}}{ {\left| { {t_G}} \right|}},p = \frac{ {\left| {t \cap {t_G}} \right|}}{ {\left| t \right|}}$。</p>
+<p><strong>定义4：</strong> 将$F_1$扩展为状态$c$的函数，定义${F_1}({c})$为从状态$c$出发可以产生的$F_1$值最高的句法树的$F_1$值，即<br>\[{F_1}(c) = {\max _{t \in D(c)}}{F_1}(t)\]</p>
+<p><strong>定义5（oracle）：</strong> 定义状态$c$的oracle为使状态$c$转移过后最优$F_1$值不变的动作集合，即<br>\[oracle(c) = \left\{ {\tau |{F_1}(\tau (c)) = {F_1}(c)} \right\}\]<br>至于这个集合该怎么求解，下面将会讲到。</p>
+<p><strong>定义6（span包含）：</strong> span$(i,j)$被span$(p,q)$包含，当且仅当$p \le i &lt; j \le q$，记为<br>\[(i,j) \preceq (p,q)\]</p>
+<p><strong>定义7（严格包含）：</strong> span$(i,j)$被span$(p,q)$严格包含，当且仅当$(i,j) \preceq (p,q)$，并且$(i,j) \ne (p,q)$，记为<br>\[(i,j) \prec (p,q)\]<br>同样可以将偏序关系从span扩展到类别，即$_i{X_j}{ \prec _p}{Y_q}$，当且仅当$(i,j) \prec (p,q)$。</p>
+<p><strong>定义8（可到达类别）：</strong> 对于任意状态$c = \left\langle {z,\sigma |i|j,t} \right\rangle $，定义它的可到达类别集合为<br>\[reach(c) = left(c) \cup right(c)\]<br>其中左右可到达类别集合又分别定义为<br>\[\begin{array}{l}left(c) = \left\{ {_p{X_q} \in {t_G}|(i,j) \prec (p,q),p \in \sigma |i} \right\}\\right(c) = \left\{ {_p{X_q} \in {t_G}|p \ge j} \right\}\end{array}\]<br>光看定义可能有点生涩，通俗理解就是，$left(c)$为标准树中包含span$(i,j)$的类别集合，并且类别的左端点与栈中的span没有交叉，也就是说类别的左端点就是栈中除了$j$以外的其余split中的某一个。而$right(c)$为标准树中还处于队列中没有进栈的类别集合。<br><img src="3.png" alt><br>如上图所示，还以之前的句法树为例，现在的状态为$\left\langle {10,[0,1,2,4],\left\{ {_0N{P_1}} \right\}} \right\rangle $，此时的栈顶span$(i,j)=(2,4)$，也就是红色梯形部分，那么$left(c)$就是深蓝色类别，$right(c)$就是天蓝色类别。而灰色类别因为与红色类别交叉了，所以属于不可到达类别，而标准树中还有一个类别$_0N{P_1}$由于已经被识别出来了，所以也属于不可到达类别。</p>
+<p>上面定义是基于动作序号为偶数的情况，而对于动作序号为奇数的情况，也就是预测label的动作，只需要将偏序$\prec$修改为$\preceq$即可，因为转移过后span依然是本身，所以不是严格包含关系。</p>
+<p>特殊情况（初始值）：<br>\[reach(\left\langle {0,[0],\emptyset } \right\rangle ) = {t_G}\]<br>很显然，初始时$t_G$中所有类别都属于$right(c)$。</p>
+<p>最后需要注意的一点是，根据以上定义有<br>\[reach(c) \cap t = \emptyset ,reach(c) \subseteq {t_G} - t\]<br>这一点也是很显然的，$left(c)$都是严格包含span$(i,j)$的，所以与$t$不存在交集，而$right(c)$在队列里，更不可能存在交集，观察上面的例子会更加好理解。</p>
+<p><strong>定义9（next类别）：</strong> 对于任意状态$c = \left\langle {z,\sigma |i|j,t} \right\rangle $，上面已经定义了它的可到达类别集合，最后再定义它的下一个可到达类别为严格包含span$(i,j)$的可到达类别集合（即$left(c)$）中偏序关系最小的类别<br>\[next(c) = {\min _ \prec }left(c)\]</p>
 <h1 id="结构化和label-Oracles"><a href="#结构化和label-Oracles" class="headerlink" title="结构化和label Oracles"></a>结构化和label Oracles</h1><hr>
-<p>对于任意动作序号为偶数的状态<script type="math/tex">c = \left\langle {z,\sigma |i|j,t} \right\rangle</script>，记<script type="math/tex">next(c){ = \_p}{X_q}</script>，那么定义它的结构化Dynamic Oracle为<br><img src="4.png" alt><br>也就是使当前状态向着标准树中最接近它的状态<script type="math/tex">next(c)</script>转移，如果<script type="math/tex">p = i,q > j</script>，那么应该在移进栈里一些单词；如果<script type="math/tex">p < i,q = j</script>，那么不能再移进了，而应该在栈里combine两个span；如果<script type="math/tex">p < i,q > j</script>，那么移进或者归约都可以，反正总能达到前两种状态。</p>
-<p>特殊情况（初始值）：<br>\[dyna(\left\langle {0,[0],\emptyset } \right\rangle ) = \{ sh\} \]<br>即使当前预测的span是错的，也可以经过Dynamic Oracle指导，几步之后预测到正确的<script type="math/tex">next(c)</script>。而如果没有Dynamic Oracle，可能就一直错下去了。<br><img src="5.png" alt><br>上图是几种任意状态的Dynamic Oracle示例，除了第一种之外，其余三个都是预测错误的，如果没有Dynamic Oracle，甚至都不知道下一步转移的动作是什么。</p>
-<p><strong>引理1：</strong> 对于任意状态<script type="math/tex">c</script>，任意动作<script type="math/tex">\tau  \in dyna(c)</script>，有<br>\[reach(\tau (c)) = reach(c)\]<br>而对于任意动作<script type="math/tex">\tau  \notin dyna(c)</script>，有<br>\[reach(\tau (c)) \not\subset reach(c)\]</p>
-<p>最后是label Dynamic Oracle，这个就很简单了，如果span<script type="math/tex">(i,j)</script>出现在了标准树中，那么预测类别就行了，否则的话预测为nolabel：<br><img src="6.png" alt></p>
+<p>对于任意动作序号为偶数的状态$c = \left\langle {z,\sigma |i|j,t} \right\rangle $，记$next(c){ = _p}{X_q}$，那么定义它的结构化Dynamic Oracle为<br><img src="4.png" alt><br>也就是使当前状态向着标准树中最接近它的状态$next(c)$转移，如果$p = i,q &gt; j$，那么应该在移进栈里一些单词；如果$p &lt; i,q = j$，那么不能再移进了，而应该在栈里combine两个span；如果$p &lt; i,q &gt; j$，那么移进或者归约都可以，反正总能达到前两种状态。</p>
+<p>特殊情况（初始值）：<br>\[dyna(\left\langle {0,[0],\emptyset } \right\rangle ) = \{ sh\} \]<br>即使当前预测的span是错的，也可以经过Dynamic Oracle指导，几步之后预测到正确的$next(c)$。而如果没有Dynamic Oracle，可能就一直错下去了。<br><img src="5.png" alt><br>上图是几种任意状态的Dynamic Oracle示例，除了第一种之外，其余三个都是预测错误的，如果没有Dynamic Oracle，甚至都不知道下一步转移的动作是什么。</p>
+<p><strong>引理1：</strong> 对于任意状态$c$，任意动作$\tau  \in dyna(c)$，有<br>\[reach(\tau (c)) = reach(c)\]<br>而对于任意动作$\tau  \notin dyna(c)$，有<br>\[reach(\tau (c)) \not\subset reach(c)\]</p>
+<p>最后是label Dynamic Oracle，这个就很简单了，如果span$(i,j)$出现在了标准树中，那么预测类别就行了，否则的话预测为nolabel：<br><img src="6.png" alt></p>
 <h1 id="正确性证明"><a href="#正确性证明" class="headerlink" title="正确性证明"></a>正确性证明</h1><hr>
 <p>主要证明两点内容：</p>
 <ul>
-<li>首先定义一个特殊的树<script type="math/tex">t^\*{(c)}</script>，下面会证明它是从状态<script type="math/tex">c</script>开始可以得到的得分最高的树。</li>
-<li>然后证明从状态<script type="math/tex">c</script>开始按照Dynamic Oracle策略，确实可以得到最优树<script type="math/tex">t^\*{(c)}</script>。</li>
+<li>首先定义一个特殊的树$t^*{(c)}$，下面会证明它是从状态$c$开始可以得到的得分最高的树。</li>
+<li>然后证明从状态$c$开始按照Dynamic Oracle策略，确实可以得到最优树$t^*{(c)}$。</li>
 </ul>
-<p><strong>定义10（<script type="math/tex">t^\*{(c)}</script>）：</strong> 对于任意状态<script type="math/tex">c = \left\langle {z,\sigma,t} \right\rangle</script>，定义最优树<script type="math/tex">t^\*{(c)}</script>为<script type="math/tex">c</script>中的子树<script type="math/tex">t</script>并上当前状态可到达的类别集合，也就是<br>\[{t^*}(c) = t \cup reach(c)\]<br>下面我们会证明，<script type="math/tex">t^\*{(c)}</script>的确是当前状态可以得到的得分最高的树。<br><img src="7.png" alt><br>上图形象的说明了几种树之间的关系。当前子树<script type="math/tex">t</script>与标准树<script type="math/tex">t_G</script>不一定完全重合，可能有预测错误的，所以是交叉的。那么接下来的预测如果全部预测为标准树中的<script type="math/tex">reach(c)</script>，那么得分一定是最高的。而剩余的白色部分就是与<script type="math/tex">t</script>的span产生交叉的类别，属于不可到达的。</p>
-<p><strong>引理2：</strong> 对于任意状态<script type="math/tex">c</script>，最优树<script type="math/tex">t^\*{(c)}</script>一定是<script type="math/tex">c</script>的派生树，也就是<br>\[{t^*}(c) \in D(c)\]</p>
-<p><strong>定理1：</strong> 对于任意状态<script type="math/tex">c</script>，有<br>\[{F_1}({t^*}(c)) = {F_1}(c)\]</p>
-<p>也就是说最优树<script type="math/tex">t^\*{(c)}</script>的得分一定是当前状态可以得到的最高分数。</p>
-<p>证明也很简单，根据召回率和准确率公式，最优树<script type="math/tex">t^\*{(c)}</script>是在<script type="math/tex">t</script>的基础上加入了所有的标准树中的可到达类别<script type="math/tex">reach(c)</script>，所以召回率分子不会降下来，召回率不可能更高了；同时并没有加入任何不在标准树中的类别，所以准确率的分母也不可能减小，准确率也不会更高了。因此<script type="math/tex">t^\*{(c)}</script>就是当前状态可以得到的最优树。</p>
-<p><strong>推论1：</strong> 对于任意状态<script type="math/tex">c = \left\langle {z,\sigma,t} \right\rangle</script>，对任意<script type="math/tex">t' \in D(c),t' \ne {t^\*}(c)</script>，都有<br>\[{F_1}(t’) &lt; {F_1}(c)\]<br>上面已经证明了<script type="math/tex">t^\*{(c)}</script>是最优树，所以自然其余的树得分都比它低了。</p>
+<p><strong>定义10（$t^*{(c)}$）：</strong> 对于任意状态$c = \left\langle {z,\sigma,t} \right\rangle $，定义最优树$t^*{(c)}$为$c$中的子树$t$并上当前状态可到达的类别集合，也就是<br>\[{t^*}(c) = t \cup reach(c)\]<br>下面我们会证明，$t^*{(c)}$的确是当前状态可以得到的得分最高的树。<br><img src="7.png" alt><br>上图形象的说明了几种树之间的关系。当前子树$t$与标准树$t_G$不一定完全重合，可能有预测错误的，所以是交叉的。那么接下来的预测如果全部预测为标准树中的$reach(c)$，那么得分一定是最高的。而剩余的白色部分就是与$t$的span产生交叉的类别，属于不可到达的。</p>
+<p><strong>引理2：</strong> 对于任意状态$c$，最优树$t^*{(c)}$一定是$c$的派生树，也就是<br>\[{t^*}(c) \in D(c)\]</p>
+<p><strong>定理1：</strong> 对于任意状态$c$，有<br>\[{F_1}({t^*}(c)) = {F_1}(c)\]</p>
+<p>也就是说最优树$t^*{(c)}$的得分一定是当前状态可以得到的最高分数。</p>
+<p>证明也很简单，根据召回率和准确率公式，最优树$t^*{(c)}$是在$t$的基础上加入了所有的标准树中的可到达类别$reach(c)$，所以召回率分子不会降下来，召回率不可能更高了；同时并没有加入任何不在标准树中的类别，所以准确率的分母也不可能减小，准确率也不会更高了。因此$t^*{(c)}$就是当前状态可以得到的最优树。</p>
+<p><strong>推论1：</strong> 对于任意状态$c = \left\langle {z,\sigma,t} \right\rangle $，对任意$t’ \in D(c),t’ \ne {t^*}(c)$，都有<br>\[{F_1}(t’) &lt; {F_1}(c)\]<br>上面已经证明了$t^*{(c)}$是最优树，所以自然其余的树得分都比它低了。</p>
 <p>最后需要证明的一点就是，按照Dynamic Oracle策略进行转移，一定能到达这个最优树吗？</p>
-<p><strong>引理3：</strong> 对于任意状态<script type="math/tex">c = \left\langle {z,\sigma,t} \right\rangle</script>，对任意动作<script type="math/tex">\tau  \in dyna(c)</script>，都有<br>\[{t^*}(\tau (c)) = {t^*}(c)\]<br>反之如果<script type="math/tex">\tau  \notin dyna(c)</script>，那么有<br>\[{t^*}(\tau (c)) \ne {t^*}(c)\]<br>原文并没有给出证明，粗略理解的话，按照Dynamic Oracle策略，下面应该向着<script type="math/tex">next(c)</script>这个类别靠近，而在这个过程中，包含在<script type="math/tex">next(c)</script>内的<script type="math/tex">right(c)</script>都会被sh动作识别，而其余不在标准树中的类别都会被识别为nolabel，<script type="math/tex">next(c)</script>又是第一个<script type="math/tex">left(c)</script>，所以所有的<script type="math/tex">reach(c)</script>都可以被识别，所以这是符合<script type="math/tex">t^\*{(c)}</script>定义的。</p>
-<p>反之如果不按照Dynamic Oracle策略来转移，下一步产生的span一定会与<script type="math/tex">next(c)</script>产生交叉，因此<script type="math/tex">next(c)</script>再也无法被包括进最终的句法树中，所以第二点也成立。</p>
+<p><strong>引理3：</strong> 对于任意状态$c = \left\langle {z,\sigma,t} \right\rangle $，对任意动作$\tau  \in dyna(c)$，都有<br>\[{t^*}(\tau (c)) = {t^*}(c)\]<br>反之如果$\tau  \notin dyna(c)$，那么有<br>\[{t^*}(\tau (c)) \ne {t^*}(c)\]<br>原文并没有给出证明，粗略理解的话，按照Dynamic Oracle策略，下面应该向着$next(c)$这个类别靠近，而在这个过程中，包含在$next(c)$内的$right(c)$都会被sh动作识别，而其余不在标准树中的类别都会被识别为nolabel，$next(c)$又是第一个$left(c)$，所以所有的$reach(c)$都可以被识别，所以这是符合$t^*{(c)}$定义的。</p>
+<p>反之如果不按照Dynamic Oracle策略来转移，下一步产生的span一定会与$next(c)$产生交叉，因此$next(c)$再也无法被包括进最终的句法树中，所以第二点也成立。</p>
 <p>最终综合引理3、定理1和推论1，得到了本文中最关键的结论：</p>
-<p><strong>定理2：</strong> <script type="math/tex">dyna()</script>函数符合定义5中的oracle定义，即对于任意状态<script type="math/tex">c</script>，有<br>\[dyna(c) = oracle(c)\]</p>
+<p><strong>定理2：</strong> $dyna()$函数符合定义5中的oracle定义，即对于任意状态$c$，有<br>\[dyna(c) = oracle(c)\]</p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><hr>
 <p>至此关于Dynamic Oracle已经全部介绍完了，在黄亮老师的个人主页上面，还有这篇论文的会议视频和ppt，还有github源码，大家可以去深入学习：<a href="http://web.engr.oregonstate.edu/~huanlian/" target="_blank" rel="noopener">Liang Huang</a>。</p>
 <p>当然，在具体实现中，由于在训练集上过早的拟合，单纯使用Dynamic Oracle并没有得到任何效果提升，所以要加入exploration机制，也就是人为的干预动作分类，使模型故意预测错误的动作，这样就能学习到更多的情况了，事实证明这样的确得到了略微提升。PTB上的结果如下：<br><img src="8.png" alt></p>
-<p>最后提一个小疑问，关于引理1，原文说之后定理的证明会用到它，但我没看出来哪里用到了。而且我对它的正确性也有所怀疑，按照Dynamic Oracle转移之后，<script type="math/tex">reach(c)</script>不可能一直不变啊，按理说会先不变，再变少，交替变化，最后生成句法树后变为空集。并且原文中引理1符号也出现了一个小错误，我在这里修改正确了。</p>
+<p>最后提一个小疑问，关于引理1，原文说之后定理的证明会用到它，但我没看出来哪里用到了。而且我对它的正确性也有所怀疑，按照Dynamic Oracle转移之后，$reach(c)$不可能一直不变啊，按理说会先不变，再变少，交替变化，最后生成句法树后变为空集。并且原文中引理1符号也出现了一个小错误，我在这里修改正确了。</p>
 <p>关于这一点疑问，我已经发邮件请教了原作者James Cross，他也已经回复我了，更深入的解答不久应该就会告诉我了，到时候我再更新一下。如果大家有想法的话，也可以提出来。</p>
 
             </div>
@@ -651,7 +651,7 @@
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2018/08/03/dynamic-oracles/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -728,8 +728,8 @@
                     <div class="summary block-with-text">
                         
                             问题描述
-有K个赌博机，每个赌博机有一定概率P吐出硬币，但是我们不知道这个概率是多少，每个赌博机吐出的硬币价值V也是不一样的，现在有T次机会选择赌博机，怎么选才能使得到的硬币总价值最大？
-在下面的不同算法实现中，统一设定\[\begin{a
+有$K$个赌博机，每个赌博机有一定概率$P$吐出硬币，但是我们不知道这个概率是多少，每个赌博机吐出的硬币价值$V$也是不一样的，现在有$T$次机会选择赌博机，怎么选才能使得到的硬币总价值最大？
+在下面的不同算法实现中，统一设定\[
                         
                     </div>
                     <div class="publish-info">
@@ -869,8 +869,8 @@
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -992,7 +992,7 @@
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

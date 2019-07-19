@@ -22,7 +22,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Better, Faster, Stronger Sequence Tagging Constituent Parsers | WeiYang Blog</title>
+    <title>Better, Faster, Stronger Sequence Tagging Constituent Parsers | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -51,7 +51,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -114,7 +114,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -465,23 +465,23 @@
 <li>采用辅助任务和策略梯度。</li>
 </ul>
 <h1 id="三大问题以及解决方法"><a href="#三大问题以及解决方法" class="headerlink" title="三大问题以及解决方法"></a>三大问题以及解决方法</h1><hr>
-<h2 id="过长短语预测的高错误率"><a href="#过长短语预测的高错误率" class="headerlink" title="过长短语预测的高错误率"></a>过长短语预测的高错误率</h2><p>由下面这张图可以看出，当<script type="math/tex">n_i</script>太小时，准确率就会大幅下降。这个问题主要体现在过长短语的闭合上，右括号的预测尤其困难。其实这也跟数据稀疏性有很大关系，训练集中过长短语毕竟占少数。<br><img src="1.jpg" alt></p>
+<h2 id="过长短语预测的高错误率"><a href="#过长短语预测的高错误率" class="headerlink" title="过长短语预测的高错误率"></a>过长短语预测的高错误率</h2><p>由下面这张图可以看出，当$n_i$太小时，准确率就会大幅下降。这个问题主要体现在过长短语的闭合上，右括号的预测尤其困难。其实这也跟数据稀疏性有很大关系，训练集中过长短语毕竟占少数。<br><img src="1.jpg" alt></p>
 <p>解决方法就是采用动态编码，如下图所示：<br><img src="2.jpg" alt><br>第一行是相对值编码，第二行是绝对值编码，之前文章都已经解释过了。第三行是结合了上面两种编码的动态编码，具体取值情况是大多数时候都还采用相对值编码，因为毕竟相对值编码空间比较小，可以适当缓解数据稀疏性。但是当满足如下两种情况的时候，就采用绝对值编码：</p>
 <ul>
-<li>绝对值<script type="math/tex">n_t' \leq 3</script>，也就是说CA的个数不能超过3个，这样也是为了降低数据的稀疏性。</li>
-<li>相对值<script type="math/tex">n_t \leq -2</script>，也就是说将上图中准确率比较低的那些负数值全部用绝对值替代了，在句法树中表现为<script type="math/tex">w_{t+1}</script>所在的子树比<script type="math/tex">w_t</script>低两层以上。</li>
+<li>绝对值$n_t’ \leq 3$，也就是说CA的个数不能超过3个，这样也是为了降低数据的稀疏性。</li>
+<li>相对值$n_t \leq -2$，也就是说将上图中准确率比较低的那些负数值全部用绝对值替代了，在句法树中表现为$w_{t+1}$所在的子树比$w_t$低两层以上。</li>
 </ul>
-<h2 id="输出空间太大导致label稀疏性"><a href="#输出空间太大导致label稀疏性" class="headerlink" title="输出空间太大导致label稀疏性"></a>输出空间太大导致label稀疏性</h2><p>这个问题主要是由于三元组<script type="math/tex">(n_t, c_t, u_t)</script>太稀疏了导致的。假设<script type="math/tex">n_t \in N, c_t \in C, u_t \in U</script>，那么这个三元组的状态空间是<script type="math/tex">\left| N \right| \times \left| C \right| \times \left| U \right|</script>，可以通过将三元组分解为三个不同的子任务将复杂度降低为<script type="math/tex">\left| N \right| + \left| C \right| + \left| U \right|</script>。最后的损失函数定义为三个子任务的损失之和：<br>\[<br>\mathcal{L} = \mathcal{L}_n + \mathcal{L}_c + \mathcal{L}_u<br>\]<br>具体实现上，可以将任务<script type="math/tex">U</script>的输出给任务<script type="math/tex">N</script>和<script type="math/tex">C</script>作为输入。</p>
+<h2 id="输出空间太大导致label稀疏性"><a href="#输出空间太大导致label稀疏性" class="headerlink" title="输出空间太大导致label稀疏性"></a>输出空间太大导致label稀疏性</h2><p>这个问题主要是由于三元组$(n_t, c_t, u_t)$太稀疏了导致的。假设$n_t \in N, c_t \in C, u_t \in U$，那么这个三元组的状态空间是$\left| N \right| \times \left| C \right| \times \left| U \right|$，可以通过将三元组分解为三个不同的子任务将复杂度降低为$\left| N \right| + \left| C \right| + \left| U \right|$。最后的损失函数定义为三个子任务的损失之和：<br>\[<br>\mathcal{L} = \mathcal{L}_n + \mathcal{L}_c + \mathcal{L}_u<br>\]<br>具体实现上，可以将任务$U$的输出给任务$N$和$C$作为输入。</p>
 <h2 id="贪心解码导致的错误传播"><a href="#贪心解码导致的错误传播" class="headerlink" title="贪心解码导致的错误传播"></a>贪心解码导致的错误传播</h2><p>这个问题在基于贪心的方法中基本都存在，也就是所谓的一步错步步错，这里主要提出了两种解决方法。</p>
-<p><strong>辅助任务</strong> 辅助任务主要就是用来帮助主任务学习到一些不太容易学到的信息。这里才用了两个辅助任务，一个是在预测<script type="math/tex">n_t</script>的同时再预测一个<script type="math/tex">n_{t+1}</script>，这样就能往后多预测一步，适当的减少了贪心的影响。另一个方法就是将之前博客写到的句法距离（syntactic distances）加入到模型中一起预测：<br><img src="3.jpg" alt><br>对于不同的辅助任务，最后将他们的损失求和加到最终的损失函数中去：<br>\[<br>\mathcal{L} = \mathcal{L}_n + \mathcal{L}_c + \mathcal{L}_u + \beta \sum_a \mathcal{L}_a<br>\]</p>
-<p><strong>策略梯度</strong> 这个方法可以从全局的角度来对模型进行优化。假设模型在<script type="math/tex">t</script>时刻的状态为<script type="math/tex">s_t</script>，输出标签为<script type="math/tex">l_t = (n_t, c_t, u_t)</script>，那么模型选择<script type="math/tex">l_t</script>的概率定义为策略<script type="math/tex">\pi</script>，模型最终可以获得的奖励为<script type="math/tex">\mathcal R_{tree}</script>，定义为句法树的F1值。</p>
-<p>定义句法树的概率为每一步决策的概率之积：<br>\[<br>p(tree) = \prod\limits_{t = 1}^T {\pi ({l_t}|{s_t};\theta )}<br>\]<br>所以模型最终就是要最大化如下的奖励：<br>\[<br>\mathcal R = \sum\limits_{tree} { {\mathcal R_{tree}}p(tree)}<br>\]<br>按照梯度上升的方向更新参数<script type="math/tex">\theta</script>，求梯度可得：<br>\[<br>\begin{array}{l}\Delta \mathcal R = \sum\limits_{tree} { {\mathcal R_{tree}}\Delta p(tree)} \\ = \sum\limits_{tree} {p(tree){\mathcal R_{tree}}\frac{ {\Delta p(tree)}}{ {p(tree)}}} \\ = \sum\limits_{tree} {p(tree){\mathcal R_{tree}}\Delta \log p(tree)} \\ = {\mathbb{E}_{tree \sim p}}({\mathcal R_{tree}}\Delta \log p(tree))\end{array}<br>\]<br>将<script type="math/tex">p(tree)</script>代入可得：<br>\[<br>\begin{array}{l}\Delta \mathcal R = {\mathbb{E}_{tree \sim p}}({\mathcal R_{tree}}\Delta \log p(tree))\\ = {\mathbb{E}_{tree \sim p}}({\mathcal R_{tree}}\Delta \log \prod\limits_{t = 1}^T {\pi ({l_t}|{s_t};\theta )} )\\ = {\mathbb{E}_{tree \sim p}}(\sum\limits_{t = 1}^T { {\mathcal R_{tree}}\Delta \log \pi ({l_t}|{s_t};\theta )} )\\ \approx \frac{1}{N}\sum\limits_{i = 1}^N {\sum\limits_{t = 1}^T {\mathcal R_{i}\Delta \log \pi ({l_t}|{s_t};\theta )} } \end{array}<br>\]<br>其中<script type="math/tex">\mathcal R_{i}</script>是根据分布<script type="math/tex">p</script>采样出来的<script type="math/tex">N</script>棵句法树的奖励。</p>
+<p><strong>辅助任务</strong> 辅助任务主要就是用来帮助主任务学习到一些不太容易学到的信息。这里才用了两个辅助任务，一个是在预测$n_t$的同时再预测一个$n_{t+1}$，这样就能往后多预测一步，适当的减少了贪心的影响。另一个方法就是将之前博客写到的句法距离（syntactic distances）加入到模型中一起预测：<br><img src="3.jpg" alt><br>对于不同的辅助任务，最后将他们的损失求和加到最终的损失函数中去：<br>\[<br>\mathcal{L} = \mathcal{L}_n + \mathcal{L}_c + \mathcal{L}_u + \beta \sum_a \mathcal{L}_a<br>\]</p>
+<p><strong>策略梯度</strong> 这个方法可以从全局的角度来对模型进行优化。假设模型在$t$时刻的状态为$s_t$，输出标签为$l_t = (n_t, c_t, u_t)$，那么模型选择$l_t$的概率定义为策略$\pi$，模型最终可以获得的奖励为$\mathcal R_{tree}$，定义为句法树的F1值。</p>
+<p>定义句法树的概率为每一步决策的概率之积：<br>\[<br>p(tree) = \prod\limits_{t = 1}^T {\pi ({l_t}|{s_t};\theta )}<br>\]<br>所以模型最终就是要最大化如下的奖励：<br>\[<br>\mathcal R = \sum\limits_{tree} { {\mathcal R_{tree}}p(tree)}<br>\]<br>按照梯度上升的方向更新参数$\theta$，求梯度可得：<br>\[<br>\begin{array}{l}\Delta \mathcal R = \sum\limits_{tree} { {\mathcal R_{tree}}\Delta p(tree)} \\ = \sum\limits_{tree} {p(tree){\mathcal R_{tree}}\frac{ {\Delta p(tree)}}{ {p(tree)}}} \\ = \sum\limits_{tree} {p(tree){\mathcal R_{tree}}\Delta \log p(tree)} \\ = {\mathbb{E}_{tree \sim p}}({\mathcal R_{tree}}\Delta \log p(tree))\end{array}<br>\]<br>将$p(tree)$代入可得：<br>\[<br>\begin{array}{l}\Delta \mathcal R = {\mathbb{E}_{tree \sim p}}({\mathcal R_{tree}}\Delta \log p(tree))\\ = {\mathbb{E}_{tree \sim p}}({\mathcal R_{tree}}\Delta \log \prod\limits_{t = 1}^T {\pi ({l_t}|{s_t};\theta )} )\\ = {\mathbb{E}_{tree \sim p}}(\sum\limits_{t = 1}^T { {\mathcal R_{tree}}\Delta \log \pi ({l_t}|{s_t};\theta )} )\\ \approx \frac{1}{N}\sum\limits_{i = 1}^N {\sum\limits_{t = 1}^T {\mathcal R_{i}\Delta \log \pi ({l_t}|{s_t};\theta )} } \end{array}<br>\]<br>其中$\mathcal R_{i}$是根据分布$p$采样出来的$N$棵句法树的奖励。</p>
 <p>具体实现的时候有好几个小Tips。</p>
 <p>第一个就是要将奖励减去一个baseline，这里定义为模型直接根据贪心求得的句法树的F1值：<br>\[<br>\Delta \mathcal R \approx \frac{1}{N}\sum\limits_{i = 1}^N {\sum\limits_{t = 1}^T {\Delta \log \pi ({l_t}|{s_t};\theta )({\mathcal R_i} - {B_i})} }<br>\]<br>这么做的目的就是为了让奖励有正有负，不然全部都是正数的话，因为采样不可能全部采样到，可能会导致高概率的样本概率越来越高，而没有采样到的低概率样本可能奖励非常高，却因此概率越来越低。</p>
 <p>第二个Tip就是加入熵作为正则项：<br>\[<br>\Delta \mathcal R \approx \frac{1}{N}\sum\limits_{i = 1}^N {\sum\limits_{t = 1}^T {\Delta \log \pi ({l_t}|{s_t};\theta )({\mathcal R_i} - {B_i}) + \beta \Delta H(\pi ({l_t}|{s_t};\theta ))} }<br>\]<br>目的就是使概率尽量不要太小，不然的话采样数不够的话就有可能造成采样不到小概率的样本。</p>
 <p>还有就是给策略加入噪声：<br>\[<br>\Delta \mathcal R \approx \frac{1}{N}\sum\limits_{i = 1}^N {\sum\limits_{t = 1}^T {\Delta (\log \pi ({l_t}|{s_t};\theta ) + N)({\mathcal R_i} - {B_i}) + \beta \Delta H(\pi ({l_t}|{s_t};\theta ) + N)} }<br>\]<br>目的同样是加大概率，防止概率太接近于0，当然这个可加可不加。。。</p>
 <h1 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h1><hr>
-<p>首先测试了不同设置的影响：<br><img src="4.jpg" alt><br>可以看出上面提到的几种方法对性能都有提升，其中采用动态编码、多任务（也就是减少输出空间）、辅助任务（主要是预测前一个<script type="math/tex">n_{t-1}</script>）还有策略梯度可以获得最好的结果。</p>
+<p>首先测试了不同设置的影响：<br><img src="4.jpg" alt><br>可以看出上面提到的几种方法对性能都有提升，其中采用动态编码、多任务（也就是减少输出空间）、辅助任务（主要是预测前一个$n_{t-1}$）还有策略梯度可以获得最好的结果。</p>
 <p>最终模型在测试集上取得了90.6的F1值，虽然不是很高，但比之前的序列标注模型提升还是不少。<br><img src="5.jpg" alt></p>
 <p>最后再来看一下模型在负数预测上的准确率，可以看出有了非常大的提升：<br><img src="6.jpg" alt></p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><hr>
@@ -648,7 +648,7 @@
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2019/03/11/naacl19-conparsing/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -880,8 +880,8 @@
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -1003,7 +1003,7 @@
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

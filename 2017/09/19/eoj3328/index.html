@@ -8,9 +8,9 @@
     <meta name="baidu-site-verification" content="rlXUrNbP8h">
     <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
     <meta name="description" content="题意
-给定n个点和每个点在x轴上面的位置和每个点的权值，求出点对之间的费用总和。其中某两个点i，j之间的费用定义为| p_i - p_j | \times max\{v_i, v_j\}。
+给定$n$个点和每个点在$x$轴上面的位置和每个点的权值，求出点对之间的费用总和。其中某两个点$i$，$j$之间的费用定义为$ | p_i - p_j | \times max\{v_i, v_j\} $。
 题解
-对于每个点，计算它左边权值小于它的点与它点对">
+对于每个点，计算它左">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -18,7 +18,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>EOJ3328. 时空交织的代价 | WeiYang Blog</title>
+    <title>EOJ3328. 时空交织的代价 | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -47,7 +47,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -110,7 +110,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -402,7 +402,7 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                        565
+                        695
                     </div>
                     
 
@@ -426,143 +426,142 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h1 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h1><hr>
-<p>给定<script type="math/tex">n</script>个点和每个点在<script type="math/tex">x</script>轴上面的位置和每个点的权值，求出点对之间的费用总和。其中某两个点<script type="math/tex">i</script>，<script type="math/tex">j</script>之间的费用定义为<script type="math/tex">| p_i - p_j | \times max\{v_i, v_j\}</script>。</p>
+<p>给定$n$个点和每个点在$x$轴上面的位置和每个点的权值，求出点对之间的费用总和。其中某两个点$i$，$j$之间的费用定义为$ | p_i - p_j | \times max\{v_i, v_j\} $。</p>
 <h1 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h1><hr>
-<p>对于每个点，计算它左边权值小于它的点与它点对费用之和：\[{v_i}\sum\limits_j {({p_i} - {p_j})}  = k{v_i}{p_i} - {v_i}\sum\limits_j {p_j} \]其中<script type="math/tex">k</script>是左边权值小于它的点的数量，<script type="math/tex">\sum\limits_j {p_j}</script>是它们的权值之和，可以用两个树状数组统计。右边同理。<br>首先按照<script type="math/tex">p</script>从小到大排序。对于每个点用树状数组分别统计出左右两边<script type="math/tex">v</script>比它小的<script type="math/tex">v</script>之和与数量，然后直接计算结果即可。</p>
+<p>对于每个点，计算它左边权值小于它的点与它点对费用之和：\[{v_i}\sum\limits_j {({p_i} - {p_j})}  = k{v_i}{p_i} - {v_i}\sum\limits_j {p_j} \]其中$k$是左边权值小于它的点的数量，$\sum\limits_j {p_j}$是它们的权值之和，可以用两个树状数组统计。右边同理。<br>首先按照$p$从小到大排序。对于每个点用树状数组分别统计出左右两边$v$比它小的$v$之和与数量，然后直接计算结果即可。</p>
 <h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><hr>
-<pre class=" language-lang-cpp"><code class="language-lang-cpp">#include <functional>
-#include <algorithm>
-#include <iostream>
-#include <iterator>
-#include <sstream>
-#include <fstream>
-#include <numeric>
-#include <iomanip>
-#include <climits>
-#include <utility>
-#include <complex>
-#include <cstdlib>
-#include <cstring>
-#include <cassert>
-#include <string>
-#include <vector>
-#include <cctype>
-#include <bitset>
-#include <cstdio>
-#include <cmath>
-#include <ctime>
-#include <deque>
-#include <stack>
-#include <queue>
-#include <deque>
-#include <list>
-#include <new>
-#include <map>
-#include <set>
-using namespace std;
-//#pragma comment(linker, "/STACK:102400000,102400000")
+<pre class=" language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;functional></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;algorithm></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;iterator></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;sstream></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;fstream></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;numeric></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;iomanip></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;climits></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;utility></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;complex></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;cstdlib></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;cstring></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;cassert></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;string></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;vector></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;cctype></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;bitset></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;cstdio></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;cmath></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;ctime></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;deque></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;stack></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;queue></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;deque></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;list></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;new></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;map></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;set></span></span>
+<span class="token keyword">using</span> <span class="token keyword">namespace</span> std<span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//#pragma comment(linker, "/STACK:102400000,102400000")</span>
 
-typedef long long LL;
-typedef pair<int, int> PII;
-typedef pair<PII, int> PIII;
-typedef vector<int> vec;
-typedef vector<vec> mat;
-#define PB push_back
-#define MP(a, b) make_pair(a, b)
-#define FI first
-#define SE second
-#define gcd(x, y) __gcd(x, y)
-#define gcd3(x, y, z) __gcd(__gcd(x, y), z)
+<span class="token keyword">typedef</span> <span class="token keyword">long</span> <span class="token keyword">long</span> LL<span class="token punctuation">;</span>
+<span class="token keyword">typedef</span> pair<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token punctuation">,</span> <span class="token keyword">int</span><span class="token operator">></span> PII<span class="token punctuation">;</span>
+<span class="token keyword">typedef</span> pair<span class="token operator">&lt;</span>PII<span class="token punctuation">,</span> <span class="token keyword">int</span><span class="token operator">></span> PIII<span class="token punctuation">;</span>
+<span class="token keyword">typedef</span> vector<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span> vec<span class="token punctuation">;</span>
+<span class="token keyword">typedef</span> vector<span class="token operator">&lt;</span>vec<span class="token operator">></span> mat<span class="token punctuation">;</span>
+<span class="token macro property">#<span class="token directive keyword">define</span> PB push_back</span>
+<span class="token macro property">#<span class="token directive keyword">define</span> MP(a, b) make_pair(a, b)</span>
+<span class="token macro property">#<span class="token directive keyword">define</span> FI first</span>
+<span class="token macro property">#<span class="token directive keyword">define</span> SE second</span>
+<span class="token macro property">#<span class="token directive keyword">define</span> gcd(x, y) __gcd(x, y)</span>
+<span class="token macro property">#<span class="token directive keyword">define</span> gcd3(x, y, z) __gcd(__gcd(x, y), z)</span>
 
-const double EPS = 1e-15;
-const double PI = acos(-1.0);
-const int INF = 0x3f3f3f3f;
-const LL INFL = 0x3f3f3f3f3f3f3f3fLL;
-const int MAXN = 200000 + 10;
-const int MOD = 1000000007;
+<span class="token keyword">const</span> <span class="token keyword">double</span> EPS <span class="token operator">=</span> <span class="token number">1e-15</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> <span class="token keyword">double</span> PI <span class="token operator">=</span> <span class="token function">acos</span><span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">1.0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> <span class="token keyword">int</span> INF <span class="token operator">=</span> <span class="token number">0x3f3f3f3f</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> LL INFL <span class="token operator">=</span> <span class="token number">0x3f3f3f3f3f3f3f3fLL</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> <span class="token keyword">int</span> MAXN <span class="token operator">=</span> <span class="token number">200000</span> <span class="token operator">+</span> <span class="token number">10</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> <span class="token keyword">int</span> MOD <span class="token operator">=</span> <span class="token number">1000000007</span><span class="token punctuation">;</span>
 
-LL bit[MAXN], bit1[MAXN], n;
+LL bit<span class="token punctuation">[</span>MAXN<span class="token punctuation">]</span><span class="token punctuation">,</span> bit1<span class="token punctuation">[</span>MAXN<span class="token punctuation">]</span><span class="token punctuation">,</span> n<span class="token punctuation">;</span>
 
-LL sum(int i) {
-    LL s = 0;
-    while (i > 0) {
-        (s += bit[i]) %= MOD;
-        i -= i & -i;
-    }
-    return s;
-}
+LL <span class="token function">sum</span><span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    LL s <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span>i <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token punctuation">(</span>s <span class="token operator">+</span><span class="token operator">=</span> bit<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">%</span><span class="token operator">=</span> MOD<span class="token punctuation">;</span>
+        i <span class="token operator">-</span><span class="token operator">=</span> i <span class="token operator">&amp;</span> <span class="token operator">-</span>i<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> s<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
 
-void add(int i, LL x) {
-    while (i <= 10000) {
-        (bit[i] += x) %= MOD;
-        i += i & -i;
-    }
-}
+<span class="token keyword">void</span> <span class="token function">add</span><span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token punctuation">,</span> LL x<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span>i <span class="token operator">&lt;=</span> <span class="token number">10000</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token punctuation">(</span>bit<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">+</span><span class="token operator">=</span> x<span class="token punctuation">)</span> <span class="token operator">%</span><span class="token operator">=</span> MOD<span class="token punctuation">;</span>
+        i <span class="token operator">+</span><span class="token operator">=</span> i <span class="token operator">&amp;</span> <span class="token operator">-</span>i<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
 
-LL sum1(int i) {
-    LL s = 0;
-    while (i > 0) {
-        (s += bit1[i]) %= MOD;
-        i -= i & -i;
-    }
-    return s;
-}
+LL <span class="token function">sum1</span><span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    LL s <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span>i <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token punctuation">(</span>s <span class="token operator">+</span><span class="token operator">=</span> bit1<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">%</span><span class="token operator">=</span> MOD<span class="token punctuation">;</span>
+        i <span class="token operator">-</span><span class="token operator">=</span> i <span class="token operator">&amp;</span> <span class="token operator">-</span>i<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> s<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
 
-void add1(int i, LL x) {
-    while (i <= 10000) {
-        (bit1[i] += x) %= MOD;
-        i += i & -i;
-    }
-}
+<span class="token keyword">void</span> <span class="token function">add1</span><span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token punctuation">,</span> LL x<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span>i <span class="token operator">&lt;=</span> <span class="token number">10000</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token punctuation">(</span>bit1<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">+</span><span class="token operator">=</span> x<span class="token punctuation">)</span> <span class="token operator">%</span><span class="token operator">=</span> MOD<span class="token punctuation">;</span>
+        i <span class="token operator">+</span><span class="token operator">=</span> i <span class="token operator">&amp;</span> <span class="token operator">-</span>i<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
 
-struct node {
-    LL p, v;
-    bool operator < (const node& rhs) const {
-        return p < rhs.p;
-    }
-};
+<span class="token keyword">struct</span> node <span class="token punctuation">{</span>
+    LL p<span class="token punctuation">,</span> v<span class="token punctuation">;</span>
+    <span class="token keyword">bool</span> <span class="token keyword">operator</span> <span class="token operator">&lt;</span> <span class="token punctuation">(</span><span class="token keyword">const</span> node<span class="token operator">&amp;</span> rhs<span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> p <span class="token operator">&lt;</span> rhs<span class="token punctuation">.</span>p<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
 
-node a[MAXN];
+node a<span class="token punctuation">[</span>MAXN<span class="token punctuation">]</span><span class="token punctuation">;</span>
 
-int main() {
-    cin >> n;
-    for (int i = 0; i < n; ++i) {
-        scanf("%lld", &a[i].p);
-    }
-    for (int i = 0; i < n; ++i) {
-        scanf("%lld", &a[i].v);
-    }
-    sort(a, a + n);
-    LL ans = 0;
-    for (int i = 0; i < n; ++i) {
-        LL cnt = sum(a[i].v);
-        LL s = sum1(a[i].v);
-        (ans += (((cnt * a[i].p - s) % MOD + MOD) % MOD) * a[i].v) %= MOD;
-        add(a[i].v, 1);
-        add1(a[i].v, a[i].p);
-    }
-    memset(bit, 0, sizeof bit);
-    memset(bit1, 0, sizeof bit1);
-    for (int i = n - 1; i >= 0; --i) {
-        LL cnt = sum(a[i].v);
-        LL s = sum1(a[i].v);
-        (ans += (((s - cnt * a[i].p) % MOD + MOD) % MOD) * a[i].v) %= MOD;
-        add(a[i].v, 1);
-        add1(a[i].v, a[i].p);
-    }
-    memset(bit, 0, sizeof bit);
-    memset(bit1, 0, sizeof bit1);
-    for (int i = n - 1; i >= 0; --i) {
-        LL cnt = sum(a[i].v) - sum(a[i].v - 1);
-        LL s = ((sum1(a[i].v) - sum1(a[i].v - 1)) % MOD + MOD) % MOD;
-        (ans -= (((s - cnt * a[i].p) % MOD + MOD) % MOD) * a[i].v) %= MOD;
-        add(a[i].v, 1);
-        add1(a[i].v, a[i].p);
-    }
-    printf("%lld\n", (ans % MOD + MOD) % MOD);
-    return 0;
-}
-</code></pre>
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    cin <span class="token operator">>></span> n<span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> n<span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">scanf</span><span class="token punctuation">(</span><span class="token string">"%lld"</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>a<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>p<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> n<span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">scanf</span><span class="token punctuation">(</span><span class="token string">"%lld"</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>a<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>v<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token function">sort</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span> a <span class="token operator">+</span> n<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    LL ans <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> n<span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        LL cnt <span class="token operator">=</span> <span class="token function">sum</span><span class="token punctuation">(</span>a<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>v<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        LL s <span class="token operator">=</span> <span class="token function">sum1</span><span class="token punctuation">(</span>a<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>v<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">(</span>ans <span class="token operator">+</span><span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">(</span>cnt <span class="token operator">*</span> a<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>p <span class="token operator">-</span> s<span class="token punctuation">)</span> <span class="token operator">%</span> MOD <span class="token operator">+</span> MOD<span class="token punctuation">)</span> <span class="token operator">%</span> MOD<span class="token punctuation">)</span> <span class="token operator">*</span> a<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>v<span class="token punctuation">)</span> <span class="token operator">%</span><span class="token operator">=</span> MOD<span class="token punctuation">;</span>
+        <span class="token function">add</span><span class="token punctuation">(</span>a<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>v<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">add1</span><span class="token punctuation">(</span>a<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>v<span class="token punctuation">,</span> a<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>p<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token function">memset</span><span class="token punctuation">(</span>bit<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token keyword">sizeof</span> bit<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">memset</span><span class="token punctuation">(</span>bit1<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token keyword">sizeof</span> bit1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> n <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span> i <span class="token operator">>=</span> <span class="token number">0</span><span class="token punctuation">;</span> <span class="token operator">--</span>i<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        LL cnt <span class="token operator">=</span> <span class="token function">sum</span><span class="token punctuation">(</span>a<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>v<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        LL s <span class="token operator">=</span> <span class="token function">sum1</span><span class="token punctuation">(</span>a<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>v<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">(</span>ans <span class="token operator">+</span><span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">(</span>s <span class="token operator">-</span> cnt <span class="token operator">*</span> a<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>p<span class="token punctuation">)</span> <span class="token operator">%</span> MOD <span class="token operator">+</span> MOD<span class="token punctuation">)</span> <span class="token operator">%</span> MOD<span class="token punctuation">)</span> <span class="token operator">*</span> a<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>v<span class="token punctuation">)</span> <span class="token operator">%</span><span class="token operator">=</span> MOD<span class="token punctuation">;</span>
+        <span class="token function">add</span><span class="token punctuation">(</span>a<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>v<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">add1</span><span class="token punctuation">(</span>a<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>v<span class="token punctuation">,</span> a<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>p<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token function">memset</span><span class="token punctuation">(</span>bit<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token keyword">sizeof</span> bit<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">memset</span><span class="token punctuation">(</span>bit1<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token keyword">sizeof</span> bit1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> n <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span> i <span class="token operator">>=</span> <span class="token number">0</span><span class="token punctuation">;</span> <span class="token operator">--</span>i<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        LL cnt <span class="token operator">=</span> <span class="token function">sum</span><span class="token punctuation">(</span>a<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>v<span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token function">sum</span><span class="token punctuation">(</span>a<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>v <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        LL s <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token function">sum1</span><span class="token punctuation">(</span>a<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>v<span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token function">sum1</span><span class="token punctuation">(</span>a<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>v <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">%</span> MOD <span class="token operator">+</span> MOD<span class="token punctuation">)</span> <span class="token operator">%</span> MOD<span class="token punctuation">;</span>
+        <span class="token punctuation">(</span>ans <span class="token operator">-</span><span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">(</span>s <span class="token operator">-</span> cnt <span class="token operator">*</span> a<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>p<span class="token punctuation">)</span> <span class="token operator">%</span> MOD <span class="token operator">+</span> MOD<span class="token punctuation">)</span> <span class="token operator">%</span> MOD<span class="token punctuation">)</span> <span class="token operator">*</span> a<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>v<span class="token punctuation">)</span> <span class="token operator">%</span><span class="token operator">=</span> MOD<span class="token punctuation">;</span>
+        <span class="token function">add</span><span class="token punctuation">(</span>a<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>v<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">add1</span><span class="token punctuation">(</span>a<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>v<span class="token punctuation">,</span> a<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>p<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%lld\n"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>ans <span class="token operator">%</span> MOD <span class="token operator">+</span> MOD<span class="token punctuation">)</span> <span class="token operator">%</span> MOD<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
 
             </div>
             <hr/>
@@ -725,7 +724,7 @@ int main() {
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2017/09/19/eoj3328/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -854,9 +853,9 @@ int main() {
                     <div class="summary block-with-text">
                         
                             题意
-给定n个点和每个点在x轴上面的位置和每个点的权值，求出点对之间的费用总和。其中某两个点i，j之间的费用定义为| p_i - p_j | \times max\{v_i, v_j\}。
+给定$n$个点和每个点在$x$轴上面的位置和每个点的权值，求出点对之间的费用总和。其中某两个点$i$，$j$之间的费用定义为$ | p_i - p_j | \times max\{v_i, v_j\} $。
 题解
-对于每个点，计算它左边权值小于它的点与它点对
+对于每个点，计算它左
                         
                     </div>
                     <div class="publish-info">
@@ -920,8 +919,8 @@ int main() {
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -1043,7 +1042,7 @@ int main() {
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

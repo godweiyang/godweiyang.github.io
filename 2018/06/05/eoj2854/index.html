@@ -11,10 +11,10 @@
 
 题目链接：EOJ2854
 题意
-在0和1组成的长度为n(1 \le n \le 31)的字符串中，统计包含m(1 \le m \le n)个连续1子串的字符串的个数。
+在0和1组成的长度为$n(1 \le n \le 31)$的字符串中，统计包含$m(1 \le m \le n)$个连续1子串的字符串的个数。
 题解
 这题要用到的算法思想是动态规划。
-首先令f(n, m)表示长度">
+首先令$f(n, m">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -22,7 +22,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>EOJ2854. 统计特定字串模式的个数 | WeiYang Blog</title>
+    <title>EOJ2854. 统计特定字串模式的个数 | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -51,7 +51,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -114,7 +114,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -406,7 +406,7 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                        466
+                        518
                     </div>
                     
 
@@ -433,39 +433,38 @@
 
 <p><strong>题目链接：<a href="https://acm.ecnu.edu.cn/problem/2854/" target="_blank" rel="noopener">EOJ2854</a></strong></p>
 <h1 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h1><hr>
-<p>在0和1组成的长度为<script type="math/tex">n(1 \le n \le 31)</script>的字符串中，统计包含<script type="math/tex">m(1 \le m \le n)</script>个连续1子串的字符串的个数。</p>
+<p>在0和1组成的长度为$n(1 \le n \le 31)$的字符串中，统计包含$m(1 \le m \le n)$个连续1子串的字符串的个数。</p>
 <h1 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h1><hr>
 <p>这题要用到的算法思想是动态规划。</p>
-<p>首先令<script type="math/tex">f(n, m)</script>表示长度为<script type="math/tex">n(1 \le n \le 31)</script>的字符串中，包含<script type="math/tex">m(1 \le m \le n)</script>个连续1子串的字符串的个数。考虑最后一位，也就是第<script type="math/tex">n</script>位的取值，可以分为两种情况：</p>
+<p>首先令$f(n, m)$表示长度为$n(1 \le n \le 31)$的字符串中，包含$m(1 \le m \le n)$个连续1子串的字符串的个数。考虑最后一位，也就是第$n$位的取值，可以分为两种情况：</p>
 <ul>
-<li>如果第<script type="math/tex">n</script>位为0，那么只能在前面的<script type="math/tex">n-1</script>位里取长度为<script type="math/tex">m</script>的连续1子串，那么答案就是<br>\[f(n-1,m)\]</li>
-<li>如果第<script type="math/tex">n</script>位为1，那么考虑两种情况。<br>一种是最后<script type="math/tex">m</script>位全为1，那么前面<script type="math/tex">n-m</script>位就可以任意取值，答案为<br>\[2^{n-m}\]<br>另一种情况是最后<script type="math/tex">m</script>位不全为1，也就是存在某一位为0，枚举最后一位0出现的位置，可能出现在第<script type="math/tex">n-1</script>位、第<script type="math/tex">n-2</script>位，一直到第<script type="math/tex">n-m+1</script>位，不管最后一个0出现在哪里，都要在之前的字符串中重新出现长度为<script type="math/tex">m</script>的连续1子串，所以答案是<br>\[\sum\limits_{n - m \le i \le n - 2} {f(i,m)} \]</li>
+<li>如果第$n$位为0，那么只能在前面的$n-1$位里取长度为$m$的连续1子串，那么答案就是<br>\[f(n-1,m)\]</li>
+<li>如果第$n$位为1，那么考虑两种情况。<br>一种是最后$m$位全为1，那么前面$n-m$位就可以任意取值，答案为<br>\[2^{n-m}\]<br>另一种情况是最后$m$位不全为1，也就是存在某一位为0，枚举最后一位0出现的位置，可能出现在第$n-1$位、第$n-2$位，一直到第$n-m+1$位，不管最后一个0出现在哪里，都要在之前的字符串中重新出现长度为$m$的连续1子串，所以答案是<br>\[\sum\limits_{n - m \le i \le n - 2} {f(i,m)} \]</li>
 </ul>
-<p>所以最终的答案就是<br>\[f(n,m) = {2^{n - m}} + \sum\limits_{n - m \le i \le n - 1} {f(i,m)} \]<br>进一步化简这个式子，用<script type="math/tex">n-1</script>替换<script type="math/tex">n</script>可以得到<br>\[f(n - 1,m) = {2^{n - m - 1}} + \sum\limits_{n - m - 1 \le i \le n - 2} {f(i,m)} \]<br>两式相减可以得到<br>\[f(n,m) = {2^{n - m - 1}} + 2f(n - 1,m) - f(n - m - 1,m)\]<br>边界条件为：</p>
+<p>所以最终的答案就是<br>\[f(n,m) = {2^{n - m}} + \sum\limits_{n - m \le i \le n - 1} {f(i,m)} \]<br>进一步化简这个式子，用$n-1$替换$n$可以得到<br>\[f(n - 1,m) = {2^{n - m - 1}} + \sum\limits_{n - m - 1 \le i \le n - 2} {f(i,m)} \]<br>两式相减可以得到<br>\[f(n,m) = {2^{n - m - 1}} + 2f(n - 1,m) - f(n - m - 1,m)\]<br>边界条件为：</p>
 <ul>
-<li>当<script type="math/tex">n < m</script>时，<script type="math/tex">f(n,m)=0</script>。</li>
-<li>当<script type="math/tex">n = m</script>时，<script type="math/tex">f(n,m)=1</script>。</li>
+<li>当$n &lt; m$时，$f(n,m)=0$。</li>
+<li>当$n = m$时，$f(n,m)=1$。</li>
 </ul>
 <h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><hr>
-<pre class=" language-lang-cpp"><code class="language-lang-cpp">#include <bits/stdc++.h>
-using namespace std;
+<pre class=" language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;bits/stdc++.h></span></span>
+<span class="token keyword">using</span> <span class="token keyword">namespace</span> std<span class="token punctuation">;</span>
 
-int f(int n, int m) {
-    if (n < m) return 0;
-    if (n == m) return 1;
-    int res = 2 * f(n - 1, m) - f(n - m - 1, m) + (1 << (n - m - 1));
-    return res;
-}
+<span class="token keyword">int</span> <span class="token function">f</span><span class="token punctuation">(</span><span class="token keyword">int</span> n<span class="token punctuation">,</span> <span class="token keyword">int</span> m<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>n <span class="token operator">&lt;</span> m<span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>n <span class="token operator">==</span> m<span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> res <span class="token operator">=</span> <span class="token number">2</span> <span class="token operator">*</span> <span class="token function">f</span><span class="token punctuation">(</span>n <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">,</span> m<span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token function">f</span><span class="token punctuation">(</span>n <span class="token operator">-</span> m <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">,</span> m<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">&lt;&lt;</span> <span class="token punctuation">(</span>n <span class="token operator">-</span> m <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> res<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
 
-int main() {
-    int n, m;
-    while (scanf("%d%d", &n, &m) && (n != -1 || m != -1)) {
-        int res = f(n, m);
-        printf("%d\n", res);
-    }
-    return 0;
-}
-</code></pre>
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> n<span class="token punctuation">,</span> m<span class="token punctuation">;</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token function">scanf</span><span class="token punctuation">(</span><span class="token string">"%d%d"</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>n<span class="token punctuation">,</span> <span class="token operator">&amp;</span>m<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> <span class="token punctuation">(</span>n <span class="token operator">!=</span> <span class="token operator">-</span><span class="token number">1</span> <span class="token operator">||</span> m <span class="token operator">!=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">int</span> res <span class="token operator">=</span> <span class="token function">f</span><span class="token punctuation">(</span>n<span class="token punctuation">,</span> m<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d\n"</span><span class="token punctuation">,</span> res<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
 
             </div>
             <hr/>
@@ -628,7 +627,7 @@ int main() {
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2018/06/05/eoj2854/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -708,9 +707,9 @@ int main() {
 
 题目链接：EOJ3006
 题意
-给定一个多项式{(ax + by)^k}，计算多项式展开后{x^n}{y^m}项的系数，结果对1000000007取模。
+给定一个多项式${(ax + by)^k}$，计算多项式展开后${x^n}{y^m}$项的系数，结果对1000000007取模。
 题解
-由二项式定理可以得知，{x^n}{y^m}项的系数就是\[{a^n}{b^m
+由二项式定理可以得知，${x^n}{y^m}$项的系数就是\[{a^
                         
                     </div>
                     <div class="publish-info">
@@ -762,7 +761,7 @@ int main() {
                             
 
 4.
-题目：通过上指标翻转计算出\left( {\begin{array}{\*{20}{c}}{ - 1}\\k\end{array}} \right)。解答：如果k \ge 0，那么\[\left( {\begin{array}{*
+题目：通过上指标翻转计算出$\left( {\begin{array}{*{20}{c}}{ - 1}\\k\end{array}} \right)$。解答：如果$k \ge 0$，那么\[\left( {\begin{array
                         
                     </div>
                     <div class="publish-info">
@@ -829,8 +828,8 @@ int main() {
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -952,7 +951,7 @@ int main() {
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

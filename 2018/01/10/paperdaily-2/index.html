@@ -15,7 +15,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Parsing with Compositional Vector Grammars | WeiYang Blog</title>
+    <title>Parsing with Compositional Vector Grammars | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -44,7 +44,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -107,7 +107,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -445,14 +445,14 @@
 <h1 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h1><hr>
 <p>这个模型概括起来是这样的：首先用PCFG产生k-best句法树，比如产生概率最大的20棵句法树。然后对这k-best棵句法树每棵树都跑一遍SU-RNN，计算出每棵树的得分，然后综合PCFG得分和SU-RNN得分，对他们进行重排序，然后得到排名最高的句法树。</p>
 <p>那么怎么通过SU-RNN计算一棵树的得分呢？</p>
-<p>首先上一张图，看看SU-RNN是个什么结构：<br><img src="1.png" alt><br>可以看出，每个节点不仅含有它的类别表示，还有一个向量表示它的语义信息。而SU-RNN与之前提出过的RNN不一样的是，这里的每个节点的<script type="math/tex">W</script>权值矩阵全部是不同的，依赖于它的子节点的类别。<br>每个节点的语义表示向量计算方法如下：<br>\[{p^{(1)}} = f\left( { {W^{(B,C)}}\left[ {\begin{array}{*{20}{c}}b\\c\end{array}} \right]} \right)\]而这个节点的得分表示为<br>\[s({p^{(1)}}) = {({v^{(B,C)}})^T}{p^{(1)}} + \log P({P_1} \to B{\rm{ }}C)\]最后一整棵树的得分就是<br>\[s(CVG(\theta ,x,\hat y)) = \sum\limits_{d \in N(\hat y)} {s({p^d})} \]这样就可以枚举所有的句法树，然后计算得到得分最高的那棵树就是最终的句法树了。</p>
-<p>但是这样枚举的话复杂度太高了，要知道一个长度为<script type="math/tex">n</script>的句子，可能的句法树有<script type="math/tex">Catalan(n)</script>种。而且是无法用动态规划算法来计算最优句法树的，因为SU-RNN破坏了上下文无关的独立性假设（因为反向传播？其实我也不是太懂。。。）。所以就要用到之前所说的先用PCFG得到k-best棵句法树，然后用SU-RNN重排序了。</p>
+<p>首先上一张图，看看SU-RNN是个什么结构：<br><img src="1.png" alt><br>可以看出，每个节点不仅含有它的类别表示，还有一个向量表示它的语义信息。而SU-RNN与之前提出过的RNN不一样的是，这里的每个节点的$W$权值矩阵全部是不同的，依赖于它的子节点的类别。<br>每个节点的语义表示向量计算方法如下：<br>\[{p^{(1)}} = f\left( { {W^{(B,C)}}\left[ {\begin{array}{*{20}{c}}b\\c\end{array}} \right]} \right)\]而这个节点的得分表示为<br>\[s({p^{(1)}}) = {({v^{(B,C)}})^T}{p^{(1)}} + \log P({P_1} \to B{\rm{ }}C)\]最后一整棵树的得分就是<br>\[s(CVG(\theta ,x,\hat y)) = \sum\limits_{d \in N(\hat y)} {s({p^d})} \]这样就可以枚举所有的句法树，然后计算得到得分最高的那棵树就是最终的句法树了。</p>
+<p>但是这样枚举的话复杂度太高了，要知道一个长度为$n$的句子，可能的句法树有$Catalan(n)$种。而且是无法用动态规划算法来计算最优句法树的，因为SU-RNN破坏了上下文无关的独立性假设（因为反向传播？其实我也不是太懂。。。）。所以就要用到之前所说的先用PCFG得到k-best棵句法树，然后用SU-RNN重排序了。</p>
 <p>那么用SU-RNN计算完得到最优树之后，怎么计算它与gold-tree之间的差异，从而得到loss呢？</p>
 <p>本文计算两棵树差异的公式如下：<br>\[\Delta ({y_i},\hat y) = \sum\limits_{d \in N(\hat y)} {\kappa 1\{ d \notin N({y_i})\} } \]最终的损失函数定义为：<br>\[J(\theta ) = \frac{1}{m}\sum\limits_{i = 1}^m { {r_i}(\theta )}  + \frac{\lambda }{2}{\left| \theta  \right|^2}\]其中<br>\[{r_i}(\theta ) = \mathop {\max }\limits_{\hat y \in Y({x_i})} (s(CVG({x_i},\hat y)) + \Delta ({y_i},\hat y)) - s(CVG({x_i},{y_i}))\]也就是要尽量最大化标准树的得分，减小预测树的得分。</p>
 <h1 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h1><hr>
 <p><img src="2.png" alt><br>可以看出，SU-RNN结果比以往的结果都要好，但是没有最后两行的好。。。最后两个具体是啥我也没去细看。</p>
 <h1 id="我的毕设任务"><a href="#我的毕设任务" class="headerlink" title="我的毕设任务"></a>我的毕设任务</h1><hr>
-<p>其实我的任务不用PCFG，看起来减少了工作量？嘿嘿，其实貌似麻烦的一笔啊。。。我的模型主要的思想就是直接用SU-RNN训练出句法分析树！那枚举复杂度太高了怎么办？用动态规划啊！不是不能用吗？没事，假装它能用，要是效果好强行解释一波就行了。。。而且原模型的RNN是递归神经网络哦，这次我改成了循环神经网络，用LSTM来计算得分。看起来貌似挺麻烦的，纠结了好几天。LSTM每个节点总得有一个<script type="math/tex">x</script>输入，一个<script type="math/tex">h</script>隐层输入吧，所以可能还要给每两个节点指定一个作为head。。。</p>
+<p>其实我的任务不用PCFG，看起来减少了工作量？嘿嘿，其实貌似麻烦的一笔啊。。。我的模型主要的思想就是直接用SU-RNN训练出句法分析树！那枚举复杂度太高了怎么办？用动态规划啊！不是不能用吗？没事，假装它能用，要是效果好强行解释一波就行了。。。而且原模型的RNN是递归神经网络哦，这次我改成了循环神经网络，用LSTM来计算得分。看起来貌似挺麻烦的，纠结了好几天。LSTM每个节点总得有一个$x$输入，一个$h$隐层输入吧，所以可能还要给每两个节点指定一个作为head。。。</p>
 <p>感觉心态炸了哦，一堆非主流写法？也不知道最后能不能写出来，也不知道写出来结果怎么样。。。说不定要延毕了？哈哈，自嘲一波吧，暑假好好研究研究了，python基础还是不行，写起来太累了。。。</p>
 
             </div>
@@ -616,7 +616,7 @@
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2018/01/10/paperdaily-2/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -841,8 +841,8 @@
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -964,7 +964,7 @@
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

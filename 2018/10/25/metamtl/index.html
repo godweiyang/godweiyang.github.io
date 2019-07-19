@@ -22,7 +22,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Meta Multi-Task Learning for Sequence Modeling | WeiYang Blog</title>
+    <title>Meta Multi-Task Learning for Sequence Modeling | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -51,7 +51,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -114,7 +114,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -470,7 +470,7 @@
 <li>不断重复以上三个过程。</li>
 </ul>
 <p>这样就可以训练出一个适用于所有任务的多任务模型。</p>
-<h2 id="元多任务学习"><a href="#元多任务学习" class="headerlink" title="元多任务学习"></a>元多任务学习</h2><p>传统模型只共享了特征表示层，也就是共享了私有LSTM。本文的模型创新就是通过Meta-LSTM动态生成针对每个任务、每个时刻不同的参数，然后用每个任务特定的Basic-LSTM进行编码。具体结构如下图所示：<br><img src="2.jpg" alt><br>其中Basic-LSTM的结构和普通的LSTM基本一样，唯一区别就是每个时刻的参数W和b是通过Meta-LSTM动态生成的，形式化定义如下：<br><img src="3.jpg" alt><br>因为W维度过大，计算复杂度太高，并且也容易导致过拟合，所以这里采用了SVD分解：<br><img src="4.jpg" alt><br>而这里的<script type="math/tex">z_t</script>就是通过Meta-LSTM动态生成的，形式化定义如下：<br><img src="5.jpg" alt><br>如果精简的表示出这个LSTM之间的关系，可以写成如下形式：<br><img src="6.jpg" alt><br>概括起来就是：<strong>Basic-LSTM上一个时刻的输出<script type="math/tex">h_{t - 1}</script>、Meta-LSTM上一个时刻的输出<script type="math/tex">\hat h_{t - 1}</script>和当前时刻的单词表示<script type="math/tex">x_t</script>作为Meta-LSTM当前时刻的输入，产生的输出<script type="math/tex">z_t</script>用来产生Basic-LSTM当前时刻的参数矩阵。</strong></p>
+<h2 id="元多任务学习"><a href="#元多任务学习" class="headerlink" title="元多任务学习"></a>元多任务学习</h2><p>传统模型只共享了特征表示层，也就是共享了私有LSTM。本文的模型创新就是通过Meta-LSTM动态生成针对每个任务、每个时刻不同的参数，然后用每个任务特定的Basic-LSTM进行编码。具体结构如下图所示：<br><img src="2.jpg" alt><br>其中Basic-LSTM的结构和普通的LSTM基本一样，唯一区别就是每个时刻的参数W和b是通过Meta-LSTM动态生成的，形式化定义如下：<br><img src="3.jpg" alt><br>因为W维度过大，计算复杂度太高，并且也容易导致过拟合，所以这里采用了SVD分解：<br><img src="4.jpg" alt><br>而这里的$z_t$就是通过Meta-LSTM动态生成的，形式化定义如下：<br><img src="5.jpg" alt><br>如果精简的表示出这个LSTM之间的关系，可以写成如下形式：<br><img src="6.jpg" alt><br>概括起来就是：<strong>Basic-LSTM上一个时刻的输出$h_{t - 1}$、Meta-LSTM上一个时刻的输出$\hat h_{t - 1}$和当前时刻的单词表示$x_t$作为Meta-LSTM当前时刻的输入，产生的输出$z_t$用来产生Basic-LSTM当前时刻的参数矩阵。</strong></p>
 <p>Meta-LSTM主要有如下两个优点：</p>
 <ul>
 <li>一个就是每个时刻的参数动态生成。</li>
@@ -647,7 +647,7 @@
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2018/10/25/metamtl/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -874,8 +874,8 @@
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -997,7 +997,7 @@
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

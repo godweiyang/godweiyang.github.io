@@ -20,7 +20,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Dynamic Oracles for Top-Down and In-Order Shift-Reduce Constituent Parsing | WeiYang Blog</title>
+    <title>Dynamic Oracles for Top-Down and In-Order Shift-Reduce Constituent Parsing | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -49,7 +49,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -112,7 +112,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -455,13 +455,13 @@
 <p>其中bottom-up转移系统的Dynamic Oracle在<a href="http://aclweb.org/anthology/D16-1001" target="_blank" rel="noopener">Span-Based Constituency Parsing with a Structure-Label System and Provably Optimal Dynamic Oracles</a>中有很详细的证明，也可以参看我之前的博客<a href="https://godweiyang.com/2018/08/03/dynamic-oracles/">Deep Understanding of Dynamic Oracle in Constituent Parsing</a>。</p>
 <p>而本文就提出了另外两种转移系统的Dynamic Oracle，其中top-down转移系统主要基于<a href="http://aclweb.org/anthology/N16-1024" target="_blank" rel="noopener">Recurrent Neural Network Grammars</a>，in-order转移系统主要基于<a href="http://aclweb.org/anthology/Q17-1029" target="_blank" rel="noopener">In-Order Transition-based Constituent Parsing</a>。</p>
 <h1 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h1><hr>
-<h2 id="形式化定义"><a href="#形式化定义" class="headerlink" title="形式化定义"></a>形式化定义</h2><p>bottom-up的转移系统这里就不讨论了，这里主要讨论另外两种转移系统。转移系统的状态用五元组<script type="math/tex">c = \left\langle {\sum ,i,f,\gamma ,\alpha } \right\rangle</script>表示，五元组内元素分别表示stack、buffer第一个单词的下标、in-order转移系统中结束标记、已经生成的短语成分集合、stack中非终结符集合。</p>
-<p>每个短语成分用三元组<script type="math/tex">(X, l, r)</script>表示，其中X是非终结符，l和r是短语的边界下标。而非终结符用二元组<script type="math/tex">(X, j)</script>表示，其中j表示X入栈后下一个入栈的单词的下标。</p>
+<h2 id="形式化定义"><a href="#形式化定义" class="headerlink" title="形式化定义"></a>形式化定义</h2><p>bottom-up的转移系统这里就不讨论了，这里主要讨论另外两种转移系统。转移系统的状态用五元组$c = \left\langle {\sum ,i,f,\gamma ,\alpha } \right\rangle $表示，五元组内元素分别表示stack、buffer第一个单词的下标、in-order转移系统中结束标记、已经生成的短语成分集合、stack中非终结符集合。</p>
+<p>每个短语成分用三元组$(X, l, r)$表示，其中X是非终结符，l和r是短语的边界下标。而非终结符用二元组$(X, j)$表示，其中j表示X入栈后下一个入栈的单词的下标。</p>
 <p><img src="1.jpg" alt></p>
 <p>例如对于上图中的句法树，它的gold短语成分集合是<br>\[(S,0,6),(NP,0,2),(VP,2,5),(ADVP,3,4),(ADJP,4,5)\]如果采用top-down的转移系统，非终结符入栈的顺序为<br>\[(S, 0), (NP, 0), (VP, 2), (ADVP, 3), (ADJP, 4)\]如果采用in-order的转移系统，非终结符入栈的顺序为<br>\[(NP, 1), (S, 2), (VP, 3), (ADVP, 4), (ADJP, 5)\]<br>正如之前所说，top-down中非终结符的下标就是短语的第一个单词的下标，但是in-order不是的，因为短语的第一个子结点已经在非终结符入栈之前形成了，所以它的下标是第二个子结点表示的短语的第一个单词的下标。</p>
-<p>之前的top-down和in-order转移系统中并没有用到预测的短语集合<script type="math/tex">\gamma</script>和stack里的非终结符集合<script type="math/tex">\alpha</script>，但是在本文的转移系统中需要用到，因为本文要用它来改进loss函数，以此来实现Dynamic Oracle。</p>
+<p>之前的top-down和in-order转移系统中并没有用到预测的短语集合$\gamma$和stack里的非终结符集合$\alpha$，但是在本文的转移系统中需要用到，因为本文要用它来改进loss函数，以此来实现Dynamic Oracle。</p>
 <h2 id="top-down转移系统"><a href="#top-down转移系统" class="headerlink" title="top-down转移系统"></a>top-down转移系统</h2><p><img src="2.jpg" alt><br><img src="3.jpg" alt></p>
-<p>上面两张图分别是top-down转移系统的转移过程和具体的转移示例。注意到REDUCE动作会将新的短语加入到<script type="math/tex">\gamma</script>集合中，并且从非终结符集合<script type="math/tex">\alpha</script>中删去该非终结符。而NT-X动作会将新的非终结符X加入到非终结符集合<script type="math/tex">\alpha</script>中。</p>
+<p>上面两张图分别是top-down转移系统的转移过程和具体的转移示例。注意到REDUCE动作会将新的短语加入到$\gamma$集合中，并且从非终结符集合$\alpha$中删去该非终结符。而NT-X动作会将新的非终结符X加入到非终结符集合$\alpha$中。</p>
 <h2 id="in-order转移系统"><a href="#in-order转移系统" class="headerlink" title="in-order转移系统"></a>in-order转移系统</h2><p><img src="4.jpg" alt><br><img src="5.jpg" alt></p>
 <p>上面两张图分别是in-order转移系统的转移过程和具体的转移示例，大致细节和top-down转移系统类似。</p>
 <h2 id="Dynamic-Oracles简介"><a href="#Dynamic-Oracles简介" class="headerlink" title="Dynamic Oracles简介"></a>Dynamic Oracles简介</h2><p>最后再解释一下Dynamic Oracle是干嘛用的，传统的Static Oracle就是在转移的每一步按照标准转移序列中的action进行转移，但是这样会有一个问题，如果预测的时候某一步预测错了，遇到了一个训练阶段没有出现过的状态，那么该怎么进行转移呢？这时候就要用到Dynamic Oracle，用来针对不同的错误情况进行动态的指导，引导它转移到正确的状态中去。另外在训练时可以手动加入一些错误状态，来训练模型，不然的话遇到的错误状态还是太少了，不足以训练好模型。</p>
@@ -472,26 +472,26 @@
 <p>上面的损失函数是上一篇论文中介绍的bottom-up的转移系统的Dynamic Oracle，但是本文主要讨论top-down和in-order的转移系统，因为转移系统多了non-terminal，所以需要新加入两项损失，用来衡量当前状态可以产生的最优句法树与标准句法树之间的汉明损失。</p>
 <p>这两项新加的损失分别是：</p>
 <ul>
-<li>当前栈中已经生成的non-terminal集合<script type="math/tex">\alpha_c</script>中不包含在标准non-terminal集合<script type="math/tex">\alpha_G</script>中的non-terminal数量，即<script type="math/tex">\left| \alpha_c \backslash \alpha_G \right|</script>。</li>
+<li>当前栈中已经生成的non-terminal集合$\alpha_c$中不包含在标准non-terminal集合$\alpha_G$中的non-terminal数量，即$\left| \alpha_c \backslash \alpha_G \right|$。</li>
 <li>当前栈中违反了标准树中non-terminal顺序的non-terminal数量。</li>
 </ul>
 <p>所以最终的损失函数为：<br>\[\mathcal{l}(c) = \min_{\gamma | c \to \gamma} \mathcal{L}(\gamma, \gamma_G) = \left| \mathcal{U}(c, \gamma_G) \right| + \left| {\gamma_c \backslash {\gamma _G}} \right| + \left| \alpha_c \backslash \alpha_G \right| + out \_ of \_ order(\alpha_c, \alpha_G)\]</p>
 <p>前面三项都很容易求得，至于最后一项，可以通过计算栈里的gold non-terminal序列的最长上升子序列来得到，而序列中每个non-terminal的标号就是它在标准树转移序列的non-terminal顺序标号。</p>
-<h2 id="短语的可达性"><a href="#短语的可达性" class="headerlink" title="短语的可达性"></a>短语的可达性</h2><p>在这里用短语集合<script type="math/tex">{(X, l, r)}</script>来表示一棵句法树，我们假设状态c的短语集合为<script type="math/tex">\sum = [(Y_p, i_p, i_{p-1}) \cdots (Y_2, i_2, i_1)|(Y_1, i_1, j)]</script>，那么我们说，标准句法树中的一个短语<script type="math/tex">(X, l, r) \in \gamma_G</script>当且仅当满足如下三个条件之一时，称它是“各自可达短语”：</p>
+<h2 id="短语的可达性"><a href="#短语的可达性" class="headerlink" title="短语的可达性"></a>短语的可达性</h2><p>在这里用短语集合${(X, l, r)}$来表示一棵句法树，我们假设状态c的短语集合为$\sum = [(Y_p, i_p, i_{p-1}) \cdots (Y_2, i_2, i_1)|(Y_1, i_1, j)]$，那么我们说，标准句法树中的一个短语$(X, l, r) \in \gamma_G$当且仅当满足如下三个条件之一时，称它是“各自可达短语”：</p>
 <p>对于top-down转移系统：</p>
 <ul>
-<li><script type="math/tex">(X, l, r) \in \gamma_c</script>（因为短语已经包含在了状态c已生成的短语集合里，那么它当然是可达的）。</li>
-<li><script type="math/tex">j \le l < r \wedge (X, l) \notin \alpha_c</script>（因为短语还在buffer中，并且短语的non-terminal还没有入栈，所以可以通过入栈<script type="math/tex">(X, l)</script>，再不断SHIFT然后REDUCE得到）。</li>
-<li><script type="math/tex">l \in \{i_k | 1 \le k \le p\} \wedge j \le r \wedge (X, l) \in \alpha_c</script>（这种情况表明了短语的左端点恰好位于栈里某个短语的边界处，而右端点又还在buffer里，所以还可以通过不断SHUFT然后REDUCE得到短语。但是如果左端点不是栈里短语的边界，那说明产生了交叉，自然不会可达了。而如果右端点已经在栈里了，那之后也不会得到了，因为转移系统每次都是REDUCE栈顶的短语，不可能从栈里面开始REDUCE的，当然这些前提条件当然是non-terminal<script type="math/tex">(X, l)</script>已经在栈里了）。</li>
+<li>$(X, l, r) \in \gamma_c$（因为短语已经包含在了状态c已生成的短语集合里，那么它当然是可达的）。</li>
+<li>$j \le l &lt; r \wedge (X, l) \notin \alpha_c$（因为短语还在buffer中，并且短语的non-terminal还没有入栈，所以可以通过入栈$(X, l)$，再不断SHIFT然后REDUCE得到）。</li>
+<li>$l \in \{i_k | 1 \le k \le p\} \wedge j \le r \wedge (X, l) \in \alpha_c$（这种情况表明了短语的左端点恰好位于栈里某个短语的边界处，而右端点又还在buffer里，所以还可以通过不断SHUFT然后REDUCE得到短语。但是如果左端点不是栈里短语的边界，那说明产生了交叉，自然不会可达了。而如果右端点已经在栈里了，那之后也不会得到了，因为转移系统每次都是REDUCE栈顶的短语，不可能从栈里面开始REDUCE的，当然这些前提条件当然是non-terminal$(X, l)$已经在栈里了）。</li>
 </ul>
 <p>对于in-order转移系统：</p>
 <ul>
-<li><script type="math/tex">(X, l, r) \in \gamma_c</script>（因为短语已经包含在了状态c已生成的短语集合里，那么它当然是可达的）。</li>
-<li><script type="math/tex">j \le l < r</script>（因为短语还在buffer中，所以可以通过入栈第一个左儿子，再入栈<script type="math/tex">(X, m)</script>，再不断SHIFT然后REDUCE得到）。</li>
-<li><script type="math/tex">l \in \{i_k | 1 \le k \le p\} \wedge j \le r \wedge (X, m) \notin \alpha_c</script>（这种情况表明了第一个左儿子已经生成了一部分或者完全生成了，并且根结点non-terminal还没有入栈，所以依然可以生成）。</li>
-<li><script type="math/tex">l \in \{i_k | 1 \le k \le p\} \wedge j \le r \wedge (X, m) \in \alpha_c \wedge \exists (Y,l,m) \in \sum</script>（这种情况表明了第一个左儿子已经完全生成了，并且根结点non-terminal在栈里，所以依然可以生成）。</li>
+<li>$(X, l, r) \in \gamma_c$（因为短语已经包含在了状态c已生成的短语集合里，那么它当然是可达的）。</li>
+<li>$j \le l &lt; r$（因为短语还在buffer中，所以可以通过入栈第一个左儿子，再入栈$(X, m)$，再不断SHIFT然后REDUCE得到）。</li>
+<li>$l \in \{i_k | 1 \le k \le p\} \wedge j \le r \wedge (X, m) \notin \alpha_c$（这种情况表明了第一个左儿子已经生成了一部分或者完全生成了，并且根结点non-terminal还没有入栈，所以依然可以生成）。</li>
+<li>$l \in \{i_k | 1 \le k \le p\} \wedge j \le r \wedge (X, m) \in \alpha_c \wedge \exists (Y,l,m) \in \sum $（这种情况表明了第一个左儿子已经完全生成了，并且根结点non-terminal在栈里，所以依然可以生成）。</li>
 </ul>
-<p>枚举标准树中的所有短语，根据以上规则可以得到可达短语集合<script type="math/tex">\mathcal{R}(c, \gamma_G)</script>，然后从标准短语集合中排除掉这部分短语，剩下的就是不可达短语集合<script type="math/tex">\mathcal{U}(c, \gamma_G) = \gamma_G \backslash \mathcal{R}(c, \gamma_G)</script>。这部分短语就是不论采取何种动作序列，最后都不可能生成的短语集合。</p>
+<p>枚举标准树中的所有短语，根据以上规则可以得到可达短语集合$\mathcal{R}(c, \gamma_G)$，然后从标准短语集合中排除掉这部分短语，剩下的就是不可达短语集合$\mathcal{U}(c, \gamma_G) = \gamma_G \backslash \mathcal{R}(c, \gamma_G)$。这部分短语就是不论采取何种动作序列，最后都不可能生成的短语集合。</p>
 <p>关于这两个Dynamic Oracles的正确性，这里就不再证明了，证明过程和上一篇bottom-up的差不多。</p>
 <h1 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h1><hr>
 <p>本文和基础的几个转移系统做了对比，代码也是在他们基础上进行修改的，结果如下：<br><img src="5.jpg" alt><br>可以发现，加了Dynamic Oracles之后，结果还是有略微提高的。</p>
@@ -657,7 +657,7 @@
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2018/11/07/emnlp18-dynamic-oracle/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -866,8 +866,8 @@
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -989,7 +989,7 @@
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

@@ -19,7 +19,7 @@ imp">
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>吴恩达深度学习公开课第二周编程练习2 | WeiYang Blog</title>
+    <title>吴恩达深度学习公开课第二周编程练习2 | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -48,7 +48,7 @@ imp">
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -111,7 +111,7 @@ imp">
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -407,14 +407,14 @@ imp">
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                        370
+                        529
                     </div>
                     
 
                     
                     <div class="info-break-policy">
                         <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                        2 分
+                        3 分
                     </div>
                     
                 
@@ -431,115 +431,113 @@ imp">
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <p>这次练习是实现logistic回归模型的神经网络，来预测一张图片是不是一只猫。<br>我把代码整合在了一起，如下：</p>
-<pre class=" language-lang-python"><code class="language-lang-python">import numpy as np
-import matplotlib.pyplot as plt
-import h5py
-import scipy
-from PIL import Image
-from scipy import ndimage
-from lr_utils import load_dataset
+<pre class=" language-python"><code class="language-python"><span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+<span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
+<span class="token keyword">import</span> h5py
+<span class="token keyword">import</span> scipy
+<span class="token keyword">from</span> PIL <span class="token keyword">import</span> Image
+<span class="token keyword">from</span> scipy <span class="token keyword">import</span> ndimage
+<span class="token keyword">from</span> lr_utils <span class="token keyword">import</span> load_dataset
 
-train_set_x_orig, train_set_y, test_set_x_orig, test_set_y, classes = load_dataset()
+train_set_x_orig<span class="token punctuation">,</span> train_set_y<span class="token punctuation">,</span> test_set_x_orig<span class="token punctuation">,</span> test_set_y<span class="token punctuation">,</span> classes <span class="token operator">=</span> load_dataset<span class="token punctuation">(</span><span class="token punctuation">)</span>
 
-m_train = train_set_x_orig.shape[0]
-m_test = test_set_x_orig.shape[0]
-num_px = train_set_x_orig.shape[1]
+m_train <span class="token operator">=</span> train_set_x_orig<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+m_test <span class="token operator">=</span> test_set_x_orig<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+num_px <span class="token operator">=</span> train_set_x_orig<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
 
-train_set_x_flatten = train_set_x_orig.reshape(train_set_x_orig.shape[0], -1).T
-test_set_x_flatten = test_set_x_orig.reshape(test_set_x_orig.shape[0], -1).T
+train_set_x_flatten <span class="token operator">=</span> train_set_x_orig<span class="token punctuation">.</span>reshape<span class="token punctuation">(</span>train_set_x_orig<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">.</span>T
+test_set_x_flatten <span class="token operator">=</span> test_set_x_orig<span class="token punctuation">.</span>reshape<span class="token punctuation">(</span>test_set_x_orig<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">.</span>T
 
-train_set_x = train_set_x_flatten / 255.
-test_set_x = test_set_x_flatten / 255.
+train_set_x <span class="token operator">=</span> train_set_x_flatten <span class="token operator">/</span> <span class="token number">255</span><span class="token punctuation">.</span>
+test_set_x <span class="token operator">=</span> test_set_x_flatten <span class="token operator">/</span> <span class="token number">255</span><span class="token punctuation">.</span>
 
-def sigmoid(z):
-    s = 1 / (1 + np.exp(-z))
-    return s
+<span class="token keyword">def</span> <span class="token function">sigmoid</span><span class="token punctuation">(</span>z<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    s <span class="token operator">=</span> <span class="token number">1</span> <span class="token operator">/</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">+</span> np<span class="token punctuation">.</span>exp<span class="token punctuation">(</span><span class="token operator">-</span>z<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> s
 
-def initialize_with_zeros(dim):
-    w = np.zeros((dim, 1))
-    b = 0
-    assert(w.shape == (dim, 1))
-    assert(isinstance(b, float) or isinstance(b, int))
-    return w, b
+<span class="token keyword">def</span> <span class="token function">initialize_with_zeros</span><span class="token punctuation">(</span>dim<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    w <span class="token operator">=</span> np<span class="token punctuation">.</span>zeros<span class="token punctuation">(</span><span class="token punctuation">(</span>dim<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    b <span class="token operator">=</span> <span class="token number">0</span>
+    <span class="token keyword">assert</span><span class="token punctuation">(</span>w<span class="token punctuation">.</span>shape <span class="token operator">==</span> <span class="token punctuation">(</span>dim<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">assert</span><span class="token punctuation">(</span>isinstance<span class="token punctuation">(</span>b<span class="token punctuation">,</span> float<span class="token punctuation">)</span> <span class="token operator">or</span> isinstance<span class="token punctuation">(</span>b<span class="token punctuation">,</span> int<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> w<span class="token punctuation">,</span> b
 
-dim = 2
-w, b = initialize_with_zeros(dim)
+dim <span class="token operator">=</span> <span class="token number">2</span>
+w<span class="token punctuation">,</span> b <span class="token operator">=</span> initialize_with_zeros<span class="token punctuation">(</span>dim<span class="token punctuation">)</span>
 
-def propagate(w, b, X, Y):
-    m = X.shape[1]
-    A = sigmoid(w.T.dot(X) + b)
-    cost = -np.sum(Y * np.log(A) + (1 - Y) * np.log(1 - A)) / m
-    dw = X.dot((A - Y).T) / m
-    db = np.sum(A - Y) / m
-    assert(dw.shape == w.shape)
-    assert(db.dtype == float)
-    cost = np.squeeze(cost)
-    assert(cost.shape == ())
-    grads = {"dw": dw,
-             "db": db}
-    return grads, cost
+<span class="token keyword">def</span> <span class="token function">propagate</span><span class="token punctuation">(</span>w<span class="token punctuation">,</span> b<span class="token punctuation">,</span> X<span class="token punctuation">,</span> Y<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    m <span class="token operator">=</span> X<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
+    A <span class="token operator">=</span> sigmoid<span class="token punctuation">(</span>w<span class="token punctuation">.</span>T<span class="token punctuation">.</span>dot<span class="token punctuation">(</span>X<span class="token punctuation">)</span> <span class="token operator">+</span> b<span class="token punctuation">)</span>
+    cost <span class="token operator">=</span> <span class="token operator">-</span>np<span class="token punctuation">.</span>sum<span class="token punctuation">(</span>Y <span class="token operator">*</span> np<span class="token punctuation">.</span>log<span class="token punctuation">(</span>A<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">-</span> Y<span class="token punctuation">)</span> <span class="token operator">*</span> np<span class="token punctuation">.</span>log<span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">-</span> A<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">/</span> m
+    dw <span class="token operator">=</span> X<span class="token punctuation">.</span>dot<span class="token punctuation">(</span><span class="token punctuation">(</span>A <span class="token operator">-</span> Y<span class="token punctuation">)</span><span class="token punctuation">.</span>T<span class="token punctuation">)</span> <span class="token operator">/</span> m
+    db <span class="token operator">=</span> np<span class="token punctuation">.</span>sum<span class="token punctuation">(</span>A <span class="token operator">-</span> Y<span class="token punctuation">)</span> <span class="token operator">/</span> m
+    <span class="token keyword">assert</span><span class="token punctuation">(</span>dw<span class="token punctuation">.</span>shape <span class="token operator">==</span> w<span class="token punctuation">.</span>shape<span class="token punctuation">)</span>
+    <span class="token keyword">assert</span><span class="token punctuation">(</span>db<span class="token punctuation">.</span>dtype <span class="token operator">==</span> float<span class="token punctuation">)</span>
+    cost <span class="token operator">=</span> np<span class="token punctuation">.</span>squeeze<span class="token punctuation">(</span>cost<span class="token punctuation">)</span>
+    <span class="token keyword">assert</span><span class="token punctuation">(</span>cost<span class="token punctuation">.</span>shape <span class="token operator">==</span> <span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    grads <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token string">"dw"</span><span class="token punctuation">:</span> dw<span class="token punctuation">,</span>
+             <span class="token string">"db"</span><span class="token punctuation">:</span> db<span class="token punctuation">}</span>
+    <span class="token keyword">return</span> grads<span class="token punctuation">,</span> cost
 
-w, b, X, Y = np.array([[1],[2]]), 2, np.array([[1,2],[3,4]]), np.array([[1,0]])
-grads, cost = propagate(w, b, X, Y)
+w<span class="token punctuation">,</span> b<span class="token punctuation">,</span> X<span class="token punctuation">,</span> Y <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span><span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">,</span><span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+grads<span class="token punctuation">,</span> cost <span class="token operator">=</span> propagate<span class="token punctuation">(</span>w<span class="token punctuation">,</span> b<span class="token punctuation">,</span> X<span class="token punctuation">,</span> Y<span class="token punctuation">)</span>
 
-def optimize(w, b, X, Y, num_iterations, learning_rate, print_cost = False):
-    costs = []
-    for i in range(num_iterations):
-        grads, cost = propagate(w, b, X, Y)
-        dw = grads["dw"]
-        db = grads["db"]
-        w = w - learning_rate * dw
-        b = b - learning_rate * db
-        if i % 100 == 0:
-            costs.append(cost)
-        if print_cost and i % 100 == 0:
-            print ("Cost after iteration %i: %f" %(i, cost))
+<span class="token keyword">def</span> <span class="token function">optimize</span><span class="token punctuation">(</span>w<span class="token punctuation">,</span> b<span class="token punctuation">,</span> X<span class="token punctuation">,</span> Y<span class="token punctuation">,</span> num_iterations<span class="token punctuation">,</span> learning_rate<span class="token punctuation">,</span> print_cost <span class="token operator">=</span> <span class="token boolean">False</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    costs <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span>num_iterations<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        grads<span class="token punctuation">,</span> cost <span class="token operator">=</span> propagate<span class="token punctuation">(</span>w<span class="token punctuation">,</span> b<span class="token punctuation">,</span> X<span class="token punctuation">,</span> Y<span class="token punctuation">)</span>
+        dw <span class="token operator">=</span> grads<span class="token punctuation">[</span><span class="token string">"dw"</span><span class="token punctuation">]</span>
+        db <span class="token operator">=</span> grads<span class="token punctuation">[</span><span class="token string">"db"</span><span class="token punctuation">]</span>
+        w <span class="token operator">=</span> w <span class="token operator">-</span> learning_rate <span class="token operator">*</span> dw
+        b <span class="token operator">=</span> b <span class="token operator">-</span> learning_rate <span class="token operator">*</span> db
+        <span class="token keyword">if</span> i <span class="token operator">%</span> <span class="token number">100</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">:</span>
+            costs<span class="token punctuation">.</span>append<span class="token punctuation">(</span>cost<span class="token punctuation">)</span>
+        <span class="token keyword">if</span> print_cost <span class="token operator">and</span> i <span class="token operator">%</span> <span class="token number">100</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">:</span>
+            <span class="token keyword">print</span> <span class="token punctuation">(</span><span class="token string">"Cost after iteration %i: %f"</span> <span class="token operator">%</span><span class="token punctuation">(</span>i<span class="token punctuation">,</span> cost<span class="token punctuation">)</span><span class="token punctuation">)</span>
 
-    params = {"w": w,
-              "b": b}
+    params <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token string">"w"</span><span class="token punctuation">:</span> w<span class="token punctuation">,</span>
+              <span class="token string">"b"</span><span class="token punctuation">:</span> b<span class="token punctuation">}</span>
 
-    grads = {"dw": dw,
-             "db": db}
+    grads <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token string">"dw"</span><span class="token punctuation">:</span> dw<span class="token punctuation">,</span>
+             <span class="token string">"db"</span><span class="token punctuation">:</span> db<span class="token punctuation">}</span>
 
-    return params, grads, costs
+    <span class="token keyword">return</span> params<span class="token punctuation">,</span> grads<span class="token punctuation">,</span> costs
 
-params, grads, costs = optimize(w, b, X, Y, num_iterations= 100, learning_rate = 0.009, print_cost = False)
+params<span class="token punctuation">,</span> grads<span class="token punctuation">,</span> costs <span class="token operator">=</span> optimize<span class="token punctuation">(</span>w<span class="token punctuation">,</span> b<span class="token punctuation">,</span> X<span class="token punctuation">,</span> Y<span class="token punctuation">,</span> num_iterations<span class="token operator">=</span> <span class="token number">100</span><span class="token punctuation">,</span> learning_rate <span class="token operator">=</span> <span class="token number">0.009</span><span class="token punctuation">,</span> print_cost <span class="token operator">=</span> <span class="token boolean">False</span><span class="token punctuation">)</span>
 
-def predict(w, b, X):
+<span class="token keyword">def</span> <span class="token function">predict</span><span class="token punctuation">(</span>w<span class="token punctuation">,</span> b<span class="token punctuation">,</span> X<span class="token punctuation">)</span><span class="token punctuation">:</span>
 
-    m = X.shape[1]
-    Y_prediction = np.zeros((1,m))
-    w = w.reshape(X.shape[0], 1)
-    A = sigmoid(w.T.dot(X) + b)
-    for i in range(A.shape[1]):
-        if A[0][i] <= 0.5:
-            Y_prediction[0][i] = 0
-        else:
-            Y_prediction[0][i] = 1  
-    assert(Y_prediction.shape == (1, m))
-    return Y_prediction
-</code></pre>
+    m <span class="token operator">=</span> X<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
+    Y_prediction <span class="token operator">=</span> np<span class="token punctuation">.</span>zeros<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span>m<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    w <span class="token operator">=</span> w<span class="token punctuation">.</span>reshape<span class="token punctuation">(</span>X<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
+    A <span class="token operator">=</span> sigmoid<span class="token punctuation">(</span>w<span class="token punctuation">.</span>T<span class="token punctuation">.</span>dot<span class="token punctuation">(</span>X<span class="token punctuation">)</span> <span class="token operator">+</span> b<span class="token punctuation">)</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span>A<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">if</span> A<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">&lt;=</span> <span class="token number">0.5</span><span class="token punctuation">:</span>
+            Y_prediction<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span>
+        <span class="token keyword">else</span><span class="token punctuation">:</span>
+            Y_prediction<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">1</span>  
+    <span class="token keyword">assert</span><span class="token punctuation">(</span>Y_prediction<span class="token punctuation">.</span>shape <span class="token operator">==</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> m<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> Y_prediction</code></pre>
 <p>但是这样看起来太乱太复杂了，于是最后一个练习将训练过程合并成了一个model，代码如下：</p>
-<pre class=" language-lang-python"><code class="language-lang-python">def model(X_train, Y_train, X_test, Y_test, num_iterations = 2000, learning_rate = 0.5, print_cost = False):
-    w, b = np.zeros((X_train.shape[0], 1)), 0
-    parameters, grads, costs = optimize(w, b, X_train, Y_train, num_iterations, learning_rate, print_cost)
-    w = parameters["w"]
-    b = parameters["b"]
-    Y_prediction_test = predict(w, b, X_test)
-    Y_prediction_train = predict(w, b, X_train)
-    print("train accuracy: {} %".format(100 - np.mean(np.abs(Y_prediction_train - Y_train)) * 100))
-    print("test accuracy: {} %".format(100 - np.mean(np.abs(Y_prediction_test - Y_test)) * 100))
-    d = {"costs": costs,
-         "Y_prediction_test": Y_prediction_test, 
-         "Y_prediction_train" : Y_prediction_train, 
-         "w" : w, 
-         "b" : b,
-         "learning_rate" : learning_rate,
-         "num_iterations": num_iterations}
-    return d
+<pre class=" language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">model</span><span class="token punctuation">(</span>X_train<span class="token punctuation">,</span> Y_train<span class="token punctuation">,</span> X_test<span class="token punctuation">,</span> Y_test<span class="token punctuation">,</span> num_iterations <span class="token operator">=</span> <span class="token number">2000</span><span class="token punctuation">,</span> learning_rate <span class="token operator">=</span> <span class="token number">0.5</span><span class="token punctuation">,</span> print_cost <span class="token operator">=</span> <span class="token boolean">False</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    w<span class="token punctuation">,</span> b <span class="token operator">=</span> np<span class="token punctuation">.</span>zeros<span class="token punctuation">(</span><span class="token punctuation">(</span>X_train<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">0</span>
+    parameters<span class="token punctuation">,</span> grads<span class="token punctuation">,</span> costs <span class="token operator">=</span> optimize<span class="token punctuation">(</span>w<span class="token punctuation">,</span> b<span class="token punctuation">,</span> X_train<span class="token punctuation">,</span> Y_train<span class="token punctuation">,</span> num_iterations<span class="token punctuation">,</span> learning_rate<span class="token punctuation">,</span> print_cost<span class="token punctuation">)</span>
+    w <span class="token operator">=</span> parameters<span class="token punctuation">[</span><span class="token string">"w"</span><span class="token punctuation">]</span>
+    b <span class="token operator">=</span> parameters<span class="token punctuation">[</span><span class="token string">"b"</span><span class="token punctuation">]</span>
+    Y_prediction_test <span class="token operator">=</span> predict<span class="token punctuation">(</span>w<span class="token punctuation">,</span> b<span class="token punctuation">,</span> X_test<span class="token punctuation">)</span>
+    Y_prediction_train <span class="token operator">=</span> predict<span class="token punctuation">(</span>w<span class="token punctuation">,</span> b<span class="token punctuation">,</span> X_train<span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"train accuracy: {} %"</span><span class="token punctuation">.</span>format<span class="token punctuation">(</span><span class="token number">100</span> <span class="token operator">-</span> np<span class="token punctuation">.</span>mean<span class="token punctuation">(</span>np<span class="token punctuation">.</span>abs<span class="token punctuation">(</span>Y_prediction_train <span class="token operator">-</span> Y_train<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"test accuracy: {} %"</span><span class="token punctuation">.</span>format<span class="token punctuation">(</span><span class="token number">100</span> <span class="token operator">-</span> np<span class="token punctuation">.</span>mean<span class="token punctuation">(</span>np<span class="token punctuation">.</span>abs<span class="token punctuation">(</span>Y_prediction_test <span class="token operator">-</span> Y_test<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    d <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token string">"costs"</span><span class="token punctuation">:</span> costs<span class="token punctuation">,</span>
+         <span class="token string">"Y_prediction_test"</span><span class="token punctuation">:</span> Y_prediction_test<span class="token punctuation">,</span> 
+         <span class="token string">"Y_prediction_train"</span> <span class="token punctuation">:</span> Y_prediction_train<span class="token punctuation">,</span> 
+         <span class="token string">"w"</span> <span class="token punctuation">:</span> w<span class="token punctuation">,</span> 
+         <span class="token string">"b"</span> <span class="token punctuation">:</span> b<span class="token punctuation">,</span>
+         <span class="token string">"learning_rate"</span> <span class="token punctuation">:</span> learning_rate<span class="token punctuation">,</span>
+         <span class="token string">"num_iterations"</span><span class="token punctuation">:</span> num_iterations<span class="token punctuation">}</span>
+    <span class="token keyword">return</span> d
 
-d = model(train_set_x, train_set_y, test_set_x, test_set_y, num_iterations = 2000, learning_rate = 0.005, print_cost = True)
-</code></pre>
+d <span class="token operator">=</span> model<span class="token punctuation">(</span>train_set_x<span class="token punctuation">,</span> train_set_y<span class="token punctuation">,</span> test_set_x<span class="token punctuation">,</span> test_set_y<span class="token punctuation">,</span> num_iterations <span class="token operator">=</span> <span class="token number">2000</span><span class="token punctuation">,</span> learning_rate <span class="token operator">=</span> <span class="token number">0.005</span><span class="token punctuation">,</span> print_cost <span class="token operator">=</span> <span class="token boolean">True</span><span class="token punctuation">)</span></code></pre>
 
             </div>
             <hr/>
@@ -702,7 +700,7 @@ d = model(train_set_x, train_set_y, test_set_x, test_set_y, num_iterations = 200
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2017/09/20/dlhw2/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -901,8 +899,8 @@ d = model(train_set_x, train_set_y, test_set_x, test_set_y, num_iterations = 200
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -1024,7 +1022,7 @@ d = model(train_set_x, train_set_y, test_set_x, test_set_y, num_iterations = 200
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

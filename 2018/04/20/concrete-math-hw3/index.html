@@ -10,8 +10,8 @@
     <meta name="description" content="
 
 题3
-题目求\left\lfloor {nx} \right\rfloor  = n\left\lfloor x \right\rfloor的充要条件。解答因为
-\[x = \left\lfloor x \right\rfloor  +">
+题目求$\left\lfloor {nx} \right\rfloor  = n\left\lfloor x \right\rfloor $的充要条件。解答因为
+\[x = \left\lfloor x \right\rfloor">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -19,7 +19,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>具体数学-第三章作业解答 | WeiYang Blog</title>
+    <title>具体数学-第三章作业解答 | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -48,7 +48,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -111,7 +111,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -407,7 +407,7 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                        502
+                        506
                     </div>
                     
 
@@ -433,9 +433,9 @@
                 <div align="middle"><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=29534449&auto=1&height=66"></iframe></div>
 
 <h1 id="题3"><a href="#题3" class="headerlink" title="题3"></a>题3</h1><hr>
-<p><strong>题目</strong><br>求<script type="math/tex">\left\lfloor {nx} \right\rfloor  = n\left\lfloor x \right\rfloor</script>的充要条件。<br><strong>解答</strong><br>因为</p>
+<p><strong>题目</strong><br>求$\left\lfloor {nx} \right\rfloor  = n\left\lfloor x \right\rfloor $的充要条件。<br><strong>解答</strong><br>因为</p>
 <p>\[<br>x = \left\lfloor x \right\rfloor  + \{ x\}<br>\]<br>所以</p>
-<p>\[<br>\left\lfloor {nx} \right\rfloor  = \left\lfloor {n(\left\lfloor x \right\rfloor  + \{ x\} )} \right\rfloor  = n\left\lfloor x \right\rfloor  + \left\lfloor {n\{ x\} } \right\rfloor<br>\]<br>要使得<script type="math/tex">\left\lfloor {nx} \right\rfloor  = n\left\lfloor x \right\rfloor</script>，就必须有</p>
+<p>\[<br>\left\lfloor {nx} \right\rfloor  = \left\lfloor {n(\left\lfloor x \right\rfloor  + \{ x\} )} \right\rfloor  = n\left\lfloor x \right\rfloor  + \left\lfloor {n\{ x\} } \right\rfloor<br>\]<br>要使得$\left\lfloor {nx} \right\rfloor  = n\left\lfloor x \right\rfloor$，就必须有</p>
 <p>\[<br>\left\lfloor {n\{ x\} } \right\rfloor  = 0<br>\]<br>所以</p>
 <p>\[<br>n\{ x\}  &lt; 1<br>\]<br>即</p>
 <p>\[<br>\{ x\}  &lt; \frac{1}{n}<br>\]</p>
@@ -444,15 +444,14 @@
 <p>\[<br>n - \left\lfloor {\frac{n}{m}} \right\rfloor m = n\bmod m &lt; m<br>\]<br>所以</p>
 <p>\[<br>\begin{array}{l}{X_n} = {X_{n - m}} + 1 = {X_{n - 2m}} + 2 =  \cdots \\ = {X_{n - \left\lfloor {\frac{n}{m}} \right\rfloor m}} + \left\lfloor {\frac{n}{m}} \right\rfloor  = n - \left\lfloor {\frac{n}{m}} \right\rfloor m + \left\lfloor {\frac{n}{m}} \right\rfloor \\ = n\,\bmod \,m + \left\lfloor {\frac{n}{m}} \right\rfloor \end{array}<br>\]</p>
 <h1 id="题8"><a href="#题8" class="headerlink" title="题8"></a>题8</h1><hr>
-<p><strong>题目</strong></p>
-<p><script type="math/tex">n</script>个物品放到<script type="math/tex">m</script>个盒子中，求证至少有一个盒子物品数大于等于<script type="math/tex">\left\lceil {\frac{n}{m}} \right\rceil</script>，至少有一个盒子物品数小于等于<script type="math/tex">\left\lfloor {\frac{n}{m}} \right\rfloor</script>。<br><strong>解答</strong><br>假设所有的盒子物品数都小于<script type="math/tex">\left\lceil {\frac{n}{m}} \right\rceil</script>，那么总物品数<script type="math/tex">S</script>满足</p>
-<p>\[<br>S \le m(\left\lceil {\frac{n}{m}} \right\rceil  - 1)<br>\]<br>令<script type="math/tex">n = qm + r,0 \le r < m</script>，那么有</p>
-<p>\[<br>S \le m(\left\lceil {q + \frac{r}{m}} \right\rceil  - 1) = qm - m + m\left\lceil {\frac{r}{m}} \right\rceil<br>\]<br>如果<script type="math/tex">r=0</script>，那么有</p>
-<p>\[<br>S \le qm - m &lt; n<br>\]<br>如果<script type="math/tex">r>0</script>，那么有</p>
-<p>\[<br>S \le qm &lt; n<br>\]<br>这与<script type="math/tex">S=n</script>矛盾！所以至少有一个盒子物品数大于等于<script type="math/tex">\left\lceil {\frac{n}{m}} \right\rceil</script>。</p>
-<p>假设所有的盒子物品数都大于<script type="math/tex">\left\lfloor {\frac{n}{m}} \right\rfloor</script>，那么总物品数<script type="math/tex">S</script>满足</p>
-<p>\[<br>S \ge m(\left\lfloor {\frac{n}{m}} \right\rfloor  + 1)<br>\]<br>令<script type="math/tex">n = qm + r,0 \le r < m</script>，那么有</p>
-<p>\[<br>S \ge m(\left\lfloor {q + \frac{r}{m}} \right\rfloor  + 1) = qm + m + m\left\lfloor {\frac{r}{m}} \right\rfloor  = qm + m &gt; qm + r = n<br>\]<br>这与<script type="math/tex">S=n</script>矛盾！所以至少有一个盒子物品数小于等于<script type="math/tex">\left\lfloor {\frac{n}{m}} \right\rfloor</script>。</p>
+<p><strong>题目</strong><br>$n$个物品放到$m$个盒子中，求证至少有一个盒子物品数大于等于$\left\lceil {\frac{n}{m}} \right\rceil$，至少有一个盒子物品数小于等于$\left\lfloor {\frac{n}{m}} \right\rfloor$。<br><strong>解答</strong><br>假设所有的盒子物品数都小于$\left\lceil {\frac{n}{m}} \right\rceil$，那么总物品数$S$满足</p>
+<p>\[<br>S \le m(\left\lceil {\frac{n}{m}} \right\rceil  - 1)<br>\]<br>令$n = qm + r,0 \le r &lt; m$，那么有</p>
+<p>\[<br>S \le m(\left\lceil {q + \frac{r}{m}} \right\rceil  - 1) = qm - m + m\left\lceil {\frac{r}{m}} \right\rceil<br>\]<br>如果$r=0$，那么有</p>
+<p>\[<br>S \le qm - m &lt; n<br>\]<br>如果$r&gt;0$，那么有</p>
+<p>\[<br>S \le qm &lt; n<br>\]<br>这与$S=n$矛盾！所以至少有一个盒子物品数大于等于$\left\lceil {\frac{n}{m}} \right\rceil$。</p>
+<p>假设所有的盒子物品数都大于$\left\lfloor {\frac{n}{m}} \right\rfloor$，那么总物品数$S$满足</p>
+<p>\[<br>S \ge m(\left\lfloor {\frac{n}{m}} \right\rfloor  + 1)<br>\]<br>令$n = qm + r,0 \le r &lt; m$，那么有</p>
+<p>\[<br>S \ge m(\left\lfloor {q + \frac{r}{m}} \right\rfloor  + 1) = qm + m + m\left\lfloor {\frac{r}{m}} \right\rfloor  = qm + m &gt; qm + r = n<br>\]<br>这与$S=n$矛盾！所以至少有一个盒子物品数小于等于$\left\lfloor {\frac{n}{m}} \right\rfloor$。</p>
 
             </div>
             <hr/>
@@ -615,7 +614,7 @@
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2018/04/20/concrete-math-hw3/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -822,8 +821,8 @@ inside-outside算法是用来预测一棵句法分析树的概率的算法，算
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -945,7 +944,7 @@ inside-outside算法是用来预测一棵句法分析树的概率的算法，算
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

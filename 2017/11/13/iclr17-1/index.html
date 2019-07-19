@@ -19,7 +19,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Transfer Learning for Sequence Tagging with Hierarchical Recurrent Networks | WeiYang Blog</title>
+    <title>Transfer Learning for Sequence Tagging with Hierarchical Recurrent Networks | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -48,7 +48,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -111,7 +111,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -452,8 +452,8 @@
 <h4 id="3-2-1-跨领域迁移"><a href="#3-2-1-跨领域迁移" class="headerlink" title="3.2.1 跨领域迁移"></a>3.2.1 跨领域迁移</h4><p>跨领域迁移有两种情况，一种是两个领域标签存在映射关系，一种是不存在映射关系。<br>第一种情况结构如图b所示，可以共享CRF层以及下面的所有层，最后加一个标签映射的步骤就行了<br>第二种情况结构如图c所示，CRF层独立训练。</p>
 <h4 id="3-2-2-跨应用迁移"><a href="#3-2-2-跨应用迁移" class="headerlink" title="3.2.2 跨应用迁移"></a>3.2.2 跨应用迁移</h4><p>这里假设两种应用是同一种语言，所以和跨领域标签无映射关系类似，用的是图c的结构。</p>
 <h4 id="3-2-3-跨语言迁移"><a href="#3-2-3-跨语言迁移" class="headerlink" title="3.2.3 跨语言迁移"></a>3.2.3 跨语言迁移</h4><p>这里重点放在两种字母表相同的语言上，比如英语和西班牙语。<br>由于字符相同，所以采用图d结构，共享字符层和词向量。</p>
-<h3 id="3-3-训练"><a href="#3-3-训练" class="headerlink" title="3.3 训练"></a>3.3 训练</h3><p>假设从任务<script type="math/tex">s</script>迁移到任务<script type="math/tex">t</script>，训练集分为<script type="math/tex">X_s</script>和<script type="math/tex">X_t</script>，参数分为<script type="math/tex">W_s</script>和<script type="math/tex">W_t</script>。其中模型参数还分为任务特定参数和共享参数：<br>\[{W_s} = {W_{s,spec}} \cup {W_{shared}},{W_t} = {W_{t,spec}} \cup {W_{shared}}\]训练过程如下：<br>每一次迭代，都采用二项分布随机抽取一个任务<script type="math/tex">s</script>或<script type="math/tex">t</script>，然后训练该任务特定模型参数和共享参数。由于源任务和目标任务收敛速度不一定一样，所以对目标任务提前停止。</p>
-<h3 id="3-4-模型实现"><a href="#3-4-模型实现" class="headerlink" title="3.4 模型实现"></a>3.4 模型实现</h3><p>RNN采用GRU，假设隐含层输出为<script type="math/tex">h</script>，输出标签为<script type="math/tex">y</script>，定义CRF的目标函数为<br>\[f(h,y) - \log \sum\limits_{y’ \in \gamma (h)} {\exp (f(h,y’) + \cos {\rm{t}}(y,y’))} \]</p>
+<h3 id="3-3-训练"><a href="#3-3-训练" class="headerlink" title="3.3 训练"></a>3.3 训练</h3><p>假设从任务$s$迁移到任务$t$，训练集分为$X_s$和$X_t$，参数分为$W_s$和$W_t$。其中模型参数还分为任务特定参数和共享参数：<br>\[{W_s} = {W_{s,spec}} \cup {W_{shared}},{W_t} = {W_{t,spec}} \cup {W_{shared}}\]训练过程如下：<br>每一次迭代，都采用二项分布随机抽取一个任务$s$或$t$，然后训练该任务特定模型参数和共享参数。由于源任务和目标任务收敛速度不一定一样，所以对目标任务提前停止。</p>
+<h3 id="3-4-模型实现"><a href="#3-4-模型实现" class="headerlink" title="3.4 模型实现"></a>3.4 模型实现</h3><p>RNN采用GRU，假设隐含层输出为$h$，输出标签为$y$，定义CRF的目标函数为<br>\[f(h,y) - \log \sum\limits_{y’ \in \gamma (h)} {\exp (f(h,y’) + \cos {\rm{t}}(y,y’))} \]</p>
 <h1 id="4-实验"><a href="#4-实验" class="headerlink" title="4 实验"></a>4 实验</h1><p><img src="2.png" alt><br><img src="3.png" alt><br>上图是实验结果，其中跨领域迁移：ade，跨应用迁移：fgh，跨语言迁移：ij，跨领域和应用：b，跨领域、应用和语言：c。<br><img src="4.png" alt><br>上表是各类任务在不同标签率下迁移学习和无迁移学习的性能对比。<br>可以看出三种迁移结构性能提升的顺序是A&gt;B&gt;C，因为结构C比如跨语言模型，源任务和目标任务相似性很小。<br><img src="5.png" alt><br>上图是和其他模型比较的结果。</p>
 <h1 id="5-结论"><a href="#5-结论" class="headerlink" title="5 结论"></a>5 结论</h1><hr>
 <p>提出一种神经序列标注的迁移学习方法，主要有三个方面：跨领域、跨应用、跨语言。<br>以下三个因素对迁移学习性能有很大影响：目标任务标签数量、源任务和目标任务相关性、能够共享的参数数量。<br>在以后的工作中，可以在跨语言迁移学习中尝试结合基于模型的迁移和基于资源的迁移。</p>
@@ -619,7 +619,7 @@
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2017/11/13/iclr17-1/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -833,8 +833,8 @@
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -956,7 +956,7 @@
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

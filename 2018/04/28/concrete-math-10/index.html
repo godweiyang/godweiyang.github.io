@@ -11,7 +11,7 @@
 
 欧几里得数
 首先我们来证明一下，素数有无穷多个。
-假设素数只有k个，分别为2,3, \ldots ,{P_k}，那么我们构造下面的数字：\[M = 2 \cdot 3 \cdot  \ldots  \cdot {P_k} + 1\]显然">
+假设素数只有$k$个，分别为$2,3, \ldots ,{P_k}$，那么我们构造下面的数字：\[M = 2 \cdot 3 \cdot  \ldots  \cdot {P_k} + 1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -19,7 +19,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>具体数学-第10课（素数和阶乘的有趣性质） | WeiYang Blog</title>
+    <title>具体数学-第10课（素数和阶乘的有趣性质） | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -48,7 +48,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -111,7 +111,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -434,28 +434,27 @@
 
 <h1 id="欧几里得数"><a href="#欧几里得数" class="headerlink" title="欧几里得数"></a>欧几里得数</h1><hr>
 <p>首先我们来证明一下，素数有无穷多个。</p>
-<p>假设素数只有<script type="math/tex">k</script>个，分别为<script type="math/tex">2,3, \ldots ,{P_k}</script>，那么我们构造下面的数字：<br>\[M = 2 \cdot 3 \cdot  \ldots  \cdot {P_k} + 1\]<br>显然<script type="math/tex">M</script>无法被<script type="math/tex">2,3, \ldots ,{P_k}</script>中的任意一个整除，那么要么<script type="math/tex">M</script>可以被其他的素数整除，要么<script type="math/tex">M</script>自己就是一个素数。所以素数有无穷多个。</p>
+<p>假设素数只有$k$个，分别为$2,3, \ldots ,{P_k}$，那么我们构造下面的数字：<br>\[M = 2 \cdot 3 \cdot  \ldots  \cdot {P_k} + 1\]<br>显然$M$无法被$2,3, \ldots ,{P_k}$中的任意一个整除，那么要么$M$可以被其他的素数整除，要么$M$自己就是一个素数。所以素数有无穷多个。</p>
 <p>下面我们来定义欧几里得数，是用递归形式来定义的：<br>\[{e_n} = {e_0}{e_1}{e_2} \ldots {e_{n - 1}} + 1\]</p>
-<p>那么欧几里得数是否是素数呢？当然不是的，<script type="math/tex">{e_5} = 1807 = 13 \cdot 139</script>。</p>
+<p>那么欧几里得数是否是素数呢？当然不是的，${e_5} = 1807 = 13 \cdot 139$。</p>
 <p>但是欧几里得数还是有很多奇妙的性质。</p>
-<p><strong>性质1</strong><br>\[\gcd ({e_m},{e_n}) = 1,m \ne n\]<br><strong>证明：</strong><br>假设<script type="math/tex">n > m</script>，那么有<br>\[\gcd ({e_m},{e_n}) = \gcd ({e_m},{e_0}{e_1} \ldots {e_m}{e_{m + 1}} \ldots {e_{n - 1}} + 1) = \gcd (1,{e_m}) = 1\]<br><strong>性质2</strong><br>如果令<script type="math/tex">q_j</script>等于<script type="math/tex">e_j</script>的最小素因子，那么<script type="math/tex">{q_1},{q_2}, \ldots</script>就是一个不重复的素数序列，这也证明了素数有无穷多个。<br><strong>性质3</strong><br>\[{e_n} = {e_0}{e_1}{e_2} \ldots {e_{n - 1}} + 1 = ({e_{n - 1}} - 1){e_{n - 1}} + 1 = e_{n - 1}^2 - {e_{n - 1}} + 1\]<br>在后面的章节可以证明：<br>\[{e_n} = \left\lfloor { {E^{ {2^n}}} + \frac{1}{2}} \right\rfloor \]<br>其中<script type="math/tex">E \approx 1.264</script></p>
+<p><strong>性质1</strong><br>\[\gcd ({e_m},{e_n}) = 1,m \ne n\]<br><strong>证明：</strong><br>假设$n &gt; m$，那么有<br>\[\gcd ({e_m},{e_n}) = \gcd ({e_m},{e_0}{e_1} \ldots {e_m}{e_{m + 1}} \ldots {e_{n - 1}} + 1) = \gcd (1,{e_m}) = 1\]<br><strong>性质2</strong><br>如果令$q_j$等于$e_j$的最小素因子，那么${q_1},{q_2}, \ldots $就是一个不重复的素数序列，这也证明了素数有无穷多个。<br><strong>性质3</strong><br>\[{e_n} = {e_0}{e_1}{e_2} \ldots {e_{n - 1}} + 1 = ({e_{n - 1}} - 1){e_{n - 1}} + 1 = e_{n - 1}^2 - {e_{n - 1}} + 1\]<br>在后面的章节可以证明：<br>\[{e_n} = \left\lfloor { {E^{ {2^n}}} + \frac{1}{2}} \right\rfloor \]<br>其中$E \approx 1.264$</p>
 <p>下面我们稍稍探究一下下面这个数的性质：<br>\[{2^p} - 1\]<br>这个数如果是素数，那么就被叫做<strong>梅森素数</strong>，那么它在什么情况下是素数呢？</p>
-<p>首先<script type="math/tex">p</script>不能是合数，因为有<br>\[{2^{km}} - 1 = ({2^m} - 1)({2^{m(k - 1)}} + {2^{m(k - 2)}} +  \cdots  + 1)\]<br>但是如果<script type="math/tex">p</script>是素数，这个数也不一定是素数，2017年年末美国一个电气工程师发现了人类历史上最大的梅森素数——<script type="math/tex">{2^{77232917}} - 1</script>。</p>
+<p>首先$p$不能是合数，因为有<br>\[{2^{km}} - 1 = ({2^m} - 1)({2^{m(k - 1)}} + {2^{m(k - 2)}} +  \cdots  + 1)\]<br>但是如果$p$是素数，这个数也不一定是素数，2017年年末美国一个电气工程师发现了人类历史上最大的梅森素数——${2^{77232917}} - 1$。</p>
 <h1 id="阶乘"><a href="#阶乘" class="headerlink" title="阶乘"></a>阶乘</h1><p>阶乘定义如下：<br>\[n! = 1 \cdot 2 \cdot  \ldots  \cdot n = \prod\limits_{k = 1}^n k \]<br>所以有<br>\[n{!^2} = (1 \cdot 2 \cdot  \ldots  \cdot n)(n \cdot  \ldots  \cdot 2 \cdot 1) = \prod\limits_{k = 1}^n {k(n + 1 - k)} \]<br>由基本不等式可以得到<br>\[n \le k(n + 1 - k) \le \frac{ { { {(n + 1)}^2}}}{4}\]<br>所以<br>\[\prod\limits_{k = 1}^n n  \le n{!^2} \le \prod\limits_{k = 1}^n {\frac{ { { {(n + 1)}^2}}}{4}} \]<br>所以<br>\[{n^{n/2}} \le n! \le \frac{ { { {(n + 1)}^n}}}{ { {2^n}}}\]<br>这里得到了阶乘的一个粗略范围，在后面章节中，我们会得到阶乘的一个更精确的表达式：<br>\[n! \sim \sqrt {2\pi n} {\left( {\frac{n}{e}} \right)^n}\]<br>这就是斯特林数，搞ACM还是很有用的。</p>
-<p>下面我们来探讨<script type="math/tex">n!</script>中含有多少个素因子<script type="math/tex">p</script>，个数记为<script type="math/tex">{\varepsilon _p}(n!)</script>。</p>
-<p>从特殊情况讨论起，当<script type="math/tex">p = 2</script>的时候，我们首先看<script type="math/tex">n!</script>含有多少个2，然后看有多少个4，再看有多少个8，依次下去，所以答案为：<br>\[{\varepsilon _2}(n!) = \sum\limits_{k \ge 1} {\left\lfloor {\frac{n}{ { {2^k}}}} \right\rfloor } \]<br>可以看出，这个答案不就是<script type="math/tex">n</script>的二进制表示不停右移1位，然后相加吗？所以又可以写成：<br>\[{\varepsilon _2}(n!) = n - {\nu _2}(n)\]<br>其中<script type="math/tex">{\nu _2}(n)</script>表示<script type="math/tex">n</script>的二进制表示中1的个数。</p>
+<p>下面我们来探讨$n!$中含有多少个素因子$p$，个数记为${\varepsilon _p}(n!)$。</p>
+<p>从特殊情况讨论起，当$p = 2$的时候，我们首先看$n!$含有多少个2，然后看有多少个4，再看有多少个8，依次下去，所以答案为：<br>\[{\varepsilon _2}(n!) = \sum\limits_{k \ge 1} {\left\lfloor {\frac{n}{ { {2^k}}}} \right\rfloor } \]<br>可以看出，这个答案不就是$n$的二进制表示不停右移1位，然后相加吗？所以又可以写成：<br>\[{\varepsilon _2}(n!) = n - {\nu _2}(n)\]<br>其中${\nu _2}(n)$表示$n$的二进制表示中1的个数。</p>
 <p>推广到一般情况：<br>\[{\varepsilon _p}(n!) = \sum\limits_{k \ge 1} {\left\lfloor {\frac{n}{ { {p^k}}}} \right\rfloor } \]<br>放缩一下有：<br>\[{\varepsilon _p}(n!) = \sum\limits_{k \ge 1} {\left\lfloor {\frac{n}{ { {p^k}}}} \right\rfloor }  &lt; \sum\limits_{k \ge 1} {\frac{n}{ { {p^k}}} = \frac{n}{ {p - 1}}} \]</p>
-<p>如果我们令<script type="math/tex">p = 2</script>和<script type="math/tex">p = 3</script>可以发现：<br>\[{\varepsilon _2}(n!) \approx 2{\varepsilon _3}(n!)\]<br>但是这个式子在什么情况下相等呢？这仍然是一个未解之谜。</p>
-<p>所以<script type="math/tex">p</script>对<script type="math/tex">n!</script>的贡献度满足如下式子：<br>\[{p^{ {\varepsilon _p}(n!)}} &lt; {p^{\frac{n}{ {p - 1}}}}\]<br>又因为<script type="math/tex">p \le 2^{p - 1}</script>，所以<br>\[{p^{ {\varepsilon _p}(n!)}} &lt; {p^{\frac{n}{ {p - 1}}}} \le {2^n}\]<br>假设素数只有<script type="math/tex">k</script>个，分别为<script type="math/tex">2,3, \ldots ,{P_k}</script>，那么有<br>\[n! &lt; {({2^n})^k}\]<br>如果我们令<script type="math/tex">n = {2^{2k}}</script>，那么<br>\[n! &lt; {({2^n})^k} = {2^{k{2^{2k}}}} = {2^{2k{2^{2k}}/2}} = {n^{n/2}}\]<br>这与我们之前推过的不等式矛盾！所以一定有无穷个素数。</p>
-<p>设小于等于<script type="math/tex">n</script>的素数个数为<script type="math/tex">\pi (n)</script>，所以<br>\[n! &lt; {2^{n\pi (n)}}\]<br>根据斯特林数公式，我们可以得到<br>\[\pi (n) &gt; \lg (n/e)\]</p>
+<p>如果我们令$p = 2$和$p = 3$可以发现：<br>\[{\varepsilon _2}(n!) \approx 2{\varepsilon _3}(n!)\]<br>但是这个式子在什么情况下相等呢？这仍然是一个未解之谜。</p>
+<p>所以$p$对$n!$的贡献度满足如下式子：<br>\[{p^{ {\varepsilon _p}(n!)}} &lt; {p^{\frac{n}{ {p - 1}}}}\]<br>又因为$p \le 2^{p - 1}$，所以<br>\[{p^{ {\varepsilon _p}(n!)}} &lt; {p^{\frac{n}{ {p - 1}}}} \le {2^n}\]<br>假设素数只有$k$个，分别为$2,3, \ldots ,{P_k}$，那么有<br>\[n! &lt; {({2^n})^k}\]<br>如果我们令$n = {2^{2k}}$，那么<br>\[n! &lt; {({2^n})^k} = {2^{k{2^{2k}}}} = {2^{2k{2^{2k}}/2}} = {n^{n/2}}\]<br>这与我们之前推过的不等式矛盾！所以一定有无穷个素数。</p>
+<p>设小于等于$n$的素数个数为$\pi (n)$，所以<br>\[n! &lt; {2^{n\pi (n)}}\]<br>根据斯特林数公式，我们可以得到<br>\[\pi (n) &gt; \lg (n/e)\]</p>
 <h1 id="互素"><a href="#互素" class="headerlink" title="互素"></a>互素</h1><hr>
-<p><strong>定义</strong></p>
-<p><script type="math/tex">m</script>和<script type="math/tex">n</script>互素定义为<script type="math/tex">gcd(m, n) = 1</script>，记作<script type="math/tex">m \bot n</script>。</p>
+<p><strong>定义</strong><br>$m$和$n$互素定义为$gcd(m, n) = 1$，记作$m \bot n$。</p>
 <p>互素也有很多性质。</p>
-<p><strong>性质1</strong><br>\[m/\gcd (m,n) \bot n/\gcd (m,n)\]<br><strong>性质2</strong><br>\[m \bot n \Leftrightarrow \min ({m_p},{n_p}) = 0\]<br>其中<script type="math/tex">{m_p},{n_p}</script>就是两个数的素数指数表示法，详细定义见上一节课。<br>或者可以表示为<br>\[m \bot n \Leftrightarrow {m_p}{n_p} = 0\]<br><strong>性质3</strong><br>\[k \bot m,k \bot n \Leftrightarrow k \bot mn\]</p>
+<p><strong>性质1</strong><br>\[m/\gcd (m,n) \bot n/\gcd (m,n)\]<br><strong>性质2</strong><br>\[m \bot n \Leftrightarrow \min ({m_p},{n_p}) = 0\]<br>其中${m_p},{n_p}$就是两个数的素数指数表示法，详细定义见上一节课。<br>或者可以表示为<br>\[m \bot n \Leftrightarrow {m_p}{n_p} = 0\]<br><strong>性质3</strong><br>\[k \bot m,k \bot n \Leftrightarrow k \bot mn\]</p>
 <h1 id="Stern-Brocot树"><a href="#Stern-Brocot树" class="headerlink" title="Stern-Brocot树"></a>Stern-Brocot树</h1><hr>
 <p><img src="1.png" alt><br>如上图所示，Stern-Brocot树就是0到1之间的分数生成的一棵二叉树。</p>
-<p>初始时只有<script type="math/tex">\frac{0}{1},\frac{1}{0}</script>两个数，第一轮将两者分母相加，分子也相加作为新的分数的分母分子。第二轮再对相邻的两个分数做相同的操作，生成新的分数序列。不断生成下去，得到了上图的二叉树。</p>
+<p>初始时只有$\frac{0}{1},\frac{1}{0}$两个数，第一轮将两者分母相加，分子也相加作为新的分数的分母分子。第二轮再对相邻的两个分数做相同的操作，生成新的分数序列。不断生成下去，得到了上图的二叉树。</p>
 <p>Stern-Brocot树有下面四个性质：</p>
 <ol>
 <li>0到1之间的所有有理数都出现在了这棵树中。</li>
@@ -464,16 +463,16 @@
 <li>生成的序列是单调递增的。</li>
 </ol>
 <p>下面我们来一个一个证明。</p>
-<p><strong>引理</strong><br>对于相邻的两个分数<script type="math/tex">\frac{m}{n},\frac{ {m'}}{ {n'}}</script>，满足：<br>\[m’n - mn’ = 1\]<br><strong>证明</strong><br>用数学归纳法证明。</p>
+<p><strong>引理</strong><br>对于相邻的两个分数$\frac{m}{n},\frac{ {m’}}{ {n’}}$，满足：<br>\[m’n - mn’ = 1\]<br><strong>证明</strong><br>用数学归纳法证明。</p>
 <p>性质4就是证明：<br>\[\frac{m}{n} &lt; \frac{ {m + m’}}{ {n + n’}} &lt; \frac{ {m’}}{ {n’}}\]<br>结论是很显然的，这样性质2同时就成立了。</p>
-<p>性质1的话，对于任意有理数<script type="math/tex">\frac{a}{b}</script>，假设<script type="math/tex">\frac{m}{n} < \frac{a}{b} < \frac{ {m'}}{ {n'}}</script>。<br>我们采用如下策略生成<script type="math/tex">\frac{a}{b}</script>。</p>
+<p>性质1的话，对于任意有理数$\frac{a}{b}$，假设$\frac{m}{n} &lt; \frac{a}{b} &lt; \frac{ {m’}}{ {n’}}$。<br>我们采用如下策略生成$\frac{a}{b}$。</p>
 <ul>
-<li>如果<script type="math/tex">\frac{ {m + m'}}{ {n + n'}} = \frac{a}{b}</script>，那么成功。</li>
-<li>如果<script type="math/tex">\frac{ {m + m'}}{ {n + n'}} < \frac{a}{b}</script>，那么令<script type="math/tex">m = m + m',n = n + n'</script>。</li>
-<li>如果<script type="math/tex">\frac{ {m + m'}}{ {n + n'}} > \frac{a}{b}</script>，那么令<script type="math/tex">m' = m + m',n' = n + n'</script>。</li>
+<li>如果$\frac{ {m + m’}}{ {n + n’}} = \frac{a}{b}$，那么成功。</li>
+<li>如果$\frac{ {m + m’}}{ {n + n’}} &lt; \frac{a}{b}$，那么令$m = m + m’,n = n + n’$。</li>
+<li>如果$\frac{ {m + m’}}{ {n + n’}} &gt; \frac{a}{b}$，那么令$m’ = m + m’,n’ = n + n’$。</li>
 </ul>
-<p>那么有<br>\[an - bm \ge 1,bm’ - an’ \ge 1\]<br>所以<br>\[(m’ + n’)(an - bm) + (m + n)(bm’ - an’) \ge m’ + n’ + m + n\]<br>而左边式子就等于<script type="math/tex">a + b</script>，所以<br>\[a + b \ge m’ + n’ + m + n\]<br>因为<script type="math/tex">m,n,m',n'</script>都在不断增加，所以最多<script type="math/tex">a + b</script>轮就能生成<script type="math/tex">\frac{a}{b}</script>。</p>
-<p>性质3的话，同样用数学归纳法。通过引理可以得到<br>\[(m + m’)n - m(n + n’) = 1\]<br>由扩展欧几里得定理可以得到<script type="math/tex">m + m'</script>与<script type="math/tex">n + n'</script>互素。</p>
+<p>那么有<br>\[an - bm \ge 1,bm’ - an’ \ge 1\]<br>所以<br>\[(m’ + n’)(an - bm) + (m + n)(bm’ - an’) \ge m’ + n’ + m + n\]<br>而左边式子就等于$a + b$，所以<br>\[a + b \ge m’ + n’ + m + n\]<br>因为$m,n,m’,n’$都在不断增加，所以最多$a + b$轮就能生成$\frac{a}{b}$。</p>
+<p>性质3的话，同样用数学归纳法。通过引理可以得到<br>\[(m + m’)n - m(n + n’) = 1\]<br>由扩展欧几里得定理可以得到$m + m’$与$n + n’$互素。</p>
 <p><strong>Farey序列</strong><br>我们引申出Farey序列的概念，定义如下：<br>\[{F_n} = \{ a/b|\gcd (a,b) = 1,0 \le a,b \le n,0 \le a/b \le 1\} \]<br>关于它的更多性质，留到下一节课继续。</p>
 
             </div>
@@ -637,7 +636,7 @@
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2018/04/28/concrete-math-10/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -717,7 +716,7 @@
 
 Stern-Brocot树
 我们接着上节课讲到的Stern-Brocot树继续往下讲。
-LR序列表示对于任意分数\frac{a}{b}，我们从\frac{1}{1}开始走到它所在的结点。如果向左走就记为L，向右走记为R，最终可以得到一个
+LR序列表示对于任意分数$\frac{a}{b}$，我们从$\frac{1}{1}$开始走到它所在的结点。如果向左走就记为L，向右走记为R，最终可以
                         
                     </div>
                     <div class="publish-info">
@@ -853,8 +852,8 @@ CKY算法或维特比inside算法是成分句法分析的主要方法之一，�
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -976,7 +975,7 @@ CKY算法或维特比inside算法是成分句法分析的主要方法之一，�
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

@@ -19,7 +19,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>给python新手的一些建议 | WeiYang Blog</title>
+    <title>给python新手的一些建议 | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -48,7 +48,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -111,7 +111,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -453,21 +453,37 @@
 <p>很多同学刚开始写的代码风格都很丑，我自己也是，要尽快形成自己的代码风格，python相比c语言好很多，强制了缩进，不然编译都不给你通过，但是还是有很多地方需要你自己注意，比如表达式运算符两边要加空格、变量命名要可以直接看出用途等等。推荐大家去读一读google的<a href="https://www.runoob.com/w3cnote/google-python-styleguide.html" target="_blank" rel="noopener">python编程规范</a>，写出美观的代码，以后也便于维护。</p>
 <h1 id="Q-amp-A"><a href="#Q-amp-A" class="headerlink" title="Q&amp;A"></a>Q&amp;A</h1><hr>
 <ul>
-<li><p><strong>Q: python相对于其他语言有哪些优势和区别？</strong><br><strong>A:</strong> 首先python语言最大的优势就是简单，非常适合没有编程基础的人入门，它去除了c语言繁琐的指针类型，而且代码也很容易读懂，与人类语言有点类似。python也支持面向对象，并且不像c++和java那样繁琐，保持了它的简洁性。因为它是开源的，所以有很多很多的第三方库可以调用，很多功能根本不需要你自己动手写，别人都帮你写好封装好了，你直接调用一个函数就解决了。但是python也有缺点，一大缺点就是相比于c++和java这种较为底层的语言，python的运行速度非常慢，当然可以选择使用cython来加速python。并且python的格式要求非常严格，强制代码缩进，两条语句不能写在同一行等等。</p>
+<li><p><strong>Q: python相对于其他语言有哪些优势和区别？</strong></p>
 </li>
-<li><p><strong>Q: 老师上课提到“面向对象”和“面向过程”，是什么意思？</strong><br><strong>A:</strong> 简单来说，面向过程就是按照解决问题的顺序，一步步的编写代码、调用函数。而面向对象就是将你要处理的事物分解为一个个对象（也就是类），每个对象有很多属性，编写代码时只要生成这些类，并且调用它们的类方法就好了。面向对象的一大好处就是可维护性好，比如如果你要对两个相同的对象进行操作，如果用面向过程，那你就要写两段相同的代码，如果改了一段，还得同时修改另一段；而面向对象就很简单了，因为你的两个对象都封装在了一个类里，所以只要改一下类就好啦。</p>
+<li><p><em>A:*</em> 首先python语言最大的优势就是简单，非常适合没有编程基础的人入门，它去除了c语言繁琐的指针类型，而且代码也很容易读懂，与人类语言有点类似。python也支持面向对象，并且不像c++和java那样繁琐，保持了它的简洁性。因为它是开源的，所以有很多很多的第三方库可以调用，很多功能根本不需要你自己动手写，别人都帮你写好封装好了，你直接调用一个函数就解决了。但是python也有缺点，一大缺点就是相比于c++和java这种较为底层的语言，python的运行速度非常慢，当然可以选择使用cython来加速python。并且python的格式要求非常严格，强制代码缩进，两条语句不能写在同一行等等。</p>
 </li>
-<li><p><strong>Q: 拿到一个问题应该如何思考？如何解决？步骤是什么？</strong><br><strong>A:</strong> 拿到一个问题（比如编程题），不要直接下手写代码，先想想该用什么方法解决？方法的时间复杂度和空间复杂度能否承受？要用到哪些函数？总体框架应该写成什么样子？然后再一个个模块编写，不要写一步想一步。</p>
+<li><p><strong>Q: 老师上课提到“面向对象”和“面向过程”，是什么意思？</strong></p>
 </li>
-<li><p><strong>Q: 什么是递归思维？有什么好处？</strong><br><strong>A:</strong> 递归思想也就是递归算法是经常用到的一种算法，可以将规模很大的问题化解为一个个的小问题，便于求解也增加了可读性。举个例子吧，求解阶乘，常规方法是从<script type="math/tex">f(1)</script>开始逐项计算，而用递归思想就是要计算<script type="math/tex">f(n)</script>，就先计算出<script type="math/tex">f(n - 1)</script>然后乘以<script type="math/tex">n</script>，而<script type="math/tex">f(n - 1)</script>继续递归算下去就行了。</p>
+<li><p><em>A:*</em> 简单来说，面向过程就是按照解决问题的顺序，一步步的编写代码、调用函数。而面向对象就是将你要处理的事物分解为一个个对象（也就是类），每个对象有很多属性，编写代码时只要生成这些类，并且调用它们的类方法就好了。面向对象的一大好处就是可维护性好，比如如果你要对两个相同的对象进行操作，如果用面向过程，那你就要写两段相同的代码，如果改了一段，还得同时修改另一段；而面向对象就很简单了，因为你的两个对象都封装在了一个类里，所以只要改一下类就好啦。</p>
 </li>
-<li><p><strong>Q: 对于萌新，基础薄弱，学长有什么好的方法？推荐一下有用的参考资料</strong><br><strong>A:</strong> 基础薄弱那就先把书上的语法看懂了，边看边敲了自己试一试怎么用，不要光看不写。资料的话看再多不如自己敲来的记忆深刻，推荐《python简明教程》吧，最方便的还是不会的用法直接百度或者谷歌，看博客讲解。</p>
+<li><p><strong>Q: 拿到一个问题应该如何思考？如何解决？步骤是什么？</strong></p>
 </li>
-<li><p><strong>Q: 如何避免语法符号规范的错误？</strong><br><strong>A:</strong> 语法错误很正常，我也经常遇到，特别是没怎么用过的函数，这个只能靠查文档，然后用多了自然就记得怎么用了。规范之类的上面说过了，去看google的python编码规范，养成一个好的编码习惯，既是为了别人能看懂你的代码，也是为了你自己今后还能看懂你自己的代码。</p>
+<li><p><em>A:*</em> 拿到一个问题（比如编程题），不要直接下手写代码，先想想该用什么方法解决？方法的时间复杂度和空间复杂度能否承受？要用到哪些函数？总体框架应该写成什么样子？然后再一个个模块编写，不要写一步想一步。</p>
 </li>
-<li><p><strong>Q: 如何判断什么时候该用什么函数？</strong><br><strong>A:</strong> 这个就根据你要实现的功能啊，比如你要切分一个句子变成若干个单词，那么自然而然想到要用<code>string.split()</code>函数。当然刚开始你可能根本就不知道有哪些函数可以给你用，那么你就需要百度“python切分一个句子变成若干个单词”，然后就会告诉你要用什么方法了，多查多记以后就会用了。</p>
+<li><p><strong>Q: 什么是递归思维？有什么好处？</strong></p>
 </li>
-<li><p><strong>Q: OJ系统是什么？我们如何利用它？</strong><br><strong>A:</strong> OJ全称是Online Judge，是一个在线评测系统，上面有很多很多编程题，你可以写代码实现它，然后提交给OJ运行，它会告诉你你的代码是否正确。大家可以利用我们学校自己的EOJ来进行编程训练，先从简单的题开始做起，记住，不要一遇到不会做的题就去百度找题解，一定要自己思考，自己想出了方法收获才是最大的，切记。</p>
+<li><p><em>A:*</em> 递归思想也就是递归算法是经常用到的一种算法，可以将规模很大的问题化解为一个个的小问题，便于求解也增加了可读性。举个例子吧，求解阶乘，常规方法是从$f(1)$开始逐项计算，而用递归思想就是要计算$f(n)$，就先计算出$f(n - 1)$然后乘以$n$，而$f(n - 1)$继续递归算下去就行了。</p>
+</li>
+<li><p><strong>Q: 对于萌新，基础薄弱，学长有什么好的方法？推荐一下有用的参考资料</strong></p>
+</li>
+<li><p><em>A:*</em> 基础薄弱那就先把书上的语法看懂了，边看边敲了自己试一试怎么用，不要光看不写。资料的话看再多不如自己敲来的记忆深刻，推荐《python简明教程》吧，最方便的还是不会的用法直接百度或者谷歌，看博客讲解。</p>
+</li>
+<li><p><strong>Q: 如何避免语法符号规范的错误？</strong></p>
+</li>
+<li><p><em>A:*</em> 语法错误很正常，我也经常遇到，特别是没怎么用过的函数，这个只能靠查文档，然后用多了自然就记得怎么用了。规范之类的上面说过了，去看google的python编码规范，养成一个好的编码习惯，既是为了别人能看懂你的代码，也是为了你自己今后还能看懂你自己的代码。</p>
+</li>
+<li><p><strong>Q: 如何判断什么时候该用什么函数？</strong></p>
+</li>
+<li><p><em>A:*</em> 这个就根据你要实现的功能啊，比如你要切分一个句子变成若干个单词，那么自然而然想到要用<code>string.split()</code>函数。当然刚开始你可能根本就不知道有哪些函数可以给你用，那么你就需要百度“python切分一个句子变成若干个单词”，然后就会告诉你要用什么方法了，多查多记以后就会用了。</p>
+</li>
+<li><p><strong>Q: OJ系统是什么？我们如何利用它？</strong></p>
+</li>
+<li><p><em>A:*</em> OJ全称是Online Judge，是一个在线评测系统，上面有很多很多编程题，你可以写代码实现它，然后提交给OJ运行，它会告诉你你的代码是否正确。大家可以利用我们学校自己的EOJ来进行编程训练，先从简单的题开始做起，记住，不要一遇到不会做的题就去百度找题解，一定要自己思考，自己想出了方法收获才是最大的，切记。</p>
 </li>
 </ul>
 
@@ -632,7 +648,7 @@
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2018/10/11/python-advice/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -858,8 +874,8 @@ PPT地址：A Summary of
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -981,7 +997,7 @@ PPT地址：A Summary of
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

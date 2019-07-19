@@ -17,7 +17,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>具体数学-第5课（8种方法求和） | WeiYang Blog</title>
+    <title>具体数学-第5课（8种方法求和） | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -46,7 +46,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -109,7 +109,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -437,12 +437,12 @@
 <p><strong>猜答案，然后用数学归纳法证明。</strong><br>这个也不多说了，前提是你得猜得出来，这题的公式还是很难猜的。</p>
 <h1 id="方法2"><a href="#方法2" class="headerlink" title="方法2"></a>方法2</h1><hr>
 <p><strong>扰动法。</strong><br>令<br>\[T = \sum\limits_{0 \le k \le n} { {k^3}} \]<br>所以<br>\[\begin{array}{l}T + {(n + 1)^3}\\ = \sum\limits_{1 \le k \le n + 1} { {k^3}} \\ = \sum\limits_{1 \le k \le n + 1} { { {(k - 1)}^3}}  + \sum\limits_{1 \le k \le n + 1} {(3{k^2} - 3k + 1)} \\ = \sum\limits_{0 \le k \le n} { {k^3}}  + \sum\limits_{1 \le k \le n + 1} {[3{ {(k - 1)}^2} + 3k - 2]} \\ = T + 3{S_n} + \frac{ {3(n + 2)(n + 1)}}{2} - 2(n + 1)\end{array}\]<br>解出<br>\[3{S_n} = {(n + 1)^3} - \frac{ {3(n + 2)(n + 1)}}{2} + 2(n + 1) = n(n + \frac{1}{2})(n + 1)\]<br>最终得到<br>\[{S_n} = \frac{ {n(n + 1)(2n + 1)}}{6}\]</p>
-<p>可以看出，我们本来是要对<script type="math/tex">k^2</script>求和的，但是只要对<script type="math/tex">k^3</script>用扰动法求和即可，因为求和过程中<script type="math/tex">k^3</script>项会被抵消掉。</p>
+<p>可以看出，我们本来是要对$k^2$求和的，但是只要对$k^3$用扰动法求和即可，因为求和过程中$k^3$项会被抵消掉。</p>
 <h1 id="方法3"><a href="#方法3" class="headerlink" title="方法3"></a>方法3</h1><hr>
-<p><strong>成套方法。</strong><br>定义如下递归式：<br>\[\begin{array}{l}{R_0} = \alpha \\{R_n} = {R_{n - 1}} + \beta  + \gamma n + \delta {n^2}\end{array}\]<br>由<a href="http://godweiyang.com/2018/03/05/concrete-math-2/">第2课</a>可知，设解的形式为：<br>\[{R_n} = A(n)\alpha  + B(n)\beta  + C(n)\gamma  + D(n)\delta \]<br>分别令<script type="math/tex">{R_n} = 1,n,{n^2}</script>可以解出<br>\[A(n) = 1,B(n) = n,C(n) = \frac{ {n(n + 1)}}{2}\]<br>再另<script type="math/tex">{R_n} = {n^3}</script>，可以得到<br>\[3D(n) = {n^3} + 3C(n) - B(n) = n(n + \frac{1}{2})(n + 1)\]<br>即<br>\[D(n) = \frac{ {n(n + 1)(2n + 1)}}{6}\]</p>
+<p><strong>成套方法。</strong><br>定义如下递归式：<br>\[\begin{array}{l}{R_0} = \alpha \\{R_n} = {R_{n - 1}} + \beta  + \gamma n + \delta {n^2}\end{array}\]<br>由<a href="http://godweiyang.com/2018/03/05/concrete-math-2/">第2课</a>可知，设解的形式为：<br>\[{R_n} = A(n)\alpha  + B(n)\beta  + C(n)\gamma  + D(n)\delta \]<br>分别令${R_n} = 1,n,{n^2}$可以解出<br>\[A(n) = 1,B(n) = n,C(n) = \frac{ {n(n + 1)}}{2}\]<br>再另${R_n} = {n^3}$，可以得到<br>\[3D(n) = {n^3} + 3C(n) - B(n) = n(n + \frac{1}{2})(n + 1)\]<br>即<br>\[D(n) = \frac{ {n(n + 1)(2n + 1)}}{6}\]</p>
 <p>这时如果令<br>\[\alpha  = \beta  = \gamma  = 0,\delta  = 1\]<br>那么<br>\[{R_n} = \sum\limits_{0 \le k \le n} { {k^2}}  = D(n) = \frac{ {n(n + 1)(2n + 1)}}{6}\]</p>
 <h1 id="方法4"><a href="#方法4" class="headerlink" title="方法4"></a>方法4</h1><hr>
-<p><strong>积分法</strong><br>求和式可以近似成积分\[\int_0^n { {x^2}dx}  = {n^3}/3\]<br>但是还少算了一部分误差，设为<script type="math/tex">E_n</script>，则有<br>\[{E_n} = {S_n} - \frac{1}{3}{n^3} = {S_{n - 1}} + {n^2} - \frac{1}{3}{n^3} = {E_{n - 1}} + n - \frac{1}{3}\]<br>解得<br>\[{E_n} = \frac{ {3{n^2} + n}}{6}\]<br>所以<br>\[{S_n} = {E_n} + \frac{1}{3}{n^3} = \frac{ {n(n + 1)(2n + 1)}}{6}\]</p>
+<p><strong>积分法</strong><br>求和式可以近似成积分\[\int_0^n { {x^2}dx}  = {n^3}/3\]<br>但是还少算了一部分误差，设为$E_n$，则有<br>\[{E_n} = {S_n} - \frac{1}{3}{n^3} = {S_{n - 1}} + {n^2} - \frac{1}{3}{n^3} = {E_{n - 1}} + n - \frac{1}{3}\]<br>解得<br>\[{E_n} = \frac{ {3{n^2} + n}}{6}\]<br>所以<br>\[{S_n} = {E_n} + \frac{1}{3}{n^3} = \frac{ {n(n + 1)(2n + 1)}}{6}\]</p>
 <p>其实这种方法就是把最高次直接给算出来了，低次项可以直接求和的。</p>
 <h1 id="方法5"><a href="#方法5" class="headerlink" title="方法5"></a>方法5</h1><hr>
 <p><strong>扩展成二重指标求和</strong><br>\[\begin{array}{l}{S_n} = \sum\limits_{1 \le k \le n} { {k^2}}  = \sum\limits_{1 \le j \le k \le n} { {k^2}} \\ = \sum\limits_{1 \le j \le n} {\sum\limits_{j \le k \le n} k } \\ = \sum\limits_{1 \le j \le n} {(\frac{ {j + n}}{2})(n - j + 1)} \\ = \frac{1}{2}\sum\limits_{1 \le j \le n} {(n(n + 1) + j - {j^2})} \\ = \frac{1}{2}{n^2}(n + 1) + \frac{1}{4}n(n + 1) - \frac{1}{2}{S_n}\\ = \frac{1}{2}n(n + \frac{1}{2})(n + 1) - \frac{1}{2}{S_n}\end{array}\]<br>所以<br>\[{S_n} = \frac{ {n(n + 1)(2n + 1)}}{6}\]</p>
@@ -614,7 +614,7 @@
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2018/03/26/concrete-math-5/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -694,9 +694,8 @@
 
 上节课讲到下降阶乘幂和差分运算，这节课继续讲它和差分的各种性质。
 性质1
-首先在后面章节会证明，{(x + y)^{\underline{m}}}的二项展开形式和普通的{(x + y)^m}是一样的，这里提一下，暂时用不到。
-性质2
-接
+首先在后面章节会证明，${(x + y)^{\underline{m}}}$的二项展开形式和普通的${(x + y)^m}$是一样的，这里提一下，暂时用不到。
+性
                         
                     </div>
                     <div class="publish-info">
@@ -820,8 +819,8 @@
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -943,7 +942,7 @@
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

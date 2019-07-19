@@ -11,7 +11,7 @@
 
 Stern-Brocot树
 我们接着上节课讲到的Stern-Brocot树继续往下讲。
-LR序列表示对于任意分数\frac{a}{b}，我们从\frac{1}{1}开始走到它所在的结点。如果向左走就记为L，向右走记为R，最终可以得到一个">
+LR序列表示对于任意分数$\frac{a}{b}$，我们从$\frac{1}{1}$开始走到它所在的结点。如果向左走就记为L，向右走记为R，最终可以">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -19,7 +19,7 @@ LR序列表示对于任意分数\frac{a}{b}，我们从\frac{1}{1}开始走到�
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>具体数学-第11课（Stern-Brocot树和同余关系） | WeiYang Blog</title>
+    <title>具体数学-第11课（Stern-Brocot树和同余关系） | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -48,7 +48,7 @@ LR序列表示对于任意分数\frac{a}{b}，我们从\frac{1}{1}开始走到�
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -111,7 +111,7 @@ LR序列表示对于任意分数\frac{a}{b}，我们从\frac{1}{1}开始走到�
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -407,7 +407,7 @@ LR序列表示对于任意分数\frac{a}{b}，我们从\frac{1}{1}开始走到�
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                        1.4k
+                        1.5k
                     </div>
                     
 
@@ -434,36 +434,36 @@ LR序列表示对于任意分数\frac{a}{b}，我们从\frac{1}{1}开始走到�
 
 <h1 id="Stern-Brocot树"><a href="#Stern-Brocot树" class="headerlink" title="Stern-Brocot树"></a>Stern-Brocot树</h1><hr>
 <p>我们接着上节课讲到的Stern-Brocot树继续往下讲。</p>
-<h2 id="LR序列表示"><a href="#LR序列表示" class="headerlink" title="LR序列表示"></a>LR序列表示</h2><p>对于任意分数<script type="math/tex">\frac{a}{b}</script>，我们从<script type="math/tex">\frac{1}{1}</script>开始走到它所在的结点。如果向左走就记为L，向右走记为R，最终可以得到一个L和R的序列。例如<script type="math/tex">\frac{5}{7}</script>的表示就是LRRL。</p>
+<h2 id="LR序列表示"><a href="#LR序列表示" class="headerlink" title="LR序列表示"></a>LR序列表示</h2><p>对于任意分数$\frac{a}{b}$，我们从$\frac{1}{1}$开始走到它所在的结点。如果向左走就记为L，向右走记为R，最终可以得到一个L和R的序列。例如$\frac{5}{7}$的表示就是LRRL。</p>
 <p>这种表示产生了两个问题：</p>
 <ol>
-<li>给定满足正整数<script type="math/tex">m</script>和<script type="math/tex">n</script>互素的分数<script type="math/tex">\frac{m}{n}</script>，它所对应的LR序列是什么？</li>
+<li>给定满足正整数$m$和$n$互素的分数$\frac{m}{n}$，它所对应的LR序列是什么？</li>
 <li>给定LR序列，它所表示的分数是什么？</li>
 </ol>
 <p>第二个问题看起来更好解决一点，我们先解决第二个问题。<br>我们定义<br>\[f(S) = 与S对应的分数\]<br>例如<br>\[f(LRRL) = \frac{5}{7}\]<br>如果用代码实现的话，对于每个L或者R，如果是L，那么就把右边界设为中间值，如果是R，那么就把左边界设为中间值。</p>
 <p>但是如何用数学式子来表达这一过程呢？</p>
-<p>我们建立一个2阶方阵：<br>\[M(S) = \left( {\begin{array}{*{20}{c}}n&amp;{n’}\\m&amp;{m’}\end{array}} \right)\]<br>表示<script type="math/tex">f(S)</script>的两个祖先分数<script type="math/tex">\frac{m}{n}</script>和<script type="math/tex">\frac{m'}{n'}</script></p>
+<p>我们建立一个2阶方阵：<br>\[M(S) = \left( {\begin{array}{*{20}{c}}n&amp;{n’}\\m&amp;{m’}\end{array}} \right)\]<br>表示$f(S)$的两个祖先分数$\frac{m}{n}$和$\frac{m’}{n’}$</p>
 <p>那么初始状态就可以表示为<br>\[M(I) = \left( {\begin{array}{*{20}{c}}1&amp;0\\0&amp;1\end{array}} \right)\]</p>
 <p>如果遇到了向左符号L，那么</p>
 <p>\[M(SL) = \left( {\begin{array}{}n&amp;{n + n’}\\m&amp;{m + m’}\end{array}} \right) = M(S)\left( {\begin{array}{}1&amp;1\\0&amp;1\end{array}} \right)\]</p>
 <p>如果遇到了向右符号R，那么<br>\[M(SL) = \left( {\begin{array}{}{n + n’}&amp;{n’}\\{m + m’}&amp;{m’}\end{array}} \right) = M(S)\left( {\begin{array}{}1&amp;0\\1&amp;1\end{array}} \right)\]<br>所以我们将L和R定义成2阶方阵就行了：<br>\[L = \left( {\begin{array}{}1&amp;1\\0&amp;1\end{array}} \right),R = \left( {\begin{array}{}1&amp;0\\1&amp;1\end{array}} \right)\]<br>所以<br>\[\begin{array}{l}M(LRRL) = LRRL\\ = \left( {\begin{array}{}1&amp;1\\0&amp;1\end{array}} \right)\left( {\begin{array}{}1&amp;0\\1&amp;1\end{array}} \right)\left( {\begin{array}{}1&amp;0\\1&amp;1\end{array}} \right)\left( {\begin{array}{}1&amp;1\\0&amp;1\end{array}} \right)\\ = \left( {\begin{array}{}3&amp;4\\2&amp;3\end{array}} \right)\end{array}\]<br>所以LRRL表示的分数为<br>\[\frac{ {2 + 3}}{ {3 + 4}} = \frac{5}{7}\]<br>那么第一个问题如何解决呢？<br>同样可以用类似二叉搜索的方法来求出LR序列，也可以用矩阵的方法来求解，根据上面的L和R的方阵，可以发现：<br>\[f(RS) = f(S) + 1\]<br>对于L也有类似的性质，所以我们得到了如下的求解算法：</p>
 <ul>
-<li>如果<script type="math/tex">m > n</script>，输出R，令<script type="math/tex">m = m - n</script>。</li>
-<li>如果<script type="math/tex">m < n</script>，输出L，令<script type="math/tex">n = n - m</script>。</li>
+<li>如果$m &gt; n$，输出R，令$m = m - n$。</li>
+<li>如果$m &lt; n$，输出L，令$n = n - m$。</li>
 </ul>
 <h2 id="无理数近似表示"><a href="#无理数近似表示" class="headerlink" title="无理数近似表示"></a>无理数近似表示</h2><p>虽然说无理数不在Stern-Brocot树中，但是我们可以找到无限逼近它的分数。</p>
 <p>方法仍然使用二叉搜索，不同的是，搜索过程不会终止，除非得到了我们想要的精度或者我们人为终止。</p>
-<p>值得一提的是，无理数<script type="math/tex">e</script>的LR表示很有规律性：<br>\[e = R{L^0}RL{R^2}LR{L^4}RL{R^6}LR{L^8}RL{R^{10}}LR{L^{12}} \cdots \]</p>
-<p>最后值得一提的是，欧几里得算法和有理数的Stern-Brocot树表示有密切的关系。给定<script type="math/tex">\alpha  = \frac{m}{n}</script>，根据之前的算法，它的LR表达式首先是<script type="math/tex">\left\lfloor {m/n} \right\rfloor</script>个R，然后是<script type="math/tex">\left\lfloor {n/(m\bmod n)} \right\rfloor</script>个L，依次下去，这些系数恰好就是求最大公因数的时候用到的系数。</p>
+<p>值得一提的是，无理数$e$的LR表示很有规律性：<br>\[e = R{L^0}RL{R^2}LR{L^4}RL{R^6}LR{L^8}RL{R^{10}}LR{L^{12}} \cdots \]</p>
+<p>最后值得一提的是，欧几里得算法和有理数的Stern-Brocot树表示有密切的关系。给定$\alpha  = \frac{m}{n}$，根据之前的算法，它的LR表达式首先是$\left\lfloor {m/n} \right\rfloor $个R，然后是$\left\lfloor {n/(m\bmod n)} \right\rfloor $个L，依次下去，这些系数恰好就是求最大公因数的时候用到的系数。</p>
 <h1 id="同余关系"><a href="#同余关系" class="headerlink" title="同余关系"></a>同余关系</h1><hr>
 <p>同余定义为：<br>\[a \equiv b(\bmod m) \Leftrightarrow a\bmod m = b\bmod m\]<br>读作“a关于模m与b同余”，我们只讨论都是整数的情况。</p>
 <p>同样可以写作：<br>\[a \equiv b(\bmod m) \Leftrightarrow a - b是m的倍数\]</p>
 <p>同余是等价关系，满足自反律、对称律、传递律，即：<br>\[\begin{array}{l}a \equiv a\\a \equiv b \Rightarrow b \equiv a\\a \equiv b \equiv c \Rightarrow a \equiv c\end{array}\]<br>如果我们对同余两边的元素加减乘，同余仍然满足：<br>\[\begin{array}{l}a \equiv b,c \equiv d \Rightarrow a + c \equiv b + d(\bmod m)\\a \equiv b,c \equiv d \Rightarrow a - c \equiv b - d(\bmod m)\\a \equiv b,c \equiv d \Rightarrow ac \equiv bd(\bmod m)\end{array}\]<br>因此可以得到<br>\[a \equiv b \Rightarrow {a^n} \equiv {b^n}(\bmod m)\]</p>
-<p>然而对于除法同余并不总是成立，一些特殊条件下可能成立。<br>如果<br>\[ad \equiv bd(\bmod m)\]<br>当<script type="math/tex">d,m</script>互素的时候，我们可以得到<br>\[a \equiv b(\bmod m)\]<br>同样<br>\[ad \equiv bd(\bmod md) \Leftrightarrow a \equiv b(\bmod m)\]<br>更一般的情况下，我们有<br>\[ad \equiv bd(\bmod m) \Leftrightarrow a \equiv b(\bmod \frac{m}{ {\gcd (d,m)}})\]<br>还有许多性质我就直接列举了，不做证明了，证明很简单：<br>\[\begin{array}{l}a \equiv b(\bmod md) \Rightarrow a \equiv b(\bmod m)\\a \equiv b(\bmod m),a \equiv b(\bmod n) \Leftrightarrow a \equiv b(\bmod lcm(m,n))\\a \equiv b(\bmod mn),m \bot n \Leftrightarrow a \equiv b(\bmod m),a \equiv b(\bmod n)\\a \equiv b(\bmod m) \Leftrightarrow \forall p,a \equiv b(\bmod {p^{ {m_p}}})\end{array}\]<br>其中<script type="math/tex">m = \prod\nolimits_p { {p^{ {m_p}}}}</script>是<script type="math/tex">m</script>的素因子分解。<br>第三条性质是中国剩余定理的特例，今后我们再做证明。</p>
+<p>然而对于除法同余并不总是成立，一些特殊条件下可能成立。<br>如果<br>\[ad \equiv bd(\bmod m)\]<br>当$d,m$互素的时候，我们可以得到<br>\[a \equiv b(\bmod m)\]<br>同样<br>\[ad \equiv bd(\bmod md) \Leftrightarrow a \equiv b(\bmod m)\]<br>更一般的情况下，我们有<br>\[ad \equiv bd(\bmod m) \Leftrightarrow a \equiv b(\bmod \frac{m}{ {\gcd (d,m)}})\]<br>还有许多性质我就直接列举了，不做证明了，证明很简单：<br>\[\begin{array}{l}a \equiv b(\bmod md) \Rightarrow a \equiv b(\bmod m)\\a \equiv b(\bmod m),a \equiv b(\bmod n) \Leftrightarrow a \equiv b(\bmod lcm(m,n))\\a \equiv b(\bmod mn),m \bot n \Leftrightarrow a \equiv b(\bmod m),a \equiv b(\bmod n)\\a \equiv b(\bmod m) \Leftrightarrow \forall p,a \equiv b(\bmod {p^{ {m_p}}})\end{array}\]<br>其中$m = \prod\nolimits_p { {p^{ {m_p}}}} $是$m$的素因子分解。<br>第三条性质是中国剩余定理的特例，今后我们再做证明。</p>
 <h1 id="独立剩余"><a href="#独立剩余" class="headerlink" title="独立剩余"></a>独立剩余</h1><hr>
-<p>同余的应用之一就是剩余系，将整数<script type="math/tex">x</script>表示为一组互素的模的剩余（余数）序列：<br>\[(x\bmod {m_1}, \ldots ,x\bmod {m_r})\]<br>其中模<script type="math/tex">m</script>两两互素。</p>
-<p>通过这个剩余序列可以确定出<script type="math/tex">x</script>的通解，其实可以看出来，这就是中国剩余定理的另一种表示形式。</p>
-<p>这种表示形式有很多好处，比如可以直接在每个维度上面进行加减乘法。例如对于<script type="math/tex">m_1 = 3, m_2 = 5</script>的剩余系，有如下表示：<br>\[13 = (1,3),7 = (1,2)\]<br>那么<script type="math/tex">13 \cdot 7\,\bmod \,15</script>就可以这样计算：<br>\[(1 \cdot 1\bmod 3,3 \cdot 2\bmod 5) = (1,1)\]<br>所以<br>\[13 \cdot 7\bmod 15 = 1 \cdot 1\bmod 15 = 1\]</p>
+<p>同余的应用之一就是剩余系，将整数$x$表示为一组互素的模的剩余（余数）序列：<br>\[(x\bmod {m_1}, \ldots ,x\bmod {m_r})\]<br>其中模$m$两两互素。</p>
+<p>通过这个剩余序列可以确定出$x$的通解，其实可以看出来，这就是中国剩余定理的另一种表示形式。</p>
+<p>这种表示形式有很多好处，比如可以直接在每个维度上面进行加减乘法。例如对于$m_1 = 3, m_2 = 5$的剩余系，有如下表示：<br>\[13 = (1,3),7 = (1,2)\]<br>那么$13 \cdot 7\,\bmod \,15$就可以这样计算：<br>\[(1 \cdot 1\bmod 3,3 \cdot 2\bmod 5) = (1,1)\]<br>所以<br>\[13 \cdot 7\bmod 15 = 1 \cdot 1\bmod 15 = 1\]</p>
 
             </div>
             <hr/>
@@ -626,7 +626,7 @@ LR序列表示对于任意分数\frac{a}{b}，我们从\frac{1}{1}开始走到�
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2018/05/07/concrete-math-11/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -765,7 +765,7 @@ LR序列表示对于任意分数\frac{a}{b}，我们从\frac{1}{1}开始走到�
 
 欧几里得数
 首先我们来证明一下，素数有无穷多个。
-假设素数只有k个，分别为2,3, \ldots ,{P_k}，那么我们构造下面的数字：\[M = 2 \cdot 3 \cdot  \ldots  \cdot {P_k} + 1\]显然
+假设素数只有$k$个，分别为$2,3, \ldots ,{P_k}$，那么我们构造下面的数字：\[M = 2 \cdot 3 \cdot  \ldots  \cdot {P_k} + 1
                         
                     </div>
                     <div class="publish-info">
@@ -832,8 +832,8 @@ LR序列表示对于任意分数\frac{a}{b}，我们从\frac{1}{1}开始走到�
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -955,7 +955,7 @@ LR序列表示对于任意分数\frac{a}{b}，我们从\frac{1}{1}开始走到�
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

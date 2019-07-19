@@ -20,7 +20,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>A Minimal Span-Based Neural Constituency Parser | WeiYang Blog</title>
+    <title>A Minimal Span-Based Neural Constituency Parser | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -49,7 +49,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -112,7 +112,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -458,42 +458,42 @@
 <p>而本文提出的模型不需要预先构造出语法规则集合，只需要预测出每个短语的label和split就行了，这样就能构造出一棵完整的句法树。</p>
 <p>该模型分为编码与解码两部分，其中编码部分就是利用双向LSTM将每个词和短语表示成向量，解码部分提出了两种模型，一种是chart模型，类似于CKY算法，另一种是top-down模型，就是自顶向下的贪心算法，具体模型之后介绍。</p>
 <h1 id="编码模型"><a href="#编码模型" class="headerlink" title="编码模型"></a>编码模型</h1><hr>
-<p>一棵句法分析树可以看做是<script type="math/tex">(label, span)</script>的集合，也就是句法树中的每一个结点的类别是label，该结点对应的短语在句子中的下标范围就是span。所以模型的任务就是要预测这个集合，给每一个label和span一个得分，找出使得一个句子得分最高的<script type="math/tex">(label, span)</script>集合即可。</p>
-<p>那么我们的编码模型任务就是要得出每一个短语的表示，并将其转换为短语的label得分和span得分。这里用到的就是最简单的双向LSTM，对于句子的第<script type="math/tex">i</script>个位置，得到它的双向表示<script type="math/tex">f_i</script>和<script type="math/tex">b_i</script>，那么<script type="math/tex">span(i,j)</script>就可以表示为<script type="math/tex">[f_j-f_i,b_i-b_j]</script>。</p>
-<p>然后将短语表示输入到两个单独的单层前馈神经网络中，就能分别得到label得分和span得分了。假设用<script type="math/tex">s_{ij}</script>表示<script type="math/tex">span(i,j)</script>的短语表示，那么label得分和span得分可以分别表示为：<br>\[\begin{array}{*{20}{l}}{ {s_{labels}}(i,j) = {V_l}g({W_l}{s_{ij}} + {b_l})}\\\ { {s_{span}}(i,j) = {v_s}^{\rm{T}}g({W_s}{s_{ij}} + {b_s})}\end{array}\]<br>注意到这里计算出来的label得分是一个向量，维数为label的类别数，而span得分计算出来就是一个标量了。而对于某一个特定的类别，它的得分就可以直接从label得分向量中取出对应的那一维就行了：</p>
+<p>一棵句法分析树可以看做是$(label, span)$的集合，也就是句法树中的每一个结点的类别是label，该结点对应的短语在句子中的下标范围就是span。所以模型的任务就是要预测这个集合，给每一个label和span一个得分，找出使得一个句子得分最高的$(label, span)$集合即可。</p>
+<p>那么我们的编码模型任务就是要得出每一个短语的表示，并将其转换为短语的label得分和span得分。这里用到的就是最简单的双向LSTM，对于句子的第$i$个位置，得到它的双向表示$f_i$和$b_i$，那么$span(i,j)$就可以表示为$[f_j-f_i,b_i-b_j]$。</p>
+<p>然后将短语表示输入到两个单独的单层前馈神经网络中，就能分别得到label得分和span得分了。假设用$s_{ij}$表示$span(i,j)$的短语表示，那么label得分和span得分可以分别表示为：<br>\[\begin{array}{*{20}{l}}{ {s_{labels}}(i,j) = {V_l}g({W_l}{s_{ij}} + {b_l})}\\\ { {s_{span}}(i,j) = {v_s}^{\rm{T}}g({W_s}{s_{ij}} + {b_s})}\end{array}\]<br>注意到这里计算出来的label得分是一个向量，维数为label的类别数，而span得分计算出来就是一个标量了。而对于某一个特定的类别，它的得分就可以直接从label得分向量中取出对应的那一维就行了：</p>
 <p>\[{s_{label}}(i,j,l) = {[{s_{labels}}(i,j)]_l}\]</p>
-<p>还有个重要的问题就是一元和<script type="math/tex">n</script>元的产生式怎么处理，对于一元产生式，可以将所有的类别合并为一个新的类别，然后加入类别集合中共同预测就行了，在实现代码中，将一元的产生式链上面的类别合并成了一个元组作为这棵子树的label。对于<script type="math/tex">n</script>元的产生式，可以添加一个临时类别<script type="math/tex">\emptyset</script>，相当于进行了二叉化，所有的新增节点全部预测为<script type="math/tex">\emptyset</script>。</p>
+<p>还有个重要的问题就是一元和$n$元的产生式怎么处理，对于一元产生式，可以将所有的类别合并为一个新的类别，然后加入类别集合中共同预测就行了，在实现代码中，将一元的产生式链上面的类别合并成了一个元组作为这棵子树的label。对于$n$元的产生式，可以添加一个临时类别$\emptyset $，相当于进行了二叉化，所有的新增节点全部预测为$\emptyset $。</p>
 <h1 id="chart解码模型"><a href="#chart解码模型" class="headerlink" title="chart解码模型"></a>chart解码模型</h1><hr>
 <p>chart模型本质上就是一个动态规划算法，类似于CKY算法。</p>
-<p>首先一棵句法树的总得分可以表示为组成它的<script type="math/tex">(label, span)</script>集合的label得分与span得分之和：<br>\[{s_{tree}}(T) = \sum\limits_{(l,(i,j)) \in T} {[{s_{label}}(i,j,l) + {s_{span}}(i,j)]} \]<br>我们目的就是寻找使得该式最大的集合<script type="math/tex">T</script>，利用动态规划可以将时间复杂度降到<script type="math/tex">O(n^3)</script>。</p>
-<p>对于叶子结点的情况，因为没有split，所以我们只需要预测最大得分的label就行了：<br>\[{s_{best}}(i,i + 1) = \mathop {\max }\limits_l [{s_{label}}(i,i + 1,l)]\]<br>而对于一般的<script type="math/tex">span(i,j)</script>，我们不仅要预测label，还得预测split。对于split<script type="math/tex">k</script>，我们可以将split得分表示为：<br>\[{s_{split}}(i,k,j) = {s_{span}}(i,k) + {s_{span}}(k,j)\]<br>那么最大得分可以表示为：<br>\[{s_{best}}(i,j) = \mathop {\max }\limits_l [{s_{label}}(i,j,l)] + \mathop {\max }\limits_k [{s_{split}}(i,k,j) + {s_{best}}(i,k) + {s_{best}}(k,j)]\]<br>这样就可以对label和split单独预测，在实际代码实现中，去掉了<script type="math/tex">{s_{split}}(i,k,j)</script>这一部分，也就是只预测label得分之和最高的split。这样做的一个好处就是防止了二叉化过程中，从左边开始合并和从右边开始合并得到的分数不一样，从而导致偏差，另外加上这部分效果提升也不大，所以为了简便就删掉了。</p>
-<p>训练的话采用的还是Max-Margin：<br>\[max\left( {0,\Delta (\hat T,{T^*}) - {s_{tree}}({T^*}) + {s_{tree}}(\hat T)} \right)\]<br>至于句法树差异<script type="math/tex">{\Delta (\hat T,{T^\*})}</script>，可以方便的将<script type="math/tex">{s_{label}}(i,j,l)</script>替换为<script type="math/tex">{s_{label}}(i,j,l) + {\bf{1}}(l \ne l_{ij}^\*)</script>，其中<script type="math/tex">l_{ij}^\*</script>就是<script type="math/tex">span(i,j)</script>在标准树中的label。</p>
+<p>首先一棵句法树的总得分可以表示为组成它的$(label, span)$集合的label得分与span得分之和：<br>\[{s_{tree}}(T) = \sum\limits_{(l,(i,j)) \in T} {[{s_{label}}(i,j,l) + {s_{span}}(i,j)]} \]<br>我们目的就是寻找使得该式最大的集合$T$，利用动态规划可以将时间复杂度降到$O(n^3)$。</p>
+<p>对于叶子结点的情况，因为没有split，所以我们只需要预测最大得分的label就行了：<br>\[{s_{best}}(i,i + 1) = \mathop {\max }\limits_l [{s_{label}}(i,i + 1,l)]\]<br>而对于一般的$span(i,j)$，我们不仅要预测label，还得预测split。对于split$k$，我们可以将split得分表示为：<br>\[{s_{split}}(i,k,j) = {s_{span}}(i,k) + {s_{span}}(k,j)\]<br>那么最大得分可以表示为：<br>\[{s_{best}}(i,j) = \mathop {\max }\limits_l [{s_{label}}(i,j,l)] + \mathop {\max }\limits_k [{s_{split}}(i,k,j) + {s_{best}}(i,k) + {s_{best}}(k,j)]\]<br>这样就可以对label和split单独预测，在实际代码实现中，去掉了${s_{split}}(i,k,j)$这一部分，也就是只预测label得分之和最高的split。这样做的一个好处就是防止了二叉化过程中，从左边开始合并和从右边开始合并得到的分数不一样，从而导致偏差，另外加上这部分效果提升也不大，所以为了简便就删掉了。</p>
+<p>训练的话采用的还是Max-Margin：<br>\[max\left( {0,\Delta (\hat T,{T^*}) - {s_{tree}}({T^*}) + {s_{tree}}(\hat T)} \right)\]<br>至于句法树差异${\Delta (\hat T,{T^*})}$，可以方便的将${s_{label}}(i,j,l)$替换为${s_{label}}(i,j,l) + {\bf{1}}(l \ne l_{ij}^*)$，其中$l_{ij}^*$就是$span(i,j)$在标准树中的label。</p>
 <h1 id="top-down解码模型"><a href="#top-down解码模型" class="headerlink" title="top-down解码模型"></a>top-down解码模型</h1><hr>
 <p>top-down模型其实就是自顶向下贪心的选择每一个短语的最大label和split。</p>
-<p>其中叶子结点处依然还是直接找得分最高的那一维：<br>\[\hat l = \mathop {arg\max }\limits_l [{s_{label}}(i,i + 1,l)]\]<br>对于一般的<script type="math/tex">span(i,j)</script>，直接贪心的寻找得分最高的label和split就行了：<br>\[\begin{array}{l}\hat l = \mathop {\arg \max }\limits_l [{s_{label}}(i,j,l)]\\\hat k = \mathop {\arg \max }\limits_k [{s_{split}}(i,k,j)]\end{array}\]<br>虽然这种贪心的方法看上去并不十分科学，但是实际效果却比动态规划算法还要好一点，并且它的时间复杂度只有<script type="math/tex">O(n^2)</script>。</p>
-<p>下面是top-down模型进行解析的一个例子：<br><img src="1.png" alt><br>其中<script type="math/tex">\emptyset</script>在构造句法树的时候就直接忽略，最后可以还原成<script type="math/tex">n</script>元的产生式。并且一元产生式<script type="math/tex">S \to VP</script>被直接替换为了新的类别<script type="math/tex">S-VP</script>。</p>
-<p>训练过程类似，对标准树中的每一个<script type="math/tex">span(i,j)</script>，分别计算label和split的loss就行了：<br>\[\begin{array}{l}\max \left( {0,1 - {s_{label}}(i,j,{l^*}) + {s_{label}}(i,j,\hat l)} \right)\\\max \left( {0,1 - {s_{split}}(i,{k^*},j) + {s_{split}}(i,\hat k,j)} \right)\end{array}\]<br>最后累加求出总的loss即可。</p>
-<p><strong>动态Oracle</strong><br>top-down模型在每一个<script type="math/tex">span(i,j)</script>处都计算出得分最高的label和split，然后与标准树对应的<script type="math/tex">span(i,j)</script>作比较，计算出loss。但是这样存在一个很严重的问题，就是如果这个预测出来的<script type="math/tex">span(i,j)</script>没有出现在标准树中，那么他在标准树中的label和split是什么呢？这时候就要用到这里提到的动态Oracle技术了。</p>
-<p>对于label而言，如果<script type="math/tex">span(i,j)</script>出现在标准树中，那么label就是标准树中的label，否则的话就是<script type="math/tex">\emptyset</script>。</p>
-<p>对于split而言，定义<script type="math/tex">b(i,j)</script>为<script type="math/tex">span(i,j)</script>的split集合，因为可能是<script type="math/tex">n</script>元的，所以split可能不止一个。如果<script type="math/tex">span(i,j)</script>在标准树中，那么<script type="math/tex">b(i,j)</script>显然就是标准树中<script type="math/tex">span(i,j)</script>的split集合。如果<script type="math/tex">span(i,j)</script>不在标准树中，那么就寻找一个标准树中包含<script type="math/tex">span(i,j)</script>的最小span，该span的split集合中位于<script type="math/tex">i,j</script>之间的split就构成了<script type="math/tex">b(i,j)</script>。</p>
-<p>形式化定义为，寻找：<br>\[({i^*},{j^*}) = \min \left\{ {(i’,j’) \in T:i’ \le i &lt; j \le j’} \right\}\]<br>其中这里的最小是定义在区间长度上的偏序关系。所以<script type="math/tex">b(i,j)</script>就可以定义为：<br>\[b(i,j) = \left\{ {k \in b({i^*},{j^*}):i &lt; k &lt; j} \right\}\]</p>
-<p>这样对于任意的<script type="math/tex">span(i,j)</script>，都能在标准树中找到对应的split集合，然后计算出loss。这样也能解决因为<script type="math/tex">n</script>叉树不同的二叉化导致的不同的split产生的问题。在实际的代码中，直接采用了<script type="math/tex">b(i,j)</script>集合中最左边的split作为标准树中的split，当然也可以选择得分最高的一个split，不过提升不大没有必要。</p>
+<p>其中叶子结点处依然还是直接找得分最高的那一维：<br>\[\hat l = \mathop {arg\max }\limits_l [{s_{label}}(i,i + 1,l)]\]<br>对于一般的$span(i,j)$，直接贪心的寻找得分最高的label和split就行了：<br>\[\begin{array}{l}\hat l = \mathop {\arg \max }\limits_l [{s_{label}}(i,j,l)]\\\hat k = \mathop {\arg \max }\limits_k [{s_{split}}(i,k,j)]\end{array}\]<br>虽然这种贪心的方法看上去并不十分科学，但是实际效果却比动态规划算法还要好一点，并且它的时间复杂度只有$O(n^2)$。</p>
+<p>下面是top-down模型进行解析的一个例子：<br><img src="1.png" alt><br>其中$\emptyset $在构造句法树的时候就直接忽略，最后可以还原成$n$元的产生式。并且一元产生式$S \to VP$被直接替换为了新的类别$S-VP$。</p>
+<p>训练过程类似，对标准树中的每一个$span(i,j)$，分别计算label和split的loss就行了：<br>\[\begin{array}{l}\max \left( {0,1 - {s_{label}}(i,j,{l^*}) + {s_{label}}(i,j,\hat l)} \right)\\\max \left( {0,1 - {s_{split}}(i,{k^*},j) + {s_{split}}(i,\hat k,j)} \right)\end{array}\]<br>最后累加求出总的loss即可。</p>
+<p><strong>动态Oracle</strong><br>top-down模型在每一个$span(i,j)$处都计算出得分最高的label和split，然后与标准树对应的$span(i,j)$作比较，计算出loss。但是这样存在一个很严重的问题，就是如果这个预测出来的$span(i,j)$没有出现在标准树中，那么他在标准树中的label和split是什么呢？这时候就要用到这里提到的动态Oracle技术了。</p>
+<p>对于label而言，如果$span(i,j)$出现在标准树中，那么label就是标准树中的label，否则的话就是$\emptyset $。</p>
+<p>对于split而言，定义$b(i,j)$为$span(i,j)$的split集合，因为可能是$n$元的，所以split可能不止一个。如果$span(i,j)$在标准树中，那么$b(i,j)$显然就是标准树中$span(i,j)$的split集合。如果$span(i,j)$不在标准树中，那么就寻找一个标准树中包含$span(i,j)$的最小span，该span的split集合中位于$i,j$之间的split就构成了$b(i,j)$。</p>
+<p>形式化定义为，寻找：<br>\[({i^*},{j^*}) = \min \left\{ {(i’,j’) \in T:i’ \le i &lt; j \le j’} \right\}\]<br>其中这里的最小是定义在区间长度上的偏序关系。所以$b(i,j)$就可以定义为：<br>\[b(i,j) = \left\{ {k \in b({i^*},{j^*}):i &lt; k &lt; j} \right\}\]</p>
+<p>这样对于任意的$span(i,j)$，都能在标准树中找到对应的split集合，然后计算出loss。这样也能解决因为$n$叉树不同的二叉化导致的不同的split产生的问题。在实际的代码中，直接采用了$b(i,j)$集合中最左边的split作为标准树中的split，当然也可以选择得分最高的一个split，不过提升不大没有必要。</p>
 <p>采用动态Oracle有两个好处：</p>
 <ul>
 <li>一个就是上面说到的，训练的时候不需要每次都预测的和标准树一样了，就算不一样也能给出评判标准。</li>
 <li>另一个就是在预测不准的时候，可以给出在该span里的标准树中的split，这样可以将贪心预测从错误中逐渐“拉回正轨”。</li>
 </ul>
 <h1 id="其他的得分计算方法"><a href="#其他的得分计算方法" class="headerlink" title="其他的得分计算方法"></a>其他的得分计算方法</h1><hr>
-<p><strong>Top-Middle-Bottom label得分</strong><br>其实就是将每个span的label拆分为三元组<script type="math/tex">(top,middle,bottom)</script>，主要用来应对一元产生式的：</p>
+<p><strong>Top-Middle-Bottom label得分</strong><br>其实就是将每个span的label拆分为三元组$(top,middle,bottom)$，主要用来应对一元产生式的：</p>
 <ul>
-<li>如果不是一元产生式，那么父结点label就可以写为<script type="math/tex">(X,\emptyset,\emptyset)</script>。</li>
-<li>如果产生式为<script type="math/tex">X \to Y</script>，那么label可以合并写为<script type="math/tex">(X,\emptyset,Y)</script>。</li>
-<li>如果产生式为<script type="math/tex">X \to {Z_1} \to  \cdots  \to {Z_k} \to Y</script>，那么label可以合并写为<script type="math/tex">(X,{Z_1} -  \cdots  - {Z_k},Y)</script>。</li>
+<li>如果不是一元产生式，那么父结点label就可以写为$(X,\emptyset,\emptyset)$。</li>
+<li>如果产生式为$X \to Y$，那么label可以合并写为$(X,\emptyset,Y)$。</li>
+<li>如果产生式为$X \to {Z_1} \to  \cdots  \to {Z_k} \to Y$，那么label可以合并写为$(X,{Z_1} -  \cdots  - {Z_k},Y)$。</li>
 </ul>
 <p>label的得分也由三部分求和得到：<br>\[{s_{label}}(i,j,({l_t},{l_m},{l_b})) = {s_{top}}(i,j,{l_t}) + {s_{middle}}(i,j,{l_m}) + {s_{bottom}}(i,j,{l_b})\]<br>求最大得分的时候也可以三部分分开求。</p>
 <p><strong>左右span得分</strong><br>其实就是在计算split得分时，将左右span的得分区别为left和right两部分：<br>\[{s_{split}}(i,k,j) = {s_{left}}(i,k) + {s_{right}}(k,j)\]</p>
 <p><strong>span连接得分</strong><br>之前计算split得分都是将左右span得分直接相加，当然也可以将他们拼接起来，输入到单层前馈神经网络里，输出作为得分：<br>\[{s_{split}}(i,k,j) = {v^{\rm{T}}}g({W_s}[{s_{ik}};{s_{kj}}] + {b_s})\]</p>
-<p><strong>深度双仿射span得分</strong><br>首先令<script type="math/tex">{h_{ik}} = {f_{left}}({s_{ik}}),{h_{kj}} = {f_{right}}({s_{kj}})</script>，然后split得分可以计算为：<br>\[{s_{split}}(i,k,j) = h_{ik}^{\rm{T}}{W_s}{h_{kj}} + v_{left}^{\rm{T}}{h_{ik}} + v_{right}^{\rm{T}}{h_{kj}}\]</p>
+<p><strong>深度双仿射span得分</strong><br>首先令${h_{ik}} = {f_{left}}({s_{ik}}),{h_{kj}} = {f_{right}}({s_{kj}})$，然后split得分可以计算为：<br>\[{s_{split}}(i,k,j) = h_{ik}^{\rm{T}}{W_s}{h_{kj}} + v_{left}^{\rm{T}}{h_{ik}} + v_{right}^{\rm{T}}{h_{kj}}\]</p>
 <p><strong>结构化label损失</strong><br>对于两个label集合，定义它们之间的结构化Hamming损失为：<br>\[\left| { {l_1}\backslash {l_2}} \right| + \left| { {l_2}\backslash {l_1}} \right|\]<br>这个loss可以被用在之前的训练过程中。</p>
 <h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><hr>
 <p>具体代码细节以及超参数设置请参看代码。</p>
@@ -666,7 +666,7 @@
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2018/06/28/acl17-conparsing/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -816,9 +816,9 @@
 
 题目链接：EOJ3006
 题意
-给定一个多项式{(ax + by)^k}，计算多项式展开后{x^n}{y^m}项的系数，结果对1000000007取模。
+给定一个多项式${(ax + by)^k}$，计算多项式展开后${x^n}{y^m}$项的系数，结果对1000000007取模。
 题解
-由二项式定理可以得知，{x^n}{y^m}项的系数就是\[{a^n}{b^m
+由二项式定理可以得知，${x^n}{y^m}$项的系数就是\[{a^
                         
                     </div>
                     <div class="publish-info">
@@ -881,8 +881,8 @@
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -1004,7 +1004,7 @@
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

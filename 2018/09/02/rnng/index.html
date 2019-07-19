@@ -18,7 +18,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Recurrent Neural Network Grammars | WeiYang Blog</title>
+    <title>Recurrent Neural Network Grammars | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -47,7 +47,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -110,7 +110,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -418,7 +418,7 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                        2.9k
+                        3k
                     </div>
                     
 
@@ -451,55 +451,54 @@
 <p>因此本文提出了一种利用RNN建模出来的全新文法RNNG，建立在句子的句法结构之上，消除了PCFG的上下文无关假设。并提出了两种变体，一种是生成模型，可以用来句法分析和训练语言模型，另一种是判别模型，可以用来句法分析。</p>
 <p>RNNG建立在top-down转移系统之上，top-down转移系统相比于bottom-up转移系统有一个好处，就是不需要二叉化，因为如果bottom-up转移系统不二叉化的话，REDUCE的状态就会有很多种可能，不知道到底归约栈里的几个结点。而top-down转移系统就不存在这个问题，直接归约到第一个父结点为止就行了。本文应该也是第一个提出用RNN来实现top-down转移系统的，之前的方法都是用top-down的文法，或者是bottom-up的，例如Sochar2013的CVG，也是用二叉化后的RNN学习结点的语义表示。</p>
 <h1 id="RNN文法"><a href="#RNN文法" class="headerlink" title="RNN文法"></a>RNN文法</h1><hr>
-<p>RNNG定义为三元组<script type="math/tex">(N, \Sigma, \Theta)</script>，其中<script type="math/tex">N</script>是非终结符集合，<script type="math/tex">\Sigma</script>是终结符集合，并且<script type="math/tex">N \cap \Sigma = \emptyset</script>，<script type="math/tex">\Theta</script>就是神经网络的参数集合。RNNG和传统的PCFG的一个明显区别就是它没有显式地指出语法规则是什么，而是蕴含在了神经网络中，在句法转移的时候动态的生成。</p>
+<p>RNNG定义为三元组$(N, \Sigma, \Theta)$，其中$N$是非终结符集合，$\Sigma$是终结符集合，并且$N \cap \Sigma = \emptyset$，$\Theta$就是神经网络的参数集合。RNNG和传统的PCFG的一个明显区别就是它没有显式地指出语法规则是什么，而是蕴含在了神经网络中，在句法转移的时候动态的生成。</p>
 <h1 id="Top-down句法分析和生成"><a href="#Top-down句法分析和生成" class="headerlink" title="Top-down句法分析和生成"></a>Top-down句法分析和生成</h1><p>这部分主要介绍RNNG的两个变体，一个是top-down的句法分析系统，还有一个是稍稍修改后的生成系统。</p>
-<h2 id="判别式系统"><a href="#判别式系统" class="headerlink" title="判别式系统"></a>判别式系统</h2><p>这个判别式模型之前也已经介绍过很多次了，和普通的基于转移的句法分析系统一样，输入是一个句子<script type="math/tex">x</script>，输出是它的句法分析树<script type="math/tex">y</script>。主要组成部分有句法树栈、句子单词buffer、动作集合，每一步的动作有三种：</p>
+<h2 id="判别式系统"><a href="#判别式系统" class="headerlink" title="判别式系统"></a>判别式系统</h2><p>这个判别式模型之前也已经介绍过很多次了，和普通的基于转移的句法分析系统一样，输入是一个句子$x$，输出是它的句法分析树$y$。主要组成部分有句法树栈、句子单词buffer、动作集合，每一步的动作有三种：</p>
 <ul>
 <li>NT(X)： 将一个父结点X移进栈里。</li>
 <li>SHIFT： 从buffer中移一个单词到栈里。</li>
 <li>REDUCE： 将栈顶的若干个结点归约为它们的父结点，并且出栈。</li>
 </ul>
 <p>图1就是每个动作的状态变化过程，图2是判别式模型进行句法分析的示例：<br><img src="1.jpg" alt></p>
-<p>当然得给动作添加一些限制，首先记当前状态为三元组<script type="math/tex">(B, S, n)</script>，分别表示buffer、栈、当前栈里未归约的父结点数量，这个之前的博客没有提及过：</p>
+<p>当然得给动作添加一些限制，首先记当前状态为三元组$(B, S, n)$，分别表示buffer、栈、当前栈里未归约的父结点数量，这个之前的博客没有提及过：</p>
 <ul>
-<li>NT(X)动作只有当buffer不为空并且<script type="math/tex">n < 100</script>的时候才能进行。因为buffer空了的话就没有单词了，此时不可能移进新的非终结符了，并且要限制<script type="math/tex">n < 100</script>防止一元产生式无限生成下去。</li>
-<li>SHIFT动作只有当buffer不为空并且<script type="math/tex">n \ge 1</script>时才能进行。前者不用解释了，后者的话因为是top-down的，所以栈里至少要有一个父结点才能移进新的单词。</li>
+<li>NT(X)动作只有当buffer不为空并且$n &lt; 100$的时候才能进行。因为buffer空了的话就没有单词了，此时不可能移进新的非终结符了，并且要限制$n &lt; 100$防止一元产生式无限生成下去。</li>
+<li>SHIFT动作只有当buffer不为空并且$n \ge 1$时才能进行。前者不用解释了，后者的话因为是top-down的，所以栈里至少要有一个父结点才能移进新的单词。</li>
 <li>REDUCE只有当栈顶不是没有归约的父结点才能进行。</li>
-<li>REDUCE只有当<script type="math/tex">n \ge 2</script>或者buffer为空时才能进行。<strong>这里要解释一下为什么<script type="math/tex">n \ge 2</script>，因为如果buffer不为空同时<script type="math/tex">n = 1</script>，那么这时候如果REDUCE的话，栈里就只剩一个非终结符了，只可能是根节点S，而buffer里还有单词，所以这是不可能的。</strong></li>
+<li>REDUCE只有当$n \ge 2$或者buffer为空时才能进行。<strong>这里要解释一下为什么$n \ge 2$，因为如果buffer不为空同时$n = 1$，那么这时候如果REDUCE的话，栈里就只剩一个非终结符了，只可能是根节点S，而buffer里还有单词，所以这是不可能的。</strong></li>
 </ul>
-<p>记当前状态的可能动作集合为<script type="math/tex">\mathcal{A}\_D(B, S, n)</script>。</p>
+<p>记当前状态的可能动作集合为$\mathcal{A}_D(B, S, n)$。</p>
 <h2 id="生成式系统"><a href="#生成式系统" class="headerlink" title="生成式系统"></a>生成式系统</h2><p>将上面的top-down转移系统稍稍修改即可得到生成式系统。区别有两点：</p>
 <ul>
-<li>首先没有了输入的buffer，取而代之的是输出的buffer <script type="math/tex">T</script>。</li>
-<li>其次因为没有输入单词了，所以在需要输入单词的时候采用GEN(x)动作来产生一个新的单词<script type="math/tex">x</script>，然后移进栈里，取代SHIFT动作。</li>
+<li>首先没有了输入的buffer，取而代之的是输出的buffer $T$。</li>
+<li>其次因为没有输入单词了，所以在需要输入单词的时候采用GEN(x)动作来产生一个新的单词$x$，然后移进栈里，取代SHIFT动作。</li>
 </ul>
 <p>图3就是每个动作的状态变化过程，图4是生成式模型进行句法分析的示例：<br><img src="2.jpg" alt></p>
 <p>同样也要对其采取一些限制：</p>
 <ul>
-<li>GEN(x)动作只有当<script type="math/tex">n \ge 1</script>时才能进行，上面SHIFT限制已经解释过了。</li>
-<li>REDUCE只有当<script type="math/tex">n \ge 1</script>或者buffer为空时才能进行。<strong>这里再次解释一下，上面判别式模型限制条件是<script type="math/tex">n \ge 2</script>，为什么这里就变成了<script type="math/tex">n \ge 1</script>？因为生成模型没有输入buffer，所以即使<script type="math/tex">n = 1</script>时REDUCE了，以后不要再GEN(x)即可，直接结束分析</strong></li>
+<li>GEN(x)动作只有当$n \ge 1$时才能进行，上面SHIFT限制已经解释过了。</li>
+<li>REDUCE只有当$n \ge 1$或者buffer为空时才能进行。<strong>这里再次解释一下，上面判别式模型限制条件是$n \ge 2$，为什么这里就变成了$n \ge 1$？因为生成模型没有输入buffer，所以即使$n = 1$时REDUCE了，以后不要再GEN(x)即可，直接结束分析</strong></li>
 </ul>
-<p>记当前状态的可能动作集合为<script type="math/tex">\mathcal{A}\_G(T, S, n)</script>。</p>
-<h2 id="转移序列"><a href="#转移序列" class="headerlink" title="转移序列"></a>转移序列</h2><p>因为一棵句法树的前序遍历是唯一的，所以不管用判别式模型还是生成式模型，得到的动作序列也都是唯一的。对于句子<script type="math/tex">x</script>和句法树<script type="math/tex">y</script>，记生成式模型动作序列为<script type="math/tex">a(x, y)</script>，判别式模型动作序列为<script type="math/tex">b(x, y)</script>。</p>
+<p>记当前状态的可能动作集合为$\mathcal{A}_G(T, S, n)$。</p>
+<h2 id="转移序列"><a href="#转移序列" class="headerlink" title="转移序列"></a>转移序列</h2><p>因为一棵句法树的前序遍历是唯一的，所以不管用判别式模型还是生成式模型，得到的动作序列也都是唯一的。对于句子$x$和句法树$y$，记生成式模型动作序列为$a(x, y)$，判别式模型动作序列为$b(x, y)$。</p>
 <h1 id="生成式模型"><a href="#生成式模型" class="headerlink" title="生成式模型"></a>生成式模型</h1><hr>
-<p>本文最重要的就是上面提到的生成式模型，因为GEN(x)动作的存在，所以模型同时对句子<script type="math/tex">x</script>和句法树<script type="math/tex">y</script>的联合分布进行了建模。记当前状态的向量表示为<script type="math/tex">u_t</script>，那么联合分布可以表示为：<br>\[p(x,y) = \prod\limits_{t = 1}^{\left| {a(x,y)} \right|} {p({a_t}|{a_{ &lt; t}})}  = \prod\limits_{t = 1}^{\left| {a(x,y)} \right|} {\frac{ {\exp r_{ {a_t}}^T{u_t} + {b_{ {a_t}}}}}{ {\sum\nolimits_{a’ \in {\mathcal{A}_G}({T_t},{S_t},{n_t})} {\exp r_{a’}^T{u_t} + {b_{a’}}} }}} \]<br>其中<script type="math/tex">r_a</script>表示动作<script type="math/tex">a</script>的向量表示，<script type="math/tex">b</script>表示偏移向量，都包含在了RNNG参数集合<script type="math/tex">\Theta</script>里面，通过训练得到。</p>
-<p>而当前状态的向量表示<script type="math/tex">u_t</script>由三部分得到，输出buffer的LSTM输出<script type="math/tex">o_t</script>、栈的LSTM输出<script type="math/tex">s_t</script>、历史动作序列的LSTM输出<script type="math/tex">h_t</script>，然后经过一个前馈神经网络得到：<br>\[u_t = \tanh (W[o_t; s_t; h_t] + c)\]</p>
-<p><script type="math/tex">W</script>和<script type="math/tex">c</script>同样也包含在了RNNG参数集合<script type="math/tex">\Theta</script>里面，下图是三个LSTM的示例图：<br><img src="3.jpg" alt></p>
+<p>本文最重要的就是上面提到的生成式模型，因为GEN(x)动作的存在，所以模型同时对句子$x$和句法树$y$的联合分布进行了建模。记当前状态的向量表示为$u_t$，那么联合分布可以表示为：<br>\[p(x,y) = \prod\limits_{t = 1}^{\left| {a(x,y)} \right|} {p({a_t}|{a_{ &lt; t}})}  = \prod\limits_{t = 1}^{\left| {a(x,y)} \right|} {\frac{ {\exp r_{ {a_t}}^T{u_t} + {b_{ {a_t}}}}}{ {\sum\nolimits_{a’ \in {\mathcal{A}_G}({T_t},{S_t},{n_t})} {\exp r_{a’}^T{u_t} + {b_{a’}}} }}} \]<br>其中$r_a$表示动作$a$的向量表示，$b$表示偏移向量，都包含在了RNNG参数集合$\Theta$里面，通过训练得到。</p>
+<p>而当前状态的向量表示$u_t$由三部分得到，输出buffer的LSTM输出$o_t$、栈的LSTM输出$s_t$、历史动作序列的LSTM输出$h_t$，然后经过一个前馈神经网络得到：<br>\[u_t = \tanh (W[o_t; s_t; h_t] + c)\]<br>$W$和$c$同样也包含在了RNNG参数集合$\Theta$里面，下图是三个LSTM的示例图：<br><img src="3.jpg" alt></p>
 <h2 id="句法成分组合"><a href="#句法成分组合" class="headerlink" title="句法成分组合"></a>句法成分组合</h2><p>在REDUCE操作时，需要将若干个子结点归约为一个父结点，为了得到父结点的向量表示，再次利用一个LSTM对子结点序列进行编码，同时在首尾加上父结点，结构图如下所示：<br><img src="4.jpg" alt></p>
-<h2 id="单词生成"><a href="#单词生成" class="headerlink" title="单词生成"></a>单词生成</h2><p>单词生成采用softmax寻找概率最大的单词，但是单词数量可能十分巨大，所以采用分层softmax的思想，首先预测当前动作是不是GEN，如果是GEN，记单词总数为<script type="math/tex">{\left| { \sum  } \right|}</script>，再将单词平均分成<script type="math/tex">{\sqrt {\left| \sum  \right|} }</script>个类别，用softmax预测属于哪个类别，然后在那个类别里再用softmax预测输出哪个单词。这样时间复杂度就从<script type="math/tex">O\left( {\left| \sum  \right|} \right)</script>降到了<script type="math/tex">O\left( {\sqrt {\left| \sum  \right|} } \right)</script>。</p>
+<h2 id="单词生成"><a href="#单词生成" class="headerlink" title="单词生成"></a>单词生成</h2><p>单词生成采用softmax寻找概率最大的单词，但是单词数量可能十分巨大，所以采用分层softmax的思想，首先预测当前动作是不是GEN，如果是GEN，记单词总数为${\left| { \sum  } \right|}$，再将单词平均分成${\sqrt {\left| \sum  \right|} }$个类别，用softmax预测属于哪个类别，然后在那个类别里再用softmax预测输出哪个单词。这样时间复杂度就从$O\left( {\left| \sum  \right|} \right)$降到了$O\left( {\sqrt {\left| \sum  \right|} } \right)$。</p>
 <h2 id="参数训练和判别式模型"><a href="#参数训练和判别式模型" class="headerlink" title="参数训练和判别式模型"></a>参数训练和判别式模型</h2><p>模型最终训练目的就是使得联合概率最大。</p>
 <p>而只需要将输出buffer改为输入buffer，GEN动作改为SHIFT动作，然后重新训练，就可以将模型变为判别式模型了，输出给定输入句子下概率最大的句法树。</p>
 <h1 id="通过重要性采样进行推理"><a href="#通过重要性采样进行推理" class="headerlink" title="通过重要性采样进行推理"></a>通过重要性采样进行推理</h1><hr>
-<p>本文的生成式模型另一大作用是训练语言模型<script type="math/tex">p(x)</script>，根据边际分布公式<br>\[p(x) = \sum\nolimits_{y \in \mathcal{Y}(x)} {p(x,y)} \]<br>可以直接得到<script type="math/tex">p(x)</script>，但是一句话的句法树可能性是指数级别的，不可能一一枚举，这时候就要用到重要性采样算法。</p>
-<p>首先定义一个比较容易得到的条件分布<script type="math/tex">q(y | x)</script>，它满足如下性质：</p>
+<p>本文的生成式模型另一大作用是训练语言模型$p(x)$，根据边际分布公式<br>\[p(x) = \sum\nolimits_{y \in \mathcal{Y}(x)} {p(x,y)} \]<br>可以直接得到$p(x)$，但是一句话的句法树可能性是指数级别的，不可能一一枚举，这时候就要用到重要性采样算法。</p>
+<p>首先定义一个比较容易得到的条件分布$q(y | x)$，它满足如下性质：</p>
 <ul>
-<li><script type="math/tex">p(y | x) > 0</script>可以推出<script type="math/tex">q(y | x) > 0</script>。</li>
+<li>$p(y | x) &gt; 0$可以推出$q(y | x) &gt; 0$。</li>
 <li>服从分布的样本很容易得到。</li>
-<li><script type="math/tex">q(y | x)</script>可以直接计算得到。</li>
+<li>$q(y | x)$可以直接计算得到。</li>
 </ul>
 <p>可以发现，上面的判别式模型得到的条件分布符合上面的性质，所以这里直接用判别式模型来进行采样。</p>
-<p>这样<script type="math/tex">p(x)</script>就变为了：<br>\[p(x) = \sum\nolimits_{y \in \mathcal{Y}(x)} {p(x,y)}  = \sum\nolimits_{y \in \mathcal{Y}(x)} {q(y|x)w(x,y)}  = {E_{q(y|x)}}w(x,y)\]<br>其中重要性权重<script type="math/tex">w(x,y) = p(x,y)/q(y|x)</script>。</p>
-<p>最后如果根据分布<script type="math/tex">q(y | x)</script>采样得到了<script type="math/tex">N</script>个句法树样本，那么用蒙特卡罗方法就可以估计出<script type="math/tex">p(x)</script>了：<br>\[{E_{q(y|x)}}w(x,y) \approx \frac{1}{N}\sum\limits_{i = 1}^N {w(x,{y_i})} \]</p>
+<p>这样$p(x)$就变为了：<br>\[p(x) = \sum\nolimits_{y \in \mathcal{Y}(x)} {p(x,y)}  = \sum\nolimits_{y \in \mathcal{Y}(x)} {q(y|x)w(x,y)}  = {E_{q(y|x)}}w(x,y)\]<br>其中重要性权重$w(x,y) = p(x,y)/q(y|x)$。</p>
+<p>最后如果根据分布$q(y | x)$采样得到了$N$个句法树样本，那么用蒙特卡罗方法就可以估计出$p(x)$了：<br>\[{E_{q(y|x)}}w(x,y) \approx \frac{1}{N}\sum\limits_{i = 1}^N {w(x,{y_i})} \]</p>
 <h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><hr>
 <p>实验部分主要说一下PTB上的句法分析和语言模型吧，下面两张图分别是句法分析和语言模型的结果：<br><img src="5.jpg" alt><br><img src="6.jpg" alt><br>句法分析方面可以看出，生成模型效果要远远好于判别模型，生成模型效果也接近了当时的最好结果。一个合理的解释是在小数据集上面，生成模型效果要更好，而在大数据集上，判别模型效果可以赶上生成模型。</p>
 <p><strong>这里要提到的一点是，判别式模型就是每一个状态直接贪心argmax找到概率最大的动作，然后生成句法树。而生成式模型是利用判别式模型采样出100个概率比较高的句法树，然后用生成式模型计算它们的联合概率，重排序选择概率最高的句法树。</strong></p>
@@ -672,7 +671,7 @@
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2018/09/02/rnng/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -896,8 +895,8 @@ PPT地址：A Summary of
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -1019,7 +1018,7 @@ PPT地址：A Summary of
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

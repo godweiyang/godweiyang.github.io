@@ -21,7 +21,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Implicitly-Defined Neural Networks for Sequence Labeling | WeiYang Blog</title>
+    <title>Implicitly-Defined Neural Networks for Sequence Labeling | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -50,7 +50,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -113,7 +113,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -446,15 +446,15 @@
 <h1 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1 介绍"></a>1 介绍</h1><hr>
 <p>传统的双向RNN只能单独计算两个方向的隐含层，现在介绍一种新的机制，将两个方向的信息直接结合起来计算。</p>
 <h1 id="2-INN"><a href="#2-INN" class="headerlink" title="2 INN"></a>2 INN</h1><hr>
-<h3 id="2-1-传统的RNN"><a href="#2-1-传统的RNN" class="headerlink" title="2.1 传统的RNN"></a>2.1 传统的RNN</h3><p>经典的RNN给定一个输入序列<script type="math/tex">[{\xi _1},{\xi _2}, \ldots ,{\xi _n}]</script>和初始隐含层状态<script type="math/tex">{h_s}</script>，然后迭代产生后续的隐含层状态：<br>\[\begin{array}{l}{h_1} = f({\xi _1},{h_s})\\{h_2} = f({\xi _2},{h_1})\\ \cdots \\{h_n} = f({\xi _n},{h_{n - 1}})\end{array}\]LSTM、GRU和其他的相关变体计算方法也都类似，都是像下图这样线性计算，每一时刻的状态只依赖于当前输入和前一时刻的状态。<br><img src="1.png" alt></p>
-<h3 id="2-2-改进结构"><a href="#2-2-改进结构" class="headerlink" title="2.2 改进结构"></a>2.2 改进结构</h3><p>这篇论文中这样计算隐含层状态：<br>\[{h_t} = f({\xi _t},{h_{t - 1}},{h_{t + 1}})\]这样整个隐含层状态序列的等式就是隐式的，记为：<br>\[H = [{h_1},{h_2}, \ldots ,{h_n}]\]在这个神经网络中，定义如下变量：数据<script type="math/tex">X</script>、标签<script type="math/tex">Y</script>、参数<script type="math/tex">\theta</script>，定义如下函数：<br>输入层变换：<br>\[\xi  = g(\theta ,X)\]隐式隐含层：<br>\[H = F(\theta ,\xi ,H)\]损失函数：<br>\[L = \ell (\theta ,H,Y)\]定义<script type="math/tex">{h_s}</script>和<script type="math/tex">{h_e}</script>为边界状态，<script type="math/tex">n</script>为输入序列长度，<script type="math/tex">F</script>函数构造出了一系列非线性等式：<br>\[\begin{array}{l}{h_1} = f({h_s},{h_2},{\xi _1})\\ \cdots \\{h_i} = f({h_{i - 1}},{h_{i + 1}},{\xi _i})\\ \cdots \\{h_n} = f({h_{n - 1}},{h_e},{\xi _n})\end{array}\]INN结构如下图：<br><img src="2.png" alt></p>
-<h3 id="2-3-计算前向传播"><a href="#2-3-计算前向传播" class="headerlink" title="2.3 计算前向传播"></a>2.3 计算前向传播</h3><p>为了计算等式<script type="math/tex">H = F(H)</script>，采用拟牛顿法。<br>令<script type="math/tex">G = H - F(H)</script>，转化为计算等式<script type="math/tex">G = 0</script>。<br>\[\begin{array}{l}{H_{n + 1}} = {H_n} - {({\nabla _H}G)^{ - 1}}G\\{H_{n + 1}} = {H_n} - {(I - {\nabla _H}F)^{ - 1}}({H_n} - F({H_n}))\end{array}\]注意到<script type="math/tex">(I - {\nabla _H}F)</script>是一个稀疏矩阵，所以采用Krylov子空间方法，具体是稳定双共轭梯度法(BICG-STAB)算法来计算。</p>
+<h3 id="2-1-传统的RNN"><a href="#2-1-传统的RNN" class="headerlink" title="2.1 传统的RNN"></a>2.1 传统的RNN</h3><p>经典的RNN给定一个输入序列$[{\xi _1},{\xi _2}, \ldots ,{\xi _n}]$和初始隐含层状态${h_s}$，然后迭代产生后续的隐含层状态：<br>\[\begin{array}{l}{h_1} = f({\xi _1},{h_s})\\{h_2} = f({\xi _2},{h_1})\\ \cdots \\{h_n} = f({\xi _n},{h_{n - 1}})\end{array}\]LSTM、GRU和其他的相关变体计算方法也都类似，都是像下图这样线性计算，每一时刻的状态只依赖于当前输入和前一时刻的状态。<br><img src="1.png" alt></p>
+<h3 id="2-2-改进结构"><a href="#2-2-改进结构" class="headerlink" title="2.2 改进结构"></a>2.2 改进结构</h3><p>这篇论文中这样计算隐含层状态：<br>\[{h_t} = f({\xi _t},{h_{t - 1}},{h_{t + 1}})\]这样整个隐含层状态序列的等式就是隐式的，记为：<br>\[H = [{h_1},{h_2}, \ldots ,{h_n}]\]在这个神经网络中，定义如下变量：数据$X$、标签$Y$、参数$\theta$，定义如下函数：<br>输入层变换：<br>\[\xi  = g(\theta ,X)\]隐式隐含层：<br>\[H = F(\theta ,\xi ,H)\]损失函数：<br>\[L = \ell (\theta ,H,Y)\]定义${h_s}$和${h_e}$为边界状态，$n$为输入序列长度，$F$函数构造出了一系列非线性等式：<br>\[\begin{array}{l}{h_1} = f({h_s},{h_2},{\xi _1})\\ \cdots \\{h_i} = f({h_{i - 1}},{h_{i + 1}},{\xi _i})\\ \cdots \\{h_n} = f({h_{n - 1}},{h_e},{\xi _n})\end{array}\]INN结构如下图：<br><img src="2.png" alt></p>
+<h3 id="2-3-计算前向传播"><a href="#2-3-计算前向传播" class="headerlink" title="2.3 计算前向传播"></a>2.3 计算前向传播</h3><p>为了计算等式$H = F(H)$，采用拟牛顿法。<br>令$G = H - F(H)$，转化为计算等式$G = 0$。<br>\[\begin{array}{l}{H_{n + 1}} = {H_n} - {({\nabla _H}G)^{ - 1}}G\\{H_{n + 1}} = {H_n} - {(I - {\nabla _H}F)^{ - 1}}({H_n} - F({H_n}))\end{array}\]注意到$(I - {\nabla _H}F)$是一个稀疏矩阵，所以采用Krylov子空间方法，具体是稳定双共轭梯度法(BICG-STAB)算法来计算。</p>
 <h3 id="2-4-梯度"><a href="#2-4-梯度" class="headerlink" title="2.4 梯度"></a>2.4 梯度</h3><p>为了训练模型，采用随机梯度下降，定义损失函数：<br>\[{\nabla _\theta }L = {\nabla _\theta }\ell  + {\nabla _H}\ell {\nabla _\theta }H\]其中<br>\[{\nabla _\theta }H = {\nabla _\theta }F + {\nabla _H}F{\nabla _\theta }H + {\nabla _\xi }F{\nabla _\theta }\xi \]所以<br>\[{\nabla _\theta }H = {(I - {\nabla _H}F)^{ - 1}}({\nabla _\theta }F + {\nabla _\xi }F{\nabla _\theta }\xi )\]所以整个梯度就是<br>\[{\nabla _\theta }L = {\nabla _\theta }\ell  + {\nabla _H}\ell {(I - {\nabla _H}F)^{ - 1}}({\nabla _\theta }F + {\nabla _\xi }F{\nabla _\theta }\xi )\]</p>
-<h3 id="2-5-转换函数"><a href="#2-5-转换函数" class="headerlink" title="2.5 转换函数"></a>2.5 转换函数</h3><p>回忆在GRU中，有如下转换函数：<br>\[\begin{array}{l}{h_t} = (1 - {z_t}){ {\hat h}_t} + {z_t}{ {\tilde h}_t}\\{ {\tilde h}_t} = \tanh (W{x_t} + U({r_t}{ {\hat h}_t}) + \tilde b)\\{z_t} = \sigma ({W_z}{x_t} + {U_z}{ {\hat h}_t} + {b_z})\\{r_t} = \sigma ({W_r}{x_t} + {U_r}{ {\hat h}_t} + {b_r})\end{array}\]其中在GRU中<script type="math/tex">{ {\hat h}_t} = {h_{t - 1}}</script>，在INN中做一个替代：<br>\[\begin{array}{l}{ {\hat h}_t} = s{h_{t - 1}} + (1 - s){h_{t + 1}}\\s = \frac{ { {s_p}}}{ { {s_p} + {s_n}}}\\{s_p} = \sigma ({W_p}{x_t} + {U_p}{h_{t - 1}} + {b_p})\\{s_n} = \sigma ({W_n}{x_t} + {U_n}{h_{t + 1}} + {b_n})\end{array}\]</p>
+<h3 id="2-5-转换函数"><a href="#2-5-转换函数" class="headerlink" title="2.5 转换函数"></a>2.5 转换函数</h3><p>回忆在GRU中，有如下转换函数：<br>\[\begin{array}{l}{h_t} = (1 - {z_t}){ {\hat h}_t} + {z_t}{ {\tilde h}_t}\\{ {\tilde h}_t} = \tanh (W{x_t} + U({r_t}{ {\hat h}_t}) + \tilde b)\\{z_t} = \sigma ({W_z}{x_t} + {U_z}{ {\hat h}_t} + {b_z})\\{r_t} = \sigma ({W_r}{x_t} + {U_r}{ {\hat h}_t} + {b_r})\end{array}\]其中在GRU中${ {\hat h}_t} = {h_{t - 1}}$，在INN中做一个替代：<br>\[\begin{array}{l}{ {\hat h}_t} = s{h_{t - 1}} + (1 - s){h_{t + 1}}\\s = \frac{ { {s_p}}}{ { {s_p} + {s_n}}}\\{s_p} = \sigma ({W_p}{x_t} + {U_p}{h_{t - 1}} + {b_p})\\{s_n} = \sigma ({W_n}{x_t} + {U_n}{h_{t + 1}} + {b_n})\end{array}\]</p>
 <h1 id="3-实验"><a href="#3-实验" class="headerlink" title="3 实验"></a>3 实验</h1><hr>
 <h3 id="序列标注"><a href="#序列标注" class="headerlink" title="序列标注"></a>序列标注</h3><p>如下图所示，这个模型的效果甚至比标准的序列标注器还要好！<br><img src="3.png" alt></p>
 <h1 id="4-结论"><a href="#4-结论" class="headerlink" title="4 结论"></a>4 结论</h1><hr>
-<p>介绍了一种隐式定义神经网络，应用到了序列标注任务上，效果比双向LSTM、双向GRU等还要好。<br>还有一些工作可以改进，比如可以在双向LSTM上面改造INN，加速计算<script type="math/tex">{(I - {\nabla _H}F)^{ - 1}}</script>等等。</p>
+<p>介绍了一种隐式定义神经网络，应用到了序列标注任务上，效果比双向LSTM、双向GRU等还要好。<br>还有一些工作可以改进，比如可以在双向LSTM上面改造INN，加速计算${(I - {\nabla _H}F)^{ - 1}}$等等。</p>
 
             </div>
             <hr/>
@@ -617,7 +617,7 @@
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2017/10/25/acl17-2027/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -835,8 +835,8 @@
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -958,7 +958,7 @@
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

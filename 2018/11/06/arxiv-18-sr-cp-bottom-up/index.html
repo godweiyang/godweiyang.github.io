@@ -20,7 +20,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Faster Shift-Reduce Constituent Parsing with a Non-Binary, Bottom-Up Strategy | WeiYang Blog</title>
+    <title>Faster Shift-Reduce Constituent Parsing with a Non-Binary, Bottom-Up Strategy | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -49,7 +49,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -112,7 +112,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -447,29 +447,29 @@
 <p>这篇论文提出了一种非二叉化、自底向上的转移系统，并且针对它提出了一种Dynamic Oracle，用损失函数的形式来实现它。</p>
 <p>之前的模型针对多叉树的处理都是采用head规则进行二叉化，或者采用空结点作为临时结点来进行隐式二叉化。但是本文将REDUCE动作扩展为REDUCE-k动作，从而可以对k叉树进行预测，这样减少了很多二叉树预测的中间过程，降低了模型的训练时间。并且为了提升准确率，还提出了一种用损失函数实现的Dynamic Oracle。</p>
 <p>自底向上的转移系统就不详细介绍了，之前都已经介绍过了，这里只说明一下之后要用到的记号。</p>
-<p>转移系统由一个stack和buffer组成，每个时刻的状态通常表示为<script type="math/tex">c = \left\langle {\sum ,i,f,\gamma} \right\rangle</script>，四个元素分别表示stack、buffer第一个单词的单词下标、分析结束标记、已经生成的短语成分的集合。</p>
+<p>转移系统由一个stack和buffer组成，每个时刻的状态通常表示为$c = \left\langle {\sum ,i,f,\gamma} \right\rangle $，四个元素分别表示stack、buffer第一个单词的单词下标、分析结束标记、已经生成的短语成分的集合。</p>
 <h1 id="自底向上的转移系统"><a href="#自底向上的转移系统" class="headerlink" title="自底向上的转移系统"></a>自底向上的转移系统</h1><hr>
-<p>传统的转移系统REDUCE操作都只是将栈顶的两个元素归约为一个结点，而本文提出的转移系统将REDUCE扩展为REDUCE-X#k动作，归约栈顶概率最大的k个结点为结点X。举个例子，对于产生式<script type="math/tex">VP \to is \ ADVP \ ADJP</script>，使用的动作为REDUCE-VP#3，表示归约栈顶的三个结点。</p>
+<p>传统的转移系统REDUCE操作都只是将栈顶的两个元素归约为一个结点，而本文提出的转移系统将REDUCE扩展为REDUCE-X#k动作，归约栈顶概率最大的k个结点为结点X。举个例子，对于产生式$VP \to is \ ADVP \ ADJP$，使用的动作为REDUCE-VP#3，表示归约栈顶的三个结点。</p>
 <p><img src="1.jpg" alt><br><img src="2.jpg" alt><br>具体的转移系统和例子如上图所示，为了区分具有不同数量儿子的结点X，将结点的label细化为X#k，表示具有k个儿子。例如对于VP结点，如果有两个儿子，那么它的label就是VP#2，如果有三个儿子就是VP#3。</p>
 <h1 id="Dynamic-Oracle"><a href="#Dynamic-Oracle" class="headerlink" title="Dynamic Oracle"></a>Dynamic Oracle</h1><hr>
 <p>本文采用的Dynamic Oracle是用损失函数来实现的，损失函数衡量的是状态c可以产生的最优句法树和标准句法树之间的距离，这样就可以计算出采取每一个动作之后下一个状态的损失函数值，选择损失函数值最小的动作。</p>
-<p>对于状态c，损失函数<script type="math/tex">l(c)</script>定义为状态c可以产生的最终的句法树t和标准句法树<script type="math/tex">t_G</script>之间的最小汉明距离，即：<br>\[l(c) = \min_{t|c \to t} \mathcal{L}(t, t_G)\]<br>一个训练正确的Dynamic Oracle应当使得预测的下一个状态<script type="math/tex">\tau(c)</script>不会增加损失函数值，即<br>\[l(\tau(c)) - l(c) = 0\]<br>这个最小汉明损失可以定义为<script type="math/tex">\left| { {t_G}\backslash t} \right| + \left| {t\backslash {t_G}} \right|</script>，下面就将讨论这两部分怎么计算，主要用到短语的可达性和可分解性。</p>
-<h2 id="短语的可达性"><a href="#短语的可达性" class="headerlink" title="短语的可达性"></a>短语的可达性</h2><p>在这里用短语集合<script type="math/tex">{(X, l, r)}</script>来表示一棵句法树，我们假设状态c的短语集合为<script type="math/tex">\sum = [(Y_p, i_p, i_{p-1}) \cdots (Y_2, i_2, i_1)|(Y_1, i_1, j)]</script>，那么我们说，标准句法树中的一个短语<script type="math/tex">(X, l, r) \in \gamma_G</script>当且仅当满足如下三个条件之一时，称它是“各自可达短语”：</p>
+<p>对于状态c，损失函数$l(c)$定义为状态c可以产生的最终的句法树t和标准句法树$t_G$之间的最小汉明距离，即：<br>\[l(c) = \min_{t|c \to t} \mathcal{L}(t, t_G)\]<br>一个训练正确的Dynamic Oracle应当使得预测的下一个状态$\tau(c)$不会增加损失函数值，即<br>\[l(\tau(c)) - l(c) = 0\]<br>这个最小汉明损失可以定义为$\left| { {t_G}\backslash t} \right| + \left| {t\backslash {t_G}} \right|$，下面就将讨论这两部分怎么计算，主要用到短语的可达性和可分解性。</p>
+<h2 id="短语的可达性"><a href="#短语的可达性" class="headerlink" title="短语的可达性"></a>短语的可达性</h2><p>在这里用短语集合${(X, l, r)}$来表示一棵句法树，我们假设状态c的短语集合为$\sum = [(Y_p, i_p, i_{p-1}) \cdots (Y_2, i_2, i_1)|(Y_1, i_1, j)]$，那么我们说，标准句法树中的一个短语$(X, l, r) \in \gamma_G$当且仅当满足如下三个条件之一时，称它是“各自可达短语”：</p>
 <ul>
-<li><script type="math/tex">(X, l, r) \in \gamma_c</script>（因为短语已经包含在了状态c已生成的短语集合里，那么它当然是可达的）。</li>
-<li><script type="math/tex">j \le l < r</script>（因为短语还在buffer中，所以可以通过不断SHIFT然后REDUCE得到）。</li>
-<li><script type="math/tex">l \in \{i_k | 1 \le k \le p\} \wedge j \le r</script>（这种情况表明了短语的左端点恰好位于栈里某个短语的边界处，而右端点又还在buffer里，所以还可以通过不断SHUFT然后REDUCE得到短语。但是如果左端点不是栈里短语的边界，那说明产生了交叉，自然不会可达了。而如果右端点已经在栈里了，那之后也不会得到了，因为转移系统每次都是REDUCE栈顶的短语，不可能从栈里面开始REDUCE的）。</li>
+<li>$(X, l, r) \in \gamma_c$（因为短语已经包含在了状态c已生成的短语集合里，那么它当然是可达的）。</li>
+<li>$j \le l &lt; r$（因为短语还在buffer中，所以可以通过不断SHIFT然后REDUCE得到）。</li>
+<li>$l \in \{i_k | 1 \le k \le p\} \wedge j \le r$（这种情况表明了短语的左端点恰好位于栈里某个短语的边界处，而右端点又还在buffer里，所以还可以通过不断SHUFT然后REDUCE得到短语。但是如果左端点不是栈里短语的边界，那说明产生了交叉，自然不会可达了。而如果右端点已经在栈里了，那之后也不会得到了，因为转移系统每次都是REDUCE栈顶的短语，不可能从栈里面开始REDUCE的）。</li>
 </ul>
-<p>枚举标准树中的所有短语，根据以上规则可以得到可达短语集合<script type="math/tex">\mathcal{R}(c, \gamma_G)</script>，然后从标准短语集合中排除掉这部分短语，剩下的就是不可达短语集合<script type="math/tex">\mathcal{U}(c, \gamma_G) = \gamma_G \backslash \mathcal{R}(c, \gamma_G)</script>。这部分短语就是不论采取何种动作序列，最后都不可能生成的短语集合。</p>
+<p>枚举标准树中的所有短语，根据以上规则可以得到可达短语集合$\mathcal{R}(c, \gamma_G)$，然后从标准短语集合中排除掉这部分短语，剩下的就是不可达短语集合$\mathcal{U}(c, \gamma_G) = \gamma_G \backslash \mathcal{R}(c, \gamma_G)$。这部分短语就是不论采取何种动作序列，最后都不可能生成的短语集合。</p>
 <h2 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h2><p>对于每一个状态c，可以定义它的损失函数为<br>\[l(c) = \min_{\gamma |c \to \gamma} \mathcal{L}(\gamma, \gamma_G) = \left| { \mathcal{U}(c, \gamma_G)} \right| + \left| {\gamma_c \backslash {\gamma_G}} \right|\]<br>其中第一个因子惩罚的是False Negative短语，也就是漏报的短语，即正确的但是不可能被生成的短语。第二个因子惩罚的是False Positive短语，也就是误报的短语，即已经生成的但是是错的短语。</p>
 <h2 id="正确性证明"><a href="#正确性证明" class="headerlink" title="正确性证明"></a>正确性证明</h2><p>那么我们如何证明，按照这个最小的损失函数值走下去，一定能得到最优的句法树呢？也就是要证明，这个状态c的损失函数，的确就是从状态c能得到的最优句法树和标准树的汉明损失。<br>\[\min_{\gamma |c \to \gamma} \mathcal{L}(\gamma, \gamma_G) = \left| { \mathcal{U}(c, \gamma_G)} \right| + \left| {\gamma_c \backslash {\gamma_G}} \right|\]<br>首先证明这个损失函数是<strong>短语可分解</strong>的，也就是证明，对于一个标准树中的短语集合，如果其中的每一个短语都是各自可达的，那么整个集合中的短语可以同时生成。</p>
-<p>证明这个性质要用到数学归纳法。首先<script type="math/tex">m = 1</script>时显然成立，然后假设集合元素个数为<script type="math/tex">m, (m > 1)</script>时性质成立，下面证明集合T元素个数为<script type="math/tex">m + 1</script>时性质也成立。</p>
-<p>令<script type="math/tex">(X, l, r)</script>表示集合T中偏序最小的短语，即l是最小的，如果l有相等的，就再取r最小的。根据假设，<script type="math/tex">(X, l, r)</script>是从状态c可到达的gold短语。令<script type="math/tex">T' = T \backslash (X, l, r)</script>，所以集合T’有m个元素，根据递归定义，整个集合都是从状态c可达的。</p>
-<p>如果短语的可达性条件中第一种情况满足，那么<script type="math/tex">(X, l, r)</script>已经存在于状态c已生成短语集合中了，那么整个T集合当然是可达的。</p>
-<p>如果第二种情况满足，即<script type="math/tex">j \le l < r</script>，那么可以通过不断SHIFT再一个REDUCE来得到短语<script type="math/tex">(X, l, r)</script>。那么T’集合又如何能全部生成呢？可以发现T’集合中的短语，要么是左边界等于l并且右边界大于r的（根据定义），这种可以继续SHUFT再REDUCE得到（满足条件3）。要么是左边界大于等于r的（因为都是标准树中的短语，所以不会有边界交叉），这种满足条件2，也可达。<strong>论文中就说了这两种情况，是否还存在一种左边界大于等于l，右边界小于等于r的情况呢？当然这种情况满足条件1，因为在生成<script type="math/tex">(X, l, r)</script>的时候就已经生成了。</strong>所以最终T集合还是全部可达的。</p>
+<p>证明这个性质要用到数学归纳法。首先$m = 1$时显然成立，然后假设集合元素个数为$m, (m &gt; 1)$时性质成立，下面证明集合T元素个数为$m + 1$时性质也成立。</p>
+<p>令$(X, l, r)$表示集合T中偏序最小的短语，即l是最小的，如果l有相等的，就再取r最小的。根据假设，$(X, l, r)$是从状态c可到达的gold短语。令$T’ = T \backslash (X, l, r)$，所以集合T’有m个元素，根据递归定义，整个集合都是从状态c可达的。</p>
+<p>如果短语的可达性条件中第一种情况满足，那么$(X, l, r)$已经存在于状态c已生成短语集合中了，那么整个T集合当然是可达的。</p>
+<p>如果第二种情况满足，即$j \le l &lt; r$，那么可以通过不断SHIFT再一个REDUCE来得到短语$(X, l, r)$。那么T’集合又如何能全部生成呢？可以发现T’集合中的短语，要么是左边界等于l并且右边界大于r的（根据定义），这种可以继续SHUFT再REDUCE得到（满足条件3）。要么是左边界大于等于r的（因为都是标准树中的短语，所以不会有边界交叉），这种满足条件2，也可达。<strong>论文中就说了这两种情况，是否还存在一种左边界大于等于l，右边界小于等于r的情况呢？当然这种情况满足条件1，因为在生成$(X, l, r)$的时候就已经生成了。</strong>所以最终T集合还是全部可达的。</p>
 <p>如果第三种情况满足，即l是栈里某个短语的边界，而r大于等于j，那么这种情况依然可以通过不断SHIFT再REDUCE得到，而T集合仍然可以全部可达，原因和上一种情况类似。</p>
 <p>所以可以证得，从状态c开始，存在某个转移序列，使得所有可达短语全部生成，那么只有不可达的短语会被错过，即：<br>\[\min_{\gamma |c \to \gamma} \left| {\gamma_G \backslash {\gamma}} \right| = \left| { \mathcal{U}(c, \gamma_G)} \right|\]</p>
-<p>最后一步就是证明另一项<script type="math/tex">\left| {\gamma \backslash {\gamma_G}} \right|</script>等于<script type="math/tex">\left| {\gamma_c \backslash {\gamma_G}} \right|</script>。首先因为前者肯定包含了后者，因为随着转移的进行，预测错误的短语只会增加，不会减少。然后证明最优句法树不会再增加新的错误短语，即从状态c开始的最优句法树一定是<script type="math/tex">\mathcal{R}(c, \gamma_G) \cup \left| {\gamma_c \backslash {\gamma_G}} \right|</script>。这里不是很好想，可以想象从包含当前栈顶短语的最小的标准短语开始，一步步的进行转移，按照<a href="https://www.aclweb.org/anthology/D/D16/D16-1001.pdf" target="_blank" rel="noopener">James and Huang</a>中的Dynamic Oracle。</p>
+<p>最后一步就是证明另一项$\left| {\gamma \backslash {\gamma_G}} \right|$等于$\left| {\gamma_c \backslash {\gamma_G}} \right|$。首先因为前者肯定包含了后者，因为随着转移的进行，预测错误的短语只会增加，不会减少。然后证明最优句法树不会再增加新的错误短语，即从状态c开始的最优句法树一定是$\mathcal{R}(c, \gamma_G) \cup \left| {\gamma_c \backslash {\gamma_G}} \right|$。这里不是很好想，可以想象从包含当前栈顶短语的最小的标准短语开始，一步步的进行转移，按照<a href="https://www.aclweb.org/anthology/D/D16/D16-1001.pdf" target="_blank" rel="noopener">James and Huang</a>中的Dynamic Oracle。</p>
 <p>至此已经证明了，这个损失函数可以保证每一步都按照最优的策略来进行转移。</p>
 <h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><hr>
 <p>实验采用的转移模型都是基于<a href="http://aclweb.org/anthology/N16-1024" target="_blank" rel="noopener">Dyer et al.</a>，并且也采用了<a href="https://www.aclweb.org/anthology/D/D16/D16-1001.pdf" target="_blank" rel="noopener">James and Huang</a>中的exploration策略来增加错误状态，提高Dynamic Oracle的准确率。</p>
@@ -646,7 +646,7 @@
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2018/11/06/arxiv-18-sr-cp-bottom-up/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -878,8 +878,8 @@
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -1001,7 +1001,7 @@
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

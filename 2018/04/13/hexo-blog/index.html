@@ -17,7 +17,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>超详细Hexo+Github博客搭建小白教程 | WeiYang Blog</title>
+    <title>超详细Hexo+Github博客搭建小白教程 | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -46,7 +46,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -109,7 +109,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -409,14 +409,14 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                        3.2k
+                        2.6k
                     </div>
                     
 
                     
                     <div class="info-break-policy">
                         <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                        12 分
+                        10 分
                     </div>
                     
                 
@@ -461,11 +461,9 @@
 <h1 id="连接Github与本地"><a href="#连接Github与本地" class="headerlink" title="连接Github与本地"></a>连接Github与本地</h1><hr>
 <p>首先右键打开git bash，然后输入下面命令：</p>
 <pre><code>git config --global user.name &quot;godweiyang&quot;
-git config --global user.email &quot;792321264@qq.com&quot;
-</code></pre><p>用户名和邮箱根据你注册github的信息自行修改。</p>
+git config --global user.email &quot;792321264@qq.com&quot;</code></pre><p>用户名和邮箱根据你注册github的信息自行修改。</p>
 <p>然后生成密钥SSH key：</p>
-<pre><code>ssh-keygen -t rsa -C &quot;792321264@qq.com&quot;
-</code></pre><p>输入<code>eval &quot;$(ssh-agent -s)&quot;</code>，添加密钥到ssh-agent。</p>
+<pre><code>ssh-keygen -t rsa -C &quot;792321264@qq.com&quot;</code></pre><p>输入<code>eval &quot;$(ssh-agent -s)&quot;</code>，添加密钥到ssh-agent。</p>
 <p>再输入<code>ssh-add ~/.ssh/id_rsa</code>，添加生成的SSH key到ssh-agent。</p>
 <p>打开<a href="http://github.com" target="_blank" rel="noopener">github</a>，在头像下面点击<code>settings</code>，再点击<code>SSH and GPG keys</code>，新建一个SSH，名字随便。</p>
 <p>打开<code>C:\Users\Administrator\.ssh\id_rsa.pub</code>，注意是隐藏文件夹，将其中的内容复制到新建的SSH中。</p>
@@ -475,8 +473,7 @@ git config --global user.email &quot;792321264@qq.com&quot;
 <pre><code>deploy:
   type: git
   repository: https://github.com/godweiyang/godweiyang.github.io
-  branch: master
-</code></pre><p>repository修改为你自己的github项目地址。<strong>不过你这里看到的可能与我有点不一样，因为我已经修改过主题了，所以这一步先不用管，换完主题之后记得回来修改！</strong></p>
+  branch: master</code></pre><p>repository修改为你自己的github项目地址。<strong>不过你这里看到的可能与我有点不一样，因为我已经修改过主题了，所以这一步先不用管，换完主题之后记得回来修改！</strong></p>
 <h1 id="写文章、发布文章"><a href="#写文章、发布文章" class="headerlink" title="写文章、发布文章"></a>写文章、发布文章</h1><hr>
 <p>首先在博客根目录下右键打开git，安装一个扩展<code>npm install hexo-deployer-git --save</code>。</p>
 <p>然后输入<code>hexo new post &quot;article title&quot;</code>，新建一篇文章。</p>
@@ -503,8 +500,7 @@ git config --global user.email &quot;792321264@qq.com&quot;
     - archive
     - img
     - tags
-- themes
-</code></pre><p><code>node_modules</code>是node.js各种库的目录，<code>public</code>是生成的网页文件目录，<code>scaffolds</code>里面就三个文件，存储着新文章和新页面的初始设置，<code>source</code>是我们最常用到的一个目录，里面存放着文章、各类页面、图像等文件，<code>themes</code>存放着主题文件，一般也用不到。</p>
+- themes</code></pre><p><code>node_modules</code>是node.js各种库的目录，<code>public</code>是生成的网页文件目录，<code>scaffolds</code>里面就三个文件，存储着新文章和新页面的初始设置，<code>source</code>是我们最常用到的一个目录，里面存放着文章、各类页面、图像等文件，<code>themes</code>存放着主题文件，一般也用不到。</p>
 <p>我们平时写文章只需要关注<code>source/_posts</code>这个文件夹就行了。</p>
 <h1 id="个性化设置及bug处理"><a href="#个性化设置及bug处理" class="headerlink" title="个性化设置及bug处理"></a>个性化设置及bug处理</h1><hr>
 <p><strong>首先打开<code>_config.yml</code>，根据自己需求配置，具体不说了，有注释。</strong></p>
@@ -514,21 +510,15 @@ git config --global user.email &quot;792321264@qq.com&quot;
 <p>首先你得注册一个畅言账号，<a href="http://changyan.kuaizhan.com/" target="_blank" rel="noopener">地址</a>。<br>然后打开如下页面，复制该段代码：<br><img src="11.jpg" alt><br>打开<code>D:\study\program\blog\themes\beantech\layout\post.ejs</code>，将代码粘贴到如下位置：<br><img src="12.jpg" alt><br>然后重新生成一下网页，可以看到效果图如下：<br><img src="13.jpg" alt><br>更多插件例如热评话题之类的，可以自行在畅言后台找到代码添加。</p>
 <h2 id="添加图片放大功能"><a href="#添加图片放大功能" class="headerlink" title="添加图片放大功能"></a>添加图片放大功能</h2><p>首先下载<code>zooming.js</code>文件<a href="https://github.com/godweiyang/godweiyang.github.io/blob/master/js/zooming.js" target="_blank" rel="noopener">地址</a>，保存在<code>D:\study\program\blog\themes\beantech\source\js</code>目录下。</p>
 <p>打开<code>D:\study\program\blog\themes\beantech\layout\post.ejs</code>，在最下方粘贴如下代码：</p>
-<pre><code>&lt;script type=&quot;text/javascript&quot; src=&quot;/js/zooming.js&quot;&gt;&lt;/script&gt;
-</code></pre><p>然后文章里的图片就可以单击全屏啦。</p>
+<pre><code>&lt;script type=&quot;text/javascript&quot; src=&quot;/js/zooming.js&quot;&gt;&lt;/script&gt;</code></pre><p>然后文章里的图片就可以单击全屏啦。</p>
 <h2 id="添加数学公式显示"><a href="#添加数学公式显示" class="headerlink" title="添加数学公式显示"></a>添加数学公式显示</h2><p>打开<code>D:\study\program\blog\themes\beantech\layout\post.ejs</code>，在最下方粘贴如下代码：</p>
-<pre><code>&lt;script type=&quot;text/javascript&quot; src=&quot;http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default&quot;&gt;&lt;/script&gt;
-</code></pre><p>由于markdown语法与mathjax语法存在冲突，所以还需要修改源文件。</p>
+<pre><code>&lt;script type=&quot;text/javascript&quot; src=&quot;http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default&quot;&gt;&lt;/script&gt;</code></pre><p>由于markdown语法与mathjax语法存在冲突，所以还需要修改源文件。</p>
 <p>打开<code>D:\study\program\blog\node_modules\marked\lib\marked.js</code><br><code>escape:</code>处替换成：</p>
-<pre><code>escape: /^$$[`*\[\]()#$+\-.!_&gt;])/
-</code></pre><p><code>em:</code>处替换成：</p>
-<pre><code>em: /^\*((?:\*\*|[\s\S])+?)\*(?!\*)/
-</code></pre><p>这时在文章里写数学公式基本没有问题了，但是要注意：<br><strong>数学公式中如果出现了连续两个{，中间一定要加空格！</strong></p>
-<p>举个例子:<br>行内公式：<script type="math/tex">y = f(x)</script><br>代码：</p>
-<pre><code>$$y = f(x)$$
-</code></pre><p>行间公式：<br>\[y = {f_{ {g_1}}}(x)\]<br>代码：</p>
-<pre><code>\\[y = {f_{ {g_1}}}(x)\\]
-</code></pre><p><strong>注意上面花括号之间有空格！</strong></p>
+<pre><code>escape: /^$[`*\[\]()#$+\-.!_&gt;])/</code></pre><p><code>em:</code>处替换成：</p>
+<pre><code>em: /^\*((?:\*\*|[\s\S])+?)\*(?!\*)/</code></pre><p>这时在文章里写数学公式基本没有问题了，但是要注意：<br><strong>数学公式中如果出现了连续两个{，中间一定要加空格！</strong></p>
+<p>举个例子:<br>行内公式：$y = f(x)$<br>代码：</p>
+<pre><code>$y = f(x)$</code></pre><p>行间公式：<br>\[y = {f_{ {g_1}}}(x)\]<br>代码：</p>
+<pre><code>\\[y = {f_{ {g_1}}}(x)\\]</code></pre><p><strong>注意上面花括号之间有空格！</strong></p>
 <h2 id="添加留言板"><a href="#添加留言板" class="headerlink" title="添加留言板"></a>添加留言板</h2><p>在<code>D:\study\program\blog\themes\beantech\layout</code>中新建<code>bbs.ejs</code>，文件内容如下：</p>
 <pre><code>---
 layout: page
@@ -541,8 +531,7 @@ layout: page
 &lt;!-- Chinese Version --&gt;
 &lt;div class=&quot;zh post-container&quot;&gt;
     &lt;%- page.content %&gt;
-&lt;/div&gt;
-</code></pre><p>然后在<code>D:\study\program\blog\source</code>中新建<code>\bbs</code>文件夹，里面在新建<code>index.md</code>文件，内容如下：</p>
+&lt;/div&gt;</code></pre><p>然后在<code>D:\study\program\blog\source</code>中新建<code>\bbs</code>文件夹，里面在新建<code>index.md</code>文件，内容如下：</p>
 <pre><code>---
 layout: &quot;bbs&quot;
 title: &quot;BBS&quot;
@@ -551,29 +540,23 @@ description: &quot;欢迎交换友链，一起交流学习！&quot;
 header-img: &quot;img/header_img/home-bg-2-dark.png&quot;
 comments: true
 ---
-此处替换为你的畅言评论代码~~~
-</code></pre><h2 id="添加置顶功能"><a href="#添加置顶功能" class="headerlink" title="添加置顶功能"></a>添加置顶功能</h2><p>运行如下两条命令安装置顶插件：</p>
+此处替换为你的畅言评论代码~~~</code></pre><h2 id="添加置顶功能"><a href="#添加置顶功能" class="headerlink" title="添加置顶功能"></a>添加置顶功能</h2><p>运行如下两条命令安装置顶插件：</p>
 <pre><code>npm uninstall hexo-generator-index --save
-npm install hexo-generator-index-pin-top --save
-</code></pre><p>然后打开<code>D:\study\program\blog\themes\beantech\layout\index.ejs</code>，在如下位置添加代码：<br><img src="14.jpg" alt></p>
+npm install hexo-generator-index-pin-top --save</code></pre><p>然后打开<code>D:\study\program\blog\themes\beantech\layout\index.ejs</code>，在如下位置添加代码：<br><img src="14.jpg" alt></p>
 <pre><code>&lt;% if (post.top) {%>
     <i class="fa fa-thumb-tack"></i>
     <font color="7D26CD">置顶</font>
     <span class="post-meta-divider">|</span>
-<%}%&gt; < code></%}%&gt;></code></pre><p>然后在你想置顶的文章md文件里，添加如下配置选项：</p>
-<pre><code>top: true
-</code></pre><h2 id="添加网易云音乐BGM"><a href="#添加网易云音乐BGM" class="headerlink" title="添加网易云音乐BGM"></a>添加网易云音乐BGM</h2><p>写文章的时候，想插入一段BGM怎么办？</p>
+<%}%&gt;< code></%}%&gt;<></code></pre><p>然后在你想置顶的文章md文件里，添加如下配置选项：</p>
+<pre><code>top: true</code></pre><h2 id="添加网易云音乐BGM"><a href="#添加网易云音乐BGM" class="headerlink" title="添加网易云音乐BGM"></a>添加网易云音乐BGM</h2><p>写文章的时候，想插入一段BGM怎么办？</p>
 <p>首先打开网易云网页版，找到想听的歌曲，然后点击生成外链：<br><img src="15.jpg" alt><br>复制如下代码：<br><img src="16.jpg" alt></p>
 <p>粘贴到文章里就行了，为了美观，设置一下居中，具体代码如下：</p>
-<pre><code>&lt;div align=&quot;middle&quot;&gt;这里粘贴刚刚复制的代码&lt;/div&gt;
-</code></pre><h2 id="添加访客人数统计和字数统计"><a href="#添加访客人数统计和字数统计" class="headerlink" title="添加访客人数统计和字数统计"></a>添加访客人数统计和字数统计</h2><p>我们使用一个国外的流量统计网站：<a href="gostats.com">gostats.com</a>，首先注册一下。</p>
+<pre><code>&lt;div align=&quot;middle&quot;&gt;这里粘贴刚刚复制的代码&lt;/div&gt;</code></pre><h2 id="添加访客人数统计和字数统计"><a href="#添加访客人数统计和字数统计" class="headerlink" title="添加访客人数统计和字数统计"></a>添加访客人数统计和字数统计</h2><p>我们使用一个国外的流量统计网站：<a href="gostats.com">gostats.com</a>，首先注册一下。</p>
 <p>然后自己添加网站地址，过程就不详细说了，然后点击<code>Get counter code</code>，选择一个自己喜欢的风格。<br>如下图所示，选择一个样式，选择<code>HTML</code>，生成代码：<br><img src="17.jpg" alt></p>
 <p>复制这段代码到<code>D:\study\program\blog\themes\beantech\layout\_partial\footer.ejs</code>，具体位置如下：<br><img src="18.jpg" alt><br>默认的代码和我图中不一样，因为我不想点击图片跳转到它统计网站的链接，可以模仿我的自行修改。</p>
 <p>字数统计首先安装插件</p>
-<pre><code>npm i --save hexo-wordcount
-</code></pre><p>然后打开<code>D:\study\program\blog\themes\beantech\layout\_partial\footer.ejs</code>，添加如下代码：</p>
-<pre><code>&lt;span class=&quot;post-count&quot;&gt;&lt;%= totalcount(site) %&gt; words altogether&lt;/span&gt;
-</code></pre><p>具体位置见上图。</p>
+<pre><code>npm i --save hexo-wordcount</code></pre><p>然后打开<code>D:\study\program\blog\themes\beantech\layout\_partial\footer.ejs</code>，添加如下代码：</p>
+<pre><code>&lt;span class=&quot;post-count&quot;&gt;&lt;%= totalcount(site) %&gt; words altogether&lt;/span&gt;</code></pre><p>具体位置见上图。</p>
 <h1 id="一些注意事项"><a href="#一些注意事项" class="headerlink" title="一些注意事项"></a>一些注意事项</h1><hr>
 <p>首先解释一下文章开头的配置，如下图所示：<br><img src="19.jpg" alt></p>
 <pre><code>title: 文章标题
@@ -583,8 +566,7 @@ subtitle: 子标题
 header-img: 顶部背景图片
 top: 是否置顶
 tags: 标签
-categories: 分类
-</code></pre><p>网站图片都保存在<code>D:\study\program\blog\source\img</code>目录下，可以修改成自己的图片。</p>
+categories: 分类</code></pre><p>网站图片都保存在<code>D:\study\program\blog\source\img</code>目录下，可以修改成自己的图片。</p>
 <p>如果换一台电脑想迁移博客的话，最简单的方法就是把博客整个目录拷贝过去，就是这么暴力。</p>
 <p><strong>其他还有什么问题的话等我想起来了再继续添加，如果遇到问题欢迎联系我。</strong></p>
 
@@ -749,7 +731,7 @@ categories: 分类
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2018/04/13/hexo-blog/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -887,7 +869,7 @@ categories: 分类
 首先声明一下，最近这段时间忙毕设，没时间更新博客了，大家见谅。
 今天这节课开始讲解取整相关知识，主要是数论相关的了。
 符号定义
-向下取整函数\left\lfloor x \right\rfloor定义为小于等于x的最大整数。向上取整函数
+向下取整函数$\left\lfloor x \right\rfloor $定义为小于等于$x$的最大整数。向
                         
                     </div>
                     <div class="publish-info">
@@ -954,8 +936,8 @@ categories: 分类
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -1077,7 +1059,7 @@ categories: 分类
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             

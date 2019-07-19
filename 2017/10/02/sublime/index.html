@@ -16,7 +16,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Sublime Text安装与配置教程 | WeiYang Blog</title>
+    <title>Sublime Text安装与配置教程 | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -45,7 +45,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">WeiYang Blog</span>
+                    <span class="logo-span">韦阳的博客</span>
                 </a>
             </div>
             
@@ -108,7 +108,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
             华东师范大学|计算机科学与技术|自然语言处理
@@ -433,8 +433,10 @@
 <h1 id="配置C-运行环境"><a href="#配置C-运行环境" class="headerlink" title="配置C++运行环境"></a>配置C++运行环境</h1><hr>
 <p>装完后可以直接写代码了，但是不能运行C++的哦，还需要配置运行环境。</p>
 <ul>
-<li>首先要安装C++的编译器MinGW，可以直接去官网下（<a href="http://www.mingw.org/" target="_blank" rel="noopener">传送门</a>）。不过我自己是直接下的CodeBlocks（<a href="https://downloads.sourceforge.net/project/codeblocks/Binaries/16.01/Windows/codeblocks-16.01mingw-setup.exe" target="_blank" rel="noopener">传送门</a>），然后用的自带的MinGW。</li>
-<li>装完编译器之后在<code>我的电脑</code>右键，依次点击<code>属性 - 高级系统设置 - 环境变量</code>，在<code>系统变量</code>中找到<code>Path</code>，编辑它，新建一条，添加MinGW路径，以我的为例是<code>E:\software\codeblocks\MinGW\bin</code>。</li>
+<li><p>首先要安装C++的编译器MinGW，可以直接去官网下（<a href="http://www.mingw.org/" target="_blank" rel="noopener">传送门</a>）。不过我自己是直接下的CodeBlocks（<a href="https://downloads.sourceforge.net/project/codeblocks/Binaries/16.01/Windows/codeblocks-16.01mingw-setup.exe" target="_blank" rel="noopener">传送门</a>），然后用的自带的MinGW。</p>
+</li>
+<li><p>装完编译器之后在<code>我的电脑</code>右键，依次点击<code>属性 - 高级系统设置 - 环境变量</code>，在<code>系统变量</code>中找到<code>Path</code>，编辑它，新建一条，添加MinGW路径，以我的为例是<code>E:\software\codeblocks\MinGW\bin</code>。</p>
+</li>
 <li><p>打开Sublime Text，依次点击<code>Tools - Build System - new Build System</code>，粘贴以下代码：</p>
 <pre><code>{
   &quot;encoding&quot;: &quot;utf-8&quot;,
@@ -450,9 +452,9 @@
           &quot;shell_cmd&quot;: &quot;g++ -Wall -std=c++11 \&quot;$file\&quot; -o \&quot;$file_base_name\&quot; &amp;&amp; start cmd /c \&quot;\&quot;${file_path}/${file_base_name}\&quot; &amp; pause\&quot;&quot;
       }
   ]
-}
-</code></pre></li>
-<li>然后<code>ctrl+s</code>保存，命名为c++11。</li>
+}</code></pre></li>
+<li><p>然后<code>ctrl+s</code>保存，命名为c++11。</p>
+</li>
 </ul>
 <p>这时候随便写一个C++代码，然后<code>Tools - Build System</code>选择<code>c++11</code>，然后按<code>ctrl+b</code>就可以运行啦。<br>我这配置的是控制台运行的C++，所以支持输入数据的哦！</p>
 <h1 id="配置Java运行环境"><a href="#配置Java运行环境" class="headerlink" title="配置Java运行环境"></a>配置Java运行环境</h1><hr>
@@ -480,8 +482,7 @@
           &quot;encoding&quot;:&quot;cp936&quot;
       }
   ]
-}
-</code></pre></li>
+}</code></pre></li>
 <li>然后<code>ctrl+s</code>保存，命名为JavaC。</li>
 </ul>
 <p>这时候随便写一个Java代码，然后<code>Tools - Build System</code>选择<code>JavaC</code>，然后按<code>ctrl+b</code>就可以运行啦。<br>我这配置的是控制台运行的Java，所以支持输入数据的哦！</p>
@@ -508,8 +509,7 @@
               &quot;file&quot;: &quot;config/Python/Main.sublime-menu&quot;
           }
       }
-  ]
-</code></pre>  然后运行Python代码时直接按<code>F5</code>就行啦！<br>下面两个随意装。</li>
+  ]</code></pre>  然后运行Python代码时直接按<code>F5</code>就行啦！<br>下面两个随意装。</li>
 <li>SublimeHighLight<br>装完之后选中你要复制的代码，右键<code>Copy as RTF</code>，然后粘贴到Word里就会保留代码格式，很漂亮的啊！</li>
 <li>ConvertToUTF8<br>这是为了某些中文显示准备的插件，貌似不怎么用得到，随意装吧。</li>
 </ul>
@@ -532,8 +532,7 @@
     &quot;translate_tabs_to_spaces&quot;: true,
     &quot;expand_tabs_on_save&quot;: true,
     &quot;tab_size&quot;: 4,
-}
-</code></pre><p><strong>Anaconda Settings User:</strong></p>
+}</code></pre><p><strong>Anaconda Settings User:</strong></p>
 <pre><code>{
     &quot;python_interpreter&quot;: &quot;E:/software/anaconda/python.exe&quot;,
     &quot;suppress_word_completions&quot;: false,
@@ -546,8 +545,7 @@
     &quot;enable_docstrings_tooltip&quot;: true,
     &quot;enable_signatures_tooltip&quot;: true,
     &quot;display_signatures&quot;: true,
-}
-</code></pre>
+}</code></pre>
             </div>
             <hr/>
 
@@ -709,7 +707,7 @@
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2017/10/02/sublime/" property="cc:attributionName"
                rel="cc:attributionURL">
-                WeiYang
+                韦阳
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
                 知识共享署名 4.0 国际许可协议
@@ -919,8 +917,8 @@ imp
 
         var url = document.location.href;
         newdiv.innerHTML += '<br />'
-            + '来源: WeiYang Blog<br />'
-            + '作者: WeiYang<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
             + '链接: <a href="' + url + '">' + url + '</a><br />'
             + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
 
@@ -1042,7 +1040,7 @@ imp
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">107.9k</span>
+                <span class="white-color">110.8k</span>
             
 
             
