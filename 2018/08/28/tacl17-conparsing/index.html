@@ -1,0 +1,1161 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="In-Order Transition-based Constituent Parsing, ECNU NLP DeepLearning">
+    <meta name="description" content="
+
+论文地址：In-Order Transition-based Constituent Parsing代码地址：github
+今天要介绍的这篇论文是成分句法分析领域目前的第三名，结果最高的几篇paper可以参见ruder在github整理">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>In-Order Transition-based Constituent Parsing | WeiYang Blog</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    <style type="text/css">
+        
+    </style>
+
+    <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body>
+
+<header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">WeiYang Blog</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fa fa-navicon"></i></a>
+<ul class="right">
+    
+    <li class="hide-on-med-and-down">
+        <a href="/" class="waves-effect waves-light">
+            
+            <span>首页</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/tags" class="waves-effect waves-light">
+            
+            <span>标签</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories" class="waves-effect waves-light">
+            
+            <span>分类</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/archives" class="waves-effect waves-light">
+            
+            <span>归档</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/about" class="waves-effect waves-light">
+            
+            <span>关于</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/friends" class="waves-effect waves-light">
+            
+            <span>友情链接</span>
+        </a>
+    </li>
+    
+    <li>
+        <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+            <i id="searchIcon" class="fa fa-search" title="搜索"></i>
+        </a>
+    </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-desc">
+            
+            华东师范大学|计算机科学与技术|自然语言处理
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li>
+            <a href="/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-link"></i>
+                
+                首页
+            </a>
+        </li>
+        
+        <li>
+            <a href="/tags" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-link"></i>
+                
+                标签
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-link"></i>
+                
+                分类
+            </a>
+        </li>
+        
+        <li>
+            <a href="/archives" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-link"></i>
+                
+                归档
+            </a>
+        </li>
+        
+        <li>
+            <a href="/about" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-link"></i>
+                
+                关于
+            </a>
+        </li>
+        
+        <li>
+            <a href="/friends" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-link"></i>
+                
+                友情链接
+            </a>
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/godweiyang" class="waves-effect waves-light" target="_blank">
+                <i class="fa fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/godweiyang" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        In-Order Transition-based Constituent Parsing
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 20px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/NLP/" target="_blank">
+                                <span class="chip bg-color">NLP</span>
+                            </a>
+                        
+                            <a href="/tags/神经网络/" target="_blank">
+                                <span class="chip bg-color">神经网络</span>
+                            </a>
+                        
+                            <a href="/tags/深度学习/" target="_blank">
+                                <span class="chip bg-color">深度学习</span>
+                            </a>
+                        
+                            <a href="/tags/句法分析/" target="_blank">
+                                <span class="chip bg-color">句法分析</span>
+                            </a>
+                        
+                            <a href="/tags/TACL/" target="_blank">
+                                <span class="chip bg-color">TACL</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fa fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/句法分析/" class="post-category" target="_blank">
+                                句法分析
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                <div class="post-date info-break-policy">
+                    <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2018-08-28
+                </div>
+
+                
+                    
+                    <div class="info-break-policy">
+                        <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
+                        2.4k
+                    </div>
+                    
+
+                    
+                    <div class="info-break-policy">
+                        <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                        8 分
+                    </div>
+                    
+                
+				
+				
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="fa fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <div align="middle"><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=366752&auto=1&height=66"></iframe></div>
+
+<p><strong>论文地址：</strong><a href="https://www.aclweb.org/anthology/Q/Q17/Q17-1029.pdf" target="_blank" rel="noopener">In-Order Transition-based Constituent Parsing</a><br><strong>代码地址：</strong><a href="https://github.com/LeonCrashCode/InOrderParser" target="_blank" rel="noopener">github</a></p>
+<p>今天要介绍的这篇论文是成分句法分析领域目前的第三名，结果最高的几篇paper可以参见ruder在github整理的列表：<a href="https://github.com/sebastianruder/NLP-progress/blob/master/constituency_parsing.md" target="_blank" rel="noopener">github</a>。<br>下面就是成分句法分析目前排名：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th style="text-align:center">F1 score</th>
+<th>Paper / Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Self-attentive encoder + ELMo (Kitaev and Klein, 2018)</td>
+<td style="text-align:center">95.13</td>
+<td><a href="https://arxiv.org/abs/1805.01052" target="_blank" rel="noopener">Constituency Parsing with a Self-Attentive Encoder</a></td>
+</tr>
+<tr>
+<td>Model combination (Fried et al., 2017)</td>
+<td style="text-align:center">94.66</td>
+<td><a href="https://arxiv.org/abs/1707.03058" target="_blank" rel="noopener">Improving Neural Parsing by Disentangling Model Combination and Reranking Effects</a></td>
+</tr>
+<tr>
+<td>In-order (Liu and Zhang, 2017)</td>
+<td style="text-align:center">94.2</td>
+<td><a href="http://aclweb.org/anthology/Q17-1029" target="_blank" rel="noopener">In-Order Transition-based Constituent Parsing</a></td>
+</tr>
+<tr>
+<td>Semi-supervised LSTM-LM (Choe and Charniak, 2016)</td>
+<td style="text-align:center">93.8</td>
+<td><a href="http://www.aclweb.org/anthology/D16-1257" target="_blank" rel="noopener">Parsing as Language Modeling</a></td>
+</tr>
+<tr>
+<td>Stack-only RNNG (Kuncoro et al., 2017)</td>
+<td style="text-align:center">93.6</td>
+<td><a href="https://arxiv.org/abs/1611.05774" target="_blank" rel="noopener">What Do Recurrent Neural Network Grammars Learn About Syntax?</a></td>
+</tr>
+<tr>
+<td>RNN Grammar (Dyer et al., 2016)</td>
+<td style="text-align:center">﻿93.3</td>
+<td><a href="https://www.aclweb.org/anthology/N16-1024" target="_blank" rel="noopener">Recurrent Neural Network Grammars</a></td>
+</tr>
+<tr>
+<td>Transformer (Vaswani et al., 2017)</td>
+<td style="text-align:center">92.7</td>
+<td><a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">Attention Is All You Need</a></td>
+</tr>
+<tr>
+<td>Semi-supervised LSTM (Vinyals et al., 2015)</td>
+<td style="text-align:center">92.1</td>
+<td><a href="https://papers.nips.cc/paper/5635-grammar-as-a-foreign-language.pdf" target="_blank" rel="noopener">Grammar as a Foreign Language</a></td>
+</tr>
+<tr>
+<td>Self-trained parser (McClosky et al., 2006)</td>
+<td style="text-align:center">92.1</td>
+<td><a href="https://pdfs.semanticscholar.org/6f0f/64f0dab74295e5eb139c160ed79ff262558a.pdf" target="_blank" rel="noopener">Effective Self-Training for Parsing</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><hr>
+<p>基于转移的成分句法分析主要分为两种：</p>
+<ul>
+<li>一种是自顶向下（top-down）的方法，按照前序遍历（pre-order）的顺序生成句法树。这种方法可以更好地利用全局信息，但是需要一个强大的编码器来对每个短语成分进行编码。</li>
+<li>一种是自底向上（bottom-up）的方法，按照后序遍历（post-order）的顺序生成句法树。这种方法可以充分利用子树的特征来进行分析，但是却无法利用全局信息。</li>
+</ul>
+<p>本文的模型就对这两种方法进行了改进，采用中序遍历（in-order）的顺序来生成句法树。单模型最终取得了91.8的F1值（貌似也不是特别高？），采用监督重排序之后F1值提升到了93.6，采用半监督重排序之后F1值提升到了94.2。所以看起来还是重排序起了很大的作用。</p>
+<h1 id="基于转移的成分句法分析"><a href="#基于转移的成分句法分析" class="headerlink" title="基于转移的成分句法分析"></a>基于转移的成分句法分析</h1><hr>
+<p>首先简要介绍一下这三种基于转移的句法分析方法。</p>
+<h2 id="自底向上的转移系统"><a href="#自底向上的转移系统" class="headerlink" title="自底向上的转移系统"></a>自底向上的转移系统</h2><p>自底向上的转移系统是基于后序遍历的，例如对于下图这棵句法树，算法产生结点的顺序为3、4、5、2、7、9、10、8、6、11、1。<br><img src="1.jpg" alt><br>a图是未经二叉化的句法树，b图是二叉化之后的句法树，二叉化之后的结点要用l和r来区分头结点。其实不二叉化也是可以的，伯克利一帮人的做法就是用<script type="math/tex">\emptyset</script>来作为临时结点，构造树的时候去掉就行了。</p>
+<p>句法分析系统如下：<br><img src="2.jpg" alt><br>每个时刻的状态用三元组<script type="math/tex">[\sigma ,i,f]</script>来表示，分别表示栈中元素、buffer的第一个元素在句子中的下标、句法分析结束标记。系统一共有四个操作：</p>
+<ul>
+<li>SHIFT： 从buffer中移进一个单词到栈里。</li>
+<li>REDUCE-L/R-X：将栈顶两个结点归约为一个父结点X。</li>
+<li>UNARY-X：将栈顶元素归约为一元结点X。</li>
+<li>FINISH：句法分析结束。</li>
+</ul>
+<p>上面那个句法树按照该模型分析的话过程如下：<br><img src="3.jpg" alt><br>优缺点很显然，可以充分利用已生成的子树来对父结点的预测进行分析，但是不能利用全局信息（也就是其他子树、父结点等信息），并且需要提前进行二叉化（这点可以用临时结点标记来规避）。</p>
+<h2 id="自顶向下的转移系统"><a href="#自顶向下的转移系统" class="headerlink" title="自顶向下的转移系统"></a>自顶向下的转移系统</h2><p>自顶向下的转移系统是基于前序遍历的，例如对于之前那棵句法树，算法产生结点的顺序为1、2、3、4、5、6、7、8、9、10、11。</p>
+<p>句法分析系统如下：<br><img src="4.jpg" alt><br>系统一共有三个操作：</p>
+<ul>
+<li>SHIFT： 从buffer中移进一个单词到栈里。</li>
+<li>NT-X：对一个父结点生成出它的一个子结点X。</li>
+<li>REDUCE：将栈顶的若干个结点归约为一个结点，并且全部出栈，注意它们的父结点这时已经在栈顶了。</li>
+</ul>
+<p>上面那个句法树按照该模型分析的话过程如下：<br><img src="5.jpg" alt><br>优缺点也很显然，可以充分利用全局信息，但是因为预测子树的时候，子树还没有生成，所以无法利用子树的特征来进行分析，所以需要提前对句子的每个短语进行编码。</p>
+<h2 id="采用中序遍历的转移系统"><a href="#采用中序遍历的转移系统" class="headerlink" title="采用中序遍历的转移系统"></a>采用中序遍历的转移系统</h2><p>为了协调上面的两种问题，本文提出了一种基于中序遍历的转移系统。</p>
+<p>其实采用中序遍历也符合人们的直觉判断，比如你读到一个单词“like”，脑子里首先就会想到，这个可能和下面短语共同组成了动词短语VP，然后接着往下看，果然印证了你的猜想。</p>
+<p>中序遍历就是采用这种思想的，例如对于之前那棵句法树，算法产生结点的顺序为3、2、4、5、1、7、6、9、8、10。</p>
+<p>句法分析系统如下：<br><img src="6.jpg" alt><br>系统一共有四个操作：</p>
+<ul>
+<li>SHIFT： 从buffer中移进一个单词到栈里。</li>
+<li>PJ-X：向栈里移进父结点X，来作为栈顶结点的父结点。</li>
+<li>REDUCE：将栈顶的若干个结点归约为一个结点，并且全部出栈，注意它们的父结点在出栈元素的倒数第二个。然后再将父结点入栈。</li>
+<li>FINISH：句法分析结束。</li>
+</ul>
+<p>上面那个句法树按照该模型分析的话过程如下：<br><img src="7.jpg" alt></p>
+<p>该转移系统还有很多变体。对于短语(S, a, b, c, d)，可以令它在栈中S结点之前的子结点个数为<script type="math/tex">k</script>，例如对于上面的中序转移系统，栈里存放顺序是“a S b c d”，那么<script type="math/tex">k = 1</script>，如果栈里存放顺序是“a b S c d”，那么<script type="math/tex">k = 2</script>。而对于自底向上的转移系统，<script type="math/tex">k</script>就是正无穷，对于自顶向下的转移系统，<script type="math/tex">k</script>就是0。</p>
+<h1 id="句法分析模型"><a href="#句法分析模型" class="headerlink" title="句法分析模型"></a>句法分析模型</h1><hr>
+<p>对于每一个状态，模型采用三个LSTM来预测当前步动作，结构如下图所示：<br><img src="8.jpg" alt><br>一个LSTM用来对栈顶元素进行编码，一个LSTM用来对buffer中所有元素进行编码，一个LSTM用来对之前预测完毕的所有动作进行编码。</p>
+<h2 id="单词表示"><a href="#单词表示" class="headerlink" title="单词表示"></a>单词表示</h2><p>对于每个单词，用预训练词向量、随机初始化词向量、POS向量拼接起来，然后经过一个前馈神经网络来作为最终的单词表示：<br>\[{x_i} = f({W_{input}}[{e_{ {p_i}}};{\bar e_{ {w_i}}};{e_{ {w_i}}}] + {b_{input}})\]<br>其中<script type="math/tex">{e_{ {p_i}}}</script>表示POS为<script type="math/tex">p_i</script>的向量，<script type="math/tex">{\bar e_{ {w_i}}}</script>表示单词<script type="math/tex">w_i</script>的预训练词向量，<script type="math/tex">{e_{ {w_i}}}</script>表示单词<script type="math/tex">w_i</script>的随机初始化词向量。<script type="math/tex">f</script>函数通常取ReLU。</p>
+<h2 id="栈里的短语表示"><a href="#栈里的短语表示" class="headerlink" title="栈里的短语表示"></a>栈里的短语表示</h2><p>对于自顶向下和in-order的转移系统，由于不需要二叉化，所以采用如下图所示的LSTM来对栈里的短语进行编码：<br><img src="9.jpg" alt><br>具体的短语表示为：<br>\[{s_{comp}} = (LST{M_f}[{e_{nt}},{s_0}, \ldots ,{s_m}];LST{M_b}[{e_{nt}},{s_m}, \ldots ,{s_0}])\]<br>其中<script type="math/tex">{e_{nt}}</script>是父结点的向量表示，其他都是子结点的短语表示。</p>
+<p>而作为对比实验，自底向上的转移系统因为是二叉树，所以LSTM略有不同，结构图如下所示：<br><img src="12.jpg" alt><br>唯一的区别就是不管你短语的单词顺序如何，都要把中心词也就是头结点放在前面。</p>
+<h2 id="贪心动作预测"><a href="#贪心动作预测" class="headerlink" title="贪心动作预测"></a>贪心动作预测</h2><p>上面的两个小节将buffer和栈里的元素都进行了编码，最后就要对当前状态进行动作预测了。</p>
+<p>假设第<script type="math/tex">k</script>个状态为<script type="math/tex">[{s_j}, \ldots ,{s_0},i,false]</script>，那么当前状态每个动作的概率为：<br>\[p = SOFTMAX(W[{h_{stk}};{h_{buf}};{h_{ah}}] + b)\]<br>其中<script type="math/tex">{h_{stk}}</script>是栈里的LSTM编码结果：<br>\[{h_{stk}} = LSTM[{s_0}, \ldots ,{s_j}]\]</p>
+<p><script type="math/tex">{h_{buf}}</script>是buffer里的LSTM编码结果：<br>\[{h_{buf}} = LSTM[{x_i}, \ldots ,{x_n}]\]</p>
+<p><script type="math/tex">{h_{ah}}</script>是之前动作序列的LSTM编码结果：<br>\[{h_{ah}} = LSTM[{e_{ac{t_k}}}, \ldots ,{e_{ac{t_0}}}]\]</p>
+<p>最终的损失函数采用交叉熵：<br>\[L(\theta ) =  - \sum\limits_i {\sum\limits_j {\log {p_{ {a_{ij}}}}} }  + \frac{\lambda }{2}{\Vert \theta  \Vert ^2}\]</p>
+<h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><hr>
+<p>实验的超参数设置如下：<br><img src="10.jpg" alt><br>经过对比实验可以发现，结果比自底向上和自顶向下的转移系统都要略高一点，就算加上了重排序，还是略高一点。单模型的话，和2017年之前的结果相比的确是最高的，但是91.8的F1值现在看来不是特别高了，毕竟伯克利基于CKY算法的chart-parser都已经到了92多甚至93了。</p>
+<p>详细结果如下表：<br><img src="11.jpg" alt><br>模型在依存句法分析和CTB上的表现也都很不错。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><hr>
+<p>本文提出了一种基于中序遍历转移系统的成分句法分析模型，主要的动机还是基于人类阅读时的直觉，该模型协调了自底向上和自顶向下转移系统的优缺点，在采用重排序之后，结果达到了非常高的水准。</p>
+<p>当然我个人认为模型也存在一些改进的地方：</p>
+<ul>
+<li>单词的表示可以加上Char-LSTM。</li>
+<li>预测阶段可以采用之前文章提到的Dynamic Oracle技术，来减少预测错误的发生。详见之前的文章：<a href="https://godweiyang.com/2018/08/03/dynamic-oracles/">地址</a>。不过这里的Dynamic Oracle要重新设计了，设计好了说不定又可以发一篇论文了？（手动滑稽）</li>
+</ul>
+
+            </div>
+            <hr/>
+
+            
+            <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.88rem;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fa fa-close"></i></a>
+            <h4 class="reward-title">能否打赏一杯咖啡，让我有继续写作的动力？</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+
+            <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    <div class="social-share" data-disabled="qzone" data-wechat-qrcode-helper="<p>微信里点“发现”->“扫一扫”二维码便可查看分享。</p>"></div>
+    
+</div>
+
+<script src="/libs/share/js/social-share.min.js"></script>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        <p class="reprint-tip">
+            <i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;
+            <span>转载规则</span>
+        </p>
+        
+            <div class="center-align">
+                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
+                    <img alt=""
+                         style="border-width:0"
+                         src="https://i.creativecommons.org/l/by/4.0/88x31.png"/>
+                </a>
+            </div>
+            <br/>
+            <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text"
+                  property="dct:title" rel="dct:type">
+                    《In-Order Transition-based Constituent Parsing》
+                </span> 由
+            <a xmlns:cc="http://creativecommons.org/ns#" href="/2018/08/28/tacl17-conparsing/" property="cc:attributionName"
+               rel="cc:attributionURL">
+                WeiYang
+            </a> 采用
+            <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
+                知识共享署名 4.0 国际许可协议
+            </a>进行许可。
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+        </div>
+    </div>
+
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: 'c3ac6e20697ee5422b43',
+        clientSecret: '3ccf19d2ec7e33b55f71aaeec74542a3938772f6',
+        repo: 'godweiyang.github.io',
+        owner: 'godweiyang',
+        admin: "godweiyang",
+        id: '2018/08/28/tacl17-conparsing/',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2018/09/02/rnng/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="Recurrent Neural Network Grammars">
+                        
+                        <span class="card-title">Recurrent Neural Network Grammars</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+
+论文地址：Recurrent Neural Network Grammars代码地址：github
+今天要介绍的这篇论文是来自NAACL16的Recurrent Neural Network Grammars，主要贡献点就是提出了一种新
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="fa fa-clock-o fa-fw icon-date"></i>2018-09-02
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/句法分析/" class="post-category" target="_blank">
+                                    句法分析
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/NLP/" target="_blank">
+                        <span class="chip bg-color">NLP</span>
+                    </a>
+                    
+                    <a href="/tags/神经网络/" target="_blank">
+                        <span class="chip bg-color">神经网络</span>
+                    </a>
+                    
+                    <a href="/tags/深度学习/" target="_blank">
+                        <span class="chip bg-color">深度学习</span>
+                    </a>
+                    
+                    <a href="/tags/句法分析/" target="_blank">
+                        <span class="chip bg-color">句法分析</span>
+                    </a>
+                    
+                    <a href="/tags/NAACL/" target="_blank">
+                        <span class="chip bg-color">NAACL</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2018/08/05/k-bandit/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="K-bandit Algorithm">
+                        
+                        <span class="card-title">K-bandit Algorithm</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            问题描述
+有K个赌博机，每个赌博机有一定概率P吐出硬币，但是我们不知道这个概率是多少，每个赌博机吐出的硬币价值V也是不一样的，现在有T次机会选择赌博机，怎么选才能使得到的硬币总价值最大？
+在下面的不同算法实现中，统一设定\[\begin{a
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2018-08-05
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/强化学习/" class="post-category" target="_blank">
+                                    强化学习
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/神经网络/" target="_blank">
+                        <span class="chip bg-color">神经网络</span>
+                    </a>
+                    
+                    <a href="/tags/深度学习/" target="_blank">
+                        <span class="chip bg-color">深度学习</span>
+                    </a>
+                    
+                    <a href="/tags/强化学习/" target="_blank">
+                        <span class="chip bg-color">强化学习</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: WeiYang Blog<br />'
+            + '作者: WeiYang<br />'
+            + '链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="fa fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fa fa-list"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            // headingsOffset: -205,
+            headingSelector: 'h1, h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h1, h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).slideUp(500);
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).slideDown(500);
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+    
+
+</main>
+
+
+<script src="https://cdn.bootcss.com/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script>
+    MathJax.Hub.Config({
+        tex2jax: {inlineMath: [['$', '$'], ['\(', '\)']]}
+    });
+</script>
+
+<footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            &copy; 2019 WeiYang. All Rights Reserved.
+
+            
+                &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
+                <span class="white-color">107.9k</span>
+            
+
+            
+			
+                <br>
+                
+                <span id="busuanzi_container_site_pv">
+                    <i class="fa fa-heart-o"></i>
+                    本站总访问量 <span id="busuanzi_value_site_pv" class="white-color"></span>
+                </span>
+                
+                
+                <span id="busuanzi_container_site_uv">
+                    人次,&nbsp;访客数 <span id="busuanzi_value_site_uv" class="white-color"></span> 人.
+                </span>
+                
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/godweiyang" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fa fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:weiyang@godweiyang.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fa fa-envelope-open"></i>
+    </a>
+
+
+
+    <a href="https://user.qzone.qq.com/792321264" class="tooltipped" data-tooltip="访问我的QQ空间" data-position="top" data-delay="50">
+        <i class="fa fa-qq"></i>
+    </a>
+
+
+
+    <a href="https://weibo.com/godweiyang" class="tooltipped" data-tooltip="关注我的微博" data-position="top" data-delay="50">
+        <i class="fa fa-weibo"></i>
+    </a>
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fa fa-rss"></i>
+    </a>
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+<!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fa fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+<!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fa fa-angle-up"></i>
+    </a>
+</div>
+
+
+<script src="/libs/materialize/materialize.min.js"></script>
+<script src="/libs/masonry/masonry.pkgd.min.js"></script>
+<script src="/libs/aos/aos.js"></script>
+<script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+<script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+<script src="/js/matery.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+
+    <script src="/libs/others/clicklove.js"></script>
+
+
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+
+
+</body>
+</html>

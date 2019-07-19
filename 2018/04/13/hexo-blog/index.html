@@ -1,0 +1,1175 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="超详细Hexo+Github博客搭建小白教程, ECNU NLP DeepLearning">
+    <meta name="description" content="
+
+去年9月的时候开始搭建了第一个自己的独立博客，到现在也稍微像模像样了。很多小伙伴应该也想过搭建一个自己的博客，网上也有一堆详细教程。我在此稍稍总结一下具体的搭建步骤，另外网上很少有修改博客源码的个性化教程，我就稍稍分享一下我的一些修改经">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>超详细Hexo+Github博客搭建小白教程 | WeiYang Blog</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    <style type="text/css">
+        
+    </style>
+
+    <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body>
+
+<header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">WeiYang Blog</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fa fa-navicon"></i></a>
+<ul class="right">
+    
+    <li class="hide-on-med-and-down">
+        <a href="/" class="waves-effect waves-light">
+            
+            <span>首页</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/tags" class="waves-effect waves-light">
+            
+            <span>标签</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories" class="waves-effect waves-light">
+            
+            <span>分类</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/archives" class="waves-effect waves-light">
+            
+            <span>归档</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/about" class="waves-effect waves-light">
+            
+            <span>关于</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/friends" class="waves-effect waves-light">
+            
+            <span>友情链接</span>
+        </a>
+    </li>
+    
+    <li>
+        <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+            <i id="searchIcon" class="fa fa-search" title="搜索"></i>
+        </a>
+    </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-desc">
+            
+            华东师范大学|计算机科学与技术|自然语言处理
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li>
+            <a href="/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-link"></i>
+                
+                首页
+            </a>
+        </li>
+        
+        <li>
+            <a href="/tags" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-link"></i>
+                
+                标签
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-link"></i>
+                
+                分类
+            </a>
+        </li>
+        
+        <li>
+            <a href="/archives" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-link"></i>
+                
+                归档
+            </a>
+        </li>
+        
+        <li>
+            <a href="/about" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-link"></i>
+                
+                关于
+            </a>
+        </li>
+        
+        <li>
+            <a href="/friends" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-link"></i>
+                
+                友情链接
+            </a>
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/godweiyang" class="waves-effect waves-light" target="_blank">
+                <i class="fa fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/godweiyang" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/6.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        超详细Hexo+Github博客搭建小白教程
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 20px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Hexo/" target="_blank">
+                                <span class="chip bg-color">Hexo</span>
+                            </a>
+                        
+                            <a href="/tags/Github/" target="_blank">
+                                <span class="chip bg-color">Github</span>
+                            </a>
+                        
+                            <a href="/tags/博客/" target="_blank">
+                                <span class="chip bg-color">博客</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fa fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/软件/" class="post-category" target="_blank">
+                                软件
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                <div class="post-date info-break-policy">
+                    <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2018-04-13
+                </div>
+
+                
+                    
+                    <div class="info-break-policy">
+                        <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
+                        3.2k
+                    </div>
+                    
+
+                    
+                    <div class="info-break-policy">
+                        <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                        12 分
+                    </div>
+                    
+                
+				
+				
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="fa fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <div align="middle"><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=545799244&auto=1&height=66"></iframe></div>
+
+<p>去年9月的时候开始搭建了第一个自己的独立博客，到现在也稍微像模像样了。很多小伙伴应该也想过搭建一个自己的博客，网上也有一堆详细教程。我在此稍稍总结一下具体的搭建步骤，另外网上很少有修改博客源码的个性化教程，我就稍稍分享一下我的一些修改经验，更多的个性化操作需要你自己以后去摸索。</p>
+<p>具体效果可以参观我的博客：<a href="http://godweiyang.com">godweiyang.com</a>，欢迎大家支持。</p>
+<p>我不是一个前端程序员，有些东西不是很了解，说的不好大家见谅。</p>
+<p>首先要了解一下我们搭建博客要用到的框架。Hexo是高效的静态站点生成框架，它基于Node.js。通过Hexo，你可以直接使用Markdown语法来撰写博客。相信很多小伙伴写工程都写过README.md文件吧，对，就是这个格式的！写完后只需两三条命令即可将生成的网页上传到你的github上，然后别人就可以看到你的网页啦。是不是很简单？你无需关心网页源代码的具体细节，你只需要用心写好你的博客内容就行。</p>
+<h1 id="安装Node-js"><a href="#安装Node-js" class="headerlink" title="安装Node.js"></a>安装Node.js</h1><hr>
+<p>首先下载最新版<a href="https://nodejs.org/dist/v9.11.1/node-v9.11.1-x64.msi" target="_blank" rel="noopener">Node.js</a>，我这里给的是64位的。</p>
+<p>安装选项全部默认，一路点击<code>Next</code>。</p>
+<p>最后安装好之后，按<code>Win+R</code>打开命令提示符，输入<code>node -v</code>和<code>npm -v</code>，如果出现版本号，那么就安装成功了。</p>
+<h1 id="安装Git"><a href="#安装Git" class="headerlink" title="安装Git"></a>安装Git</h1><hr>
+<p>为了把本地的网页文件上传到github上面去，我们需要用到分布式版本控制工具————Git<a href="https://git-scm.com/download/win" target="_blank" rel="noopener">[下载地址]</a>。</p>
+<p>安装选项还是全部默认，只不过最后一步添加路径时选择<code>Use Git from the Windows Command Prompt</code>，这样我们就可以直接在命令提示符里打开git了。</p>
+<p>安装完成后在命令提示符中输入<code>git --version</code>验证是否安装成功。</p>
+<h1 id="注册Github账号"><a href="#注册Github账号" class="headerlink" title="注册Github账号"></a>注册Github账号</h1><hr>
+<p>接下来就去注册一个github账号，用来存放我们的网站。大多数小伙伴应该都有了吧，作为一个合格的程序猿（媛）还是要有一个的。</p>
+<p>打开<a href="https://github.com/" target="_blank" rel="noopener">https://github.com/</a>，新建一个项目，如下所示：<br><img src="1.jpg" alt><br>然后如下图所示，输入自己的项目名字，后面一定要加<code>.github.io</code>后缀，README初始化也要勾上。<br><img src="2.jpg" alt><br>然后项目就建成了，点击<code>Settings</code>，向下拉到最后有个<code>GitHub Pages</code>，点击<code>Choose a theme</code>选择一个主题。然后等一会儿，再回到<code>GitHub Pages</code>，会变成下面这样：<br><img src="3.jpg" alt><br>点击那个链接，就会出现自己的网页啦，效果如下：<br><img src="4.jpg" alt></p>
+<h1 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h1><hr>
+<p>在合适的地方新建一个文件夹，用来存放自己的博客文件，比如我的博客文件都存放在<code>D:\study\program\blog</code>目录下。</p>
+<p>在该目录下右键点击<code>Git Bash Here</code>，打开git的控制台窗口，以后我们所有的操作都在git控制台进行，就不要用Windows自带的控制台了。</p>
+<p>定位到该目录下，输入<code>npm install hexo-cli -g</code>安装Hexo。会有几个报错，无视它就行。</p>
+<p>然后输入<code>npm install hexo --save</code>继续安装。</p>
+<p>安装完后输入<code>hexo -v</code>验证是否安装成功。</p>
+<p>然后就要初始化我们的网站，输入<code>hexo init</code>初始化文件夹，接着输入<code>npm install</code>安装必备的组件。</p>
+<p>这样本地的网站配置也弄好啦，输入<code>hexo g</code>生成静态网页，然后输入<code>hexo s</code>打开本地服务器，然后浏览器打开<a href="http://localhost:4000/" target="_blank" rel="noopener">http://localhost:4000/</a>，就可以看到我们的博客啦，效果如下：<br><img src="5.jpg" alt></p>
+<p>按<code>ctrl+c</code>关闭本地服务器。</p>
+<h1 id="连接Github与本地"><a href="#连接Github与本地" class="headerlink" title="连接Github与本地"></a>连接Github与本地</h1><hr>
+<p>首先右键打开git bash，然后输入下面命令：</p>
+<pre><code>git config --global user.name &quot;godweiyang&quot;
+git config --global user.email &quot;792321264@qq.com&quot;
+</code></pre><p>用户名和邮箱根据你注册github的信息自行修改。</p>
+<p>然后生成密钥SSH key：</p>
+<pre><code>ssh-keygen -t rsa -C &quot;792321264@qq.com&quot;
+</code></pre><p>输入<code>eval &quot;$(ssh-agent -s)&quot;</code>，添加密钥到ssh-agent。</p>
+<p>再输入<code>ssh-add ~/.ssh/id_rsa</code>，添加生成的SSH key到ssh-agent。</p>
+<p>打开<a href="http://github.com" target="_blank" rel="noopener">github</a>，在头像下面点击<code>settings</code>，再点击<code>SSH and GPG keys</code>，新建一个SSH，名字随便。</p>
+<p>打开<code>C:\Users\Administrator\.ssh\id_rsa.pub</code>，注意是隐藏文件夹，将其中的内容复制到新建的SSH中。</p>
+<p>输入<code>ssh -T git@github.com</code>，如果如下图所示，出现你的用户名，那就成功了。<br><img src="6.jpg" alt></p>
+<p>打开博客根目录下的<code>_config.yml</code>文件，这是博客的配置文件，在这里你可以修改与博客相关的各种信息。</p>
+<p>修改最后一行的配置：</p>
+<pre><code>deploy:
+  type: git
+  repository: https://github.com/godweiyang/godweiyang.github.io
+  branch: master
+</code></pre><p>repository修改为你自己的github项目地址。<strong>不过你这里看到的可能与我有点不一样，因为我已经修改过主题了，所以这一步先不用管，换完主题之后记得回来修改！</strong></p>
+<h1 id="写文章、发布文章"><a href="#写文章、发布文章" class="headerlink" title="写文章、发布文章"></a>写文章、发布文章</h1><hr>
+<p>首先在博客根目录下右键打开git，安装一个扩展<code>npm install hexo-deployer-git --save</code>。</p>
+<p>然后输入<code>hexo new post &quot;article title&quot;</code>，新建一篇文章。</p>
+<p>然后打开<code>D:\study\program\blog\source\_posts</code>的目录，可以发现下面多了一个文件夹和一个<code>.md</code>文件，一个用来存放你的图片等数据，另一个就是你的文章文件啦。</p>
+<p>编写完markdown文件后，根目录下输入<code>hexo g</code>生成静态网页，然后输入<code>hexo s</code>可以本地预览效果，最后输入<code>hexo d</code>上传到github上。这时打开你的github.io主页就能看到发布的文章啦。</p>
+<h1 id="绑定域名"><a href="#绑定域名" class="headerlink" title="绑定域名"></a>绑定域名</h1><hr>
+<p>现在默认的域名还是<code>xxx.github.io</code>，是不是很没有牌面？想不想也像我一样弄一个专属域名呢，首先你得购买一个域名，xx云都能买，看你个人喜好了。</p>
+<p>以我的百度云为例，如下图所示，添加两条解析记录：<br><img src="7.jpg" alt></p>
+<p>然后打开你的github博客项目，点击<code>settings</code>，拉到下面<code>Custom domain</code>处，填上你自己的域名，保存：<br><img src="8.jpg" alt></p>
+<p>这时候你的项目根目录应该会出现一个名为<code>CNAME</code>的文件了。如果没有的话，打开你本地博客<code>/source</code>目录，我的是<code>D:\study\program\blog\source</code>，新建<code>CNAME</code>文件，注意没有后缀。然后在里面写上你的域名，保存。最后运行<code>hexo g</code>、<code>hexo d</code>上传到github。</p>
+<h1 id="更换主题"><a href="#更换主题" class="headerlink" title="更换主题"></a>更换主题</h1><hr>
+<p>网上大多数主题都是github排名第一的<code>Next</code>主题，但是我个人不是很喜欢，我更喜欢<code>beantech</code>主题，地址在<a href="https://github.com/YenYuHsuan/hexo-theme-beantech" target="_blank" rel="noopener">传送门</a>。</p>
+<p>首先要注意的是，<strong>这个github项目不仅包含了主题文件，还包含了hexo的各种文件</strong>。</p>
+<p>所以首先下载下来这个项目，然后推荐将下图所有文件全部替换你原本博客根目录下的文件：<br><img src="9.jpg" alt></p>
+<p>然后运行<code>hexo clean</code>清空所有生成的网页缓存，<code>hexo g</code>、<code>hexo d</code>。这时候新的主题网页就生成好了，博客根目录的情况应该大致如下：<br><img src="10.jpg" alt></p>
+<h1 id="博客目录构成介绍"><a href="#博客目录构成介绍" class="headerlink" title="博客目录构成介绍"></a>博客目录构成介绍</h1><hr>
+<p>从上图可以看出，博客的目录结构如下：</p>
+<pre><code>- node_modules
+- public
+- scaffolds
+- source
+    - _posts
+    - about
+    - archive
+    - img
+    - tags
+- themes
+</code></pre><p><code>node_modules</code>是node.js各种库的目录，<code>public</code>是生成的网页文件目录，<code>scaffolds</code>里面就三个文件，存储着新文章和新页面的初始设置，<code>source</code>是我们最常用到的一个目录，里面存放着文章、各类页面、图像等文件，<code>themes</code>存放着主题文件，一般也用不到。</p>
+<p>我们平时写文章只需要关注<code>source/_posts</code>这个文件夹就行了。</p>
+<h1 id="个性化设置及bug处理"><a href="#个性化设置及bug处理" class="headerlink" title="个性化设置及bug处理"></a>个性化设置及bug处理</h1><hr>
+<p><strong>首先打开<code>_config.yml</code>，根据自己需求配置，具体不说了，有注释。</strong></p>
+<h2 id="修复文档分类bug"><a href="#修复文档分类bug" class="headerlink" title="修复文档分类bug"></a>修复文档分类bug</h2><p>这个主题文档分类功能有个bug，一直没有得到解决，直到最近，我才发现是源文件的单词拼错了。。。</p>
+<p>打开<code>D:\study\program\blog\scaffolds\post.md</code>，单词<code>catagories</code>改为<code>categories</code>。</p>
+<h2 id="添加畅言评论插件"><a href="#添加畅言评论插件" class="headerlink" title="添加畅言评论插件"></a>添加畅言评论插件</h2><p>主题自带了多说评论插件，但是多说已经关闭了，所以我换成了畅言评论插件。</p>
+<p>首先你得注册一个畅言账号，<a href="http://changyan.kuaizhan.com/" target="_blank" rel="noopener">地址</a>。<br>然后打开如下页面，复制该段代码：<br><img src="11.jpg" alt><br>打开<code>D:\study\program\blog\themes\beantech\layout\post.ejs</code>，将代码粘贴到如下位置：<br><img src="12.jpg" alt><br>然后重新生成一下网页，可以看到效果图如下：<br><img src="13.jpg" alt><br>更多插件例如热评话题之类的，可以自行在畅言后台找到代码添加。</p>
+<h2 id="添加图片放大功能"><a href="#添加图片放大功能" class="headerlink" title="添加图片放大功能"></a>添加图片放大功能</h2><p>首先下载<code>zooming.js</code>文件<a href="https://github.com/godweiyang/godweiyang.github.io/blob/master/js/zooming.js" target="_blank" rel="noopener">地址</a>，保存在<code>D:\study\program\blog\themes\beantech\source\js</code>目录下。</p>
+<p>打开<code>D:\study\program\blog\themes\beantech\layout\post.ejs</code>，在最下方粘贴如下代码：</p>
+<pre><code>&lt;script type=&quot;text/javascript&quot; src=&quot;/js/zooming.js&quot;&gt;&lt;/script&gt;
+</code></pre><p>然后文章里的图片就可以单击全屏啦。</p>
+<h2 id="添加数学公式显示"><a href="#添加数学公式显示" class="headerlink" title="添加数学公式显示"></a>添加数学公式显示</h2><p>打开<code>D:\study\program\blog\themes\beantech\layout\post.ejs</code>，在最下方粘贴如下代码：</p>
+<pre><code>&lt;script type=&quot;text/javascript&quot; src=&quot;http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default&quot;&gt;&lt;/script&gt;
+</code></pre><p>由于markdown语法与mathjax语法存在冲突，所以还需要修改源文件。</p>
+<p>打开<code>D:\study\program\blog\node_modules\marked\lib\marked.js</code><br><code>escape:</code>处替换成：</p>
+<pre><code>escape: /^$$[`*\[\]()#$+\-.!_&gt;])/
+</code></pre><p><code>em:</code>处替换成：</p>
+<pre><code>em: /^\*((?:\*\*|[\s\S])+?)\*(?!\*)/
+</code></pre><p>这时在文章里写数学公式基本没有问题了，但是要注意：<br><strong>数学公式中如果出现了连续两个{，中间一定要加空格！</strong></p>
+<p>举个例子:<br>行内公式：<script type="math/tex">y = f(x)</script><br>代码：</p>
+<pre><code>$$y = f(x)$$
+</code></pre><p>行间公式：<br>\[y = {f_{ {g_1}}}(x)\]<br>代码：</p>
+<pre><code>\\[y = {f_{ {g_1}}}(x)\\]
+</code></pre><p><strong>注意上面花括号之间有空格！</strong></p>
+<h2 id="添加留言板"><a href="#添加留言板" class="headerlink" title="添加留言板"></a>添加留言板</h2><p>在<code>D:\study\program\blog\themes\beantech\layout</code>中新建<code>bbs.ejs</code>，文件内容如下：</p>
+<pre><code>---
+layout: page
+---
+&lt;style type=&quot;text/css&quot;&gt;
+    header.intro-header{
+        background-position: right; 
+    }
+&lt;/style&gt;
+&lt;!-- Chinese Version --&gt;
+&lt;div class=&quot;zh post-container&quot;&gt;
+    &lt;%- page.content %&gt;
+&lt;/div&gt;
+</code></pre><p>然后在<code>D:\study\program\blog\source</code>中新建<code>\bbs</code>文件夹，里面在新建<code>index.md</code>文件，内容如下：</p>
+<pre><code>---
+layout: &quot;bbs&quot;
+title: &quot;BBS&quot;
+date: 2017-09-19 12:48:33
+description: &quot;欢迎交换友链，一起交流学习！&quot;
+header-img: &quot;img/header_img/home-bg-2-dark.png&quot;
+comments: true
+---
+此处替换为你的畅言评论代码~~~
+</code></pre><h2 id="添加置顶功能"><a href="#添加置顶功能" class="headerlink" title="添加置顶功能"></a>添加置顶功能</h2><p>运行如下两条命令安装置顶插件：</p>
+<pre><code>npm uninstall hexo-generator-index --save
+npm install hexo-generator-index-pin-top --save
+</code></pre><p>然后打开<code>D:\study\program\blog\themes\beantech\layout\index.ejs</code>，在如下位置添加代码：<br><img src="14.jpg" alt></p>
+<pre><code>&lt;% if (post.top) {%>
+    <i class="fa fa-thumb-tack"></i>
+    <font color="7D26CD">置顶</font>
+    <span class="post-meta-divider">|</span>
+<%}%&gt; < code></%}%&gt;></code></pre><p>然后在你想置顶的文章md文件里，添加如下配置选项：</p>
+<pre><code>top: true
+</code></pre><h2 id="添加网易云音乐BGM"><a href="#添加网易云音乐BGM" class="headerlink" title="添加网易云音乐BGM"></a>添加网易云音乐BGM</h2><p>写文章的时候，想插入一段BGM怎么办？</p>
+<p>首先打开网易云网页版，找到想听的歌曲，然后点击生成外链：<br><img src="15.jpg" alt><br>复制如下代码：<br><img src="16.jpg" alt></p>
+<p>粘贴到文章里就行了，为了美观，设置一下居中，具体代码如下：</p>
+<pre><code>&lt;div align=&quot;middle&quot;&gt;这里粘贴刚刚复制的代码&lt;/div&gt;
+</code></pre><h2 id="添加访客人数统计和字数统计"><a href="#添加访客人数统计和字数统计" class="headerlink" title="添加访客人数统计和字数统计"></a>添加访客人数统计和字数统计</h2><p>我们使用一个国外的流量统计网站：<a href="gostats.com">gostats.com</a>，首先注册一下。</p>
+<p>然后自己添加网站地址，过程就不详细说了，然后点击<code>Get counter code</code>，选择一个自己喜欢的风格。<br>如下图所示，选择一个样式，选择<code>HTML</code>，生成代码：<br><img src="17.jpg" alt></p>
+<p>复制这段代码到<code>D:\study\program\blog\themes\beantech\layout\_partial\footer.ejs</code>，具体位置如下：<br><img src="18.jpg" alt><br>默认的代码和我图中不一样，因为我不想点击图片跳转到它统计网站的链接，可以模仿我的自行修改。</p>
+<p>字数统计首先安装插件</p>
+<pre><code>npm i --save hexo-wordcount
+</code></pre><p>然后打开<code>D:\study\program\blog\themes\beantech\layout\_partial\footer.ejs</code>，添加如下代码：</p>
+<pre><code>&lt;span class=&quot;post-count&quot;&gt;&lt;%= totalcount(site) %&gt; words altogether&lt;/span&gt;
+</code></pre><p>具体位置见上图。</p>
+<h1 id="一些注意事项"><a href="#一些注意事项" class="headerlink" title="一些注意事项"></a>一些注意事项</h1><hr>
+<p>首先解释一下文章开头的配置，如下图所示：<br><img src="19.jpg" alt></p>
+<pre><code>title: 文章标题
+catalog: 是否显示段落目录
+date: 文章日期
+subtitle: 子标题
+header-img: 顶部背景图片
+top: 是否置顶
+tags: 标签
+categories: 分类
+</code></pre><p>网站图片都保存在<code>D:\study\program\blog\source\img</code>目录下，可以修改成自己的图片。</p>
+<p>如果换一台电脑想迁移博客的话，最简单的方法就是把博客整个目录拷贝过去，就是这么暴力。</p>
+<p><strong>其他还有什么问题的话等我想起来了再继续添加，如果遇到问题欢迎联系我。</strong></p>
+
+            </div>
+            <hr/>
+
+            
+            <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.88rem;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fa fa-close"></i></a>
+            <h4 class="reward-title">能否打赏一杯咖啡，让我有继续写作的动力？</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+
+            <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    <div class="social-share" data-disabled="qzone" data-wechat-qrcode-helper="<p>微信里点“发现”->“扫一扫”二维码便可查看分享。</p>"></div>
+    
+</div>
+
+<script src="/libs/share/js/social-share.min.js"></script>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        <p class="reprint-tip">
+            <i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;
+            <span>转载规则</span>
+        </p>
+        
+            <div class="center-align">
+                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
+                    <img alt=""
+                         style="border-width:0"
+                         src="https://i.creativecommons.org/l/by/4.0/88x31.png"/>
+                </a>
+            </div>
+            <br/>
+            <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text"
+                  property="dct:title" rel="dct:type">
+                    《超详细Hexo+Github博客搭建小白教程》
+                </span> 由
+            <a xmlns:cc="http://creativecommons.org/ns#" href="/2018/04/13/hexo-blog/" property="cc:attributionName"
+               rel="cc:attributionURL">
+                WeiYang
+            </a> 采用
+            <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
+                知识共享署名 4.0 国际许可协议
+            </a>进行许可。
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+        </div>
+    </div>
+
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: 'c3ac6e20697ee5422b43',
+        clientSecret: '3ccf19d2ec7e33b55f71aaeec74542a3938772f6',
+        repo: 'godweiyang.github.io',
+        owner: 'godweiyang',
+        admin: "godweiyang",
+        id: '2018/04/13/hexo-blog/',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2018/04/16/concrete-math-8/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="具体数学-第8课（取整进阶）">
+                        
+                        <span class="card-title">具体数学-第8课（取整进阶）</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+
+今天主要讲了取整与递归式的结合，还有取模的相关知识。
+例题1
+给出下列递归式：\[\begin{array}{l}{K_0}{\rm{ = }}1\\{K_{n + 1}} = 1 + \min (2{K_{\left\lfloor {
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="fa fa-clock-o fa-fw icon-date"></i>2018-04-16
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/数学/" class="post-category" target="_blank">
+                                    数学
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/具体数学/" target="_blank">
+                        <span class="chip bg-color">具体数学</span>
+                    </a>
+                    
+                    <a href="/tags/Concrete-Mathematics/" target="_blank">
+                        <span class="chip bg-color">Concrete Mathematics</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2018/04/09/concrete-math-7/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="具体数学-第7课（取整基础）">
+                        
+                        <span class="card-title">具体数学-第7课（取整基础）</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+
+首先声明一下，最近这段时间忙毕设，没时间更新博客了，大家见谅。
+今天这节课开始讲解取整相关知识，主要是数论相关的了。
+符号定义
+向下取整函数\left\lfloor x \right\rfloor定义为小于等于x的最大整数。向上取整函数
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2018-04-09
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/数学/" class="post-category" target="_blank">
+                                    数学
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/具体数学/" target="_blank">
+                        <span class="chip bg-color">具体数学</span>
+                    </a>
+                    
+                    <a href="/tags/Concrete-Mathematics/" target="_blank">
+                        <span class="chip bg-color">Concrete Mathematics</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: WeiYang Blog<br />'
+            + '作者: WeiYang<br />'
+            + '链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="fa fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fa fa-list"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            // headingsOffset: -205,
+            headingSelector: 'h1, h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h1, h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).slideUp(500);
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).slideDown(500);
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+    
+
+</main>
+
+
+<script src="https://cdn.bootcss.com/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script>
+    MathJax.Hub.Config({
+        tex2jax: {inlineMath: [['$', '$'], ['\(', '\)']]}
+    });
+</script>
+
+<footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            &copy; 2019 WeiYang. All Rights Reserved.
+
+            
+                &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
+                <span class="white-color">107.9k</span>
+            
+
+            
+			
+                <br>
+                
+                <span id="busuanzi_container_site_pv">
+                    <i class="fa fa-heart-o"></i>
+                    本站总访问量 <span id="busuanzi_value_site_pv" class="white-color"></span>
+                </span>
+                
+                
+                <span id="busuanzi_container_site_uv">
+                    人次,&nbsp;访客数 <span id="busuanzi_value_site_uv" class="white-color"></span> 人.
+                </span>
+                
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/godweiyang" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fa fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:weiyang@godweiyang.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fa fa-envelope-open"></i>
+    </a>
+
+
+
+    <a href="https://user.qzone.qq.com/792321264" class="tooltipped" data-tooltip="访问我的QQ空间" data-position="top" data-delay="50">
+        <i class="fa fa-qq"></i>
+    </a>
+
+
+
+    <a href="https://weibo.com/godweiyang" class="tooltipped" data-tooltip="关注我的微博" data-position="top" data-delay="50">
+        <i class="fa fa-weibo"></i>
+    </a>
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fa fa-rss"></i>
+    </a>
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+<!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fa fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+<!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fa fa-angle-up"></i>
+    </a>
+</div>
+
+
+<script src="/libs/materialize/materialize.min.js"></script>
+<script src="/libs/masonry/masonry.pkgd.min.js"></script>
+<script src="/libs/aos/aos.js"></script>
+<script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+<script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+<script src="/js/matery.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+
+    <script src="/libs/others/clicklove.js"></script>
+
+
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+
+
+</body>
+</html>

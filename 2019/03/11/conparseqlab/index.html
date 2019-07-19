@@ -1,0 +1,1098 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="Constituent Parsing as Sequence Labeling, ECNU NLP DeepLearning">
+    <meta name="description" content="
+
+
+貌似已经有好几个月没怎么看过论文了，之前一直在写论文，一直没空更新博客，最近闲下来把最后几篇没看完的论文看了。
+
+论文地址：Constituent Parsing as Sequence Labeling
+代码地址：Code
+介绍
+本">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Constituent Parsing as Sequence Labeling | WeiYang Blog</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    <style type="text/css">
+        
+    </style>
+
+    <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body>
+
+<header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">WeiYang Blog</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fa fa-navicon"></i></a>
+<ul class="right">
+    
+    <li class="hide-on-med-and-down">
+        <a href="/" class="waves-effect waves-light">
+            
+            <span>首页</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/tags" class="waves-effect waves-light">
+            
+            <span>标签</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories" class="waves-effect waves-light">
+            
+            <span>分类</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/archives" class="waves-effect waves-light">
+            
+            <span>归档</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/about" class="waves-effect waves-light">
+            
+            <span>关于</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/friends" class="waves-effect waves-light">
+            
+            <span>友情链接</span>
+        </a>
+    </li>
+    
+    <li>
+        <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+            <i id="searchIcon" class="fa fa-search" title="搜索"></i>
+        </a>
+    </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">WeiYang Blog</div>
+        <div class="logo-desc">
+            
+            华东师范大学|计算机科学与技术|自然语言处理
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li>
+            <a href="/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-link"></i>
+                
+                首页
+            </a>
+        </li>
+        
+        <li>
+            <a href="/tags" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-link"></i>
+                
+                标签
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-link"></i>
+                
+                分类
+            </a>
+        </li>
+        
+        <li>
+            <a href="/archives" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-link"></i>
+                
+                归档
+            </a>
+        </li>
+        
+        <li>
+            <a href="/about" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-link"></i>
+                
+                关于
+            </a>
+        </li>
+        
+        <li>
+            <a href="/friends" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-link"></i>
+                
+                友情链接
+            </a>
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/godweiyang" class="waves-effect waves-light" target="_blank">
+                <i class="fa fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/godweiyang" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/3.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        Constituent Parsing as Sequence Labeling
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 20px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/NLP/" target="_blank">
+                                <span class="chip bg-color">NLP</span>
+                            </a>
+                        
+                            <a href="/tags/神经网络/" target="_blank">
+                                <span class="chip bg-color">神经网络</span>
+                            </a>
+                        
+                            <a href="/tags/深度学习/" target="_blank">
+                                <span class="chip bg-color">深度学习</span>
+                            </a>
+                        
+                            <a href="/tags/句法分析/" target="_blank">
+                                <span class="chip bg-color">句法分析</span>
+                            </a>
+                        
+                            <a href="/tags/EMNLP/" target="_blank">
+                                <span class="chip bg-color">EMNLP</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fa fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/句法分析/" class="post-category" target="_blank">
+                                句法分析
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                <div class="post-date info-break-policy">
+                    <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2019-03-11
+                </div>
+
+                
+                    
+                    <div class="info-break-policy">
+                        <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
+                        3.1k
+                    </div>
+                    
+
+                    
+                    <div class="info-break-policy">
+                        <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                        11 分
+                    </div>
+                    
+                
+				
+				
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="fa fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <div align="middle"><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=421885447&auto=1&height=66"></iframe></div>
+
+<blockquote>
+<p>貌似已经有好几个月没怎么看过论文了，之前一直在写论文，一直没空更新博客，最近闲下来把最后几篇没看完的论文看了。</p>
+</blockquote>
+<p><strong>论文地址：</strong><a href="http://aclweb.org/anthology/D18-1162" target="_blank" rel="noopener">Constituent Parsing as Sequence Labeling</a></p>
+<p><strong>代码地址：</strong><a href="https://github.com/aghie/tree2labels" target="_blank" rel="noopener">Code</a></p>
+<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><hr>
+<p>本文定义了一种新的树的序列化方法，将树结构预测问题转化为了序列预测问题。该序列用相邻两个结点的<strong>公共祖先（CA）数量</strong>和<strong>最近公共祖先（LCA）的label</strong>来表示一棵树，并且证明了这个树到序列的映射是单射但不是满射的，但是提出了一系列方法来解决这个问题。</p>
+<p>相比于之前的序列方法，比如<a href="http://www.aclweb.org/anthology/D16-1257" target="_blank" rel="noopener">Parsing as Language Modeling</a>，本文的序列化有所不同，主要体现在之前的方法都是seq2seq的，也就是输入句子，直接输出树的括号表达式序列。但是这种方法输出不是定长的，所以结果可能会比较差。本文的方法将输出长度固定在了句子长度减1上（只针对不存在一元产生式的句法树，这种情况之后讨论），所以可以将每个预测分配到每个单词上，然后用序列标注的方法来解决。</p>
+<h1 id="树的序列化"><a href="#树的序列化" class="headerlink" title="树的序列化"></a>树的序列化</h1><hr>
+<h2 id="记号和基础知识"><a href="#记号和基础知识" class="headerlink" title="记号和基础知识"></a>记号和基础知识</h2><p>记输入句子为<script type="math/tex">\textbf{w} = [w_1, w_2, \ldots, w_N]</script>，其中<script type="math/tex">w_i \in V</script>。<script type="math/tex">T_N</script>为拥有<script type="math/tex">N</script>个叶子结点的不含有一元产生式的句法树集合。句法分析的任务就是将输入句子<script type="math/tex">\textbf{w}</script>映射到句法树<script type="math/tex">T_N</script>。</p>
+<p>为了将句法分析转化为序列标注任务，需要定义一个树的序列化方法：<script type="math/tex">\Phi_N : T_N \to L^{N - 1}</script>，也就是将一棵有<script type="math/tex">N</script>个叶子结点的句法树转化为长度为<script type="math/tex">N - 1</script>的序列。并且该映射函数还得满足一定的条件，首先它一定得是一个<strong>函数</strong>（<em>也就是对于所有的句法树，都得找到一个对应的序列</em>），然后这个函数还得有<strong>单射性</strong>（<em>也就是句法树和序列要一一对应，不能存在两个句法树对应同一个序列，否则的话预测出来一个序列可能解码出两棵句法树，那就尴尬了</em>），当然要是还满足<strong>满射性</strong>就最好了（<em>也就是对于每一个序列，最好都能找到一棵句法树与之对应，不然预测出一个序列无法找到对应的句法树也很尴尬</em>），当然找不到也没事，后文有解决方法。</p>
+<p>然后需要定义一个函数，将句子映射为序列：<script type="math/tex">F_{N, \theta} : V^N \to L^{N - 1}</script>。这个映射就通过序列标注的LSTM来实现了，<script type="math/tex">\theta</script>就是LSTM的参数。</p>
+<p>最后通过函数<script type="math/tex">F_{N, \theta} \circ \Phi_N^{-1}</script>将输入句子转化为对应的句法树。那么<script type="math/tex">F_{N, \theta}</script>没什么好说的，就是一个序列标注模型，下面重点就是介绍如何设计函数<script type="math/tex">\Phi_N</script>。</p>
+<h2 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h2><p>之前说到了将一棵有<script type="math/tex">N</script>个叶子结点的句法树转化为长度为<script type="math/tex">N - 1</script>的序列，这个序列是这样生成的：对于单词<script type="math/tex">w_i</script>，分配给它一个二元label <script type="math/tex">l_i = (n_i, c_i)</script>，其中<script type="math/tex">n_i</script>为单词<script type="math/tex">w_i</script>和<script type="math/tex">w_{i + 1}</script>的CA数量，<script type="math/tex">c_i</script>为它俩的LCA的label。</p>
+<p><img src="1.jpg" alt></p>
+<p>如上图所示，这个序列的<script type="math/tex">n_i</script>有两种表示方法。一种就表示成CA的绝对数量，如图中第一行所示。还有一种表示成后一个数与前一个数的差值，这样能减少元组的数量，但是会出现负数。当然在这个例子中貌似并不能看出数量减少了。。。</p>
+<p><strong><script type="math/tex">k</script>叉树编码：</strong>如果句法树所有产生式全部是<script type="math/tex">k</script>叉的，那么还可以将编码进一步简化，具体做法就是将所有的负数<script type="math/tex">n_i</script>统一为一个负数就行。为什么这里就不需要对负数进行区分了呢？这还得从句法树的解码说起，我们看一看是怎么从序列解码成句法树的。</p>
+<p>当遇到一个负数<script type="math/tex">n_i</script>的时候，说明<script type="math/tex">{\rm LCA}(w_{i}, w_{i+1})</script>到根结点路径的长度比<script type="math/tex">{\rm LCA}(w_{i-1}, w_i)</script>到根结点路径长度少<script type="math/tex">-n_i</script>个结点。大致结构如下图所示（图画的丑，不要介意）：</p>
+<p><img src="2.jpg" alt></p>
+<p>可以看出，<script type="math/tex">w_{i+1}</script>这棵子树接在了从<script type="math/tex">w_i</script>到根结点路径上的第<script type="math/tex">-n_i + 2</script>个结点上。但是<script type="math/tex">w_{i+1}</script>具体在哪还无法确定，只能确定它的子树根结点位置。另外需要解释的是，为什么这里是常数2？因为<script type="math/tex">w_i</script>到<script type="math/tex">w_{i-1}</script>与<script type="math/tex">w_i</script>的LCA的距离一定是2，如果不是的话，中间就一定会有其他结点，那么就一定存在结点位于<script type="math/tex">w_{i-1}</script>与<script type="math/tex">w_i</script>之间，这显然不可能。最后可以注意到，这种情况下，</p>
+<p>如果<script type="math/tex">n_i</script>是正数的话，说明<script type="math/tex">{\rm LCA}(w_{i}, w_{i+1})</script>到根结点路径的长度比<script type="math/tex">{\rm LCA}(w_{i-1}, w_i)</script>到根结点路径长度多<script type="math/tex">n_i</script>个结点。大致结构如下图所示：</p>
+<p><img src="3.jpg" alt></p>
+<p>这种情况下，<script type="math/tex">w_{i+1}</script>这棵子树接在了从<script type="math/tex">{\rm LCA}(w_{i-1}, w_i)</script>到<script type="math/tex">w_i</script>路径上的第<script type="math/tex">n_i + 1</script>个结点处。同样也无法确定它的准确位置，但是它所在的子树确定了从这分叉出去的。</p>
+<p>回到正题，之前说到了对于<script type="math/tex">k</script>叉树，所有负数都可以统一起来，为什么呢？继续看上面<script type="math/tex">n_i</script>负数那张图，对于<script type="math/tex">w_{i+1}</script>所在子树，需要在从<script type="math/tex">w_i</script>到根结点这条路径上寻找一个分叉点，也就是它俩的LCA。如果这是一个<script type="math/tex">k</script>叉树，那么这个分叉点就一定是第一个孩子数不满<script type="math/tex">k</script>个的结点。因为如果再往下的话，孩子数都满了，再加子树孩子数一定大于<script type="math/tex">k</script>。再往上的话，就会导致这第一个结点孩子数小于<script type="math/tex">k</script>，因为从左到右遍历的，子树之间不会交叉，以后都不会有子树插入到这个结点处了。</p>
+<p>下图就是简化序列化后的二叉树例子，第三行将所有的负数都用一个负号替代了：</p>
+<p><img src="4.jpg" alt></p>
+<p>我尝试过了按照这个序列构建出一棵树的过程，画了个草图给大家看看，可能有点乱（参照的是上面那个非二叉树的图）：<br><img src="5.jpg" alt></p>
+<p>还有一个小trick就是对于有些直接连到根结点的叶子，用<script type="math/tex">({\rm ROOT}, c_i)</script>作为它们的label。</p>
+<h2 id="理论证明"><a href="#理论证明" class="headerlink" title="理论证明"></a>理论证明</h2><p>主要证明两个性质，一个就是充分性（即每个句法树都能映射为一个序列），另一个就是单射性（即每个序列只能唯一对应一个句法树）。</p>
+<p><strong>充分性：</strong><br>这个显而易见，对于每个句法树，相邻两个单词一定存在唯一的LCA，且它的label也是唯一的，所以充分性肯定能保证的。</p>
+<p><strong>单射性：</strong><br>为了简便，首先证明不包含非终结符的树结构映射的单射性，再证明加上非终结符也是单射的。</p>
+<p>如果用<script type="math/tex">(\bullet_i)</script>表示第<script type="math/tex">i</script>个叶子结点，那么句法树可以表示成如下的括号表达式：<br>\[<br>\alpha_0 (\bullet_1) \alpha_1 (\bullet_2) \ldots \alpha_{\left| w \right| - 1} (\bullet_{\left| w \right|}) \alpha_{\left| w \right|}<br>\]<br>更进一步，每个<script type="math/tex">\alpha_i</script>形式肯定是<script type="math/tex">[)]^\*[(X]^\*</script>，因为如果存在一个闭合的括号对，那么中间肯定还存在着一个叶子结点，这显然不可能。所以我们可以用<script type="math/tex">\alpha_{i)}</script>来替代<script type="math/tex">[)]^\*</script>，用<script type="math/tex">\alpha_{i(}</script>来替代<script type="math/tex">[(X]^\*</script>，将<script type="math/tex">\alpha_i</script>改写为<script type="math/tex">\alpha_{i)} \alpha_{i(}</script>，括号表达式可以重写为：<br>\[<br>\alpha_{0)} \alpha_{0(} (\bullet_1) \alpha_{1)} \alpha_{1(} (\bullet_2) \ldots (\bullet_{\left| w \right|}) \alpha_{\left| w \right|)} \alpha_{\left| w \right|(}<br>\]<br>注意到首尾两个元素一定是空的，接下来用<script type="math/tex">\beta_i</script>替换<script type="math/tex">\alpha_{i-1(}(\bullet_i)\alpha_{i)}</script>，得到序列：<br>\[<br>\beta_1 \beta_2 \ldots \beta_{\left| w \right|}<br>\]<br>更进一步，可以证明<script type="math/tex">\beta_i</script>一定只含有<script type="math/tex">[(X]^\*(\bullet_i)</script>和<script type="math/tex">(\bullet_i)[)]^\*</script>中的一个。因为如果两个都含有的话，说明存在<script type="math/tex">(X(\bullet_i))</script>这种一元产生式，但是因为一元产生式都提前处理过了，所以不可能存在。</p>
+<p>接下来可以给每个<script type="math/tex">\beta_i</script>分配一个值<script type="math/tex">\delta(\beta_i)</script>，如果<script type="math/tex">\beta_i</script>左右两边都没有括号，那这个值就是0，如果左边有<script type="math/tex">k</script>个括号，那值就是<script type="math/tex">+k</script>，如果右边有<script type="math/tex">k</script>个括号，那值就是<script type="math/tex">-k</script>。如果将这些值写成序列：<br>\[<br>\delta(\beta_1)\delta(\beta_2)\ldots\delta(\beta_{\left|w\right| - 1})<br>\]<br>这个序列正好对应了之前的第二种编码，也就是编码成LCA的个数之差。这是为什么呢？可以看出，一直到<script type="math/tex">\beta_i</script>结束，没有闭合的括号数量正好就是<script type="math/tex">w_i</script>和<script type="math/tex">w_{i+1}</script>的LCA数量。所以<script type="math/tex">\delta(\beta_i)</script>就是<script type="math/tex">w_i</script>和<script type="math/tex">w_{i+1}</script>的LCA数量与<script type="math/tex">w_{i-1}</script>和<script type="math/tex">w_{i}</script>的LCA数量的差值。</p>
+<p>最后这就验证了括号序列和之前的编码是一一对应的，单射性得证。解码的时候只需要将数字直接转化成对应的括号序列就行了。</p>
+<p>而加上了非终结符之后，单射性不会受到影响。因为虽然两棵相同结构但是拥有不同非终结符的句法树，转化成括号序列后是相同的。但是因为之前的定义中，还有一个变量<script type="math/tex">c_i</script>来表示这个非终结符了，所以还是能够唯一对应过去的。</p>
+<h2 id="限制"><a href="#限制" class="headerlink" title="限制"></a>限制</h2><p>上面定义的序列化函数有两个缺点：一是非满射，二是不能处理一元产生式，下面介绍一下解决方法。</p>
+<p><strong>对于一元产生式：</strong><br>有两种一元产生式，一种是中间结点，还有一种是叶子结点的label。</p>
+<p>对于中间结点，直接将一条链上的label合并成一个新的label就行了，方法和之前文章介绍的一样。</p>
+<p>而对于叶子结点的label，一个方法是在解码之前先用一个函数预测一下每个叶子结点的label，如果为空，说明没有label，否则就加上这个label，然后再进行正常的解码。另一个方法是将之前的序列化的二元组扩展为三元组<script type="math/tex">(n_i, c_i, u_i)</script>，其中第三个元素就是每个叶子结点的label。</p>
+<p><strong>非满射：</strong><br>非满射会导致的问题就是产生出来的序列可能无法映射到某一棵句法树。根据文中所说，一共有两种无法映射的情况。</p>
+<p>一种情况是对于多叉树，相邻两对叶子结点的LCA的label预测不同。比如在最上面一张图中，“the red toy”如果预测为两个不同的label，那么就会产生矛盾。这种情况很好解决，只要在解码的时候只取第一个label，忽略后一个就行了。</p>
+<p>另一种情况是序列可能会产生一元产生式，如下图所示：</p>
+<p><img src="6.jpg" alt></p>
+<p>根据图中序列，会产生下面那棵句法树，一元结点X并没有预测到。但其实因为一元结点已经提前合并了，所以如果预测到了一元结点，直接删掉不要就行了。</p>
+<h1 id="序列标注"><a href="#序列标注" class="headerlink" title="序列标注"></a>序列标注</h1><hr>
+<p>这里就不细讲了，用的就是基本的BiLSTM + CRF序列标注模型，具体可以看这篇论文：<a href="https://arxiv.org/abs/1603.01354" target="_blank" rel="noopener">End-to-end Sequence Labeling via Bi-directional LSTM-CNNs-CRF</a>。</p>
+<h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><hr>
+<p>这篇论文最大的卖点不是效果，而是速度快，下面是和其他模型的速度对比，可以看出，速度的确快了不少，达到了大几百句每秒。但是还是存在序列标注模型的老毛病，效果并不好，虽然比之前的高了，但是还是只有90%的F1。</p>
+<p><img src="7.jpg" alt></p>
+<h1 id="结论与展望"><a href="#结论与展望" class="headerlink" title="结论与展望"></a>结论与展望</h1><hr>
+<p>这篇论文定义了一种新的句法树序列化方法，将句法树序列化为长度减1的序列，其中每个值就是相邻两个单词的CA个数和LCA的label。</p>
+<p>看完这篇，我仔细想了想，其实之前的chart-based方法也都可以转化成序列，只不过都得特别处理一下一元产生式和多叉树，比较麻烦。以后可以考虑在这方面有所突破，速度快还是很nice的。</p>
+
+            </div>
+            <hr/>
+
+            
+            <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.88rem;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fa fa-close"></i></a>
+            <h4 class="reward-title">能否打赏一杯咖啡，让我有继续写作的动力？</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+
+            <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    <div class="social-share" data-disabled="qzone" data-wechat-qrcode-helper="<p>微信里点“发现”->“扫一扫”二维码便可查看分享。</p>"></div>
+    
+</div>
+
+<script src="/libs/share/js/social-share.min.js"></script>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        <p class="reprint-tip">
+            <i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;
+            <span>转载规则</span>
+        </p>
+        
+            <div class="center-align">
+                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
+                    <img alt=""
+                         style="border-width:0"
+                         src="https://i.creativecommons.org/l/by/4.0/88x31.png"/>
+                </a>
+            </div>
+            <br/>
+            <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text"
+                  property="dct:title" rel="dct:type">
+                    《Constituent Parsing as Sequence Labeling》
+                </span> 由
+            <a xmlns:cc="http://creativecommons.org/ns#" href="/2019/03/11/conparseqlab/" property="cc:attributionName"
+               rel="cc:attributionURL">
+                WeiYang
+            </a> 采用
+            <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
+                知识共享署名 4.0 国际许可协议
+            </a>进行许可。
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+        </div>
+    </div>
+
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: 'c3ac6e20697ee5422b43',
+        clientSecret: '3ccf19d2ec7e33b55f71aaeec74542a3938772f6',
+        repo: 'godweiyang.github.io',
+        owner: 'godweiyang',
+        admin: "godweiyang",
+        id: '2019/03/11/conparseqlab/',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2019/03/11/naacl19-conparsing/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="Better, Faster, Stronger Sequence Tagging Constituent Parsers">
+                        
+                        <span class="card-title">Better, Faster, Stronger Sequence Tagging Constituent Parsers</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+
+
+为了看懂论文里的策略梯度，又去把强化学习看了一遍。。。
+
+论文地址：Better, Faster, Stronger Sequence Tagging Constituent Parsers
+介绍
+这篇论文主要是在之前的那篇论文Con
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="fa fa-clock-o fa-fw icon-date"></i>2019-03-11
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/句法分析/" class="post-category" target="_blank">
+                                    句法分析
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/NLP/" target="_blank">
+                        <span class="chip bg-color">NLP</span>
+                    </a>
+                    
+                    <a href="/tags/神经网络/" target="_blank">
+                        <span class="chip bg-color">神经网络</span>
+                    </a>
+                    
+                    <a href="/tags/深度学习/" target="_blank">
+                        <span class="chip bg-color">深度学习</span>
+                    </a>
+                    
+                    <a href="/tags/句法分析/" target="_blank">
+                        <span class="chip bg-color">句法分析</span>
+                    </a>
+                    
+                    <a href="/tags/NAACL/" target="_blank">
+                        <span class="chip bg-color">NAACL</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2019/01/13/latex-pdf/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="Latex撰写论文常用技巧总结">
+                        
+                        <span class="card-title">Latex撰写论文常用技巧总结</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+
+这篇博文专门用来记录Latex写论文过程中遇到的一些技巧与心得。
+插入矢量图片
+首先在Office PowerPoint中画好模型图，然后有两种方法在Latex中插入矢量图。方法一：直接另存为pdf，例如存为figure.pdf。注意到
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-01-13
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/软件/" class="post-category" target="_blank">
+                                    软件
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/软件安装与配置/" target="_blank">
+                        <span class="chip bg-color">软件安装与配置</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: WeiYang Blog<br />'
+            + '作者: WeiYang<br />'
+            + '链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="fa fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fa fa-list"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            // headingsOffset: -205,
+            headingSelector: 'h1, h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h1, h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).slideUp(500);
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).slideDown(500);
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+    
+
+</main>
+
+
+<script src="https://cdn.bootcss.com/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script>
+    MathJax.Hub.Config({
+        tex2jax: {inlineMath: [['$', '$'], ['\(', '\)']]}
+    });
+</script>
+
+<footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            &copy; 2019 WeiYang. All Rights Reserved.
+
+            
+                &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
+                <span class="white-color">107.9k</span>
+            
+
+            
+			
+                <br>
+                
+                <span id="busuanzi_container_site_pv">
+                    <i class="fa fa-heart-o"></i>
+                    本站总访问量 <span id="busuanzi_value_site_pv" class="white-color"></span>
+                </span>
+                
+                
+                <span id="busuanzi_container_site_uv">
+                    人次,&nbsp;访客数 <span id="busuanzi_value_site_uv" class="white-color"></span> 人.
+                </span>
+                
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/godweiyang" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fa fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:weiyang@godweiyang.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fa fa-envelope-open"></i>
+    </a>
+
+
+
+    <a href="https://user.qzone.qq.com/792321264" class="tooltipped" data-tooltip="访问我的QQ空间" data-position="top" data-delay="50">
+        <i class="fa fa-qq"></i>
+    </a>
+
+
+
+    <a href="https://weibo.com/godweiyang" class="tooltipped" data-tooltip="关注我的微博" data-position="top" data-delay="50">
+        <i class="fa fa-weibo"></i>
+    </a>
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fa fa-rss"></i>
+    </a>
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+<!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fa fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+<!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fa fa-angle-up"></i>
+    </a>
+</div>
+
+
+<script src="/libs/materialize/materialize.min.js"></script>
+<script src="/libs/masonry/masonry.pkgd.min.js"></script>
+<script src="/libs/aos/aos.js"></script>
+<script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+<script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+<script src="/js/matery.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+
+    <script src="/libs/others/clicklove.js"></script>
+
+
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+
+
+</body>
+</html>
