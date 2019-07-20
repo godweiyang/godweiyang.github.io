@@ -405,6 +405,21 @@ header .go-back i {
     font-size: 1.9rem;
 }
 
+.bg-cover .title-404 {
+    font-size: 6rem;
+    font-weight: 700;
+    line-height: 1.85em;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.bg-cover .description-404 {
+    font-size: 2rem;
+    font-weight: 300;
+    line-height: 1.4em;
+    color: #eee;
+}
+
 @-webkit-keyframes rainbow {
     0%,
     100% {
