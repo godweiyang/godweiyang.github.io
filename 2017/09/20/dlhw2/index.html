@@ -35,8 +35,16 @@ imp">
 
     <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
     <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+    <script>
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?46e79e71af0709a5b9106bf20cecc493";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
 <link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
-
 
 <body>
 
@@ -431,7 +439,7 @@ imp">
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <p>这次练习是实现logistic回归模型的神经网络，来预测一张图片是不是一只猫。<br>我把代码整合在了一起，如下：</p>
-<pre class=" language-python"><code class="language-python"><span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+<pre class="line-numbers language-python"><code class="language-python"><span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
 <span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
 <span class="token keyword">import</span> h5py
 <span class="token keyword">import</span> scipy
@@ -517,9 +525,9 @@ params<span class="token punctuation">,</span> grads<span class="token punctuati
         <span class="token keyword">else</span><span class="token punctuation">:</span>
             Y_prediction<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">1</span>  
     <span class="token keyword">assert</span><span class="token punctuation">(</span>Y_prediction<span class="token punctuation">.</span>shape <span class="token operator">==</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> m<span class="token punctuation">)</span><span class="token punctuation">)</span>
-    <span class="token keyword">return</span> Y_prediction</code></pre>
+    <span class="token keyword">return</span> Y_prediction<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>但是这样看起来太乱太复杂了，于是最后一个练习将训练过程合并成了一个model，代码如下：</p>
-<pre class=" language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">model</span><span class="token punctuation">(</span>X_train<span class="token punctuation">,</span> Y_train<span class="token punctuation">,</span> X_test<span class="token punctuation">,</span> Y_test<span class="token punctuation">,</span> num_iterations <span class="token operator">=</span> <span class="token number">2000</span><span class="token punctuation">,</span> learning_rate <span class="token operator">=</span> <span class="token number">0.5</span><span class="token punctuation">,</span> print_cost <span class="token operator">=</span> <span class="token boolean">False</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+<pre class="line-numbers language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">model</span><span class="token punctuation">(</span>X_train<span class="token punctuation">,</span> Y_train<span class="token punctuation">,</span> X_test<span class="token punctuation">,</span> Y_test<span class="token punctuation">,</span> num_iterations <span class="token operator">=</span> <span class="token number">2000</span><span class="token punctuation">,</span> learning_rate <span class="token operator">=</span> <span class="token number">0.5</span><span class="token punctuation">,</span> print_cost <span class="token operator">=</span> <span class="token boolean">False</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
     w<span class="token punctuation">,</span> b <span class="token operator">=</span> np<span class="token punctuation">.</span>zeros<span class="token punctuation">(</span><span class="token punctuation">(</span>X_train<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">0</span>
     parameters<span class="token punctuation">,</span> grads<span class="token punctuation">,</span> costs <span class="token operator">=</span> optimize<span class="token punctuation">(</span>w<span class="token punctuation">,</span> b<span class="token punctuation">,</span> X_train<span class="token punctuation">,</span> Y_train<span class="token punctuation">,</span> num_iterations<span class="token punctuation">,</span> learning_rate<span class="token punctuation">,</span> print_cost<span class="token punctuation">)</span>
     w <span class="token operator">=</span> parameters<span class="token punctuation">[</span><span class="token string">"w"</span><span class="token punctuation">]</span>
@@ -537,7 +545,7 @@ params<span class="token punctuation">,</span> grads<span class="token punctuati
          <span class="token string">"num_iterations"</span><span class="token punctuation">:</span> num_iterations<span class="token punctuation">}</span>
     <span class="token keyword">return</span> d
 
-d <span class="token operator">=</span> model<span class="token punctuation">(</span>train_set_x<span class="token punctuation">,</span> train_set_y<span class="token punctuation">,</span> test_set_x<span class="token punctuation">,</span> test_set_y<span class="token punctuation">,</span> num_iterations <span class="token operator">=</span> <span class="token number">2000</span><span class="token punctuation">,</span> learning_rate <span class="token operator">=</span> <span class="token number">0.005</span><span class="token punctuation">,</span> print_cost <span class="token operator">=</span> <span class="token boolean">True</span><span class="token punctuation">)</span></code></pre>
+d <span class="token operator">=</span> model<span class="token punctuation">(</span>train_set_x<span class="token punctuation">,</span> train_set_y<span class="token punctuation">,</span> test_set_x<span class="token punctuation">,</span> test_set_y<span class="token punctuation">,</span> num_iterations <span class="token operator">=</span> <span class="token number">2000</span><span class="token punctuation">,</span> learning_rate <span class="token operator">=</span> <span class="token number">0.005</span><span class="token punctuation">,</span> print_cost <span class="token operator">=</span> <span class="token boolean">True</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
             </div>
             <hr/>

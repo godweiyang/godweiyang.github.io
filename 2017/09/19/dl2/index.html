@@ -35,8 +35,16 @@
 
     <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
     <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+    <script>
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?46e79e71af0709a5b9106bf20cecc493";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
 <link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
-
 
 <body>
 
@@ -461,12 +469,12 @@
 <p>$m$个样本的梯度其实就是每个样本的梯度求和，如图所示的伪代码中，用一层<code>for</code>循环来对梯度进行求和。在后面的课程中我们将会摒弃这种做法，用更快速的向量化方法来进行计算。</p>
 <h1 id="2-11-向量化"><a href="#2-11-向量化" class="headerlink" title="2.11 向量化"></a>2.11 向量化</h1><hr>
 <p>向量化就是将例如${w^T}x$这样的矩阵点乘用python的<code>numpy</code>库函数<code>dot</code>代替普通的<code>for</code>循环。示例代码如下：</p>
-<pre class=" language-python"><code class="language-python"><span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+<pre class="line-numbers language-python"><code class="language-python"><span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
 
 a <span class="token operator">=</span> np<span class="token punctuation">.</span>random<span class="token punctuation">.</span>rand<span class="token punctuation">(</span><span class="token number">1000000</span><span class="token punctuation">)</span>
 b <span class="token operator">=</span> np<span class="token punctuation">.</span>random<span class="token punctuation">.</span>rand<span class="token punctuation">(</span><span class="token number">1000000</span><span class="token punctuation">)</span>
 c <span class="token operator">=</span> np<span class="token punctuation">.</span>dot<span class="token punctuation">(</span>a<span class="token punctuation">,</span> b<span class="token punctuation">)</span>
-<span class="token keyword">print</span> c</code></pre>
+<span class="token keyword">print</span> c<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h1 id="2-12-向量化的更多例子"><a href="#2-12-向量化的更多例子" class="headerlink" title="2.12 向量化的更多例子"></a>2.12 向量化的更多例子</h1><hr>
 <p>经验法则是能不使用<code>for</code>循环就尽量不要使用，用向量来代替。更多的向量化例子有<code>np.exp()</code>，<code>np.sum()</code>等等。</p>
 <h1 id="2-13-向量化logistic回归"><a href="#2-13-向量化logistic回归" class="headerlink" title="2.13 向量化logistic回归"></a>2.13 向量化logistic回归</h1><hr>
