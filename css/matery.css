@@ -406,7 +406,7 @@ header .go-back i {
 }
 
 .bg-cover .title-404 {
-    font-size: 40px;
+    font-size: 80px;
     font-weight: 700;
     line-height: 1.85em;
     margin-bottom: 20px;
@@ -414,7 +414,7 @@ header .go-back i {
 }
 
 .bg-cover .description-404 {
-    font-size: 20px;
+    font-size: 30px;
     font-weight: 300;
     line-height: 1.4em;
     color: #eee;
