@@ -450,7 +450,7 @@
 </ol>
 <h1 id="探索与利用算法"><a href="#探索与利用算法" class="headerlink" title="探索与利用算法"></a>探索与利用算法</h1><hr>
 <h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>“仅探索”（exploration-only）算法就是将机会平均分配给每一个赌博机，随机挑选赌博机。<br>“仅利用”（exploitation-only）算法就是选取当前平均价值最高的那台赌博机。</p>
-<h2 id="实现代码"><a href="#实现代码" class="headerlink" title="实现代码"></a>实现代码</h2><pre class="line-numbers language-python"><code class="language-python"><span class="token comment" spellcheck="true">#!/usr/bin/python</span>
+<h2 id="实现代码"><a href="#实现代码" class="headerlink" title="实现代码"></a>实现代码</h2><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true">#!/usr/bin/python</span>
 <span class="token comment" spellcheck="true"># -*- coding: UTF-8 -*-</span>
 <span class="token keyword">import</span> random
 <span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
@@ -477,10 +477,10 @@
     <span class="token keyword">print</span> exploration_bandit<span class="token punctuation">(</span>K<span class="token punctuation">,</span> P<span class="token punctuation">,</span> V<span class="token punctuation">,</span> R<span class="token punctuation">,</span> T<span class="token punctuation">)</span>
 
 <span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
-    main<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    main<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
 <p>代码运行结果为：获得总价值1538893。</p>
 <h1 id="varepsilon-贪心算法"><a href="#varepsilon-贪心算法" class="headerlink" title="$\varepsilon $贪心算法"></a>$\varepsilon $贪心算法</h1><hr>
-<h2 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h2><h2 id="实现代码-1"><a href="#实现代码-1" class="headerlink" title="实现代码"></a>实现代码</h2><pre class="line-numbers language-python"><code class="language-python"><span class="token comment" spellcheck="true">#!/usr/bin/python</span>
+<h2 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h2><h2 id="实现代码-1"><a href="#实现代码-1" class="headerlink" title="实现代码"></a>实现代码</h2><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true">#!/usr/bin/python</span>
 <span class="token comment" spellcheck="true"># -*- coding: UTF-8 -*-</span>
 <span class="token keyword">import</span> random
 <span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
@@ -515,10 +515,10 @@
     <span class="token keyword">print</span> eplison_bandit<span class="token punctuation">(</span>K<span class="token punctuation">,</span> P<span class="token punctuation">,</span> V<span class="token punctuation">,</span> R<span class="token punctuation">,</span> T<span class="token punctuation">)</span>
 
 <span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
-    main<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    main<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
 <p>代码运行结果为：获得总价值2795546。</p>
 <h1 id="Softmax算法"><a href="#Softmax算法" class="headerlink" title="Softmax算法"></a>Softmax算法</h1><hr>
-<h2 id="原理-2"><a href="#原理-2" class="headerlink" title="原理"></a>原理</h2><h2 id="实现代码-2"><a href="#实现代码-2" class="headerlink" title="实现代码"></a>实现代码</h2><pre class="line-numbers language-python"><code class="language-python"><span class="token comment" spellcheck="true">#!/usr/bin/python</span>
+<h2 id="原理-2"><a href="#原理-2" class="headerlink" title="原理"></a>原理</h2><h2 id="实现代码-2"><a href="#实现代码-2" class="headerlink" title="实现代码"></a>实现代码</h2><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true">#!/usr/bin/python</span>
 <span class="token comment" spellcheck="true"># -*- coding: UTF-8 -*-</span>
 <span class="token keyword">import</span> random
 <span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
@@ -560,7 +560,7 @@
     <span class="token keyword">print</span> eplison_bandit<span class="token punctuation">(</span>K<span class="token punctuation">,</span> P<span class="token punctuation">,</span> V<span class="token punctuation">,</span> R<span class="token punctuation">,</span> T<span class="token punctuation">,</span> tau<span class="token punctuation">)</span>
 
 <span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
-    main<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    main<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
 <p>代码运行结果为：$tau=0.01$时，获得总价值1397795。$tau=0.1$时，获得总价值2798372。当然随机性很大，每次运行结果都会不同</p>
 
             </div>

@@ -439,26 +439,26 @@
 <p>这篇博文专门用来记录Latex写论文过程中遇到的一些技巧与心得。</p>
 <h1 id="插入矢量图片"><a href="#插入矢量图片" class="headerlink" title="插入矢量图片"></a>插入矢量图片</h1><hr>
 <p>首先在Office PowerPoint中画好模型图，然后有两种方法在Latex中插入矢量图。<br><img src="1.jpg" alt><br><strong>方法一：</strong><br>直接另存为pdf，例如存为<code>figure.pdf</code>。<br><img src="2.jpg" alt><br>注意到pdf打开来左右两个侧边栏有较大的空余空间，所以最好在ppt中绘制模型图的时候就调整好。<br>然后在Latex中使用如下代码插入pdf图片即可：</p>
-<pre class="line-numbers language-latex"><code class="language-latex"><span class="token function selector">\begin</span><span class="token punctuation">{</span><span class="token keyword">figure*</span><span class="token punctuation">}</span><span class="token punctuation">[</span>htbp<span class="token punctuation">]</span>
+<pre class=" language-latex"><code class="language-latex"><span class="token function selector">\begin</span><span class="token punctuation">{</span><span class="token keyword">figure*</span><span class="token punctuation">}</span><span class="token punctuation">[</span>htbp<span class="token punctuation">]</span>
     <span class="token function selector">\centering</span>
     <span class="token function selector">\includegraphics</span><span class="token punctuation">[</span>width=<span class="token function selector">\textwidth</span><span class="token punctuation">]</span><span class="token punctuation">{</span>figure.pdf<span class="token punctuation">}</span>
     <span class="token function selector">\caption</span><span class="token punctuation">{</span> Model. <span class="token punctuation">}</span>
     <span class="token function selector">\label</span><span class="token punctuation">{</span><span class="token keyword">fig::model</span><span class="token punctuation">}</span>
-<span class="token function selector">\end</span><span class="token punctuation">{</span><span class="token keyword">figure*</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token function selector">\end</span><span class="token punctuation">{</span><span class="token keyword">figure*</span><span class="token punctuation">}</span></code></pre>
 <p>其中参数<code>width=\textwidth</code>是用来调整图片宽度，使得图片占满整个论文，效果如下：<br><img src="3.jpg" alt><br>注意到这里左右两个侧边栏间距的确有点大了，没有占满整个页面。<br>如果想要图片只显示在一半的页面上，那么只需要用如下代码即可：</p>
-<pre class="line-numbers language-latex"><code class="language-latex"><span class="token function selector">\begin</span><span class="token punctuation">{</span><span class="token keyword">figure</span><span class="token punctuation">}</span><span class="token punctuation">[</span>htbp<span class="token punctuation">]</span>
+<pre class=" language-latex"><code class="language-latex"><span class="token function selector">\begin</span><span class="token punctuation">{</span><span class="token keyword">figure</span><span class="token punctuation">}</span><span class="token punctuation">[</span>htbp<span class="token punctuation">]</span>
     <span class="token function selector">\centering</span>
     <span class="token function selector">\includegraphics</span><span class="token punctuation">[</span>width=<span class="token function selector">\linewidth</span><span class="token punctuation">]</span><span class="token punctuation">{</span>figure.pdf<span class="token punctuation">}</span>
     <span class="token function selector">\caption</span><span class="token punctuation">{</span> Model. <span class="token punctuation">}</span>
     <span class="token function selector">\label</span><span class="token punctuation">{</span><span class="token keyword">fig::model</span><span class="token punctuation">}</span>
-<span class="token function selector">\end</span><span class="token punctuation">{</span><span class="token keyword">figure</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token function selector">\end</span><span class="token punctuation">{</span><span class="token keyword">figure</span><span class="token punctuation">}</span></code></pre>
 <p>效果如下：<br><img src="4.jpg" alt></p>
 <p><strong>2019.1.14更新：</strong><br>关于生成出来的模型图pdf侧边距过大的问题，可以下载“迅捷pdf编辑器”，使用它强大的页面裁剪功能。当然非会员会留下水印，只需要修改水印透明度为0即可。</p>
 <p><strong>方法二：</strong><br>ppt绘制好的模型图右键另存为<code>emf</code>格式，这是一种Windows的矢量图格式，然后下载一款软件叫<code>Metafile to EPS Converter</code><a href="http://wiki.lyx.org/uploads/Windows/metafile2eps/metafile2eps.exe" target="_blank" rel="noopener">地址</a>，将图片转为Latex支持的<code>eps</code>格式，例如命名为<code>figure.eps</code>。</p>
 <p>最后在Latex使用相同的代码插入图片即可，效果如下：<br><img src="5.jpg" alt><br>可以看出两侧间距比原来小了很多。</p>
 <p><strong>2019.3.6更新：</strong></p>
 <h1 id="中文支持"><a href="#中文支持" class="headerlink" title="中文支持"></a>中文支持</h1><hr>
-<pre class="line-numbers language-latex"><code class="language-latex"><span class="token function selector">\usepackage</span><span class="token punctuation">{</span><span class="token keyword">CJK</span><span class="token punctuation">}</span>
+<pre class=" language-latex"><code class="language-latex"><span class="token function selector">\usepackage</span><span class="token punctuation">{</span><span class="token keyword">CJK</span><span class="token punctuation">}</span>
 
 <span class="token function selector">\begin</span><span class="token punctuation">{</span><span class="token keyword">document</span><span class="token punctuation">}</span>
 <span class="token function selector">\begin</span><span class="token punctuation">{</span><span class="token keyword">CJK*</span><span class="token punctuation">}</span><span class="token punctuation">{</span>GBK<span class="token punctuation">}</span><span class="token punctuation">{</span>song<span class="token punctuation">}</span>
@@ -466,28 +466,28 @@
 <span class="token comment" spellcheck="true">% 正文</span>
 
 <span class="token function selector">\end</span><span class="token punctuation">{</span><span class="token keyword">CJK*</span><span class="token punctuation">}</span>
-<span class="token function selector">\end</span><span class="token punctuation">{</span><span class="token keyword">document</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token function selector">\end</span><span class="token punctuation">{</span><span class="token keyword">document</span><span class="token punctuation">}</span></code></pre>
 <h1 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h1><hr>
 <p><strong>单幅图片：</strong></p>
-<pre class="line-numbers language-latex"><code class="language-latex"><span class="token function selector">\begin</span><span class="token punctuation">{</span><span class="token keyword">figure</span><span class="token punctuation">}</span><span class="token punctuation">[</span>htbp<span class="token punctuation">]</span>
+<pre class=" language-latex"><code class="language-latex"><span class="token function selector">\begin</span><span class="token punctuation">{</span><span class="token keyword">figure</span><span class="token punctuation">}</span><span class="token punctuation">[</span>htbp<span class="token punctuation">]</span>
     <span class="token function selector">\centering</span>
     <span class="token function selector">\includegraphics</span><span class="token punctuation">[</span>width=<span class="token function selector">\linewidth</span><span class="token punctuation">]</span><span class="token punctuation">{</span>figure.pdf<span class="token punctuation">}</span>
     <span class="token function selector">\caption</span><span class="token punctuation">{</span>xxxxx.<span class="token punctuation">}</span>
     <span class="token function selector">\label</span><span class="token punctuation">{</span><span class="token keyword">Fig:xxxxx</span><span class="token punctuation">}</span>
-<span class="token function selector">\end</span><span class="token punctuation">{</span><span class="token keyword">figure</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token function selector">\end</span><span class="token punctuation">{</span><span class="token keyword">figure</span><span class="token punctuation">}</span></code></pre>
 <p>跨双栏的话把<code>figure</code>改成<code>figure*</code>，<code>htbp</code>控制位置，自己看着调。</p>
 <p>难点是跨双栏图片置顶，一般情况下会自动跑到下一页去，找了半天才找到解决方法：</p>
-<pre class="line-numbers language-latex"><code class="language-latex"><span class="token function selector">\twocolumn</span><span class="token punctuation">[</span><span class="token punctuation">{</span>
+<pre class=" language-latex"><code class="language-latex"><span class="token function selector">\twocolumn</span><span class="token punctuation">[</span><span class="token punctuation">{</span>
     <span class="token function selector">\renewcommand</span><span class="token function selector">\twocolumn</span><span class="token punctuation">[</span>1<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">{</span>#1<span class="token punctuation">}</span>
     <span class="token function selector">\begin</span><span class="token punctuation">{</span><span class="token keyword">center</span><span class="token punctuation">}</span>
         <span class="token function selector">\centering</span>
         <span class="token function selector">\includegraphics</span><span class="token punctuation">[</span>width=<span class="token function selector">\textwidth</span><span class="token punctuation">]</span><span class="token punctuation">{</span>figure.pdf<span class="token punctuation">}</span>
         <span class="token function selector">\captionof</span><span class="token punctuation">{</span>xxxxx.<span class="token punctuation">}</span>
     <span class="token function selector">\end</span><span class="token punctuation">{</span><span class="token keyword">center</span><span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token punctuation">}</span><span class="token punctuation">]</span></code></pre>
 <p>缺点是无法添加<code>label</code>，正文只能手动加引用了。</p>
 <p><strong>两幅图片同一行显示：</strong></p>
-<pre class="line-numbers language-latex"><code class="language-latex"><span class="token function selector">\begin</span><span class="token punctuation">{</span><span class="token keyword">figure*</span><span class="token punctuation">}</span><span class="token punctuation">[</span>htbp<span class="token punctuation">]</span>
+<pre class=" language-latex"><code class="language-latex"><span class="token function selector">\begin</span><span class="token punctuation">{</span><span class="token keyword">figure*</span><span class="token punctuation">}</span><span class="token punctuation">[</span>htbp<span class="token punctuation">]</span>
     <span class="token function selector">\centering</span>
     <span class="token function selector">\subfigure</span><span class="token punctuation">[</span>fig1.<span class="token punctuation">]</span><span class="token punctuation">{</span>
         <span class="token function selector">\begin</span><span class="token punctuation">{</span><span class="token keyword">minipage</span><span class="token punctuation">}</span><span class="token punctuation">[</span>t<span class="token punctuation">]</span><span class="token punctuation">{</span>0.58<span class="token function selector">\textwidth</span><span class="token punctuation">}</span>
@@ -503,10 +503,10 @@
     <span class="token punctuation">}</span>
     <span class="token function selector">\caption</span><span class="token punctuation">{</span>xxxxx.<span class="token punctuation">}</span>
     <span class="token function selector">\label</span><span class="token punctuation">{</span><span class="token keyword">Fig:fig1</span><span class="token punctuation">}</span>
-<span class="token function selector">\end</span><span class="token punctuation">{</span><span class="token keyword">figure*</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token function selector">\end</span><span class="token punctuation">{</span><span class="token keyword">figure*</span><span class="token punctuation">}</span></code></pre>
 <p>注意的是，两个图片宽度之和<code>0.58 + 0.34 = 0.92</code>要尽量小于1，不然会显示出问题。</p>
 <h1 id="伪代码"><a href="#伪代码" class="headerlink" title="伪代码"></a>伪代码</h1><hr>
-<pre class="line-numbers language-latex"><code class="language-latex"><span class="token function selector">\renewcommand</span><span class="token punctuation">{</span><span class="token function selector">\algorithmicrequire</span><span class="token punctuation">}</span><span class="token punctuation">{</span> <span class="token function selector">\textbf</span><span class="token punctuation">{</span>Input:<span class="token punctuation">}</span><span class="token punctuation">}</span>
+<pre class=" language-latex"><code class="language-latex"><span class="token function selector">\renewcommand</span><span class="token punctuation">{</span><span class="token function selector">\algorithmicrequire</span><span class="token punctuation">}</span><span class="token punctuation">{</span> <span class="token function selector">\textbf</span><span class="token punctuation">{</span>Input:<span class="token punctuation">}</span><span class="token punctuation">}</span>
 <span class="token function selector">\renewcommand</span><span class="token punctuation">{</span><span class="token function selector">\algorithmicensure</span><span class="token punctuation">}</span><span class="token punctuation">{</span> <span class="token function selector">\textbf</span><span class="token punctuation">{</span>Output:<span class="token punctuation">}</span><span class="token punctuation">}</span>
 
 <span class="token function selector">\begin</span><span class="token punctuation">{</span><span class="token keyword">algorithm</span><span class="token punctuation">}</span><span class="token punctuation">[</span>t<span class="token punctuation">]</span>
@@ -521,9 +521,9 @@
             <span class="token comment" spellcheck="true">% 函数体</span>
         <span class="token function selector">\EndFunction</span>
     <span class="token function selector">\end</span><span class="token punctuation">{</span><span class="token keyword">algorithmic</span><span class="token punctuation">}</span>
-<span class="token function selector">\end</span><span class="token punctuation">{</span><span class="token keyword">algorithm</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token function selector">\end</span><span class="token punctuation">{</span><span class="token keyword">algorithm</span><span class="token punctuation">}</span></code></pre>
 <h1 id="表格"><a href="#表格" class="headerlink" title="表格"></a>表格</h1><hr>
-<pre class="line-numbers language-latex"><code class="language-latex"><span class="token function selector">\newcommand</span><span class="token punctuation">{</span><span class="token function selector">\tabincell</span><span class="token punctuation">}</span><span class="token punctuation">[</span>2<span class="token punctuation">]</span><span class="token punctuation">{</span><span class="token function selector">\begin</span><span class="token punctuation">{</span><span class="token keyword">tabular</span><span class="token punctuation">}</span><span class="token punctuation">{</span>@<span class="token punctuation">{</span><span class="token punctuation">}</span>#1@<span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">}</span>#2<span class="token function selector">\end</span><span class="token punctuation">{</span><span class="token keyword">tabular</span><span class="token punctuation">}</span><span class="token punctuation">}</span>
+<pre class=" language-latex"><code class="language-latex"><span class="token function selector">\newcommand</span><span class="token punctuation">{</span><span class="token function selector">\tabincell</span><span class="token punctuation">}</span><span class="token punctuation">[</span>2<span class="token punctuation">]</span><span class="token punctuation">{</span><span class="token function selector">\begin</span><span class="token punctuation">{</span><span class="token keyword">tabular</span><span class="token punctuation">}</span><span class="token punctuation">{</span>@<span class="token punctuation">{</span><span class="token punctuation">}</span>#1@<span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">}</span>#2<span class="token function selector">\end</span><span class="token punctuation">{</span><span class="token keyword">tabular</span><span class="token punctuation">}</span><span class="token punctuation">}</span>
 
 <span class="token function selector">\begin</span><span class="token punctuation">{</span><span class="token keyword">table</span><span class="token punctuation">}</span><span class="token punctuation">[</span>t<span class="token punctuation">]</span>
 <span class="token function selector">\normalsize</span>
@@ -539,10 +539,10 @@
 <span class="token function selector">\end</span><span class="token punctuation">{</span><span class="token keyword">center</span><span class="token punctuation">}</span>
 <span class="token function selector">\caption</span><span class="token punctuation">{</span> xxxxx.<span class="token punctuation">}</span>
 <span class="token function selector">\label</span><span class="token punctuation">{</span><span class="token keyword">Tab:CompDiffConfig</span><span class="token punctuation">}</span>
-<span class="token function selector">\end</span><span class="token punctuation">{</span><span class="token keyword">table</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token function selector">\end</span><span class="token punctuation">{</span><span class="token keyword">table</span><span class="token punctuation">}</span></code></pre>
 <p>两个难点，一个是合并同一行的单元格，用<code>\multicolumn{cols}{pos}{text}</code>。</p>
 <p>一个是合并同一列的单元格，用：</p>
-<pre class="line-numbers language-latex"><code class="language-latex"><span class="token function selector">\begin</span><span class="token punctuation">{</span><span class="token keyword">table</span><span class="token punctuation">}</span>
+<pre class=" language-latex"><code class="language-latex"><span class="token function selector">\begin</span><span class="token punctuation">{</span><span class="token keyword">table</span><span class="token punctuation">}</span>
     <span class="token function selector">\centering</span>
     <span class="token function selector">\begin</span><span class="token punctuation">{</span><span class="token keyword">tabular</span><span class="token punctuation">}</span><span class="token punctuation">{</span>|c|c|c|c|<span class="token punctuation">}</span>
         <span class="token function selector">\hline</span>
@@ -550,7 +550,7 @@
         ~ <span class="token punctuation">&amp;</span> 2 <span class="token punctuation">&amp;</span> 3 <span class="token punctuation">&amp;</span> 4 <span class="token function selector">\\</span>
         <span class="token function selector">\hline</span>
     <span class="token function selector">\end</span><span class="token punctuation">{</span><span class="token keyword">tabular</span><span class="token punctuation">}</span>
-<span class="token function selector">\end</span><span class="token punctuation">{</span><span class="token keyword">table</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token function selector">\end</span><span class="token punctuation">{</span><span class="token keyword">table</span><span class="token punctuation">}</span></code></pre>
 <p>注意第二行第一列要用<code>~</code>补上空位。用<code>\cline{start-end}</code>来代替<code>\hline</code>划线。</p>
 <p><strong>暂时就想到这些了，等想到了再更吧，祝我paper顺利。</strong></p>
 

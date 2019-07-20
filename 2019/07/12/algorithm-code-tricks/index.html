@@ -445,7 +445,7 @@
 <h2 id="题目1"><a href="#题目1" class="headerlink" title="题目1"></a>题目1</h2><p>给定$n$个数字$1, 2, \ldots, n$，求任意取一个排列，任意第$i$个位置上的元素都不等于$i$的概率是多少？</p>
 <p>如果知道结论的话，这就是一道普通的错位排列题，常规做法是求出递推式<br>\[f(n) = (n-1)(f(n-1)+f(n-2))\]<br>然后除以全排列的数量$n!$就行了，这里就不讲怎么求的了，百度有很多。这里讲讲如果不会求怎么办？</p>
 <p>首先想到的暴力方法就是暴力枚举所有排列，然后看看有多少排列满足题目中的错位的条件。C++中的库函数<code>next_permutation</code>正好可以帮助我们枚举全排列，代码如下：</p>
-<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;bits/stdc++.h></span></span>
+<pre class=" language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;bits/stdc++.h></span></span>
 <span class="token keyword">using</span> <span class="token keyword">namespace</span> std<span class="token punctuation">;</span>
 
 <span class="token keyword">typedef</span> <span class="token keyword">long</span> <span class="token keyword">long</span> LL<span class="token punctuation">;</span>
@@ -473,9 +473,9 @@ LL a<span class="token punctuation">[</span><span class="token number">30</span>
         <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d, "</span><span class="token punctuation">,</span> cnt<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token punctuation">}</span></code></pre>
 <p>然后就可以跑出$n \le 12$的结果，但是再大就跑不出来了，因为全排列数量太多了，跑得太慢了。但是不用管，因为题目要求的不是错位排列的数量，而是除以全排列数量之后的概率，巧的是，$n &gt; 12$之后概率保留两位小数的结果是完全相同的，所以直接取$n = 12$的概率就行了，代码如下：</p>
-<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;bits/stdc++.h></span></span>
+<pre class=" language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;bits/stdc++.h></span></span>
 <span class="token keyword">using</span> <span class="token keyword">namespace</span> std<span class="token punctuation">;</span>
 
 <span class="token keyword">typedef</span> <span class="token keyword">long</span> <span class="token keyword">long</span> LL<span class="token punctuation">;</span>
@@ -498,12 +498,12 @@ LL a<span class="token punctuation">[</span><span class="token number">30</span>
         <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%.2f%%\n"</span><span class="token punctuation">,</span> res<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token punctuation">}</span></code></pre>
 <p>这样即使你完全不会计算，也可以100分通过这题啦。</p>
 <h2 id="题目2"><a href="#题目2" class="headerlink" title="题目2"></a>题目2</h2><p><a href="https://acm.ecnu.edu.cn/problem/3337/" target="_blank" rel="noopener">原题链接</a></p>
 <p>这题其实就是给你$n$个数组，计算任意两个指定数组相同元素的个数。</p>
 <p>首先想到的最暴力的方法就是，两层循环遍历两个数组咯，看有多少一样的元素就行了。那我们试试：</p>
-<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;bits/stdc++.h></span></span>
+<pre class=" language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;bits/stdc++.h></span></span>
 <span class="token keyword">using</span> <span class="token keyword">namespace</span> std<span class="token punctuation">;</span>
 
 <span class="token keyword">const</span> <span class="token keyword">int</span> MAXN <span class="token operator">=</span> <span class="token number">40000</span> <span class="token operator">+</span> <span class="token number">10</span><span class="token punctuation">;</span>
@@ -538,11 +538,11 @@ vector<span class="token operator">&lt;</span><span class="token keyword">int</s
         <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d\n"</span><span class="token punctuation">,</span> cnt<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token punctuation">}</span></code></pre>
 <p><img src="3337-1.jpg" alt></p>
 <p>结果已经不错了，过了大多数样例了，这时你实在不想做了，拿了这点分数也可以做下一题了。</p>
 <p>但是你稍微动点脑子，就可以发现，可以把所有数组提前排个序啊，然后遍历的时候就不需要每次都从头找起了，代码如下：</p>
-<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;bits/stdc++.h></span></span>
+<pre class=" language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;bits/stdc++.h></span></span>
 <span class="token keyword">using</span> <span class="token keyword">namespace</span> std<span class="token punctuation">;</span>
 
 <span class="token keyword">const</span> <span class="token keyword">int</span> MAXN <span class="token operator">=</span> <span class="token number">40000</span> <span class="token operator">+</span> <span class="token number">10</span><span class="token punctuation">;</span>
@@ -581,11 +581,11 @@ vector<span class="token operator">&lt;</span><span class="token keyword">int</s
         <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d\n"</span><span class="token punctuation">,</span> cnt<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token punctuation">}</span></code></pre>
 <p><img src="3337-2.jpg" alt></p>
 <p>然后你就会发现，结果并没有任何变化。。。不过理论上来说是会快一点的，这里数据可能比较小。</p>
 <p>所以这里应该想不到啥优化的好方法了，不会做的话就下一题吧，分数够了，下面是正确代码，用<code>bitset</code>实现的：</p>
-<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;bits/stdc++.h></span></span>
+<pre class=" language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;bits/stdc++.h></span></span>
 <span class="token keyword">using</span> <span class="token keyword">namespace</span> std<span class="token punctuation">;</span>
 
 <span class="token keyword">const</span> <span class="token keyword">int</span> MAXN <span class="token operator">=</span> <span class="token number">40000</span> <span class="token operator">+</span> <span class="token number">10</span><span class="token punctuation">;</span>
@@ -607,7 +607,7 @@ bitset<span class="token operator">&lt;</span>MAXN<span class="token operator">>
         <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d\n"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>G<span class="token punctuation">[</span>s<span class="token punctuation">]</span> <span class="token operator">&amp;</span> G<span class="token punctuation">[</span>t<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">count</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token punctuation">}</span></code></pre>
 
             </div>
             <hr/>

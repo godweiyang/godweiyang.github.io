@@ -451,7 +451,7 @@
 <p>在代码实现中，应用lucas定理之后，将$C_n^m$替换为$C_s^t$继续调用lucas定理即可。递归终止条件是$t=0$。</p>
 <p>最后计算$C_q^r\bmod p$时直接应用组合数定义即可：<br>\[C_q^r \equiv \frac{ {q!}}{ {r!(q - r)!}} \equiv q!{(r!(q - r)!)^{p - 2}} \equiv q!{(r!(q - r)!\bmod p)^{p - 2}}\bmod p\]<br>这里还用到了逆元：<br>\[{a^{ - 1}} \equiv {a^{p - 2}}\bmod p\]<br>证明详见我的另一篇博客：<a href="http://godweiyang.com/2018/05/14/concrete-math-12/">具体数学-第12课</a>中的费马小定理和欧拉定理。</p>
 <h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><hr>
-<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;bits/stdc++.h></span></span>
+<pre class=" language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;bits/stdc++.h></span></span>
 <span class="token keyword">using</span> <span class="token keyword">namespace</span> std<span class="token punctuation">;</span>
 
 <span class="token keyword">typedef</span> <span class="token keyword">long</span> <span class="token keyword">long</span> LL<span class="token punctuation">;</span>
@@ -495,7 +495,7 @@ LL <span class="token function">C</span><span class="token punctuation">(</span>
         <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"case #%d:\n%lld\n"</span><span class="token punctuation">,</span> t<span class="token punctuation">,</span> res<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token punctuation">}</span></code></pre>
 
             </div>
             <hr/>

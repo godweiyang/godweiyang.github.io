@@ -554,7 +554,7 @@ understands VERB
 you PRON
 . PUNC</code></pre><p>可以看出来，加了CRF（第一组）效果反而差了一点点，对最后例句的词性标注唯一的区别在于”am”是助动词AUX还是动词VERB，我发现训练集里两种都有，区别也不大。</p>
 <p>完整代码：</p>
-<pre class="line-numbers language-python"><code class="language-python"><span class="token keyword">from</span> collections <span class="token keyword">import</span> Counter<span class="token punctuation">,</span> defaultdict
+<pre class=" language-python"><code class="language-python"><span class="token keyword">from</span> collections <span class="token keyword">import</span> Counter<span class="token punctuation">,</span> defaultdict
 <span class="token keyword">from</span> itertools <span class="token keyword">import</span> count
 <span class="token keyword">import</span> random
 <span class="token keyword">import</span> dynet <span class="token keyword">as</span> dy
@@ -939,7 +939,7 @@ cBwdRNN <span class="token operator">=</span> dy<span class="token punctuation">
 
 <span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
     sentence <span class="token operator">=</span> <span class="token string">"if you could see that i am the one who understands you ."</span>
-    tagging<span class="token punctuation">(</span>sentence<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    tagging<span class="token punctuation">(</span>sentence<span class="token punctuation">)</span></code></pre>
 
             </div>
             <hr/>
@@ -1212,12 +1212,12 @@ cBwdRNN <span class="token operator">=</span> dy<span class="token punctuation">
                         <span class="chip bg-color">深度学习</span>
                     </a>
                     
-                    <a href="/tags/迁移学习/" target="_blank">
-                        <span class="chip bg-color">迁移学习</span>
-                    </a>
-                    
                     <a href="/tags/序列标注/" target="_blank">
                         <span class="chip bg-color">序列标注</span>
+                    </a>
+                    
+                    <a href="/tags/迁移学习/" target="_blank">
+                        <span class="chip bg-color">迁移学习</span>
                     </a>
                     
                     <a href="/tags/AAAI/" target="_blank">
@@ -1281,12 +1281,12 @@ Semi-supervised Lear
                         <span class="chip bg-color">深度学习</span>
                     </a>
                     
-                    <a href="/tags/迁移学习/" target="_blank">
-                        <span class="chip bg-color">迁移学习</span>
-                    </a>
-                    
                     <a href="/tags/序列标注/" target="_blank">
                         <span class="chip bg-color">序列标注</span>
+                    </a>
+                    
+                    <a href="/tags/迁移学习/" target="_blank">
+                        <span class="chip bg-color">迁移学习</span>
                     </a>
                     
                     <a href="/tags/自然语言处理/" target="_blank">
