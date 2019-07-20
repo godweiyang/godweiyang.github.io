@@ -47,6 +47,8 @@
       
         <tags>
             
+            <tag> 自然语言处理 </tag>
+            
             <tag> 神经网络 </tag>
             
             <tag> 深度学习 </tag>
@@ -54,8 +56,6 @@
             <tag> 句法分析 </tag>
             
             <tag> NAACL </tag>
-            
-            <tag> NLP </tag>
             
         </tags>
       
@@ -113,6 +113,8 @@
       
         <tags>
             
+            <tag> 自然语言处理 </tag>
+            
             <tag> 神经网络 </tag>
             
             <tag> 深度学习 </tag>
@@ -120,8 +122,6 @@
             <tag> 句法分析 </tag>
             
             <tag> NAACL </tag>
-            
-            <tag> NLP </tag>
             
         </tags>
       
@@ -642,6 +642,8 @@
       
         <tags>
             
+            <tag> 自然语言处理 </tag>
+            
             <tag> 神经网络 </tag>
             
             <tag> 深度学习 </tag>
@@ -649,8 +651,6 @@
             <tag> 句法分析 </tag>
             
             <tag> NAACL </tag>
-            
-            <tag> NLP </tag>
             
         </tags>
       
@@ -1201,13 +1201,13 @@
       
         <tags>
             
+            <tag> 自然语言处理 </tag>
+            
             <tag> 神经网络 </tag>
             
             <tag> 深度学习 </tag>
             
             <tag> 句法分析 </tag>
-            
-            <tag> NLP </tag>
             
         </tags>
       
@@ -1234,8 +1234,6 @@
             
             <tag> 具体数学 </tag>
             
-            <tag> Concrete Mathematics </tag>
-            
         </tags>
       
     </entry>
@@ -1252,14 +1250,18 @@
       
       <categories>
           
-          <category> 软件 </category>
+          <category> 软件安装与配置 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> 软件安装与配置 </tag>
+            <tag> Dynet </tag>
+            
+            <tag> Cuda </tag>
+            
+            <tag> Ubuntu </tag>
             
         </tags>
       
@@ -1359,13 +1361,13 @@
       
         <tags>
             
+            <tag> 自然语言处理 </tag>
+            
             <tag> 神经网络 </tag>
             
             <tag> 深度学习 </tag>
             
             <tag> 句法分析 </tag>
-            
-            <tag> NLP </tag>
             
         </tags>
       

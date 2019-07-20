@@ -52,7 +52,7 @@
     <link href="https://godweiyang.com/2019/04/20/naacl19-urnng/"/>
     <id>https://godweiyang.com/2019/04/20/naacl19-urnng/</id>
     <published>2019-04-20T08:46:08.000Z</published>
-    <updated>2019-07-19T17:12:44.943Z</updated>
+    <updated>2019-07-20T04:31:43.130Z</updated>
     
     <summary type="html">
     
@@ -69,6 +69,8 @@
       <category term="句法分析" scheme="https://godweiyang.com/categories/%E5%8F%A5%E6%B3%95%E5%88%86%E6%9E%90/"/>
     
     
+      <category term="自然语言处理" scheme="https://godweiyang.com/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/"/>
+    
       <category term="神经网络" scheme="https://godweiyang.com/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/"/>
     
       <category term="深度学习" scheme="https://godweiyang.com/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
@@ -76,8 +78,6 @@
       <category term="句法分析" scheme="https://godweiyang.com/tags/%E5%8F%A5%E6%B3%95%E5%88%86%E6%9E%90/"/>
     
       <category term="NAACL" scheme="https://godweiyang.com/tags/NAACL/"/>
-    
-      <category term="NLP" scheme="https://godweiyang.com/tags/NLP/"/>
     
   </entry>
   
@@ -120,7 +120,7 @@
     <link href="https://godweiyang.com/2019/03/11/naacl19-conparsing/"/>
     <id>https://godweiyang.com/2019/03/11/naacl19-conparsing/</id>
     <published>2019-03-11T09:45:18.000Z</published>
-    <updated>2019-07-19T17:12:44.943Z</updated>
+    <updated>2019-07-20T04:30:53.179Z</updated>
     
     <summary type="html">
     
@@ -137,6 +137,8 @@
       <category term="句法分析" scheme="https://godweiyang.com/categories/%E5%8F%A5%E6%B3%95%E5%88%86%E6%9E%90/"/>
     
     
+      <category term="自然语言处理" scheme="https://godweiyang.com/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/"/>
+    
       <category term="神经网络" scheme="https://godweiyang.com/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/"/>
     
       <category term="深度学习" scheme="https://godweiyang.com/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
@@ -144,8 +146,6 @@
       <category term="句法分析" scheme="https://godweiyang.com/tags/%E5%8F%A5%E6%B3%95%E5%88%86%E6%9E%90/"/>
     
       <category term="NAACL" scheme="https://godweiyang.com/tags/NAACL/"/>
-    
-      <category term="NLP" scheme="https://godweiyang.com/tags/NLP/"/>
     
   </entry>
   
