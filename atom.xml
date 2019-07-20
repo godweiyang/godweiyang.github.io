@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://godweiyang.com/"/>
-  <updated>2019-07-19T17:12:48.605Z</updated>
+  <updated>2019-07-20T04:02:46.231Z</updated>
   <id>https://godweiyang.com/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://godweiyang.com/2019/07/12/algorithm-code-tricks/"/>
     <id>https://godweiyang.com/2019/07/12/algorithm-code-tricks/</id>
     <published>2019-07-12T06:26:27.000Z</published>
-    <updated>2019-07-19T17:12:48.605Z</updated>
+    <updated>2019-07-20T04:02:46.231Z</updated>
     
     <summary type="html">
     
@@ -38,12 +38,12 @@
     
     </summary>
     
-      <category term="算法编程" scheme="https://godweiyang.com/categories/%E7%AE%97%E6%B3%95%E7%BC%96%E7%A8%8B/"/>
+      <category term="程序设计" scheme="https://godweiyang.com/categories/%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/"/>
     
     
       <category term="算法" scheme="https://godweiyang.com/tags/%E7%AE%97%E6%B3%95/"/>
     
-      <category term="奇巧淫技" scheme="https://godweiyang.com/tags/%E5%A5%87%E5%B7%A7%E6%B7%AB%E6%8A%80/"/>
+      <category term="机试" scheme="https://godweiyang.com/tags/%E6%9C%BA%E8%AF%95/"/>
     
   </entry>
   
@@ -69,8 +69,6 @@
       <category term="句法分析" scheme="https://godweiyang.com/categories/%E5%8F%A5%E6%B3%95%E5%88%86%E6%9E%90/"/>
     
     
-      <category term="NLP" scheme="https://godweiyang.com/tags/NLP/"/>
-    
       <category term="神经网络" scheme="https://godweiyang.com/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/"/>
     
       <category term="深度学习" scheme="https://godweiyang.com/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
@@ -79,6 +77,8 @@
     
       <category term="NAACL" scheme="https://godweiyang.com/tags/NAACL/"/>
     
+      <category term="NLP" scheme="https://godweiyang.com/tags/NLP/"/>
+    
   </entry>
   
   <entry>
@@ -86,7 +86,7 @@
     <link href="https://godweiyang.com/2019/03/31/iclr18-prpn/"/>
     <id>https://godweiyang.com/2019/03/31/iclr18-prpn/</id>
     <published>2019-03-31T08:08:35.000Z</published>
-    <updated>2019-07-19T17:12:44.942Z</updated>
+    <updated>2019-07-20T04:17:03.143Z</updated>
     
     <summary type="html">
     
@@ -103,7 +103,7 @@
       <category term="句法分析" scheme="https://godweiyang.com/categories/%E5%8F%A5%E6%B3%95%E5%88%86%E6%9E%90/"/>
     
     
-      <category term="NLP" scheme="https://godweiyang.com/tags/NLP/"/>
+      <category term="自然语言处理" scheme="https://godweiyang.com/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/"/>
     
       <category term="神经网络" scheme="https://godweiyang.com/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/"/>
     
@@ -137,8 +137,6 @@
       <category term="句法分析" scheme="https://godweiyang.com/categories/%E5%8F%A5%E6%B3%95%E5%88%86%E6%9E%90/"/>
     
     
-      <category term="NLP" scheme="https://godweiyang.com/tags/NLP/"/>
-    
       <category term="神经网络" scheme="https://godweiyang.com/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/"/>
     
       <category term="深度学习" scheme="https://godweiyang.com/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
@@ -147,6 +145,8 @@
     
       <category term="NAACL" scheme="https://godweiyang.com/tags/NAACL/"/>
     
+      <category term="NLP" scheme="https://godweiyang.com/tags/NLP/"/>
+    
   </entry>
   
   <entry>
@@ -154,7 +154,7 @@
     <link href="https://godweiyang.com/2019/03/11/conparseqlab/"/>
     <id>https://godweiyang.com/2019/03/11/conparseqlab/</id>
     <published>2019-03-11T09:37:12.000Z</published>
-    <updated>2019-07-19T17:12:44.938Z</updated>
+    <updated>2019-07-20T04:07:07.330Z</updated>
     
     <summary type="html">
     
@@ -171,7 +171,7 @@
       <category term="句法分析" scheme="https://godweiyang.com/categories/%E5%8F%A5%E6%B3%95%E5%88%86%E6%9E%90/"/>
     
     
-      <category term="NLP" scheme="https://godweiyang.com/tags/NLP/"/>
+      <category term="自然语言处理" scheme="https://godweiyang.com/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/"/>
     
       <category term="神经网络" scheme="https://godweiyang.com/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/"/>
     
@@ -188,7 +188,7 @@
     <link href="https://godweiyang.com/2019/01/13/latex-pdf/"/>
     <id>https://godweiyang.com/2019/01/13/latex-pdf/</id>
     <published>2019-01-13T09:34:07.000Z</published>
-    <updated>2019-07-19T17:14:12.175Z</updated>
+    <updated>2019-07-20T04:18:01.660Z</updated>
     
     <summary type="html">
     
@@ -202,10 +202,10 @@
     
     </summary>
     
-      <category term="软件" scheme="https://godweiyang.com/categories/%E8%BD%AF%E4%BB%B6/"/>
+      <category term="软件安装与配置" scheme="https://godweiyang.com/categories/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE/"/>
     
     
-      <category term="软件安装与配置" scheme="https://godweiyang.com/tags/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE/"/>
+      <category term="LaTeX" scheme="https://godweiyang.com/tags/LaTeX/"/>
     
   </entry>
   
@@ -243,7 +243,7 @@
     <link href="https://godweiyang.com/2018/11/07/emnlp18-dynamic-oracle/"/>
     <id>https://godweiyang.com/2018/11/07/emnlp18-dynamic-oracle/</id>
     <published>2018-11-07T11:57:38.000Z</published>
-    <updated>2019-07-19T17:12:44.940Z</updated>
+    <updated>2019-07-20T04:14:26.033Z</updated>
     
     <summary type="html">
     
@@ -260,7 +260,7 @@
       <category term="句法分析" scheme="https://godweiyang.com/categories/%E5%8F%A5%E6%B3%95%E5%88%86%E6%9E%90/"/>
     
     
-      <category term="NLP" scheme="https://godweiyang.com/tags/NLP/"/>
+      <category term="自然语言处理" scheme="https://godweiyang.com/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/"/>
     
       <category term="神经网络" scheme="https://godweiyang.com/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/"/>
     
@@ -277,7 +277,7 @@
     <link href="https://godweiyang.com/2018/11/06/arxiv-18-sr-cp-bottom-up/"/>
     <id>https://godweiyang.com/2018/11/06/arxiv-18-sr-cp-bottom-up/</id>
     <published>2018-11-06T07:16:44.000Z</published>
-    <updated>2019-07-19T17:12:44.937Z</updated>
+    <updated>2019-07-20T04:02:55.222Z</updated>
     
     <summary type="html">
     
@@ -294,7 +294,7 @@
       <category term="句法分析" scheme="https://godweiyang.com/categories/%E5%8F%A5%E6%B3%95%E5%88%86%E6%9E%90/"/>
     
     
-      <category term="NLP" scheme="https://godweiyang.com/tags/NLP/"/>
+      <category term="自然语言处理" scheme="https://godweiyang.com/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/"/>
     
       <category term="神经网络" scheme="https://godweiyang.com/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/"/>
     
@@ -309,7 +309,7 @@
     <link href="https://godweiyang.com/2018/10/25/metamtl/"/>
     <id>https://godweiyang.com/2018/10/25/metamtl/</id>
     <published>2018-10-25T14:50:40.000Z</published>
-    <updated>2019-07-19T17:12:44.942Z</updated>
+    <updated>2019-07-20T04:18:36.240Z</updated>
     
     <summary type="html">
     
@@ -323,10 +323,10 @@
     
     </summary>
     
-      <category term="深度学习" scheme="https://godweiyang.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
+      <category term="元学习" scheme="https://godweiyang.com/categories/%E5%85%83%E5%AD%A6%E4%B9%A0/"/>
     
     
-      <category term="NLP" scheme="https://godweiyang.com/tags/NLP/"/>
+      <category term="自然语言处理" scheme="https://godweiyang.com/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/"/>
     
       <category term="神经网络" scheme="https://godweiyang.com/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/"/>
     
@@ -343,7 +343,7 @@
     <link href="https://godweiyang.com/2018/10/18/coling18-2localmodels/"/>
     <id>https://godweiyang.com/2018/10/18/coling18-2localmodels/</id>
     <published>2018-10-18T08:29:18.000Z</published>
-    <updated>2019-07-19T17:12:44.934Z</updated>
+    <updated>2019-07-20T04:05:01.928Z</updated>
     
     <summary type="html">
     
@@ -360,7 +360,7 @@
       <category term="句法分析" scheme="https://godweiyang.com/categories/%E5%8F%A5%E6%B3%95%E5%88%86%E6%9E%90/"/>
     
     
-      <category term="NLP" scheme="https://godweiyang.com/tags/NLP/"/>
+      <category term="自然语言处理" scheme="https://godweiyang.com/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/"/>
     
       <category term="神经网络" scheme="https://godweiyang.com/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/"/>
     
@@ -377,7 +377,7 @@
     <link href="https://godweiyang.com/2018/10/15/acl18-beamspanparser/"/>
     <id>https://godweiyang.com/2018/10/15/acl18-beamspanparser/</id>
     <published>2018-10-15T14:45:01.000Z</published>
-    <updated>2019-07-19T17:12:44.935Z</updated>
+    <updated>2019-07-20T04:01:51.690Z</updated>
     
     <summary type="html">
     
@@ -396,7 +396,7 @@
     
       <category term="ACL" scheme="https://godweiyang.com/tags/ACL/"/>
     
-      <category term="NLP" scheme="https://godweiyang.com/tags/NLP/"/>
+      <category term="自然语言处理" scheme="https://godweiyang.com/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/"/>
     
       <category term="神经网络" scheme="https://godweiyang.com/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/"/>
     
@@ -411,7 +411,7 @@
     <link href="https://godweiyang.com/2018/10/11/python-advice/"/>
     <id>https://godweiyang.com/2018/10/11/python-advice/</id>
     <published>2018-10-11T12:53:18.000Z</published>
-    <updated>2019-07-19T17:12:44.945Z</updated>
+    <updated>2019-07-20T04:20:59.812Z</updated>
     
     <summary type="html">
     
@@ -428,9 +428,9 @@
       <category term="随笔" scheme="https://godweiyang.com/categories/%E9%9A%8F%E7%AC%94/"/>
     
     
-      <category term="python" scheme="https://godweiyang.com/tags/python/"/>
+      <category term="算法" scheme="https://godweiyang.com/tags/%E7%AE%97%E6%B3%95/"/>
     
-      <category term="编程学习" scheme="https://godweiyang.com/tags/%E7%BC%96%E7%A8%8B%E5%AD%A6%E4%B9%A0/"/>
+      <category term="Python" scheme="https://godweiyang.com/tags/Python/"/>
     
   </entry>
   
@@ -439,7 +439,7 @@
     <link href="https://godweiyang.com/2018/09/26/constituent-parsing-summary/"/>
     <id>https://godweiyang.com/2018/09/26/constituent-parsing-summary/</id>
     <published>2018-09-26T04:53:10.000Z</published>
-    <updated>2019-07-19T17:12:44.939Z</updated>
+    <updated>2019-07-20T04:07:15.809Z</updated>
     
     <summary type="html">
     
@@ -456,13 +456,13 @@
       <category term="句法分析" scheme="https://godweiyang.com/categories/%E5%8F%A5%E6%B3%95%E5%88%86%E6%9E%90/"/>
     
     
-      <category term="NLP" scheme="https://godweiyang.com/tags/NLP/"/>
-    
       <category term="神经网络" scheme="https://godweiyang.com/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/"/>
     
       <category term="深度学习" scheme="https://godweiyang.com/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
     
       <category term="句法分析" scheme="https://godweiyang.com/tags/%E5%8F%A5%E6%B3%95%E5%88%86%E6%9E%90/"/>
+    
+      <category term="NLP" scheme="https://godweiyang.com/tags/NLP/"/>
     
   </entry>
   
@@ -471,7 +471,7 @@
     <link href="https://godweiyang.com/2018/09/02/rnng/"/>
     <id>https://godweiyang.com/2018/09/02/rnng/</id>
     <published>2018-09-02T14:58:35.000Z</published>
-    <updated>2019-07-19T17:12:44.945Z</updated>
+    <updated>2019-07-20T04:21:12.106Z</updated>
     
     <summary type="html">
     
@@ -488,7 +488,7 @@
       <category term="句法分析" scheme="https://godweiyang.com/categories/%E5%8F%A5%E6%B3%95%E5%88%86%E6%9E%90/"/>
     
     
-      <category term="NLP" scheme="https://godweiyang.com/tags/NLP/"/>
+      <category term="自然语言处理" scheme="https://godweiyang.com/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/"/>
     
       <category term="神经网络" scheme="https://godweiyang.com/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/"/>
     
@@ -505,7 +505,7 @@
     <link href="https://godweiyang.com/2018/08/28/tacl17-conparsing/"/>
     <id>https://godweiyang.com/2018/08/28/tacl17-conparsing/</id>
     <published>2018-08-27T16:00:08.000Z</published>
-    <updated>2019-07-19T17:12:44.945Z</updated>
+    <updated>2019-07-20T04:22:01.104Z</updated>
     
     <summary type="html">
     
@@ -522,7 +522,7 @@
       <category term="句法分析" scheme="https://godweiyang.com/categories/%E5%8F%A5%E6%B3%95%E5%88%86%E6%9E%90/"/>
     
     
-      <category term="NLP" scheme="https://godweiyang.com/tags/NLP/"/>
+      <category term="自然语言处理" scheme="https://godweiyang.com/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/"/>
     
       <category term="神经网络" scheme="https://godweiyang.com/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/"/>
     
@@ -569,7 +569,7 @@
     <link href="https://godweiyang.com/2018/08/03/dynamic-oracles/"/>
     <id>https://godweiyang.com/2018/08/03/dynamic-oracles/</id>
     <published>2018-08-03T08:20:02.000Z</published>
-    <updated>2019-07-19T17:12:44.941Z</updated>
+    <updated>2019-07-20T04:13:22.641Z</updated>
     
     <summary type="html">
     
@@ -586,7 +586,7 @@
       <category term="句法分析" scheme="https://godweiyang.com/categories/%E5%8F%A5%E6%B3%95%E5%88%86%E6%9E%90/"/>
     
     
-      <category term="NLP" scheme="https://godweiyang.com/tags/NLP/"/>
+      <category term="自然语言处理" scheme="https://godweiyang.com/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/"/>
     
       <category term="神经网络" scheme="https://godweiyang.com/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/"/>
     
@@ -601,7 +601,7 @@
     <link href="https://godweiyang.com/2018/07/19/conparsing-syntactic-distance/"/>
     <id>https://godweiyang.com/2018/07/19/conparsing-syntactic-distance/</id>
     <published>2018-07-19T15:57:03.000Z</published>
-    <updated>2019-07-19T17:12:44.939Z</updated>
+    <updated>2019-07-20T04:07:11.023Z</updated>
     
     <summary type="html">
     
@@ -620,7 +620,7 @@
     
       <category term="ACL" scheme="https://godweiyang.com/tags/ACL/"/>
     
-      <category term="NLP" scheme="https://godweiyang.com/tags/NLP/"/>
+      <category term="自然语言处理" scheme="https://godweiyang.com/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/"/>
     
       <category term="神经网络" scheme="https://godweiyang.com/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/"/>
     
@@ -635,7 +635,7 @@
     <link href="https://godweiyang.com/2018/07/04/acl18-attconparsing/"/>
     <id>https://godweiyang.com/2018/07/04/acl18-attconparsing/</id>
     <published>2018-07-04T14:22:06.000Z</published>
-    <updated>2019-07-19T17:12:44.934Z</updated>
+    <updated>2019-07-20T04:01:46.105Z</updated>
     
     <summary type="html">
     
@@ -654,7 +654,7 @@
     
       <category term="ACL" scheme="https://godweiyang.com/tags/ACL/"/>
     
-      <category term="NLP" scheme="https://godweiyang.com/tags/NLP/"/>
+      <category term="自然语言处理" scheme="https://godweiyang.com/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/"/>
     
       <category term="神经网络" scheme="https://godweiyang.com/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/"/>
     

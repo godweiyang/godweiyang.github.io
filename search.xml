@@ -13,7 +13,7 @@
       
       <categories>
           
-          <category> 算法编程 </category>
+          <category> 程序设计 </category>
           
       </categories>
       
@@ -22,7 +22,7 @@
             
             <tag> 算法 </tag>
             
-            <tag> 奇巧淫技 </tag>
+            <tag> 机试 </tag>
             
         </tags>
       
@@ -47,8 +47,6 @@
       
         <tags>
             
-            <tag> NLP </tag>
-            
             <tag> 神经网络 </tag>
             
             <tag> 深度学习 </tag>
@@ -56,6 +54,8 @@
             <tag> 句法分析 </tag>
             
             <tag> NAACL </tag>
+            
+            <tag> NLP </tag>
             
         </tags>
       
@@ -80,7 +80,7 @@
       
         <tags>
             
-            <tag> NLP </tag>
+            <tag> 自然语言处理 </tag>
             
             <tag> 神经网络 </tag>
             
@@ -113,8 +113,6 @@
       
         <tags>
             
-            <tag> NLP </tag>
-            
             <tag> 神经网络 </tag>
             
             <tag> 深度学习 </tag>
@@ -122,6 +120,8 @@
             <tag> 句法分析 </tag>
             
             <tag> NAACL </tag>
+            
+            <tag> NLP </tag>
             
         </tags>
       
@@ -146,7 +146,7 @@
       
         <tags>
             
-            <tag> NLP </tag>
+            <tag> 自然语言处理 </tag>
             
             <tag> 神经网络 </tag>
             
@@ -172,14 +172,14 @@
       
       <categories>
           
-          <category> 软件 </category>
+          <category> 软件安装与配置 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> 软件安装与配置 </tag>
+            <tag> LaTeX </tag>
             
         </tags>
       
@@ -229,7 +229,7 @@
       
         <tags>
             
-            <tag> NLP </tag>
+            <tag> 自然语言处理 </tag>
             
             <tag> 神经网络 </tag>
             
@@ -262,7 +262,7 @@
       
         <tags>
             
-            <tag> NLP </tag>
+            <tag> 自然语言处理 </tag>
             
             <tag> 神经网络 </tag>
             
@@ -286,14 +286,14 @@
       
       <categories>
           
-          <category> 深度学习 </category>
+          <category> 元学习 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> NLP </tag>
+            <tag> 自然语言处理 </tag>
             
             <tag> 神经网络 </tag>
             
@@ -326,7 +326,7 @@
       
         <tags>
             
-            <tag> NLP </tag>
+            <tag> 自然语言处理 </tag>
             
             <tag> 神经网络 </tag>
             
@@ -361,7 +361,7 @@
             
             <tag> ACL </tag>
             
-            <tag> NLP </tag>
+            <tag> 自然语言处理 </tag>
             
             <tag> 神经网络 </tag>
             
@@ -392,9 +392,9 @@
       
         <tags>
             
-            <tag> python </tag>
+            <tag> 算法 </tag>
             
-            <tag> 编程学习 </tag>
+            <tag> Python </tag>
             
         </tags>
       
@@ -419,13 +419,13 @@
       
         <tags>
             
-            <tag> NLP </tag>
-            
             <tag> 神经网络 </tag>
             
             <tag> 深度学习 </tag>
             
             <tag> 句法分析 </tag>
+            
+            <tag> NLP </tag>
             
         </tags>
       
@@ -450,7 +450,7 @@
       
         <tags>
             
-            <tag> NLP </tag>
+            <tag> 自然语言处理 </tag>
             
             <tag> 神经网络 </tag>
             
@@ -483,7 +483,7 @@
       
         <tags>
             
-            <tag> NLP </tag>
+            <tag> 自然语言处理 </tag>
             
             <tag> 神经网络 </tag>
             
@@ -545,7 +545,7 @@
       
         <tags>
             
-            <tag> NLP </tag>
+            <tag> 自然语言处理 </tag>
             
             <tag> 神经网络 </tag>
             
@@ -578,7 +578,7 @@
             
             <tag> ACL </tag>
             
-            <tag> NLP </tag>
+            <tag> 自然语言处理 </tag>
             
             <tag> 神经网络 </tag>
             
@@ -611,7 +611,7 @@
             
             <tag> ACL </tag>
             
-            <tag> NLP </tag>
+            <tag> 自然语言处理 </tag>
             
             <tag> 神经网络 </tag>
             
@@ -642,8 +642,6 @@
       
         <tags>
             
-            <tag> NLP </tag>
-            
             <tag> 神经网络 </tag>
             
             <tag> 深度学习 </tag>
@@ -651,6 +649,8 @@
             <tag> 句法分析 </tag>
             
             <tag> NAACL </tag>
+            
+            <tag> NLP </tag>
             
         </tags>
       
@@ -677,7 +677,7 @@
             
             <tag> ACL </tag>
             
-            <tag> NLP </tag>
+            <tag> 自然语言处理 </tag>
             
             <tag> 神经网络 </tag>
             
@@ -701,12 +701,14 @@
       
       <categories>
           
-          <category> 算法编程 </category>
+          <category> 程序设计 </category>
           
       </categories>
       
       
         <tags>
+            
+            <tag> 算法 </tag>
             
             <tag> EOJ </tag>
             
@@ -726,12 +728,14 @@
       
       <categories>
           
-          <category> 算法编程 </category>
+          <category> 程序设计 </category>
           
       </categories>
       
       
         <tags>
+            
+            <tag> 算法 </tag>
             
             <tag> EOJ </tag>
             
@@ -760,8 +764,6 @@
             
             <tag> 具体数学 </tag>
             
-            <tag> Concrete Mathematics </tag>
-            
         </tags>
       
     </entry>
@@ -786,8 +788,6 @@
         <tags>
             
             <tag> 具体数学 </tag>
-            
-            <tag> Concrete Mathematics </tag>
             
         </tags>
       
@@ -814,8 +814,6 @@
             
             <tag> 具体数学 </tag>
             
-            <tag> Concrete Mathematics </tag>
-            
         </tags>
       
     </entry>
@@ -840,8 +838,6 @@
         <tags>
             
             <tag> 具体数学 </tag>
-            
-            <tag> Concrete Mathematics </tag>
             
         </tags>
       
@@ -868,8 +864,6 @@
             
             <tag> 具体数学 </tag>
             
-            <tag> Concrete Mathematics </tag>
-            
         </tags>
       
     </entry>
@@ -895,8 +889,6 @@
             
             <tag> 具体数学 </tag>
             
-            <tag> Concrete Mathematics </tag>
-            
         </tags>
       
     </entry>
@@ -920,7 +912,7 @@
       
         <tags>
             
-            <tag> NLP </tag>
+            <tag> 自然语言处理 </tag>
             
             <tag> 神经网络 </tag>
             
@@ -955,8 +947,6 @@
             
             <tag> 具体数学 </tag>
             
-            <tag> Concrete Mathematics </tag>
-            
         </tags>
       
     </entry>
@@ -982,8 +972,6 @@
             
             <tag> 具体数学 </tag>
             
-            <tag> Concrete Mathematics </tag>
-            
         </tags>
       
     </entry>
@@ -1007,11 +995,9 @@
       
         <tags>
             
-            <tag> NLP </tag>
+            <tag> 自然语言处理 </tag>
             
             <tag> 句法分析 </tag>
-            
-            <tag> 自然语言处理 </tag>
             
         </tags>
       
@@ -1038,8 +1024,6 @@
             
             <tag> 具体数学 </tag>
             
-            <tag> Concrete Mathematics </tag>
-            
         </tags>
       
     </entry>
@@ -1056,7 +1040,7 @@
       
       <categories>
           
-          <category> 软件 </category>
+          <category> 软件安装与配置 </category>
           
       </categories>
       
@@ -1094,8 +1078,6 @@
             
             <tag> 具体数学 </tag>
             
-            <tag> Concrete Mathematics </tag>
-            
         </tags>
       
     </entry>
@@ -1120,8 +1102,6 @@
         <tags>
             
             <tag> 具体数学 </tag>
-            
-            <tag> Concrete Mathematics </tag>
             
         </tags>
       
@@ -1148,8 +1128,6 @@
             
             <tag> 具体数学 </tag>
             
-            <tag> Concrete Mathematics </tag>
-            
         </tags>
       
     </entry>
@@ -1174,8 +1152,6 @@
         <tags>
             
             <tag> 具体数学 </tag>
-            
-            <tag> Concrete Mathematics </tag>
             
         </tags>
       
@@ -1202,8 +1178,6 @@
             
             <tag> 具体数学 </tag>
             
-            <tag> Concrete Mathematics </tag>
-            
         </tags>
       
     </entry>
@@ -1227,13 +1201,13 @@
       
         <tags>
             
-            <tag> NLP </tag>
-            
             <tag> 神经网络 </tag>
             
             <tag> 深度学习 </tag>
             
             <tag> 句法分析 </tag>
+            
+            <tag> NLP </tag>
             
         </tags>
       
@@ -1312,8 +1286,6 @@
             
             <tag> 具体数学 </tag>
             
-            <tag> Concrete Mathematics </tag>
-            
         </tags>
       
     </entry>
@@ -1338,37 +1310,6 @@
         <tags>
             
             <tag> 具体数学 </tag>
-            
-            <tag> Concrete Mathematics </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>ECNU自然语言处理与深度学习2018春季讨论班开讲啦</title>
-      <link href="/2018/03/04/cs224n-introduction/"/>
-      <url>/2018/03/04/cs224n-introduction/</url>
-      
-        <content type="html"><![CDATA[<div align="middle"><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=437387277&auto=1&height=66"></iframe></div><p>讨论班详细安排在github上面，地址:<a href="https://github.com/godweiyang/ECNU18_Spring_Seminar" target="_blank" rel="noopener">传送门</a>。<br>主要就是学习斯坦福CS224n课程，穿插学习深度学习相关知识，争取一人能有机会讲一次。</p><p>下面是具体安排。</p><h1 id="ECNU18-Spring-Seminar"><a href="#ECNU18-Spring-Seminar" class="headerlink" title="ECNU18_Spring_Seminar"></a>ECNU18_Spring_Seminar</h1><p>ECNU NLP group learns CS224n and deep learning in the form of seminars in the 2018 spring.</p><h2 id="Seminar-Participants"><a href="#Seminar-Participants" class="headerlink" title="Seminar Participants"></a>Seminar Participants</h2><p>纪焘、杜雨沛、韦阳、黄子寅、郑淇、姚月坤</p><p>剩下的参加的同学自行添加^_^</p><h2 id="Venue"><a href="#Venue" class="headerlink" title="Venue"></a>Venue</h2><p>理科大楼B914</p><h2 id="Introduce-CS224n-and-Deep-Learning"><a href="#Introduce-CS224n-and-Deep-Learning" class="headerlink" title="Introduce CS224n and Deep Learning"></a>Introduce CS224n and Deep Learning</h2><h4 id="Lecture-Videos"><a href="#Lecture-Videos" class="headerlink" title="Lecture Videos"></a>Lecture Videos</h4><ul><li><a href="https://www.youtube.com/playlist?list=PL3FW7Lu3i5Jsnh1rnUwq_TcylNr7EkRe6" target="_blank" rel="noopener">YouTube</a></li><li><a href="http://space.bilibili.com/23852932#!/channel/detail?cid=11177" target="_blank" rel="noopener">Bilibili</a></li></ul><h4 id="Lecture-Materials"><a href="#Lecture-Materials" class="headerlink" title="Lecture Materials"></a>Lecture Materials</h4><p><a href="http://web.stanford.edu/class/cs224n/syllabus.html" target="_blank" rel="noopener">CS224n: Natural Language Processing with Deep Learning</a></p><h4 id="Course-Notes"><a href="#Course-Notes" class="headerlink" title="Course Notes"></a>Course Notes</h4><p><a href="http://www.hankcs.com/tag/cs224n/" target="_blank" rel="noopener">CS224n - 码农场</a></p><h4 id="Deep-Learning-Books"><a href="#Deep-Learning-Books" class="headerlink" title="Deep Learning Books"></a>Deep Learning Books</h4><ul><li><a href="https://github.com/exacity/deeplearningbook-chinese" target="_blank" rel="noopener">PDF(Chinese Edition)</a></li><li><a href="http://www.deeplearningbook.org/" target="_blank" rel="noopener">PDF</a></li></ul><h4 id="Lecture-List"><a href="#Lecture-List" class="headerlink" title="Lecture List"></a>Lecture List</h4><table><thead><tr><th align="center">Event</th><th align="center">Date</th><th align="left">Description</th><th align="left">描述</th><th align="center">Speaker</th></tr></thead><tbody><tr><td align="center">Lecture1</td><td align="center">3.7</td><td align="left">Introduction to NLP and Deep Learning</td><td align="left">介绍自然语言和深度学习</td><td align="center">尧舜禹</td></tr><tr><td align="center">Lecture2</td><td align="center">3.14</td><td align="left">Word Vector Representations: word2vec<br>Advanced Word Vector Representations</td><td align="left">Word2Vec词向量表示<br>高级词向量表示</td><td align="center">杜雨沛</td></tr><tr><td align="center">Lecture3</td><td align="center">3.21</td><td align="left">Word Window Classification and Neural Networks<br>Backpropagation</td><td align="left">词窗分类与神经网络<br>反向传播</td><td align="center"></td></tr><tr><td align="center">Lecture4</td><td align="center">3.28</td><td align="left">Dependency Parsing</td><td align="left">依存句法分析</td><td align="center"></td></tr><tr><td align="center"><strong>Assignment #1</strong></td><td align="center">4.4</td><td align="left"></td><td align="left"></td><td align="center"></td></tr><tr><td align="center">Lecture5</td><td align="center">4.11</td><td align="left">Recurrent Neural Networks and Language Models</td><td align="left">循环神经网络与语言模型</td><td align="center"></td></tr><tr><td align="center">Lecture6</td><td align="center">4.18</td><td align="left">Machine translation and advanced recurrent LSTMs and GRUs</td><td align="left">机器翻译与高级RNN</td><td align="center">黄子寅</td></tr><tr><td align="center">Lecture7</td><td align="center">4.25</td><td align="left">Neural Machine Translation and Models with Attention</td><td align="left">NMT与注意力模型</td><td align="center"></td></tr><tr><td align="center">Lecture8</td><td align="center">5.2</td><td align="left">Gated recurrent units and further topics in NMT</td><td align="left">GRU与NMT进阶</td><td align="center"></td></tr><tr><td align="center">Lecture9</td><td align="center">5.9</td><td align="left">End-to-end models for Speech Processing</td><td align="left">端到端语音处理</td><td align="center"></td></tr><tr><td align="center">Lecture10</td><td align="center">5.16</td><td align="left">Convolutional Neural Networks</td><td align="left">卷积神经网络</td><td align="center"></td></tr><tr><td align="center"><strong>Assignment #2</strong></td><td align="center">5.23</td><td align="left"></td><td align="left"></td><td align="center"></td></tr><tr><td align="center">Lecture11</td><td align="center">5.30</td><td align="left">Tree Recursive Neural Networks and Constituency Parsing</td><td align="left">树状RNN与短语句法分析</td><td align="center">韦阳</td></tr><tr><td align="center">Lecture12</td><td align="center">6.6</td><td align="left">Dynamic Neural Networks for Question Answering</td><td align="left">动态神经网络QA</td><td align="center">郑淇</td></tr><tr><td align="center">Lecture13</td><td align="center">6.13</td><td align="left">Issues in NLP and Possible Architectures for NLP</td><td align="left">NLP中的问题与可能的解决框架</td><td align="center"></td></tr><tr><td align="center">Lecture14</td><td align="center">6.20</td><td align="left">Tackling the Limits of Deep Learning for NLP</td><td align="left">聚焦深度学习在NLP上的局限性</td><td align="center"></td></tr><tr><td align="center"><strong>Assignment #3</strong></td><td align="center">6.27</td><td align="left"></td><td align="left"></td><td align="center"></td></tr><tr><td align="center"><strong>Assignment #4</strong></td><td align="center">7.4</td><td align="left"></td><td align="left"></td><td align="center"></td></tr></tbody></table>]]></content>
-      
-      
-      <categories>
-          
-          <category> NLP </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> NLP </tag>
-            
-            <tag> 深度学习 </tag>
-            
-            <tag> 自然语言处理 </tag>
             
         </tags>
       
@@ -1395,8 +1336,6 @@
             
             <tag> 具体数学 </tag>
             
-            <tag> Concrete Mathematics </tag>
-            
         </tags>
       
     </entry>
@@ -1420,13 +1359,13 @@
       
         <tags>
             
-            <tag> NLP </tag>
-            
             <tag> 神经网络 </tag>
             
             <tag> 深度学习 </tag>
             
             <tag> 句法分析 </tag>
+            
+            <tag> NLP </tag>
             
         </tags>
       
@@ -1469,22 +1408,20 @@
       
       <categories>
           
-          <category> 树形LSTM </category>
+          <category> 深度学习 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> NLP </tag>
+            <tag> 自然语言处理 </tag>
             
             <tag> 神经网络 </tag>
             
             <tag> 深度学习 </tag>
             
             <tag> NAACL </tag>
-            
-            <tag> LSTM </tag>
             
         </tags>
       
@@ -1502,22 +1439,20 @@
       
       <categories>
           
-          <category> 树形LSTM </category>
+          <category> 深度学习 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> NLP </tag>
+            <tag> 自然语言处理 </tag>
             
             <tag> 神经网络 </tag>
             
             <tag> 深度学习 </tag>
             
             <tag> TACL </tag>
-            
-            <tag> LSTM </tag>
             
         </tags>
       
@@ -1544,7 +1479,7 @@
             
             <tag> ACL </tag>
             
-            <tag> NLP </tag>
+            <tag> 自然语言处理 </tag>
             
             <tag> 神经网络 </tag>
             
@@ -1575,15 +1510,15 @@
       
         <tags>
             
-            <tag> NLP </tag>
+            <tag> 自然语言处理 </tag>
             
             <tag> 神经网络 </tag>
             
             <tag> 深度学习 </tag>
             
-            <tag> 迁移学习 </tag>
-            
             <tag> 序列标注 </tag>
+            
+            <tag> 迁移学习 </tag>
             
             <tag> AAAI </tag>
             
@@ -1612,13 +1547,13 @@
             
             <tag> ACL </tag>
             
-            <tag> NLP </tag>
+            <tag> 自然语言处理 </tag>
             
             <tag> 神经网络 </tag>
             
             <tag> 深度学习 </tag>
             
-            <tag> dynet </tag>
+            <tag> Dynet </tag>
             
         </tags>
       
@@ -1643,15 +1578,15 @@
       
         <tags>
             
+            <tag> 自然语言处理 </tag>
+            
             <tag> 神经网络 </tag>
             
             <tag> 深度学习 </tag>
             
-            <tag> 迁移学习 </tag>
-            
             <tag> 序列标注 </tag>
             
-            <tag> 自然语言处理 </tag>
+            <tag> 迁移学习 </tag>
             
             <tag> 半监督学习 </tag>
             
@@ -1707,15 +1642,15 @@
       
         <tags>
             
-            <tag> NLP </tag>
+            <tag> 自然语言处理 </tag>
             
             <tag> 神经网络 </tag>
             
             <tag> 深度学习 </tag>
             
-            <tag> EMNLP </tag>
-            
             <tag> 序列标注 </tag>
+            
+            <tag> EMNLP </tag>
             
         </tags>
       
@@ -1740,17 +1675,17 @@
       
         <tags>
             
-            <tag> NLP </tag>
+            <tag> 自然语言处理 </tag>
             
             <tag> 神经网络 </tag>
             
             <tag> 深度学习 </tag>
             
+            <tag> 序列标注 </tag>
+            
             <tag> EMNLP </tag>
             
             <tag> 迁移学习 </tag>
-            
-            <tag> 序列标注 </tag>
             
         </tags>
       
@@ -1775,15 +1710,15 @@
       
         <tags>
             
+            <tag> 自然语言处理 </tag>
+            
             <tag> 神经网络 </tag>
             
             <tag> 深度学习 </tag>
             
-            <tag> 迁移学习 </tag>
-            
             <tag> 序列标注 </tag>
             
-            <tag> 自然语言处理 </tag>
+            <tag> 迁移学习 </tag>
             
             <tag> 半监督学习 </tag>
             
@@ -1803,7 +1738,7 @@
       
       <categories>
           
-          <category> 软件 </category>
+          <category> 程序设计 </category>
           
       </categories>
       
@@ -1815,6 +1750,8 @@
             <tag> 编译器 </tag>
             
             <tag> C# </tag>
+            
+            <tag> C++ </tag>
             
         </tags>
       
@@ -1839,11 +1776,13 @@
       
         <tags>
             
-            <tag> NLP </tag>
+            <tag> 自然语言处理 </tag>
             
             <tag> 神经网络 </tag>
             
             <tag> 深度学习 </tag>
+            
+            <tag> 序列标注 </tag>
             
             <tag> ICLR </tag>
             
@@ -1872,11 +1811,13 @@
             
             <tag> ACL </tag>
             
-            <tag> NLP </tag>
+            <tag> 自然语言处理 </tag>
             
             <tag> 神经网络 </tag>
             
             <tag> 深度学习 </tag>
+            
+            <tag> 序列标注 </tag>
             
         </tags>
       
@@ -1903,11 +1844,13 @@
             
             <tag> ACL </tag>
             
-            <tag> NLP </tag>
+            <tag> 自然语言处理 </tag>
             
             <tag> 神经网络 </tag>
             
             <tag> 深度学习 </tag>
+            
+            <tag> 序列标注 </tag>
             
         </tags>
       
@@ -1925,16 +1868,14 @@
       
       <categories>
           
-          <category> 软件 </category>
+          <category> 软件安装与配置 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> 软件安装与配置 </tag>
-            
-            <tag> Sublime Text </tag>
+            <tag> Sublime </tag>
             
         </tags>
       
@@ -2069,11 +2010,13 @@
             
             <tag> ACL </tag>
             
-            <tag> NLP </tag>
+            <tag> 自然语言处理 </tag>
             
             <tag> 神经网络 </tag>
             
             <tag> 深度学习 </tag>
+            
+            <tag> 问答系统 </tag>
             
         </tags>
       
@@ -2141,12 +2084,14 @@
       
       <categories>
           
-          <category> 算法编程 </category>
+          <category> 程序设计 </category>
           
       </categories>
       
       
         <tags>
+            
+            <tag> 算法 </tag>
             
             <tag> EOJ </tag>
             
