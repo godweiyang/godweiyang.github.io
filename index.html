@@ -486,38 +486,42 @@ $(function () {
                     
 
                     
-                        
 
-<link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
-<div class="music-player">
+                    
+                        <link rel="stylesheet" href="/libs/dplayer/DPlayer.min.css">
+<div class="video-player">
+    
+    <div class="title center-align">
+        <i class="fa fa-video-camera"></i>&nbsp;&nbsp;邓紫棋 - 差不多姑娘
+    </div>
     
     <div class="row">
         <div class="col l8 offset-l2 m10 offset-m1 s12">
-            <div id="aplayer" class="music"></div>
+            <div id="dplayer" class="dplayer-video"
+                    ></div>
         </div>
     </div>
 </div>
 
-<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="/libs/dplayer/DPlayer.min.js"></script>
 <script>
-$(function () {
-    new APlayer({
-        container: document.getElementById('aplayer'),
-        fixed: 'false' === 'true',
-        autoplay: 'true' === 'true',
-        theme: '#542674',
-        loop: 'all',
-        order: 'list',
-        preload: 'auto',
-        volume: Number('0.7'),
-        listFolded: 'false' === 'true',
-        listMaxHeight: '',
-        audio: JSON.parse('[{"name":"来自天堂的魔鬼","artist":"邓紫棋","url":"/medias/music/tiantangdemogui.mp3","cover":"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1563717347893&di=110c7c670d70e490135b581cbfd73e0d&imgtype=0&src=http%3A%2F%2Fs1.sinaimg.cn%2Fmw690%2F00334B5xgy6WL0FCP0A10%26690"},{"name":"倒数","artist":"邓紫棋","url":"/medias/music/daoshu.mp3","cover":"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1563568131238&di=23ae51dda700bd4e3b624f66af1289f7&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201808%2F11%2F20180811021949_fVEST.jpeg"},{"name":"一路向北","artist":"周杰伦","url":"/medias/music/yiluxiangbei.mp3","cover":"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1563566810433&di=68b80a762a497648670ef0df46ee8f57&imgtype=0&src=http%3A%2F%2F03imgmini.eastday.com%2Fmobile%2F20180918%2F20180918205448_99dfb333ca34518cb96823defa4c68c9_1.jpeg"}]')
+    $(function () {
+        new DPlayer({
+            container: document.getElementById('dplayer'),
+            autoplay: 'true' === 'true',
+            theme: '#42b983',
+            loop: 'false' === 'true',
+            lang: 'zh-CN' === 'zh-CN' ? 'zh-cn' : 'en',
+            preload: 'auto',
+            volume: Number('0.7'),
+            video: {
+                url: '/medias/video/chabuduoguniang.mp4',
+                pic: '',
+                thumbnails: ''
+            }
+        });
     });
-});
 </script>
-                    
-
                     
 
                     <div id="recommend-sections" class="recommend">
