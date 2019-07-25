@@ -737,18 +737,6 @@ article .article-content .publish-category {
     padding-left: 5px;
 }
 
-article .article-content .publish-author {
-    float: right;
-}
-
-.publish-author .icon-author {
-    padding-left: 10px;
-}
-
-.article-content .publish-author .post-author {
-    padding-left: 5px;
-}
-
 article .card .card-action {
     padding: 10px 15px 10px 18px;
     border-radius: 0 0 8px 8px !important;
