@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://godweiyang.com/2018/04/13/hexo-blog/</loc>
-    <lastmod>2019-07-21</lastmod>
+    <loc>https://godweiyang.com/2019/07/25/diora/</loc>
+    <lastmod>2019-07-25</lastmod>
   </url>  <url>
-    <loc>https://godweiyang.com/2018/12/31/2018-conclusion/</loc>
-    <lastmod>2019-07-20</lastmod>
+    <loc>https://godweiyang.com/2017/10/02/sublime/</loc>
+    <lastmod>2019-07-25</lastmod>
+  </url>  <url>
+    <loc>https://godweiyang.com/2018/10/11/python-advice/</loc>
+    <lastmod>2019-07-25</lastmod>
+  </url>  <url>
+    <loc>https://godweiyang.com/2018/04/13/hexo-blog/</loc>
+    <lastmod>2019-07-25</lastmod>
   </url>  <url>
     <loc>https://godweiyang.com/2019/07/12/algorithm-code-tricks/</loc>
+    <lastmod>2019-07-25</lastmod>
+  </url>  <url>
+    <loc>https://godweiyang.com/2018/12/31/2018-conclusion/</loc>
     <lastmod>2019-07-20</lastmod>
   </url>  <url>
     <loc>https://godweiyang.com/2018/02/26/biyelunwen/</loc>
@@ -40,13 +49,7 @@
     <loc>https://godweiyang.com/2017/11/16/sw-compiler/</loc>
     <lastmod>2019-07-20</lastmod>
   </url>  <url>
-    <loc>https://godweiyang.com/2017/10/02/sublime/</loc>
-    <lastmod>2019-07-20</lastmod>
-  </url>  <url>
     <loc>https://godweiyang.com/2018/09/02/rnng/</loc>
-    <lastmod>2019-07-20</lastmod>
-  </url>  <url>
-    <loc>https://godweiyang.com/2018/10/11/python-advice/</loc>
     <lastmod>2019-07-20</lastmod>
   </url>  <url>
     <loc>https://godweiyang.com/2018/01/01/pos-lm/</loc>
@@ -196,7 +199,7 @@
     <loc>https://godweiyang.com/2017/12/30/text-minning-ppt/</loc>
     <lastmod>2019-07-19</lastmod>
   </url>  <url>
-    <loc>https://godweiyang.com/2017/09/19/dl2/</loc>
+    <loc>https://godweiyang.com/2017/09/20/dlhw1/</loc>
     <lastmod>2019-07-19</lastmod>
   </url>  <url>
     <loc>https://godweiyang.com/2018/08/05/k-bandit/</loc>
@@ -205,7 +208,7 @@
     <loc>https://godweiyang.com/2017/09/19/dl1/</loc>
     <lastmod>2019-07-19</lastmod>
   </url>  <url>
-    <loc>https://godweiyang.com/2017/09/20/dlhw1/</loc>
+    <loc>https://godweiyang.com/2017/09/19/dl2/</loc>
     <lastmod>2019-07-19</lastmod>
   </url>  <url>
     <loc>https://godweiyang.com/2017/09/19/recommend/</loc>

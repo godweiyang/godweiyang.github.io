@@ -725,6 +725,10 @@ article .article-content .publish-author {
     float: right;
 }
 
+article .article-content .publish-category {
+    float: right;
+}
+
 .publish-date .icon-date {
     padding-right: 5px;
 }
@@ -891,6 +895,10 @@ article .article-tags .chip {
 }
 
 #artDetail .post-info .post-date {
+    color: #525f7f;
+}
+
+#artDetail .post-info .post-author {
     color: #525f7f;
 }
 

@@ -486,42 +486,38 @@ $(function () {
                     
 
                     
-
                     
-                        <link rel="stylesheet" href="/libs/dplayer/DPlayer.min.css">
-<div class="video-player">
-    
-    <div class="title center-align">
-        <i class="fa fa-video-camera"></i>&nbsp;&nbsp;邓紫棋 - 差不多姑娘
-    </div>
+
+<link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<div class="music-player">
     
     <div class="row">
         <div class="col l8 offset-l2 m10 offset-m1 s12">
-            <div id="dplayer" class="dplayer-video"
-                    ></div>
+            <div id="aplayer" class="music"></div>
         </div>
     </div>
 </div>
 
-<script src="/libs/dplayer/DPlayer.min.js"></script>
+<script src="/libs/aplayer/APlayer.min.js"></script>
 <script>
-    $(function () {
-        new DPlayer({
-            container: document.getElementById('dplayer'),
-            autoplay: 'true' === 'true',
-            theme: '#42b983',
-            loop: 'true' === 'true',
-            lang: 'zh-CN' === 'zh-CN' ? 'zh-cn' : 'en',
-            preload: 'auto',
-            volume: Number('0.7'),
-            video: {
-                url: '/medias/video/chabuduoguniang.mp4',
-                pic: '',
-                thumbnails: ''
-            }
-        });
+$(function () {
+    new APlayer({
+        container: document.getElementById('aplayer'),
+        fixed: 'false' === 'true',
+        autoplay: 'true' === 'true',
+        theme: '#542674',
+        loop: 'all',
+        order: 'list',
+        preload: 'auto',
+        volume: Number('0.7'),
+        listFolded: 'false' === 'true',
+        listMaxHeight: '',
+        audio: JSON.parse('[{"name":"来自天堂的魔鬼","artist":"邓紫棋","url":"/medias/music/tiantangdemogui.mp3","cover":"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1563717347893&di=110c7c670d70e490135b581cbfd73e0d&imgtype=0&src=http%3A%2F%2Fs1.sinaimg.cn%2Fmw690%2F00334B5xgy6WL0FCP0A10%26690"},{"name":"倒数","artist":"邓紫棋","url":"/medias/music/daoshu.mp3","cover":"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1563568131238&di=23ae51dda700bd4e3b624f66af1289f7&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201808%2F11%2F20180811021949_fVEST.jpeg"},{"name":"一路向北","artist":"周杰伦","url":"/medias/music/yiluxiangbei.mp3","cover":"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1563566810433&di=68b80a762a497648670ef0df46ee8f57&imgtype=0&src=http%3A%2F%2F03imgmini.eastday.com%2Fmobile%2F20180918%2F20180918205448_99dfb333ca34518cb96823defa4c68c9_1.jpeg"}]')
     });
+});
 </script>
+                    
+
                     
 
                     <div id="recommend-sections" class="recommend">
@@ -648,59 +644,6 @@ $(function () {
         </div>
     </div>
     
-    
-    <div class="col s12 m6" data-aos="zoom-in-up">
-        <div class="post-card" style="background-image: url('/medias/featureimages/5.jpg')">
-            <div class="post-body">
-                <div class="post-categories">
-                    
-                    <a href="/categories/随笔/" class="category" target="_blank">随笔</a>
-                    
-                </div>
-                <a href="/2018/10/11/python-advice/" target="_blank">
-                    <h3 class="post-title">给python新手的一些建议</h3>
-                </a>
-                <p class="post-description">
-                    
-                        
-
-
-首先很荣幸被邀请给大一新入学的学弟学妹们谈谈编程入门经验，尤其是他们正在学的python语言。我就随便谈谈我大一时是如何编程入门的，以
-                    
-                </p>
-                <a href="/2018/10/11/python-advice/" target="_blank"
-                        class="read-more btn waves-effect waves-light" style="background: linear-gradient(to right, #4cbf30 0%, #0f9d58 100%)">
-                    <i class="icon fa fa-eye fa-fw"></i>阅读更多
-                </a>
-            </div>
-        </div>
-    </div>
-    
-    
-    <div class="col s12 m6" data-aos="zoom-in-up">
-        <div class="post-card" style="background-image: url('/medias/featureimages/3.jpg')">
-            <div class="post-body">
-                <div class="post-categories">
-                    
-                    <a href="/categories/软件安装与配置/" class="category" target="_blank">软件安装与配置</a>
-                    
-                </div>
-                <a href="/2017/10/02/sublime/" target="_blank">
-                    <h3 class="post-title">Sublime Text安装与配置教程</h3>
-                </a>
-                <p class="post-description">
-                    
-                        Sublime Text是我一直使用的代码编辑器，我喜爱它的原因就是好看啊！当然打开速度毋庸置疑啦，毕竟不是IDE。这里我把我的安装与配置步
-                    
-                </p>
-                <a href="/2017/10/02/sublime/" target="_blank"
-                        class="read-more btn waves-effect waves-light" style="background: linear-gradient(to right, #C644FC 0%, #5856D6 100%)">
-                    <i class="icon fa fa-eye fa-fw"></i>阅读更多
-                </a>
-            </div>
-        </div>
-    </div>
-    
 
 </div>
 
@@ -720,6 +663,44 @@ $(function () {
             
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
+                    <a href="/2019/07/25/diora/" target="_blank">
+                        <div class="card-image">
+                            
+                            
+                            <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="diora">
+                            
+                            <span class="card-title">diora</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                            
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-07-25
+                            </span>
+                            <span class="publish-author">
+                                
+                            </span>
+                            <span class="publish-category">
+                                
+                                <i class="fa fa-user fa-fw"></i>
+                                韦阳
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                </div>
+            </div>
+            
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
                     <a href="/2019/07/12/algorithm-code-tricks/" target="_blank">
                         <div class="card-image">
                             
@@ -733,7 +714,7 @@ $(function () {
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                
+                            
 大佬就不用往下看了，这篇文章没有任何逻辑，没有任何进阶的指导意义，纯粹为了应付各种机试（夏令营机试、保研机试、程序设计实践考试等等），对正经编程竞赛没有任何帮助。我就想到哪写到哪了，不定期想到新的在更新。
 
 暴力打表法
@@ -752,6 +733,12 @@ $(function () {
                                     程序设计
                                 </a>
                                 
+                                
+                            </span>
+                            <span class="publish-category">
+                                
+                                <i class="fa fa-user fa-fw"></i>
+                                韦阳
                                 
                             </span>
                         </div>
@@ -788,7 +775,7 @@ $(function () {
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                
+                            
 
 论文地址：Unsupervised Recurrent Neural Network Grammars代码地址：github
 介绍
@@ -807,6 +794,12 @@ $(function () {
                                     句法分析
                                 </a>
                                 
+                                
+                            </span>
+                            <span class="publish-category">
+                                
+                                <i class="fa fa-user fa-fw"></i>
+                                韦阳
                                 
                             </span>
                         </div>
@@ -855,7 +848,7 @@ $(function () {
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                
+                            
 
 论文地址：Neural Language Modeling by Jointly Learning Syntax and Lexicon代码地址：github
 
@@ -874,6 +867,12 @@ $(function () {
                                     句法分析
                                 </a>
                                 
+                                
+                            </span>
+                            <span class="publish-category">
+                                
+                                <i class="fa fa-user fa-fw"></i>
+                                韦阳
                                 
                             </span>
                         </div>
@@ -922,7 +921,7 @@ $(function () {
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                
+                            
 
 
 为了看懂论文里的策略梯度，又去把强化学习看了一遍。。。
@@ -944,6 +943,12 @@ $(function () {
                                     句法分析
                                 </a>
                                 
+                                
+                            </span>
+                            <span class="publish-category">
+                                
+                                <i class="fa fa-user fa-fw"></i>
+                                韦阳
                                 
                             </span>
                         </div>
@@ -992,7 +997,7 @@ $(function () {
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                
+                            
 
 
 貌似已经有好几个月没怎么看过论文了，之前一直在写论文，一直没空更新博客，最近闲下来把最后几篇没看完的论文看了。
@@ -1015,6 +1020,12 @@ $(function () {
                                     句法分析
                                 </a>
                                 
+                                
+                            </span>
+                            <span class="publish-category">
+                                
+                                <i class="fa fa-user fa-fw"></i>
+                                韦阳
                                 
                             </span>
                         </div>
@@ -1063,7 +1074,7 @@ $(function () {
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                
+                            
 
 这篇博文专门用来记录Latex写论文过程中遇到的一些技巧与心得。
 插入矢量图片
@@ -1082,6 +1093,12 @@ $(function () {
                                     软件安装与配置
                                 </a>
                                 
+                                
+                            </span>
+                            <span class="publish-category">
+                                
+                                <i class="fa fa-user fa-fw"></i>
+                                韦阳
                                 
                             </span>
                         </div>
@@ -1114,7 +1131,7 @@ $(function () {
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                某天，你无端想起了一个人，她曾让你对明天有所期许，但是却完全没有出现在你的明天里。2017年好像还历历在目，2018年却要过去了，貌似这一年并没有发生什么特别值得纪念的事情吧，平平淡淡，淡的就像一杯白开水。
+                            某天，你无端想起了一个人，她曾让你对明天有所期许，但是却完全没有出现在你的明天里。2017年好像还历历在目，2018年却要过去了，貌似这一年并没有发生什么特别值得纪念的事情吧，平平淡淡，淡的就像一杯白开水。
                             
                         </div>
                         <div class="publish-info">
@@ -1129,6 +1146,12 @@ $(function () {
                                     随笔
                                 </a>
                                 
+                                
+                            </span>
+                            <span class="publish-category">
+                                
+                                <i class="fa fa-user fa-fw"></i>
+                                韦阳
                                 
                             </span>
                         </div>
@@ -1161,7 +1184,7 @@ $(function () {
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                
+                            
 
 
 有一句话，宾语是你。“吉下两点一口，又有欠字相依。”
@@ -1181,6 +1204,12 @@ $(function () {
                                     句法分析
                                 </a>
                                 
+                                
+                            </span>
+                            <span class="publish-category">
+                                
+                                <i class="fa fa-user fa-fw"></i>
+                                韦阳
                                 
                             </span>
                         </div>
@@ -1229,7 +1258,7 @@ $(function () {
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                
+                            
 
 
 论文地址：Faster Shift-Reduce Constituent Parsing with a Non-Binary, Bottom-Up Strategy
@@ -1249,6 +1278,12 @@ $(function () {
                                     句法分析
                                 </a>
                                 
+                                
+                            </span>
+                            <span class="publish-category">
+                                
+                                <i class="fa fa-user fa-fw"></i>
+                                韦阳
                                 
                             </span>
                         </div>
@@ -1293,7 +1328,7 @@ $(function () {
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                
+                            
 
 
 这篇文章是知识分析课准备讲的论文，随便拿来看一看了，简单介绍一下吧，论文是复旦邱锡鹏老师组写的。
@@ -1315,6 +1350,12 @@ $(function () {
                                     元学习
                                 </a>
                                 
+                                
+                            </span>
+                            <span class="publish-category">
+                                
+                                <i class="fa fa-user fa-fw"></i>
+                                韦阳
                                 
                             </span>
                         </div>
@@ -1363,7 +1404,7 @@ $(function () {
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                
+                            
 
 
 我们究竟是活了365天，还是活了1天，重复了364遍。
@@ -1384,6 +1425,12 @@ $(function () {
                                     句法分析
                                 </a>
                                 
+                                
+                            </span>
+                            <span class="publish-category">
+                                
+                                <i class="fa fa-user fa-fw"></i>
+                                韦阳
                                 
                             </span>
                         </div>
@@ -1417,74 +1464,6 @@ $(function () {
                 </div>
             </div>
             
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2018/10/15/acl18-beamspanparser/" target="_blank">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="Linear-Time Constituency Parsing with RNNs and Dynamic Programming">
-                            
-                            <span class="card-title">Linear-Time Constituency Parsing with RNNs and Dynamic Programming</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                
-
-
-好像已经很久没有看论文了呢，开学了一堆事情，以后还是要抽空阅读论文，保持一定的阅读量，并且不能光看最新的论文，还得去前人传统的方法中去寻找有没有能应用于深度学习的东西，说不定就发ACL了呢（手动滑稽）。
-
-论文地址：Linear-Ti
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="fa fa-clock-o fa-fw icon-date"></i>2018-10-15
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fa fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/句法分析/" class="post-category" target="_blank">
-                                    句法分析
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/ACL/" target="_blank">
-                            <span class="chip bg-color">ACL</span>
-                        </a>
-                        
-                        <a href="/tags/自然语言处理/" target="_blank">
-                            <span class="chip bg-color">自然语言处理</span>
-                        </a>
-                        
-                        <a href="/tags/神经网络/" target="_blank">
-                            <span class="chip bg-color">神经网络</span>
-                        </a>
-                        
-                        <a href="/tags/深度学习/" target="_blank">
-                            <span class="chip bg-color">深度学习</span>
-                        </a>
-                        
-                        <a href="/tags/句法分析/" target="_blank">
-                            <span class="chip bg-color">句法分析</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-            
         </div>
     </article>
 
@@ -1501,7 +1480,7 @@ $(function () {
             
         </div>
         <div class="page-info col m4 l4 hide-on-small-only">
-            <div class="center-align b-text-gray">1 / 6</div>
+            <div class="center-align b-text-gray">1 / 7</div>
         </div>
         <div class="col s6 m4 l4">
             
@@ -1515,7 +1494,6 @@ $(function () {
 </div>
 
 
-
 <footer class="page-footer bg-color">
     <div class="container row center-align">
         <div class="col s12 m8 l8 copy-right">
@@ -1523,9 +1501,9 @@ $(function () {
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">112k</span>
+            <span class="white-color">112.1k</span>
             
-            
+
             <br>
             <span id="sitetime"></span>
 
@@ -1533,13 +1511,13 @@ $(function () {
             
             <br>
             
-            <span id="busuanzi_container_site_pv" style='display:none'>
+            <span id="busuanzi_container_site_pv">
                 <i class="fa fa-heart-o"></i>
                 本站总访问量 <span id="busuanzi_value_site_pv" class="white-color"></span>
             </span>
             
             
-            <span id="busuanzi_container_site_uv" style='display:none'>
+            <span id="busuanzi_container_site_uv">
                 人次,&nbsp;访客数 <span id="busuanzi_value_site_uv" class="white-color"></span> 人.
             </span>
             
@@ -1589,8 +1567,8 @@ $(function () {
 <script>
     $(document).ready(function () {
 
-        var int = setInterval(fixCount, 50);  // 50ms周期检测函数
-        var pvcountOffset = 80000;  // 初始化首次数据
+        var int = setInterval(fixCount, 50);
+        var pvcountOffset = 80000;
         var uvcountOffset = 20000;
 
         function fixCount() {
@@ -1600,7 +1578,7 @@ $(function () {
             }
             if ($("#busuanzi_container_site_pv").css("display") != "none") {
                 $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + uvcountOffset); // 加上初始数据 
-                clearInterval(int); // 停止检测
+                clearInterval(int);
             }
         }
     });
@@ -1637,7 +1615,7 @@ $(function () {
         var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
         var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) / minutes);
         var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours - diffMinutes * minutes) / seconds);
-        document.getElementById("sitetime").innerHTML = "本站已运行 " +diffYears+" 年 "+diffDays + " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+        document.getElementById("sitetime").innerHTML = "本站已运行 " + diffYears + " 年 " + diffDays + " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
     }/*因为建站时间还没有一年，就将之注释掉了。需要的可以取消*/
     siteTime();
 </script>
@@ -1696,5 +1674,5 @@ $(function () {
     <script async src="/libs/others/busuanzi.pure.mini.js"></script>
 
 
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"left","width":200,"height":400},"mobile":{"show":false},"react":{"opacity":0.7}});</script></body>
+</body>
 </html>

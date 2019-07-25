@@ -435,6 +435,12 @@ $('.bg-cover').css('background-image', 'url(/medias/banner/' + new Date().getDay
                                 
                                 
                             </span>
+                            <span class="publish-category">
+                                
+                                <i class="fa fa-user fa-fw"></i>
+                                韦阳
+                                
+                            </span>
                         </div>
                     </div>
 
@@ -501,6 +507,12 @@ $('.bg-cover').css('background-image', 'url(/medias/banner/' + new Date().getDay
                                 
                                 
                             </span>
+                            <span class="publish-category">
+                                
+                                <i class="fa fa-user fa-fw"></i>
+                                韦阳
+                                
+                            </span>
                         </div>
                     </div>
 
@@ -565,6 +577,12 @@ Semi-supervised Lear
                                     序列标注
                                 </a>
                                 
+                                
+                            </span>
+                            <span class="publish-category">
+                                
+                                <i class="fa fa-user fa-fw"></i>
+                                韦阳
                                 
                             </span>
                         </div>
@@ -635,6 +653,12 @@ Semi-supervised Lear
                                 
                                 
                             </span>
+                            <span class="publish-category">
+                                
+                                <i class="fa fa-user fa-fw"></i>
+                                韦阳
+                                
+                            </span>
                         </div>
                     </div>
 
@@ -699,6 +723,12 @@ Semi-supervised Lear
                                     序列标注
                                 </a>
                                 
+                                
+                            </span>
+                            <span class="publish-category">
+                                
+                                <i class="fa fa-user fa-fw"></i>
+                                韦阳
                                 
                             </span>
                         </div>
@@ -767,6 +797,12 @@ Semi-supervised Lear
                                     序列标注
                                 </a>
                                 
+                                
+                            </span>
+                            <span class="publish-category">
+                                
+                                <i class="fa fa-user fa-fw"></i>
+                                韦阳
                                 
                             </span>
                         </div>
@@ -839,6 +875,12 @@ Semi-supervised Lear
                                 
                                 
                             </span>
+                            <span class="publish-category">
+                                
+                                <i class="fa fa-user fa-fw"></i>
+                                韦阳
+                                
+                            </span>
                         </div>
                     </div>
 
@@ -907,6 +949,12 @@ Semi-supervised Lear
                                 
                                 
                             </span>
+                            <span class="publish-category">
+                                
+                                <i class="fa fa-user fa-fw"></i>
+                                韦阳
+                                
+                            </span>
                         </div>
                     </div>
 
@@ -971,6 +1019,12 @@ Semi-supervised Lear
                                 
                                 
                             </span>
+                            <span class="publish-category">
+                                
+                                <i class="fa fa-user fa-fw"></i>
+                                韦阳
+                                
+                            </span>
                         </div>
                     </div>
 
@@ -1014,9 +1068,9 @@ Semi-supervised Lear
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">112k</span>
+            <span class="white-color">112.1k</span>
             
-            
+
             <br>
             <span id="sitetime"></span>
 
@@ -1024,13 +1078,13 @@ Semi-supervised Lear
             
             <br>
             
-            <span id="busuanzi_container_site_pv" style='display:none'>
+            <span id="busuanzi_container_site_pv">
                 <i class="fa fa-heart-o"></i>
                 本站总访问量 <span id="busuanzi_value_site_pv" class="white-color"></span>
             </span>
             
             
-            <span id="busuanzi_container_site_uv" style='display:none'>
+            <span id="busuanzi_container_site_uv">
                 人次,&nbsp;访客数 <span id="busuanzi_value_site_uv" class="white-color"></span> 人.
             </span>
             
@@ -1080,8 +1134,8 @@ Semi-supervised Lear
 <script>
     $(document).ready(function () {
 
-        var int = setInterval(fixCount, 50);  // 50ms周期检测函数
-        var pvcountOffset = 80000;  // 初始化首次数据
+        var int = setInterval(fixCount, 50);
+        var pvcountOffset = 80000;
         var uvcountOffset = 20000;
 
         function fixCount() {
@@ -1091,7 +1145,7 @@ Semi-supervised Lear
             }
             if ($("#busuanzi_container_site_pv").css("display") != "none") {
                 $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + uvcountOffset); // 加上初始数据 
-                clearInterval(int); // 停止检测
+                clearInterval(int);
             }
         }
     });
@@ -1128,7 +1182,7 @@ Semi-supervised Lear
         var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
         var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) / minutes);
         var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours - diffMinutes * minutes) / seconds);
-        document.getElementById("sitetime").innerHTML = "本站已运行 " +diffYears+" 年 "+diffDays + " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+        document.getElementById("sitetime").innerHTML = "本站已运行 " + diffYears + " 年 " + diffDays + " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
     }/*因为建站时间还没有一年，就将之注释掉了。需要的可以取消*/
     siteTime();
 </script>
@@ -1187,5 +1241,5 @@ $(function () {
     <script async src="/libs/others/busuanzi.pure.mini.js"></script>
 
 
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"left","width":200,"height":400},"mobile":{"show":false},"react":{"opacity":0.7}});</script></body>
+</body>
 </html>

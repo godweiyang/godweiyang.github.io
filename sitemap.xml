@@ -2,9 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://godweiyang.com/2019/07/25/diora/</loc>
+    
+    <lastmod>2019-07-25T05:31:28.607Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://godweiyang.com/2017/10/02/sublime/</loc>
+    
+    <lastmod>2019-07-25T05:31:01.483Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://godweiyang.com/2018/10/11/python-advice/</loc>
+    
+    <lastmod>2019-07-25T05:30:08.059Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://godweiyang.com/2018/04/13/hexo-blog/</loc>
     
-    <lastmod>2019-07-21T02:19:40.000Z</lastmod>
+    <lastmod>2019-07-25T05:25:20.940Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://godweiyang.com/2019/07/12/algorithm-code-tricks/</loc>
+    
+    <lastmod>2019-07-25T04:35:23.371Z</lastmod>
     
   </url>
   
@@ -26,13 +54,6 @@
     <loc>https://godweiyang.com/about/index.html</loc>
     
     <lastmod>2019-07-20T07:34:48.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://godweiyang.com/2019/07/12/algorithm-code-tricks/</loc>
-    
-    <lastmod>2019-07-20T07:32:22.000Z</lastmod>
     
   </url>
   
@@ -135,23 +156,9 @@
   </url>
   
   <url>
-    <loc>https://godweiyang.com/2017/10/02/sublime/</loc>
-    
-    <lastmod>2019-07-20T04:21:26.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://godweiyang.com/2018/09/02/rnng/</loc>
     
     <lastmod>2019-07-20T04:21:14.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://godweiyang.com/2018/10/11/python-advice/</loc>
-    
-    <lastmod>2019-07-20T04:21:00.000Z</lastmod>
     
   </url>
   
@@ -499,7 +506,7 @@
   </url>
   
   <url>
-    <loc>https://godweiyang.com/2017/09/19/dl2/</loc>
+    <loc>https://godweiyang.com/2017/09/20/dlhw1/</loc>
     
     <lastmod>2019-07-19T17:12:46.000Z</lastmod>
     
@@ -520,7 +527,7 @@
   </url>
   
   <url>
-    <loc>https://godweiyang.com/2017/09/20/dlhw1/</loc>
+    <loc>https://godweiyang.com/2017/09/19/dl2/</loc>
     
     <lastmod>2019-07-19T17:12:46.000Z</lastmod>
     
