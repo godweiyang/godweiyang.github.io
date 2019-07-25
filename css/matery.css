@@ -721,10 +721,6 @@ article .article-content .summary {
     word-break: break-all;
 }
 
-article .article-content .publish-author {
-    float: right;
-}
-
 article .article-content .publish-category {
     float: right;
 }
@@ -733,11 +729,23 @@ article .article-content .publish-category {
     padding-right: 5px;
 }
 
-.publish-author .icon-category {
+.publish-category .icon-category {
     padding-left: 10px;
 }
 
-.article-content .publish-author .post-category {
+.article-content .publish-category .post-category {
+    padding-left: 5px;
+}
+
+article .article-content .publish-author {
+    float: right;
+}
+
+.publish-author .icon-author {
+    padding-left: 10px;
+}
+
+.article-content .publish-author .post-author {
     padding-left: 5px;
 }
 
