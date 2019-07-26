@@ -1349,14 +1349,14 @@ table tr:nth-child(2n), thead {
 }
 
 .contact-container {
-    width: 50%;
+    width: 90%;
     max-width: 900px;
     margin-top: -60px;
 }
 
 @media only screen and (max-width: 450px) {
     .contact-container {
-        width: 55%;
+        width: 95%;
     }
 }
 
