@@ -1348,6 +1348,18 @@ table tr:nth-child(2n), thead {
     }
 }
 
+.contact-container {
+    width: 50%;
+    max-width: 900px;
+    margin-top: -60px;
+}
+
+@media only screen and (max-width: 450px) {
+    .contact-container {
+        width: 55%;
+    }
+}
+
 /* about page styles. */
 
 .about-container {
