@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://godweiyang.com/"/>
-  <updated>2020-04-26T15:41:42.000Z</updated>
+  <updated>2020-08-30T05:02:29.101Z</updated>
   <id>https://godweiyang.com/</id>
   
   <author>
@@ -15,6 +15,39 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>【ACL2020】一种新颖的成分句法树序列化方法</title>
+    <link href="https://godweiyang.com/2020/08/30/acl20-yangwei-parsing/"/>
+    <id>https://godweiyang.com/2020/08/30/acl20-yangwei-parsing/</id>
+    <published>2020-08-30T02:41:09.000Z</published>
+    <updated>2020-08-30T05:02:29.101Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;论文作者：godweiyang，末流985研三，ACM退役蒻苣，爱好算法，目前在字节跳动AI Lab实习，业余喜欢PUBG和LOL。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;论文地址：&lt;/strong&gt;&lt;a
+        
+      
+    
+    </summary>
+    
+      <category term="深度学习" scheme="https://godweiyang.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="ACL" scheme="https://godweiyang.com/tags/ACL/"/>
+    
+      <category term="NLP" scheme="https://godweiyang.com/tags/NLP/"/>
+    
+      <category term="成分句法分析" scheme="https://godweiyang.com/tags/%E6%88%90%E5%88%86%E5%8F%A5%E6%B3%95%E5%88%86%E6%9E%90/"/>
+    
+  </entry>
   
   <entry>
     <title>【NLP 算法岗】提前批暑期实习面（试）经（历）</title>
@@ -563,34 +596,6 @@
 &lt;p&gt;第 100 天时，我可能会对这 100 天以来的算法题进行一个总结，然后暂时停止更新 LeetCode 题解了。&lt;br&gt;下一步可能更新 NLP 相关算法了，非常感谢大家每天的支持。&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h2
-        
-      
-    
-    </summary>
-    
-      <category term="编程算法" scheme="https://godweiyang.com/categories/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95/"/>
-    
-    
-      <category term="leetcode" scheme="https://godweiyang.com/tags/leetcode/"/>
-    
-      <category term="算法" scheme="https://godweiyang.com/tags/%E7%AE%97%E6%B3%95/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【每日算法Day 92】经典面试题：编辑距离</title>
-    <link href="https://godweiyang.com/2020/04/06/leetcode-72/"/>
-    <id>https://godweiyang.com/2020/04/06/leetcode-72/</id>
-    <published>2020-04-06T05:45:09.000Z</published>
-    <updated>2020-04-06T06:22:34.000Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;h2 id=&quot;题目链接&quot;&gt;&lt;a href=&quot;#题目链接&quot; class=&quot;headerlink&quot; title=&quot;题目链接&quot;&gt;&lt;/a&gt;题目链接&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;https://leetcode-cn.com/problems/edit-distance/&quot;
         
       
     

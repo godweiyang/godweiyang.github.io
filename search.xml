@@ -4,6 +4,35 @@
   
     
     <entry>
+      <title>【ACL2020】一种新颖的成分句法树序列化方法</title>
+      <link href="/2020/08/30/acl20-yangwei-parsing/"/>
+      <url>/2020/08/30/acl20-yangwei-parsing/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p>论文作者：godweiyang，末流985研三，ACM退役蒻苣，爱好算法，目前在字节跳动AI Lab实习，业余喜欢PUBG和LOL。</p></blockquote><p><strong>论文地址：</strong><a href="https://www.aclweb.org/anthology/2020.acl-main.299/" title="论文地址" target="_blank" rel="noopener">A Span-based Linearization for Constituent Trees</a><br><strong>代码地址：</strong><a href="https://github.com/AntNLP/span-linearization-parser" title="代码地址" target="_blank" rel="noopener">https://github.com/AntNLP/span-linearization-parser</a><br><strong>PPT地址：</strong><a href="https://godweiyang.com/2020/08/30/acl20-yangwei-parsing/ACL2020.pdf" title="PPT地址">https://godweiyang.com/2020/08/30/acl20-yangwei-parsing/ACL2020.pdf</a>  </p><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>不知不觉在字节跳动实习也快四个月了，在这高强度快节奏的工作生活中，也是收获颇多。然而博客也很久很久没更新过了，论文阅读了那么多，却一直没空写写自己中的这篇。今天趁周末分享一下自己发在今年ACL上的这篇工作，主要贡献就是提出了一种新颖的成分句法树的序列表示方法。建议配合我的PPT阅读，里面有很多例子。</p><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>成分句法分析任务的目的就是解析出一个句子的短语结构树，详细的介绍都可以在我写的综述里找到：<a href="https://godweiyang.com/2019/08/15/con-parsing-summary-v2/" title="成分句法分析综述（第二版）">成分句法分析综述（第二版）</a>。</p><p>当前主流的成分句法分析方法我按照归一化目标主要分为两类：</p><ul><li>一是基于CKY的<strong>全局归一化</strong>方法，优化整棵句法树得分之和。也就是采用动态规划算法解析，时间复杂度较高（$O(n^3)$），但同时效果是目前SOTA的。</li><li>二是各种<strong>局部归一化</strong>方法，优化目标是单个目标得分（例如span、action、syntactic distance等等）。这一类方法具体包括基于shift-reduce的转移系统、各种序列化方法（例如syntactic distance）、基于CKY解码的局部归一化模型等，速度通常都很快，但由于局部归一化并没有考虑到全局特征，所以效果普遍较差。</li></ul><p>详细说两个以往的局部归一化方法吧。例如预测句法树的括号表达式，然后还原成句法树，这种方法效果非常差，因为很难解决括号匹配合法性的问题，模型很难学。再如syntactic distance，因为预测的是浮点数序列，所以约束太松了，只要求相对大小合适就行，可解释性也较差，没有和span紧密结合起来，因此最后效果也一般。最后转移系统也会存在exposure bias的问题，效果也不尽如人意，基本没人使用了。</p><h3 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h3><p>回到主题，针对上面这么多问题，我想寻找一种更好的序列表示方法，如果能够和span更直接联系起来就最好了。其实这篇论文idea出来的初期，我是想用上GNN（GAT）的，那么就得有一张图，而传统的成分句法树不适合直接GNN建模，因为节点数不确定，图没法提前获得。因此我就联想到了我师兄去年发的一篇依存句法树应用GAT的工作：<a href="https://www.aclweb.org/anthology/P19-1237/" title="Graph-based Dependency Parsing with Graph Neural Networks" target="_blank" rel="noopener">Graph-based Dependency Parsing with Graph Neural Networks</a>。如果有一个办法能让成分句法树表示成依存树那样就好了！于是我这个idea就逐渐成型了，虽然最后并没有用上GNN。</p><h2 id="序列化方法"><a href="#序列化方法" class="headerlink" title="序列化方法"></a>序列化方法</h2><p>我原论文里面有很多公式和证明的部分，这里我就跳过了，其实方法的思想非常的简单。</p><p><img src="1.jpg" alt="序列化示例"></p><p>如上图所示，句法树原本可能不是二叉的，因此要先转成二叉树，然后这个二叉树在span表中（图c）绿色的部分就是所有的左孩子（包含根结点），红色的部分就是所有的右孩子。</p><p>然后可以轻易发现，所有左孩子的右边界一定不存在重复，因此一定一一对应了 $[1, n]$ 中的值，那么就可以把它们作为序列化后的下标，而相应的左边界就作为序列化后的值。举个例子，图中 $(1, 4)$ 这个span表示的是”loves writing code”这个短语，那么序列化数组$d$的下标4处的值就是 $d_4 = 1$。</p><p>同时可以发现，这个序列满足另一种定义，也就是 $(d_i, i)$ <strong>一定是以 $i$ 作为右边界的最大的span</strong>，这用反证法可以轻易证明。</p><p>最后就可以得到序列化后的数组 $d$，同时这个序列满足两个性质：</p><ul><li>一定满足 $d_i &lt; i$ ，因为 $(d_i, i)$ 是某个左孩子。</li><li>对于任意的 $j &gt; i$，$d_j$ 一定不会在 $(d_i, i)$ 范围里，否则的话 $(d_j, j)$ 就和 $(d_i, i)$产生交叉了。</li></ul><p>同时可以证明，满足如上两个条件的任意非负整数序列都可以唯一还原成一棵句法树。序列化和反序列化伪代码如下：</p><p><img src="2.jpg" alt="序列化和反序列化算法"></p><p>注意这里的反序列化有个前提假设：$d$ 一定要是满足上面两个条件的合法序列！至于不合法的怎么办？下面会详细讲。</p><h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p>模型方面没有什么新意，借鉴了依存句法分析模型bi-affine attention。</p><p>输入是词向量、字向量、位置向量拼接：<br>$$<br>x_i = [e_i; c_i; p_i].<br>$$<br>然后用LSTM或者Transformer得到每个单词的隐层表示 $h_i$，为了区分span的左右边界表示，我采用了两套表示：<br>$$<br>l_i = \text{MLP}_l(h_i),\quad r_i = \text{MLP}_r(h_i).<br>$$<br>然后就可以用bi-affine attention计算两个边界的相关性了：<br>$$<br>\alpha_{ij} = l_i^\top {\bf W} r_j + b_1^\top l_i + b_2^\top r_j,<br>$$<br>接着对所有小于 $j$ 的attention做局部归一化，就得到了左边界为 $i$ 的概率：<br>$$<br>P(i|j) = \text{Softmax}_{i}(\alpha_{ij}), \forall i &lt; j.<br>$$<br>最后取概率最高的左边界作为预测的序列值：<br>$$<br>d_j = \mathop{\arg\max}_{i} {[P(i|j)]}, \forall i &lt; j.<br>$$<br>对于句法树的label，我没有直接用序列方法预测，而是先用序列 $d$ 反序列化得到句法结构，然后利用句法结构预测label，这样准确率会高很多：<br>$$<br>P(\ell|i, j) = \text{Softmax}(\text{MLP}_{\text{label}}([l_i; r_j]))_{\ell}.<br>$$<br>损失函数就是 $n$ 项结构损失加上 $2n-1$ 项label损失：<br>$$<br>\mathcal{L} = -\frac{1}{n} (\sum_{i = 1}^{n}{\log P(d_i | i)} + \sum_{(i, j, \ell) \in \mathcal{T}}{\log P(\ell|i, j)}).<br>$$</p><h3 id="反序列化"><a href="#反序列化" class="headerlink" title="反序列化"></a>反序列化</h3><p>之前提到过，如果预测出来的序列是非法的怎么办呢？其实之前的两个条件，第一个条件可以通过mask的方式保证满足，一般第二个条件无法满足，也就是会出现交叉的span。</p><p>最优解是最小顶点覆盖问题，也就是对于预测出来的 $n$ 个左孩子，两两之间如果交叉了就连边，最后建了一张图。那么选取最少的点（非法span），使得它们的边涵盖了整张图，也就是修改它们使得序列合法。然而这是一个NP hard的问题，复杂度很高，因此我提出了几种近似求解的方法。</p><p>第一种方法是CKY解码，我们直接从 $P(i|j)$ 出发，不解码出序列 $d$ ，也就是直接解码出使得所有左孩子得分之和最高的序列：<br>$$<br>\mathcal{G}(i, j) = \max{\{P(i | k) \times \mathcal{G}(k, j) \mid i &lt; k &lt; j\}},<br>$$</p><p>这种方法时间复杂度是 $O(n^3)$ ，是精确解码，但是复杂度太高意义不大。</p><p>第二种方法是自顶向下解码，然后寻找 $(i, j)$ 的split时，将满足 $d_{k’} \leq i$ 且 $i &lt; k’ &lt; j$ 的所有 $k’$ 中最大的那个 $k’$ 作为split：<br>$$<br>k \gets \max{\{k’ \mid d_{k’} \le i, i &lt; k’ &lt; j\}}.<br>$$</p><p><img src="3.jpg" alt="方法二示例"></p><p>看上图例子可能更好理解一些。这是一种贪心解码，渐进时间复杂度是 $O(n \log n)$ ，实测最后效果和最优解码没有区别。</p><p>第三种方法和方法二类似，直接选取满足 $i &lt; k’ &lt; j$ 的最小的 $d_{k’}$ 就行了：<br>$$<br>k \gets \mathop{\arg\min}_{k’}[d_{k’}].<br>$$</p><p><img src="4.jpg" alt="方法三示例"></p><p>这个方法效果也完全一样，实现起来可能方便一丢丢。</p><h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><p>详细的实验对比结果感兴趣的直接去看论文吧，这里放一个总表：</p><p><img src="5.jpg" alt="PTB和CTB结果"></p><p>可以看出无论是单模型还是采用了BERT，我们的方法都达到了和SOTA完全一样的效果。那么速度怎么样呢？</p><p><img src="6.jpg" alt="速度对比"></p><p>可以看出我们速度远远快于CKY算法，甚至超过很多序列方法，并且我们没有采用Cython来优化for循环。</p><h2 id="一些思考"><a href="#一些思考" class="headerlink" title="一些思考"></a>一些思考</h2><p>和全局归一化模型（CKY算法）相比，他们优化的是整棵句法树span得分之和，而我们优化的是所有的左孩子得分之和。因为我们认为，原来的优化目标是包含冗余的，左孩子得到之后，右孩子可以唯一确定。</p><p>和CKY算法的自顶向下贪心优化+张岳老师提出的两种局部模型结合相比，我认为我们的方法也是不同的。他们的方法会导致更加复杂的span表示，同一个span会被优化两次，因此需要更为复杂的表示来规避这个问题。同时我们的方法只需要矩阵运算来预测结构，span表示简单，速度也更快。</p><p>此外仍然有很多未完成的工作：</p><ul><li>利用我这个序列方法，GNN可以用上了。</li><li>如果用所有的右孩子，可以产生出另一套等价的序列表示，如何结合这两套表示来准确解码？</li><li>其他句法分析任务（CCG，semantic等）都可以转化为我的序列表示，如何联合学习这些任务？</li><li>利用这套表示，其他很多下游任务（机器翻译等）都可以加入句法信息，能否增强它们的性能？</li></ul><h2 id="尾声"><a href="#尾声" class="headerlink" title="尾声"></a>尾声</h2><p>下一次分享不知道又会到什么时候了，秋招也进入尾声了，下面就是毕业论文了。如果有时间，我还会和大家分享我最近阅读的论文。有缘江湖再见！</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 深度学习 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> ACL </tag>
+            
+            <tag> NLP </tag>
+            
+            <tag> 成分句法分析 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>【NLP 算法岗】提前批暑期实习面（试）经（历）</title>
       <link href="/2020/04/26/summer-interview-experience/"/>
       <url>/2020/04/26/summer-interview-experience/</url>
@@ -3810,9 +3839,9 @@
             
             <tag> NLP </tag>
             
-            <tag> AAAI </tag>
-            
             <tag> 迁移学习 </tag>
+            
+            <tag> AAAI </tag>
             
         </tags>
       
@@ -4959,9 +4988,9 @@
             
             <tag> 序列标注 </tag>
             
-            <tag> AAAI </tag>
-            
             <tag> 迁移学习 </tag>
+            
+            <tag> AAAI </tag>
             
         </tags>
       
