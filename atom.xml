@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://godweiyang.com/"/>
-  <updated>2020-08-30T05:11:05.040Z</updated>
+  <updated>2020-10-16T15:45:12.973Z</updated>
   <id>https://godweiyang.com/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>国庆碎碎念</title>
+    <link href="https://godweiyang.com/2020/10/08/mood-20-10-08/"/>
+    <id>https://godweiyang.com/2020/10/08/mood-20-10-08/</id>
+    <published>2020-10-08T15:35:29.000Z</published>
+    <updated>2020-10-16T15:45:12.973Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;关注公众号【算法码上来】，每日算法干货马上就来！&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&quot;/medias/contact.jpg&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="随笔" scheme="https://godweiyang.com/categories/%E9%9A%8F%E7%AC%94/"/>
+    
+    
+      <category term="经验" scheme="https://godweiyang.com/tags/%E7%BB%8F%E9%AA%8C/"/>
+    
+  </entry>
   
   <entry>
     <title>【ACL2020】一种新颖的成分句法树序列化方法</title>
@@ -565,37 +594,6 @@
 &lt;p&gt;最近在忙面试，本来今天都不想更了，但是看基础知识看的太累了，于是写道题排解一下压力。&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h2 id=&quot;题目链接&quot;&gt;&lt;a href=&quot;#题目链接&quot; class=&quot;headerlink&quot;
-        
-      
-    
-    </summary>
-    
-      <category term="编程算法" scheme="https://godweiyang.com/categories/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95/"/>
-    
-    
-      <category term="leetcode" scheme="https://godweiyang.com/tags/leetcode/"/>
-    
-      <category term="算法" scheme="https://godweiyang.com/tags/%E7%AE%97%E6%B3%95/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【每日算法Day 93】不用额外空间，你会旋转一个矩阵吗？</title>
-    <link href="https://godweiyang.com/2020/04/07/leetcode-interview-01-07/"/>
-    <id>https://godweiyang.com/2020/04/07/leetcode-interview-01-07/</id>
-    <published>2020-04-07T02:33:44.000Z</published>
-    <updated>2020-04-07T03:56:02.000Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;blockquote&gt;
-&lt;p&gt;第 100 天时，我可能会对这 100 天以来的算法题进行一个总结，然后暂时停止更新 LeetCode 题解了。&lt;br&gt;下一步可能更新 NLP 相关算法了，非常感谢大家每天的支持。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2
         
       
     
