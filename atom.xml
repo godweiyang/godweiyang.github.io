@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://godweiyang.com/"/>
-  <updated>2020-10-16T15:45:12.973Z</updated>
+  <updated>2020-10-19T17:09:00.083Z</updated>
   <id>https://godweiyang.com/</id>
   
   <author>
@@ -15,6 +15,38 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>每日心情（2020.10.19）</title>
+    <link href="https://godweiyang.com/2020/10/20/mood-20-10-19/"/>
+    <id>https://godweiyang.com/2020/10/20/mood-20-10-19/</id>
+    <published>2020-10-19T16:32:04.000Z</published>
+    <updated>2020-10-19T17:09:00.083Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;没有别的意思，只是又到了网抑云时间了。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;每天的生活还是那么重复而又单调。&lt;/p&gt;
+&lt;p&gt;早上九点半起床，10点多到公司。&lt;/p&gt;
+&lt;p&gt;工作两小时不到吃午饭，中午看看直播，两点又开始下午的工作。&lt;/p&gt;
+&lt;
+        
+      
+    
+    </summary>
+    
+      <category term="随笔" scheme="https://godweiyang.com/categories/%E9%9A%8F%E7%AC%94/"/>
+    
+    
+      <category term="经验" scheme="https://godweiyang.com/tags/%E7%BB%8F%E9%AA%8C/"/>
+    
+  </entry>
   
   <entry>
     <title>国庆碎碎念</title>
@@ -563,37 +595,6 @@
 &lt;p&gt;今天就更新一道刚做的美团在线编程题吧。&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h2 id=&quot;题目描述&quot;&gt;&lt;a href=&quot;#题目描述&quot; class=&quot;headerlink&quot;
-        
-      
-    
-    </summary>
-    
-      <category term="编程算法" scheme="https://godweiyang.com/categories/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95/"/>
-    
-    
-      <category term="leetcode" scheme="https://godweiyang.com/tags/leetcode/"/>
-    
-      <category term="算法" scheme="https://godweiyang.com/tags/%E7%AE%97%E6%B3%95/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【每日算法Day 94】经典面试题：机器人的运动范围</title>
-    <link href="https://godweiyang.com/2020/04/08/leetcode-interview-13/"/>
-    <id>https://godweiyang.com/2020/04/08/leetcode-interview-13/</id>
-    <published>2020-04-08T09:31:22.000Z</published>
-    <updated>2020-04-08T09:57:22.000Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;blockquote&gt;
-&lt;p&gt;最近在忙面试，本来今天都不想更了，但是看基础知识看的太累了，于是写道题排解一下压力。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;题目链接&quot;&gt;&lt;a href=&quot;#题目链接&quot; class=&quot;headerlink&quot;
         
       
     
