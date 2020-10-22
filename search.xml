@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>LightSeq：安利一款速度超级快的序列推理引擎</title>
+      <link href="/2020/10/22/lightseq/"/>
+      <url>/2020/10/22/lightseq/</url>
+      
+        <content type="html"><![CDATA[<p><img src="1.png" alt></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 深度学习 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 模型加速 </tag>
+            
+            <tag> 序列推理 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>每日心情（2020.10.19）</title>
       <link href="/2020/10/20/mood-20-10-19/"/>
       <url>/2020/10/20/mood-20-10-19/</url>
@@ -4591,9 +4618,9 @@
             
             <tag> 博客 </tag>
             
-            <tag> hexo </tag>
-            
             <tag> github </tag>
+            
+            <tag> hexo </tag>
             
         </tags>
       
