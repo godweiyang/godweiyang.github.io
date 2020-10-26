@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://godweiyang.com/"/>
-  <updated>2020-10-22T14:51:27.664Z</updated>
+  <updated>2020-10-19T17:09:00.083Z</updated>
   <id>https://godweiyang.com/</id>
   
   <author>
@@ -15,34 +15,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>LightSeq：安利一款速度超级快的序列推理引擎</title>
-    <link href="https://godweiyang.com/2020/10/22/lightseq/"/>
-    <id>https://godweiyang.com/2020/10/22/lightseq/</id>
-    <published>2020-10-22T06:47:38.000Z</published>
-    <updated>2020-10-22T14:51:27.664Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;&lt;img src=&quot;1.png&quot;
-        
-      
-    
-    </summary>
-    
-      <category term="深度学习" scheme="https://godweiyang.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-      <category term="模型加速" scheme="https://godweiyang.com/tags/%E6%A8%A1%E5%9E%8B%E5%8A%A0%E9%80%9F/"/>
-    
-      <category term="序列推理" scheme="https://godweiyang.com/tags/%E5%BA%8F%E5%88%97%E6%8E%A8%E7%90%86/"/>
-    
-  </entry>
   
   <entry>
     <title>每日心情（2020.10.19）</title>
@@ -592,6 +564,37 @@
 &lt;p&gt;昨天腾讯一面上来就给我整的这道 easy 难度的题，然后我太紧张了还想了一会儿，差点炸裂。&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h2 id=&quot;题目链接&quot;&gt;&lt;a href=&quot;#题目链接&quot; class=&quot;headerlink&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="编程算法" scheme="https://godweiyang.com/categories/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95/"/>
+    
+    
+      <category term="leetcode" scheme="https://godweiyang.com/tags/leetcode/"/>
+    
+      <category term="算法" scheme="https://godweiyang.com/tags/%E7%AE%97%E6%B3%95/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【每日算法Day 95】美团笔试题：四面体方案个数</title>
+    <link href="https://godweiyang.com/2020/04/09/meituan-interview/"/>
+    <id>https://godweiyang.com/2020/04/09/meituan-interview/</id>
+    <published>2020-04-09T14:37:51.000Z</published>
+    <updated>2020-04-09T15:10:36.000Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;今天就更新一道刚做的美团在线编程题吧。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;题目描述&quot;&gt;&lt;a href=&quot;#题目描述&quot; class=&quot;headerlink&quot;
         
       
     
