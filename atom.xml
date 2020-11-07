@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://godweiyang.com/"/>
-  <updated>2020-10-19T17:09:00.083Z</updated>
+  <updated>2020-11-07T10:30:54.464Z</updated>
   <id>https://godweiyang.com/</id>
   
   <author>
@@ -15,6 +15,38 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>【LeetCode 327】区间和的个数</title>
+    <link href="https://godweiyang.com/2020/11/07/leetcode-327/"/>
+    <id>https://godweiyang.com/2020/11/07/leetcode-327/</id>
+    <published>2020-11-07T09:49:30.000Z</published>
+    <updated>2020-11-07T10:30:54.464Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;关注公众号【算法码上来】，每日算法干货马上就来！&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&quot;/medias/contact.jpg&quot; alt&gt;&lt;/p&gt;
+&lt;h2 id=&quot;题目描述&quot;&gt;&lt;a href=&quot;#题目描述&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="编程算法" scheme="https://godweiyang.com/categories/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95/"/>
+    
+    
+      <category term="leetcode" scheme="https://godweiyang.com/tags/leetcode/"/>
+    
+      <category term="算法" scheme="https://godweiyang.com/tags/%E7%AE%97%E6%B3%95/"/>
+    
+  </entry>
   
   <entry>
     <title>每日心情（2020.10.19）</title>
@@ -564,37 +596,6 @@
 &lt;p&gt;昨天腾讯一面上来就给我整的这道 easy 难度的题，然后我太紧张了还想了一会儿，差点炸裂。&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h2 id=&quot;题目链接&quot;&gt;&lt;a href=&quot;#题目链接&quot; class=&quot;headerlink&quot;
-        
-      
-    
-    </summary>
-    
-      <category term="编程算法" scheme="https://godweiyang.com/categories/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95/"/>
-    
-    
-      <category term="leetcode" scheme="https://godweiyang.com/tags/leetcode/"/>
-    
-      <category term="算法" scheme="https://godweiyang.com/tags/%E7%AE%97%E6%B3%95/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【每日算法Day 95】美团笔试题：四面体方案个数</title>
-    <link href="https://godweiyang.com/2020/04/09/meituan-interview/"/>
-    <id>https://godweiyang.com/2020/04/09/meituan-interview/</id>
-    <published>2020-04-09T14:37:51.000Z</published>
-    <updated>2020-04-09T15:10:36.000Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;blockquote&gt;
-&lt;p&gt;今天就更新一道刚做的美团在线编程题吧。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;题目描述&quot;&gt;&lt;a href=&quot;#题目描述&quot; class=&quot;headerlink&quot;
         
       
     
