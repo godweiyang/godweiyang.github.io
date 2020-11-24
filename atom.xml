@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://godweiyang.com/"/>
-  <updated>2020-11-07T10:30:54.464Z</updated>
+  <updated>2020-11-24T17:00:09.573Z</updated>
   <id>https://godweiyang.com/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>一段平平无奇的秋招经历</title>
+    <link href="https://godweiyang.com/2020/11/24/find-work/"/>
+    <id>https://godweiyang.com/2020/11/24/find-work/</id>
+    <published>2020-11-24T13:37:18.000Z</published>
+    <updated>2020-11-24T17:00:09.573Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;秋招也正式结束了，三方寄出去了，最终选择留在了实习的字节跳动。这里简单聊聊这大半年以来的实习和秋招经历。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&quot;2.jpg&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="随笔" scheme="https://godweiyang.com/categories/%E9%9A%8F%E7%AC%94/"/>
+    
+    
+      <category term="秋招" scheme="https://godweiyang.com/tags/%E7%A7%8B%E6%8B%9B/"/>
+    
+      <category term="经验总结" scheme="https://godweiyang.com/tags/%E7%BB%8F%E9%AA%8C%E6%80%BB%E7%BB%93/"/>
+    
+  </entry>
   
   <entry>
     <title>【LeetCode 327】区间和的个数</title>
@@ -565,37 +596,6 @@
         
         
           &lt;h2 id=&quot;题目链接&quot;&gt;&lt;a href=&quot;#题目链接&quot; class=&quot;headerlink&quot; title=&quot;题目链接&quot;&gt;&lt;/a&gt;题目链接&lt;/h2&gt;&lt;p&gt;&lt;a
-        
-      
-    
-    </summary>
-    
-      <category term="编程算法" scheme="https://godweiyang.com/categories/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95/"/>
-    
-    
-      <category term="leetcode" scheme="https://godweiyang.com/tags/leetcode/"/>
-    
-      <category term="算法" scheme="https://godweiyang.com/tags/%E7%AE%97%E6%B3%95/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【每日算法Day 96】腾讯面试题：合并两个有序数组</title>
-    <link href="https://godweiyang.com/2020/04/10/leetcode-88/"/>
-    <id>https://godweiyang.com/2020/04/10/leetcode-88/</id>
-    <published>2020-04-10T12:24:17.000Z</published>
-    <updated>2020-04-11T13:26:06.000Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;blockquote&gt;
-&lt;p&gt;昨天腾讯一面上来就给我整的这道 easy 难度的题，然后我太紧张了还想了一会儿，差点炸裂。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;题目链接&quot;&gt;&lt;a href=&quot;#题目链接&quot; class=&quot;headerlink&quot;
         
       
     
