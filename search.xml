@@ -4,6 +4,35 @@
   
     
     <entry>
+      <title>关于内推、简历、面试，我有一些想说的</title>
+      <link href="/2021/02/05/about-find-work/"/>
+      <url>/2021/02/05/about-find-work/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p>最近我司内推活动又开始了，宣传了一波，帮很多人内推了一下，这过程中也发现了不少问题。虽然我也没啥太多经验，但还是想拿出来说一说。</p></blockquote><h2 id="关于内推"><a href="#关于内推" class="headerlink" title="关于内推"></a>关于内推</h2><p>其实如果你只是随便在网上找了个内推码，然后自己投了投，那和不内推基本没有任何区别。所以还是得找靠谱的人内推，能随时联系得上，内推的一大好处就是<strong>能随时找他查查进度咋样了，能让他帮忙联系hr处理一些事情</strong>。当然这还是普通内推的情况，如果你投的是内推人自己的部门，并且你也很强，那他可以在面试官面前给你吹吹牛，至少<strong>简历关基本上可以直接过了吧，面试或许也能增加好感</strong>，当然个人能力还是最重要的。</p><p>然后就是针对我司内推的一些注意事项，<strong>尽量不要海投</strong>。有些人以为一下子投几十个，总能有一个被捞起来吧。其实我们后台系统看到的情况是，简历评估是串行的，遵循队列先进先出的规律，你的投递顺序决定了你的简历评估顺序。所以<strong>投你最中意、最有把握的岗位</strong>就行，然后可以投一两个次优的，或者干脆别再投了。因为你投再多，流程也不会进行下去的。</p><p>也有人会好奇内推对我有啥好处，其实绝大多数情况下，你们在我这投一个简历我可能也就几毛钱或者几块钱，只有入职了才会有大额奖金。</p><h2 id="关于简历"><a href="#关于简历" class="headerlink" title="关于简历"></a>关于简历</h2><p>简历说白了其实还是需要硬实力，但是我相信大多数人跟我一样也没啥拿得出手的干货，这时候就要包装一下了。</p><p>先放一下我的辣鸡简历吧：</p><p><strong>中文简历：</strong><br><a href="https://godweiyang.com/medias/files/cv-zh.pdf">https://godweiyang.com/medias/files/cv-zh.pdf</a></p><p><strong>英文简历：</strong><br><a href="https://godweiyang.com/medias/files/cv-en.pdf">https://godweiyang.com/medias/files/cv-en.pdf</a></p><p>也没啥好参考的，我这方面经验不是很足，推荐一个我感觉不错的经验贴：</p><p><a href="https://www.zhihu.com/question/25002833/answer/158108028" target="_blank" rel="noopener">https://www.zhihu.com/question/25002833/answer/158108028</a></p><p>我个人感觉，少一些主观评价（没有特色的），比如踏实好学、不怕吃苦这种（还真看到很多人喜欢写这些）。然后突出自己的特长，精简一些，如果你是面试官，第一眼看到你的简历如果是密密麻麻的，那你可能都没耐心找重点了。</p><p>简历模板也是不少人想要的，我比较推崇用LaTeX模板写，排版比较工整，也不会很花里胡哨，当然你喜欢用word也行。分享一个LaTeX模板网站吧：</p><p><a href="https://www.latexstudio.net/index/lists/barSearch/text/%E7%AE%80%E5%8E%86" target="_blank" rel="noopener">https://www.latexstudio.net/index/lists/barSearch/text/%E7%AE%80%E5%8E%86</a></p><p>简历页数最好控制在一页以内，还是以精简为主，当然如果你是大佬几十页的论文就当我没说，不过大佬也不会来看我写的这些。</p><h2 id="关于面试"><a href="#关于面试" class="headerlink" title="关于面试"></a>关于面试</h2><p>面试我也没啥好说的，主要就算法题和专业知识，我的经历说实话也基本没任何参考价值。</p><p>算法题去刷leetcode就行了。如果你有基础，那就随机刷，找手感就行了。如果你基础不是很好，那就刷重点专题，比如贪心、动态规划之类的，先培养题感。大多数题目官网都有不错的题解，如果你还是看不懂，可以试试看我写的题解：</p><p><a href="https://godweiyang.com/2020/04/24/leetcode-conclusions-110/">https://godweiyang.com/2020/04/24/leetcode-conclusions-110/</a></p><p>专业知识没啥特别说的，网上找面经复习去吧，当然这就靠你搜索能力了，鱼龙混杂，不一定找得到靠谱的面经。就拿我NLP方向举例，我当时就在知乎找到几篇不错的总结文章，例如下面的：</p><p><strong>nlp中的预训练语言模型总结(单向模型、BERT系列模型、XLNet)：</strong><br><a href="https://zhuanlan.zhihu.com/p/76912493" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/76912493</a></p><p><strong>NLP算法面试必备！史上最全！PTMs：NLP预训练模型的全面总结：</strong><br><a href="https://zhuanlan.zhihu.com/p/115014536" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/115014536</a></p><p>我觉得很多人搜索能力还是挺欠缺的，特别是在各种群里看到过的各种问题都能轻易搜到，所以锻炼锻炼搜索能力吧。</p><p>如果你有很牛的论文或者项目，那大可不必复习得这么累，好好温习一下你的论文或项目，问起细节来对答如流就行。</p><h2 id="找我内推"><a href="#找我内推" class="headerlink" title="找我内推"></a>找我内推</h2><p><strong>NLP同学想来我们组的：</strong><br>有NLP基础，想找实习的同学，可以【直接把简历给我】。我们组（字节AI Lab NLP，北京和上海）急缺做文本生成和机器翻译相关工作的实习生，不要求有顶会或竞赛，面试能过就行，看能力。实习转正率很高。有兴趣的私聊我【微信godweiyang】直接发简历，会直接送到leader手上，帮转给有需要的同学也行。</p><p><strong>想投其他岗位的：</strong><br>我的内推码：<strong>A7FSJMK</strong></p><p>投递地址：<br><a href="https://job.toutiao.com/referral/mobile/position?token=MzsxNjExOTkzMjA4NDg4OzY4MjMzNTY3NzIyMzg0MTEyNzc7MA" target="_blank" rel="noopener">https://job.toutiao.com/referral/mobile/position?token=MzsxNjExOTkzMjA4NDg4OzY4MjMzNTY3NzIyMzg0MTEyNzc7MA</a></p><p>或者直接加我微信godweiyang，拉你进内推群，找我问进度，有啥疑问也能直接问我。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 随笔 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 内推 </tag>
+            
+            <tag> 简历 </tag>
+            
+            <tag> 面试 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>想来字节跳动和我做同事吗？抓紧这次机会吧~</title>
       <link href="/2021/01/28/bytedance-offer/"/>
       <url>/2021/01/28/bytedance-offer/</url>
@@ -20,11 +49,11 @@
       
         <tags>
             
+            <tag> 面试 </tag>
+            
             <tag> 字节跳动 </tag>
             
             <tag> 实习 </tag>
-            
-            <tag> 面试 </tag>
             
         </tags>
       
