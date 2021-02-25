@@ -1,3 +1,6 @@
+https://godweiyang.com/2021/02/25/bytedance2021-hire/
+https://godweiyang.com/2021/02/14/valentine-day/
+https://godweiyang.com/2021/02/10/2021-guonian/
 https://godweiyang.com/2021/02/05/about-find-work/
 https://godweiyang.com/2021/01/28/bytedance-offer/
 https://godweiyang.com/2021/01/26/python-mail/
@@ -95,6 +98,3 @@ https://godweiyang.com/2020/02/12/leetcode-1186/
 https://godweiyang.com/2020/02/11/leetcode-927/
 https://godweiyang.com/2020/02/10/leetcode-503/
 https://godweiyang.com/2020/02/09/leetcode-16/
-https://godweiyang.com/2020/02/08/leetcode-719/
-https://godweiyang.com/2020/02/07/leetcode-289/
-https://godweiyang.com/2020/02/06/leetcode-556/
