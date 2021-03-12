@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>微信电脑版重大更新，可以上班刷朋友圈摸鱼了</title>
+      <link href="/2021/03/13/wechat-3-0-0/"/>
+      <url>/2021/03/13/wechat-3-0-0/</url>
+      
+        <content type="html"><![CDATA[<p>微信刚刚更新了3.0.0内测版本，不过暂时只有mac os版本。</p><p>主要有这么几大更新：</p><ul><li>图标变了。</li><li>能刷朋友圈了。</li><li>能看聊天分享的视频号了。</li><li>支持深色模式了。</li></ul><p>首先是图标，从原来的圆润的图标变成了手机端的方形图标：</p><p><img src="1.png" alt></p><p>然后是可以刷朋友圈了，这是最重磅的一大更新了，上班再也不用担心刷手机摸鱼被发现了！</p><p><img src="2.png" alt></p><p>接着是可以点开朋友分享的视频号观看了，不过只能看分享的，不能任意查看。</p><p><img src="3.png" alt></p><p>最后是支持深色模式了，不过对系统版本有要求。</p><p><img src="4.png" alt></p><blockquote><p>因为是内测版，所以自己下安装包安装。在我公众号“算法码上来”的后台回复“微信”，下载最新安装包。</p></blockquote><p>但是安装完后，如果你的系统是最新的big sur，那么可能会打不开，显示“没有权限”。那么两条简单的命令教你怎么解决。</p><pre class="line-numbers language-shell"><code class="language-shell">sudo chmod -R 777 /Applications/WeChat.app/xattr -c -r /Applications/WeChat.app/Contents/MacOS/WeChat<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><p>首先第一条命令是给微信app文件夹下所有文件赋予可执行权限，第二条命令则是去除mac系统特有的管理权限，然后就能运行啦。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 计算机知识 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 微信 </tag>
+            
+            <tag> 朋友圈 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>字节跳动2021春招正式启动！欢迎找我内推~</title>
       <link href="/2021/02/25/bytedance2021-hire/"/>
       <url>/2021/02/25/bytedance2021-hire/</url>

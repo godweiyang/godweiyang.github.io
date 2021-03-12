@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://godweiyang.com/"/>
-  <updated>2021-02-25T05:43:39.039Z</updated>
+  <updated>2021-03-12T16:14:57.384Z</updated>
   <id>https://godweiyang.com/</id>
   
   <author>
@@ -17,11 +17,39 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>微信电脑版重大更新，可以上班刷朋友圈摸鱼了</title>
+    <link href="https://godweiyang.com/2021/03/13/wechat-3-0-0/"/>
+    <id>https://godweiyang.com/2021/03/13/wechat-3-0-0/</id>
+    <published>2021-03-12T16:12:02.000Z</published>
+    <updated>2021-03-12T16:14:57.384Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;微信刚刚更新了3.0.0内测版本，不过暂时只有mac
+        
+      
+    
+    </summary>
+    
+      <category term="计算机知识" scheme="https://godweiyang.com/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9F%A5%E8%AF%86/"/>
+    
+    
+      <category term="微信" scheme="https://godweiyang.com/tags/%E5%BE%AE%E4%BF%A1/"/>
+    
+      <category term="朋友圈" scheme="https://godweiyang.com/tags/%E6%9C%8B%E5%8F%8B%E5%9C%88/"/>
+    
+  </entry>
+  
+  <entry>
     <title>字节跳动2021春招正式启动！欢迎找我内推~</title>
     <link href="https://godweiyang.com/2021/02/25/bytedance2021-hire/"/>
     <id>https://godweiyang.com/2021/02/25/bytedance2021-hire/</id>
     <published>2021-02-25T05:39:57.000Z</published>
-    <updated>2021-02-25T05:43:39.039Z</updated>
+    <updated>2021-03-04T09:20:59.265Z</updated>
     
     <summary type="html">
     
@@ -603,39 +631,6 @@
     
     
       <category term="经验" scheme="https://godweiyang.com/tags/%E7%BB%8F%E9%AA%8C/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【ACL2020】一种新颖的成分句法树序列化方法</title>
-    <link href="https://godweiyang.com/2020/08/30/acl20-yangwei-parsing/"/>
-    <id>https://godweiyang.com/2020/08/30/acl20-yangwei-parsing/</id>
-    <published>2020-08-30T02:41:09.000Z</published>
-    <updated>2021-01-26T14:16:36.975Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;blockquote&gt;
-&lt;p&gt;论文作者：godweiyang，末流985研三，ACM退役蒻苣，爱好算法，目前在字节跳动AI Lab实习，业余喜欢PUBG和LOL。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&lt;strong&gt;论文地址：&lt;/strong&gt;&lt;a
-        
-      
-    
-    </summary>
-    
-      <category term="深度学习" scheme="https://godweiyang.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-      <category term="ACL" scheme="https://godweiyang.com/tags/ACL/"/>
-    
-      <category term="NLP" scheme="https://godweiyang.com/tags/NLP/"/>
-    
-      <category term="成分句法分析" scheme="https://godweiyang.com/tags/%E6%88%90%E5%88%86%E5%8F%A5%E6%B3%95%E5%88%86%E6%9E%90/"/>
     
   </entry>
   
