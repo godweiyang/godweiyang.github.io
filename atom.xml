@@ -2,11 +2,11 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>韦阳的博客</title>
   
-  <subtitle>算法码上来</subtitle>
+  <subtitle>公众号：算法码上来</subtitle>
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://godweiyang.com/"/>
-  <updated>2020-11-24T17:00:09.573Z</updated>
+  <updated>2021-08-24T16:37:43.809Z</updated>
   <id>https://godweiyang.com/</id>
   
   <author>
@@ -17,11 +17,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>一段平平无奇的秋招经历</title>
-    <link href="https://godweiyang.com/2020/11/24/find-work/"/>
-    <id>https://godweiyang.com/2020/11/24/find-work/</id>
-    <published>2020-11-24T13:37:18.000Z</published>
-    <updated>2020-11-24T17:00:09.573Z</updated>
+    <title>cuBLAS矩阵乘法性能分析（附代码示例）</title>
+    <link href="https://godweiyang.com/2021/08/24/gemm/"/>
+    <id>https://godweiyang.com/2021/08/24/gemm/</id>
+    <published>2021-08-24T15:27:35.000Z</published>
+    <updated>2021-08-24T16:37:43.809Z</updated>
     
     <summary type="html">
     
@@ -29,42 +29,7 @@
       
         
         
-          &lt;blockquote&gt;
-&lt;p&gt;秋招也正式结束了，三方寄出去了，最终选择留在了实习的字节跳动。这里简单聊聊这大半年以来的实习和秋招经历。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&lt;img src=&quot;2.jpg&quot;
-        
-      
-    
-    </summary>
-    
-      <category term="随笔" scheme="https://godweiyang.com/categories/%E9%9A%8F%E7%AC%94/"/>
-    
-    
-      <category term="秋招" scheme="https://godweiyang.com/tags/%E7%A7%8B%E6%8B%9B/"/>
-    
-      <category term="经验总结" scheme="https://godweiyang.com/tags/%E7%BB%8F%E9%AA%8C%E6%80%BB%E7%BB%93/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【LeetCode 327】区间和的个数</title>
-    <link href="https://godweiyang.com/2020/11/07/leetcode-327/"/>
-    <id>https://godweiyang.com/2020/11/07/leetcode-327/</id>
-    <published>2020-11-07T09:49:30.000Z</published>
-    <updated>2020-11-07T10:30:54.464Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;blockquote&gt;
-&lt;p&gt;关注公众号【算法码上来】，每日算法干货马上就来！&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&lt;img src=&quot;/medias/contact.jpg&quot; alt&gt;&lt;/p&gt;
-&lt;h2 id=&quot;题目描述&quot;&gt;&lt;a href=&quot;#题目描述&quot;
+          &lt;h2 id=&quot;使用教程&quot;&gt;&lt;a href=&quot;#使用教程&quot; class=&quot;headerlink&quot;
         
       
     
@@ -73,18 +38,18 @@
       <category term="编程算法" scheme="https://godweiyang.com/categories/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95/"/>
     
     
-      <category term="leetcode" scheme="https://godweiyang.com/tags/leetcode/"/>
+      <category term="CUDA" scheme="https://godweiyang.com/tags/CUDA/"/>
     
-      <category term="算法" scheme="https://godweiyang.com/tags/%E7%AE%97%E6%B3%95/"/>
+      <category term="C++" scheme="https://godweiyang.com/tags/C/"/>
     
   </entry>
   
   <entry>
-    <title>每日心情（2020.10.19）</title>
-    <link href="https://godweiyang.com/2020/10/20/mood-20-10-19/"/>
-    <id>https://godweiyang.com/2020/10/20/mood-20-10-19/</id>
-    <published>2020-10-19T16:32:04.000Z</published>
-    <updated>2020-10-19T17:09:00.083Z</updated>
+    <title>在火山翻译团队工作是一种什么体验？</title>
+    <link href="https://godweiyang.com/2021/08/24/volctrans/"/>
+    <id>https://godweiyang.com/2021/08/24/volctrans/</id>
+    <published>2021-08-24T04:50:41.000Z</published>
+    <updated>2021-08-24T15:26:51.197Z</updated>
     
     <summary type="html">
     
@@ -92,13 +57,8 @@
       
         
         
-          &lt;blockquote&gt;
-&lt;p&gt;没有别的意思，只是又到了网抑云时间了。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;每天的生活还是那么重复而又单调。&lt;/p&gt;
-&lt;p&gt;早上九点半起床，10点多到公司。&lt;/p&gt;
-&lt;p&gt;工作两小时不到吃午饭，中午看看直播，两点又开始下午的工作。&lt;/p&gt;
-&lt;
+          &lt;p&gt;去年春天的某一天，看着邮件里论文被接收的通知，我心中既充满了喜悦，但随后又陷入了无尽的迷茫，后面的路该往哪走呢？&lt;/p&gt;
+&lt;p&gt;“你怎么不去找实习？”，导师的一句话点醒了我。是啊，我也该离开校园去见识见识外面的世界了。可是去哪好呢？我有能力去大厂吗？我能适应社会人的生活吗？
         
       
     
@@ -107,16 +67,18 @@
       <category term="随笔" scheme="https://godweiyang.com/categories/%E9%9A%8F%E7%AC%94/"/>
     
     
-      <category term="经验" scheme="https://godweiyang.com/tags/%E7%BB%8F%E9%AA%8C/"/>
+      <category term="火山翻译" scheme="https://godweiyang.com/tags/%E7%81%AB%E5%B1%B1%E7%BF%BB%E8%AF%91/"/>
+    
+      <category term="工作体验" scheme="https://godweiyang.com/tags/%E5%B7%A5%E4%BD%9C%E4%BD%93%E9%AA%8C/"/>
     
   </entry>
   
   <entry>
-    <title>国庆碎碎念</title>
-    <link href="https://godweiyang.com/2020/10/08/mood-20-10-08/"/>
-    <id>https://godweiyang.com/2020/10/08/mood-20-10-08/</id>
-    <published>2020-10-08T15:35:29.000Z</published>
-    <updated>2020-10-16T15:45:12.973Z</updated>
+    <title>让大家久等了，BERT推理加速终于开源了</title>
+    <link href="https://godweiyang.com/2021/08/10/ls-bert-infer/"/>
+    <id>https://godweiyang.com/2021/08/10/ls-bert-infer/</id>
+    <published>2021-08-09T17:08:22.000Z</published>
+    <updated>2021-08-24T14:25:29.992Z</updated>
     
     <summary type="html">
     
@@ -124,28 +86,23 @@
       
         
         
-          &lt;blockquote&gt;
-&lt;p&gt;关注公众号【算法码上来】，每日算法干货马上就来！&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&lt;img src=&quot;/medias/contact.jpg&quot;
+          &lt;p&gt;前几个月一直有不少小伙伴问我要&lt;strong&gt;LightSeq的BERT推理加速代码&lt;/strong&gt;，当时内部已经使用了，但是一直没空整理开源。&lt;/p&gt;
+&lt;p&gt;现在代码终于整理好了，写了一个简单的样例，大家有需要的可以使用起来了。&lt;/p&gt;
+&lt;h2
         
       
     
     </summary>
     
-      <category term="随笔" scheme="https://godweiyang.com/categories/%E9%9A%8F%E7%AC%94/"/>
-    
-    
-      <category term="经验" scheme="https://godweiyang.com/tags/%E7%BB%8F%E9%AA%8C/"/>
     
   </entry>
   
   <entry>
-    <title>【ACL2020】一种新颖的成分句法树序列化方法</title>
-    <link href="https://godweiyang.com/2020/08/30/acl20-yangwei-parsing/"/>
-    <id>https://godweiyang.com/2020/08/30/acl20-yangwei-parsing/</id>
-    <published>2020-08-30T02:41:09.000Z</published>
-    <updated>2020-08-30T05:11:05.040Z</updated>
+    <title>大数据分析，带你认识一个你从未见过的周杰伦</title>
+    <link href="https://godweiyang.com/2021/08/03/jay-chou/"/>
+    <id>https://godweiyang.com/2021/08/03/jay-chou/</id>
+    <published>2021-08-03T15:26:36.000Z</published>
+    <updated>2021-08-24T14:25:29.938Z</updated>
     
     <summary type="html">
     
@@ -153,10 +110,64 @@
       
         
         
-          &lt;blockquote&gt;
-&lt;p&gt;论文作者：godweiyang，末流985研三，ACM退役蒻苣，爱好算法，目前在字节跳动AI Lab实习，业余喜欢PUBG和LOL。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&lt;strong&gt;论文地址：&lt;/strong&gt;&lt;a
+          &lt;p&gt;周杰伦可以说是大多数90后的青春了，连我妈这种从来不咋看新闻的人也知道他。&lt;/p&gt;
+&lt;p&gt;你是否曾在初中时抄过他的歌词？你又是否曾经将他的歌词写进作文？&lt;/p&gt;
+&lt;p&gt;今天我就用大数据来分析一波他的所有歌词，带你认识一个你从未见过的周杰伦。&lt;br&gt;&lt;img
+        
+      
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>分析完吴亦凡的所有歌曲，我震惊了</title>
+    <link href="https://godweiyang.com/2021/08/01/lyric-crawler/"/>
+    <id>https://godweiyang.com/2021/08/01/lyric-crawler/</id>
+    <published>2021-08-01T14:58:47.000Z</published>
+    <updated>2021-08-24T14:25:29.995Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;最近吴亦凡的事件闹的沸沸扬扬，相信不少吃瓜群众也都有所耳闻。&lt;/p&gt;
+&lt;p&gt;但咱们今天不谈他的事件到底怎么样，咱们来谈谈他的歌到底如何。&lt;/p&gt;
+&lt;h2 id=&quot;收集歌词&quot;&gt;&lt;a href=&quot;#收集歌词&quot; class=&quot;headerlink&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="计算机知识" scheme="https://godweiyang.com/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9F%A5%E8%AF%86/"/>
+    
+    
+      <category term="NLP" scheme="https://godweiyang.com/tags/NLP/"/>
+    
+      <category term="爬虫" scheme="https://godweiyang.com/tags/%E7%88%AC%E8%99%AB/"/>
+    
+      <category term="词云" scheme="https://godweiyang.com/tags/%E8%AF%8D%E4%BA%91/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>养成女友？我训练出了一个“杨超越”聊天机器人</title>
+    <link href="https://godweiyang.com/2021/07/24/chatbot/"/>
+    <id>https://godweiyang.com/2021/07/24/chatbot/</id>
+    <published>2021-07-23T18:03:42.000Z</published>
+    <updated>2021-08-24T14:25:29.928Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;在上一期教程中，我演示了如何从零开始训练一个比较智障的聊天机器人。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://zhuanlan.zhihu.com/p/392175369&quot; target=&quot;_blank&quot;
         
       
     
@@ -165,20 +176,83 @@
       <category term="深度学习" scheme="https://godweiyang.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
     
     
-      <category term="ACL" scheme="https://godweiyang.com/tags/ACL/"/>
+      <category term="Transformer" scheme="https://godweiyang.com/tags/Transformer/"/>
     
-      <category term="NLP" scheme="https://godweiyang.com/tags/NLP/"/>
+      <category term="模型训练" scheme="https://godweiyang.com/tags/%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83/"/>
     
-      <category term="成分句法分析" scheme="https://godweiyang.com/tags/%E6%88%90%E5%88%86%E5%8F%A5%E6%B3%95%E5%88%86%E6%9E%90/"/>
+      <category term="模型加速" scheme="https://godweiyang.com/tags/%E6%A8%A1%E5%9E%8B%E5%8A%A0%E9%80%9F/"/>
     
   </entry>
   
   <entry>
-    <title>【NLP 算法岗】提前批暑期实习面（试）经（历）</title>
-    <link href="https://godweiyang.com/2020/04/26/summer-interview-experience/"/>
-    <id>https://godweiyang.com/2020/04/26/summer-interview-experience/</id>
-    <published>2020-04-26T13:30:47.000Z</published>
-    <updated>2020-04-26T15:41:42.000Z</updated>
+    <title>从零开始训练一个人工智障女友</title>
+    <link href="https://godweiyang.com/2021/07/21/transformer-code/"/>
+    <id>https://godweiyang.com/2021/07/21/transformer-code/</id>
+    <published>2021-07-20T18:44:30.000Z</published>
+    <updated>2021-08-24T14:25:30.033Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;很多人工智能小白可能不知道那些高大上的语音助理、机器翻译或者聊天机器人都是怎么被创造出来的，也不知道一个深度学习模型是怎么从零开始搭建并运行起来的。&lt;/p&gt;
+&lt;p&gt;今天我就简单教大家如何从零开始搭建一个Transformer模型，并在自己的数据上训练起来。这个教程非常基础，
+        
+      
+    
+    </summary>
+    
+      <category term="深度学习" scheme="https://godweiyang.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="Transformer" scheme="https://godweiyang.com/tags/Transformer/"/>
+    
+      <category term="模型训练" scheme="https://godweiyang.com/tags/%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83/"/>
+    
+      <category term="模型加速" scheme="https://godweiyang.com/tags/%E6%A8%A1%E5%9E%8B%E5%8A%A0%E9%80%9F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>训练BERT，我只花了一半的时间</title>
+    <link href="https://godweiyang.com/2021/07/13/huggingface-speedup/"/>
+    <id>https://godweiyang.com/2021/07/13/huggingface-speedup/</id>
+    <published>2021-07-13T15:35:32.000Z</published>
+    <updated>2021-08-24T14:25:29.937Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;相信很多人都知道Hugging Face，也都用过它的Transformers预训练语言模型，但你们有没有觉得它训练的有点太慢了呢？&lt;/p&gt;
+&lt;p&gt;这时候，字节第二快的男人要站出来了（第一快是我mentor），手把手教你怎么让训练时间缩短一半。&lt;/p&gt;
+&lt;h2
+        
+      
+    
+    </summary>
+    
+      <category term="编程算法" scheme="https://godweiyang.com/categories/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95/"/>
+    
+    
+      <category term="cuda" scheme="https://godweiyang.com/tags/cuda/"/>
+    
+      <category term="BERT" scheme="https://godweiyang.com/tags/BERT/"/>
+    
+      <category term="训练加速" scheme="https://godweiyang.com/tags/%E8%AE%AD%E7%BB%83%E5%8A%A0%E9%80%9F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>字节跳动秋招提前批开始，不用笔试，只剩一个月！</title>
+    <link href="https://godweiyang.com/2021/07/08/bytedance-hire-2022/"/>
+    <id>https://godweiyang.com/2021/07/08/bytedance-hire-2022/</id>
+    <published>2021-07-08T13:45:48.000Z</published>
+    <updated>2021-08-24T14:25:29.894Z</updated>
     
     <summary type="html">
     
@@ -187,9 +261,9 @@
         
         
           &lt;blockquote&gt;
-&lt;p&gt;首先申明，这是一份面试【经历】，而【不是】经验，所以基本上对大家没有什么帮助，看个乐子就好，最后结果是来了心心念念的字节啦。&lt;/p&gt;
+&lt;p&gt;盼星星盼月亮，字节跳动2022届秋招提前批终于开始啦！&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h2 id=&quot;基本情况&quot;&gt;&lt;a href=&quot;#基本情况&quot;
+&lt;h2 id=&quot;提前批优势&quot;&gt;&lt;a href=&quot;#提前批优势&quot; class=&quot;headerlink&quot;
         
       
     
@@ -200,14 +274,18 @@
     
       <category term="面试" scheme="https://godweiyang.com/tags/%E9%9D%A2%E8%AF%95/"/>
     
+      <category term="字节跳动" scheme="https://godweiyang.com/tags/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8/"/>
+    
+      <category term="实习" scheme="https://godweiyang.com/tags/%E5%AE%9E%E4%B9%A0/"/>
+    
   </entry>
   
   <entry>
-    <title>【分类汇总】110 天以来的题解分类汇总</title>
-    <link href="https://godweiyang.com/2020/04/24/leetcode-conclusions-110/"/>
-    <id>https://godweiyang.com/2020/04/24/leetcode-conclusions-110/</id>
-    <published>2020-04-24T09:45:12.000Z</published>
-    <updated>2020-04-23T12:48:26.000Z</updated>
+    <title>恕我直言，你们的模型训练都还不够快</title>
+    <link href="https://godweiyang.com/2021/06/26/params-cont/"/>
+    <id>https://godweiyang.com/2021/06/26/params-cont/</id>
+    <published>2021-06-26T04:45:23.000Z</published>
+    <updated>2021-08-24T14:25:30.018Z</updated>
     
     <summary type="html">
     
@@ -215,7 +293,9 @@
       
         
         
-          &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;写算法题解也有 110
+          &lt;p&gt;周末在家没事干，也没人约了打游戏，于是打开了gayhub闲逛，哦不，是github。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;1.jpeg&quot; alt&gt;&lt;/p&gt;
+&lt;p&gt;然后发现了一个挺有意思的项目:&lt;br&gt;&lt;img src=&quot;2.png&quot;
         
       
     
@@ -224,18 +304,20 @@
       <category term="编程算法" scheme="https://godweiyang.com/categories/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95/"/>
     
     
-      <category term="leetcode" scheme="https://godweiyang.com/tags/leetcode/"/>
+      <category term="CUDA" scheme="https://godweiyang.com/tags/CUDA/"/>
     
-      <category term="算法" scheme="https://godweiyang.com/tags/%E7%AE%97%E6%B3%95/"/>
+      <category term="LightSeq" scheme="https://godweiyang.com/tags/LightSeq/"/>
+    
+      <category term="PyTorch" scheme="https://godweiyang.com/tags/PyTorch/"/>
     
   </entry>
   
   <entry>
-    <title>【每日算法Day 109】五大解法，带你深入了解完全背包方案数</title>
-    <link href="https://godweiyang.com/2020/04/23/leetcode-interview-08-11/"/>
-    <id>https://godweiyang.com/2020/04/23/leetcode-interview-08-11/</id>
-    <published>2020-04-23T06:40:14.000Z</published>
-    <updated>2020-04-23T08:03:50.000Z</updated>
+    <title>网传字节跳动实习生删除所有轻量级模型，还有救吗？</title>
+    <link href="https://godweiyang.com/2021/06/25/bytedance-news-0/"/>
+    <id>https://godweiyang.com/2021/06/25/bytedance-news-0/</id>
+    <published>2021-06-25T03:18:34.000Z</published>
+    <updated>2021-08-24T14:25:29.896Z</updated>
     
     <summary type="html">
     
@@ -243,10 +325,7 @@
       
         
         
-          &lt;blockquote&gt;
-&lt;p&gt;今天这题是完全背包问题 + 背包问题方案数，我一共列举了 5 种解法，层层递进优化。并且从两个角度殊途同归，最终优化到同一个式子。强烈建议掌握，对理解背包问题有很大帮助。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;题目链接&quot;&gt;&lt;a
+          &lt;p&gt;这两天字节跳动的一个新闻上了热搜，相信大多数人应该都已经听说了：&lt;br&gt;&lt;img src=&quot;1.png&quot;
         
       
     
@@ -255,18 +334,20 @@
       <category term="编程算法" scheme="https://godweiyang.com/categories/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95/"/>
     
     
-      <category term="leetcode" scheme="https://godweiyang.com/tags/leetcode/"/>
+      <category term="字节跳动" scheme="https://godweiyang.com/tags/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8/"/>
     
-      <category term="算法" scheme="https://godweiyang.com/tags/%E7%AE%97%E6%B3%95/"/>
+      <category term="CUDA" scheme="https://godweiyang.com/tags/CUDA/"/>
+    
+      <category term="LightSeq" scheme="https://godweiyang.com/tags/LightSeq/"/>
     
   </entry>
   
   <entry>
-    <title>【每日算法Day 108】一道简单的二叉树题目，写法还是挺多的。</title>
-    <link href="https://godweiyang.com/2020/04/22/leetcode-199/"/>
-    <id>https://godweiyang.com/2020/04/22/leetcode-199/</id>
-    <published>2020-04-22T04:03:45.000Z</published>
-    <updated>2020-04-22T04:47:12.000Z</updated>
+    <title>只用几行代码，我让模型『训练』加速了3倍以上！</title>
+    <link href="https://godweiyang.com/2021/06/21/lightseq2-usage/"/>
+    <id>https://godweiyang.com/2021/06/21/lightseq2-usage/</id>
+    <published>2021-06-21T07:02:31.000Z</published>
+    <updated>2021-08-24T14:25:29.980Z</updated>
     
     <summary type="html">
     
@@ -274,7 +355,10 @@
       
         
         
-          &lt;h2 id=&quot;题目链接&quot;&gt;&lt;a href=&quot;#题目链接&quot; class=&quot;headerlink&quot; title=&quot;题目链接&quot;&gt;&lt;/a&gt;题目链接&lt;/h2&gt;&lt;p&gt;&lt;a
+          &lt;p&gt;最近总有学妹问我，论文要截稿了，模型来不及跑怎么办？&lt;/p&gt;
+&lt;p&gt;还有学妹问我，有好多idea，验证一个就要跑一周怎么办？&lt;/p&gt;
+&lt;p&gt;这时候我想起了下面这张图，我想这句话反映了大多数从事人工智能的科研工作者们目前的状态。&lt;/p&gt;
+&lt;p&gt;&lt;img
         
       
     
@@ -283,18 +367,22 @@
       <category term="编程算法" scheme="https://godweiyang.com/categories/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95/"/>
     
     
-      <category term="leetcode" scheme="https://godweiyang.com/tags/leetcode/"/>
+      <category term="CUDA" scheme="https://godweiyang.com/tags/CUDA/"/>
     
-      <category term="算法" scheme="https://godweiyang.com/tags/%E7%AE%97%E6%B3%95/"/>
+      <category term="LightSeq" scheme="https://godweiyang.com/tags/LightSeq/"/>
+    
+      <category term="PyTorch" scheme="https://godweiyang.com/tags/PyTorch/"/>
+    
+      <category term="TensorFlow" scheme="https://godweiyang.com/tags/TensorFlow/"/>
     
   </entry>
   
   <entry>
-    <title>【每日算法Day 107】面试必考：良心推荐，一题三解，不看后悔一辈子</title>
-    <link href="https://godweiyang.com/2020/04/21/leetcode-1248/"/>
-    <id>https://godweiyang.com/2020/04/21/leetcode-1248/</id>
-    <published>2020-04-21T03:14:02.000Z</published>
-    <updated>2020-04-21T05:12:26.000Z</updated>
+    <title>训练加速3倍！字节跳动推出业界首个NLP模型全流程加速引擎</title>
+    <link href="https://godweiyang.com/2021/06/21/lightseq2-introduction/"/>
+    <id>https://godweiyang.com/2021/06/21/lightseq2-introduction/</id>
+    <published>2021-06-21T06:47:03.000Z</published>
+    <updated>2021-08-24T14:25:29.958Z</updated>
     
     <summary type="html">
     
@@ -302,8 +390,7 @@
       
         
         
-          &lt;blockquote&gt;
-&lt;p&gt;可能有些同学只会写 &lt;code&gt;python&lt;/code&gt; ，看不懂 &lt;code&gt;c++&lt;/code&gt;。但是一个是因为我懒，多解时不想再写一遍 &lt;code&gt;python&lt;/code&gt;
+          &lt;p&gt;&lt;img src=&quot;ls.png&quot;
         
       
     
@@ -312,18 +399,22 @@
       <category term="编程算法" scheme="https://godweiyang.com/categories/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95/"/>
     
     
-      <category term="leetcode" scheme="https://godweiyang.com/tags/leetcode/"/>
+      <category term="CUDA" scheme="https://godweiyang.com/tags/CUDA/"/>
     
-      <category term="算法" scheme="https://godweiyang.com/tags/%E7%AE%97%E6%B3%95/"/>
+      <category term="LightSeq" scheme="https://godweiyang.com/tags/LightSeq/"/>
+    
+      <category term="PyTorch" scheme="https://godweiyang.com/tags/PyTorch/"/>
+    
+      <category term="TensorFlow" scheme="https://godweiyang.com/tags/TensorFlow/"/>
     
   </entry>
   
   <entry>
-    <title>【每日算法Day 106】打家劫舍系列最后一弹，撑住你就赢了！</title>
-    <link href="https://godweiyang.com/2020/04/20/leetcode-337/"/>
-    <id>https://godweiyang.com/2020/04/20/leetcode-337/</id>
-    <published>2020-04-20T02:46:49.000Z</published>
-    <updated>2020-04-20T03:15:48.000Z</updated>
+    <title>七年师大，青春永不毕业</title>
+    <link href="https://godweiyang.com/2021/05/21/master-graduate/"/>
+    <id>https://godweiyang.com/2021/05/21/master-graduate/</id>
+    <published>2021-05-20T17:05:16.000Z</published>
+    <updated>2021-08-24T14:25:30.013Z</updated>
     
     <summary type="html">
     
@@ -331,7 +422,68 @@
       
         
         
-          &lt;h2 id=&quot;题目链接&quot;&gt;&lt;a href=&quot;#题目链接&quot; class=&quot;headerlink&quot; title=&quot;题目链接&quot;&gt;&lt;/a&gt;题目链接&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;https://leetcode-cn.com/problems/house-robber-iii/&quot;
+          &lt;p&gt;2021年5月19日，我答辩顺利结束了。&lt;/p&gt;
+&lt;p&gt;22年的学生时代终于要走到了尽头，在学校的日子过一天少一天。想到校园卡即将刷不进校门了，难免有些失落。&lt;/p&gt;
+&lt;p&gt;七年师大，从两年的东川路500号，到五年的中山北路3663号。我见证了计算机系的三次变迁，也发展的越
+        
+      
+    
+    </summary>
+    
+      <category term="随笔" scheme="https://godweiyang.com/categories/%E9%9A%8F%E7%AC%94/"/>
+    
+    
+      <category term="毕业" scheme="https://godweiyang.com/tags/%E6%AF%95%E4%B8%9A/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>字节还有打游戏、听音乐这种神仙工作？</title>
+    <link href="https://godweiyang.com/2021/04/16/bytedance-hire-2021/"/>
+    <id>https://godweiyang.com/2021/04/16/bytedance-hire-2021/</id>
+    <published>2021-04-16T11:57:36.000Z</published>
+    <updated>2021-08-24T14:25:29.892Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;有很多同（xue）学（mei）想来字节，但是也不知道投什么岗位，于是就乱投一通，最后大多数都倒在了简历筛选阶段。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;1.jpeg&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="随笔" scheme="https://godweiyang.com/categories/%E9%9A%8F%E7%AC%94/"/>
+    
+    
+      <category term="面试" scheme="https://godweiyang.com/tags/%E9%9D%A2%E8%AF%95/"/>
+    
+      <category term="字节跳动" scheme="https://godweiyang.com/tags/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8/"/>
+    
+      <category term="实习" scheme="https://godweiyang.com/tags/%E5%AE%9E%E4%B9%A0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>只用两行代码，我让Transformer推理加速了10倍</title>
+    <link href="https://godweiyang.com/2021/04/13/lightseq-python-usage/"/>
+    <id>https://godweiyang.com/2021/04/13/lightseq-python-usage/</id>
+    <published>2021-04-12T17:32:47.000Z</published>
+    <updated>2021-08-24T14:25:29.954Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;最近有学妹问我，我训了一个Transformer模型，但是预测好慢啊，有啥解决方案吗？&lt;/p&gt;
+&lt;p&gt;我心想，你又想好，又想快，咋不上天🚀呢？&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;1.png&quot;
         
       
     
@@ -340,18 +492,20 @@
       <category term="编程算法" scheme="https://godweiyang.com/categories/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95/"/>
     
     
-      <category term="leetcode" scheme="https://godweiyang.com/tags/leetcode/"/>
+      <category term="CUDA" scheme="https://godweiyang.com/tags/CUDA/"/>
     
-      <category term="算法" scheme="https://godweiyang.com/tags/%E7%AE%97%E6%B3%95/"/>
+      <category term="LightSeq" scheme="https://godweiyang.com/tags/LightSeq/"/>
+    
+      <category term="PyTorch" scheme="https://godweiyang.com/tags/PyTorch/"/>
     
   </entry>
   
   <entry>
-    <title>【每日算法Day 105】打家劫舍第二弹：看好你的电瓶车！</title>
-    <link href="https://godweiyang.com/2020/04/19/leetcode-213/"/>
-    <id>https://godweiyang.com/2020/04/19/leetcode-213/</id>
-    <published>2020-04-19T04:18:19.000Z</published>
-    <updated>2020-04-19T04:45:02.000Z</updated>
+    <title>熬了几个通宵，我写了份CUDA新手入门代码</title>
+    <link href="https://godweiyang.com/2021/03/28/nn-cuda-example/"/>
+    <id>https://godweiyang.com/2021/03/28/nn-cuda-example/</id>
+    <published>2021-03-27T16:51:05.000Z</published>
+    <updated>2021-08-24T14:25:30.015Z</updated>
     
     <summary type="html">
     
@@ -359,7 +513,10 @@
       
         
         
-          &lt;h2 id=&quot;题目链接&quot;&gt;&lt;a href=&quot;#题目链接&quot; class=&quot;headerlink&quot; title=&quot;题目链接&quot;&gt;&lt;/a&gt;题目链接&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;https://leetcode-cn.com/problems/house-robber-ii/&quot;
+          &lt;p&gt;在用PyTorch或者TensorFlow搭积木的时候，你是不是也遇到过下面这些情况：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;自带的算子及其组合都无法满足你超（bian）常（tai）的计算需求。&lt;/li&gt;
+&lt;li&gt;自带的算子不可导，需要自己定义反向传播的梯度，例如&lt;code&gt;argma
         
       
     
@@ -368,18 +525,22 @@
       <category term="编程算法" scheme="https://godweiyang.com/categories/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95/"/>
     
     
-      <category term="leetcode" scheme="https://godweiyang.com/tags/leetcode/"/>
+      <category term="CUDA" scheme="https://godweiyang.com/tags/CUDA/"/>
     
-      <category term="算法" scheme="https://godweiyang.com/tags/%E7%AE%97%E6%B3%95/"/>
+      <category term="C++" scheme="https://godweiyang.com/tags/C/"/>
+    
+      <category term="PyTorch" scheme="https://godweiyang.com/tags/PyTorch/"/>
+    
+      <category term="TensorFlow" scheme="https://godweiyang.com/tags/TensorFlow/"/>
     
   </entry>
   
   <entry>
-    <title>【每日算法Day 104】偷电瓶的周某今天放出来了，还不赶紧做这道题防范一下！</title>
-    <link href="https://godweiyang.com/2020/04/18/leetcode-198/"/>
-    <id>https://godweiyang.com/2020/04/18/leetcode-198/</id>
-    <published>2020-04-18T05:18:51.000Z</published>
-    <updated>2020-04-18T05:35:38.000Z</updated>
+    <title>三分钟教你如何PyTorch自定义反向传播</title>
+    <link href="https://godweiyang.com/2021/03/24/torch-cpp-cuda-3/"/>
+    <id>https://godweiyang.com/2021/03/24/torch-cpp-cuda-3/</id>
+    <published>2021-03-24T05:03:15.000Z</published>
+    <updated>2021-08-24T14:25:30.022Z</updated>
     
     <summary type="html">
     
@@ -387,8 +548,8 @@
       
         
         
-          &lt;blockquote&gt;
-&lt;p&gt;偷电瓶的周某今天（2020.04.18）出来啦，打工是不可能打工的，这辈子都不可能打工的，大家可要小心咯。&lt;br&gt;今天开始讲解 LeetCode
+          &lt;p&gt;在前面两篇教程中，我们详细讲解了如何编写cuda算子，并用PyTorch进行调用，并且详细讲述了三种编译cuda算子的方式，具体可以看前面两篇：&lt;/p&gt;
+&lt;p&gt;&lt;a
         
       
     
@@ -397,18 +558,20 @@
       <category term="编程算法" scheme="https://godweiyang.com/categories/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95/"/>
     
     
-      <category term="leetcode" scheme="https://godweiyang.com/tags/leetcode/"/>
+      <category term="CUDA" scheme="https://godweiyang.com/tags/CUDA/"/>
     
-      <category term="算法" scheme="https://godweiyang.com/tags/%E7%AE%97%E6%B3%95/"/>
+      <category term="C++" scheme="https://godweiyang.com/tags/C/"/>
+    
+      <category term="PyTorch" scheme="https://godweiyang.com/tags/PyTorch/"/>
     
   </entry>
   
   <entry>
-    <title>【每日算法Day 103】老题新做，几乎不会有人想到的解法，它来了</title>
-    <link href="https://godweiyang.com/2020/04/17/leetcode-846-v2/"/>
-    <id>https://godweiyang.com/2020/04/17/leetcode-846-v2/</id>
-    <published>2020-04-17T03:30:53.000Z</published>
-    <updated>2020-04-17T07:35:34.000Z</updated>
+    <title>详解PyTorch编译并调用自定义CUDA算子的三种方式</title>
+    <link href="https://godweiyang.com/2021/03/21/torch-cpp-cuda-2/"/>
+    <id>https://godweiyang.com/2021/03/21/torch-cpp-cuda-2/</id>
+    <published>2021-03-21T07:26:57.000Z</published>
+    <updated>2021-08-24T14:25:30.021Z</updated>
     
     <summary type="html">
     
@@ -416,10 +579,8 @@
       
         
         
-          &lt;blockquote&gt;
-&lt;p&gt;前两天 Day 99 的时候，做过一道顺子的题目，当时有一个网友的妙解有点没看懂，今天我来给大家详细讲解一下。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;题目链接&quot;&gt;&lt;a href=&quot;#题目链接&quot; class=&quot;headerlink&quot;
+          &lt;p&gt;在上一篇教程中，我们实现了一个自定义的CUDA算子&lt;code&gt;add2&lt;/code&gt;，用来实现两个Tensor的相加。然后用PyTorch调用这个算子，分析对比了一下和PyTorch原生加法的速度差异，并且详细解释了线程同步给统计时间带来的影响。&lt;/p&gt;
+&lt;p&gt;&lt;stron
         
       
     
@@ -428,18 +589,20 @@
       <category term="编程算法" scheme="https://godweiyang.com/categories/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95/"/>
     
     
-      <category term="leetcode" scheme="https://godweiyang.com/tags/leetcode/"/>
+      <category term="CUDA" scheme="https://godweiyang.com/tags/CUDA/"/>
     
-      <category term="算法" scheme="https://godweiyang.com/tags/%E7%AE%97%E6%B3%95/"/>
+      <category term="C++" scheme="https://godweiyang.com/tags/C/"/>
+    
+      <category term="PyTorch" scheme="https://godweiyang.com/tags/PyTorch/"/>
     
   </entry>
   
   <entry>
-    <title>【每日算法Day 102】美团 AI 平台算法工程师面试编程题</title>
-    <link href="https://godweiyang.com/2020/04/16/meituan-interview-1/"/>
-    <id>https://godweiyang.com/2020/04/16/meituan-interview-1/</id>
-    <published>2020-04-16T09:51:30.000Z</published>
-    <updated>2020-04-16T10:21:28.000Z</updated>
+    <title>PyTorch自定义CUDA算子教程与运行时间分析</title>
+    <link href="https://godweiyang.com/2021/03/18/torch-cpp-cuda/"/>
+    <id>https://godweiyang.com/2021/03/18/torch-cpp-cuda/</id>
+    <published>2021-03-18T11:31:21.000Z</published>
+    <updated>2021-08-24T14:25:30.022Z</updated>
     
     <summary type="html">
     
@@ -447,8 +610,8 @@
       
         
         
-          &lt;blockquote&gt;
-&lt;p&gt;今天去尝试了一下美团 AI
+          &lt;p&gt;最近因为工作需要，学习了一波CUDA。这里简单记录一下PyTorch自定义CUDA算子的方法，写了一个非常简单的example，再介绍一下正确的PyTorch中CUDA运行时间分析方法。&lt;/p&gt;
+&lt;p&gt;所有的代码都放在了github上，地址是：&lt;br&gt;&lt;a
         
       
     
@@ -457,156 +620,11 @@
       <category term="编程算法" scheme="https://godweiyang.com/categories/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95/"/>
     
     
-      <category term="leetcode" scheme="https://godweiyang.com/tags/leetcode/"/>
+      <category term="CUDA" scheme="https://godweiyang.com/tags/CUDA/"/>
     
-      <category term="算法" scheme="https://godweiyang.com/tags/%E7%AE%97%E6%B3%95/"/>
+      <category term="C++" scheme="https://godweiyang.com/tags/C/"/>
     
-  </entry>
-  
-  <entry>
-    <title>【每日算法Day 101】字节跳动 AI Lab 精选面试编程题</title>
-    <link href="https://godweiyang.com/2020/04/15/byte-dance-interview-1/"/>
-    <id>https://godweiyang.com/2020/04/15/byte-dance-interview-1/</id>
-    <published>2020-04-15T09:51:32.000Z</published>
-    <updated>2020-04-15T10:38:56.000Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;blockquote&gt;
-&lt;p&gt;今天字节三面结束了，超越妹妹保佑我通过吧！今天更新两道同学之前面试 AI Lab 时遇到的题。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;0-1-背包问题（浮点数）&quot;&gt;&lt;a href=&quot;#0-1-背包问题（浮点数）&quot;
-        
-      
-    
-    </summary>
-    
-      <category term="编程算法" scheme="https://godweiyang.com/categories/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95/"/>
-    
-    
-      <category term="leetcode" scheme="https://godweiyang.com/tags/leetcode/"/>
-    
-      <category term="算法" scheme="https://godweiyang.com/tags/%E7%AE%97%E6%B3%95/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【每日算法Day 100】字节跳动 AI Lab 面试编程题（三道）</title>
-    <link href="https://godweiyang.com/2020/04/14/byte-dance-interview/"/>
-    <id>https://godweiyang.com/2020/04/14/byte-dance-interview/</id>
-    <published>2020-04-14T09:31:09.000Z</published>
-    <updated>2020-04-14T10:36:06.000Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;blockquote&gt;
-&lt;p&gt;今天连着面了两次字节跳动，勉强撑到了明天三面。一共三道编程题，做的很烂，这里分享一下。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;第一题&quot;&gt;&lt;a href=&quot;#第一题&quot; class=&quot;headerlink&quot;
-        
-      
-    
-    </summary>
-    
-      <category term="编程算法" scheme="https://godweiyang.com/categories/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95/"/>
-    
-    
-      <category term="leetcode" scheme="https://godweiyang.com/tags/leetcode/"/>
-    
-      <category term="算法" scheme="https://godweiyang.com/tags/%E7%AE%97%E6%B3%95/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【每日算法Day 99】你们可能不知道只用20万赢到578万是什么概念</title>
-    <link href="https://godweiyang.com/2020/04/13/leetcode-846/"/>
-    <id>https://godweiyang.com/2020/04/13/leetcode-846/</id>
-    <published>2020-04-13T04:23:00.000Z</published>
-    <updated>2020-04-13T06:16:20.000Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;blockquote&gt;
-&lt;p&gt;你们可能不知道只用 20 万赢到 578 万是什么概念。&lt;br&gt;我们一般只会用两个字来形容这种人：赌怪！&lt;br&gt;我经常说一句话，当年陈刀仔他能用 20 块赢到 3700 万，我 LBW 用 20 万赢到 500
-        
-      
-    
-    </summary>
-    
-      <category term="编程算法" scheme="https://godweiyang.com/categories/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95/"/>
-    
-    
-      <category term="leetcode" scheme="https://godweiyang.com/tags/leetcode/"/>
-    
-      <category term="算法" scheme="https://godweiyang.com/tags/%E7%AE%97%E6%B3%95/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【每日算法Day 98】慈善赌神godweiyang教你算骰子点数概率！</title>
-    <link href="https://godweiyang.com/2020/04/12/leetcode-interview-60/"/>
-    <id>https://godweiyang.com/2020/04/12/leetcode-interview-60/</id>
-    <published>2020-04-12T12:41:45.000Z</published>
-    <updated>2020-04-12T13:21:58.000Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;h2 id=&quot;题目链接&quot;&gt;&lt;a href=&quot;#题目链接&quot; class=&quot;headerlink&quot; title=&quot;题目链接&quot;&gt;&lt;/a&gt;题目链接&lt;/h2&gt;&lt;p&gt;&lt;a
-        
-      
-    
-    </summary>
-    
-      <category term="编程算法" scheme="https://godweiyang.com/categories/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95/"/>
-    
-    
-      <category term="leetcode" scheme="https://godweiyang.com/tags/leetcode/"/>
-    
-      <category term="算法" scheme="https://godweiyang.com/tags/%E7%AE%97%E6%B3%95/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【每日算法Day 97】经典面试题：求两个数组最小差</title>
-    <link href="https://godweiyang.com/2020/04/11/leetcode-interview-16-06/"/>
-    <id>https://godweiyang.com/2020/04/11/leetcode-interview-16-06/</id>
-    <published>2020-04-11T13:22:08.000Z</published>
-    <updated>2020-04-11T13:44:38.000Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;h2 id=&quot;题目链接&quot;&gt;&lt;a href=&quot;#题目链接&quot; class=&quot;headerlink&quot; title=&quot;题目链接&quot;&gt;&lt;/a&gt;题目链接&lt;/h2&gt;&lt;p&gt;&lt;a
-        
-      
-    
-    </summary>
-    
-      <category term="编程算法" scheme="https://godweiyang.com/categories/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95/"/>
-    
-    
-      <category term="leetcode" scheme="https://godweiyang.com/tags/leetcode/"/>
-    
-      <category term="算法" scheme="https://godweiyang.com/tags/%E7%AE%97%E6%B3%95/"/>
+      <category term="PyTorch" scheme="https://godweiyang.com/tags/PyTorch/"/>
     
   </entry>
   
