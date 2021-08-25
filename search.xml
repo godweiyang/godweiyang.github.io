@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>昨晚学妹参加了B站秋招笔试，还想考考我？</title>
+      <link href="/2021/08/26/bilibili-0/"/>
+      <url>/2021/08/26/bilibili-0/</url>
+      
+        <content type="html"><![CDATA[<p>学妹昨晚参加了B站的2022届秋招算法笔试，做完给我发来了一道题，想考考我，说挺难的。<br><img src="2.jpg" alt></p><p>我看了两分钟，给她发去了我的思路。然后学妹一眼就看懂了，立马秒过。<br><img src="1.jpg" alt></p><p>那么这道题到底是怎么做的呢？</p><p>题目要求将$n$个数切分成$k$块，求每块的序号乘上该块内数字之和的最大值。</p><p>那么首先我们可以用$S_i$来表示前缀和，也就是$S_i = \sum_{j &lt; i}{a_j}$。</p><p>然后假设$k$个子序列中，第$i$个子序列的末尾元素为$a_{d_i}$，其中$1 \le i \le k$。那么第$i$个子序列的元素和就可以用前缀和来表示为$S_{d_i} - S_{d_{i-1}}$。</p><p>然后题目要求的最大值就可以表示为：<br>$$<br>\sum_{1 \le i \le k}{i \cdot (S_{d_i} - S_{d_{i-1}})}<br>$$</p><p>展开并化简就可以得到：<br>$$<br>-\sum_{0 \le i \le k-1}{S_{d_i}} + k \cdot S_{d_k}<br>$$</p><p>后面一项$k \cdot S_{d_k}$就是整个数组之和的$k$倍，是一个定值。所以要求这个式子的最大值，就是求$\sum_{0 \le i \le k-1}{S_{d_i}}$的最小值。</p><p>又因为$S_{d_0} = 0$，所以就是求$\sum_{1 \le i \le k-1}{S_{d_i}}$的最小值。</p><p>可以发现，这$k-1$个前缀和其实是互不干扰的，所以只需要对所有的前缀和进行排序，取最小的$k-1$个就行了。</p><p>C++代码如下：</p><pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;algorithm></span></span><span class="token keyword">using</span> <span class="token keyword">namespace</span> std<span class="token punctuation">;</span><span class="token keyword">typedef</span> <span class="token keyword">long</span> <span class="token keyword">long</span> ll<span class="token punctuation">;</span><span class="token keyword">const</span> <span class="token keyword">int</span> N <span class="token operator">=</span> <span class="token number">300010</span><span class="token punctuation">;</span>ll a<span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">;</span><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>    <span class="token keyword">int</span> n<span class="token punctuation">,</span> k<span class="token punctuation">;</span>    <span class="token function">scanf</span><span class="token punctuation">(</span><span class="token string">"%d%d"</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>n<span class="token punctuation">,</span> <span class="token operator">&amp;</span>k<span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> n<span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token punctuation">{</span>        <span class="token function">scanf</span><span class="token punctuation">(</span><span class="token string">"%lld"</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>a<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>        <span class="token keyword">if</span> <span class="token punctuation">(</span>i<span class="token punctuation">)</span> a<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">+</span><span class="token operator">=</span> a<span class="token punctuation">[</span>i<span class="token number">-1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    <span class="token punctuation">}</span>    <span class="token function">sort</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span> a<span class="token operator">+</span>n<span class="token number">-1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    ll res <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> k<span class="token number">-1</span><span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span>        res <span class="token operator">+</span><span class="token operator">=</span> a<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>    res <span class="token operator">=</span> <span class="token operator">-</span>res <span class="token operator">+</span> k <span class="token operator">*</span> a<span class="token punctuation">[</span>n<span class="token number">-1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%lld\n"</span><span class="token punctuation">,</span> res<span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>Python代码：</p><pre class="line-numbers language-python"><code class="language-python">n<span class="token punctuation">,</span> k <span class="token operator">=</span> <span class="token punctuation">[</span>int<span class="token punctuation">(</span>x<span class="token punctuation">)</span> <span class="token keyword">for</span> x <span class="token keyword">in</span> input<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">)</span><span class="token punctuation">]</span>a <span class="token operator">=</span> <span class="token punctuation">[</span>int<span class="token punctuation">(</span>x<span class="token punctuation">)</span> <span class="token keyword">for</span> x <span class="token keyword">in</span> input<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">)</span><span class="token punctuation">]</span>S <span class="token operator">=</span> <span class="token punctuation">[</span>sum<span class="token punctuation">(</span>a<span class="token punctuation">[</span><span class="token punctuation">:</span>i<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span>n<span class="token number">-1</span><span class="token punctuation">)</span><span class="token punctuation">]</span>S<span class="token punctuation">.</span>sort<span class="token punctuation">(</span><span class="token punctuation">)</span>res <span class="token operator">=</span> <span class="token operator">-</span>sum<span class="token punctuation">(</span>S<span class="token punctuation">[</span><span class="token punctuation">:</span>k<span class="token number">-1</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">+</span> k <span class="token operator">*</span> sum<span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token keyword">print</span><span class="token punctuation">(</span>res<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 编程算法 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 算法 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>cuBLAS矩阵乘法性能分析（附代码示例）</title>
       <link href="/2021/08/24/gemm/"/>
       <url>/2021/08/24/gemm/</url>
@@ -35,7 +60,7 @@
       <link href="/2021/08/24/volctrans/"/>
       <url>/2021/08/24/volctrans/</url>
       
-        <content type="html"><![CDATA[<p>去年春天的某一天，看着邮件里论文被接收的通知，我心中既充满了喜悦，但随后又陷入了无尽的迷茫，后面的路该往哪走呢？</p><p>“你怎么不去找实习？”，导师的一句话点醒了我。是啊，我也该离开校园去见识见识外面的世界了。可是去哪好呢？我有能力去大厂吗？我能适应社会人的生活吗？</p><p>我是做句法分析的，好像也没啥大厂需要我这方向。也看过几篇机器翻译融合句法分析的论文，兴许能拿出来说道说道吧。</p><p>我打算毕业后留在上海，字节跳动算是上海数一数二的大公司了，可是不知道有哪个组要我呢。听师兄说字节的NLP组在圈子里挺有名气的，可以试试。正好这时一个粉丝就是字节的员工，就让他帮我内推了。</p><p>很快前两面都结束了，</p>]]></content>
+        <content type="html"><![CDATA[<p>去年初春的某个清晨，一封未读邮件在收件箱弹了出来。怀着忐忑的心情，我点开了邮件，映入眼前的第一句话就是：“We are delighted to inform you that your paper has been accepted by ACL 2020.”</p><p>一阵喜悦过后，随之而来的是对未来的迷茫。疫情在家呆了四个多月，已经忘记了外面的世界是什么样了。</p><p>“你怎么不去找个实习试试？”，导师的一句话点醒了我，不能再躺在家里了。</p><p>经过师兄介绍，投了字节的NLP组试了试水。虽然面的也不是那么的顺利，方向也不是特别对口，但没曾想最后收到了offer。</p><p>我是远程入职的，第一天上午在线办理了各种入职手续。下午点开直属上级的聊天框，怀着忐忑的心情发了句：“请问我mentor是哪位啊？”，对方回了句：“就是我”。然后就给我简单布置了一些熟悉平台环境的任务。</p><p>晚上就和mentor约了个视频会议。见到mentor的第一眼，我被小小地震惊到了，字节的算法工程师发型都是这么man的吗？然后mentor给我简单介绍了一下组里的情况，这时我才知道原来我进的是“火山翻译”团队。</p><p>经过两周的在家办公，已经基本熟悉了平时常用的平台和代码了。但总感觉见不到同事们，交流不便。而且在家办公没有上下班的时间概念，经常一干就是干到半夜，岂不是划不来？</p><p>于是匆匆买了车票，赶来了上海。花了半天时间定下了网上早已看中的房子，从学校把东西都搬了过来。这是第一次一个人在外面过夜。</p>]]></content>
       
       
       <categories>
@@ -1039,9 +1064,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1170,9 +1195,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1197,9 +1222,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1224,9 +1249,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1251,9 +1276,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1278,9 +1303,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1305,9 +1330,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1332,9 +1357,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1359,9 +1384,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1386,9 +1411,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1413,9 +1438,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1440,9 +1465,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1467,9 +1492,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1494,9 +1519,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1521,9 +1546,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1548,9 +1573,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1575,9 +1600,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1602,9 +1627,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1629,9 +1654,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1656,9 +1681,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1683,9 +1708,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1737,9 +1762,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1764,9 +1789,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1791,9 +1816,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1818,9 +1843,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1845,9 +1870,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1872,9 +1897,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1899,9 +1924,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1926,9 +1951,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1953,9 +1978,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1980,9 +2005,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2007,9 +2032,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2034,9 +2059,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2061,9 +2086,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2088,9 +2113,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2115,9 +2140,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2142,9 +2167,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2169,9 +2194,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2196,9 +2221,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2223,9 +2248,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2250,9 +2275,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2277,9 +2302,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2304,9 +2329,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2331,9 +2356,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2358,9 +2383,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2385,9 +2410,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2412,9 +2437,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2439,9 +2464,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2466,9 +2491,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2493,9 +2518,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2520,9 +2545,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2547,9 +2572,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2574,9 +2599,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2601,9 +2626,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2657,9 +2682,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2684,9 +2709,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2711,9 +2736,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2738,9 +2763,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2765,9 +2790,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2792,9 +2817,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2819,9 +2844,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2846,9 +2871,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2873,9 +2898,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2900,9 +2925,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2952,9 +2977,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2979,9 +3004,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3006,9 +3031,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3033,9 +3058,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3087,9 +3112,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3114,9 +3139,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3141,9 +3166,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3168,9 +3193,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3195,9 +3220,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3222,9 +3247,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3249,9 +3274,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3276,9 +3301,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3303,9 +3328,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3330,9 +3355,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3357,9 +3382,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3384,9 +3409,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3411,9 +3436,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3465,9 +3490,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3492,9 +3517,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3519,9 +3544,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3546,9 +3571,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3573,9 +3598,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3600,9 +3625,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3627,9 +3652,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3654,9 +3679,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3681,9 +3706,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3708,9 +3733,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3735,9 +3760,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3787,9 +3812,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3814,9 +3839,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3841,9 +3866,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3868,9 +3893,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3895,9 +3920,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3922,9 +3947,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3949,9 +3974,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3976,9 +4001,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -4003,9 +4028,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -4030,9 +4055,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -4057,9 +4082,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -4109,9 +4134,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -4136,9 +4161,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -4163,9 +4188,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -4190,9 +4215,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -4217,9 +4242,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -4273,9 +4298,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -4300,9 +4325,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -4352,9 +4377,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -5637,9 +5662,9 @@
             
             <tag> 博客 </tag>
             
-            <tag> hexo </tag>
-            
             <tag> github </tag>
+            
+            <tag> hexo </tag>
             
         </tags>
       

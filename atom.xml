@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://godweiyang.com/"/>
-  <updated>2021-08-24T16:39:46.619Z</updated>
+  <updated>2021-08-25T17:08:25.371Z</updated>
   <id>https://godweiyang.com/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>昨晚学妹参加了B站秋招笔试，还想考考我？</title>
+    <link href="https://godweiyang.com/2021/08/26/bilibili-0/"/>
+    <id>https://godweiyang.com/2021/08/26/bilibili-0/</id>
+    <published>2021-08-25T16:14:51.000Z</published>
+    <updated>2021-08-25T17:08:25.371Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;学妹昨晚参加了B站的2022届秋招算法笔试，做完给我发来了一道题，想考考我，说挺难的。&lt;br&gt;&lt;img src=&quot;2.jpg&quot; alt&gt;&lt;/p&gt;
+&lt;p&gt;我看了两分钟，给她发去了我的思路。然后学妹一眼就看懂了，立马秒过。&lt;br&gt;&lt;img src=&quot;1.jpg&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="编程算法" scheme="https://godweiyang.com/categories/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95/"/>
+    
+    
+      <category term="算法" scheme="https://godweiyang.com/tags/%E7%AE%97%E6%B3%95/"/>
+    
+  </entry>
   
   <entry>
     <title>cuBLAS矩阵乘法性能分析（附代码示例）</title>
@@ -49,7 +76,7 @@
     <link href="https://godweiyang.com/2021/08/24/volctrans/"/>
     <id>https://godweiyang.com/2021/08/24/volctrans/</id>
     <published>2021-08-24T04:50:41.000Z</published>
-    <updated>2021-08-24T15:26:51.197Z</updated>
+    <updated>2021-08-25T17:26:53.359Z</updated>
     
     <summary type="html">
     
@@ -57,8 +84,7 @@
       
         
         
-          &lt;p&gt;去年春天的某一天，看着邮件里论文被接收的通知，我心中既充满了喜悦，但随后又陷入了无尽的迷茫，后面的路该往哪走呢？&lt;/p&gt;
-&lt;p&gt;“你怎么不去找实习？”，导师的一句话点醒了我。是啊，我也该离开校园去见识见识外面的世界了。可是去哪好呢？我有能力去大厂吗？我能适应社会人的生活吗？
+          &lt;p&gt;去年初春的某个清晨，一封未读邮件在收件箱弹了出来。怀着忐忑的心情，我点开了邮件，映入眼前的第一句话就是：“We are delighted to inform you that your paper has been accepted by ACL
         
       
     
@@ -581,37 +607,6 @@
         
           &lt;p&gt;在上一篇教程中，我们实现了一个自定义的CUDA算子&lt;code&gt;add2&lt;/code&gt;，用来实现两个Tensor的相加。然后用PyTorch调用这个算子，分析对比了一下和PyTorch原生加法的速度差异，并且详细解释了线程同步给统计时间带来的影响。&lt;/p&gt;
 &lt;p&gt;&lt;stron
-        
-      
-    
-    </summary>
-    
-      <category term="编程算法" scheme="https://godweiyang.com/categories/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95/"/>
-    
-    
-      <category term="CUDA" scheme="https://godweiyang.com/tags/CUDA/"/>
-    
-      <category term="C++" scheme="https://godweiyang.com/tags/C/"/>
-    
-      <category term="PyTorch" scheme="https://godweiyang.com/tags/PyTorch/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>PyTorch自定义CUDA算子教程与运行时间分析</title>
-    <link href="https://godweiyang.com/2021/03/18/torch-cpp-cuda/"/>
-    <id>https://godweiyang.com/2021/03/18/torch-cpp-cuda/</id>
-    <published>2021-03-18T11:31:21.000Z</published>
-    <updated>2021-08-24T14:25:30.022Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;最近因为工作需要，学习了一波CUDA。这里简单记录一下PyTorch自定义CUDA算子的方法，写了一个非常简单的example，再介绍一下正确的PyTorch中CUDA运行时间分析方法。&lt;/p&gt;
-&lt;p&gt;所有的代码都放在了github上，地址是：&lt;br&gt;&lt;a
         
       
     
