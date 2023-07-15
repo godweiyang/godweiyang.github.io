@@ -1,3 +1,4 @@
+https://godweiyang.com/2023/07/15/cpu-parallel/
 https://godweiyang.com/2023/07/15/volctrans-3-year/
 https://godweiyang.com/2022/12/12/2022-conclusion/
 https://godweiyang.com/2022/06/16/sc22/
@@ -15,9 +16,7 @@ https://godweiyang.com/2022/04/07/2022-4-6-life/
 https://godweiyang.com/2022/02/26/bytedance-hire-2022-2/
 https://godweiyang.com/2022/02/17/bytedance-hire-2022-1/
 https://godweiyang.com/2022/01/16/anchi-translation/
-https://godweiyang.com/2021/12/18/danmu-spider/
 https://godweiyang.com/2021/12/18/cuda-monte-carlo/
-https://godweiyang.com/2021/12/17/qat-ptq/
 https://godweiyang.com/2021/12/13/2021-conclusion/
 https://godweiyang.com/2021/11/25/int8-gemm/
 https://godweiyang.com/2021/08/26/bilibili-0/
@@ -98,3 +97,4 @@ https://godweiyang.com/2020/03/25/leetcode-inteview-08-31-v2/
 https://godweiyang.com/2020/03/24/leetcode-inteview-08-01/
 https://godweiyang.com/2020/03/23/leetcode-55/
 https://godweiyang.com/2020/03/22/leetcode-week-181/
+https://godweiyang.com/2020/03/21/leetcode-inteview-04-06/

@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://godweiyang.com/"/>
-  <updated>2023-07-15T07:13:48.721Z</updated>
+  <updated>2023-07-15T18:41:53.363Z</updated>
   <id>https://godweiyang.com/</id>
   
   <author>
@@ -15,6 +15,39 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>从多线程到多进程：如何让你的小电影下载飞快？</title>
+    <link href="https://godweiyang.com/2023/07/15/cpu-parallel/"/>
+    <id>https://godweiyang.com/2023/07/15/cpu-parallel/</id>
+    <published>2023-07-15T07:31:58.000Z</published>
+    <updated>2023-07-15T18:41:53.363Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;关注公众号【算法码上来】，每日算法干货马上就来！&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&quot;/medias/contact.jpg&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="编程算法" scheme="https://godweiyang.com/categories/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95/"/>
+    
+    
+      <category term="多线程" scheme="https://godweiyang.com/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+    
+      <category term="多进程" scheme="https://godweiyang.com/tags/%E5%A4%9A%E8%BF%9B%E7%A8%8B/"/>
+    
+      <category term="并行" scheme="https://godweiyang.com/tags/%E5%B9%B6%E8%A1%8C/"/>
+    
+  </entry>
   
   <entry>
     <title>探秘火山之巅：我在字节跳动的三年奇妙旅程</title>
@@ -525,37 +558,6 @@
   </entry>
   
   <entry>
-    <title>分析了B站所有的弹幕，原来大家都是这样的人</title>
-    <link href="https://godweiyang.com/2021/12/18/danmu-spider/"/>
-    <id>https://godweiyang.com/2021/12/18/danmu-spider/</id>
-    <published>2021-12-17T19:35:18.000Z</published>
-    <updated>2023-07-15T07:13:40.181Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;blockquote&gt;
-&lt;p&gt;关注公众号【算法码上来】，每日算法干货马上就来！&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&lt;img src=&quot;/medias/contact.jpg&quot;
-        
-      
-    
-    </summary>
-    
-      <category term="编程技术" scheme="https://godweiyang.com/categories/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="爬虫" scheme="https://godweiyang.com/tags/%E7%88%AC%E8%99%AB/"/>
-    
-      <category term="词云" scheme="https://godweiyang.com/tags/%E8%AF%8D%E4%BA%91/"/>
-    
-  </entry>
-  
-  <entry>
     <title>这道小学六年级的数学题，恕我直言没几个人会做</title>
     <link href="https://godweiyang.com/2021/12/18/cuda-monte-carlo/"/>
     <id>https://godweiyang.com/2021/12/18/cuda-monte-carlo/</id>
@@ -588,11 +590,11 @@
   </entry>
   
   <entry>
-    <title>【白话模型量化系列二】量化感知训练</title>
-    <link href="https://godweiyang.com/2021/12/17/qat-ptq/"/>
-    <id>https://godweiyang.com/2021/12/17/qat-ptq/</id>
-    <published>2021-12-17T12:52:16.000Z</published>
-    <updated>2023-07-15T07:13:40.637Z</updated>
+    <title>二零二一年终总结</title>
+    <link href="https://godweiyang.com/2021/12/13/2021-conclusion/"/>
+    <id>https://godweiyang.com/2021/12/13/2021-conclusion/</id>
+    <published>2021-12-13T12:29:45.000Z</published>
+    <updated>2023-07-15T07:13:39.589Z</updated>
     
     <summary type="html">
     
@@ -609,10 +611,10 @@
     
     </summary>
     
-      <category term="深度学习" scheme="https://godweiyang.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
+      <category term="随笔" scheme="https://godweiyang.com/categories/%E9%9A%8F%E7%AC%94/"/>
     
     
-      <category term="模型加速" scheme="https://godweiyang.com/tags/%E6%A8%A1%E5%9E%8B%E5%8A%A0%E9%80%9F/"/>
+      <category term="年终总结" scheme="https://godweiyang.com/tags/%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/"/>
     
   </entry>
   
