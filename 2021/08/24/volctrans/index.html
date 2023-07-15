@@ -4,11 +4,11 @@
 
 <head><meta name="generator" content="Hexo 3.9.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="在字节跳动AI Lab工作是一种什么体验？, 算法码上来 字节跳动 算法工程师 ECNU NLP DeepLearning AntNLP 韦阳 godweiyang WeiYang 自然语言处理 深度学习">
+    <meta name="keywords" content="最全攻略：利用LightSeq加速你的深度学习模型, 算法码上来 字节跳动 算法工程师 ECNU NLP DeepLearning AntNLP 韦阳 godweiyang WeiYang 自然语言处理 深度学习">
     <meta name="baidu-site-verification" content="fmlEuI34ir">
     <meta name="google-site-verification" content="yCy2azpds5XSuGZvis6OuA-XIGF5GuGpYRAaGfD6o48">
     <meta name="360-site-verification" content="b7c11a830ef90fd1464ad6206bb7b6e7">
-    <meta name="description" content="在字节跳动AI Lab工作是一种什么体验？ | 韦阳的博客">
+    <meta name="description" content="前言LightSeq是字节跳动火山翻译团队开源的一款Transformer系列模型加速引擎，分为训练和推理两个部分。其中推理加速引擎早在2019年12月就已经开源，而训练加速引擎也在2021年6月开源。项目地址：https://github">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -16,7 +16,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>在字节跳动AI Lab工作是一种什么体验？ | 韦阳的博客</title>
+    <title>最全攻略：利用LightSeq加速你的深度学习模型 | 韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -166,7 +166,7 @@
         <div class="logo-name">韦阳的博客</div>
         <div class="logo-desc">
             
-            字节跳动 | AI Lab | NLP算法工程师
+            字节跳动 | AI Lab | 算法工程师
             
         </div>
     </div>
@@ -329,13 +329,13 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/19.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/26.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        在字节跳动AI Lab工作是一种什么体验？
+                        最全攻略：利用LightSeq加速你的深度学习模型
                     </div>
                 </div>
             </div>
@@ -446,12 +446,16 @@
                     
                     <div class="article-tag">
                         
-                        <a href="/tags/火山翻译/" target="_blank">
-                            <span class="chip bg-color">火山翻译</span>
+                        <a href="/tags/NLP/" target="_blank">
+                            <span class="chip bg-color">NLP</span>
                         </a>
                         
-                        <a href="/tags/工作体验/" target="_blank">
-                            <span class="chip bg-color">工作体验</span>
+                        <a href="/tags/模型加速/" target="_blank">
+                            <span class="chip bg-color">模型加速</span>
+                        </a>
+                        
+                        <a href="/tags/LightSeq/" target="_blank">
+                            <span class="chip bg-color">LightSeq</span>
                         </a>
                         
                     </div>
@@ -462,8 +466,8 @@
                     <div class="post-cate">
                         <i class="fa fa-bookmark fa-fw icon-category"></i>
                         
-                        <a href="/categories/随笔/" class="post-category" target="_blank">
-                            随笔
+                        <a href="/categories/深度学习/" class="post-category" target="_blank">
+                            深度学习
                         </a>
                         
                     </div>
@@ -488,14 +492,14 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    0
+                    3k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    11 分
                 </div>
                 
                 
@@ -511,7 +515,165 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>LightSeq是字节跳动火山翻译团队开源的一款Transformer系列模型加速引擎，分为训练和推理两个部分。其中推理加速引擎早在2019年12月就已经开源，而训练加速引擎也在2021年6月开源。<br><strong>项目地址：</strong><br><a href="https://github.com/bytedance/lightseq" target="_blank" rel="noopener">https://github.com/bytedance/lightseq</a></p>
+<p>LightSeq主要采用了CUDA算子融合、显存优化、参数连续化、层级式解码策略等技术，感兴趣的小伙伴可以阅读此前的文章：<br><strong>训练引擎：</strong><br><a href="https://zhuanlan.zhihu.com/p/383657837" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/383657837</a><br><strong>推理引擎：</strong><br><a href="https://zhuanlan.zhihu.com/p/269478459" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/269478459</a></p>
+<p>本文详细讲解一下如何使用LightSeq来改造你的PyTorch模型，实现1.5-3倍的训练加速和5-10倍的推理加速。至于TensorFlow模型的加速，目前也已经支持，这里不会详细讲解，可以参考下面NeurST的代码：<br><a href="https://github.com/bytedance/neurst/tree/lightseq" target="_blank" rel="noopener">https://github.com/bytedance/neurst/tree/lightseq</a></p>
+<h2 id="整体流程"><a href="#整体流程" class="headerlink" title="整体流程"></a>整体流程</h2><p>使用LightSeq进行加速的整体流程依次为：</p>
+<ol>
+<li>接入训练引擎进行模型训练，并保存模型参数。</li>
+<li>加载模型参数，使用训练引擎的前向传播部分进行模型推理。</li>
+<li>为了更快的推理速度，还可以将模型参数导出为protobuf或者hdf5格式。</li>
+<li>使用推理引擎解析第3步中导出的模型，并进行模型推理。</li>
+</ol>
+<h2 id="模型训练"><a href="#模型训练" class="headerlink" title="模型训练"></a>模型训练</h2><p>LightSeq提供了封装好的embedding、encoder、decoder、cross entropy和adam类，可以接入到你自己的模型中替换原有的模型。</p>
+<p>LightSeq还提供了现成的Fairseq、Hugging Face、DeepSpeed<br>DeepSpeed可以用于大规模训练Speed、NeurST等样例。如果你用这几个训练库的话，就可以直接使用。如果你是自己的模型，那也可以手动接入LightSeq。这几个样例代码都在<code>examples/training</code>目录下。</p>
+<h3 id="自定义模型"><a href="#自定义模型" class="headerlink" title="自定义模型"></a>自定义模型</h3><p>首先引入所有可能用到的头文件：</p>
+<pre class="line-numbers language-python"><code class="language-python"><span class="token keyword">from</span> lightseq<span class="token punctuation">.</span>training <span class="token keyword">import</span> <span class="token punctuation">(</span>
+    LSTransformer<span class="token punctuation">,</span>
+    LSTransformerEmbeddingLayer<span class="token punctuation">,</span>
+    LSTransformerEncoderLayer<span class="token punctuation">,</span>
+    LSTransformerDecoderLayer<span class="token punctuation">,</span>
+    LSCrossEntropyLayer<span class="token punctuation">,</span>
+    LSAdam<span class="token punctuation">,</span>
+<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>以新建encoder层为例，主要分为两个步骤：</p>
+<ol>
+<li>使用<code>LSTransformerEncoderLayer.get_config</code>函数新建config。</li>
+<li>新建LightSeq的encoder层，即<code>LSTransformerEncoderLayer</code>类，使用config来初始化。</li>
+</ol>
+<p>一个典型的例子如下：</p>
+<pre class="line-numbers language-python"><code class="language-python">config <span class="token operator">=</span> LSTransformerEncoderLayer<span class="token punctuation">.</span>get_config<span class="token punctuation">(</span>
+    model<span class="token operator">=</span><span class="token string">"bert-base"</span><span class="token punctuation">,</span>
+    max_batch_tokens<span class="token operator">=</span><span class="token number">4096</span><span class="token punctuation">,</span>
+    max_seq_len<span class="token operator">=</span><span class="token number">512</span><span class="token punctuation">,</span>
+    fp16<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>
+    local_rank<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span>
+<span class="token punctuation">)</span>
+layer <span class="token operator">=</span> LSTransformerEncoderLayer<span class="token punctuation">(</span>config<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>其中<code>max_batch_tokens</code>指定了训练过程中一个batch最大可能的单词数，<code>max_seq_len</code>指定了句子的最长长度。<code>model</code>提供了四种现成的模型配置：<code>transformer-base</code>、<code>transformer-big</code>、<code>bert-base</code>和<code>bert-big</code>。</p>
+<p>当然如果你想用自己的模型配置，也可以手动补全所有的参数：</p>
+<pre class="line-numbers language-python"><code class="language-python">config <span class="token operator">=</span> LSTransformerEncoderLayer<span class="token punctuation">.</span>get_config<span class="token punctuation">(</span>
+    max_batch_tokens<span class="token operator">=</span><span class="token number">4096</span><span class="token punctuation">,</span>
+    max_seq_len<span class="token operator">=</span><span class="token number">512</span><span class="token punctuation">,</span>
+    hidden_size<span class="token operator">=</span><span class="token number">1024</span><span class="token punctuation">,</span>
+    intermediate_size<span class="token operator">=</span><span class="token number">4096</span><span class="token punctuation">,</span>
+    nhead<span class="token operator">=</span><span class="token number">16</span><span class="token punctuation">,</span>
+    attn_prob_dropout_ratio<span class="token operator">=</span><span class="token number">0.1</span><span class="token punctuation">,</span>
+    activation_dropout_ratio<span class="token operator">=</span><span class="token number">0.1</span><span class="token punctuation">,</span>
+    hidden_dropout_ratio<span class="token operator">=</span><span class="token number">0.1</span><span class="token punctuation">,</span>
+    pre_layer_norm<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span>
+    activation_fn<span class="token operator">=</span><span class="token string">"gelu"</span><span class="token punctuation">,</span>
+    fp16<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>
+    local_rank<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span>
+<span class="token punctuation">)</span>
+layer <span class="token operator">=</span> LSTransformerEncoderLayer<span class="token punctuation">(</span>config<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>除了encoder以外，embedding、decoder、cross entropy和adam也可以用同样的方法新建，最后和你自己写的模型一样进行训练即可。</p>
+<p>此外LightSeq还提供了完整的Transformer类<code>LSTransformer</code>，可以直接新建一整个Transformer：</p>
+<pre class="line-numbers language-python"><code class="language-python">config <span class="token operator">=</span> LSTransformer<span class="token punctuation">.</span>get_config<span class="token punctuation">(</span>
+    model<span class="token operator">=</span><span class="token string">"transformer-base"</span><span class="token punctuation">,</span>
+    max_batch_tokens<span class="token operator">=</span><span class="token number">4096</span><span class="token punctuation">,</span>
+    max_seq_len<span class="token operator">=</span><span class="token number">512</span><span class="token punctuation">,</span>
+    vocab_size<span class="token operator">=</span><span class="token number">32000</span><span class="token punctuation">,</span>
+    padding_idx<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span>
+    num_encoder_layer<span class="token operator">=</span><span class="token number">6</span><span class="token punctuation">,</span>
+    num_decoder_layer<span class="token operator">=</span><span class="token number">6</span><span class="token punctuation">,</span>
+    fp16<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>
+    local_rank<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span>
+<span class="token punctuation">)</span>
+model <span class="token operator">=</span> LSTransformer<span class="token punctuation">(</span>config<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>示例代码在<code>examples/training/custom</code>中，可以直接运行<code>python run.py</code>查看效果。</p>
+<h3 id="Hugging-Face"><a href="#Hugging-Face" class="headerlink" title="Hugging Face"></a>Hugging Face</h3><p>以Hugging Face官方提供的<code>run_glue.py</code>为例，一般首先都是用<code>AutoModel.from_pretrained</code>函数新建模型model，然后进行训练。</p>
+<p>为了接入LightSeq，需要将model中的所有encoder层替换为LightSeq版本的encoder层。替换过程分为三个步骤：</p>
+<ol>
+<li>使用<code>LSTransformerEncoderLayer.get_config</code>函数新建config。</li>
+<li>获取Hugging Face预训练好的BERT参数。</li>
+<li>新建LightSeq的encoder层，即<code>LSTransformerEncoderLayer</code>类，使用config和预训练好的参数来初始化。</li>
+</ol>
+<p>新建encoder层代码参见上一小节。注意在Hugging Face这个例子里，额外给<code>LSTransformerEncoderLayer</code>封装了一层<code>LSHFTransformerEncoderLayer</code>，主要是为了兼容原来的encoder输入形状。</p>
+<p>示例代码在<code>examples/training/huggingface</code>中，运行<code>sh run_glue.sh</code>和<code>sh run_ner.sh</code>分别可以查看LightSeq在GLUE和NER任务上的加速效果。</p>
+<p>注意Hugging Face BERT的fine-tune任务很不稳定，经常会不收敛，这时候可以尝试修改运行脚本中的<code>--seed</code>参数。</p>
+<h3 id="Fairseq"><a href="#Fairseq" class="headerlink" title="Fairseq"></a>Fairseq</h3><p>Fairseq主要用于一些生成任务，使用LightSeq加速的原理是一样的，都是需要将各自组件替换为LightSeq对应的组件。</p>
+<p>LightSeq对Fairseq做了非常完整的替换，将embedding、encoder、decoder、cross entropy和adam全部替换为了LightSeq对应的部分，来达到极致的加速效果。</p>
+<p>示例代码在<code>examples/training/fairseq</code>目录下，其中<code>fs_cli</code>目录存放着三个启动入口：<code>train</code>、<code>validate</code>和<code>generate</code>，<code>fs_modules</code>目录存放着用LightSeq封装好的几个Transformer组件。</p>
+<p>直接运行<code>sh ls_fairseq_wmt14en2de.sh</code>即可自动下载数据并运行WMT14英德机器翻译任务。脚本中主要的运行命令如下：</p>
+<pre class="line-numbers language-shell"><code class="language-shell">lightseq-train /tmp/wmt14_en_de/ \
+    --task translation \
+    --arch ls_transformer_wmt_en_de_big_t2t --share-decoder-input-output-embed \
+    --optimizer ls_adam --adam-betas '(0.9, 0.98)' --clip-norm 0.0 \
+    --lr 5e-4 --lr-scheduler inverse_sqrt --warmup-updates 4000 --weight-decay 0.0001 \
+    --criterion ls_label_smoothed_cross_entropy --label-smoothing 0.1 \
+    --max-tokens 8192 \
+    --eval-bleu --eval-bleu-args '{"beam": 5, "max_len_a": 1.2, "max_len_b": 10}' \
+    --eval-bleu-detok moses --eval-bleu-remove-bpe --eval-bleu-print-samples \
+    --best-checkpoint-metric bleu \
+    --maximize-best-checkpoint-metric --fp16<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>注意到和一般运行Fairseq的命令不同的地方有这么几个：</p>
+<ol>
+<li>启动入口从<code>fairseq-train</code>替换为了<code>lightseq-train</code>，这是因为在根目录<code>setup.py</code>里封装了<code>--user-dir</code>用户模块目录。如果还想继续用<code>fairseq-train</code>的话，就需要手动指定<code>--user-dir fs_modules</code>参数。</li>
+<li>模型结构<code>--arch</code>需要在原来的基础上加上前缀<code>ls_</code>，用来指定使用LightSeq提供的Transformer模型。</li>
+<li>优化器<code>--optimizer</code>和损失函数<code>--criterion</code>都需要在原来的基础上加上前缀<code>ls_</code>，指定使用LightSeq对应的组件。</li>
+</ol>
+<h3 id="DeepSpeed"><a href="#DeepSpeed" class="headerlink" title="DeepSpeed"></a>DeepSpeed</h3><p>DeepSpeed主要用于大规模训练，也提供了Transformer的encoder层CUDA实现，不过效率没有LightSeq高。</p>
+<p>LightSeq提供了Fairseq+DeepSpeed分布式训练的使用样例，将启动器替换成了<code>deepspeed</code>，手动指定<code>--user-dir</code>目录，还需要指定DeepSpeed的配置文件<code>deepspeed_config</code>，其它参数和上一节Fairseq样例一模一样。</p>
+<p>使用时运行<code>sh ds_fairseq_wmt14en2de.sh</code>即可，和上一小节一样都是用Fairseq运行WMT14英德机器翻译任务。</p>
+<h2 id="模型导出"><a href="#模型导出" class="headerlink" title="模型导出"></a>模型导出</h2><p>在模型训练完之后，直接load保存的checkpoint就可以继续fine-tune或者推理。但是这样调用的是训练引擎的推理部分，也就是模型的前向传播。这部分代码需要频繁在python和c++之间切换，并且前向过程中计算了很多反向传播才需要用到的变量。因此速度不如纯粹的推理引擎快。</p>
+<p>而要想使用LightSeq的推理引擎，就必须先将checkpoint转变为protobuf或者hdf5的格式。</p>
+<p>LightSeq提供了每个组件的导出接口，如果你使用了LightSeq的模型组件，那么导出将变得非常容易。只需要引入下面的头文件即可：</p>
+<pre class="line-numbers language-python"><code class="language-python"><span class="token keyword">from</span> lightseq<span class="token punctuation">.</span>training <span class="token keyword">import</span> <span class="token punctuation">(</span>
+    export_ls_config<span class="token punctuation">,</span>
+    export_ls_embedding<span class="token punctuation">,</span>
+    export_ls_encoder<span class="token punctuation">,</span>
+    export_ls_decoder<span class="token punctuation">,</span>
+<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这四个函数分别可以导出推理引擎所需要的配置信息、embedding参数、encoder参数和decoder参数。而如果有其他部分的参数没包括在这里面（例如输出到词表的映射矩阵），则需要自己进行导出，详见下面的教程。</p>
+<p>LightSeq对Hugging Face的BERT、BART、GPT2三种模型，以及Fairseq+LightSeq、LightSeq的Transformer模型都提供了模型导出的样例，代码在<code>examples/inference/python/export</code>目录下。其中Hugging Face的模型都是没有采用LightSeq加速训练的预训练模型参数，所以导出更为复杂一些。</p>
+<p>模型导出的核心思想就是：</p>
+<ol>
+<li>首先创建一个protobuf对象<code>Transformer</code>或者hdf5的文件对象。</li>
+<li>然后在checkpoint中提取出参数值，将其赋值给<code>Transformer</code>或者hdf5文件对象中对应的参数。</li>
+</ol>
+<p>这个过程麻烦的就是提取并且对应赋值的过程，LightSeq提供了一系列方便的操作函数。</p>
+<h3 id="Fairseq-1"><a href="#Fairseq-1" class="headerlink" title="Fairseq"></a>Fairseq</h3><p>执行<code>python ls_fs_transformer_export.py</code>可以导出上一章节中Fairseq+LightSeq训练样例得到的模型。</p>
+<p>以protobuf导出为例，观察代码可以看到主体部分如下（省略了部分参数）：</p>
+<pre class="line-numbers language-python"><code class="language-python">file <span class="token operator">=</span> Transformer<span class="token punctuation">(</span><span class="token punctuation">)</span>
+encoder_state_dict<span class="token punctuation">,</span> decoder_state_dict <span class="token operator">=</span> _extract_weight<span class="token punctuation">(</span>state_dict<span class="token punctuation">)</span>
+export_ls_embedding<span class="token punctuation">(</span>file<span class="token punctuation">,</span> encoder_state_dict<span class="token punctuation">,</span> is_encoder<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+export_ls_embedding<span class="token punctuation">(</span>file<span class="token punctuation">,</span> decoder_state_dict<span class="token punctuation">,</span> is_encoder<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span>
+export_ls_encoder<span class="token punctuation">(</span>file<span class="token punctuation">,</span> encoder_state_dict<span class="token punctuation">)</span>
+export_ls_decoder<span class="token punctuation">(</span>file<span class="token punctuation">,</span> decoder_state_dict<span class="token punctuation">)</span>
+export_fs_weights<span class="token punctuation">(</span>file<span class="token punctuation">,</span> state_dict<span class="token punctuation">)</span>
+export_ls_config<span class="token punctuation">(</span>file<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>首先需要用户自己将state_dict拆分成encoder和decoder两部分，这主要是因为设计时考虑到有些用户只会用到encoder的导出（例如BERT）。并且LightSeq无法知道用户模型的最外层参数名叫啥，万一不叫encoder，而叫enc之类的呢？所以交给用户自己拆分更加合理。</p>
+<p>然后分别导出encoder的embedding、decoder的embedding、encoder和decoder参数，这几部分都直接调用LightSeq提供的接口就行了。LightSeq会自动帮你把解析出来的参数导出到定义的<code>Transformer</code>类里。</p>
+<p>接着需要处理一下Fairseq中与LightSeq无关的一些参数，例如encoder和decoder的layer norm参数等等。<code>export_fs_weights</code>函数需要用户自己实现，核心思想就是找到state_dict中的参数名，将其赋值给<code>Transformer</code>类里对应的变量就行了。</p>
+<p>最后设置一下<code>Transformer</code>类里所有的配置参数就行了。</p>
+<p>hdf5的用法类似，LightSeq都将其封装在同样的函数里了，只需要指定<code>save_pb=False</code>即可。</p>
+<h3 id="Hugging-Face-1"><a href="#Hugging-Face-1" class="headerlink" title="Hugging Face"></a>Hugging Face</h3><p>执行<code>python hf_bert_export.py</code>、<code>python hf_bart_export.py</code>和<code>python hf_gpt2_export.py</code>三个文件分别可以导出BERT、BART和GPT2的预训练模型。</p>
+<p>因为Hugging Face的模型参数都是预训练得到的，所以LightSeq无法识别参数名是什么样的，只能用户自己编写导出规则，具体参考上面三个导出样例即可。</p>
+<h3 id="LightSeq-Transformer"><a href="#LightSeq-Transformer" class="headerlink" title="LightSeq Transformer"></a>LightSeq Transformer</h3><p>使用LightSeq提供的Transformer进行训练的话，参数名LightSeq都知道的一清二楚，因此可以直接使用LightSeq提供的导出接口进行转换。过程和上面的Fairseq+LightSeq类似。</p>
+<p>具体样例可以执行<code>python ls_transformer_export.py</code>，同时得到protobuf和hdf5格式的模型导出文件，并且对比两者生成的结果。这里的checkpoint可以使用上一章节中<code>自定义模型</code>小节中训练得到的模型。</p>
+<h3 id="自定义模型-1"><a href="#自定义模型-1" class="headerlink" title="自定义模型"></a>自定义模型</h3><p>因为自定义的模型参数LightSeq无法识别参数名，所以需要用户自己编写转换规则。</p>
+<p>举一个简单的例子，假设用户模型中有个encoder的输出部分的layer norm参数，state_dict中的参数名叫做<code>encoder.layer_norm.weight</code>。那么可以按如下方式进行转换：</p>
+<pre class="line-numbers language-python"><code class="language-python">transformer <span class="token operator">=</span> Transformer<span class="token punctuation">(</span><span class="token punctuation">)</span>
+enc_norm_w <span class="token operator">=</span> state_dict<span class="token punctuation">[</span><span class="token string">"encoder.layer_norm.weight"</span><span class="token punctuation">]</span><span class="token punctuation">.</span>flatten<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>tolist<span class="token punctuation">(</span><span class="token punctuation">)</span>
+transformer<span class="token punctuation">.</span>src_embedding<span class="token punctuation">.</span>norm_scale<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">]</span> <span class="token operator">=</span> enc_norm_w<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h2 id="模型推理"><a href="#模型推理" class="headerlink" title="模型推理"></a>模型推理</h2><p>得到导出的protobuf或者hdf5模型后，推理就变得十分简单，核心代码就三行：</p>
+<pre class="line-numbers language-python"><code class="language-python"><span class="token keyword">import</span> lightseq<span class="token punctuation">.</span>inference <span class="token keyword">as</span> lsi
+model <span class="token operator">=</span> lsi<span class="token punctuation">.</span>Transformer<span class="token punctuation">(</span><span class="token string">"transformer.pb"</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">)</span>
+output <span class="token operator">=</span> model<span class="token punctuation">.</span>infer<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>首先定义一个<code>Transformer</code>类用来加载模型参数，指定load的protobuf文路径和batch_size大小。</p>
+<p>然后调用<code>infer</code>函数进行推理，传入的输入参数必须是list或者numpy类型，且必须是二维。</p>
+<p>LightSeq在<code>examples/inference/python/test</code>目录下提供了三个Hugging Face模型推理的样例，此外上一小节中<code>examples/inference/python/export</code>中的<code>ls_transformer_export.py</code>代码也包含了导出后推理的过程。</p>
+<h2 id="最佳实践"><a href="#最佳实践" class="headerlink" title="最佳实践"></a>最佳实践</h2><p>总结一下，使用LightSeq加速你的深度学习模型，最佳方式无外乎三步：</p>
+<ol>
+<li>接入LightSeq训练引擎的模型组件，构建模型，进行训练，保存checkpoint。</li>
+<li>将checkpoint转换为protobuf或者hdf5格式，LightSeq的组件可以调用现成的转换接口，其它的需要自己手写转换规则。</li>
+<li>调用LightSeq推理引擎，加载上一步中导出的模型，进行快速推理。</li>
+</ol>
+<p>目前LightSeq已经被广泛应用在字节跳动公司内外各项业务和学术研究上，支持了标准的Transformer、BERT、BART、GPT2、ViT等多种Transformer系列模型。只要你的模型中包含有Transformer的部分组件，例如encoder层，就可以直接调用LightSeq进行加速。</p>
+<h2 id="联系方式"><a href="#联系方式" class="headerlink" title="联系方式"></a>联系方式</h2><p>如果在使用中遇到任何问题，或者有任何需求和建议，都可以在github issue中提出，或者加入LightSeq的飞书用户群：<br><a href="https://applink.feishu.cn/client/chat/chatter/add_by_link?link_token=936uf19e-966f-43f6-8401-269ab93ec38d" target="_blank" rel="noopener">https://applink.feishu.cn/client/chat/chatter/add_by_link?link_token=936uf19e-966f-43f6-8401-269ab93ec38d</a></p>
+<p><img src="1.png" alt></p>
+
             </div>
             <hr />
 
@@ -669,7 +831,7 @@
             <br/>
             <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text"
                   property="dct:title" rel="dct:type">
-                    《在字节跳动AI Lab工作是一种什么体验？》
+                    《最全攻略：利用LightSeq加速你的深度学习模型》
                 </span> 由
             <a xmlns:cc="http://creativecommons.org/ns#" href="/2021/08/24/volctrans/" property="cc:attributionName"
                rel="cc:attributionURL">
@@ -1075,8 +1237,31 @@
                             </span>
                         <span class="publish-author">
                             
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/深度学习/" class="post-category" target="_blank">
+                                    深度学习
+                                </a>
+                            
+                            
                         </span>
                     </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/NLP/" target="_blank">
+                        <span class="chip bg-color">NLP</span>
+                    </a>
+                    
+                    <a href="/tags/模型加速/" target="_blank">
+                        <span class="chip bg-color">模型加速</span>
+                    </a>
+                    
+                    <a href="/tags/LightSeq/" target="_blank">
+                        <span class="chip bg-color">LightSeq</span>
+                    </a>
+                    
                 </div>
                 
             </div>
@@ -1124,7 +1309,7 @@
     });
 </script>
 
-<script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+<!-- <script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
 <script>
     const btw = new BTWPlugin();
     btw.init({
@@ -1134,7 +1319,7 @@
         qrcode: 'https://godweiyang.com/medias/gzh.jpg',
         keyword: 'VIP',
     });
-</script>
+</script> -->
 
     </div>
     <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
@@ -1256,11 +1441,11 @@
     <footer class="page-footer bg-color">
     <div class="container row center-align">
         <div class="col s12 m8 l8 copy-right">
-            &copy; 2017-2021 godweiyang. 版权所有
+            &copy; 2017-2022 godweiyang. 版权所有
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">330.9k</span>
+            <span class="white-color">357.1k</span>
             
 
             <br>

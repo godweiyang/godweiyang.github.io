@@ -4,6 +4,608 @@
   
     
     <entry>
+      <title>探秘火山之巅：我在字节跳动的三年奇妙旅程</title>
+      <link href="/2023/07/15/volctrans-3-year/"/>
+      <url>/2023/07/15/volctrans-3-year/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p>关注公众号【算法码上来】，每日算法干货马上就来！</p></blockquote><p><img src="/medias/contact.jpg" alt></p><blockquote><p>本文由ChatGPT润色，朱自清文笔</p></blockquote><p>似乎已有半载的光阴，我未曾触笔述事。此半年来，工作路向浑然改变，乃至整个团队亦经历了沧海桑田的变迁。说我忙，其实也未必至于忙，但压力如山，犹如涛涛江水，使我心无余力来挥洒文墨。</p><p>简单的说，现时，我已迈离了火山翻译的工作台，但仍旧身在AI Lab之中，将我那一份热忱，在别的领域继续闪耀，犹如夕阳留照，也为曾经的事业散发余晖。</p><p>在此，我以一篇文字，作为记念，纪念我在火山翻译的三载光华岁月。</p><h2 id="初探世界"><a href="#初探世界" class="headerlink" title="初探世界"></a>初探世界</h2><p>疫情初歇，我初涉社会之门，从学校踏入世界的广漠。日复一日的新鲜感充满了我，每天，我都会拍下食堂的餐点分享到朋友圈，那时的饭菜，犹如人间美味，如今却是味同嚼蜡。</p><p>记得有一位同事曾如此戏谑：“只有实习生才会每日拍拍吃的”。当时，我不以为然，美食在眼，怎能不晒出来呢？然而两年过去，我已失去了那曾经的热情。</p><p>那半年的实习生涯，我主要从事一些探索性的工作，聚焦于Transformer模型的压缩与量化。转正之际，我还开发了一款机器翻译的iOS app，虽然模型大小被压缩至几十兆，但功能尚且简陋。</p><p>在此期间，我也有幸深入接触了LightSeq，这个伟大的开源项目。当时，它的star尚只有两三百，只是一个推理加速引擎。我助力它宣传，如今已累积超过2800个star，影响力小有所增。</p><p>实习期间，我遇到了我的首位mentor，同样，我也是他的首个实习生。他，技术熟练，人格魅力，是火山翻译中最帅气，最有男子气概，技术最出众的人。他在我身上留下了深刻的烙印，无论是在技术领域，还是在职场经验上，他都给我留下了深刻的影响。那个我深入接触的开源项目LightSeq，也是他一手策划推动的。</p><h2 id="光序之路"><a href="#光序之路" class="headerlink" title="光序之路"></a>光序之路</h2><p>这一年，我和导师共同开辟了一片崭新的疆域，从无到有，建立起了LightSeq训练加速引擎。在这期间，我叩开了CUDA的大门，初尝探索与发现的乐趣，甚至倾力打造了几篇初探CUDA的入门指南，期待让后继者少踏入一些陷阱。</p><p>我发现，写CUDA，与写开源项目的过程，充满了无尽的快乐。这快乐来自于一种难以名状的成就感，是因为我能为开源社区贡献自己的一份力量，为广大的人群带来福祉。这与某些项目大异其趣，那些项目让人只感觉自己在为公司鞠躬尽瘁，而缺少真实的动力。</p><p>在这一年，我也圆满的完成了学业，正式成为了字节跳动的一员，所以实际上，我在此的历练时间不过两年有余。</p><p>除了技术上的精进，我在宣发方面也并未松懈。我在字节内部社区发布的正能量帖子获得了前所未有的热烈回响，我还有幸登上了CEO的十周年演讲，我的故事甚至被印刷在了春节礼盒上。这一切，都让我对公司产生了强烈的归属感，我与它有了更深的羁绊。</p><h2 id="量化的翻涌"><a href="#量化的翻涌" class="headerlink" title="量化的翻涌"></a>量化的翻涌</h2><p>这一年，我的心灵主要浸润在量化技术的泉流之中。因为训练与推理的加速引擎，已经磨砺至尽善尽美，而我心中更期盼将量化的秤砣，巧妙地投入到训练与推理的洪流中。春去夏来，我主要灌注心血于量化推理（QAT）的研磨，秋风起，继续逐流推进量化训练的开发。</p><p>不绝如缕的努力，如灯塔般的宣传，使得star这一年突破了两千的峭壁，其名声也如晨星般，照亮了黑夜，日渐高涨。在这温暖的光芒下，我心中的兴奋难以言表。</p><p>不仅如此，训练的成果，居然得以登上超级计算领域的顶峰——SC大会，这样的机会，在我加入公司时是万万没有想到的。这不是纯粹的研究，也不是简单的开发，这是燃烧的激情与冷静的学术的交融。我同时肩负着工作与学术的双重任务，开源项目与论文发布的双翼搏击，此刻的我，恰如我心所期待的那般。</p><h2 id="雕琢新世纪"><a href="#雕琢新世纪" class="headerlink" title="雕琢新世纪"></a>雕琢新世纪</h2><p>辞去旧岁，迎来新元年之际，稳定扩散（Stable Diffusion，一种人工智能绘画技术）揭幕而出，颠覆了世界的视界。我在导师的催促之下，奉献于一项神秘的任务，亲手打造并服务于这一业务，而这引领我跨入了AI绘画这一未曾涉足的领域。如同磨砺的矛头，我用了一个季度的时间，走过了从浅显入门到深入领略的艰辛道路，逐渐地，整套流程的操作已然熟练于心。然而，意料之外，业务草木皆兵后的黯然消失让人唏嘘。虽然如此，收获亦非空虚，因我在这个过程中结识了不少领域中的翘楚，领会了很多尖端的技术，这将是我未来探索的宝贵财富。</p><p>后来，ChatGPT如猛虎下山，扫过各行各业，各大公司和学校纷纷掀起了自我训练LLM的热潮，连字节跳动也并未例外。我却未能及时把握这个机遇，改行研究计算机视觉（CV），具体的事宜我在此就不多言了，避嫌为妙。简而言之，随着部门的重组，我与相伴三年的火山翻译惜别，因毕竟，机器翻译也必须接纳大模型的洗礼。大模型的兴起，也为公司间的人才流动带来了无尽的可能，熟悉大模型操作的人才，将是炙手可热的宠儿。</p><p>如今，心底里的快乐，无疑并非昔日之充沛。然而，这亦是大势所趋，ChatGPT正驱使我们纷纷前行，迎接变革，有所压力，反倒正中其境。</p><h2 id="再别漕河泾"><a href="#再别漕河泾" class="headerlink" title="再别漕河泾"></a>再别漕河泾</h2><p>这是我在火山翻译度过的三载，一段异常快乐而充实的日子。有人戏谑我们的团队，号称字节中“最没字节味”的一股清流，那是因为我们的工作时间自由度大，工作环境轻松而愉快。然而，我更愿意把这种情形看作字节独特风貌的体现，是在这种环境下，我们才能更从容地创造出惊艳的成果，反倒是若将人们束缚在公司，加班加点，往往只会事与愿违。</p><p>火山翻译的使用率正逐渐下降，大家开始更多地选择chatgpt来进行翻译。诚然，后者在准确度和流畅度上还存在一些差距，但火山翻译更多的时候已经成为了我的文本编辑框，帮我整理和消除各种格式。</p><p>在不久的将来，大约两个月后，字节可能要迁移到杨浦工区，而我也将告别陪伴我三年的漕河泾。漕河泾虽不在市区，却也已经物涨价跌，房价一路攀升到每平米十万元。记得当年，我为了靠近公司，特地选在9号线沿线的松江泗泾购房，然而在搬迁后，我的通勤时间竟增加了一个小时。</p><p>我在思索，或许我应当重新开始，定期更新一些文章。回忆当初写CUDA做模型优化的日子，那些想要分享的观点和想法还有很多，也都颇为有趣。而现在的研究方向，我却在犹豫，毕竟是半路出家，深怕自己班门弄斧。但我想，我还是应当回归初心，写写算法题。这些文章或许能够帮助他人求职，或许有一天，我自己也能再次从中得益。</p><hr><blockquote><p>以下是原文</p></blockquote><p>已经有半年左右没更新过文章了，这半年工作方向有很大变动，甚至整个部门也发生了翻天覆地的变化。说忙也不算忙，但是压力倍增，也没多少心思写文章了。</p><p>简单来说，现在已经离开火山翻译了，但还是在AI Lab，继续在其他方向上发挥余热。</p><p>谨以此文，纪念我在火山翻译的三年美好时光。</p><h2 id="三年经历"><a href="#三年经历" class="headerlink" title="三年经历"></a>三年经历</h2><h3 id="2020-5-20-2020年末"><a href="#2020-5-20-2020年末" class="headerlink" title="2020.5.20 - 2020年末"></a>2020.5.20 - 2020年末</h3><p>这半年时间疫情刚结束，第一次从学校迈入社会的大门，每天都充斥着新鲜感。每天都要拍一拍公司食堂的伙食发朋友圈，那时候的饭菜是真好吃，现在已经大不如从前咯。</p><p>还记得一位同事当时跟我说：“只有实习生才会每天拍这些吃的”，当时不以为意，觉得这么好吃为啥不秀一秀，果然过了两年已经没有任何拍的动力了。</p><p>这半年时间因为是实习，所以主要做一些探索性的工作，聚焦于Transformer模型的压缩与量化，最后实习转正时还做了一个机器翻译的iOS app，模型大小压缩到只有几十兆，不过相当简陋了。</p><p>顺带还熟悉了一下LightSeq这个伟大的开源项目，当时star才两三百吧，只有推理加速引擎。帮忙做了一波宣传，现在已经2800多star了，也算是小有影响力了。</p><p>实习期间遇到了我的第一个mentor，我也是他的第一个实习生。作为火山翻译最帅最man技术最牛的人，他方方面面影响了我很多，不论是技术，还是职场经验，LightSeq也是他一手策划推动的。</p><h3 id="2021年"><a href="#2021年" class="headerlink" title="2021年"></a>2021年</h3><p>这一年时间和mentor一起从0到1搭建起了LightSeq训练加速引擎，从0开始学习了CUDA，还写了几篇CUDA入门教程，让后来的人少踩一点坑。</p><p>写CUDA还是快乐的，写开源项目也快乐。有一种莫名的成就感，为开源做贡献的成就感，造福很多很多人的成就感。不像有些项目，你做了就感觉纯粹是在给公司打工，没有那么大的动力。</p><p>这一年也顺利毕业了，正式转正成为了bytedancer，所以实际上到现在为止我的工龄才刚2年多。</p><p>除了技术，在宣发方面我也比较活跃，字节内部社区发的正能量帖子点赞量进入了历史前几，还上了CEO十周年演讲，故事被印刷在了春节礼盒上面，这更让我对公司产生了一种强烈的归属感。</p><h3 id="2022年"><a href="#2022年" class="headerlink" title="2022年"></a>2022年</h3><p>这一年主要聚焦于量化技术，因为训练和推理加速引擎都开发的差不多了，想更进一步地将量化应用到训练和推理上去。前半年主要开发了量化推理（QAT），后半年继续开发了量化训练，经过一波宣传，star在这一年突破了2000大关，知名度也越来越高。</p><p>训练相关成果还发表在了超算领域顶会SC，没想到来公司还能发顶会论文，工作学术两不误。但这又不是那种纯粹的做research，而是做开源项目的同时，顺便发了一篇论文，这才是我想要的状态。</p><h3 id="2023年"><a href="#2023年" class="headerlink" title="2023年"></a>2023年</h3><p>2022年底，stable diffusion（AI绘画）横空出世，mentor让我去给某业务做相关支持，于是机缘巧合之下从0开始学习了一波AI绘画技术。做了大概三四个月吧，整套流程都搞的差不多了，没想到业务没了，实在是可惜。不过也没白干，认识了不少这方面的大佬，也学到了很多相关技术。</p><p>再后来就是chatgpt横扫各个领域了，各大公司和学校都开始了自己训练LLM的旅程，字节肯定也不例外。不过我没赶上NLP这趟车，转而去做CV了，具体就不多说了，保密保密。简而言之，部门重组了，我也离开相伴了三年的火山翻译了，毕竟机器翻译也得拥抱大模型了。同时大模型也带来了机会，公司之间的跳槽与活水肯定也会越来越多，现在国内谁会做大模型那肯定是最吃香的。</p><p>简而言之，现在肯定是没有以前快乐的。不过大方向也是如此，chatgpt逼迫着大家追赶进步，有点压力是正常的。</p><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在火山翻译这三年是非常快乐的，有人说过，我们组是字节“最没有字节范”的组之一了，因为上班时间比较自由随意，工作轻松氛围好。但我觉得这反而是字节范的表现之一，这种环境下更容易创造出牛逼的成果出来，把人约束在公司加班反而可能适得其反。</p><p>火山翻译用的也越来越少了，现在都直接用chatgpt来翻译，准确度和流畅度还是有差距的。火山翻译网页更多时候是作为文本编辑框来给我消除文本格式用了。</p><p>再过两个多月，字节可能就要搬到杨浦工区了，我也即将离开待了三年之久的漕河泾。漕河泾虽说不算市区，但是房价也已经涨到了10万左右一平了。当初为了来公司上班，房子也特地买在了9号线沿线的松江泗泾，没想到搬完工区后通勤一下多了一个小时。</p><p>以后会重新定期更新一些文章吧。以前写CUDA做模型优化想写的东西还挺多的，也很有趣。现在做的方向不知道写啥好了，半路出家也不是非常熟悉，怕班门弄斧了。可能还是会回归初心吧，写写算法题，大家找工作也用得到，说不定哪天我自己又用到了呢。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 随笔 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 字节跳动 </tag>
+            
+            <tag> AI Lab </tag>
+            
+            <tag> 火山翻译 </tag>
+            
+            <tag> 工作体验 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>二零二二年终总结</title>
+      <link href="/2022/12/12/2022-conclusion/"/>
+      <url>/2022/12/12/2022-conclusion/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p>关注公众号【算法码上来】，每日算法干货马上就来！<br><img src="/medias/contact.jpg" alt></p></blockquote><blockquote><p>写于2022年12月13日</p></blockquote><p>不知不觉，年终总结坚持写了6年了，这几年每年都在12.13发布，因为这天🎂。还记得2017年第一次写的时候才大三，现在竟然都已经工作两年多了。回顾这一年的经历，挺魔幻的。</p><h2 id="封城两个月"><a href="#封城两个月" class="headerlink" title="封城两个月"></a>封城两个月</h2><p>今年上半年几乎是在封城中度过的。清楚地记得3.8妇女节这天，公司楼里出了第一个密接，所有人被召回在公司过了两夜。我们少数人作为顽固分子当晚执意不回去，最后第二天还是没办法回去隔离了，现在想想这些政策都挺可笑的，没有啥实际意义。</p><p>然后就是四五月份上海封城，在10平米的小房间里，和我的🐱一起硬生生呆了两个月。吃喝倒是不愁，当时小区里有户人家开小卖店的，所以过的还挺滋润的。甚至因为居家工作比较舒服，还想再多呆几个月。不过这几个月疫情反反复复，仍然是居家比较多。</p><p>生日这天，行程码就要淡出历史了，最近各地都放开了，大家多注意身体，虽然大概率最后都是要🐑的。</p><h2 id="全新的生活"><a href="#全新的生活" class="headerlink" title="全新的生活"></a>全新的生活</h2><p>8月份的时候，离开了住了两年多的小破屋，租了一间贵得多的一室一厅。60平确实比之前舒服太多了，做饭、休闲、居家工作都更轻松。猫也舒服了，整体客厅里跑酷来跑酷去，充分释放了天性。</p><p>最近还添置了戴森吸尘器，完美解决了困扰一年的猫毛打扫难的问题。平时做清洁也轻松多了，以往擦洗拖一套下来得快一个小时，还累死累活，现在十来分钟就能搞定。</p><p>服役了5年多的主机也淘汰了，虽然1080p下打打lol和pubg依然压力不大，但是最近换了4k显示器，而且偶尔要直播游戏，还是顶不住。DIY的最新电脑配置是i7-13700kf的，显卡准备抢一波7900xtx，12.13也就是今天发售，不知道之后会不会跌。主板和散热丐了点，其他都还不错。</p><p>中秋还和室友去了趟厦门，看了看没看过的海，见了见想见到的人。</p><h2 id="买🏠了"><a href="#买🏠了" class="headerlink" title="买🏠了"></a>买🏠了</h2><p>这一年陆陆续续一直在看房，从开始的二手房，到后来的新房。看的区域一直都是松江泗泾和佘山附近，因为在9号线，去公司近，就算以后跳槽或者搬公司了，去市区换乘也比较方便。最近认筹了泗泾站900米的星樾云栖，12.15开盘。100平的三房，近500总价，首付170左右，月供得一万六。24年底交房，这两年还得交房租，所以以后压力大了许多。</p><blockquote><p>（2022.12.20更新）已经拿下了，首付款、房贷、合同都已经搞定了，摇号摇了个71号，很不错，选了个111101，数字很nb。</p></blockquote><h2 id="好好干活"><a href="#好好干活" class="headerlink" title="好好干活"></a>好好干活</h2><p>今年工作上情况还不错，LightSeq3量化引擎开源了，发了一篇CCF-A论文，也完成了职场第一阶段的目标。后续工作方向更加艰难了，又是一个之前未曾涉足的领域，最近得恶补很多知识了，多看论文。好好干活吧，争取做出点成果来。最近AIGC非常火，又是stable diffusion，又是chatgpt，都是不错的赛道，上🚗！</p><p>公众号粉丝最近终于破万了，不容易，很久没经营了，摆烂，忙工作忙游戏，说白了还是懒。</p><h2 id="感情"><a href="#感情" class="headerlink" title="感情"></a>感情</h2><p>留白。</p><p>最后特别感谢一个人，自始自终都一直在，从没离开过。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 随笔 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 年终总结 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>历时一年，论文终于被国际顶会接收了</title>
+      <link href="/2022/06/16/sc22/"/>
+      <url>/2022/06/16/sc22/</url>
+      
+        <content type="html"><![CDATA[<p>就在昨天，超算领域的国际顶会SC22放榜了，我们组的论文也被接收了，得分44332（4分制）：<br><img src="1.jpg" alt></p><p><strong>论文地址：</strong><br><a href="https://arxiv.org/abs/2110.05722" target="_blank" rel="noopener">https://arxiv.org/abs/2110.05722</a><br><img src="3.png" alt></p><h2 id="SC会议是什么？"><a href="#SC会议是什么？" class="headerlink" title="SC会议是什么？"></a>SC会议是什么？</h2><p>可能很多同学都没听过SC是什么会议，SC会议全称“高性能计算、网络、存储和分析国际会议”（The International Conference for High Performance Computing, Networking, Storage, and Analysis），是高性能计算，体系结构领域顶级会议，<strong>CCF推荐A类会议</strong>。SC会议发表难度大，每年录用70篇左右的论文，录用率在25%左右。2022年投稿320篇，录用75篇（6篇修改中），录用率约为23%。SC22将于11月13-18日在美国达拉斯举行。</p><h2 id="论文写的啥？"><a href="#论文写的啥？" class="headerlink" title="论文写的啥？"></a>论文写的啥？</h2><p>这次中的论文标题是：“LightSeq2: Accelerated Training for Transformer-based Models on GPUs”，这是LightSeq第二期训练引擎相关论文，深入讲解了LightSeq训练引擎中用到的算子融合、显存管理等相关技术。LightSeq支持Transformer、BERT、GPT、ViT等多种模型的训练加速，在机器翻译任务上最高可以加速3倍。详细的技术原理介绍可以看下面的文章：<br><a href="https://zhuanlan.zhihu.com/p/383657837" target="_blank" rel="noopener">训练加速3倍！字节跳动推出业界首个NLP模型全流程加速引擎</a></p><h2 id="投稿过程是怎么样的？"><a href="#投稿过程是怎么样的？" class="headerlink" title="投稿过程是怎么样的？"></a>投稿过程是怎么样的？</h2><p>去年6月的时候，这篇论文的初稿就已经成型了。当时投了下半年的PPoPP国际顶会，但是评分很低，几乎都是拒绝。总结原因，一是因为这个会议和论文方向不是特别合得来，这个会议更注重分布式并行方向的成果；二是论文是按照NLP领域写作习惯来写的，写的也确实糟糕，所以被认为没有什么创新。</p><p>被拒之后请了UCSB的几位老师和学生进行了专业的修改，重新组织了论文的结构。相同的技术用更高级的话术来表达后，论文顿时高大上了起来。SC22的投稿过程非常漫长，从3月份一直持续到了6月份才出结果。而最终的终稿要一直持续到8月份，会议更是在11月才开启，整个过程持续了大半年。</p><h2 id="还能公费旅游不？"><a href="#还能公费旅游不？" class="headerlink" title="还能公费旅游不？"></a>还能公费旅游不？</h2><p>疫情原因，达拉斯现场是没办法去了，UCSB的几位老师同学可以帮忙去现场观摩观摩。还记得两年前的ACL20也是错过了去西雅图公费旅游的机会，今年又错过了达拉斯。会议可以错过，但愿人不要吧。</p><h2 id="我们组是做啥的？"><a href="#我们组是做啥的？" class="headerlink" title="我们组是做啥的？"></a>我们组是做啥的？</h2><p>我们组是字节跳动火山翻译团队，那自然就是做机器翻译的啦。而我呢是做模型优化方向的，LightSeq就是我们的主要项目：<br><a href="https://github.com/bytedance/lightseq" target="_blank" rel="noopener">https://github.com/bytedance/lightseq</a></p><p>之前也写过一篇我们组的详细介绍：<br><a href="https://zhuanlan.zhihu.com/p/472659682" target="_blank" rel="noopener">来字节快两年了，回答一些你们感兴趣的问题</a></p><h2 id="怎么进字节？"><a href="#怎么进字节？" class="headerlink" title="怎么进字节？"></a>怎么进字节？</h2><p><strong>内推链接：</strong><br><a href="https://job.toutiao.com/s/YB9MUpS" target="_blank" rel="noopener">https://job.toutiao.com/s/YB9MUpS</a></p><p><img src="2.png" alt></p><p>也强烈建议加我微信（godweiyang）沟通交流，岗位信息、内推进度等等都可以问我。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 深度学习 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> SC22 </tag>
+            
+            <tag> 深度学习 </tag>
+            
+            <tag> 模型优化 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>手推公式之“层归一化”梯度</title>
+      <link href="/2022/05/22/layernorm-gradient/"/>
+      <url>/2022/05/22/layernorm-gradient/</url>
+      
+        <content type="html"><![CDATA[<p>昨天推导了一下交叉熵的反向传播梯度，今天再来推导一下层归一化（LayerNorm），这是一种常见的归一化方法。</p><h1 id="前向传播"><a href="#前向传播" class="headerlink" title="前向传播"></a>前向传播</h1><p>假设待归一化的$m$维向量为$x$，均值和标准差分别是$\mu{(x)}$和$\sigma{(x)}$，LayerNorm的参数是$w$和$b$，那么层归一化后的输出为：<br>$$<br>y = w \odot \frac{x - \mu}{\sqrt{\sigma^2 + \epsilon}} + b<br>$$</p><p>这里的极小量$\epsilon$是为了防止标准差为0导致溢出。为了简单起见，我们不加上这一项，原公式也就变成了：<br>$$<br>y = w \odot \frac{x - \mu}{\sigma} + b<br>$$</p><h1 id="反向传播"><a href="#反向传播" class="headerlink" title="反向传播"></a>反向传播</h1><p>假设损失函数$\mathcal{L}$对输出$y$的梯度是$\frac{\partial{\mathcal{L}}}{\partial{y}}$，那么这里需要求三个梯度：$\frac{\partial{\mathcal{L}}}{\partial{w}}$、$\frac{\partial{\mathcal{L}}}{\partial{b}}$和$\frac{\partial{\mathcal{L}}}{\partial{x}}$。</p><p>令$\hat x = \frac{x - \mu}{\sigma}$，那么原公式就变成了：<br>$$<br>y = w \odot \hat x + b<br>$$</p><p>两个参数的梯度非常简单：<br>$$<br>\begin{aligned}<br>\frac{\partial{\mathcal{L}}}{\partial{w_i}} &amp;= \frac{\partial{\mathcal{L}}}{\partial{y_i}} \cdot \frac{\partial{\mathcal{y_i}}}{\partial{w_i}} = \frac{\partial{\mathcal{L}}}{\partial{y_i}} \cdot \hat x_i \\<br>\frac{\partial{\mathcal{L}}}{\partial{b_i}} &amp;= \frac{\partial{\mathcal{L}}}{\partial{y_i}} \cdot \frac{\partial{\mathcal{y_i}}}{\partial{b_i}} = \frac{\partial{\mathcal{L}}}{\partial{y_i}}<br>\end{aligned}<br>$$</p><p>对输入$x$的梯度等于：<br>$$<br>\frac{\partial{\mathcal{L}}}{\partial{x_i}} = \frac{1}{\sigma} \cdot \left[\frac{\partial{\mathcal{L}}}{\partial{y_i}} \cdot w_i - \frac{1}{m}\cdot \left( \sum_j {\frac{\partial{\mathcal{L}}}{\partial{y_j}} \cdot w_j} + \hat x_i \cdot \sum_j {\frac{\partial{\mathcal{L}}}{\partial{y_j}} \cdot w_j \cdot \hat x_j}\right)\right]<br>$$</p><h2 id="推导过程"><a href="#推导过程" class="headerlink" title="推导过程"></a>推导过程</h2><p>对输入$x$的梯度可以写成：<br>$$<br>\begin{aligned}<br>\frac{\partial{\mathcal{L}}}{\partial{x_i}} &amp;= \sum_j {\frac{\partial{\mathcal{L}}}{\partial{y_j}} \cdot \frac{\partial{\mathcal{y_j}}}{\partial{\hat x_j}}} \cdot \frac{\partial{\mathcal{\hat x_j}}}{\partial{x_i}} \\<br>&amp;= \sum_j {\frac{\partial{\mathcal{L}}}{\partial{y_j}} \cdot w_j \cdot \frac{\partial{\mathcal{\hat x_j}}}{\partial{x_i}}}<br>\end{aligned}<br>$$</p><p>这里只需要计算最后一项就行了：<br>$$<br>\begin{aligned}<br>\frac{\partial{\mathcal{\hat x_j}}}{\partial{x_i}} &amp;= \frac{\partial}{\partial{x_i}}\left(\frac{x_j - \mu}{\sigma}\right) \\<br>&amp;= \frac{\partial{(x_j - \mu)}}{\partial x_i} \cdot \sigma^{-1} + (x_j - \mu) \cdot \frac{\partial\sigma}{\partial x_i} \cdot (-\sigma^{-2}) \\<br>&amp;= \left(\delta_{ij} - \frac{\partial{\mu}}{\partial x_i}\right) \cdot \sigma^{-1} - \sigma^{-2} \cdot (x_j - \mu) \cdot \frac{\partial\sigma}{\partial x_i}<br>\end{aligned}<br>$$</p><p>其中$\delta_{ij}$只有当$i=j$的时候才会等于1，否则都等于0。这里只需要求出均值和标准差对$x_i$的梯度就行了。直接给出结论，证明比较简单，放在了文末：<br>$$<br>\begin{aligned}<br>\frac{\partial \mu}{\partial x_i} &amp;= \frac{1}{m} \\<br>\frac{\partial \sigma}{\partial x_i} &amp;= \frac{1}{m} \cdot \sigma^{-1} \cdot (x_i - \mu)<br>\end{aligned}<br>$$</p><p>代入可以得到：<br>$$<br>\begin{aligned}<br>\frac{\partial{\mathcal{\hat x_j}}}{\partial{x_i}} &amp;= \left(\delta_{ij} - \frac{\partial{\mu}}{\partial x_i}\right) \cdot \sigma^{-1} - \sigma^{-2} \cdot (x_j - \mu) \cdot \frac{\partial\sigma}{\partial x_i} \\<br>&amp;= \left(\delta_{ij} - \frac{1}{m}\right) \cdot \sigma^{-1} - \sigma^{-2} \cdot (x_j - \mu) \cdot \frac{1}{m} \cdot \sigma^{-1} \cdot (x_i - \mu) \\<br>&amp;= \sigma^{-1} \cdot \delta_{ij} - \frac{1}{m} \cdot \sigma^{-1} - \frac{1}{m} \cdot \sigma^{-3} \cdot (x_i - \mu) \cdot (x_j - \mu) \\<br>&amp;=  \sigma^{-1} \cdot \delta_{ij} - \frac{1}{m} \cdot \sigma^{-1} - \frac{1}{m} \cdot \sigma^{-1} \cdot {\hat x_i} \cdot {\hat x_j}<br>\end{aligned}<br>$$</p><p>最后带入梯度$\frac{\partial{\mathcal{L}}}{\partial{x_i}}$中可以得到：<br>$$<br>\begin{aligned}<br>\frac{\partial{\mathcal{L}}}{\partial{x_i}} &amp;= \sum_j {\frac{\partial{\mathcal{L}}}{\partial{y_j}} \cdot w_j \cdot \frac{\partial{\mathcal{\hat x_j}}}{\partial{x_i}}} \\<br>&amp;= \sum_j {\frac{\partial{\mathcal{L}}}{\partial{y_j}} \cdot w_j \cdot \left(\sigma^{-1} \cdot \delta_{ij} - \frac{1}{m} \cdot \sigma^{-1} - \frac{1}{m} \cdot \sigma^{-1} \cdot {\hat x_i} \cdot {\hat x_j}\right)} \\<br>&amp;= \frac{1}{\sigma} \cdot \frac{\partial{\mathcal{L}}}{\partial{y_i}} \cdot w_i - \frac{1}{m \sigma} \cdot \sum_j {\frac{\partial{\mathcal{L}}}{\partial{y_j}} \cdot w_j} - \frac{\hat x_i}{m \sigma} \cdot \sum_j {\frac{\partial{\mathcal{L}}}{\partial{y_j}} \cdot w_j \cdot \hat x_j} \\<br>&amp;= \frac{1}{\sigma} \cdot \left[\frac{\partial{\mathcal{L}}}{\partial{y_i}} \cdot w_i - \frac{1}{m}\cdot \left( \sum_j {\frac{\partial{\mathcal{L}}}{\partial{y_j}} \cdot w_j} + \hat x_i \cdot \sum_j {\frac{\partial{\mathcal{L}}}{\partial{y_j}} \cdot w_j \cdot \hat x_j}\right)\right]<br>\end{aligned}<br>$$</p><h2 id="均值和标准差的梯度"><a href="#均值和标准差的梯度" class="headerlink" title="均值和标准差的梯度"></a>均值和标准差的梯度</h2><p>均值的梯度为：<br>$$<br>\begin{aligned}<br>\frac{\partial \mu}{\partial x_i} &amp;= \frac{\partial}{\partial x_i} \left(\frac{1}{m} \cdot \sum_j{x_j}\right) \\<br>&amp;= \frac{1}{m}<br>\end{aligned}<br>$$</p><p>标准差的计算公式可以写成$\sigma = \left[\mu(x^2) - \mu^2(x)\right]^{\frac{1}{2}}$，所以梯度为：<br>$$<br>\begin{aligned}<br>\frac{\partial \sigma}{\partial x_i} &amp;=  \frac{\partial}{\partial x_i} \left[\mu(x^2) - \mu^2(x)\right]^{\frac{1}{2}} \\<br>&amp;= \frac{1}{2} \cdot \left[\mu(x^2) - \mu^2(x)\right]^{-\frac{1}{2}} \cdot \left(\frac{2}{m} \cdot x_i - \frac{2}{m} \cdot \mu \right) \\<br>&amp;= \frac{1}{m} \cdot \sigma^{-1} \cdot (x_i - \mu)<br>\end{aligned}<br>$$</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 深度学习 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Transformer </tag>
+            
+            <tag> 梯度 </tag>
+            
+            <tag> 数学 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>“交叉熵”反向传播推导</title>
+      <link href="/2022/05/21/transformer-gradient/"/>
+      <url>/2022/05/21/transformer-gradient/</url>
+      
+        <content type="html"><![CDATA[<p>交叉熵（CrossEntropy）是常见的损失函数，本文详细推导一下它的梯度，面试大厂或者工程实践中都可能会用到。</p><h1 id="前向传播"><a href="#前向传播" class="headerlink" title="前向传播"></a>前向传播</h1><p>假设分类任务类别数是$V$，隐层输出是$V$维向量$\mathbf{h}$，标准的one-hot向量是$\mathbf{y}$，正确的类别是$k$。那么交叉熵损失可以定义为：<br>$$<br>\mathcal{L}(\mathbf p, \mathbf q) = -\sum_i \mathbf{p}_i \log(\mathbf{q}_i)<br>$$<br>其中$\mathbf p = (1 - \alpha)  \mathbf y + \frac{\alpha}{V}\cdot \mathbf 1$，$\mathbf q = \mathrm{Softmax}(\mathbf h)$，$0\le \alpha\le 1$是平滑参数。Softmax函数大家都很熟悉了，具体形式为：$\mathbf{q}_i = \frac{e^{\mathbf{h}_i}}{\sum_{j}{e^{\mathbf{h}_j}}}$。</p><h1 id="反向传播"><a href="#反向传播" class="headerlink" title="反向传播"></a>反向传播</h1><p>$\mathcal{L}$对$\mathbf{h}_i$的梯度要分两种情况：<br>$$<br>\frac{\partial{\mathcal{L}}}{\partial{\mathbf{h}_i}} = \left\{<br>\begin{array}{ll}<br>   \mathbf{q}_i -\frac{\alpha}{V}  - 1 + \alpha &amp; i = k \\<br>   \mathbf{q}_i -\frac{\alpha}{V} &amp; i\neq k<br>\end{array}  \right.<br>$$</p><h2 id="推导过程"><a href="#推导过程" class="headerlink" title="推导过程"></a>推导过程</h2><p>根据求导法则有：<br>$$<br>\frac{\partial \mathcal{L}}{\partial \mathbf{h}_i} = -\sum_{j}{\frac{\partial{\mathcal{L}}}{\partial{\mathbf{q}_j}} \cdot \frac{\partial{\mathbf{q}_j}}{\partial{\mathbf{h}_i}}} = -\sum_{j}{\frac{\mathbf{p}_j}{\mathbf{q}_j} \cdot \frac{\partial{\mathbf{q}_j}}{\partial{\mathbf{h}_i}}}<br>$$<br>其中$\frac{\partial{\mathbf{q}_j}}{\partial{\mathbf{h}_i}}$就是Softmax函数的梯度（这个推导比较简单，放在了文末）：<br>$$<br>\frac{\partial{\mathbf{q}_j}}{\partial{\mathbf{h}_i}} = \left\{<br>\begin{array}{ll}<br>   \mathbf{q}_i (1 - \mathbf{q}_i)  &amp; j = i \\<br>    -\mathbf{q}_i \mathbf{q}_j &amp; j\neq i<br>\end{array}  \right.<br>$$</p><p>下面分两种情况讨论：</p><ol><li>当$i = k$时：<br>$$<br>\begin{aligned}<br>\frac{\partial \mathcal{L}}{\partial \mathbf{h}_i} &amp;= -\sum_{j}{\frac{\partial{\mathcal{L}}}{\partial{\mathbf{q}_j}} \cdot \frac{\partial{\mathbf{q}_j}}{\partial{\mathbf{h}_i}}} = -\sum_{j}{\frac{\mathbf{p}_j}{\mathbf{q}_j} \cdot \frac{\partial{\mathbf{q}_j}}{\partial{\mathbf{h}_i}}} \\<br>&amp;= -\frac{\mathbf{p}_k}{\mathbf{q}_k} \cdot \frac{\partial{\mathbf{q}_k}}{\partial{\mathbf{h}_i}} -\sum_{j \neq k}{\frac{\mathbf{p}_j}{\mathbf{q}_j} \cdot \frac{\partial{\mathbf{q}_j}}{\partial{\mathbf{h}_i}}} \\<br>&amp;= -\frac{\mathbf{p}_k}{\mathbf{q}_k} \cdot \mathbf{q}_k (1 - \mathbf{q}_k) -\sum_{j \neq k}{\frac{\mathbf{p}_j}{\mathbf{q}_j} \cdot (-\mathbf{q}_i \mathbf{q}_j)} \\<br>&amp;= \mathbf{p}_k (\mathbf{q}_k - 1)  + \mathbf{q}_i\sum_{j \neq k}{\mathbf{p}_j} \\<br>&amp;= (1 - \alpha + \frac{\alpha}{V})(\mathbf{q}_k - 1) +  (V - 1) \cdot \frac{\alpha}{V}\cdot \mathbf{q}_i \\<br>&amp;= \mathbf{q}_i -\frac{\alpha}{V}  - 1 + \alpha<br>\end{aligned}<br>$$</li><li>当$i \neq k$时：<br>$$<br>\begin{aligned}<br>\frac{\partial \mathcal{L}}{\partial \mathbf{h}_i} &amp;= -\sum_{j}{\frac{\partial{\mathcal{L}}}{\partial{\mathbf{q}_j}} \cdot \frac{\partial{\mathbf{q}_j}}{\partial{\mathbf{h}_i}}} = -\sum_{j}{\frac{\mathbf{p}_j}{\mathbf{q}_j} \cdot \frac{\partial{\mathbf{q}_j}}{\partial{\mathbf{h}_i}}} \\<br>&amp;= -\frac{\mathbf{p}_k}{\mathbf{q}_k} \cdot \frac{\partial{\mathbf{q}_k}}{\partial{\mathbf{h}_i}} -\frac{\mathbf{p}_i}{\mathbf{q}_i} \cdot \frac{\partial{\mathbf{q}_i}}{\partial{\mathbf{h}_i}} -\sum_{j \neq k, j \neq i}{\frac{\mathbf{p}_j}{\mathbf{q}_j} \cdot \frac{\partial{\mathbf{q}_j}}{\partial{\mathbf{h}_i}}} \\<br>&amp;= -\frac{\mathbf{p}_k}{\mathbf{q}_k} \cdot (-\mathbf{q}_k\mathbf{q}_i) -\frac{\mathbf{p}_i}{\mathbf{q}_i} \cdot \mathbf{q}_i (1 - \mathbf{q}_i) -\sum_{j \neq k, j \neq i}{\frac{\mathbf{p}_j}{\mathbf{q}_j} \cdot (-\mathbf{q}_i \mathbf{q}_j)} \\<br>&amp;= \mathbf{p}_k \mathbf{q}_i - \mathbf{p}_i (1 - \mathbf{q}_i) + \mathbf{q}_i\sum_{j \neq k, j \neq i}{\mathbf{p}_j} \\<br>&amp;= (1 - \alpha + \frac{\alpha}{V})\cdot\mathbf{q}_i - \frac{\alpha}{V} \cdot (1 - \mathbf{q}_i) + (V - 2) \cdot \frac{\alpha}{V}\cdot\mathbf{q}_i \\<br>&amp;= \mathbf{q}_i -\frac{\alpha}{V}<br>\end{aligned}<br>$$</li></ol><h2 id="Softmax梯度"><a href="#Softmax梯度" class="headerlink" title="Softmax梯度"></a>Softmax梯度</h2><p>回顾Softmax函数的形式：<br>$$<br>\mathbf{q}_j = \frac{e^{\mathbf{h}_j}}{\sum_{l}{e^{\mathbf{h}_l}}} = \frac{e^{\mathbf{h}_j}}{e^{\mathbf{h}_i} + \sum_{l \neq i}{e^{\mathbf{h}_l}}}<br>$$</p><p>这里也分两种情况讨论：</p><ol><li>当$j = i$时：<br>$$<br>\begin{aligned}<br>\frac{\partial{\mathbf{q}_j}}{\partial{\mathbf{h}_i}} &amp;= \frac{e^{\mathbf{h}_j}}{e^{\mathbf{h}_i} + \sum_{l \neq i}{e^{\mathbf{h}_l}}} - \frac{e^{\mathbf{h}_j} \cdot e^{\mathbf{h}_j}}{\left(e^{\mathbf{h}_i} + \sum_{l \neq i}{e^{\mathbf{h}_l}}\right)^2} \\<br>&amp;= \mathbf{q}_j - \mathbf{q}_j\mathbf{q}_j \\<br>&amp;= \mathbf{q}_j (1 - \mathbf{q}_j)<br>\end{aligned}<br>$$</li><li>当$j \neq i$时：<br>$$<br>\begin{aligned}<br>\frac{\partial{\mathbf{q}_j}}{\partial{\mathbf{h}_i}} &amp;= - \frac{e^{\mathbf{h}_j} \cdot e^{\mathbf{h}_i}}{\left(e^{\mathbf{h}_i} + \sum_{l \neq i}{e^{\mathbf{h}_l}}\right)^2} \\<br>&amp;= -\mathbf{q}_j\mathbf{q}_i<br>\end{aligned}<br>$$</li></ol>]]></content>
+      
+      
+      <categories>
+          
+          <category> 深度学习 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Transformer </tag>
+            
+            <tag> 梯度 </tag>
+            
+            <tag> 数学 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>拼图还能这么玩？</title>
+      <link href="/2022/04/22/funny-media/"/>
+      <url>/2022/04/22/funny-media/</url>
+      
+        <content type="html"><![CDATA[<p>这两天将我所有微信好友的头像弄出来了，一共5000多张。然后想着可以用它们来做些啥，最后用它们拼图玩。</p><p>Mac微信的头像保存在：</p><pre class="line-numbers language-txt"><code class="language-txt">~/Library/Containers/com.tencent.xinWeChat/Data/Library/Application\ Support/com.tencent.xinWeChat/2.0b4.0.9/c1a30fcf75eedba12764b4d4170b977e/Avatar<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>其中倒数第二个那一长串字符串每个人会不同，根据自己情况进行修改。</p><p>用到的代码在文章最后，github上也开源了：<br><a href="https://github.com/godweiyang/FunnyMedia" target="_blank" rel="noopener">https://github.com/godweiyang/FunnyMedia</a></p><h2 id="最终效果"><a href="#最终效果" class="headerlink" title="最终效果"></a>最终效果</h2><p>直接上最终效果图，首先是5000多张头像拼接成一张图片：<br><img src="avatar_30.jpg" alt><br>如果看不清的话可以放大看看细节：<br><img src="avatar_detail.png" alt></p><p>然后是5000多张头像拼成的杨超越：<br><img src="ycy_30.jpg" alt><br>如果看不清的话可以放大看看细节：<br><img src="ycy_detail.png" alt><br>杨超越的原图是这样的：<br><img src="ycy.jpeg" alt></p><h2 id="实现方法"><a href="#实现方法" class="headerlink" title="实现方法"></a>实现方法</h2><p>实现方法很简单，拼接的话就是把头像依次粘贴在一块大画布上的不同区域，就跟贴瓷砖一样。</p><p>为了实现用不同头像拼接出杨超越，就需要先将杨超越图片进行分割，每一块小区域寻找一个颜色最相近的头像粘贴上去。我直接将图像区域的RBG值求了加权平均，然后在头像中寻找RGB均值相等的粘贴上去。</p><p>代码放到文章最后了，运行命令如下：</p><pre class="line-numbers language-shell"><code class="language-shell">python3 image_stitch.py -d [图像合集目录] -i [待拼凑的图片] -s [小图最终的边长] -r<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>其中<code>-d</code>表示图像目录，你也可以放头像或者其他的图像；<code>-i</code>是你想拼成的大图路径，如果不设置的话就是直接把图像拼在一起；<code>-s</code>表示小图像最终的边长，实测设置为30效果最佳，图片大小和质量都比较好；<code>-r</code>表示是否随机排列图片。</p><p>此外之前还写过字符画视频的生成方法，代码也开源在同一个github上了：<br><a href="https://zhuanlan.zhihu.com/p/466993864" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/466993864</a><br><a href="https://github.com/godweiyang/FunnyMedia" target="_blank" rel="noopener">https://github.com/godweiyang/FunnyMedia</a></p><h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre class="line-numbers language-python"><code class="language-python"><span class="token keyword">import</span> argparse<span class="token keyword">import</span> os<span class="token keyword">import</span> random<span class="token keyword">import</span> math<span class="token keyword">from</span> collections <span class="token keyword">import</span> defaultdict<span class="token keyword">import</span> numpy <span class="token keyword">as</span> np<span class="token keyword">import</span> PIL<span class="token punctuation">.</span>Image <span class="token keyword">as</span> Image<span class="token keyword">from</span> tqdm <span class="token keyword">import</span> tqdm<span class="token punctuation">,</span> trange<span class="token keyword">def</span> <span class="token function">generate1</span><span class="token punctuation">(</span>dir<span class="token punctuation">,</span> size<span class="token punctuation">,</span> rand<span class="token punctuation">)</span><span class="token punctuation">:</span>    <span class="token keyword">print</span><span class="token punctuation">(</span>f<span class="token string">"正在拼接尺寸：{size}..."</span><span class="token punctuation">)</span>    nums <span class="token operator">=</span> len<span class="token punctuation">(</span>os<span class="token punctuation">.</span>listdir<span class="token punctuation">(</span>dir<span class="token punctuation">)</span><span class="token punctuation">)</span>    nums_width <span class="token operator">=</span> int<span class="token punctuation">(</span>math<span class="token punctuation">.</span>sqrt<span class="token punctuation">(</span>nums<span class="token punctuation">)</span><span class="token punctuation">)</span>    nums_height <span class="token operator">=</span> int<span class="token punctuation">(</span><span class="token punctuation">(</span>nums <span class="token operator">+</span> nums_width <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">/</span> nums_width<span class="token punctuation">)</span>    img_width <span class="token operator">=</span> nums_width <span class="token operator">*</span> size    img_height <span class="token operator">=</span> nums_height <span class="token operator">*</span> size    image <span class="token operator">=</span> Image<span class="token punctuation">.</span>new<span class="token punctuation">(</span><span class="token string">"RGB"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>img_width<span class="token punctuation">,</span> img_height<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"white"</span><span class="token punctuation">)</span>    x <span class="token operator">=</span> <span class="token number">0</span>    y <span class="token operator">=</span> <span class="token number">0</span>    files <span class="token operator">=</span> os<span class="token punctuation">.</span>listdir<span class="token punctuation">(</span>dir<span class="token punctuation">)</span>    <span class="token keyword">if</span> rand<span class="token punctuation">:</span>        random<span class="token punctuation">.</span>shuffle<span class="token punctuation">(</span>files<span class="token punctuation">)</span>    <span class="token keyword">for</span> i <span class="token keyword">in</span> tqdm<span class="token punctuation">(</span>files<span class="token punctuation">)</span><span class="token punctuation">:</span>        <span class="token keyword">try</span><span class="token punctuation">:</span>            img <span class="token operator">=</span> Image<span class="token punctuation">.</span>open<span class="token punctuation">(</span>os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>join<span class="token punctuation">(</span>dir<span class="token punctuation">,</span> i<span class="token punctuation">)</span><span class="token punctuation">)</span>        <span class="token keyword">except</span> IOError<span class="token punctuation">:</span>            <span class="token keyword">print</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span>            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"图像打开失败"</span><span class="token punctuation">)</span>        <span class="token keyword">else</span><span class="token punctuation">:</span>            img <span class="token operator">=</span> img<span class="token punctuation">.</span>resize<span class="token punctuation">(</span><span class="token punctuation">(</span>size<span class="token punctuation">,</span> size<span class="token punctuation">)</span><span class="token punctuation">,</span> Image<span class="token punctuation">.</span>ANTIALIAS<span class="token punctuation">)</span>            image<span class="token punctuation">.</span>paste<span class="token punctuation">(</span>img<span class="token punctuation">,</span> <span class="token punctuation">(</span>x <span class="token operator">*</span> size<span class="token punctuation">,</span> y <span class="token operator">*</span> size<span class="token punctuation">)</span><span class="token punctuation">)</span>            x <span class="token operator">+=</span> <span class="token number">1</span>            <span class="token keyword">if</span> x <span class="token operator">==</span> nums_width<span class="token punctuation">:</span>                x <span class="token operator">=</span> <span class="token number">0</span>                y <span class="token operator">+=</span> <span class="token number">1</span>            img<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span>    image<span class="token punctuation">.</span>save<span class="token punctuation">(</span>f<span class="token string">"avatar_{size}.jpg"</span><span class="token punctuation">)</span>    image<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token keyword">def</span> <span class="token function">mean_pixel</span><span class="token punctuation">(</span>colors<span class="token punctuation">)</span><span class="token punctuation">:</span>    colors <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">0.3</span> <span class="token operator">*</span> r <span class="token operator">+</span> <span class="token number">0.59</span> <span class="token operator">*</span> g <span class="token operator">+</span> <span class="token number">0.11</span> <span class="token operator">*</span> b <span class="token keyword">for</span> r<span class="token punctuation">,</span> g<span class="token punctuation">,</span> b <span class="token keyword">in</span> colors<span class="token punctuation">]</span>    <span class="token keyword">return</span> int<span class="token punctuation">(</span>np<span class="token punctuation">.</span>mean<span class="token punctuation">(</span>colors<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token keyword">def</span> <span class="token function">generate2</span><span class="token punctuation">(</span>dir<span class="token punctuation">,</span> source<span class="token punctuation">,</span> size<span class="token punctuation">,</span> rand<span class="token punctuation">)</span><span class="token punctuation">:</span>    <span class="token keyword">print</span><span class="token punctuation">(</span>f<span class="token string">"正在拼接尺寸：{size}..."</span><span class="token punctuation">)</span>    files <span class="token operator">=</span> os<span class="token punctuation">.</span>listdir<span class="token punctuation">(</span>dir<span class="token punctuation">)</span>    <span class="token keyword">if</span> rand<span class="token punctuation">:</span>        random<span class="token punctuation">.</span>shuffle<span class="token punctuation">(</span>files<span class="token punctuation">)</span>    image <span class="token operator">=</span> Image<span class="token punctuation">.</span>open<span class="token punctuation">(</span>source<span class="token punctuation">)</span>    image <span class="token operator">=</span> image<span class="token punctuation">.</span>convert<span class="token punctuation">(</span><span class="token string">"RGB"</span><span class="token punctuation">)</span>    img_width<span class="token punctuation">,</span> img_height <span class="token operator">=</span> image<span class="token punctuation">.</span>size    img_width <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>img_width <span class="token operator">+</span> size <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">//</span> size<span class="token punctuation">)</span> <span class="token operator">*</span> size <span class="token operator">*</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>size <span class="token operator">+</span> <span class="token number">9</span><span class="token punctuation">)</span> <span class="token operator">//</span> <span class="token number">10</span><span class="token punctuation">)</span>    img_height <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>img_height <span class="token operator">+</span> size <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">//</span> size<span class="token punctuation">)</span> <span class="token operator">*</span> size <span class="token operator">*</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>size <span class="token operator">+</span> <span class="token number">9</span><span class="token punctuation">)</span> <span class="token operator">//</span> <span class="token number">10</span><span class="token punctuation">)</span>    image <span class="token operator">=</span> image<span class="token punctuation">.</span>resize<span class="token punctuation">(</span><span class="token punctuation">(</span>img_width<span class="token punctuation">,</span> img_height<span class="token punctuation">)</span><span class="token punctuation">,</span> Image<span class="token punctuation">.</span>ANTIALIAS<span class="token punctuation">)</span>    colors <span class="token operator">=</span> defaultdict<span class="token punctuation">(</span>list<span class="token punctuation">)</span>    <span class="token keyword">for</span> i <span class="token keyword">in</span> tqdm<span class="token punctuation">(</span>files<span class="token punctuation">)</span><span class="token punctuation">:</span>        <span class="token keyword">try</span><span class="token punctuation">:</span>            img <span class="token operator">=</span> Image<span class="token punctuation">.</span>open<span class="token punctuation">(</span>os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>join<span class="token punctuation">(</span>dir<span class="token punctuation">,</span> i<span class="token punctuation">)</span><span class="token punctuation">)</span>        <span class="token keyword">except</span> IOError<span class="token punctuation">:</span>            <span class="token keyword">print</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span>            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"图像打开失败"</span><span class="token punctuation">)</span>        <span class="token keyword">else</span><span class="token punctuation">:</span>            img <span class="token operator">=</span> img<span class="token punctuation">.</span>convert<span class="token punctuation">(</span><span class="token string">"RGB"</span><span class="token punctuation">)</span>            img <span class="token operator">=</span> img<span class="token punctuation">.</span>resize<span class="token punctuation">(</span><span class="token punctuation">(</span>size<span class="token punctuation">,</span> size<span class="token punctuation">)</span><span class="token punctuation">,</span> Image<span class="token punctuation">.</span>ANTIALIAS<span class="token punctuation">)</span>            colors<span class="token punctuation">[</span>mean_pixel<span class="token punctuation">(</span>img<span class="token punctuation">.</span>getdata<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">.</span>append<span class="token punctuation">(</span>i<span class="token punctuation">)</span>            img<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span>    <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">256</span><span class="token punctuation">)</span><span class="token punctuation">:</span>        <span class="token keyword">if</span> len<span class="token punctuation">(</span>colors<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">:</span>            <span class="token keyword">for</span> n <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">256</span><span class="token punctuation">)</span><span class="token punctuation">:</span>                <span class="token keyword">if</span> len<span class="token punctuation">(</span>colors<span class="token punctuation">[</span>i <span class="token operator">-</span> n<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">:</span>                    colors<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> colors<span class="token punctuation">[</span>i <span class="token operator">-</span> n<span class="token punctuation">]</span>                    <span class="token keyword">break</span>                <span class="token keyword">if</span> len<span class="token punctuation">(</span>colors<span class="token punctuation">[</span>i <span class="token operator">+</span> n<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">:</span>                    colors<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> colors<span class="token punctuation">[</span>i <span class="token operator">+</span> n<span class="token punctuation">]</span>                    <span class="token keyword">break</span>    index <span class="token operator">=</span> defaultdict<span class="token punctuation">(</span>int<span class="token punctuation">)</span>    <span class="token keyword">for</span> i <span class="token keyword">in</span> trange<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> img_width<span class="token punctuation">,</span> size<span class="token punctuation">)</span><span class="token punctuation">:</span>        <span class="token keyword">for</span> j <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> img_height<span class="token punctuation">,</span> size<span class="token punctuation">)</span><span class="token punctuation">:</span>            now_colors <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>            <span class="token keyword">for</span> ii <span class="token keyword">in</span> range<span class="token punctuation">(</span>i<span class="token punctuation">,</span> i <span class="token operator">+</span> size<span class="token punctuation">)</span><span class="token punctuation">:</span>                <span class="token keyword">for</span> jj <span class="token keyword">in</span> range<span class="token punctuation">(</span>j<span class="token punctuation">,</span> j <span class="token operator">+</span> size<span class="token punctuation">)</span><span class="token punctuation">:</span>                    now_colors<span class="token punctuation">.</span>append<span class="token punctuation">(</span>image<span class="token punctuation">.</span>getpixel<span class="token punctuation">(</span><span class="token punctuation">(</span>ii<span class="token punctuation">,</span> jj<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>            mean_color <span class="token operator">=</span> mean_pixel<span class="token punctuation">(</span>now_colors<span class="token punctuation">)</span>            img <span class="token operator">=</span> Image<span class="token punctuation">.</span>open<span class="token punctuation">(</span>                os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>join<span class="token punctuation">(</span>                    dir<span class="token punctuation">,</span> colors<span class="token punctuation">[</span>mean_color<span class="token punctuation">]</span><span class="token punctuation">[</span>index<span class="token punctuation">[</span>mean_color<span class="token punctuation">]</span> <span class="token operator">%</span> len<span class="token punctuation">(</span>colors<span class="token punctuation">[</span>mean_color<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">]</span>                <span class="token punctuation">)</span>            <span class="token punctuation">)</span>            img <span class="token operator">=</span> img<span class="token punctuation">.</span>convert<span class="token punctuation">(</span><span class="token string">"RGB"</span><span class="token punctuation">)</span>            img <span class="token operator">=</span> img<span class="token punctuation">.</span>resize<span class="token punctuation">(</span><span class="token punctuation">(</span>size<span class="token punctuation">,</span> size<span class="token punctuation">)</span><span class="token punctuation">,</span> Image<span class="token punctuation">.</span>ANTIALIAS<span class="token punctuation">)</span>            image<span class="token punctuation">.</span>paste<span class="token punctuation">(</span>img<span class="token punctuation">,</span> <span class="token punctuation">(</span>i<span class="token punctuation">,</span> j<span class="token punctuation">)</span><span class="token punctuation">)</span>            img<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span>            index<span class="token punctuation">[</span>mean_color<span class="token punctuation">]</span> <span class="token operator">+=</span> <span class="token number">1</span>    source_name <span class="token operator">=</span> <span class="token string">"."</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span>source<span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">"."</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span>    image<span class="token punctuation">.</span>save<span class="token punctuation">(</span>f<span class="token string">"{source_name}_{size}.jpg"</span><span class="token punctuation">)</span>    image<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">"__main__"</span><span class="token punctuation">:</span>    parser <span class="token operator">=</span> argparse<span class="token punctuation">.</span>ArgumentParser<span class="token punctuation">(</span><span class="token punctuation">)</span>    parser<span class="token punctuation">.</span>add_argument<span class="token punctuation">(</span>        <span class="token string">"--dir"</span><span class="token punctuation">,</span> <span class="token string">"-d"</span><span class="token punctuation">,</span> type<span class="token operator">=</span>str<span class="token punctuation">,</span> default<span class="token operator">=</span><span class="token string">"avatar"</span><span class="token punctuation">,</span> help<span class="token operator">=</span><span class="token string">"directory of the avatars"</span>    <span class="token punctuation">)</span>    parser<span class="token punctuation">.</span>add_argument<span class="token punctuation">(</span>        <span class="token string">"--img"</span><span class="token punctuation">,</span> <span class="token string">"-i"</span><span class="token punctuation">,</span> type<span class="token operator">=</span>str<span class="token punctuation">,</span> default<span class="token operator">=</span><span class="token string">""</span><span class="token punctuation">,</span> help<span class="token operator">=</span><span class="token string">"source image to be coverd"</span>    <span class="token punctuation">)</span>    parser<span class="token punctuation">.</span>add_argument<span class="token punctuation">(</span>        <span class="token string">"--size"</span><span class="token punctuation">,</span>        <span class="token string">"-s"</span><span class="token punctuation">,</span>        type<span class="token operator">=</span>str<span class="token punctuation">,</span>        default<span class="token operator">=</span><span class="token string">"30"</span><span class="token punctuation">,</span>        help<span class="token operator">=</span><span class="token string">"size of each avatar (size1,size2,...)"</span><span class="token punctuation">,</span>    <span class="token punctuation">)</span>    parser<span class="token punctuation">.</span>add_argument<span class="token punctuation">(</span>        <span class="token string">"--rand"</span><span class="token punctuation">,</span>        <span class="token string">"-r"</span><span class="token punctuation">,</span>        action<span class="token operator">=</span><span class="token string">"store_true"</span><span class="token punctuation">,</span>        help<span class="token operator">=</span><span class="token string">"whether to shuffle the avatars"</span><span class="token punctuation">,</span>    <span class="token punctuation">)</span>    args <span class="token operator">=</span> parser<span class="token punctuation">.</span>parse_args<span class="token punctuation">(</span><span class="token punctuation">)</span>    sizes <span class="token operator">=</span> <span class="token punctuation">[</span>int<span class="token punctuation">(</span>s<span class="token punctuation">)</span> <span class="token keyword">for</span> s <span class="token keyword">in</span> args<span class="token punctuation">.</span>size<span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">","</span><span class="token punctuation">)</span><span class="token punctuation">]</span>    <span class="token keyword">for</span> size <span class="token keyword">in</span> sizes<span class="token punctuation">:</span>        <span class="token keyword">if</span> len<span class="token punctuation">(</span>args<span class="token punctuation">.</span>img<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">:</span>            generate1<span class="token punctuation">(</span>args<span class="token punctuation">.</span>dir<span class="token punctuation">,</span> size<span class="token punctuation">,</span> args<span class="token punctuation">.</span>rand<span class="token punctuation">)</span>        <span class="token keyword">else</span><span class="token punctuation">:</span>            generate2<span class="token punctuation">(</span>args<span class="token punctuation">.</span>dir<span class="token punctuation">,</span> args<span class="token punctuation">.</span>img<span class="token punctuation">,</span> size<span class="token punctuation">,</span> args<span class="token punctuation">.</span>rand<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 编程技术 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 图像处理 </tag>
+            
+            <tag> python </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>封城第20日，起飞了（文末有字节校招惊喜）</title>
+      <link href="/2022/04/20/2022-4-20-life/"/>
+      <url>/2022/04/20/2022-4-20-life/</url>
+      
+        <content type="html"><![CDATA[<p>封城第20天了，最近上海日新增又降到2w以下了，京东快递和外卖也部分恢复了，部分小区甚至都转成防范区了。这两天小区里核酸检测率都在95%以下，有300左右的人都没去做核酸，据说达不到要求的话没法申报解封。而我也已经4天没去做过核酸了，因为在家才是最安全的。今天因为需要拿快递，所以去贡献了一个人头，小区的检测率也勉强达标了。</p><p>今天破天荒点到了KFC，虽然只有一个三人份的套餐，花了130点了一份，解决了一天的伙食。配送的速度也非常快，半小时不到就送到了。但有一说一，味道大不如以前，比较咸，也不是非常脆，可能以前的厨师还在家隔离吧。</p><p><img src="1.jpeg" alt></p><p>今天下单了10天的猫砂终于到了。我的猫比较挑剔，小时候没教育好，所以只用纳基膨润土，其它的猫砂都会拉在地上。这次购入的36斤猫砂足够用好几个月了，这个牌子也比较便宜，一斤只要3块钱，算是纳基膨润土里最便宜的了。</p><p><img src="2.jpeg" alt></p><p>今天也不全都是顺利，早上醒来停电了，原来是忘了交电费。然后发现路由器坏了，可能需要刷固件。我原来的连接方式是客厅里放着光猫-主路由器，然后我房间里副路由器-主机，主副路由器之间无线桥接。当时500兆的宽带实测速度只有200多兆。而现在副路由器坏了，我只能直接从主机连网线到光猫上，实测速度飙升到了500兆，差不多72 MB/s。这下打游戏再也不用担心跳ping了，下载动作大片也是分分钟的事情了。</p><p><img src="3.png" alt></p><p>今天还在团购群里淘到了两盒牙膏、一大瓶洗洁精，都是好心同事买多了送我的，十分感谢。</p><h2 id="字节福利"><a href="#字节福利" class="headerlink" title="字节福利"></a>字节福利</h2><blockquote><p>字节跳动春招倒计时两周，将于4月30日16:00截止投递！还没投递的小伙伴可要抓紧了。</p></blockquote><p>我的内推码：A7FSJMK</p><p>内推链接：<br><a href="https://jobs.toutiao.com/s/F1MXbHJ" target="_blank" rel="noopener">https://jobs.toutiao.com/s/F1MXbHJ</a></p><p>我们部门还在招实习生哦，我们小组也在招，如果想做我实习生可以试一试哦。</p><p>AI-Lab NLP：<br><a href="https://job.toutiao.com/s/F1MtYBH" target="_blank" rel="noopener">https://job.toutiao.com/s/F1MtYBH</a></p><p>AI-Lab NLP（模型优化方向）：<br><a href="https://job.toutiao.com/s/F1rYVYF" target="_blank" rel="noopener">https://job.toutiao.com/s/F1rYVYF</a></p><p>而最后一场笔试时间是5月6日，为帮助大家更好地应对笔试，字节校园提供「双月模拟笔试· 3-4月场」供你实战，活动免费！</p><p><strong>4月23日19:00-21:00 本周六晚，不见不散！</strong>（悄悄说，参与上一次模拟笔试的同学，已有上百位顺利拿到offer！）</p><p>报名链接：<br><a href="https://wj.toutiao.com/q/153546/f1e3vL74/4010/#/" target="_blank" rel="noopener">https://wj.toutiao.com/q/153546/f1e3vL74/4010/#/</a></p><p>活动详情：<br><a href="https://bytedancecampus1.feishu.cn/docs/doccnoWp4Sp58222k6NgMomAlpu" target="_blank" rel="noopener">https://bytedancecampus1.feishu.cn/docs/doccnoWp4Sp58222k6NgMomAlpu</a></p><p>悄悄告诉你，优秀的同学还可以免笔试，直接面试哦。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 随笔 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 疫情 </tag>
+            
+            <tag> 隔离 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>封城第14日，囤了一波好货</title>
+      <link href="/2022/04/14/2022-4-14-life/"/>
+      <url>/2022/04/14/2022-4-14-life/</url>
+      
+        <content type="html"><![CDATA[<p>封城第14天了，今天去小区里小卖部买了一箱啤酒和30个鸡蛋，一共花了110，这下明天开始可以吃菜喝酒了，夜宵也可以荷包蛋自由了。京东上看了一下大概价格在90左右，看来这个小卖部还是挺良心的，现在外面团购最起码得两倍价格。</p><p><img src="1.jpeg" alt></p><p><img src="2.jpeg" alt></p><p>小卖部里东西还挺全的，米面粮油、速冻、调味料、蔬菜水果、冰淇淋饮料啥的基本都有。即使封小区了，老板也天天进货，让我们不需要团购也可以买到东西，不至于饿死。</p><p>此外给猫买的猫粮和猫砂也到了，虽然价格贵了一半以上，但也算是解了燃眉之急，再应付两个月不是问题。封城的大环境下，我和猫不饿死是最重要的两件事。</p><p><img src="3.jpeg" alt></p><p>今天分享一下夜宵解馋小吃：炸薯条，主要步骤如下：</p><ol><li>准备俩白白胖胖的土豆，去皮洗净，切成长条。</li><li>用水洗掉表面淀粉。</li><li>开水下锅，煮至半熟。</li><li>捞出沥干水分，冰箱冷冻或冷藏，锁住水分定型。</li><li>下宽油，油温9成热下油锅，炸至微微金黄，不时翻面。</li><li>捞出等两分钟，重新开火，热油下锅复炸一分钟。</li><li>沥干油后捞出，撒上方便面调料，开吃。</li></ol><p>如果嫌削土豆麻烦的，可以买冷冻薯条，直接炸。如果有空气炸锅的，也可以用，确实很方便。但是我更喜欢油炸的感觉，那是空气炸锅永远都比不了的。复炸也是必需的，不然薯条捞出来会变软。如果喜欢吃KFC那种软软的薯条，可以炸时间短一些。而我喜欢脆脆的，所以我炸的很久，可以吃出薯片的感觉。如果喜欢甜口的，可以加番茄酱。没有方便面调料，也可以用胡椒粉代替。最后的油过滤干净，还可以下次炒菜继续用。</p><p>如果像我一样从原始的土豆开始做，非常费时间。而且两三个大土豆也只能做出一大碗的薯条，几分钟就吃光了，根本停不下来。</p><p>今天没有做什么菜，中午吃的阳春面，晚上虾仁火腿炒饭，简单管饱。明天打算继续拍个黄瓜，莴笋蛋汤/凉拌莴笋/莴笋炒火腿，先把蔬菜清理一波。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 随笔 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 疫情 </tag>
+            
+            <tag> 隔离 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>封城第13日，大数据分析团购群的各种行为</title>
+      <link href="/2022/04/13/2022-4-13-life/"/>
+      <url>/2022/04/13/2022-4-13-life/</url>
+      
+        <content type="html"><![CDATA[<p>封城第13天了，小区终于发放了第3次物资。这次的物资是三次以来最丰富的一次，还算不错。但是由于天降暴雨，大米都进水了，蔬菜也都泡水了。再加上昨天刚团购到货，所以我基本不怎么需要这些物资。所以最后我只拿了三根火腿肠、土豆、抽纸，其他都分给了比较缺货的室友。</p><p><img src="4.jpeg" alt></p><p>此外我还用两颗大白菜、两根白萝卜、两根胡萝卜，去跟别人换了一包10根火腿肠，因为我不喜欢吃萝卜，而且白菜放久了也要坏，蔬菜太多了。你们觉得这买卖是亏了还是赚了？</p><p>因为这波封城，微信上加了12个团购群。我解密了一下微信的数据库，拿到了聊天记录，分析了一下团购群平时都在聊啥。解密的方法之前写过了，可以去看看历史文章：<br><a href="https://zhuanlan.zhihu.com/p/409662291" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/409662291</a></p><p><img src="1.png" alt></p><p>首先分析了一下这些团购群平时聊的最多的<strong>物资</strong>有哪些，主要是一些食品和生活用品。可以看出蔬菜、水果、鸡蛋、牛奶、面包、大米食品等占据了前几名，而且水果、牛奶、面包还超过了大米，说明了团购群里大米紧缺的人还是不如这几样多，或者很多人没有炊具，更想吃面包、水果等现成的。</p><p><img src="2.png" alt></p><p>然后分析了一波大家平时喜欢发什么词语。可以看出“谢谢”是最多的，看来大多数人还是比较客气的，没有太多戾气。其次就是团购，因为这本来就是团购群嘛。然后就是小区的地址、团购的物资等等。</p><p><img src="3.png" alt></p><p>最后看看大家都喜欢什么时候发消息、组织团购。上图以10分钟为间隔，可以看出凌晨几乎没啥消息，睡的都还挺早的。白天的消息数量稳步上升，在23点左右达到最高峰，这也可能是因为白天很多人要上班吧。</p><p>今天没有做肉菜，想尽快消灭团购的蔬菜，不然容易坏掉。所以炒了两个素菜：手撕包菜和青椒土豆丝。</p><p><img src="5.jpeg" alt></p><p><img src="6.jpeg" alt></p><p>分享一下菜谱吧：<br><strong>手撕包菜：</strong>  </p><ol><li>包菜一定要用手撕，我喜欢把中间的茎去掉，只用嫩嫩的叶子，撕小一点。</li><li>姜、蒜拍烂、切碎，干辣椒剪成小段。</li><li>热油，姜、蒜、干辣椒下锅爆香。</li><li>下入包菜，翻炒到包菜变软，加入生抽、蚝油、盐，可以适当加一点点的水爆炒一下，出锅。</li></ol><p><strong>青椒土豆丝：</strong>  </p><ol><li>青椒和土豆切丝，今天我切的格外细，看个人喜好。土豆丝记得泡在水里，防止变黄。</li><li>（可选）水烧开，土豆丝焯水几十秒断一下生，这样可以减少之后炒土豆丝的时间。当然这一步可以不做。</li><li>热油，青椒丝下锅爆炒，炒到断生。</li><li>土豆丝沥干后倒入锅中，翻炒，加入盐、鸡精、蚝油（可选）、生抽（可选），爆炒出锅。如果之前没有焯水的话，土豆丝得多炒一会儿，当心粘锅，可以适当加水缓解。</li></ol><p>两道菜都微辣，非常下饭。但我以后拒绝再炒带有干辣椒的菜了，太呛鼻了，咳嗽了很久。</p><p>最近上海疫情仍然看不到任何好转的迹象，每日新增维持在两万多，所以大家囤的菜量还是维持至少半个月以上吧，希望早日解封。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 随笔 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 疫情 </tag>
+            
+            <tag> 隔离 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>封城第12日，冰箱都快塞不下咯（附菜谱分享）</title>
+      <link href="/2022/04/12/2022-4-12-life/"/>
+      <url>/2022/04/12/2022-4-12-life/</url>
+      
+        <content type="html"><![CDATA[<p>封城第12天了，凌晨两点多公司组织团购的物资终于送到了。虽然200的价格有点贵，但半天就送到，我也知足了。</p><p><img src="8.jpeg" alt></p><p>这下我冰箱里的菜就有点多了，之前一股脑堆在了一起，导致不到一周有些蔬菜就烂了，特别是绿叶菜。吸取了之前的教训，这次我现将蔬菜都清洗了一遍，用保存猫粮的抽真空机将它们都封存了起来，然后再塞进冰箱。</p><p><img src="1.jpeg" alt="主粮"></p><p><img src="2.jpeg" alt="速食"></p><p><img src="3.jpeg" alt="蔬菜"></p><p><img src="4.jpeg" alt="肉禽"></p><p><img src="5.jpeg" alt="鸡蛋"></p><p><img src="6.jpeg" alt="饮料"></p><p>这些量应该足够支撑半个月了，主粮甚至可以坚持一个半月。不出意外的话，半个月以内应该不会再团购了，避免外出，减小被感染的风险。</p><p>昨天分享了一道蒜蓉大茄子，今天继续分享一道茄子做的菜：肉沫茄子。遥想当年在学校和室友吃食堂，有两个套餐饭是永远吃不腻的，实在不知道吃啥了就去吃它俩。一个是青椒肉丝盖饭，另一个就是肉沫茄子盖饭。</p><p>步骤如下：</p><ol><li>茄子切成条或者滚刀，加盐腌制10分钟，然后倒出碗里的水。</li><li>茄子加一点点淀粉，下油锅煎至微黄，盛出备用。</li><li>调一碗料汁：生抽、老抽、蚝油、白糖、淀粉、清水。水不要太多，半碗左右，看茄子的量，不然汤汁会太多了。</li><li>蒜和小米辣爆香，下入肉沫，豆瓣酱，炒出红油。</li><li>下入茄子，炒一会儿，倒入料汁，大火收汁到粘稠为止。最后可以撒上葱花点缀。</li></ol><p>注意料汁可以根据自己的喜好调整调料的用量，最好不要太多。汤汁也不要太多，最好收干，不然太太太咸了，浪费米饭。</p><p><img src="7.jpeg" alt></p><p>这波囤菜太多了，明天开始得多做两个菜了，一两周内把容易坏的蔬菜干掉。</p><p>很久没写技术文章了，最近会想一些有趣的主题，搞点有趣的技术分享给大家，比如抢菜脚本、抗原统计脚本之类的。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 随笔 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 疫情 </tag>
+            
+            <tag> 隔离 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>封城第11日，只需要一个茄子就能让你干两碗饭（附菜谱分享）</title>
+      <link href="/2022/04/11/2022-4-11-life/"/>
+      <url>/2022/04/11/2022-4-11-life/</url>
+      
+        <content type="html"><![CDATA[<p>封城第11天了，今天没有做饭，起晚了，恶性循环，随便吃点老干妈拌饭了。</p><p><img src="2.jpeg" alt></p><p>今天团购了公司组织的一份菜，下面这些要203块，也是翻倍了吧，贵的一笔。不过他送的很快，今晚就直接到了，也算是解了燃眉之急吧。</p><p><img src="1.jpeg" alt></p><p>既然今天没做饭，我就分享一道非常下饭的快手菜吧：蒜蓉大茄子，这道菜非常简单，原材料只需要一个茄子，步骤如下：</p><ol><li>茄子切掉两头，直接下锅蒸15分钟，蒸熟为止。然后从中间劈开，摊平在盘子里。</li><li>调料汁：蒜和小米辣切碎，热油下锅炒香，加生抽、蚝油、盐、白糖，喜欢的话可以出锅前加入葱花。</li><li>热油直接浇在茄子上，浇均匀了，超级下饭的茄子就可以开吃了。</li></ol><p>这道菜的灵魂就是料汁，这料汁非常香，拌鞋底都好吃。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 随笔 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 疫情 </tag>
+            
+            <tag> 隔离 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>封城第10日，没蔬菜了（附菜谱分享）</title>
+      <link href="/2022/04/10/2022-4-10-life/"/>
+      <url>/2022/04/10/2022-4-10-life/</url>
+      
+        <content type="html"><![CDATA[<p>封城第10天了，今天发现我们小区美团买菜和叮咚买菜还是站点关闭，而隔壁小区的站点就是开门的，应该是那个站点出了什么异常。所以目前看来我们小区还是只能团购、盒马团购、京东物流。</p><p>京东的订单依然还没有开始处理，但是小区已经有人收到京东生鲜的快递了，看起来确实开始配送了，都要好起来了！</p><p>字节今天也给上海同学们发了补贴：2天年假+1500现金，此外危急情况的员工也可以一对一处理，这波感觉又得好好给字节卖命了。</p><p><img src="4.png" alt></p><p>药店一直是开着的，但是抢手的酒精等商品都是很难买到的，下午蹲到了一波。买了酒精和善存维生素片，防止蔬菜短缺导致维生素缺乏。这也也不用担心拿外卖和快递被感染了，酒精喷一喷就好多了。</p><p><img src="1.jpeg" alt></p><p><img src="2.jpeg" alt></p><p>今天蔬菜基本吃光了，只剩很多根黄瓜了。今天继续做了拿手菜之一：虾仁滑蛋，这道菜实在是太简单了，基本没有任何难度，所以大家都可以花个10分钟试试。</p><p><img src="3.jpeg" alt></p><p>步骤如下：</p><ol><li>虾仁加料酒、盐腌制10分钟，当然你嫌麻烦的话可以不腌制，直接跳过这一步。</li><li>碗里两勺淀粉、两勺清水、两个鸡蛋、适量盐，搅匀。</li><li>热锅热油，虾仁下锅，变红了就关火，不要炒老了。</li><li>虾仁+热油一起倒入蛋液碗里，搅匀。当然放凉了最好，其实问题不大。</li><li>锅里加热，一整碗全部倒下去。千万记住一定要<strong>最小最小的火</strong>，然后用铲子慢慢推动蛋液的边缘，四周都来回推一推，直到<strong>蛋液没有流动性</strong>。最后铲成大块出锅，喜欢的话撒上葱花。</li></ol><p>这里最关键的步骤就是小火和推动蛋液，这就是为什么这道菜叫“虾仁滑蛋”，而不是“虾仁炒蛋”。顺便告诉你们一招，蛋包饭也是类似的做法哦，只是最后不要铲碎，一整块蛋皮浇在米饭上。</p><p>明天又要上班了，相信上海的疫情应该快到峰值了，之后就会有转机，快递和外卖也要渐渐恢复了。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 随笔 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 疫情 </tag>
+            
+            <tag> 隔离 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>封城第9日，情况好起来了（附菜谱分享）</title>
+      <link href="/2022/04/09/2022-4-9-life/"/>
+      <url>/2022/04/09/2022-4-9-life/</url>
+      
+        <content type="html"><![CDATA[<p>封城第9天了，情况貌似有转机了。美团买菜“站点关闭”的公告没了，偷偷上架了一批新菜，看来又可以抢购了。京东物流听说也快可以配送了，只要是京东物流的商品都可以下单了，但估计买的人太多了，配送时效很难保证（说是15号到）。</p><p><img src="1.jpeg" alt="记得选京东物流"></p><p>细数了一下囤货的余量，主食还有30斤大米、2斤面、几十个速冻水饺；蔬菜只剩几根黄瓜，一些快烂掉的青蒜、菠菜和菜苔了；肉还有三块鸡胸肉、3斤的虾仁、8个鸡翅、25个鸡蛋；零食还有300g的薯条、2根火腿；水果只剩2个苹果了。如果只看主食的话，撑过一个半月都没啥问题，菜的话每天蛋炒饭的话也能撑过大半个月吧。但能抢菜的话还是多买点吧，谁不想吃的更好一点呢？</p><p>今天开始准备分享一下每天做的菜肴（如果认真做了的话，否则就分享之前做过的）。</p><p>今天做了两个菜，也就是我做过很多遍的“拍黄瓜”和“可乐鸡翅”，但是今天的可乐鸡翅略有不同，是去骨的，名为“可乐薯骨鸡翅”。</p><p><img src="2.jpeg" alt="拍黄瓜"></p><p><img src="3.jpeg" alt="可乐薯骨鸡翅"></p><p>这两个菜都很简单，这里简单分享一下我的菜谱：</p><p><strong>拍黄瓜：</strong></p><ol><li>我用的水果黄瓜，因为没有蔬菜黄瓜了，蔬菜黄瓜需要把皮刮掉点。</li><li>然后两头切掉，用刀背拍烂，切成段，拍烂比直接切更入味。</li><li>调料汁：小米辣、蒜、生抽、蚝油、盐、白糖、香油。用量方面我个人没有特别讲究，从不按照菜谱上的克数来。生抽最多，其他稍微加一点就行，白糖&gt;盐。最后浇到黄瓜上就行了。</li></ol><p><strong>可乐薯骨鸡翅：</strong></p><ol><li>首先去骨，用刀或者剪刀断开两根骨头两断，旋转拧出，这一步很耗时（直接做可乐鸡翅的话，跳过这一步）。</li><li>土豆去皮、切条，塞进鸡翅里（如果是做油炸鸡翅，最好过一遍开水，防止内部不熟）。我没有土豆，所以我用的速冻薯条，效果不行（直接做可乐鸡翅的话，跳过这一步）。</li><li>加生姜、料酒、生抽、胡椒粉，放冰箱腌制半小时。</li><li>锅里不加油（如果不是不粘锅，最好加点油润一润），直接鸡翅放进去煎至两面金黄。</li><li>加可乐没过鸡翅，加一点料酒、老抽、白糖、蚝油，小火慢炖10分钟，记得翻面。</li><li>最后大火收汁，千万不要收过头，不然会有焦味。可以最后时刻小火慢慢收，记得翻翻面均匀裹上糖色。</li></ol><p>我由于爸妈工作原因（三班倒），所以8岁开始就自己炒饭、搞一些菜吃了。所以我做菜不喜欢严格遵循菜谱，一般看一遍大致流程就行了。而且我不喜欢严格按照他的调料克数来，都凭感觉和经验。当然新手建议严格按照菜谱来。</p><p>之后我还会分享更多我做过的菜，基本都是家常菜、中式菜，等疫情结束还打算向西餐领域进军。</p><p>现在到处封控，大家菜还是省着点吃吧，肉可以放冰箱多囤点，米面油多囤点，我都是按照封闭一个多月的标准来囤的。蔬菜放不久，囤一两周的量就行了。</p><p>最后再分享一下之前做过的一些菜，按顺序依次是：糖醋排骨、可乐鸡翅、肉末茄子、蒜泥茄子、糖醋里脊、脆皮炸鸡翅、拍黄瓜、荷兰豆炒虾仁、虾仁滑蛋、麻婆豆腐、青椒土豆丝、青蒜豆干炒腊肉、虾仁蒸蛋、柠檬手撕鸡、青椒肉丝、宫保鸡丁、枸杞菌菇炖鸡汤、火腿茄子汤、炸薯条、香辣牛肉酱、上汤西兰花、青菜豆腐汤、火腿炒鸡蛋。</p><p><img src="6.jpeg" alt></p><p><img src="7.jpeg" alt></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 随笔 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 疫情 </tag>
+            
+            <tag> 隔离 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>记录“滋润”的隔离生活</title>
+      <link href="/2022/04/07/2022-4-6-life/"/>
+      <url>/2022/04/07/2022-4-6-life/</url>
+      
+        <content type="html"><![CDATA[<p>居家办公快一个月了，文章也很久没更新了，聊聊近况吧。</p><p>三八妇女节那天，公司被查出有密接，要求全员回公司隔离两天。这是头一次在公司过夜，打地铺、吃盒饭，空调开得很暖。可能因为睡得早，睡前又不玩手机了吧，这是我近几个月来睡的最香的两晚。早上也是起的非常早，8点不到就起了。除了睡在公司，没有游戏打，其他对于我这个单身狗来说其实和回家没有啥区别。</p><p><img src="1.jpeg" alt="地铺还是很舒服的"></p><p>两天后解封，走出公司大楼呼吸到新鲜空气的那一刻，就好像坐了很久的牢出狱一样。殊不知，这是近来最后一次见到公司了。当时上海的疫情已经有苗头了，但还没到那么严重的地步。之后的日子除了做核酸和拿外卖，就再也没出过家门一步了。后来上海疫情逐渐严重，小区也开始逐渐封闭了，只进不出。最近我们小区也有阳性了，每天还要冒着交叉感染的风险出去做核酸。说实话，如果不是因为不做健康码会变黄，我还真不愿意做。像我这种囤了很多菜，从来不出门的，几次检测都是阴性，那就再也不可能被感染了。</p><p>最近被讨论最多的问题就是买菜了，全国各地都在援助上海各种菜，但大家就是抢不到。还好我在小区封闭前抢到了一波，坚持一个月没有问题。今日的早起抢菜就如当年的早起QQ农场偷菜一样，一个是为了生存，一个是为了娱乐罢了。</p><p><img src="3.jpeg" alt="应有尽有"></p><p>做了一个月的菜，有点累了，主要是不想洗碗和择菜，想念公司吃现成的日子了。这几个月来做的菜也不少，有二十几种。有几个比较失败，例如宫保鸡丁，但大多数还是非常成功的。下图里的菜按顺序依次是：糖醋排骨、可乐鸡翅、肉末茄子、蒜泥茄子、糖醋里脊、脆皮炸鸡翅、拍黄瓜、荷兰豆炒虾仁、虾仁滑蛋、麻婆豆腐、青椒土豆丝、青蒜豆干炒腊肉、虾仁蒸蛋、柠檬手撕鸡、青椒肉丝、宫保鸡丁、枸杞菌菇炖鸡汤、火腿茄子汤、炸薯条、香辣牛肉酱、上汤西兰花、青菜豆腐汤、火腿炒鸡蛋。</p><p><img src="6.jpeg" alt="吃好喝好"></p><p><img src="7.jpeg" alt="不带重样"></p><p>隔离久了难免会出现心理问题，没有人说话，就连我家的猫好歹都能看看隔壁眉清目秀的狗。最近有不少谣言或者新闻，因为隔离太久跳楼之类的。最近负面的新闻谣言越来越多，疫情正在暴露出很多社会问题。还好我每天能上号打打游戏，跟兄弟们聊聊天，所以目前为止没有任何情绪波动。再加上每天做菜吃的也好，生活还是相当滋润的。</p><p><img src="5.jpeg" alt="一眼万年"></p><p>居家办公还是有影响的，效率变低很多，工作时间完全被打乱了。每天上午不想起来，睡到中午吃完饭才开始干活，深夜了兴致起来继续干活，真正做到了弹性工作。而且租的房子没有舒服的桌子、椅子和显示器，写一会儿代码就会腰酸背痛，更是拉低了效率。</p><p>最近开始面试实习生了，第一次面的时候很紧张，当面试官比当候选人还紧张，现在就轻松很多了。我面候选人不会怎么考八股文，除非你简历上真的什么都没有，实在没东西问，当然这种简历也不可能通过评估。所以我主要看候选人对自己论文和项目的描述是否清晰，细节是否熟悉，然后追问一些细节和拓展的知识点。代码题还是我考察的重点之一，我会根据候选人的能力出一些难度不同的代码题，很多甚至就是我公众号发过题解的原题。我不会要求候选人一定写出能够运行成功的代码，只要思路没问题，基本就ok了。</p><p>春招、暑期实习、日常实习、社招等仍然在进行中，找一个好的内推人非常重要。我经常看到有人网上随便找个内推码就投了简历，然后半个多月都没消息，也联系不到内推人，简历被锁住，浪费了很多时间。通过我内推的话，我可以帮你直接联系hr，简历修改、安排面试、催进度都没问题。</p><p>投我们部门的话进度更快，因为hr比较熟悉嘛，这里我精选了几个我们部门的岗位：</p><ol><li>首先是我自己的岗位，模型优化方向的都可以试试：<br><a href="https://job.toutiao.com/s/Ns1NKVs" target="_blank" rel="noopener">https://job.toutiao.com/s/Ns1NKVs</a></li><li>然后是NLP相关的：<br><a href="https://job.toutiao.com/s/Ns1hftq" target="_blank" rel="noopener">https://job.toutiao.com/s/Ns1hftq</a></li><li>我们组还有产品实习生：<br><a href="https://job.toutiao.com/s/Ns1uutB" target="_blank" rel="noopener">https://job.toutiao.com/s/Ns1uutB</a></li><li>运营实习生也有，适合学语言的同学：<br><a href="https://job.toutiao.com/s/Ns1SGRT" target="_blank" rel="noopener">https://job.toutiao.com/s/Ns1SGRT</a></li><li>所有岗位链接如下：<br><a href="https://jobs.toutiao.com/s/Ns1h1tU" target="_blank" rel="noopener">https://jobs.toutiao.com/s/Ns1h1tU</a></li></ol><p>公司内其他方向的岗位也很充足，CV、推荐系统、搜索、全栈等等，应有尽有。强烈建议用我的<strong>内推码（A7FSJMK）</strong>内推完之后加一下我<strong>微信（godweiyang）</strong>，有事可以直接咨询我。</p><p>这波封城少说还得持续两周，希望早日解封吧，对生活的影响实在太大了，上海加油。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 随笔 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 疫情 </tag>
+            
+            <tag> 隔离 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>来字节快两年了，回答一些你们感兴趣的问题</title>
+      <link href="/2022/02/26/bytedance-hire-2022-2/"/>
+      <url>/2022/02/26/bytedance-hire-2022-2/</url>
+      
+        <content type="html"><![CDATA[<p>最近字节跳动春招开始了，春招、暑期实习、社招、日常实习都可以准备起来了，具体的情况可以看我之前发的文章：</p><p><a href="https://mp.weixin.qq.com/s/9PvV7g_zy87puCGTsEje0A" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/9PvV7g_zy87puCGTsEje0A</a></p><p>这里还是用问答的形式来解答一些大家最感兴趣的问题，如果有其他问题可以直接留言或者加我微信（godweiyang）问我，有问必答！</p><p>想投我们部门的直接看最后两个问题。</p><h2 id="我是什么部门的？"><a href="#我是什么部门的？" class="headerlink" title="我是什么部门的？"></a>我是什么部门的？</h2><p>我是字节跳动AI Lab的火山翻译部门，所做的产品肯定就是火山翻译，当然我在部门里负责LightSeq模型训练推理加速引擎的开发。</p><p>火山翻译现在已经支持近百个语种的翻译，业务前景非常好，大家可以去试试效果：</p><p><a href="translate.volcengine.com">translate.volcengine.com</a></p><h2 id="我是负责啥的？"><a href="#我是负责啥的？" class="headerlink" title="我是负责啥的？"></a>我是负责啥的？</h2><p><a href="github.com/bytedance/lightseq">github.com/bytedance/lightseq</a></p><p>我是做LightSeq的，在我刚进部门时，LightSeq只有两位同事在开发，也只有推理引擎。而现在，连我在内一共有5位同事了，LightSeq也迭代了三个大版本了，囊括了模型训练、推理和量化等工具。</p><p>我们的目标不局限于机器翻译领域，而是要做业界最牛的机器学习工具，以后不管是NLP还是CV，只要用Transformer模型训练推理，都可以用LightSeq来加速和优化。所以我们不仅仅服务公司内的业务，还要打造出业界影响力，以后提到模型加速工具，LightSeq必定是绕不开的话题。</p><p>经过两年多的经营，现在LightSeq也算是小有名气了，在易用性和速度上肯定是业界一流的。</p><p><img src="1.png" alt></p><h2 id="平时用啥编程语言？"><a href="#平时用啥编程语言？" class="headerlink" title="平时用啥编程语言？"></a>平时用啥编程语言？</h2><p>组里的算法同学基本都用python，我的话因为涉及到CUDA，所以用c++和python都比较多。组里的后端还会用到go等语言。而深度学习框架的话，tensorflow和pytorch都有用的，看个人喜好。</p><h2 id="男女比例怎么样？"><a href="#男女比例怎么样？" class="headerlink" title="男女比例怎么样？"></a>男女比例怎么样？</h2><p>组里技术同学大多数还是男生，但是我们组还有运营和产品，绝大多数都是女生，综合下来五五开吧。整个公司而言的话，反正我每天走在大楼里到处是好看的女生，所以你懂的。</p><h2 id="公司伙食怎么样？"><a href="#公司伙食怎么样？" class="headerlink" title="公司伙食怎么样？"></a>公司伙食怎么样？</h2><p>每天包三餐，吃的肯定比学校食堂好太多了，但吃多了也腻了，因此隔三差五伙食就会变的特别好吃一点，也可能是我太挑食了。饮料也是半价购买，零食免费随意拿，但是好吃的得趁早抢。下午茶是水果、面包、酸奶、鸡翅等轮回。</p><h2 id="每天作息是啥样的？"><a href="#每天作息是啥样的？" class="headerlink" title="每天作息是啥样的？"></a>每天作息是啥样的？</h2><p>大多数人都会在10点到10点半之间到公司，有些部门甚至11点才到。11点50吃午饭，午休到14点继续干活，15点多会有下午茶，18点45吃晚饭。如果没啥事的话，吃完饭就能走了。如果比较忙的话，有些部门会加班到9点左右，极个别很忙的部门会到11点以后。至于我的话，你懂的。</p><h2 id="进AI-Lab是不是要求很高？"><a href="#进AI-Lab是不是要求很高？" class="headerlink" title="进AI Lab是不是要求很高？"></a>进AI Lab是不是要求很高？</h2><p>很多人担心自己是本科、学校不好、没有论文等一系列问题，所以进不来AI Lab。其实不然，我们不怎么看学校和学历吧，就算你是清华的又如何，很多死读书的都不大行，更别说清华硕了，论文也只是加分项。所以把你的代码能力提升起来，项目搞起来，深度学习相关的专业知识熟练起来，就没问题了。</p><h2 id="真有网上说的那么忙吗？"><a href="#真有网上说的那么忙吗？" class="headerlink" title="真有网上说的那么忙吗？"></a>真有网上说的那么忙吗？</h2><p>最近网上出现了各种不好的事情，可能是加班过多造成的，谁也说不准。其实刚刚作息也说过了，忙不忙看部门。有些部门是真的忙，没钱还干到深夜，有些部门又很闲，吃完晚饭直接走人。所以投递之前最好找个熟悉那个部门的人问一问真实情况，别踩了坑。</p><h2 id="组里做研究还是做业务多？"><a href="#组里做研究还是做业务多？" class="headerlink" title="组里做研究还是做业务多？"></a>组里做研究还是做业务多？</h2><p>业务为主，国内的AI Lab其实都差不多，我们火山翻译还算比较开放的，可以去做你感兴趣的研究，当然最好是能够落地应用，助力火山翻译上线的。如果有比较好的成果，还可以发论文或者申请专利。当然也有做文本生成、AI制药等方向，也有纯纯的研究岗位，只要你感兴趣，这里基本都能找到你想干的事。</p><h2 id="组里年龄都多大？有35岁危机吗？"><a href="#组里年龄都多大？有35岁危机吗？" class="headerlink" title="组里年龄都多大？有35岁危机吗？"></a>组里年龄都多大？有35岁危机吗？</h2><p>大多数人都不到30吧，都很年轻，更不存在什么35岁危机，因为几乎没有35岁的。只要你能力够强，就不存在35岁危机。</p><h2 id="组里有多少人？"><a href="#组里有多少人？" class="headerlink" title="组里有多少人？"></a>组里有多少人？</h2><p>几十号人吧，组里技术、运营、产品都有，从两年前十几人壮大到现在，不容易。</p><h2 id="组里转正率怎么样？"><a href="#组里转正率怎么样？" class="headerlink" title="组里转正率怎么样？"></a>组里转正率怎么样？</h2><p>很高，只要你好好干，问题不大。而其他部门就各不相同了，需要跟hr问清楚了。</p><h2 id="组里氛围怎么样？"><a href="#组里氛围怎么样？" class="headerlink" title="组里氛围怎么样？"></a>组里氛围怎么样？</h2><p>非常nice，其乐融融。有啥不会，随便问人，都是大神。喜欢打游戏？王者大神多的是，午休随便搞两把。聊八卦、拉家常，反正就把公司当家里就完事了。</p><h2 id="组里的技术怎么样？"><a href="#组里的技术怎么样？" class="headerlink" title="组里的技术怎么样？"></a>组里的技术怎么样？</h2><p>前沿论文和技术都天天更进的，每周都有很多很多的分享和报告。组里的大神南大、复旦和交大的居多（因为在上海嘛），反正来了这别愁碰到解决不了的问题。</p><h2 id="有团建吗？"><a href="#有团建吗？" class="headerlink" title="有团建吗？"></a>有团建吗？</h2><p>两个月左右一次吧，迪士尼、天目湖、轰趴等等等等，每双月有生日会，免费给大家买蛋糕吃，活动多的很。再加上公司还会经常节假日搞活动，各种送东西福利。</p><h2 id="会感到有压力吗？"><a href="#会感到有压力吗？" class="headerlink" title="会感到有压力吗？"></a>会感到有压力吗？</h2><p>压力肯定是有的，像我开发LightSeq，如果做得又好用速度又快，很多方案和技术都是需要自己去研究首创的，限定两个月搞出来？谁也说不准搞出来速度能有多快，然后又要不停优化，很多事情存在不确定性。但是有一定压力是好的，转化为动力，好好干活！</p><h2 id="组里的显卡多吗？"><a href="#组里的显卡多吗？" class="headerlink" title="组里的显卡多吗？"></a>组里的显卡多吗？</h2><p>V100和A100管饱，足够。</p><h2 id="入职即巅峰？"><a href="#入职即巅峰？" class="headerlink" title="入职即巅峰？"></a>入职即巅峰？</h2><p>字节比较扁平化嘛，很正常，但只要你工作做得好，绩效好，升职加薪还是没问题的。</p><h2 id="公司配什么电脑？"><a href="#公司配什么电脑？" class="headerlink" title="公司配什么电脑？"></a>公司配什么电脑？</h2><p>技术的话mac pro顶配，三四年后就免费送你了。非技术的你也可以选择windows电脑。</p><h2 id="允许同组谈恋爱吗？"><a href="#允许同组谈恋爱吗？" class="headerlink" title="允许同组谈恋爱吗？"></a>允许同组谈恋爱吗？</h2><p>没问题，报备一下就行了，话说我怎么还没找到对象？</p><h2 id="组里离职率高吗？"><a href="#组里离职率高吗？" class="headerlink" title="组里离职率高吗？"></a>组里离职率高吗？</h2><p>其他部门我不知道，我们部门从创立以来，几乎没有离职的，非常稳定。</p><h2 id="有跳槽打算吗？"><a href="#有跳槽打算吗？" class="headerlink" title="有跳槽打算吗？"></a>有跳槽打算吗？</h2><p>什么？我才刚毕业不到一年，按目前来说的话，怎么也得干个三四年吧，挺舒服的，没必要跳。</p><h2 id="吹了半天好，有啥缺点吗？"><a href="#吹了半天好，有啥缺点吗？" class="headerlink" title="吹了半天好，有啥缺点吗？"></a>吹了半天好，有啥缺点吗？</h2><p>缺点肯定也是有的，技术上还有提升空间，赶超谷歌翻译一直是我们的目标。各种平台、流程等等，还需要时间去优化。</p><h2 id="怎么一起来做LightSeq？"><a href="#怎么一起来做LightSeq？" class="headerlink" title="怎么一起来做LightSeq？"></a>怎么一起来做LightSeq？</h2><p>直接点阅读原文，或者看下图：</p><p><img src="1.jpg" alt></p><p>如果身边有合适的，也可以把岗位转发给他们。</p><h2 id="怎么来火山翻译部门？"><a href="#怎么来火山翻译部门？" class="headerlink" title="怎么来火山翻译部门？"></a>怎么来火山翻译部门？</h2><p>如果不想做LightSeq，想做其他NLP相关工作，可以直接投下面岗位：</p><p><a href="https://job.toutiao.com/s/Lo41WQ4" target="_blank" rel="noopener">https://job.toutiao.com/s/Lo41WQ4</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 随笔 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 面试 </tag>
+            
+            <tag> 字节跳动 </tag>
+            
+            <tag> 实习 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>字节春招开始了，整理了大家最关心的20个问题</title>
+      <link href="/2022/02/17/bytedance-hire-2022-1/"/>
+      <url>/2022/02/17/bytedance-hire-2022-1/</url>
+      
+        <content type="html"><![CDATA[<p>2023届的春招开始了，我给大家整理了一些最关心的问题。如果有任何其他疑问，请在评论区留言或者私信我。</p><h2 id="怎么投递？"><a href="#怎么投递？" class="headerlink" title="怎么投递？"></a>怎么投递？</h2><p>我的内推码：A7FSJMK</p><p><strong>校招和暑期实习投递：</strong><br>投递链接：<a href="https://jobs.toutiao.com/s/Lv6wSF7" target="_blank" rel="noopener">https://jobs.toutiao.com/s/Lv6wSF7</a><br>二维码：<br><img src="1.png" alt></p><p><strong>社招和日常实习投递：</strong><br>投递链接：<a href="https://job.toutiao.com/s/LvMyG6V" target="_blank" rel="noopener">https://job.toutiao.com/s/LvMyG6V</a><br>二维码：<br><img src="2.png" alt></p><h2 id="招聘对象有哪些？"><a href="#招聘对象有哪些？" class="headerlink" title="招聘对象有哪些？"></a>招聘对象有哪些？</h2><ul><li><strong>暑期实习</strong>：2022.9 ～ 2023.8 毕业。</li><li><strong>全职补录</strong>：2021.9 ～ 2022.8 毕业。</li></ul><h2 id="有哪些岗位？"><a href="#有哪些岗位？" class="headerlink" title="有哪些岗位？"></a>有哪些岗位？</h2><ul><li>研发、运营、产品、销售、职能/支持、设计、市场、游戏策划共八大类职位。</li></ul><h2 id="有几次投递机会？"><a href="#有几次投递机会？" class="headerlink" title="有几次投递机会？"></a>有几次投递机会？</h2><p><strong>2次</strong>投递机会，一定要投递自己最有把握的，不要广撒网！！！</p><h2 id="实习可以转正吗？"><a href="#实习可以转正吗？" class="headerlink" title="实习可以转正吗？"></a>实习可以转正吗？</h2><ul><li>暑期实习转正率<strong>81%</strong>，顺便偷偷告诉你，我们组基本都是转正留下的。</li></ul><h2 id="这次春招持续多久？"><a href="#这次春招持续多久？" class="headerlink" title="这次春招持续多久？"></a>这次春招持续多久？</h2><p>投递时间：2022.2.17 ～ 2022.4.30 。</p><h2 id="不知道投递啥职位怎么办？"><a href="#不知道投递啥职位怎么办？" class="headerlink" title="不知道投递啥职位怎么办？"></a>不知道投递啥职位怎么办？</h2><p>对职位有任何疑问，可以加我微信（微信号：godweiyang）询问，或者咨询HR。</p><h2 id="要是错过了春招怎么办？"><a href="#要是错过了春招怎么办？" class="headerlink" title="要是错过了春招怎么办？"></a>要是错过了春招怎么办？</h2><p>还可以投<strong>日常实习</strong>或者<strong>社招</strong>的，持续时间是 2022.2.10 ～ 2022.7.31 。</p><h2 id="实习通过后，入职时间能不能推迟？"><a href="#实习通过后，入职时间能不能推迟？" class="headerlink" title="实习通过后，入职时间能不能推迟？"></a>实习通过后，入职时间能不能推迟？</h2><p>入职时间都是可以商量的，想晚点来都没问题的。</p><h2 id="投递两个职位的话，系统会怎么处理？"><a href="#投递两个职位的话，系统会怎么处理？" class="headerlink" title="投递两个职位的话，系统会怎么处理？"></a>投递两个职位的话，系统会怎么处理？</h2><p>优先处理第一个投递的职位，另一个会被锁住。等第一个职位失败了，第二个职位就会解锁继续下去。当然祝大家第一个职位就直接通过啦！</p><h2 id="可以同时投实习和校招吗？"><a href="#可以同时投实习和校招吗？" class="headerlink" title="可以同时投实习和校招吗？"></a>可以同时投实习和校招吗？</h2><p>可以，系统会优先处理实习，等实习流程结束了再处理校招。</p><h2 id="投递完之后可以修改简历吗？"><a href="#投递完之后可以修改简历吗？" class="headerlink" title="投递完之后可以修改简历吗？"></a>投递完之后可以修改简历吗？</h2><p>不可以，大家一定要好好美化简历，慎重投递！</p><h2 id="怎么查看投递的进展？"><a href="#怎么查看投递的进展？" class="headerlink" title="怎么查看投递的进展？"></a>怎么查看投递的进展？</h2><p>可以在官网直接查看<strong>应聘记录</strong>，也可以加我微信（微信号：godweiyang）向我咨询，我会帮你后台查看进度。</p><h2 id="投递完很久没有消息怎么办？"><a href="#投递完很久没有消息怎么办？" class="headerlink" title="投递完很久没有消息怎么办？"></a>投递完很久没有消息怎么办？</h2><p>如果投递完超过一周还没任何消息，请加我微信（微信号：godweiyang）告诉我，我会帮你联系HR咨询原因，催进度。</p><h2 id="之前的投递对这次春招有影响吗？"><a href="#之前的投递对这次春招有影响吗？" class="headerlink" title="之前的投递对这次春招有影响吗？"></a>之前的投递对这次春招有影响吗？</h2><p>没有影响，只要你这次面的好，之前的失败不会有任何影响。</p><h2 id="有笔试吗？"><a href="#有笔试吗？" class="headerlink" title="有笔试吗？"></a>有笔试吗？</h2><p>研发类职位（后端、算法、客户端、前端、测试/测开、大数据、研发工程师-质量保障）一定会有，其他的等通知。</p><h2 id="笔试时间具体什么时候？"><a href="#笔试时间具体什么时候？" class="headerlink" title="笔试时间具体什么时候？"></a>笔试时间具体什么时候？</h2><p>2.27、3.13、3.27、4.17 的 19:00 ～ 21:00 。<br>3.6、3.20、4.10、5.6 的 10:00 ～ 12:00 。 </p><h2 id="错过了笔试还有机会吗？"><a href="#错过了笔试还有机会吗？" class="headerlink" title="错过了笔试还有机会吗？"></a>错过了笔试还有机会吗？</h2><p>错过一次笔试还可以参加下一次的，但同一个职位，错过两次笔试直接挂掉！</p><h2 id="笔试迟到了怎么办？"><a href="#笔试迟到了怎么办？" class="headerlink" title="笔试迟到了怎么办？"></a>笔试迟到了怎么办？</h2><p>迟到可以继续作答，但是时间不会给你推迟。</p><h2 id="有任何其他问题？"><a href="#有任何其他问题？" class="headerlink" title="有任何其他问题？"></a>有任何其他问题？</h2><p>请加我微信（微信号：godweiyang）咨询我，也可以在评论区留言。微信跟我说<strong>进内推群</strong>，我会经常在群里更新消息。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 随笔 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 面试 </tag>
+            
+            <tag> 字节跳动 </tag>
+            
+            <tag> 实习 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>当年如果有这个，语文就不会不及格了</title>
+      <link href="/2022/01/16/anchi-translation/"/>
+      <url>/2022/01/16/anchi-translation/</url>
+      
+        <content type="html"><![CDATA[<p>最近在github上看到了一个项目，是小牛翻译开源的文言文-现代文平行语料，一共有967257个句对，地址在下面：<br><a href="https://github.com/NiuTrans/Classical-Modern" target="_blank" rel="noopener">https://github.com/NiuTrans/Classical-Modern</a></p><p>于是我突发奇想，何不用它来训练一个<strong>文言文-现代文互相翻译</strong>的模型呢？</p><h2 id="效果演示"><a href="#效果演示" class="headerlink" title="效果演示"></a>效果演示</h2><p>来看看最终的翻译效果，先看一句舔狗经典语录：</p><blockquote><p><strong>现代文：</strong><br>昨天在工地扛沙袋，我一下子扛了三袋，工友们问我为什么这么能扛？我眼泪瞬间就下来了，是啊，为什么我这么能扛，就是扛不住想你。<br><strong>翻译成文言文：</strong><br>昨于工地荷沙囊，余忽肩三囊，工友问何以如此？吾泣须臾而下，为也，何吾之能负，负之不胜念。</p></blockquote><p>再来看一下朱自清《背影》中经典的一段话：</p><blockquote><p><strong>现代文：</strong><br>他往车外看了看，说：“我买几个橘子去。你就在此地，不要走动。”我看那边月台的栅栏外有几个卖东西的等着顾客。走到那边月台，须穿过铁道，须跳下去又爬上去。父亲是一个胖子，走过去自然要费事些。我本来要去的，他不肯，只好让他去。我看见他戴着黑布小帽，穿着黑布大马褂，深青布棉袍，蹒跚地走到铁道边，慢慢探身下去，尚不大难。可是他穿过铁道，要爬上那边月台，就不容易了。他用两手攀着上面，两脚再向上缩；他肥胖的身子向左微倾，显出努力的样子。这时我看见他的背影，我的泪很快地流下来了。<br><strong>翻译成文言文：</strong><br>车外顾曰：买橘数枚去，君在此，勿动也。余视其月台栅外有卖物数人待客。至其边月台，须穿铁道，须跳下复上。父为肥子，行自费。吾本将之，不肯，故许之。见著乌布小帽，乌布大马皂，深青布袍，乃至铁道侧，徐探其身，尚不难。然穿铁道，欲上其月台，未易也。以两手攀之，两足复上缩，肥身左微倾，有足力状。见其背影，余泪遽下。</p></blockquote><p>可以看出效果还是非常不错的，而文言文翻译成现代文的效果也非常不错。</p><p>也来看个例子，节选自陶渊明的《桃花源记》：</p><blockquote><p><strong>文言文：</strong><br>晋太元中，武陵人捕鱼为业。缘溪行，忘路之远近。忽逢桃花林，夹岸数百步，中无杂树，芳草鲜美，落英缤纷。渔人甚异之，复前行，欲穷其林。<br>林尽水源，便得一山，山有小口，仿佛若有光。便舍船，从口入。初极狭，才通人。复行数十步，豁然开朗。土地平旷，屋舍俨然，有良田、美池、桑竹之属。阡陌交通，鸡犬相闻。其中往来种作，男女衣着，悉如外人。黄发垂髫，并怡然自乐。<br><strong>翻译成现代文：</strong><br>晋太元年间，武陵人捕鱼为生。沿着溪水行走，忘记了路途的远近。忽然遇到桃花林，两岸数百步，其中没有杂树，芳草鲜美，落花缤纷。打鱼人觉得很奇怪，又往前走，想探寻那树林。<br>树林尽头水源，就见到一座山，山有小口，仿佛有光。就舍弃船，从洞口进去，起初非常狭窄，才通人，又走了几十步，豁然开朗。土地平旷，房屋庄严，有良田、美池、桑竹之类。田间小路相通，鸡犬相闻，其中往来种作，男女衣着，都和外面的人一样，黄发小孩，都怡然自得。</p></blockquote><p>这下广大中学生语文再也不用愁了。可惜我当年咋就没这好东西呢，不然语文也不会考那么差。</p><h2 id="训练方法"><a href="#训练方法" class="headerlink" title="训练方法"></a>训练方法</h2><p>训练方法非常简单，正好之前写过一个聊天机器人的训练教程，这次可以拿来直接用：<br><a href="https://godweiyang.com/2021/07/24/chatbot">https://godweiyang.com/2021/07/24/chatbot</a></p><p>训练代码在下面：<br><a href="https://github.com/godweiyang/chatbot" target="_blank" rel="noopener">https://github.com/godweiyang/chatbot</a></p><p>和训练聊天机器人唯一的不同就是训练数据，这里需要处理一下文言文-现代文语料，将其拆分成训练集和验证集，这里我写了个简单的脚本拆分整合了一下。</p><pre class="line-numbers language-python"><code class="language-python"><span class="token keyword">import</span> ostrgs <span class="token operator">=</span> os<span class="token punctuation">.</span>listdir<span class="token punctuation">(</span><span class="token string">"Classical-Modern/target"</span><span class="token punctuation">)</span>f3 <span class="token operator">=</span> open<span class="token punctuation">(</span><span class="token string">"data/train/train.src"</span><span class="token punctuation">,</span> <span class="token string">"w"</span><span class="token punctuation">)</span>f4 <span class="token operator">=</span> open<span class="token punctuation">(</span><span class="token string">"data/train/train.trg"</span><span class="token punctuation">,</span> <span class="token string">"w"</span><span class="token punctuation">)</span>f5 <span class="token operator">=</span> open<span class="token punctuation">(</span><span class="token string">"data/dev/dev.src"</span><span class="token punctuation">,</span> <span class="token string">"w"</span><span class="token punctuation">)</span>f6 <span class="token operator">=</span> open<span class="token punctuation">(</span><span class="token string">"data/dev/dev.trg"</span><span class="token punctuation">,</span> <span class="token string">"w"</span><span class="token punctuation">)</span>cnt1 <span class="token operator">=</span> <span class="token number">0</span>cnt2 <span class="token operator">=</span> <span class="token number">0</span><span class="token keyword">for</span> trg <span class="token keyword">in</span> trgs<span class="token punctuation">:</span>    src <span class="token operator">=</span> trg<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token operator">-</span><span class="token number">2</span><span class="token punctuation">]</span>    f1 <span class="token operator">=</span> open<span class="token punctuation">(</span>f<span class="token string">"Classical-Modern/source/{src}"</span><span class="token punctuation">,</span> <span class="token string">"r"</span><span class="token punctuation">)</span>    f2 <span class="token operator">=</span> open<span class="token punctuation">(</span>f<span class="token string">"Classical-Modern/target/{trg}"</span><span class="token punctuation">,</span> <span class="token string">"r"</span><span class="token punctuation">)</span>    <span class="token keyword">for</span> line <span class="token keyword">in</span> f1<span class="token punctuation">:</span>        <span class="token keyword">if</span> cnt1 <span class="token operator">&lt;</span> <span class="token number">3000</span><span class="token punctuation">:</span>            f5<span class="token punctuation">.</span>write<span class="token punctuation">(</span>line<span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">"\n"</span><span class="token punctuation">)</span>        <span class="token keyword">else</span><span class="token punctuation">:</span>            f3<span class="token punctuation">.</span>write<span class="token punctuation">(</span>line<span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">"\n"</span><span class="token punctuation">)</span>        cnt1 <span class="token operator">+=</span> <span class="token number">1</span>    <span class="token keyword">for</span> line <span class="token keyword">in</span> f2<span class="token punctuation">:</span>        <span class="token keyword">if</span> cnt2 <span class="token operator">&lt;</span> <span class="token number">3000</span><span class="token punctuation">:</span>            f6<span class="token punctuation">.</span>write<span class="token punctuation">(</span>line<span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">"\n"</span><span class="token punctuation">)</span>        <span class="token keyword">else</span><span class="token punctuation">:</span>            f4<span class="token punctuation">.</span>write<span class="token punctuation">(</span>line<span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">"\n"</span><span class="token punctuation">)</span>        cnt2 <span class="token operator">+=</span> <span class="token number">1</span>    f1<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span>    f2<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token keyword">print</span><span class="token punctuation">(</span>cnt1<span class="token punctuation">)</span>f3<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span>f4<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span>f5<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span>f6<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>然后就可以直接用和训练聊天机器人相同的方法训练了，这里不再赘述，我在8张A100显卡上训练了短短一两个小时效果就已经很不错了。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 深度学习 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Transformer </tag>
+            
+            <tag> 模型训练 </tag>
+            
+            <tag> 模型加速 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>分析了B站所有的弹幕，原来大家都是这样的人</title>
+      <link href="/2021/12/18/danmu-spider/"/>
+      <url>/2021/12/18/danmu-spider/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p>关注公众号【算法码上来】，每日算法干货马上就来！</p></blockquote><p><img src="/medias/contact.jpg" alt></p><p>不知道大家平时看不看B站，看视频的时候发不发弹幕，又喜欢发些什么？今天我写了一个简单的爬虫程序，获取了B站上所有视频的弹幕，然后进行了简单的分析。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 编程技术 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 爬虫 </tag>
+            
+            <tag> 词云 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>这道小学六年级的数学题，恕我直言没几个人会做</title>
+      <link href="/2021/12/18/cuda-monte-carlo/"/>
+      <url>/2021/12/18/cuda-monte-carlo/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p>关注公众号【算法码上来】，每日算法干货马上就来！</p></blockquote><p><img src="/medias/contact.jpg" alt></p><p><img src="1.png" alt></p><p>今天网上冲浪的时候突然看到一道小学六年级的数学题，如上图所示，求阴影部分的面积。</p><p>我下意识就想到了微积分，这不就建立坐标系，求出交点，计算积分就行了嘛。转念一想，小学生哪里会积分，这道题一定有简单的解法。</p><p>经过一番努力，我尝试出了一共两种精确解法和一种近似解法，但都超出了小学生的理解范畴。</p><p>首先我们把图左右翻转一下，方便建立坐标系，如下图所示：<br><img src="2.png" alt></p><h2 id="积分方法"><a href="#积分方法" class="headerlink" title="积分方法"></a>积分方法</h2><p>首先联立半圆和对角线的方程：<br>$$<br>\begin{aligned}<br>x^2+(y-4)^2-16&amp;=0 \\<br>x+2y-4&amp;=0<br>\end{aligned}<br>$$</p><p>解出交点E的坐标是$(\frac{12}{5}, \frac{4}{5})$</p><p>所以可以直接求下面积分，得到要求的阴影面积：<br>$$<br>\int_{0}^{\frac{12}{5}}{\left(\sqrt{16-x^2}+4\right)}dx + \int_{\frac{12}{5}}^{4}{\left(2-\frac{1}{2}x\right)}dx<br>$$</p><p>利用简单的高等数学知识，可以解出答案是下面这样的，约等于1.252。<br>$$<br>\frac{32}{5} - 8 \arcsin{\frac{3}{5}}<br>$$</p><p>但是小学生肯定不会积分呀，就算高中生大多数都不会！</p><h2 id="间接计算"><a href="#间接计算" class="headerlink" title="间接计算"></a>间接计算</h2><p>既然我们不方便算这个不规则图形的面积，我们可以计算其他规则图形的面积，然后加减之后间接得到答案。</p><p>图中阴影部分面积其实等价于三角形ACE+梯形BOCE-扇形BOE，而这三部分其实都非常好算。</p><p>因为E的坐标是$(\frac{12}{5}, \frac{4}{5})$，所以最难算的就是扇形BOE的面积，也就是要求角OBE的大小。很轻松就可以得到角度是$\arcsin{\frac{3}{5}}$，所以三部分运算后可以得到和上面积分相同的答案。</p><p>这个方法初中生都会做了！但是对于小学生来说难度还是有点大了。</p><h2 id="蒙特卡洛采样方法"><a href="#蒙特卡洛采样方法" class="headerlink" title="蒙特卡洛采样方法"></a>蒙特卡洛采样方法</h2><p>如果往第一象限正方形内随机抛撒若干豆子，然后看掉落在阴影部分里的豆子所占的比例，那么就可以近似估计出阴影部分的面积了，这就叫蒙特卡洛采样。</p><p>那我们可以随机生成两个随机数，作为采样点的坐标，然后判断是否在阴影部分里，重复上述过程，记录次数就行了。</p><p>我这里写了C++和CUDA两个实现，CUDA可以并行采样，速度快很多。</p><p>执行的话，C++保存为<code>test.cpp</code>，然后执行<code>g++ test.cpp -o test</code>和<code>./test</code>。CUDA保存为<code>test.cu</code>，然后执行<code>nvcc test.cu -o test</code>和<code>./test</code>。</p><p>实测CUDA相同时间内可以采样的次数大约是100倍左右，主要受到原子写操作的局限，不然可以达到1000倍左右的加速。</p><p>但是小学生会CUDA吗？显然不可能。</p><h3 id="C-实现"><a href="#C-实现" class="headerlink" title="C++实现"></a>C++实现</h3><pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span><span class="token keyword">typedef</span> <span class="token keyword">unsigned</span> <span class="token keyword">long</span> <span class="token keyword">long</span> <span class="token keyword">int</span> ull<span class="token punctuation">;</span><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>  <span class="token function">srand</span><span class="token punctuation">(</span><span class="token function">time</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  ull res <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>  ull cnt <span class="token operator">=</span> <span class="token number">1e8</span><span class="token punctuation">;</span>  <span class="token keyword">for</span> <span class="token punctuation">(</span>ull i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> cnt<span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token punctuation">{</span>    <span class="token keyword">double</span> x <span class="token operator">=</span> <span class="token keyword">double</span><span class="token punctuation">(</span><span class="token function">rand</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">/</span> RAND_MAX<span class="token punctuation">;</span>    <span class="token keyword">double</span> y <span class="token operator">=</span> <span class="token keyword">double</span><span class="token punctuation">(</span><span class="token function">rand</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">/</span> RAND_MAX<span class="token punctuation">;</span>    <span class="token keyword">if</span> <span class="token punctuation">(</span>x <span class="token operator">*</span> x <span class="token operator">+</span> <span class="token punctuation">(</span>y <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token punctuation">(</span>y <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">1</span> <span class="token operator">&amp;&amp;</span> x <span class="token operator">+</span> <span class="token number">2</span> <span class="token operator">*</span> y <span class="token operator">-</span> <span class="token number">1</span> <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>      res <span class="token operator">+</span><span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>    <span class="token punctuation">}</span>  <span class="token punctuation">}</span>  <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%.5f\n"</span><span class="token punctuation">,</span> res <span class="token operator">*</span> <span class="token number">16.0</span> <span class="token operator">/</span> cnt<span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><h3 id="CUDA实现"><a href="#CUDA实现" class="headerlink" title="CUDA实现"></a>CUDA实现</h3><pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;chrono></span></span><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;curand_kernel.h></span></span><span class="token keyword">typedef</span> <span class="token keyword">unsigned</span> <span class="token keyword">long</span> <span class="token keyword">long</span> <span class="token keyword">int</span> ull<span class="token punctuation">;</span>__global__ <span class="token keyword">void</span> <span class="token function">monte_carlo_kernel</span><span class="token punctuation">(</span>ull<span class="token operator">*</span> res<span class="token punctuation">,</span> ull cnt<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">int</span> seed<span class="token punctuation">)</span> <span class="token punctuation">{</span>  ull i <span class="token operator">=</span> blockIdx<span class="token punctuation">.</span>x <span class="token operator">*</span> blockDim<span class="token punctuation">.</span>x <span class="token operator">+</span> threadIdx<span class="token punctuation">.</span>x<span class="token punctuation">;</span>  <span class="token keyword">if</span> <span class="token punctuation">(</span>i <span class="token operator">>=</span> cnt<span class="token punctuation">)</span> <span class="token keyword">return</span><span class="token punctuation">;</span>  curandStatePhilox4_32_10_t state<span class="token punctuation">;</span>  <span class="token function">curand_init</span><span class="token punctuation">(</span>seed<span class="token punctuation">,</span> i<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>state<span class="token punctuation">)</span><span class="token punctuation">;</span>  double2 rand <span class="token operator">=</span> <span class="token function">curand_uniform2_double</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>state<span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token keyword">double</span> x <span class="token operator">=</span> rand<span class="token punctuation">.</span>x<span class="token punctuation">;</span>  <span class="token keyword">double</span> y <span class="token operator">=</span> rand<span class="token punctuation">.</span>y<span class="token punctuation">;</span>  <span class="token keyword">if</span> <span class="token punctuation">(</span>x <span class="token operator">*</span> x <span class="token operator">+</span> <span class="token punctuation">(</span>y <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token punctuation">(</span>y <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">1</span> <span class="token operator">&amp;&amp;</span> x <span class="token operator">+</span> <span class="token number">2</span> <span class="token operator">*</span> y <span class="token operator">-</span> <span class="token number">1</span> <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>    <span class="token function">atomicAdd</span><span class="token punctuation">(</span>res<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token keyword">void</span> <span class="token function">launch_monte_carlo</span><span class="token punctuation">(</span>ull<span class="token operator">*</span> res<span class="token punctuation">,</span> ull cnt<span class="token punctuation">,</span> cudaStream_t<span class="token operator">&amp;</span> stream<span class="token punctuation">)</span> <span class="token punctuation">{</span>  ull grid_dim <span class="token operator">=</span> cnt <span class="token operator">>></span> <span class="token number">10</span><span class="token punctuation">;</span>  monte_carlo_kernel<span class="token operator">&lt;&lt;</span><span class="token operator">&lt;</span>grid_dim <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1024</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> stream<span class="token operator">>></span><span class="token operator">></span><span class="token punctuation">(</span>      res<span class="token punctuation">,</span> cnt<span class="token punctuation">,</span>      std<span class="token operator">::</span>chrono<span class="token operator">::</span>duration_cast<span class="token operator">&lt;</span>std<span class="token operator">::</span>chrono<span class="token operator">::</span>microseconds<span class="token operator">></span><span class="token punctuation">(</span>          std<span class="token operator">::</span>chrono<span class="token operator">::</span>system_clock<span class="token operator">::</span><span class="token function">now</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">time_since_epoch</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>          <span class="token punctuation">.</span><span class="token function">count</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token punctuation">}</span><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>  ull<span class="token operator">*</span> res<span class="token punctuation">;</span>  <span class="token function">cudaMallocManaged</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>res<span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>ull<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  res<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>  ull cnt <span class="token operator">=</span> <span class="token number">1e10</span><span class="token punctuation">;</span>  cudaStream_t stream<span class="token punctuation">;</span>  <span class="token function">cudaStreamCreate</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>stream<span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token function">launch_monte_carlo</span><span class="token punctuation">(</span>res<span class="token punctuation">,</span> cnt<span class="token punctuation">,</span> stream<span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token function">cudaDeviceSynchronize</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%.5f\n"</span><span class="token punctuation">,</span> res<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">*</span> <span class="token number">16.0</span> <span class="token operator">/</span> cnt<span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token function">cudaFree</span><span class="token punctuation">(</span>res<span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><h2 id="标准方法"><a href="#标准方法" class="headerlink" title="标准方法"></a>标准方法</h2><p>其实标准的小学生解法不需要建坐标系，只需要如下图所示，做4条辅助线就行。</p><p><img src="3.png" alt></p><p>很容易证明，辅助线将三角形ACD划分出来的5个小三角形是全等的。</p><p>那么阴影面积就等于正方形AOBD减去四分之一圆BOD，再减去最右侧的弧边三角形ADE。而弧边三角形ADE面积等于三角形ACD减去三角形BCE，再减去扇形BDE。</p><p>所以问题的关键就是求角DBE的大小，因为小三角形的边长可以轻易求出，所以最终答案很好算：<br>$$<br>\frac{32}{5}-4\pi+16 \arctan{\frac{1}{2}}<br>$$</p><p>可以发现和之前高等数学得到的结果形式并不同，其实数值是一样的，所以我们得到了一个等式：<br>$$<br>4\arctan{\frac{1}{2}}+2\arcsin{\frac{3}{5}}=\pi<br>$$</p><p>这个可能看起来不是那么直观，但确实是成立的，根据反三角函数恒等式$2\arctan x = \arctan \frac{2x}{1-x^2}$，可以推出等号左边等于$2(\arctan \frac{4}{3} + \arcsin \frac{3}{5})$。构造一个边长3、4、5的直角三角形，显然答案就是$\pi$。</p><h2 id="总结与拓展"><a href="#总结与拓展" class="headerlink" title="总结与拓展"></a>总结与拓展</h2><p>其实这道题小学生也没几个人能做出来，就算给我们做也得费老鼻子劲，还不一定算的对。</p><p>最近还看到了很多类似的趣图，这里分享给大家，闲暇时间可以做了玩玩。</p><p>可以在评论区说出你的答案哦。</p><p><img src="4.jpg" alt></p><p><img src="5.png" alt></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 编程算法 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> cuda </tag>
+            
+            <tag> c++ </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>【白话模型量化系列二】量化感知训练</title>
+      <link href="/2021/12/17/qat-ptq/"/>
+      <url>/2021/12/17/qat-ptq/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p>关注公众号【算法码上来】，每日算法干货马上就来！</p></blockquote><p><img src="/medias/contact.jpg" alt></p><p>上一篇我们讲解了矩阵乘法量化的基本原理，这一篇来讲解一下量化前需要做的一些准备工作——量化感知训练。</p><p><a href="https://godweiyang.com/2021/11/25/int8-gemm">【白话模型量化系列一】矩阵乘法量化</a></p><p>什么是量化感知训练呢？简单来说就是，浮点数转整数的过程中会产生精度的损失。如果你直接强行转换，然后进行量化推理（这叫训练后量化），那模型效果肯定会下降。所以需要在训练的时候就加入量化操作，继续finetune一会儿，弥补这部分损失。</p><p>回顾上一篇讲到的矩阵乘法量化过程，对于两个矩阵的乘法$C=AB$，可以先将$A$和$B$量化为整数矩阵$\frac{s}{c_1}A$和$\frac{s}{c_2}B$。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 深度学习 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 模型加速 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>二零二一年终总结</title>
+      <link href="/2021/12/13/2021-conclusion/"/>
+      <url>/2021/12/13/2021-conclusion/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p>关注公众号【算法码上来】，每日算法干货马上就来！</p></blockquote><p><img src="/medias/contact.jpg" alt></p><p>今天是12.13，一晃二十六周岁了。从2017年开始，每年都会简单总结一下一年中经历的事情，不知不觉已经五年了。</p><p><a href="https://godweiyang.com/2018/01/22/2017-conclusion/">二零一七年终总结</a><br><a href="https://godweiyang.com/2018/12/31/2018-conclusion/">二零一八年终总结</a><br><a href="https://godweiyang.com/2019/12/13/2019-conclusion/">二零一九年终总结</a><br><a href="https://godweiyang.com/2020/12/13/2020-conclusion/">二零二零年终总结</a></p><p>回顾过去五年，从大三到今年毕业正式工作，好像干了很多事情，又好像什么都没干。也就混到硕士毕业，侥幸发了篇ACL，然后又侥幸进入字节从事新的研究方向。这五年来唯一不变的可能就是一直在打英雄联盟吧，还是当年的开黑队友，还是熟悉的味道。</p><p>2021年是正式成为社会人的一年，从校园老油条蜕变为了职场萌新。总结下来就是，上半年在忙着毕业，下半年在忙着开发LightSeq。</p><p>今年过年在上海度过了人生第一个不在家的春节，一是因为疫情回去要做核酸，二是因为毕业论文没多久要交了。连编带凑，花了将近一个月赶出了一篇像模像样的毕业论文。后面的毕业流程走的出乎意料的快，导师也没怎么修改，短短数周就答辩结束，仿佛学校盼着我们早日离校步入社会。拿完优秀毕业生、优秀毕业论文和国家奖学金，实验室最后聚了聚餐，接着就正式毕业了。</p><p><a href="https://godweiyang.com/2021/05/21/master-graduate/">七年师大，青春永不毕业</a></p><p><img src="1.jpg" alt="春节生怕饿死，囤的食物"></p><p><img src="2.jpg" alt="上海市优秀毕业生"></p><p>学校里的事就这么多了，主要精力还是在公司里。上半年进一步完善LightSeq推理引擎，写了很多文章对LightSeq进行了大量的介绍和宣传，也给很多想入门CUDA和模型加速的同学科普了基本的知识。</p><p><a href="https://godweiyang.com/2021/03/28/nn-cuda-example/">熬了几个通宵，我写了份CUDA新手入门代码</a></p><p><a href="https://godweiyang.com/2021/04/13/lightseq-python-usage/">只用两行代码，我让Transformer推理加速了10倍</a></p><p><img src="3.jpg" alt="LightSeq star数嗖嗖上涨"></p><p>还在NAACL 2021上发表了一篇关于LightSeq推理引擎相关技术的论文，进行了技术沉淀，推理引擎的开发也算是告一段落了。</p><p><a href="https://arxiv.org/abs/2010.13887" target="_blank" rel="noopener">论文地址：LightSeq: A High Performance Inference Library for Transformers</a></p><p>今年最重要的工作内容要数LightSeq训练引擎了，从4月份开始，到6月份结束，历时三个月和同事们一起开发出了业界首个Transformer全流程训练加速引擎。训练引擎从0到1的整个过程我都有参与，这期间为了快速融入到项目的开发中，不得不自学了CUDA和模型加速的相关知识，这些之前在学校都是没有接触过的。项目开源后也投递了论文，虽然没有中，但也积累了不少经验，懂了一些系统领域会议论文的写法。leader还安排我去QCon大会进行了分享，宣传了一波LightSeq技术。</p><p><a href="https://github.com/bytedance/lightseq" target="_blank" rel="noopener">LightSeq源码</a></p><p><a href="https://godweiyang.com/2021/06/21/lightseq2-introduction/">训练加速3倍！字节跳动推出业界首个NLP模型全流程加速引擎</a></p><p><a href="https://arxiv.org/abs/2110.05722" target="_blank" rel="noopener">论文地址：LightSeq2: Accelerated Training for Transformer-based Models on GPUs</a></p><p><img src="12.jpg" alt="QCon分享"></p><p>目前的话在开发LightSeq量化推理，在不久的将来就会和大家正式见面，模型推理速度也将迈上一个新的台阶。</p><p>生活方面，下半年重新开始做饭了，外卖一方面不卫生，一方面也吃腻了，不一定有自己做的好吃。不过租的房子厨房实在太小了，做一次饭都要收拾很久，经常也会不想做。限于篇幅，这里就只放几张图吧，更多的可以去我朋友圈围观。</p><p><img src="7.jpg" alt="炸薯条"><br><img src="8.jpg" alt="可乐鸡翅、玉米排骨汤"><br><img src="10.jpg" alt="糖醋排骨"></p><p>虽然房子小，10月底家里还是新增了一员，我从师兄家抱回了一只布偶猫。养猫给我的生活新增了不少乐趣，没事的时候可以撸一撸。但也带来了很多麻烦，猫经常乱拉，晚上睡觉吵人，每天要铲屎喂粮，就和带一个孩子一样。可能是我给他吃的太好了吧，才6个月左右就已经长到10斤了。</p><p><img src="11.jpg" alt="安静的美男子"></p><p>情感方面依旧维持原样，虽然有过小插曲，但都不合适。</p><p>今年给我最大的感觉就是，工作了之后时间变快了，生活变单调了。尤其是取消大小周之后，每周都过得好快，每次还没恍过神就又到下一个周末了。这可能也和我比较宅有关，每周末除了打游戏，就还是打游戏。睡眠时间也依旧很晚，不断摧残自己的身体。</p><p>对于2022年，最大的心愿还是把工作做好，先把模型量化做完善了，争取早日晋升，希望LightSeq的star早日能上3000。然后继续做好菜、养好猫，快乐游戏每一天。文章最近更新的也没有以前频繁了，得勤快一点了。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 随笔 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 年终总结 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>【白话模型量化系列一】矩阵乘法量化</title>
+      <link href="/2021/11/25/int8-gemm/"/>
+      <url>/2021/11/25/int8-gemm/</url>
+      
+        <content type="html"><![CDATA[<p>模型量化是模型加速方向一个很重要的方法，主要思想就是用int8数据格式来存储和进行计算。这样做有两点好处：</p><ol><li>可以减小模型存储的体积。原本float32存储需要4个字节，现在int8存储只需要1个字节，体积是原来的1/4。</li><li>可以加快计算速度。这主要是因为int8数据的读写更快，并且int8矩阵乘法一般来说会更快一点。</li></ol><p>以现在最常用的Transformer模型来举例，在使用CUDA推理加速库（例如LightSeq）之后，矩阵乘法的占比高达将近90%。所以优化非矩阵乘法的速度意义不是很大了，占比不高，你算得再快对整体的提速也很小，因此可以尝试优化矩阵乘法。</p><p>那么我们考虑浮点数矩阵乘法$C = AB$，如何将它转化为整数矩阵乘法，并且得到几乎相同的乘法结果呢？</p><h2 id="用整数矩阵来表示浮点数矩阵"><a href="#用整数矩阵来表示浮点数矩阵" class="headerlink" title="用整数矩阵来表示浮点数矩阵"></a>用整数矩阵来表示浮点数矩阵</h2><p>首先我们需要将一个浮点数矩阵$A$用整数矩阵$A_I$来表示。我们假设$A$的数值范围在$[-c_1, c_1]$之间，其实这个假设是合理的，例如一般深度学习模型参数初始化都是正态分布，那么数值范围就在$[-1, 1]$之间。然后整数矩阵$A_I$的数值范围其实就是有符号整数的表示范围$[-128， 127]$，为了实现的简单，我们只量化到$[-127, 127]$，这样就和$A$一样关于零点左右对称了。我们令$s = 127$，用来表示int8的数值范围，如果$s = 15$，那就是int4的范围了。</p><p>接着整数矩阵$A_I$就可以表示为$A_I = int(\frac{s}{c_1}A)$，也就是将浮点数区间$[-c_1, c_1]$里的数字等比例映射到整数区间$[-s, s]$，然后向最近的整数取整。同理，整数矩阵$B_I$可以表示为$B_I = int(\frac{s}{c_2}B)$。</p><p>这样我们就可以得到两个浮点数矩阵的整数表示，接下来就可以利用他们来进行整数矩阵乘法的转换。</p><h2 id="转化为整数矩阵乘法"><a href="#转化为整数矩阵乘法" class="headerlink" title="转化为整数矩阵乘法"></a>转化为整数矩阵乘法</h2><p>整数矩阵$A_I$还原为浮点数很简单，只需要$A = \frac{c_1}{s}A_I$即可。但是注意$A_I$是取过整的，所以还原回去的$A$并不完全等于原始的$A$，是有误差的。举个通俗的例子，两个浮点数0.1和0.101经过量化都变成了整数13，但是还原回浮点数后全都变成了0.102，再也没法区分两个浮点数有什么不同了。</p><p>所以回到原始的问题，浮点数矩阵乘法$C = AB$可以改写为$C = \frac{c_1}{s}A_I \frac{c_2}{s}B_I$，也就是$C = \frac{c_1c_2}{s^2}A_I B_I$。</p><p>那么就可以先计算整数矩阵乘法$A_I B_I$，然后得到整数的输出矩阵之后，乘上系数$\frac{c_1c_2}{s^2}$，还原为浮点数矩阵。</p><p>注意输入矩阵$A_I$和$B_I$都是int8的，但是乘法结果$A_I B_I$一定是int32的。</p><h3 id="总结一下流程"><a href="#总结一下流程" class="headerlink" title="总结一下流程"></a>总结一下流程</h3><ol><li>输入两个浮点数矩阵$A$和$B$，先分别转化为各自的整数矩阵$A_I = int(\frac{s}{c_1}A)$和$B_I = int(\frac{s}{c_2}B)$。</li><li>然后计算整数矩阵乘法结果$A_I B_I$。</li><li>最后乘上系数还原为浮点数的乘法结果$C = \frac{c_1c_2}{s^2}A_I B_I$。</li></ol><h2 id="进阶（relu激活函数）"><a href="#进阶（relu激活函数）" class="headerlink" title="进阶（relu激活函数）"></a>进阶（relu激活函数）</h2><p>熟悉Transformer的同学应该知道，FFN第二层输入分别是relu的结果$A$和参数$B$。那么这里就存在一个问题，relu结果的数值范围是$[0, c_1]$，而不可能是$[-c_1, c_1]$。</p><p>如果我们强行还按照$[-c_1, c_1]$的范围来量化relu结果$A$的话会怎么样呢？这样会导致整数区间$[-127, 0)$永远不会有数字，因为根本没有负数浮点数的存在。这样就白白浪费了127个整数，就会导致量化的精度大大受损。</p><p>那按照$[0, c_1]$来量化的话，怎么计算整数矩阵乘法的结果呢？</p><p>稍稍推导一下就可以得出，$A$可以表示为$A = \frac{c_1}{2s}(A_I + s \textbf{1})$，其中$\textbf{1}$表示和$A$相同形状的全1矩阵。而$B$的话依然表示为$B = \frac{c_2}{s}B_I$。</p><p>这样矩阵乘法可以改写为$C = \frac{c_1c_2}{2s^2}A_I B_I + \frac{c_1c_2}{2s}\textbf{1}B_I$。其中第二项因子可以用$B = \frac{c_2}{s}B_I$来进一步简化，最终得到$C = \frac{c_1c_2}{2s^2}A_I B_I + \frac{c_1}{2}\textbf{1}B$。</p><p>第一项因子和之前一样，先算整数矩阵乘法$A_I B_I$，再乘上系数，只不过系数变成了$\frac{c_1c_2}{2s^2}$。</p><p>第二项因子$\textbf{1}B$的维度和$C$相同，并且它的矩阵元素等于$B$中同一列的元素之和。那么问题就很简单了，我们只需要提前计算出矩阵$B$每一列的元素和，再乘上系数$\frac{c_1}{2}$，结果存下来。最后在计算完$\frac{c_1c_2}{2s^2}A_I B_I$整数矩阵乘法结果之后，加上这个列元素之和就行了，你可以将其理解为残差项。</p><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>如果矩阵乘法两个输入的范围都是关于零点对称的，那么计算公式为：<br><strong>量化：</strong><br>$$A_I = int(\frac{s}{c_1}A), B_I = int(\frac{s}{c_2}B)$$<br><strong>反量化：</strong><br>$$C = \frac{c_1c_2}{s^2}A_I B_I$$</p><p>如果矩阵乘法其中一个输入是relu的结果，那么计算公式为：<br><strong>量化：</strong><br>$$A_I = int(\frac{2s}{c_1}(A - s \textbf{1})), B_I = int(\frac{s}{c_2}B)$$<br><strong>反量化：</strong><br>$$C = \frac{c_1c_2}{2s^2}A_I B_I + \frac{c_1}{2}\textbf{1}B$$</p><p>当然还有很多其他情况，例如softmax的输出范围一定是$[0, 1]$，那么attention中的矩阵乘法公式还得改写。</p><p>此外为了减小量化的损失，还需要在模型结构中插入伪量化节点，然后进行量化感知训练（QAT）。接着还需要将finetune后的模型存储为int8格式。然后还需要开发加载int8模型的推理加速库代码。最后就是本文讲到的整数矩阵乘法了。整个流程比较繁琐，这部分内容今后我会慢慢给大家分享。网上关于量化的优秀教程非常多，我不会讲太多理论上的量化知识，只会从实践的角度来白话一下我们在Transformer模型量化过程中做的一些尝试。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 深度学习 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 模型加速 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>昨晚学妹参加了B站秋招笔试，还想考考我？</title>
       <link href="/2021/08/26/bilibili-0/"/>
       <url>/2021/08/26/bilibili-0/</url>
@@ -56,25 +658,27 @@
     
     
     <entry>
-      <title>在字节跳动AI Lab工作是一种什么体验？</title>
+      <title>最全攻略：利用LightSeq加速你的深度学习模型</title>
       <link href="/2021/08/24/volctrans/"/>
       <url>/2021/08/24/volctrans/</url>
       
-        <content type="html"><![CDATA[]]></content>
+        <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>LightSeq是字节跳动火山翻译团队开源的一款Transformer系列模型加速引擎，分为训练和推理两个部分。其中推理加速引擎早在2019年12月就已经开源，而训练加速引擎也在2021年6月开源。<br><strong>项目地址：</strong><br><a href="https://github.com/bytedance/lightseq" target="_blank" rel="noopener">https://github.com/bytedance/lightseq</a></p><p>LightSeq主要采用了CUDA算子融合、显存优化、参数连续化、层级式解码策略等技术，感兴趣的小伙伴可以阅读此前的文章：<br><strong>训练引擎：</strong><br><a href="https://zhuanlan.zhihu.com/p/383657837" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/383657837</a><br><strong>推理引擎：</strong><br><a href="https://zhuanlan.zhihu.com/p/269478459" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/269478459</a></p><p>本文详细讲解一下如何使用LightSeq来改造你的PyTorch模型，实现1.5-3倍的训练加速和5-10倍的推理加速。至于TensorFlow模型的加速，目前也已经支持，这里不会详细讲解，可以参考下面NeurST的代码：<br><a href="https://github.com/bytedance/neurst/tree/lightseq" target="_blank" rel="noopener">https://github.com/bytedance/neurst/tree/lightseq</a></p><h2 id="整体流程"><a href="#整体流程" class="headerlink" title="整体流程"></a>整体流程</h2><p>使用LightSeq进行加速的整体流程依次为：</p><ol><li>接入训练引擎进行模型训练，并保存模型参数。</li><li>加载模型参数，使用训练引擎的前向传播部分进行模型推理。</li><li>为了更快的推理速度，还可以将模型参数导出为protobuf或者hdf5格式。</li><li>使用推理引擎解析第3步中导出的模型，并进行模型推理。</li></ol><h2 id="模型训练"><a href="#模型训练" class="headerlink" title="模型训练"></a>模型训练</h2><p>LightSeq提供了封装好的embedding、encoder、decoder、cross entropy和adam类，可以接入到你自己的模型中替换原有的模型。</p><p>LightSeq还提供了现成的Fairseq、Hugging Face、DeepSpeed<br>DeepSpeed可以用于大规模训练Speed、NeurST等样例。如果你用这几个训练库的话，就可以直接使用。如果你是自己的模型，那也可以手动接入LightSeq。这几个样例代码都在<code>examples/training</code>目录下。</p><h3 id="自定义模型"><a href="#自定义模型" class="headerlink" title="自定义模型"></a>自定义模型</h3><p>首先引入所有可能用到的头文件：</p><pre class="line-numbers language-python"><code class="language-python"><span class="token keyword">from</span> lightseq<span class="token punctuation">.</span>training <span class="token keyword">import</span> <span class="token punctuation">(</span>    LSTransformer<span class="token punctuation">,</span>    LSTransformerEmbeddingLayer<span class="token punctuation">,</span>    LSTransformerEncoderLayer<span class="token punctuation">,</span>    LSTransformerDecoderLayer<span class="token punctuation">,</span>    LSCrossEntropyLayer<span class="token punctuation">,</span>    LSAdam<span class="token punctuation">,</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>以新建encoder层为例，主要分为两个步骤：</p><ol><li>使用<code>LSTransformerEncoderLayer.get_config</code>函数新建config。</li><li>新建LightSeq的encoder层，即<code>LSTransformerEncoderLayer</code>类，使用config来初始化。</li></ol><p>一个典型的例子如下：</p><pre class="line-numbers language-python"><code class="language-python">config <span class="token operator">=</span> LSTransformerEncoderLayer<span class="token punctuation">.</span>get_config<span class="token punctuation">(</span>    model<span class="token operator">=</span><span class="token string">"bert-base"</span><span class="token punctuation">,</span>    max_batch_tokens<span class="token operator">=</span><span class="token number">4096</span><span class="token punctuation">,</span>    max_seq_len<span class="token operator">=</span><span class="token number">512</span><span class="token punctuation">,</span>    fp16<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>    local_rank<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token punctuation">)</span>layer <span class="token operator">=</span> LSTransformerEncoderLayer<span class="token punctuation">(</span>config<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>其中<code>max_batch_tokens</code>指定了训练过程中一个batch最大可能的单词数，<code>max_seq_len</code>指定了句子的最长长度。<code>model</code>提供了四种现成的模型配置：<code>transformer-base</code>、<code>transformer-big</code>、<code>bert-base</code>和<code>bert-big</code>。</p><p>当然如果你想用自己的模型配置，也可以手动补全所有的参数：</p><pre class="line-numbers language-python"><code class="language-python">config <span class="token operator">=</span> LSTransformerEncoderLayer<span class="token punctuation">.</span>get_config<span class="token punctuation">(</span>    max_batch_tokens<span class="token operator">=</span><span class="token number">4096</span><span class="token punctuation">,</span>    max_seq_len<span class="token operator">=</span><span class="token number">512</span><span class="token punctuation">,</span>    hidden_size<span class="token operator">=</span><span class="token number">1024</span><span class="token punctuation">,</span>    intermediate_size<span class="token operator">=</span><span class="token number">4096</span><span class="token punctuation">,</span>    nhead<span class="token operator">=</span><span class="token number">16</span><span class="token punctuation">,</span>    attn_prob_dropout_ratio<span class="token operator">=</span><span class="token number">0.1</span><span class="token punctuation">,</span>    activation_dropout_ratio<span class="token operator">=</span><span class="token number">0.1</span><span class="token punctuation">,</span>    hidden_dropout_ratio<span class="token operator">=</span><span class="token number">0.1</span><span class="token punctuation">,</span>    pre_layer_norm<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span>    activation_fn<span class="token operator">=</span><span class="token string">"gelu"</span><span class="token punctuation">,</span>    fp16<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>    local_rank<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token punctuation">)</span>layer <span class="token operator">=</span> LSTransformerEncoderLayer<span class="token punctuation">(</span>config<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>除了encoder以外，embedding、decoder、cross entropy和adam也可以用同样的方法新建，最后和你自己写的模型一样进行训练即可。</p><p>此外LightSeq还提供了完整的Transformer类<code>LSTransformer</code>，可以直接新建一整个Transformer：</p><pre class="line-numbers language-python"><code class="language-python">config <span class="token operator">=</span> LSTransformer<span class="token punctuation">.</span>get_config<span class="token punctuation">(</span>    model<span class="token operator">=</span><span class="token string">"transformer-base"</span><span class="token punctuation">,</span>    max_batch_tokens<span class="token operator">=</span><span class="token number">4096</span><span class="token punctuation">,</span>    max_seq_len<span class="token operator">=</span><span class="token number">512</span><span class="token punctuation">,</span>    vocab_size<span class="token operator">=</span><span class="token number">32000</span><span class="token punctuation">,</span>    padding_idx<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span>    num_encoder_layer<span class="token operator">=</span><span class="token number">6</span><span class="token punctuation">,</span>    num_decoder_layer<span class="token operator">=</span><span class="token number">6</span><span class="token punctuation">,</span>    fp16<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>    local_rank<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token punctuation">)</span>model <span class="token operator">=</span> LSTransformer<span class="token punctuation">(</span>config<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>示例代码在<code>examples/training/custom</code>中，可以直接运行<code>python run.py</code>查看效果。</p><h3 id="Hugging-Face"><a href="#Hugging-Face" class="headerlink" title="Hugging Face"></a>Hugging Face</h3><p>以Hugging Face官方提供的<code>run_glue.py</code>为例，一般首先都是用<code>AutoModel.from_pretrained</code>函数新建模型model，然后进行训练。</p><p>为了接入LightSeq，需要将model中的所有encoder层替换为LightSeq版本的encoder层。替换过程分为三个步骤：</p><ol><li>使用<code>LSTransformerEncoderLayer.get_config</code>函数新建config。</li><li>获取Hugging Face预训练好的BERT参数。</li><li>新建LightSeq的encoder层，即<code>LSTransformerEncoderLayer</code>类，使用config和预训练好的参数来初始化。</li></ol><p>新建encoder层代码参见上一小节。注意在Hugging Face这个例子里，额外给<code>LSTransformerEncoderLayer</code>封装了一层<code>LSHFTransformerEncoderLayer</code>，主要是为了兼容原来的encoder输入形状。</p><p>示例代码在<code>examples/training/huggingface</code>中，运行<code>sh run_glue.sh</code>和<code>sh run_ner.sh</code>分别可以查看LightSeq在GLUE和NER任务上的加速效果。</p><p>注意Hugging Face BERT的fine-tune任务很不稳定，经常会不收敛，这时候可以尝试修改运行脚本中的<code>--seed</code>参数。</p><h3 id="Fairseq"><a href="#Fairseq" class="headerlink" title="Fairseq"></a>Fairseq</h3><p>Fairseq主要用于一些生成任务，使用LightSeq加速的原理是一样的，都是需要将各自组件替换为LightSeq对应的组件。</p><p>LightSeq对Fairseq做了非常完整的替换，将embedding、encoder、decoder、cross entropy和adam全部替换为了LightSeq对应的部分，来达到极致的加速效果。</p><p>示例代码在<code>examples/training/fairseq</code>目录下，其中<code>fs_cli</code>目录存放着三个启动入口：<code>train</code>、<code>validate</code>和<code>generate</code>，<code>fs_modules</code>目录存放着用LightSeq封装好的几个Transformer组件。</p><p>直接运行<code>sh ls_fairseq_wmt14en2de.sh</code>即可自动下载数据并运行WMT14英德机器翻译任务。脚本中主要的运行命令如下：</p><pre class="line-numbers language-shell"><code class="language-shell">lightseq-train /tmp/wmt14_en_de/ \    --task translation \    --arch ls_transformer_wmt_en_de_big_t2t --share-decoder-input-output-embed \    --optimizer ls_adam --adam-betas '(0.9, 0.98)' --clip-norm 0.0 \    --lr 5e-4 --lr-scheduler inverse_sqrt --warmup-updates 4000 --weight-decay 0.0001 \    --criterion ls_label_smoothed_cross_entropy --label-smoothing 0.1 \    --max-tokens 8192 \    --eval-bleu --eval-bleu-args '{"beam": 5, "max_len_a": 1.2, "max_len_b": 10}' \    --eval-bleu-detok moses --eval-bleu-remove-bpe --eval-bleu-print-samples \    --best-checkpoint-metric bleu \    --maximize-best-checkpoint-metric --fp16<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>注意到和一般运行Fairseq的命令不同的地方有这么几个：</p><ol><li>启动入口从<code>fairseq-train</code>替换为了<code>lightseq-train</code>，这是因为在根目录<code>setup.py</code>里封装了<code>--user-dir</code>用户模块目录。如果还想继续用<code>fairseq-train</code>的话，就需要手动指定<code>--user-dir fs_modules</code>参数。</li><li>模型结构<code>--arch</code>需要在原来的基础上加上前缀<code>ls_</code>，用来指定使用LightSeq提供的Transformer模型。</li><li>优化器<code>--optimizer</code>和损失函数<code>--criterion</code>都需要在原来的基础上加上前缀<code>ls_</code>，指定使用LightSeq对应的组件。</li></ol><h3 id="DeepSpeed"><a href="#DeepSpeed" class="headerlink" title="DeepSpeed"></a>DeepSpeed</h3><p>DeepSpeed主要用于大规模训练，也提供了Transformer的encoder层CUDA实现，不过效率没有LightSeq高。</p><p>LightSeq提供了Fairseq+DeepSpeed分布式训练的使用样例，将启动器替换成了<code>deepspeed</code>，手动指定<code>--user-dir</code>目录，还需要指定DeepSpeed的配置文件<code>deepspeed_config</code>，其它参数和上一节Fairseq样例一模一样。</p><p>使用时运行<code>sh ds_fairseq_wmt14en2de.sh</code>即可，和上一小节一样都是用Fairseq运行WMT14英德机器翻译任务。</p><h2 id="模型导出"><a href="#模型导出" class="headerlink" title="模型导出"></a>模型导出</h2><p>在模型训练完之后，直接load保存的checkpoint就可以继续fine-tune或者推理。但是这样调用的是训练引擎的推理部分，也就是模型的前向传播。这部分代码需要频繁在python和c++之间切换，并且前向过程中计算了很多反向传播才需要用到的变量。因此速度不如纯粹的推理引擎快。</p><p>而要想使用LightSeq的推理引擎，就必须先将checkpoint转变为protobuf或者hdf5的格式。</p><p>LightSeq提供了每个组件的导出接口，如果你使用了LightSeq的模型组件，那么导出将变得非常容易。只需要引入下面的头文件即可：</p><pre class="line-numbers language-python"><code class="language-python"><span class="token keyword">from</span> lightseq<span class="token punctuation">.</span>training <span class="token keyword">import</span> <span class="token punctuation">(</span>    export_ls_config<span class="token punctuation">,</span>    export_ls_embedding<span class="token punctuation">,</span>    export_ls_encoder<span class="token punctuation">,</span>    export_ls_decoder<span class="token punctuation">,</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>这四个函数分别可以导出推理引擎所需要的配置信息、embedding参数、encoder参数和decoder参数。而如果有其他部分的参数没包括在这里面（例如输出到词表的映射矩阵），则需要自己进行导出，详见下面的教程。</p><p>LightSeq对Hugging Face的BERT、BART、GPT2三种模型，以及Fairseq+LightSeq、LightSeq的Transformer模型都提供了模型导出的样例，代码在<code>examples/inference/python/export</code>目录下。其中Hugging Face的模型都是没有采用LightSeq加速训练的预训练模型参数，所以导出更为复杂一些。</p><p>模型导出的核心思想就是：</p><ol><li>首先创建一个protobuf对象<code>Transformer</code>或者hdf5的文件对象。</li><li>然后在checkpoint中提取出参数值，将其赋值给<code>Transformer</code>或者hdf5文件对象中对应的参数。</li></ol><p>这个过程麻烦的就是提取并且对应赋值的过程，LightSeq提供了一系列方便的操作函数。</p><h3 id="Fairseq-1"><a href="#Fairseq-1" class="headerlink" title="Fairseq"></a>Fairseq</h3><p>执行<code>python ls_fs_transformer_export.py</code>可以导出上一章节中Fairseq+LightSeq训练样例得到的模型。</p><p>以protobuf导出为例，观察代码可以看到主体部分如下（省略了部分参数）：</p><pre class="line-numbers language-python"><code class="language-python">file <span class="token operator">=</span> Transformer<span class="token punctuation">(</span><span class="token punctuation">)</span>encoder_state_dict<span class="token punctuation">,</span> decoder_state_dict <span class="token operator">=</span> _extract_weight<span class="token punctuation">(</span>state_dict<span class="token punctuation">)</span>export_ls_embedding<span class="token punctuation">(</span>file<span class="token punctuation">,</span> encoder_state_dict<span class="token punctuation">,</span> is_encoder<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>export_ls_embedding<span class="token punctuation">(</span>file<span class="token punctuation">,</span> decoder_state_dict<span class="token punctuation">,</span> is_encoder<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span>export_ls_encoder<span class="token punctuation">(</span>file<span class="token punctuation">,</span> encoder_state_dict<span class="token punctuation">)</span>export_ls_decoder<span class="token punctuation">(</span>file<span class="token punctuation">,</span> decoder_state_dict<span class="token punctuation">)</span>export_fs_weights<span class="token punctuation">(</span>file<span class="token punctuation">,</span> state_dict<span class="token punctuation">)</span>export_ls_config<span class="token punctuation">(</span>file<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>首先需要用户自己将state_dict拆分成encoder和decoder两部分，这主要是因为设计时考虑到有些用户只会用到encoder的导出（例如BERT）。并且LightSeq无法知道用户模型的最外层参数名叫啥，万一不叫encoder，而叫enc之类的呢？所以交给用户自己拆分更加合理。</p><p>然后分别导出encoder的embedding、decoder的embedding、encoder和decoder参数，这几部分都直接调用LightSeq提供的接口就行了。LightSeq会自动帮你把解析出来的参数导出到定义的<code>Transformer</code>类里。</p><p>接着需要处理一下Fairseq中与LightSeq无关的一些参数，例如encoder和decoder的layer norm参数等等。<code>export_fs_weights</code>函数需要用户自己实现，核心思想就是找到state_dict中的参数名，将其赋值给<code>Transformer</code>类里对应的变量就行了。</p><p>最后设置一下<code>Transformer</code>类里所有的配置参数就行了。</p><p>hdf5的用法类似，LightSeq都将其封装在同样的函数里了，只需要指定<code>save_pb=False</code>即可。</p><h3 id="Hugging-Face-1"><a href="#Hugging-Face-1" class="headerlink" title="Hugging Face"></a>Hugging Face</h3><p>执行<code>python hf_bert_export.py</code>、<code>python hf_bart_export.py</code>和<code>python hf_gpt2_export.py</code>三个文件分别可以导出BERT、BART和GPT2的预训练模型。</p><p>因为Hugging Face的模型参数都是预训练得到的，所以LightSeq无法识别参数名是什么样的，只能用户自己编写导出规则，具体参考上面三个导出样例即可。</p><h3 id="LightSeq-Transformer"><a href="#LightSeq-Transformer" class="headerlink" title="LightSeq Transformer"></a>LightSeq Transformer</h3><p>使用LightSeq提供的Transformer进行训练的话，参数名LightSeq都知道的一清二楚，因此可以直接使用LightSeq提供的导出接口进行转换。过程和上面的Fairseq+LightSeq类似。</p><p>具体样例可以执行<code>python ls_transformer_export.py</code>，同时得到protobuf和hdf5格式的模型导出文件，并且对比两者生成的结果。这里的checkpoint可以使用上一章节中<code>自定义模型</code>小节中训练得到的模型。</p><h3 id="自定义模型-1"><a href="#自定义模型-1" class="headerlink" title="自定义模型"></a>自定义模型</h3><p>因为自定义的模型参数LightSeq无法识别参数名，所以需要用户自己编写转换规则。</p><p>举一个简单的例子，假设用户模型中有个encoder的输出部分的layer norm参数，state_dict中的参数名叫做<code>encoder.layer_norm.weight</code>。那么可以按如下方式进行转换：</p><pre class="line-numbers language-python"><code class="language-python">transformer <span class="token operator">=</span> Transformer<span class="token punctuation">(</span><span class="token punctuation">)</span>enc_norm_w <span class="token operator">=</span> state_dict<span class="token punctuation">[</span><span class="token string">"encoder.layer_norm.weight"</span><span class="token punctuation">]</span><span class="token punctuation">.</span>flatten<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>tolist<span class="token punctuation">(</span><span class="token punctuation">)</span>transformer<span class="token punctuation">.</span>src_embedding<span class="token punctuation">.</span>norm_scale<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">]</span> <span class="token operator">=</span> enc_norm_w<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre><h2 id="模型推理"><a href="#模型推理" class="headerlink" title="模型推理"></a>模型推理</h2><p>得到导出的protobuf或者hdf5模型后，推理就变得十分简单，核心代码就三行：</p><pre class="line-numbers language-python"><code class="language-python"><span class="token keyword">import</span> lightseq<span class="token punctuation">.</span>inference <span class="token keyword">as</span> lsimodel <span class="token operator">=</span> lsi<span class="token punctuation">.</span>Transformer<span class="token punctuation">(</span><span class="token string">"transformer.pb"</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">)</span>output <span class="token operator">=</span> model<span class="token punctuation">.</span>infer<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre><p>首先定义一个<code>Transformer</code>类用来加载模型参数，指定load的protobuf文路径和batch_size大小。</p><p>然后调用<code>infer</code>函数进行推理，传入的输入参数必须是list或者numpy类型，且必须是二维。</p><p>LightSeq在<code>examples/inference/python/test</code>目录下提供了三个Hugging Face模型推理的样例，此外上一小节中<code>examples/inference/python/export</code>中的<code>ls_transformer_export.py</code>代码也包含了导出后推理的过程。</p><h2 id="最佳实践"><a href="#最佳实践" class="headerlink" title="最佳实践"></a>最佳实践</h2><p>总结一下，使用LightSeq加速你的深度学习模型，最佳方式无外乎三步：</p><ol><li>接入LightSeq训练引擎的模型组件，构建模型，进行训练，保存checkpoint。</li><li>将checkpoint转换为protobuf或者hdf5格式，LightSeq的组件可以调用现成的转换接口，其它的需要自己手写转换规则。</li><li>调用LightSeq推理引擎，加载上一步中导出的模型，进行快速推理。</li></ol><p>目前LightSeq已经被广泛应用在字节跳动公司内外各项业务和学术研究上，支持了标准的Transformer、BERT、BART、GPT2、ViT等多种Transformer系列模型。只要你的模型中包含有Transformer的部分组件，例如encoder层，就可以直接调用LightSeq进行加速。</p><h2 id="联系方式"><a href="#联系方式" class="headerlink" title="联系方式"></a>联系方式</h2><p>如果在使用中遇到任何问题，或者有任何需求和建议，都可以在github issue中提出，或者加入LightSeq的飞书用户群：<br><a href="https://applink.feishu.cn/client/chat/chatter/add_by_link?link_token=936uf19e-966f-43f6-8401-269ab93ec38d" target="_blank" rel="noopener">https://applink.feishu.cn/client/chat/chatter/add_by_link?link_token=936uf19e-966f-43f6-8401-269ab93ec38d</a></p><p><img src="1.png" alt></p>]]></content>
       
       
       <categories>
           
-          <category> 随笔 </category>
+          <category> 深度学习 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> 火山翻译 </tag>
+            <tag> NLP </tag>
             
-            <tag> 工作体验 </tag>
+            <tag> 模型加速 </tag>
+            
+            <tag> LightSeq </tag>
             
         </tags>
       
@@ -90,6 +694,22 @@
         <content type="html"><![CDATA[<p>前几个月一直有不少小伙伴问我要<strong>LightSeq的BERT推理加速代码</strong>，当时内部已经使用了，但是一直没空整理开源。</p><p>现在代码终于整理好了，写了一个简单的样例，大家有需要的可以使用起来了。</p><h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><p>这里我直接使用预训练好的BERT模型，用户只需要输入一个带有<code>[MASK]</code>标记的句子，就可以自动预测出完整的句子。</p><p>例如我输入“巴黎是[MASK]国的首都”，那么模型就会输出“巴黎是法国的首都。”。</p><p>LightSeq已经<strong>完美支持了BERT模型的快速推理</strong>，代码近期已经开源：<br><a href="https://github.com/bytedance/lightseq" target="_blank" rel="noopener">https://github.com/bytedance/lightseq</a></p><p>BERT推理使用样例可以参考<code>examples/inference/python</code>目录下的<code>ls_bert.py</code>文件。我们用LightSeq来加速BERT推理试试。</p><p>首先需要安装LightSeq和Hugging Face：</p><pre class="line-numbers language-shell"><code class="language-shell">pip install lightseq transformers<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>然后需要将Hugging Face的BERT模型导出为LightSeq支持的HDF5模型格式，运行<code>examples/inference/python</code>目录下的<code>hf_bert_export.py</code>文件即可，运行前将代码的第167-168两行修改为下面这样，指定使用中文版本的BERT预训练模型。</p><pre class="line-numbers language-python"><code class="language-python">output_lightseq_model_name <span class="token operator">=</span> <span class="token string">"lightseq-bert-base-chinese"</span>input_huggingface_bert_model <span class="token operator">=</span> <span class="token string">"bert-base-chinese"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><p>然后就会在运行目录下生成一个<code>lightseq-bert-base-chinese.hdf5</code>模型文件，导出就成功啦。</p><p>最后使用LightSeq进行推理即可：</p><pre class="line-numbers language-python"><code class="language-python"><span class="token keyword">import</span> torch<span class="token keyword">from</span> transformers <span class="token keyword">import</span> AutoTokenizer<span class="token punctuation">,</span> AutoModelForMaskedLM<span class="token keyword">import</span> lightseq<span class="token punctuation">.</span>inference <span class="token keyword">as</span> lsitokenizer <span class="token operator">=</span> AutoTokenizer<span class="token punctuation">.</span>from_pretrained<span class="token punctuation">(</span><span class="token string">"bert-base-chinese"</span><span class="token punctuation">)</span>hf_model <span class="token operator">=</span> AutoModelForMaskedLM<span class="token punctuation">.</span>from_pretrained<span class="token punctuation">(</span><span class="token string">"bert-base-chinese"</span><span class="token punctuation">)</span>hf_model<span class="token punctuation">.</span>to<span class="token punctuation">(</span><span class="token string">"cuda:0"</span><span class="token punctuation">)</span>ls_model <span class="token operator">=</span> lsi<span class="token punctuation">.</span>Bert<span class="token punctuation">(</span><span class="token string">"lightseq-bert-base-chinese.hdf5"</span><span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">)</span><span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>    raw_text <span class="token operator">=</span> input<span class="token punctuation">(</span><span class="token string">"请输入中文句子，要预测的字符用#代替：\n> "</span><span class="token punctuation">)</span>    input_text <span class="token operator">=</span> raw_text<span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">"#"</span><span class="token punctuation">,</span> <span class="token string">"[MASK]"</span><span class="token punctuation">)</span>    inputs <span class="token operator">=</span> tokenizer<span class="token punctuation">(</span>input_text<span class="token punctuation">,</span> return_tensors<span class="token operator">=</span><span class="token string">"pt"</span><span class="token punctuation">)</span>    input_ids <span class="token operator">=</span> inputs<span class="token punctuation">[</span><span class="token string">"input_ids"</span><span class="token punctuation">]</span>    mask <span class="token operator">=</span> inputs<span class="token punctuation">[</span><span class="token string">"attention_mask"</span><span class="token punctuation">]</span>    outputs <span class="token operator">=</span> ls_model<span class="token punctuation">.</span>infer<span class="token punctuation">(</span>input_ids<span class="token punctuation">,</span> mask<span class="token punctuation">)</span>    logits <span class="token operator">=</span> hf_model<span class="token punctuation">.</span>cls<span class="token punctuation">(</span>torch<span class="token punctuation">.</span>Tensor<span class="token punctuation">(</span>outputs<span class="token punctuation">)</span><span class="token punctuation">.</span>to<span class="token punctuation">(</span>dtype<span class="token operator">=</span>torch<span class="token punctuation">.</span>float<span class="token punctuation">,</span> device<span class="token operator">=</span><span class="token string">"cuda:0"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>    output_ids <span class="token operator">=</span> logits<span class="token punctuation">.</span>argmax<span class="token punctuation">(</span>axis<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span>    res_text <span class="token operator">=</span> tokenizer<span class="token punctuation">.</span>batch_decode<span class="token punctuation">(</span>output_ids<span class="token punctuation">)</span>    res_text <span class="token operator">=</span> res_text<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">:</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">)</span>    output_text <span class="token operator">=</span> list<span class="token punctuation">(</span>raw_text<span class="token punctuation">)</span>    <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span>len<span class="token punctuation">(</span>raw_text<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>        <span class="token keyword">if</span> raw_text<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">"#"</span><span class="token punctuation">:</span>            output_text<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> res_text<span class="token punctuation">[</span>i<span class="token punctuation">]</span>    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"> "</span> <span class="token operator">+</span> <span class="token string">""</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span>output_text<span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><h2 id="效果演示"><a href="#效果演示" class="headerlink" title="效果演示"></a>效果演示</h2><p>给大家看看效果，运行我写好的代码，我们来看看会输出什么结果：</p><pre class="line-numbers language-text"><code class="language-text">请输入中文句子，要预测的字符用#代替：> 巴黎是#国的首都。> 巴黎是法国的首都。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre><h2 id="代码地址"><a href="#代码地址" class="headerlink" title="代码地址"></a>代码地址</h2><p><a href="https://github.com/bytedance/lightseq" target="_blank" rel="noopener">https://github.com/bytedance/lightseq</a></p><p>就在上周，首位外部贡献者出现了，修复了LightSeq的词嵌入表示的bug。<br><img src="2.png" alt></p><blockquote><p>在这里我们非常欢迎感兴趣的同学来贡献自己的代码，包括但不局限于：修复bug、提供训练和推理样例、支持更多模型结构。</p></blockquote>]]></content>
       
       
+      <categories>
+          
+          <category> 深度学习 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> NLP </tag>
+            
+            <tag> 模型加速 </tag>
+            
+            <tag> LightSeq </tag>
+            
+        </tags>
       
     </entry>
     
@@ -103,6 +723,20 @@
         <content type="html"><![CDATA[<p>周杰伦可以说是大多数90后的青春了，连我妈这种从来不咋看新闻的人也知道他。</p><p>你是否曾在初中时抄过他的歌词？你又是否曾经将他的歌词写进作文？</p><p>今天我就用大数据来分析一波他的所有歌词，带你认识一个你从未见过的周杰伦。<br><img src="2.png" alt></p><h2 id="获取周杰伦的所有歌词"><a href="#获取周杰伦的所有歌词" class="headerlink" title="获取周杰伦的所有歌词"></a>获取周杰伦的所有歌词</h2><p>这件事其实不难，我们写个代码从QQ音乐上自动收集就行了。说来也是心酸，以前一直用网易云音乐的，后来周杰伦版权没了，就只能投身了QQ音乐。</p><p>代码我都开源出来了，也不用大家自己运行，歌词文件我都放在下面了：<br><a href="https://github.com/godweiyang/lyric-crawler/tree/master/output" target="_blank" rel="noopener">https://github.com/godweiyang/lyric-crawler/tree/master/output</a></p><p>里面有两个歌词文件是关于周杰伦的：<code>周杰伦_歌词.txt</code>和<code>周杰伦_歌名.txt</code>，分别保存了他出道以来唱过的所有歌曲的歌词和按照专辑分类的歌曲名称，当然不包括演唱会和Live版本。</p><p>一共整整<strong>174</strong>首！这个数量已经是相当多了，当然这里面还包括了蔡依林和他合唱的两首歌：《骑士精神》和《布拉格广场》，还有李玟的《刀马旦》等等，我也都算进去了。</p><h2 id="谁作曲最多？"><a href="#谁作曲最多？" class="headerlink" title="谁作曲最多？"></a>谁作曲最多？</h2><p>经过简单统计可以惊人地发现，在174首歌曲中，周杰伦亲自作曲的歌曲竟然高达171首！</p><p>那三首非本人作曲的分别是袁咏琳作曲的《画沙》、派伟俊作曲的《Try》和Funky Monkey Babys作曲的《你是我的OK绷》。</p><p>老杰迷应该都知道杰伦的作曲是有多么的牛批。《夜曲》一响，上台领奖，颁奖词都说的词穷了。时至今日这首歌还是我的手机铃声。<br><img src="1.jpeg" alt></p><h2 id="谁作词最多？"><a href="#谁作词最多？" class="headerlink" title="谁作词最多？"></a>谁作词最多？</h2><p>统计下来可以发现作曲量排名前五位的分别是：</p><ul><li>方文山：96首</li><li>周杰伦：42首</li><li>黄俊郎：15首</li><li>徐若瑄：6首</li><li>宋健彰：4首</li></ul><p>大家应该都知道，周杰伦最好的搭档就是方文山。可以说方文山和周杰伦相互成就了对方，方文山的中国风配上周杰伦的曲简直就是天造地和。<br><img src="3.jpeg" alt></p><p>而杰伦自己作词的歌也不在少数，虽然很多人都吐槽他的《等你下课》和《不爱我就拉倒》歌词简单土味，但不可否认的是他也能写出《晴天》、《稻香》这样的神级歌曲。</p><h2 id="周杰伦最常用的词语"><a href="#周杰伦最常用的词语" class="headerlink" title="周杰伦最常用的词语"></a>周杰伦最常用的词语</h2><p>我对周杰伦所有的歌词统计了一下词频，生成了一个词云：<br><img src="4.png" alt></p><p>可以看到杰伦最常用的五个词语是：</p><ul><li>离开</li><li>回忆</li><li>微笑</li><li>世界</li><li>爱情</li></ul><p>周杰伦前期基本都是苦情歌，常使用这些词也不足为奇。比如《退后》中的“天空灰得像哭过，离开你以后，并没有，更自由”，《晴天》中的“好想再问一遍，你会等待还是离开”，《花海》中的“不要你离开，距离隔不开，思念变成海，在窗外进不来”，等等等等。</p><p>而到了后期，特别是结婚后，这种歌曲基本就销声匿迹了，更多的是《告白气球》这种甜歌：“花店玫瑰，名字写错谁，告白气球，风吹到对街，微笑在天上飞”。</p><h2 id="周杰伦最爱的季节"><a href="#周杰伦最爱的季节" class="headerlink" title="周杰伦最爱的季节"></a>周杰伦最爱的季节</h2><p>杰伦最爱什么季节呢？从他所有歌词中可以统计出，春夏秋冬四个季节分别出现的次数是：</p><ul><li>春天：7次</li><li>夏天：17次</li><li>秋天：33次</li><li>冬天：18次</li></ul><p>可以看出，周杰伦最爱写的季节其实还是秋天和冬天，这也符合他大多数歌曲都是苦情歌的实际情况。一首《枫》里的“缓缓飘落的枫叶像思念，为何挽回要赶在冬天来之前”，非常伤感。这首歌也成为了周杰伦唱的难度最高的歌之一，他本人几乎都没有在演唱会上唱过。</p><h2 id="周杰伦最爱的天气"><a href="#周杰伦最爱的天气" class="headerlink" title="周杰伦最爱的天气"></a>周杰伦最爱的天气</h2><p>粗略统计了一下，周杰伦最爱的三种天气是：</p><ul><li>雨天：150次</li><li>雪天：31次</li><li>晴天：12次</li></ul><p>其中雨天更是常客，《晴天》中的“刮风这天，我试过握着你手，但偏偏，雨渐渐，大到我看你不见”，《给我一首歌的时间》中的“雨淋湿了天空，毁得很讲究，你说你不懂，为何在这时牵手”。雨是最能寄托思念的物品，因此也成为了杰伦的最爱。</p><h2 id="周杰伦最爱的心情"><a href="#周杰伦最爱的心情" class="headerlink" title="周杰伦最爱的心情"></a>周杰伦最爱的心情</h2><p>人有四种心情，喜怒哀乐，分析周杰伦歌词中出现的心情词语，常用的有这么几个：</p><ul><li>喜（开心）：17次</li><li>怒（生气、怒火）：10次</li><li>哀（难过、忧伤）：41次</li><li>乐（快乐）：32次</li></ul><p>可以看出周杰伦表达最多的情感是哀，其次是乐，其实这也是前期苦情歌太多导致的。比如《黑色幽默》的第一句“难过是因为闷了很久，是因为想了太多，是心理起了作用”，作为第一张专辑中的主打歌曲，当时就已经走上了苦情歌的路了。</p><h2 id="2010年前后周杰伦歌曲对比"><a href="#2010年前后周杰伦歌曲对比" class="headerlink" title="2010年前后周杰伦歌曲对比"></a>2010年前后周杰伦歌曲对比</h2><p>网上很多人都持有一个观点，那就是从2010年周杰伦的《跨时代》专辑开始，他的专辑质量就出现了明显下滑。很多人还因此嘲讽，说什么江郎才尽之类的话。那么事实真的如此吗？我们还是用数据来说话。</p><h3 id="常用词语变化"><a href="#常用词语变化" class="headerlink" title="常用词语变化"></a>常用词语变化</h3><p>首先来看看2010年前后的最常用词语有哪些变化：<br><img src="5.png" alt><br><img src="6.png" alt></p><p>可以看到2010年以前最常用的词语是：离开、回忆、微笑、时间，而2010年之后最常用的词语变成了：hey、公公、世界、我会、微笑、靠靠。可以看出确实用词上2010年之后明显变得不如2010年之前了，这也正常，后期方文山为周杰伦作词也不如以前多了。</p><h3 id="作词变化"><a href="#作词变化" class="headerlink" title="作词变化"></a>作词变化</h3><p>那么方文山后期到底还为周杰伦作了多少词呢？我统计了2010年前后方文山和周杰伦各自作词的数量：</p><ul><li>2010年之前：方文山52首，周杰伦20首，总共93首</li><li>2010年之后：方文山29首，周杰伦16首，总共56首</li></ul><p>可以看到，周杰伦2010年之后作品数量减少很多，这几年甚至都不出专辑了。这也没办法，杰伦也不小了，但是他的神专已经足够多的让人难以超越了。</p><p>而2010年之后方文山虽然作词总数大幅减少，但是占比依然是很高的，同时周杰伦自己作词的占比提升不少。这也抨击了那些说周杰伦成名后就和方文山关系不好了之类的言论，最后一个专辑《周杰伦的床边故事》，方文山都还为周杰伦作词整整6首！</p><h2 id="做最好的自己"><a href="#做最好的自己" class="headerlink" title="做最好的自己"></a>做最好的自己</h2><p>周杰伦引领了2000年后中国的流行乐坛，开创了中国风歌曲的先河，很多歌曲现在听依然感觉领先整个时代。</p><p>他一直坚持自己的风格，很多歌都具有教育意义。《稻香》诉说了对家乡的思念，《止战之殇》诉说了对和平的渴望、《听妈妈的话》诉说了对妈妈的感恩，等等等等。《千山万水》更是被国家博物馆收藏，他也成为了北京奥运会唯一一位独唱的歌手，排面十足。</p><p>就像周杰伦在《土耳其冰淇淋》中唱的那样，炫技、牛批就完事了，要做就做不一样的自己：</p><blockquote><p>谁说拍中国风 一定要配灯笼<br>谁说写中国风 一定要商角徵羽宫<br>我干脆自己下车 指挥乐坛的交通<br>管他管他什么曲风</p></blockquote><p>这首也是《周杰伦的床边故事》专辑中周杰伦一手包办了作词、作曲、编曲的炫技歌曲。不像《告白气球》那样为了迎合大众而写的口水歌，这首歌表达出了周杰伦自己的个性，编曲也非常的厉害。</p><p><strong>感谢周杰伦，感谢你出现在了我的青春里。如果给我一次机会，我一定要去看一场你的演唱会！</strong></p>]]></content>
       
       
+      <categories>
+          
+          <category> 计算机知识 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 爬虫 </tag>
+            
+            <tag> 周杰伦 </tag>
+            
+        </tags>
       
     </entry>
     
@@ -1064,9 +1698,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1195,9 +1829,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1222,9 +1856,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1249,9 +1883,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1276,9 +1910,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1303,9 +1937,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1330,9 +1964,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1357,9 +1991,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1384,9 +2018,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1411,9 +2045,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1438,9 +2072,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1465,9 +2099,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1492,9 +2126,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1519,9 +2153,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1546,9 +2180,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1573,9 +2207,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1600,9 +2234,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1627,9 +2261,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1654,9 +2288,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1681,9 +2315,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1708,9 +2342,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1762,9 +2396,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1789,9 +2423,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1816,9 +2450,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1843,9 +2477,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1870,9 +2504,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1897,9 +2531,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1924,9 +2558,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1951,9 +2585,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -1978,9 +2612,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2005,9 +2639,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2032,9 +2666,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2059,9 +2693,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2086,9 +2720,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2113,9 +2747,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2140,9 +2774,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2167,9 +2801,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2194,9 +2828,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2221,9 +2855,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2248,9 +2882,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2275,9 +2909,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2302,9 +2936,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2329,9 +2963,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2356,9 +2990,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2383,9 +3017,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2410,9 +3044,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2437,9 +3071,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2464,9 +3098,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2491,9 +3125,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2518,9 +3152,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2545,9 +3179,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2572,9 +3206,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2599,9 +3233,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2626,9 +3260,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2682,9 +3316,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2709,9 +3343,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2736,9 +3370,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2763,9 +3397,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2790,9 +3424,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2817,9 +3451,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2844,9 +3478,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2871,9 +3505,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2898,9 +3532,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2925,9 +3559,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -2977,9 +3611,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3004,9 +3638,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3031,9 +3665,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3058,9 +3692,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3112,9 +3746,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3139,9 +3773,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3166,9 +3800,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3193,9 +3827,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3220,9 +3854,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3247,9 +3881,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3274,9 +3908,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3301,9 +3935,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3328,9 +3962,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3355,9 +3989,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3382,9 +4016,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3409,9 +4043,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3436,9 +4070,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3490,9 +4124,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3517,9 +4151,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3544,9 +4178,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3571,9 +4205,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3598,9 +4232,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3625,9 +4259,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3652,9 +4286,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3679,9 +4313,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3706,9 +4340,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3733,9 +4367,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3760,9 +4394,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3812,9 +4446,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3839,9 +4473,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3866,9 +4500,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3893,9 +4527,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3920,9 +4554,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3947,9 +4581,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -3974,9 +4608,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -4001,9 +4635,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -4028,9 +4662,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -4055,9 +4689,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -4082,9 +4716,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -4134,9 +4768,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -4161,9 +4795,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -4188,9 +4822,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -4215,9 +4849,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -4242,9 +4876,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -4298,9 +4932,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -4325,9 +4959,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -4377,9 +5011,9 @@
       
         <tags>
             
-            <tag> leetcode </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> leetcode </tag>
             
         </tags>
       
@@ -5662,9 +6296,9 @@
             
             <tag> 博客 </tag>
             
-            <tag> hexo </tag>
-            
             <tag> github </tag>
+            
+            <tag> hexo </tag>
             
         </tags>
       
@@ -5829,7 +6463,7 @@
       <link href="/2018/03/12/concrete-math-3/"/>
       <url>/2018/03/12/concrete-math-3/</url>
       
-        <content type="html"><![CDATA[<blockquote><p>关注公众号【算法码上来】，每日算法干货马上就来！</p></blockquote><p><img src="/medias/contact.jpg" alt></p><p>今天讲了一种将递归式转化为求和的方法。</p><p>考虑如下递归式：<br>\[{a_n}{T_n} = {b_n}{T_{n - 1}} + {c_n}\]<br>两边同时乘以$s_n$得到：<br>\[{s_n}{a_n}{T_n} = {s_n}{b_n}{T_{n - 1}} + {s_n}{c_n}\]<br>要想转化成可以求和的递归式，那么必须有：<br>\[{s_n}{b_n} = {s_{n - 1}}{a_{n - 1}}\]<br>也就是：<br>\[{s_n} = \frac { { {a_{n - 1}}{a_{n - 2}} \cdots {a_1}}}{ { {b_n}{b_{n - 1}} \cdots {b_2}}}\]<br>这时令<br>\[{S_n} = {s_n}{a_n}{T_n}\]<br>得到：<br>\[{S_n} = {S_{n - 1}} + {s_n}{c_n}\]<br>这时就可以转化为求和了，解出：<br>\[{S_n} = {s_0}{a_0}{T_0} + \sum\limits_{k = 1}^n { {s_k}{c_k}} \]<br>所以<br>\[{T_n} = \frac{1}{ { {s_n}{a_n}}}({s_0}{a_0}{T_0} + \sum\limits_{k = 1}^n { {s_k}{c_k}} )\]</p><h1 id="例题1"><a href="#例题1" class="headerlink" title="例题1"></a>例题1</h1><hr><p>设$n$个数快速排序的操作次数为$C_n$，那么有<br>\[\begin{array}{l}{C_0} = 0\\{C_n} = n + 1 + \frac{2}{n}\sum\limits_{k = 0}^{n - 1} { {C_k}} ,n &gt; 0\end{array}\]<br>用$n-1$取代$n$可以得到<br>\[{C_{n - 1}} = n + \frac{2}{ {n - 1}}\sum\limits_{k = 0}^{n - 2} { {C_k}} ,n &gt; 1\]<br>两式相减可以得到<br>\[\begin{array}{l}{C_0} = 0\\n{C_n} = (n + 1){C_{n - 1}} + 2n,n &gt; 0\end{array}\]<br>由上面方法可以得到<br>\[{a_n} = n,{b_n} = n + 1,{c_n} = 2n\]<br>所以<br>\[{s_n} = \frac{2}{ {n(n + 1)}}\]<br>进而可以求出<br>\[{C_n} = 2(n + 1)\sum\limits_{k = 1}^n {\frac{1}{ {k + 1}}} \]<br>这里介绍一个概念叫做调和级数：<br>\[{H_n} = 1 + \frac{1}{2} +  \cdots  + \frac{1}{n} = \sum\limits_{k = 1}^n {\frac{1}{k}} \]<br>所以<br>\[{C_n} = 2(n + 1){H_n} - 2n\]</p><h1 id="求和三大定律"><a href="#求和三大定律" class="headerlink" title="求和三大定律"></a>求和三大定律</h1><hr><p>结合律、分配率、交换律。这里就不展开说了，相信你们都知道的。<br>来两题简单的例题说明一下。</p><h1 id="例题2"><a href="#例题2" class="headerlink" title="例题2"></a>例题2</h1><hr><p>求<br>\[S = \sum\limits_{0 \le k \le n} {(a + bk)} \]<br>普通的方法每个人应该都会，等差数列嘛。这里用求和定律来做一做。<br>用$n-k$取代$k$，得到<br>\[S = \sum\limits_{0 \le n - k \le n} {(a + b(n - k))} \]<br>即<br>\[S = \sum\limits_{0 \le k \le n} {(a + b(n - k))} \]<br>两式相加得到<br>\[2S = \sum\limits_{0 \le k \le n} {(2a + bn)}  = (2a + bn)\sum\limits_{0 \le k \le n} 1  = (2a + bn)(n + 1)\]<br>所以<br>\[S = (2a + bn)(n + 1)/2\]</p><h1 id="例题3"><a href="#例题3" class="headerlink" title="例题3"></a>例题3</h1><hr><p>求<br>\[S = \sum\limits_{0 \le k \le n} {k{x^k}} \]<br>这里用到另一种求和的方法。<br>两边同时加上第$n+1$项，得到<br>\[\begin{array}{l}S + (n + 1){x^{n + 1}}\\ = \sum\limits_{0 \le k \le n + 1} {k{x^k}} \\ = \sum\limits_{1 \le k \le n + 1} {k{x^k}} \\ = \sum\limits_{0 \le k \le n} {(k + 1){x^{k + 1}}} \\ = x\sum\limits_{0 \le k \le n} {(k{x^k} + {x^k})} \\ = xS + x\sum\limits_{0 \le k \le n} { {x^k}} \\ = xS + x\frac{ {1 - {x^{n + 1}}}}{ {1 - x}}\end{array}\]<br>所以<br>\[S = \frac{ {x - (n + 1){x^{n + 1}} + n{x^{n + 2}}}}{ { { {(1 - x)}^2}}}\]<br>这里介绍另一种方法来求解。<br>令<br>\[f(x) = \sum\limits_{0 \le k \le n} { {x^k}}  = \frac{ {1 - {x^{n + 1}}}}{ {1 - x}}\]<br>求导得到<br>\[f’(x) = \sum\limits_{0 \le k \le n} {k{x^{k - 1}}}  = \frac{1}{x}S\]<br>所以<br>\[\frac{1}{x}S = \frac{ {\partial f}}{ {\partial x}}(\frac{ {1 - {x^{n + 1}}}}{ {1 - x}}) = \frac{ {1 - (n + 1){x^n} + n{x^{n + 1}}}}{ { { {(1 - x)}^2}}}\]<br>同样可以得到<br>\[S = \frac{ {x - (n + 1){x^{n + 1}} + n{x^{n + 2}}}}{ { { {(1 - x)}^2}}}\]</p>]]></content>
+        <content type="html"><![CDATA[<blockquote><p>关注公众号【算法码上来】，每日算法干货马上就来！</p></blockquote><p><img src="/medias/contact.jpg" alt></p><p>今天讲了一种将递归式转化为求和的方法。 </p><p>考虑如下递归式：<br>\[{a_n}{T_n} = {b_n}{T_{n - 1}} + {c_n}\]<br>两边同时乘以$s_n$得到：<br>\[{s_n}{a_n}{T_n} = {s_n}{b_n}{T_{n - 1}} + {s_n}{c_n}\]<br>要想转化成可以求和的递归式，那么必须有：<br>\[{s_n}{b_n} = {s_{n - 1}}{a_{n - 1}}\]<br>也就是：<br>\[{s_n} = \frac { { {a_{n - 1}}{a_{n - 2}} \cdots {a_1}}}{ { {b_n}{b_{n - 1}} \cdots {b_2}}}\]<br>这时令<br>\[{S_n} = {s_n}{a_n}{T_n}\]<br>得到：<br>\[{S_n} = {S_{n - 1}} + {s_n}{c_n}\]<br>这时就可以转化为求和了，解出：<br>\[{S_n} = {s_0}{a_0}{T_0} + \sum\limits_{k = 1}^n { {s_k}{c_k}} \]<br>所以<br>\[{T_n} = \frac{1}{ { {s_n}{a_n}}}({s_0}{a_0}{T_0} + \sum\limits_{k = 1}^n { {s_k}{c_k}} )\]</p><h1 id="例题1"><a href="#例题1" class="headerlink" title="例题1"></a>例题1</h1><hr><p>设$n$个数快速排序的操作次数为$C_n$，那么有<br>\[\begin{array}{l}{C_0} = 0\\{C_n} = n + 1 + \frac{2}{n}\sum\limits_{k = 0}^{n - 1} { {C_k}} ,n &gt; 0\end{array}\]<br>用$n-1$取代$n$可以得到<br>\[{C_{n - 1}} = n + \frac{2}{ {n - 1}}\sum\limits_{k = 0}^{n - 2} { {C_k}} ,n &gt; 1\]<br>两式相减可以得到<br>\[\begin{array}{l}{C_0} = 0\\n{C_n} = (n + 1){C_{n - 1}} + 2n,n &gt; 0\end{array}\]<br>由上面方法可以得到<br>\[{a_n} = n,{b_n} = n + 1,{c_n} = 2n\]<br>所以<br>\[{s_n} = \frac{2}{ {n(n + 1)}}\]<br>进而可以求出<br>\[{C_n} = 2(n + 1)\sum\limits_{k = 1}^n {\frac{1}{ {k + 1}}} \]<br>这里介绍一个概念叫做调和级数：<br>\[{H_n} = 1 + \frac{1}{2} +  \cdots  + \frac{1}{n} = \sum\limits_{k = 1}^n {\frac{1}{k}} \]<br>所以<br>\[{C_n} = 2(n + 1){H_n} - 2n\]</p><h1 id="求和三大定律"><a href="#求和三大定律" class="headerlink" title="求和三大定律"></a>求和三大定律</h1><hr><p>结合律、分配率、交换律。这里就不展开说了，相信你们都知道的。<br>来两题简单的例题说明一下。</p><h1 id="例题2"><a href="#例题2" class="headerlink" title="例题2"></a>例题2</h1><hr><p>求<br>\[S = \sum\limits_{0 \le k \le n} {(a + bk)} \]<br>普通的方法每个人应该都会，等差数列嘛。这里用求和定律来做一做。<br>用$n-k$取代$k$，得到<br>\[S = \sum\limits_{0 \le n - k \le n} {(a + b(n - k))} \]<br>即<br>\[S = \sum\limits_{0 \le k \le n} {(a + b(n - k))} \]<br>两式相加得到<br>\[2S = \sum\limits_{0 \le k \le n} {(2a + bn)}  = (2a + bn)\sum\limits_{0 \le k \le n} 1  = (2a + bn)(n + 1)\]<br>所以<br>\[S = (2a + bn)(n + 1)/2\]</p><h1 id="例题3"><a href="#例题3" class="headerlink" title="例题3"></a>例题3</h1><hr><p>求<br>\[S = \sum\limits_{0 \le k \le n} {k{x^k}} \]<br>这里用到另一种求和的方法。<br>两边同时加上第$n+1$项，得到<br>\[\begin{array}{l}S + (n + 1){x^{n + 1}}\\ = \sum\limits_{0 \le k \le n + 1} {k{x^k}} \\ = \sum\limits_{1 \le k \le n + 1} {k{x^k}} \\ = \sum\limits_{0 \le k \le n} {(k + 1){x^{k + 1}}} \\ = x\sum\limits_{0 \le k \le n} {(k{x^k} + {x^k})} \\ = xS + x\sum\limits_{0 \le k \le n} { {x^k}} \\ = xS + x\frac{ {1 - {x^{n + 1}}}}{ {1 - x}}\end{array}\]<br>所以<br>\[S = \frac{ {x - (n + 1){x^{n + 1}} + n{x^{n + 2}}}}{ { { {(1 - x)}^2}}}\]<br>这里介绍另一种方法来求解。<br>令<br>\[f(x) = \sum\limits_{0 \le k \le n} { {x^k}}  = \frac{ {1 - {x^{n + 1}}}}{ {1 - x}}\]<br>求导得到<br>\[f’(x) = \sum\limits_{0 \le k \le n} {k{x^{k - 1}}}  = \frac{1}{x}S\]<br>所以<br>\[\frac{1}{x}S = \frac{ {\partial f}}{ {\partial x}}(\frac{ {1 - {x^{n + 1}}}}{ {1 - x}}) = \frac{ {1 - (n + 1){x^n} + n{x^{n + 1}}}}{ { { {(1 - x)}^2}}}\]<br>同样可以得到<br>\[S = \frac{ {x - (n + 1){x^{n + 1}} + n{x^{n + 2}}}}{ { { {(1 - x)}^2}}}\]</p>]]></content>
       
       
       <categories>
