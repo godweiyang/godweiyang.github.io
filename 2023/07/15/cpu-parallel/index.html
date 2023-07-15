@@ -536,8 +536,8 @@
 <p>具体的用法和作用我都写在测试代码对应位置的注释里了，执行时间也加上了，很详细！代码也放下面链接了：<br><a href="https://github.com/godweiyang/cpu_parallel" target="_blank" rel="noopener">https://github.com/godweiyang/cpu_parallel</a></p>
 <p>不想看的我直接总结一下，大多数时候：</p>
 <ul>
-<li><strong>计算密集型情况下，用多进程的<code>map_sync</code>一次性传入所有任务列表。</strong></li>
-<li><strong>I/O密集型情况下，CPU够多的话多进程<code>map_sync</code>和多线程<code>map</code>都行，CPU很少的话用多线程<code>map</code>，都是一次性传入所有任务列表。</strong></li>
+<li><strong>计算密集型情况下，用多进程的<code>map_async</code>一次性传入所有任务列表。</strong></li>
+<li><strong>I/O密集型情况下，CPU够多的话多进程<code>map_async</code>和多线程<code>map</code>都行，CPU很少的话用多线程<code>map</code>，都是一次性传入所有任务列表。</strong></li>
 </ul>
 <p>注意多进程不要定义很占内存的变量，因为每个子进程都会复制所有内存空间，可能会OOM，并且很耗时。</p>
 <h3 id="计算密集型任务"><a href="#计算密集型任务" class="headerlink" title="计算密集型任务"></a>计算密集型任务</h3><p>测试的方法是计算1到n求和，一共同时计算5个不同的n，n比较大。显然这是一个计算密集型任务，非常吃CPU性能。</p>
@@ -676,7 +676,7 @@ TIME: 11.41776990890503
 map方法可以一次性提交一个可迭代的对象（例如这里的列表），
 然后方法内部会迭代这个对象，将元素依次送到func中执行，注意是无序执行的。
 map方法是阻塞的，也就是说所有任务全部执行完才会返回results，返回顺序也是有序的。
-如果一次性提交了所有任务构成的列表，那么map和apply_sync几乎没有任何区别。
+如果一次性提交了所有任务构成的列表，那么map和apply_async几乎没有任何区别。
 如果手动对任务进行了分块，一块一块提交到map里，那么可能会更慢，
 因为同一块中的任务执行时间会有差异，会出现进程等待。
 
@@ -705,7 +705,7 @@ TIME: 11.016913414001465
 和map的区别就是非阻塞的，传入一个可迭代对象之后会立即返回MapResult对象，
 之后需要用MapResult.get()方法来阻塞获取计算结果，
 直到这个可迭代对象的任务全部执行完，返回结果列表，才会继续获取下一个可迭代对象的结果。
-这个过程其实和apply_sync基本一样，只是把单个元素换成了可迭代对象。
+这个过程其实和apply_async基本一样，只是把单个元素换成了可迭代对象。
 
 运行结果（block=False）：
 sum(100000000)=4999999950000000
@@ -836,7 +836,7 @@ TIME: 11.718666076660156
 
 <span class="token triple-quoted-string string">'''多线程submit方法
 submit方法是非阻塞的，会立刻返回Future对象，然后通过Future.result()获取计算结果，
-和多进程的apply_sync很像，但是因为GIL的存在，同一时刻只会计算一个sum，所以等同于串行计算。
+和多进程的apply_async很像，但是因为GIL的存在，同一时刻只会计算一个sum，所以等同于串行计算。
 
 运行结果：
 sum(100000001)=5000000050000000
