@@ -1,0 +1,1886 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="超详细Hexo+Github博客搭建小白教程, 算法码上来 字节跳动 算法工程师 ECNU NLP DeepLearning AntNLP 韦阳 godweiyang WeiYang 自然语言处理 深度学习">
+    <meta name="baidu-site-verification" content="fmlEuI34ir">
+    <meta name="google-site-verification" content="yCy2azpds5XSuGZvis6OuA-XIGF5GuGpYRAaGfD6o48">
+    <meta name="360-site-verification" content="b7c11a830ef90fd1464ad6206bb7b6e7">
+    <meta name="description" content="
+关注公众号【算法码上来】，每日算法干货马上就来！
+
+
+
+关注我公众号：算法码上来，获取实时更新。有任何问题请加 QQ 技术交流群【群号：864832264】。如果觉得有用的话可以看心情打赏一杯奶茶，我会很开心哒。
+
+我的博客源代码地址大家">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>超详细Hexo+Github博客搭建小白教程 | 韦阳的博客</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    <style type="text/css">
+        
+    </style>
+
+    <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
+    <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+    <script>
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?ce84511d3df71640a9378a69f6293044";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+    
+        <script>
+            (function(){
+                var bp = document.createElement('script');
+                var curProtocol = window.location.protocol.split(':')[0];
+                if (curProtocol === 'https') {
+                    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+                }
+                else {
+                    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+                }
+                var s = document.getElementsByTagName("script")[0];
+                s.parentNode.insertBefore(bp, s);
+            })();
+        </script>
+    
+
+    <script>
+        (function(){
+        var src = "https://jspassport.ssl.qhimg.com/11.0.1.js?d182b3f28525f2db83acfaaf6e696dba";
+        document.write('<script src="' + src + '" id="sozz"><\/script>');
+        })();
+    </script>
+
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+<body>
+
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">韦阳的博客</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fa fa-navicon"></i></a>
+<ul class="right">
+    
+    <li class="hide-on-med-and-down">
+        <a href="/" class="waves-effect waves-light">
+            
+            <i class="fa fa-home"></i>
+            
+            <span>首页</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/tags" class="waves-effect waves-light">
+            
+            <i class="fa fa-tags"></i>
+            
+            <span>标签</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories" class="waves-effect waves-light">
+            
+            <i class="fa fa-bookmark"></i>
+            
+            <span>分类</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/archives" class="waves-effect waves-light">
+            
+            <i class="fa fa-archive"></i>
+            
+            <span>归档</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/about" class="waves-effect waves-light">
+            
+            <i class="fa fa-user-circle-o"></i>
+            
+            <span>关于</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/friends" class="waves-effect waves-light">
+            
+            <i class="fa fa-address-book"></i>
+            
+            <span>友情链接</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/contact" class="waves-effect waves-light">
+            
+            <i class="fa fa-comments"></i>
+            
+            <span>留言板</span>
+        </a>
+    </li>
+    
+    <li>
+        <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+            <i id="searchIcon" class="fa fa-search" title="搜索"></i>
+        </a>
+    </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">韦阳的博客</div>
+        <div class="logo-desc">
+            
+            字节跳动 | AI Lab | 算法工程师
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li>
+            <a href="/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-home"></i>
+                
+                首页
+            </a>
+        </li>
+        
+        <li>
+            <a href="/tags" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-tags"></i>
+                
+                标签
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-bookmark"></i>
+                
+                分类
+            </a>
+        </li>
+        
+        <li>
+            <a href="/archives" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-archive"></i>
+                
+                归档
+            </a>
+        </li>
+        
+        <li>
+            <a href="/about" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-user-circle-o"></i>
+                
+                关于
+            </a>
+        </li>
+        
+        <li>
+            <a href="/friends" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-address-book"></i>
+                
+                友情链接
+            </a>
+        </li>
+        
+        <li>
+            <a href="/contact" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-comments"></i>
+                
+                留言板
+            </a>
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/godweiyang/hexo-matery-modified" class="waves-effect waves-light" target="_blank">
+                <i class="fa fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/godweiyang/hexo-matery-modified" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+<script src="/libs/cryptojs/crypto-js.min.js"></script>
+<script>
+    (function() {
+        let pwd = '';
+        if (pwd && pwd.length > 0) {
+            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
+                alert('密码错误，将返回主页！');
+                location.href = '/';
+            }
+        }
+    })();
+</script>
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/9.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        超详细Hexo+Github博客搭建小白教程
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 20px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                        <a href="/tags/博客/" target="_blank">
+                            <span class="chip bg-color">博客</span>
+                        </a>
+                        
+                        <a href="/tags/github/" target="_blank">
+                            <span class="chip bg-color">github</span>
+                        </a>
+                        
+                        <a href="/tags/hexo/" target="_blank">
+                            <span class="chip bg-color">hexo</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fa fa-bookmark fa-fw icon-category"></i>
+                        
+                        <a href="/categories/计算机知识/" class="post-category" target="_blank">
+                            计算机知识
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                <div class="post-date info-break-policy">
+                    <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2018-04-13
+                </div>
+
+                <div class="post-author info-break-policy">
+                    <i class="fa fa-user-o fa-fw"></i>作者:&nbsp;&nbsp;
+                    
+                    韦阳
+                    
+                </div>
+
+                
+                
+                <div class="info-break-policy">
+                    <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    8.4k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    34 分
+                </div>
+                
+                
+
+                
+                <div id="busuanzi_container_page_pv" class="info-break-policy">
+                    <i class="fa fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                    <span id="busuanzi_value_page_pv"></span>
+                </div>
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <blockquote>
+<p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
+</blockquote>
+<p><img src="/medias/contact.jpg" alt></p>
+<blockquote>
+<p><strong>关注我公众号：算法码上来，获取实时更新</strong>。有任何问题请加 QQ 技术交流群【群号：864832264】。如果觉得有用的话可以看心情打赏一杯奶茶，我会很开心哒。</p>
+</blockquote>
+<h1 id="我的博客源代码地址"><a href="#我的博客源代码地址" class="headerlink" title="我的博客源代码地址"></a>我的博客源代码地址</h1><p>大家可以直接素质二连，star&amp;fork我的博客源代码：<a href="https://github.com/godweiyang/hexo-matery-modified" target="_blank" rel="noopener">https://github.com/godweiyang/hexo-matery-modified</a>，然后改改配置就可以写文章啦。</p>
+<p>为了减小源码的体积，我将插件目录<code>node_modules</code>进行了压缩，大家下载完后需要解压。另外添加水印需要的字体文件我也删除了，大家可以直接从电脑自带的字体库中拷贝。</p>
+<ul>
+<li>首先运行<code>git clone git@github.com:godweiyang/hexo-matery-modified.git</code>将所有文件下载到本地。</li>
+<li>解压<code>node_modules.zip</code>，然后删除<code>node_modules.zip</code>和<code>.git</code>文件夹。</li>
+<li>还缺一个字体（为图片添加水印需要用到），去<code>C:\Windows\Fonts</code>下找到<code>STSong Regular</code>，复制到<code>hexo-matery-modified</code>文件夹下。</li>
+</ul>
+<h1 id="快速搭建"><a href="#快速搭建" class="headerlink" title="快速搭建"></a>快速搭建</h1><p>如果你不想自己从头开始慢慢自定义主题的话，可以直接下载我的修改好的主题，然后稍微修改几个地方就好了：</p>
+<ul>
+<li>根目录配置文件<code>_config.yml</code>和主题目录配置文件<code>_config.yml</code>中修改个人信息。</li>
+<li>根目录配置文件中修改<code>deploy</code>一栏的<code>repository</code>。</li>
+<li>根目录配置文件中修改<code>baidu_url_submit</code>一栏的<code>token</code>。</li>
+<li>主题配置文件中修改<code>gitalk</code>一栏，修改方法见正文。</li>
+</ul>
+<p><strong>当然前提是个性化设置章节之前的环境还是需要配置好！</strong></p>
+<p>平时常用命令：</p>
+<pre class="line-numbers language-txt"><code class="language-txt">hexo g  # 生成博客网页文件
+hexo s  # 本地预览博客
+hexo d  # 上传网页文件到github<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>17年9月的时候开始搭建了第一个自己的独立博客，到现在也稍微像模像样了。很多小伙伴应该也想过搭建一个自己的博客，网上也有一堆详细教程。我在此稍稍总结一下具体的搭建步骤，另外网上很少有修改博客源码的个性化教程，我就稍稍分享一下我的一些修改经验，更多的个性化操作需要你自己以后去摸索。</p>
+<p>具体效果可以参观我的博客：<a href="https://godweiyang.com">godweiyang.com</a>，欢迎大家支持。</p>
+<p>我不是一个前端程序员，有些东西不是很了解，写的有问题或有改进的地方请大家指出。</p>
+<p>首先要了解一下我们搭建博客要用到的框架。Hexo是高效的静态站点生成框架，它基于Node.js。通过Hexo，你可以直接使用Markdown语法来撰写博客。相信很多小伙伴写工程都写过README.md文件吧，对，就是这个格式的！写完后只需两三条命令即可将生成的网页上传到你的github上，然后别人就可以看到你的网页啦。是不是很简单？你无需关心网页源代码的具体细节，你只需要用心写好你的博客内容就行。</p>
+<p><strong>目录结构</strong></p>
+<ul>
+<li>安装Node.js</li>
+<li>添加国内镜像源</li>
+<li>安装Git</li>
+<li>注册Github账号</li>
+<li>安装Hexo</li>
+<li>连接Github与本地</li>
+<li>写文章、发布文章</li>
+<li>绑定域名</li>
+<li>备份博客源文件</li>
+<li>博客源代码下载</li>
+<li>个性化设置（matery主题）</li>
+<li>常见问题及解答（FAQ）</li>
+<li>个性化设置（beantech主题，已停更）</li>
+</ul>
+<h1 id="安装Node-js"><a href="#安装Node-js" class="headerlink" title="安装Node.js"></a>安装Node.js</h1><p>首先下载稳定版<a href="https://nodejs.org/dist/v9.11.1/node-v9.11.1-x64.msi" target="_blank" rel="noopener">Node.js</a>，我这里给的是64位的。</p>
+<p>安装选项全部默认，一路点击<code>Next</code>。</p>
+<p>最后安装好之后，按<code>Win+R</code>打开命令提示符，输入<code>node -v</code>和<code>npm -v</code>，如果出现版本号，那么就安装成功了。</p>
+<h1 id="添加国内镜像源"><a href="#添加国内镜像源" class="headerlink" title="添加国内镜像源"></a>添加国内镜像源</h1><p>如果没有梯子的话，可以使用阿里的国内镜像进行加速。</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token function">npm</span> config <span class="token keyword">set</span> registry https://registry.npm.taobao.org<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h1 id="安装Git"><a href="#安装Git" class="headerlink" title="安装Git"></a>安装Git</h1><p>为了把本地的网页文件上传到github上面去，我们需要用到分布式版本控制工具————Git<a href="https://git-scm.com/download/win" target="_blank" rel="noopener">[下载地址]</a>。</p>
+<p>安装选项还是全部默认，只不过最后一步添加路径时选择<code>Use Git from the Windows Command Prompt</code>，这样我们就可以直接在命令提示符里打开git了。</p>
+<p>安装完成后在命令提示符中输入<code>git --version</code>验证是否安装成功。</p>
+<h1 id="注册Github账号"><a href="#注册Github账号" class="headerlink" title="注册Github账号"></a>注册Github账号</h1><p>接下来就去注册一个github账号，用来存放我们的网站。大多数小伙伴应该都有了吧，作为一个合格的程序猿（媛）还是要有一个的。</p>
+<p>打开<a href="https://github.com/" target="_blank" rel="noopener">https://github.com/</a>，新建一个项目，如下所示：<br><img src="1.jpg" alt><br>然后如下图所示，输入自己的项目名字，后面一定要加<code>.github.io</code>后缀，README初始化也要勾上。<strong>名称一定要和你的github名字完全一样，比如你github名字叫<code>abc</code>，那么仓库名字一定要是<code>abc.github.io</code>。</strong><br><img src="2.jpg" alt><br>然后项目就建成了，点击<code>Settings</code>，向下拉到最后有个<code>GitHub Pages</code>，点击<code>Choose a theme</code>选择一个主题。然后等一会儿，再回到<code>GitHub Pages</code>，会变成下面这样：<br><img src="3.jpg" alt><br>点击那个链接，就会出现自己的网页啦，效果如下：<br><img src="4.jpg" alt></p>
+<h1 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h1><p>在合适的地方新建一个文件夹，用来存放自己的博客文件，比如我的博客文件都存放在<code>D:\study\program\blog</code>目录下。</p>
+<p>在该目录下右键点击<code>Git Bash Here</code>，打开git的控制台窗口，以后我们所有的操作都在git控制台进行，就不要用Windows自带的控制台了。</p>
+<p>定位到该目录下，输入<code>npm i hexo-cli -g</code>安装Hexo。会有几个报错，无视它就行。</p>
+<p>安装完后输入<code>hexo -v</code>验证是否安装成功。</p>
+<p>然后就要初始化我们的网站，输入<code>hexo init</code>初始化文件夹，接着输入<code>npm install</code>安装必备的组件。</p>
+<p>这样本地的网站配置也弄好啦，输入<code>hexo g</code>生成静态网页，然后输入<code>hexo s</code>打开本地服务器，然后浏览器打开<a href="http://localhost:4000/" target="_blank" rel="noopener">http://localhost:4000/</a>，就可以看到我们的博客啦，效果如下：<br><img src="5.jpg" alt></p>
+<p>按<code>ctrl+c</code>关闭本地服务器。</p>
+<h1 id="连接Github与本地"><a href="#连接Github与本地" class="headerlink" title="连接Github与本地"></a>连接Github与本地</h1><p>首先右键打开git bash，然后输入下面命令：</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token function">git</span> config --global user.name <span class="token string">"godweiyang"</span>
+<span class="token function">git</span> config --global user.email <span class="token string">"792321264@qq.com"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>用户名和邮箱根据你注册github的信息自行修改。</p>
+<p>然后生成密钥SSH key：</p>
+<pre class="line-numbers language-bash"><code class="language-bash">ssh-keygen -t rsa -C <span class="token string">"792321264@qq.com"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>打开<a href="http://github.com" target="_blank" rel="noopener">github</a>，在头像下面点击<code>settings</code>，再点击<code>SSH and GPG keys</code>，新建一个SSH，名字随便。</p>
+<p>git bash中输入</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token function">cat</span> ~/.ssh/id_rsa.pub<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>将输出的内容复制到框中，点击确定保存。</p>
+<p>输入<code>ssh -T git@github.com</code>，如果如下图所示，出现你的用户名，那就成功了。<br><img src="6.jpg" alt></p>
+<p>打开博客根目录下的<code>_config.yml</code>文件，这是博客的配置文件，在这里你可以修改与博客相关的各种信息。</p>
+<p>修改最后一行的配置：</p>
+<pre class="line-numbers language-bash"><code class="language-bash">deploy:
+  type: <span class="token function">git</span>
+  repository: https://github.com/godweiyang/godweiyang.github.io
+  branch: master<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>repository修改为你自己的github项目地址。</p>
+<h1 id="写文章、发布文章"><a href="#写文章、发布文章" class="headerlink" title="写文章、发布文章"></a>写文章、发布文章</h1><p>首先在博客根目录下右键打开git bash，安装一个扩展<code>npm i hexo-deployer-git</code>。</p>
+<p>然后输入<code>hexo new post &quot;article title&quot;</code>，新建一篇文章。</p>
+<p>然后打开<code>D:\study\program\blog\source\_posts</code>的目录，可以发现下面多了一个文件夹和一个<code>.md</code>文件，一个用来存放你的图片等数据，另一个就是你的文章文件啦。</p>
+<p>编写完markdown文件后，根目录下输入<code>hexo g</code>生成静态网页，然后输入<code>hexo s</code>可以本地预览效果，最后输入<code>hexo d</code>上传到github上。这时打开你的github.io主页就能看到发布的文章啦。</p>
+<h1 id="绑定域名"><a href="#绑定域名" class="headerlink" title="绑定域名"></a>绑定域名</h1><p>现在默认的域名还是<code>xxx.github.io</code>，是不是很没有牌面？想不想也像我一样弄一个专属域名呢，首先你得购买一个域名，xx云都能买，看你个人喜好了。</p>
+<p>以我的百度云为例，如下图所示，添加两条解析记录：<br><img src="7.jpg" alt></p>
+<p>然后打开你的github博客项目，点击<code>settings</code>，拉到下面<code>Custom domain</code>处，填上你自己的域名，保存：<br><img src="8.jpg" alt></p>
+<p>这时候你的项目根目录应该会出现一个名为<code>CNAME</code>的文件了。如果没有的话，打开你本地博客<code>/source</code>目录，我的是<code>D:\study\program\blog\source</code>，新建<code>CNAME</code>文件，注意没有后缀。然后在里面写上你的域名，保存。最后运行<code>hexo g</code>、<code>hexo d</code>上传到github。</p>
+<h1 id="备份博客源文件"><a href="#备份博客源文件" class="headerlink" title="备份博客源文件"></a>备份博客源文件</h1><p>有时候我们想换一台电脑继续写博客，这时候就可以将博客目录下的所有源文件都上传到github上面。</p>
+<p>首先在github博客仓库下新建一个分支<code>hexo</code>，然后<code>git clone</code>到本地，把<code>.git</code>文件夹拿出来，放在博客根目录下。</p>
+<p>然后<code>git checkout hexo</code>切换到<code>hexo</code>分支，然后<code>git add .</code>，然后<code>git commit -m &quot;xxx&quot;</code>，最后<code>git push origin hexo</code>提交就行了。</p>
+<p>当然我新建了一个仓库存放了源文件，具体效果可以看我的博客源文件仓库：<a href="https://github.com/godweiyang/hexo-matery-modified" target="_blank" rel="noopener">https://github.com/godweiyang/hexo-matery-modified</a>。大家也可以先用下文hexo安装方法安装完hexo，然后直接<code>git clone git@github.com:godweiyang/hexo-matery-modified.git</code>克隆我的所有源文件，然后这是我修改完的基本没bug的定制化的博客，就可以直接拿来用啦。</p>
+<p><strong>我这个源文件和原来的主题没有什么区别，只是我把插件都安装完了，有些小bug也修复了，所以拿来就能直接用，方便大家。</strong></p>
+<h1 id="博客源代码下载"><a href="#博客源代码下载" class="headerlink" title="博客源代码下载"></a>博客源代码下载</h1><p>如果大家不想这么麻烦的装一堆东西，然后还要自己修改bug，那么只需要做好上面的准备工作，然后下载我的源代码，改改个人配置就行了。</p>
+<p>源码地址：<a href="https://github.com/godweiyang/hexo-matery-modified" target="_blank" rel="noopener">https://github.com/godweiyang/hexo-matery-modified</a>。大家可以直接下载下来使用，修改个人配置信息即可，当然环境要先搭好。</p>
+<p><strong>如果大家下载好了源代码，就可以直接使用了，基本可以跳过文章后面的部分了！喜欢的记得star并fork哦！</strong></p>
+<h1 id="个性化设置（matery主题）"><a href="#个性化设置（matery主题）" class="headerlink" title="个性化设置（matery主题）"></a>个性化设置（matery主题）</h1><p>下面的个性化设置主要针对的是<code>matery</code>主题，如果你想用我现在博客这个主题，可以直接看这个章节。</p>
+<h2 id="更换主题"><a href="#更换主题" class="headerlink" title="更换主题"></a>更换主题</h2><p>这两天花时间将我的博客换了一个主题，现在这个主题看着更加的炫（zhuang）酷（bi），并且响应式更友好，点起来就很舒服，功能也多很多。</p>
+<p>主题的原地址在这里：<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank" rel="noopener">hexo-theme-matery</a>，它的文档写得也非常的详细，还有中英文两个版本，作者回复也很及时。效果图如下，可以看出非常合我的口味：<br><img src="21.jpg" alt></p>
+<p>但是我自己使用起来还是遇到了好几个问题，经过两天的不懈摸鱼，终于基本解决了，这里分享一下。</p>
+<p>首先先按照文档教程安装一遍主题，然后是可以正常打开的，如果你是一般使用的话，基本没啥问题了。但是我是重度强迫症，一点小毛病就看着难受，下面列举一下我遇到的问题以及解决方法。</p>
+<h2 id="文章头设置"><a href="#文章头设置" class="headerlink" title="文章头设置"></a>文章头设置</h2><p>首先为了新建文章方便，建议将<code>/scaffolds/post.md</code>修改为如下代码：</p>
+<pre class="line-numbers language-json"><code class="language-json">---
+title<span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">{</span> title <span class="token punctuation">}</span><span class="token punctuation">}</span>
+date<span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">{</span> date <span class="token punctuation">}</span><span class="token punctuation">}</span>
+top<span class="token operator">:</span> <span class="token boolean">false</span>
+cover<span class="token operator">:</span> <span class="token boolean">false</span>
+password<span class="token operator">:</span>
+toc<span class="token operator">:</span> <span class="token boolean">true</span>
+mathjax<span class="token operator">:</span> <span class="token boolean">true</span>
+summary<span class="token operator">:</span>
+tags<span class="token operator">:</span>
+categories<span class="token operator">:</span>
+---<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这样新建文章后不用你自己补充了，修改信息就行。</p>
+<h2 id="添加404页面"><a href="#添加404页面" class="headerlink" title="添加404页面"></a>添加404页面</h2><p>原来的主题没有404页面，加一个也不是什么难事。首先在<code>/source/</code>目录下新建一个<code>404.md</code>，内容如下：</p>
+<pre class="line-numbers language-json"><code class="language-json">---
+title<span class="token operator">:</span> <span class="token number">404</span>
+date<span class="token operator">:</span> <span class="token number">2019</span>-<span class="token number">07</span>-<span class="token number">19</span> <span class="token number">16</span><span class="token operator">:</span><span class="token number">41</span><span class="token operator">:</span><span class="token number">10</span>
+type<span class="token operator">:</span> <span class="token string">"404"</span>
+layout<span class="token operator">:</span> <span class="token string">"404"</span>
+description<span class="token operator">:</span> <span class="token string">"你来到了没有知识的荒原 :("</span>
+---<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>然后在<code>/themes/matery/layout/</code>目录下新建一个<code>404.ejs</code>文件，内容如下：</p>
+<pre class="line-numbers language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>style</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>text/css<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token style language-css">
+    <span class="token comment" spellcheck="true">/* don't remove. */</span>
+    <span class="token selector"><span class="token class">.about-cover</span> </span><span class="token punctuation">{</span>
+        <span class="token property">height</span><span class="token punctuation">:</span> <span class="token number">75</span>vh<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>style</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>bg-cover pd-header about-cover<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>container<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>row<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>col s10 offset-s1 m8 offset-m2 l8 offset-l2<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>brand<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+                    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>title center-align<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+                        404
+                    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+                    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>description center-align<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+                        &lt;%= page.description %>
+                    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">></span></span><span class="token script language-javascript">
+    <span class="token comment" spellcheck="true">// 每天切换 banner 图.  Switch banner image every day.</span>
+    <span class="token function">$</span><span class="token punctuation">(</span><span class="token string">'.bg-cover'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">css</span><span class="token punctuation">(</span><span class="token string">'background-image'</span><span class="token punctuation">,</span> <span class="token string">'url(/medias/banner/'</span> <span class="token operator">+</span> <span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getDay</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">'.jpg)'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="“关于”页面增加简历（可选）"><a href="#“关于”页面增加简历（可选）" class="headerlink" title="“关于”页面增加简历（可选）"></a>“关于”页面增加简历（可选）</h2><p>修改<code>/themes/matery/layout/about.ejs</code>，找到<code>&lt;div class=&quot;card&quot;&gt;</code>标签，然后找到它对应的<code>&lt;/div&gt;</code>标签，接在后面新增一个card，语句如下：</p>
+<pre class="line-numbers language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>card<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>card-content<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>card-content article-card-content<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>title center-align<span class="token punctuation">"</span></span> <span class="token attr-name">data-aos</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>zoom-in-up<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+                    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>i</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>fa fa-address-book<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>i</span><span class="token punctuation">></span></span><span class="token entity" title="&nbsp;">&amp;nbsp;</span><span class="token entity" title="&nbsp;">&amp;nbsp;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>%-</span> <span class="token attr-name">__('myCV')</span> <span class="token attr-name">%</span><span class="token punctuation">></span></span>
+                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>articleContent<span class="token punctuation">"</span></span> <span class="token attr-name">data-aos</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>fade-up<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+                    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>%-</span> <span class="token attr-name">page.content</span> <span class="token attr-name">%</span><span class="token punctuation">></span></span>
+                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这样就会多出一张card，然后可以在<code>/source/about/index.md</code>下面写上你的简历了，当然这里的位置随你自己设置，你也可以把简历作为第一个card。</p>
+<h2 id="解决mathjax与代码高亮的冲突"><a href="#解决mathjax与代码高亮的冲突" class="headerlink" title="解决mathjax与代码高亮的冲突"></a>解决mathjax与代码高亮的冲突</h2><p>如果你按照教程安装了代码高亮插件<code>hexo-prism-plugin</code>，单独使用是没有问题的，但如果你又使用了mathjax，并且按照网上教程，安装<code>kramed</code>插件并修改了js文件里的正则表达式（为了解决markdown和mathjax的语法冲突），好了，那你的代码就无法高亮了。解决方法很简单，别用<code>kramed</code>插件了，还用原来自带的<code>marked</code>插件，直接改它的正则表达式就行了，改法如下：</p>
+<p>打开<code>D:\study\program\blog\node_modules\marked\lib\marked.js</code><br><code>escape:</code>处替换成：</p>
+<pre class="line-numbers language-json"><code class="language-json">escape<span class="token operator">:</span> /^\\(<span class="token punctuation">[</span>`*\<span class="token punctuation">[</span>\<span class="token punctuation">]</span>(<span class="token punctuation">)</span>#$+\-.!_><span class="token punctuation">]</span><span class="token punctuation">)</span>/<span class="token punctuation">,</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><code>em:</code>处替换成：</p>
+<pre class="line-numbers language-json"><code class="language-json">em<span class="token operator">:</span> /^\*((?<span class="token operator">:</span>\*\*|<span class="token punctuation">[</span>\s\S<span class="token punctuation">]</span><span class="token punctuation">)</span>+?<span class="token punctuation">)</span>\*(?!\*<span class="token punctuation">)</span>/<span class="token punctuation">,</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>这时在文章里写数学公式基本没有问题了，但是要注意：<br><strong>数学公式中如果出现了连续两个{，中间一定要加空格！</strong></p>
+<h2 id="增加建站时间"><a href="#增加建站时间" class="headerlink" title="增加建站时间"></a>增加建站时间</h2><p>修改<code>/themes/matery/layout/_partial/footer.ejs</code>文件，在最后加上</p>
+<pre class="line-numbers language-js"><code class="language-js"><span class="token operator">&lt;</span>script language<span class="token operator">=</span>javascript<span class="token operator">></span>
+    <span class="token keyword">function</span> <span class="token function">siteTime</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        window<span class="token punctuation">.</span><span class="token function">setTimeout</span><span class="token punctuation">(</span><span class="token string">"siteTime()"</span><span class="token punctuation">,</span> <span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">var</span> seconds <span class="token operator">=</span> <span class="token number">1000</span><span class="token punctuation">;</span>
+        <span class="token keyword">var</span> minutes <span class="token operator">=</span> seconds <span class="token operator">*</span> <span class="token number">60</span><span class="token punctuation">;</span>
+        <span class="token keyword">var</span> hours <span class="token operator">=</span> minutes <span class="token operator">*</span> <span class="token number">60</span><span class="token punctuation">;</span>
+        <span class="token keyword">var</span> days <span class="token operator">=</span> hours <span class="token operator">*</span> <span class="token number">24</span><span class="token punctuation">;</span>
+        <span class="token keyword">var</span> years <span class="token operator">=</span> days <span class="token operator">*</span> <span class="token number">365</span><span class="token punctuation">;</span>
+        <span class="token keyword">var</span> today <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">var</span> todayYear <span class="token operator">=</span> today<span class="token punctuation">.</span><span class="token function">getFullYear</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">var</span> todayMonth <span class="token operator">=</span> today<span class="token punctuation">.</span><span class="token function">getMonth</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token keyword">var</span> todayDate <span class="token operator">=</span> today<span class="token punctuation">.</span><span class="token function">getDate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">var</span> todayHour <span class="token operator">=</span> today<span class="token punctuation">.</span><span class="token function">getHours</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">var</span> todayMinute <span class="token operator">=</span> today<span class="token punctuation">.</span><span class="token function">getMinutes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">var</span> todaySecond <span class="token operator">=</span> today<span class="token punctuation">.</span><span class="token function">getSeconds</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">/* Date.UTC() -- 返回date对象距世界标准时间(UTC)1970年1月1日午夜之间的毫秒数(时间戳)
+        year - 作为date对象的年份，为4位年份值
+        month - 0-11之间的整数，做为date对象的月份
+        day - 1-31之间的整数，做为date对象的天数
+        hours - 0(午夜24点)-23之间的整数，做为date对象的小时数
+        minutes - 0-59之间的整数，做为date对象的分钟数
+        seconds - 0-59之间的整数，做为date对象的秒数
+        microseconds - 0-999之间的整数，做为date对象的毫秒数 */</span>
+        <span class="token keyword">var</span> t1 <span class="token operator">=</span> Date<span class="token punctuation">.</span><span class="token function">UTC</span><span class="token punctuation">(</span><span class="token number">2017</span><span class="token punctuation">,</span> <span class="token number">09</span><span class="token punctuation">,</span> <span class="token number">11</span><span class="token punctuation">,</span> <span class="token number">00</span><span class="token punctuation">,</span> <span class="token number">00</span><span class="token punctuation">,</span> <span class="token number">00</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//北京时间2018-2-13 00:00:00</span>
+        <span class="token keyword">var</span> t2 <span class="token operator">=</span> Date<span class="token punctuation">.</span><span class="token function">UTC</span><span class="token punctuation">(</span>todayYear<span class="token punctuation">,</span> todayMonth<span class="token punctuation">,</span> todayDate<span class="token punctuation">,</span> todayHour<span class="token punctuation">,</span> todayMinute<span class="token punctuation">,</span> todaySecond<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">var</span> diff <span class="token operator">=</span> t2 <span class="token operator">-</span> t1<span class="token punctuation">;</span>
+        <span class="token keyword">var</span> diffYears <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">floor</span><span class="token punctuation">(</span>diff <span class="token operator">/</span> years<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">var</span> diffDays <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">floor</span><span class="token punctuation">(</span><span class="token punctuation">(</span>diff <span class="token operator">/</span> days<span class="token punctuation">)</span> <span class="token operator">-</span> diffYears <span class="token operator">*</span> <span class="token number">365</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">var</span> diffHours <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">floor</span><span class="token punctuation">(</span><span class="token punctuation">(</span>diff <span class="token operator">-</span> <span class="token punctuation">(</span>diffYears <span class="token operator">*</span> <span class="token number">365</span> <span class="token operator">+</span> diffDays<span class="token punctuation">)</span> <span class="token operator">*</span> days<span class="token punctuation">)</span> <span class="token operator">/</span> hours<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">var</span> diffMinutes <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">floor</span><span class="token punctuation">(</span><span class="token punctuation">(</span>diff <span class="token operator">-</span> <span class="token punctuation">(</span>diffYears <span class="token operator">*</span> <span class="token number">365</span> <span class="token operator">+</span> diffDays<span class="token punctuation">)</span> <span class="token operator">*</span> days <span class="token operator">-</span> diffHours <span class="token operator">*</span> hours<span class="token punctuation">)</span> <span class="token operator">/</span> minutes<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">var</span> diffSeconds <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">floor</span><span class="token punctuation">(</span><span class="token punctuation">(</span>diff <span class="token operator">-</span> <span class="token punctuation">(</span>diffYears <span class="token operator">*</span> <span class="token number">365</span> <span class="token operator">+</span> diffDays<span class="token punctuation">)</span> <span class="token operator">*</span> days <span class="token operator">-</span> diffHours <span class="token operator">*</span> hours <span class="token operator">-</span> diffMinutes <span class="token operator">*</span> minutes<span class="token punctuation">)</span> <span class="token operator">/</span> seconds<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">"sitetime"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>innerHTML <span class="token operator">=</span> <span class="token string">"本站已运行 "</span> <span class="token operator">+</span>diffYears<span class="token operator">+</span><span class="token string">" 年 "</span><span class="token operator">+</span>diffDays <span class="token operator">+</span> <span class="token string">" 天 "</span> <span class="token operator">+</span> diffHours <span class="token operator">+</span> <span class="token string">" 小时 "</span> <span class="token operator">+</span> diffMinutes <span class="token operator">+</span> <span class="token string">" 分钟 "</span> <span class="token operator">+</span> diffSeconds <span class="token operator">+</span> <span class="token string">" 秒"</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token comment" spellcheck="true">/*因为建站时间还没有一年，就将之注释掉了。需要的可以取消*/</span>
+    <span class="token function">siteTime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>script<span class="token operator">></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>然后在合适的地方（比如copyright声明后面）加上下面的代码就行了：</p>
+<pre class="line-numbers language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>sitetime<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="修改不蒜子初始化计数"><a href="#修改不蒜子初始化计数" class="headerlink" title="修改不蒜子初始化计数"></a>修改不蒜子初始化计数</h2><p>因为不蒜子至今未开放注册，所以没办法在官网修改初始化，只能自己动手了。和上一条一样，在<code>/themes/matery/layout/_partial/footer.ejs</code>文件最后加上：</p>
+<pre class="line-numbers language-js"><code class="language-js"><span class="token operator">&lt;</span>script<span class="token operator">></span>
+    <span class="token function">$</span><span class="token punctuation">(</span>document<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">ready</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        <span class="token keyword">var</span> int <span class="token operator">=</span> <span class="token function">setInterval</span><span class="token punctuation">(</span>fixCount<span class="token punctuation">,</span> <span class="token number">50</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">// 50ms周期检测函数</span>
+        <span class="token keyword">var</span> pvcountOffset <span class="token operator">=</span> <span class="token number">80000</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">// 初始化首次数据</span>
+        <span class="token keyword">var</span> uvcountOffset <span class="token operator">=</span> <span class="token number">20000</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">function</span> <span class="token function">fixCount</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">"busuanzi_container_site_pv"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>style<span class="token punctuation">.</span>display <span class="token operator">!=</span> <span class="token string">"none"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token function">$</span><span class="token punctuation">(</span><span class="token string">"#busuanzi_value_site_pv"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">html</span><span class="token punctuation">(</span><span class="token function">parseInt</span><span class="token punctuation">(</span><span class="token function">$</span><span class="token punctuation">(</span><span class="token string">"#busuanzi_value_site_pv"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">html</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">+</span> pvcountOffset<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token function">clearInterval</span><span class="token punctuation">(</span>int<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">$</span><span class="token punctuation">(</span><span class="token string">"#busuanzi_container_site_pv"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">css</span><span class="token punctuation">(</span><span class="token string">"display"</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token string">"none"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token function">$</span><span class="token punctuation">(</span><span class="token string">"#busuanzi_value_site_uv"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">html</span><span class="token punctuation">(</span><span class="token function">parseInt</span><span class="token punctuation">(</span><span class="token function">$</span><span class="token punctuation">(</span><span class="token string">"#busuanzi_value_site_uv"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">html</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">+</span> uvcountOffset<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 加上初始数据 </span>
+                <span class="token function">clearInterval</span><span class="token punctuation">(</span>int<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 停止检测</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>script<span class="token operator">></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>然后把上面几行有段代码：</p>
+<pre class="line-numbers language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>%</span> <span class="token attr-name">if</span> <span class="token attr-name">(theme.busuanziStatistics</span> <span class="token attr-name">&amp;&amp;</span> <span class="token attr-name">theme.busuanziStatistics.totalTraffic)</span> <span class="token attr-name">{</span> <span class="token attr-name">%</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>busuanzi_container_site_pv<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>i</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>fa fa-heart-o<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>i</span><span class="token punctuation">></span></span>
+        本站总访问量 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>busuanzi_value_site_pv<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>white-color<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>%</span> <span class="token attr-name">}</span> <span class="token attr-name">%</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>%</span> <span class="token attr-name">if</span> <span class="token attr-name">(theme.busuanziStatistics</span> <span class="token attr-name">&amp;&amp;</span> <span class="token attr-name">theme.busuanziStatistics.totalNumberOfvisitors)</span> <span class="token attr-name">{</span> <span class="token attr-name">%</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>busuanzi_container_site_uv<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        人次,<span class="token entity" title="&nbsp;">&amp;nbsp;</span>访客数 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>busuanzi_value_site_uv<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>white-color<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span> 人.
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>%</span> <span class="token attr-name">}</span> <span class="token attr-name">%</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>修改为：</p>
+<pre class="line-numbers language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>%</span> <span class="token attr-name">if</span> <span class="token attr-name">(theme.busuanziStatistics</span> <span class="token attr-name">&amp;&amp;</span> <span class="token attr-name">theme.busuanziStatistics.totalTraffic)</span> <span class="token attr-name">{</span> <span class="token attr-name">%</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>busuanzi_container_site_pv<span class="token punctuation">"</span></span><span class="token style-attr language-css"><span class="token attr-name"> <span class="token attr-name">style</span></span><span class="token punctuation">='</span><span class="token attr-value"><span class="token property">display</span><span class="token punctuation">:</span>none</span><span class="token punctuation">'</span></span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>i</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>fa fa-heart-o<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>i</span><span class="token punctuation">></span></span>
+        本站总访问量 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>busuanzi_value_site_pv<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>white-color<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>%</span> <span class="token attr-name">}</span> <span class="token attr-name">%</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>%</span> <span class="token attr-name">if</span> <span class="token attr-name">(theme.busuanziStatistics</span> <span class="token attr-name">&amp;&amp;</span> <span class="token attr-name">theme.busuanziStatistics.totalNumberOfvisitors)</span> <span class="token attr-name">{</span> <span class="token attr-name">%</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>busuanzi_container_site_uv<span class="token punctuation">"</span></span><span class="token style-attr language-css"><span class="token attr-name"> <span class="token attr-name">style</span></span><span class="token punctuation">='</span><span class="token attr-value"><span class="token property">display</span><span class="token punctuation">:</span>none</span><span class="token punctuation">'</span></span><span class="token punctuation">></span></span>
+        人次,<span class="token entity" title="&nbsp;">&amp;nbsp;</span>访客数 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>busuanzi_value_site_uv<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>white-color<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span> 人.
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>%</span> <span class="token attr-name">}</span> <span class="token attr-name">%</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>其实就是增加了两个<code>style=&#39;display:none&#39;</code>而已。</p>
+<h2 id="添加动漫人物"><a href="#添加动漫人物" class="headerlink" title="添加动漫人物"></a>添加动漫人物</h2><p>其实三步就行了，不用像网上有些教程那么复杂。</p>
+<p><strong>第一步：</strong></p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token function">npm</span> <span class="token function">install</span> --save hexo-helper-live2d<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><strong>第二步：</strong></p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token function">npm</span> <span class="token function">install</span> live2d-widget-model-shizuku<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><strong>第三步：</strong><br>在根目录配置文件中添加如下代码：</p>
+<pre class="line-numbers language-json"><code class="language-json">live2d<span class="token operator">:</span>
+  enable<span class="token operator">:</span> <span class="token boolean">true</span>
+  scriptFrom<span class="token operator">:</span> local
+  pluginRootPath<span class="token operator">:</span> live2dw/
+  pluginJsPath<span class="token operator">:</span> lib/
+  pluginModelPath<span class="token operator">:</span> assets/
+  tagMode<span class="token operator">:</span> <span class="token boolean">false</span>
+  log<span class="token operator">:</span> <span class="token boolean">false</span>
+  model<span class="token operator">:</span>
+    use<span class="token operator">:</span> live2d-widget-model-shizuku
+  display<span class="token operator">:</span>
+    position<span class="token operator">:</span> right
+    width<span class="token operator">:</span> <span class="token number">150</span>
+    height<span class="token operator">:</span> <span class="token number">300</span>
+  mobile<span class="token operator">:</span>
+    show<span class="token operator">:</span> <span class="token boolean">true</span>
+  react<span class="token operator">:</span>
+    opacity<span class="token operator">:</span> <span class="token number">0.7</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>然后<code>hexo g</code>再<code>hexo s</code>就能预览出效果了，但是有个注意的地方，我发现<strong>这个动漫人物最好不要和不蒜子同时使用</strong>，不然不蒜子会显示不出来。</p>
+<h2 id="图片添加水印"><a href="#图片添加水印" class="headerlink" title="图片添加水印"></a>图片添加水印</h2><p>为了防止别人抄袭你文章，可以把所有的图片都加上水印，方法很简单。</p>
+<p>首先在博客根目录下新建一个<code>watermark.py</code>，代码如下：</p>
+<pre class="line-numbers language-python"><code class="language-python"><span class="token comment" spellcheck="true"># -*- coding: utf-8 -*-</span>
+<span class="token keyword">import</span> sys
+<span class="token keyword">import</span> glob
+<span class="token keyword">from</span> PIL <span class="token keyword">import</span> Image
+<span class="token keyword">from</span> PIL <span class="token keyword">import</span> ImageDraw
+<span class="token keyword">from</span> PIL <span class="token keyword">import</span> ImageFont
+
+
+<span class="token keyword">def</span> <span class="token function">watermark</span><span class="token punctuation">(</span>post_name<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> post_name <span class="token operator">==</span> <span class="token string">'all'</span><span class="token punctuation">:</span>
+        post_name <span class="token operator">=</span> <span class="token string">'*'</span>
+    dir_name <span class="token operator">=</span> <span class="token string">'source/_posts/'</span> <span class="token operator">+</span> post_name <span class="token operator">+</span> <span class="token string">'/*'</span>
+    <span class="token keyword">for</span> files <span class="token keyword">in</span> glob<span class="token punctuation">.</span>glob<span class="token punctuation">(</span>dir_name<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        im <span class="token operator">=</span> Image<span class="token punctuation">.</span>open<span class="token punctuation">(</span>files<span class="token punctuation">)</span>
+        <span class="token keyword">if</span> len<span class="token punctuation">(</span>im<span class="token punctuation">.</span>getbands<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">&lt;</span> <span class="token number">3</span><span class="token punctuation">:</span>
+            im <span class="token operator">=</span> im<span class="token punctuation">.</span>convert<span class="token punctuation">(</span><span class="token string">'RGB'</span><span class="token punctuation">)</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span>files<span class="token punctuation">)</span>
+        font <span class="token operator">=</span> ImageFont<span class="token punctuation">.</span>truetype<span class="token punctuation">(</span><span class="token string">'STSONG.TTF'</span><span class="token punctuation">,</span> max<span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">,</span> int<span class="token punctuation">(</span>im<span class="token punctuation">.</span>size<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">/</span> <span class="token number">20</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        draw <span class="token operator">=</span> ImageDraw<span class="token punctuation">.</span>Draw<span class="token punctuation">(</span>im<span class="token punctuation">)</span>
+        draw<span class="token punctuation">.</span>text<span class="token punctuation">(</span><span class="token punctuation">(</span>im<span class="token punctuation">.</span>size<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">/</span> <span class="token number">2</span><span class="token punctuation">,</span> im<span class="token punctuation">.</span>size<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">/</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                  u<span class="token string">'@yourname'</span><span class="token punctuation">,</span> fill<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span> font<span class="token operator">=</span>font<span class="token punctuation">)</span>
+        im<span class="token punctuation">.</span>save<span class="token punctuation">(</span>files<span class="token punctuation">)</span>
+
+
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> len<span class="token punctuation">(</span>sys<span class="token punctuation">.</span>argv<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">2</span><span class="token punctuation">:</span>
+        watermark<span class="token punctuation">(</span>sys<span class="token punctuation">.</span>argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'[usage] &lt;input>'</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>字体也放根目录下，自己找字体。然后每次写完一篇文章可以运行<code>python3 watermark.py postname</code>添加水印，如果第一次运行要给所有文章添加水印，可以运行<code>python3 watermark.py all</code>。</p>
+<h2 id="添加网易云音乐BGM"><a href="#添加网易云音乐BGM" class="headerlink" title="添加网易云音乐BGM"></a>添加网易云音乐BGM</h2><p>写文章的时候，想插入一段BGM怎么办？</p>
+<p>首先打开网易云网页版，找到想听的歌曲，然后点击生成外链：<br><img src="15.jpg" alt><br>复制如下代码：<br><img src="16.jpg" alt></p>
+<p>粘贴到文章里就行了，为了美观，设置一下居中，具体代码如下：</p>
+<pre class="line-numbers language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">align</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>middle<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>这里粘贴刚刚复制的代码<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="添加评论插件"><a href="#添加评论插件" class="headerlink" title="添加评论插件"></a>添加评论插件</h2><p>主题已经自带了gitalk插件了，所以你只需要去github官网配置好就行了。</p>
+<p>首先打开<a href="https://github.com/settings/applications/new" target="_blank" rel="noopener">github</a>申请一个应用，要填四个东西：</p>
+<pre class="line-numbers language-txt"><code class="language-txt">Application name //应用名称，随便填
+Homepage URL //填自己的博客地址
+Application description //应用描述，随便填
+Authorization callback URL //填自己的博客地址<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>然后点击注册，会出现两个字符串<code>Client ID</code>和<code>Client Secret</code>，这个要复制出来。</p>
+<p>然后去主题的配置文件<code>_config.yml</code>下修改<code>gitalk</code>那里：</p>
+<pre class="line-numbers language-txt"><code class="language-txt">gitalk:
+  enable: true
+  owner: 你的github用户名
+  repo: 你的github用户名.github.io
+  oauth:
+    clientId: 粘贴刚刚注册完显示的字符串
+    clientSecret: 粘贴刚刚注册完显示的字符串
+  admin: 你的github用户名<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>以后写文章的时候，只要在文章页面登陆过github，就会自动创建评论框，<strong>记得每次写完文章后打开博客文章页面一下</strong>。</p>
+<h2 id="添加百度统计和谷歌统计代码"><a href="#添加百度统计和谷歌统计代码" class="headerlink" title="添加百度统计和谷歌统计代码"></a>添加百度统计和谷歌统计代码</h2><p>首先打开<a href="https://ziyuan.baidu.com/site/index" target="_blank" rel="noopener">百度站长平台</a>，然后点击添加网站，输入网址并选择领域。</p>
+<p>接下来要验证网站所有权，有三种方式，推荐采用HTML标签验证，最简单，将代码复制出来。</p>
+<p>打开<code>themes/matery/layout/_partial/head.ejs</code>，修改下面两行：</p>
+<pre class="line-numbers language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>meta</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>baidu-site-verification<span class="token punctuation">"</span></span> <span class="token attr-name">content</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>xxx<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>meta</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>google-site-verification<span class="token punctuation">"</span></span> <span class="token attr-name">content</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>xxx<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>其中<code>content</code>内容改成你自己刚刚复制出来的就行了。</p>
+<h2 id="修复代码块行号不显示bug"><a href="#修复代码块行号不显示bug" class="headerlink" title="修复代码块行号不显示bug"></a>修复代码块行号不显示bug</h2><p>修改<code>themes/matery/source/css/matery.css</code>第95行左右的<code>pre</code>和<code>code</code>两段改为如下代码：</p>
+<pre class="line-numbers language-css"><code class="language-css"><span class="token selector">pre </span><span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">/* padding: 1.5rem !important; */</span>
+    <span class="token property">padding</span><span class="token punctuation">:</span> <span class="token number">1.5</span>rem <span class="token number">1.5</span>rem <span class="token number">1.5</span>rem <span class="token number">3.3</span>rem <span class="token important">!important</span><span class="token punctuation">;</span>
+    <span class="token property">margin</span><span class="token punctuation">:</span> <span class="token number">1</span>rem <span class="token number">0</span> <span class="token important">!important</span><span class="token punctuation">;</span>
+    <span class="token property">background</span><span class="token punctuation">:</span> <span class="token hexcode">#272822</span><span class="token punctuation">;</span>
+    <span class="token property">overflow</span><span class="token punctuation">:</span> auto<span class="token punctuation">;</span>
+    <span class="token property">border-radius</span><span class="token punctuation">:</span> <span class="token number">0.35</span>rem<span class="token punctuation">;</span>
+    <span class="token property">tab-size</span><span class="token punctuation">:</span> <span class="token number">4</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token selector">code </span><span class="token punctuation">{</span>
+    <span class="token property">padding</span><span class="token punctuation">:</span> <span class="token number">1</span>px <span class="token number">5</span>px<span class="token punctuation">;</span>
+    <span class="token property">font-family</span><span class="token punctuation">:</span> Inconsolata, Monaco, Consolas, <span class="token string">'Courier New'</span>, Courier, monospace<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">/* font-size: 0.91rem; */</span>
+    <span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#e96900</span><span class="token punctuation">;</span>
+    <span class="token property">background-color</span><span class="token punctuation">:</span> <span class="token hexcode">#f8f8f8</span><span class="token punctuation">;</span>
+    <span class="token property">border-radius</span><span class="token punctuation">:</span> <span class="token number">2</span>px<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>然后在根目录的<code>_config.yml</code>中设置<code>prism_plugin.line_number</code>为<code>true</code>。</p>
+<h2 id="优化文章url路径"><a href="#优化文章url路径" class="headerlink" title="优化文章url路径"></a>优化文章url路径</h2><p>有教程认为，将博客目录结构改为如下，就能减少层级，有利于搜索引擎的SEO。其实不然，网站内容的层级是按照从首页开始点击几次能到达你的文章来算的，所以你改不改都是两层就到达了，不在首页的也可以通过<code>index-archives-post</code>到达，跟文章url长度没有任何关系，所以如下操作作废，你想改也行，不改也行。但是建议已经建站一段时间的同学千万别改，不然会产生很多死链，并且评论issue全部会清空，很麻烦。</p>
+<p><del>seo搜索引擎优化认为，网站的最佳结构是用户从首页点击三次就可以到达任何一个页面，但是我们使用hexo编译的站点打开文章的url是：<code>sitename/year/mounth/day/title</code>四层的结构，这样的url结构很不利于seo，爬虫就会经常爬不到我们的文章，于是，我们可以将url直接改成<code>sitename/title</code>的形式，并且title最好是用英文，在根目录的<code>_config.yml</code>文件下修改permalink如下：</del></p>
+<pre class="line-numbers language-text"><code class="language-text"># permalink: :year/:month/:day/:title/
+permalink: :title/<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h2 id="添加雪花特效"><a href="#添加雪花特效" class="headerlink" title="添加雪花特效"></a>添加雪花特效</h2><p>首先在<code>themes/matery/source/libs/others</code>下新建文件<code>snow.js</code>，并插入如下代码：</p>
+<pre class="line-numbers language-js"><code class="language-js"><span class="token comment" spellcheck="true">/*样式一*/</span>
+<span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>$<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    $<span class="token punctuation">.</span>fn<span class="token punctuation">.</span>snow <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span>options<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword">var</span> $flake <span class="token operator">=</span> <span class="token function">$</span><span class="token punctuation">(</span><span class="token string">'&lt;div id="snowbox" />'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">css</span><span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token string">'position'</span><span class="token punctuation">:</span> <span class="token string">'absolute'</span><span class="token punctuation">,</span><span class="token string">'z-index'</span><span class="token punctuation">:</span><span class="token string">'9999'</span><span class="token punctuation">,</span> <span class="token string">'top'</span><span class="token punctuation">:</span> <span class="token string">'-50px'</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">html</span><span class="token punctuation">(</span><span class="token string">'&amp;#10052;'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    documentHeight  <span class="token operator">=</span> <span class="token function">$</span><span class="token punctuation">(</span>document<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">height</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    documentWidth   <span class="token operator">=</span> <span class="token function">$</span><span class="token punctuation">(</span>document<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">width</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    defaults <span class="token operator">=</span> <span class="token punctuation">{</span>
+        minSize     <span class="token punctuation">:</span> <span class="token number">10</span><span class="token punctuation">,</span>
+        maxSize     <span class="token punctuation">:</span> <span class="token number">20</span><span class="token punctuation">,</span>
+        newOn       <span class="token punctuation">:</span> <span class="token number">1000</span><span class="token punctuation">,</span>
+        flakeColor  <span class="token punctuation">:</span> <span class="token string">"#AFDAEF"</span> <span class="token comment" spellcheck="true">/* 此处可以定义雪花颜色，若要白色可以改为#FFFFFF */</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    options <span class="token operator">=</span> $<span class="token punctuation">.</span><span class="token function">extend</span><span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span> defaults<span class="token punctuation">,</span> options<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">var</span> interval<span class="token operator">=</span> <span class="token function">setInterval</span><span class="token punctuation">(</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword">var</span> startPositionLeft <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> documentWidth <span class="token operator">-</span> <span class="token number">100</span><span class="token punctuation">,</span>
+    startOpacity <span class="token operator">=</span> <span class="token number">0.5</span> <span class="token operator">+</span> Math<span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    sizeFlake <span class="token operator">=</span> options<span class="token punctuation">.</span>minSize <span class="token operator">+</span> Math<span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> options<span class="token punctuation">.</span>maxSize<span class="token punctuation">,</span>
+    endPositionTop <span class="token operator">=</span> documentHeight <span class="token operator">-</span> <span class="token number">200</span><span class="token punctuation">,</span>
+    endPositionLeft <span class="token operator">=</span> startPositionLeft <span class="token operator">-</span> <span class="token number">500</span> <span class="token operator">+</span> Math<span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">500</span><span class="token punctuation">,</span>
+    durationFall <span class="token operator">=</span> documentHeight <span class="token operator">*</span> <span class="token number">10</span> <span class="token operator">+</span> Math<span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">5000</span><span class="token punctuation">;</span>
+    $flake<span class="token punctuation">.</span><span class="token function">clone</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">appendTo</span><span class="token punctuation">(</span><span class="token string">'body'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">css</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+        left<span class="token punctuation">:</span> startPositionLeft<span class="token punctuation">,</span>
+        opacity<span class="token punctuation">:</span> startOpacity<span class="token punctuation">,</span>
+        <span class="token string">'font-size'</span><span class="token punctuation">:</span> sizeFlake<span class="token punctuation">,</span>
+        color<span class="token punctuation">:</span> options<span class="token punctuation">.</span>flakeColor
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">animate</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+        top<span class="token punctuation">:</span> endPositionTop<span class="token punctuation">,</span>
+        left<span class="token punctuation">:</span> endPositionLeft<span class="token punctuation">,</span>
+        opacity<span class="token punctuation">:</span> <span class="token number">0.2</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>durationFall<span class="token punctuation">,</span><span class="token string">'linear'</span><span class="token punctuation">,</span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token function">$</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span> options<span class="token punctuation">.</span>newOn<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">(</span>jQuery<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">$</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    $<span class="token punctuation">.</span>fn<span class="token punctuation">.</span><span class="token function">snow</span><span class="token punctuation">(</span><span class="token punctuation">{</span> 
+        minSize<span class="token punctuation">:</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">/* 定义雪花最小尺寸 */</span>
+        maxSize<span class="token punctuation">:</span> <span class="token number">50</span><span class="token punctuation">,</span><span class="token comment" spellcheck="true">/* 定义雪花最大尺寸 */</span>
+        newOn<span class="token punctuation">:</span> <span class="token number">300</span>  <span class="token comment" spellcheck="true">/* 定义密集程度，数字越小越密集 */</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">/*样式二*/</span>
+<span class="token comment" spellcheck="true">/* 控制下雪 */</span>
+<span class="token keyword">function</span> <span class="token function">snowFall</span><span class="token punctuation">(</span>snow<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">/* 可配置属性 */</span>
+    snow <span class="token operator">=</span> snow <span class="token operator">||</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>maxFlake <span class="token operator">=</span> snow<span class="token punctuation">.</span>maxFlake <span class="token operator">||</span> <span class="token number">200</span><span class="token punctuation">;</span>   <span class="token comment" spellcheck="true">/* 最多片数 */</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>flakeSize <span class="token operator">=</span> snow<span class="token punctuation">.</span>flakeSize <span class="token operator">||</span> <span class="token number">10</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">/* 雪花形状 */</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>fallSpeed <span class="token operator">=</span> snow<span class="token punctuation">.</span>fallSpeed <span class="token operator">||</span> <span class="token number">1</span><span class="token punctuation">;</span>   <span class="token comment" spellcheck="true">/* 坠落速度 */</span>
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">/* 兼容写法 */</span>
+requestAnimationFrame <span class="token operator">=</span> window<span class="token punctuation">.</span>requestAnimationFrame <span class="token operator">||</span>
+    window<span class="token punctuation">.</span>mozRequestAnimationFrame <span class="token operator">||</span>
+    window<span class="token punctuation">.</span>webkitRequestAnimationFrame <span class="token operator">||</span>
+    window<span class="token punctuation">.</span>msRequestAnimationFrame <span class="token operator">||</span>
+    window<span class="token punctuation">.</span>oRequestAnimationFrame <span class="token operator">||</span>
+    <span class="token keyword">function</span><span class="token punctuation">(</span>callback<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token function">setTimeout</span><span class="token punctuation">(</span>callback<span class="token punctuation">,</span> <span class="token number">1000</span> <span class="token operator">/</span> <span class="token number">60</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+cancelAnimationFrame <span class="token operator">=</span> window<span class="token punctuation">.</span>cancelAnimationFrame <span class="token operator">||</span>
+    window<span class="token punctuation">.</span>mozCancelAnimationFrame <span class="token operator">||</span>
+    window<span class="token punctuation">.</span>webkitCancelAnimationFrame <span class="token operator">||</span>
+    window<span class="token punctuation">.</span>msCancelAnimationFrame <span class="token operator">||</span>
+    window<span class="token punctuation">.</span>oCancelAnimationFrame<span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">/* 开始下雪 */</span>
+snowFall<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>start <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">/* 创建画布 */</span>
+    snowCanvas<span class="token punctuation">.</span><span class="token function">apply</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">/* 创建雪花形状 */</span>
+    createFlakes<span class="token punctuation">.</span><span class="token function">apply</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">/* 画雪 */</span>
+    drawSnow<span class="token punctuation">.</span><span class="token function">apply</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">/* 创建画布 */</span>
+<span class="token keyword">function</span> <span class="token function">snowCanvas</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">/* 添加Dom结点 */</span>
+    <span class="token keyword">var</span> snowcanvas <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">createElement</span><span class="token punctuation">(</span><span class="token string">"canvas"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    snowcanvas<span class="token punctuation">.</span>id <span class="token operator">=</span> <span class="token string">"snowfall"</span><span class="token punctuation">;</span>
+    snowcanvas<span class="token punctuation">.</span>width <span class="token operator">=</span> window<span class="token punctuation">.</span>innerWidth<span class="token punctuation">;</span>
+    snowcanvas<span class="token punctuation">.</span>height <span class="token operator">=</span> document<span class="token punctuation">.</span>body<span class="token punctuation">.</span>clientHeight<span class="token punctuation">;</span>
+    snowcanvas<span class="token punctuation">.</span><span class="token function">setAttribute</span><span class="token punctuation">(</span><span class="token string">"style"</span><span class="token punctuation">,</span> <span class="token string">"position:absolute; top: 0; left: 0; z-index: 1; pointer-events: none;"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    document<span class="token punctuation">.</span><span class="token function">getElementsByTagName</span><span class="token punctuation">(</span><span class="token string">"body"</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">appendChild</span><span class="token punctuation">(</span>snowcanvas<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>canvas <span class="token operator">=</span> snowcanvas<span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>ctx <span class="token operator">=</span> snowcanvas<span class="token punctuation">.</span><span class="token function">getContext</span><span class="token punctuation">(</span><span class="token string">"2d"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">/* 窗口大小改变的处理 */</span>
+    window<span class="token punctuation">.</span>onresize <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        snowcanvas<span class="token punctuation">.</span>width <span class="token operator">=</span> window<span class="token punctuation">.</span>innerWidth<span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">/* snowcanvas.height = window.innerHeight */</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">/* 雪运动对象 */</span>
+<span class="token keyword">function</span> <span class="token function">flakeMove</span><span class="token punctuation">(</span>canvasWidth<span class="token punctuation">,</span> canvasHeight<span class="token punctuation">,</span> flakeSize<span class="token punctuation">,</span> fallSpeed<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>x <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">floor</span><span class="token punctuation">(</span>Math<span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> canvasWidth<span class="token punctuation">)</span><span class="token punctuation">;</span>   <span class="token comment" spellcheck="true">/* x坐标 */</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>y <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">floor</span><span class="token punctuation">(</span>Math<span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> canvasHeight<span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">/* y坐标 */</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>size <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> flakeSize <span class="token operator">+</span> <span class="token number">2</span><span class="token punctuation">;</span>          <span class="token comment" spellcheck="true">/* 形状 */</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>maxSize <span class="token operator">=</span> flakeSize<span class="token punctuation">;</span>                           <span class="token comment" spellcheck="true">/* 最大形状 */</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>speed <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">1</span> <span class="token operator">+</span> fallSpeed<span class="token punctuation">;</span>         <span class="token comment" spellcheck="true">/* 坠落速度 */</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>fallSpeed <span class="token operator">=</span> fallSpeed<span class="token punctuation">;</span>                         <span class="token comment" spellcheck="true">/* 坠落速度 */</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>velY <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>speed<span class="token punctuation">;</span>                             <span class="token comment" spellcheck="true">/* Y方向速度 */</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>velX <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>                                      <span class="token comment" spellcheck="true">/* X方向速度 */</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>stepSize <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">30</span><span class="token punctuation">;</span>                 <span class="token comment" spellcheck="true">/* 步长 */</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>step <span class="token operator">=</span> <span class="token number">0</span>                                       <span class="token comment" spellcheck="true">/* 步数 */</span>
+<span class="token punctuation">}</span>
+flakeMove<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>update <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">var</span> x <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>x<span class="token punctuation">,</span>
+        y <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>y<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">/* 左右摆动(余弦) */</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>velX <span class="token operator">*</span><span class="token operator">=</span> <span class="token number">0.98</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>velY <span class="token operator">&lt;=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>speed<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>velY <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>speed
+    <span class="token punctuation">}</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>velX <span class="token operator">+</span><span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">cos</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>step <span class="token operator">+</span><span class="token operator">=</span> <span class="token punctuation">.</span><span class="token number">05</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token keyword">this</span><span class="token punctuation">.</span>stepSize<span class="token punctuation">;</span>
+
+    <span class="token keyword">this</span><span class="token punctuation">.</span>y <span class="token operator">+</span><span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>velY<span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>x <span class="token operator">+</span><span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>velX<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">/* 飞出边界的处理 */</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>x <span class="token operator">>=</span> canvas<span class="token punctuation">.</span>width <span class="token operator">||</span> <span class="token keyword">this</span><span class="token punctuation">.</span>x <span class="token operator">&lt;=</span> <span class="token number">0</span> <span class="token operator">||</span> <span class="token keyword">this</span><span class="token punctuation">.</span>y <span class="token operator">>=</span> canvas<span class="token punctuation">.</span>height <span class="token operator">||</span> <span class="token keyword">this</span><span class="token punctuation">.</span>y <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">reset</span><span class="token punctuation">(</span>canvas<span class="token punctuation">.</span>width<span class="token punctuation">,</span> canvas<span class="token punctuation">.</span>height<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">/* 飞出边界-放置最顶端继续坠落 */</span>
+flakeMove<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>reset <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span>width<span class="token punctuation">,</span> height<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>x <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">floor</span><span class="token punctuation">(</span>Math<span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> width<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>y <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>size <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token keyword">this</span><span class="token punctuation">.</span>maxSize <span class="token operator">+</span> <span class="token number">2</span><span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>speed <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">1</span> <span class="token operator">+</span> <span class="token keyword">this</span><span class="token punctuation">.</span>fallSpeed<span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>velY <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>speed<span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>velX <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">// 渲染雪花-随机形状（此处可修改雪花颜色！！！）</span>
+flakeMove<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>render <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span>ctx<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">var</span> snowFlake <span class="token operator">=</span> ctx<span class="token punctuation">.</span><span class="token function">createRadialGradient</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>x<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>y<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>x<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>y<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>size<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    snowFlake<span class="token punctuation">.</span><span class="token function">addColorStop</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token string">"rgba(255, 255, 255, 0.9)"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">/* 此处是雪花颜色，默认是白色 */</span>
+    snowFlake<span class="token punctuation">.</span><span class="token function">addColorStop</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token string">"rgba(255, 255, 255, 0.5)"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">/* 若要改为其他颜色，请自行查 */</span>
+    snowFlake<span class="token punctuation">.</span><span class="token function">addColorStop</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token string">"rgba(255, 255, 255, 0)"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">/* 找16进制的RGB 颜色代码。 */</span>
+    ctx<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    ctx<span class="token punctuation">.</span>fillStyle <span class="token operator">=</span> snowFlake<span class="token punctuation">;</span>
+    ctx<span class="token punctuation">.</span><span class="token function">beginPath</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    ctx<span class="token punctuation">.</span><span class="token function">arc</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>x<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>y<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>size<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> Math<span class="token punctuation">.</span>PI <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    ctx<span class="token punctuation">.</span><span class="token function">fill</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    ctx<span class="token punctuation">.</span><span class="token function">restore</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">/* 创建雪花-定义形状 */</span>
+<span class="token keyword">function</span> <span class="token function">createFlakes</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">var</span> maxFlake <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>maxFlake<span class="token punctuation">,</span>
+        flakes <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>flakes <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+        canvas <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>canvas<span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">var</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> maxFlake<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        flakes<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">flakeMove</span><span class="token punctuation">(</span>canvas<span class="token punctuation">.</span>width<span class="token punctuation">,</span> canvas<span class="token punctuation">.</span>height<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>flakeSize<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>fallSpeed<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">/* 画雪 */</span>
+<span class="token keyword">function</span> <span class="token function">drawSnow</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">var</span> maxFlake <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>maxFlake<span class="token punctuation">,</span>
+        flakes <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>flakes<span class="token punctuation">;</span>
+    ctx <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>ctx<span class="token punctuation">,</span> canvas <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>canvas<span class="token punctuation">,</span> that <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">/* 清空雪花 */</span>
+    ctx<span class="token punctuation">.</span><span class="token function">clearRect</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> canvas<span class="token punctuation">.</span>width<span class="token punctuation">,</span> canvas<span class="token punctuation">.</span>height<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">var</span> e <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> e <span class="token operator">&lt;</span> maxFlake<span class="token punctuation">;</span> e<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        flakes<span class="token punctuation">[</span>e<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">update</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        flakes<span class="token punctuation">[</span>e<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">(</span>ctx<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token comment" spellcheck="true">/*  一帧一帧的画 */</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>loop <span class="token operator">=</span> <span class="token function">requestAnimationFrame</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        drawSnow<span class="token punctuation">.</span><span class="token function">apply</span><span class="token punctuation">(</span>that<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">/* 调用及控制方法 */</span>
+<span class="token keyword">var</span> snow <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">snowFall</span><span class="token punctuation">(</span><span class="token punctuation">{</span>maxFlake<span class="token punctuation">:</span><span class="token number">60</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+snow<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>然后在主题配置文件里<code>libs.js</code>里添加一行<code>snow: /libs/others/snow.js</code>。</p>
+<p>在<code>themes/matery/layout/layout.ejs</code>里添加如下代码：</p>
+<pre class="line-numbers language-html"><code class="language-html"><span class="token comment" spellcheck="true">&lt;!-- 雪花特效 --></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>%</span> <span class="token attr-name">if</span> <span class="token attr-name">(theme.snow.enable)</span> <span class="token attr-name">{</span> <span class="token attr-name">%</span><span class="token punctuation">></span></span>
+&lt;script type="text/javascript" src="<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>%-</span> <span class="token attr-name">theme.libs.js.snow</span> <span class="token attr-name">%</span><span class="token punctuation">></span></span><span class="token script language-javascript">"<span class="token operator">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>%</span> <span class="token attr-name">}</span> <span class="token attr-name">%</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>最后在主题配置文件最后添加：</p>
+<pre class="line-numbers language-txt"><code class="language-txt"># 雪花特效
+snow:
+  enable: true<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p>这个特效和动漫一样，有点花里胡哨，并且可能会造成卡顿，所以我并没有开启，还是给大家一个最干净的阅读体验吧。</p>
+</blockquote>
+<h2 id="动态标签栏"><a href="#动态标签栏" class="headerlink" title="动态标签栏"></a>动态标签栏</h2><p>在<code>theme/matery/layout/layout.ejs</code>下添加如下代码：</p>
+<pre class="line-numbers language-html"><code class="language-html">    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>text/javascript<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script language-javascript"> <span class="token keyword">var</span> OriginTitile <span class="token operator">=</span> document<span class="token punctuation">.</span>title<span class="token punctuation">,</span> st<span class="token punctuation">;</span> document<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">"visibilitychange"</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> document<span class="token punctuation">.</span>hidden <span class="token operator">?</span> <span class="token punctuation">(</span>document<span class="token punctuation">.</span>title <span class="token operator">=</span> <span class="token string">"Σ(っ °Д °;)っ喔哟，崩溃啦！"</span><span class="token punctuation">,</span> <span class="token function">clearTimeout</span><span class="token punctuation">(</span>st<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">:</span> <span class="token punctuation">(</span>document<span class="token punctuation">.</span>title <span class="token operator">=</span> <span class="token string">"φ(゜▽゜*)♪咦，又好了！"</span><span class="token punctuation">,</span> st <span class="token operator">=</span> <span class="token function">setTimeout</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> document<span class="token punctuation">.</span>title <span class="token operator">=</span> OriginTitile <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token number">3e3</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+    </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h1 id="常见问题及解答（FAQ）"><a href="#常见问题及解答（FAQ）" class="headerlink" title="常见问题及解答（FAQ）"></a>常见问题及解答（FAQ）</h1><p>这个章节主要更新许多同学在搭建博客的过程中咨询我的一些问题。</p>
+<h2 id="为什么本地生成完ssh-key之后没有-ssh文件夹？"><a href="#为什么本地生成完ssh-key之后没有-ssh文件夹？" class="headerlink" title="为什么本地生成完ssh key之后没有.ssh文件夹？"></a>为什么本地生成完ssh key之后没有.ssh文件夹？</h2><p>这是我没有想到会遇到的问题，但是很多人还是遇到了，主要问题就是在输入完<code>ssh-keygen -t rsa -C &quot;792321264@qq.com&quot;</code>之后，很多同学没有按照提示继续输入，而是就这么结束了，然后报错了也没有发现。正确做法是按照提示，一路按回车就行了。</p>
+<h2 id="为什么代码块显示有问题？"><a href="#为什么代码块显示有问题？" class="headerlink" title="为什么代码块显示有问题？"></a>为什么代码块显示有问题？</h2><p>代码要显示正确，要注意以下几个点：</p>
+<ul>
+<li>根目录<code>_config.yml</code>文件下的<code>highlight</code>中的<code>line_number</code>要设置为<code>false</code>，因为行号有bug，当然如果你按照上面教程修复了bug，就可以改成<code>true</code>。</li>
+<li>不要按照网上教程安装<code>kramed</code>插件，已经装了的卸载掉。</li>
+<li>修改<code>node_modules/marked/lib/marked.js</code>文件中的<code>escape</code>和<code>em</code>两行（在538行左右），改成下面：<pre class="line-numbers language-json"><code class="language-json">escape<span class="token operator">:</span> /^\\(<span class="token punctuation">[</span>`*\<span class="token punctuation">[</span>\<span class="token punctuation">]</span>(<span class="token punctuation">)</span>#$+\-.!_><span class="token punctuation">]</span><span class="token punctuation">)</span>/<span class="token punctuation">,</span>
+em<span class="token operator">:</span> /^\*((?<span class="token operator">:</span>\*\*|<span class="token punctuation">[</span>\s\S<span class="token punctuation">]</span><span class="token punctuation">)</span>+?<span class="token punctuation">)</span>\*(?!\*<span class="token punctuation">)</span>/<span class="token punctuation">,</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+</li>
+</ul>
+<h2 id="为什么博客本地预览没问题，push到github上就显示不正常？"><a href="#为什么博客本地预览没问题，push到github上就显示不正常？" class="headerlink" title="为什么博客本地预览没问题，push到github上就显示不正常？"></a>为什么博客本地预览没问题，push到github上就显示不正常？</h2><p>这个问题可能原因有很多，我暂时列举遇到的情况：</p>
+<ul>
+<li>github博客的仓库名称一定要和你的github名字完全一样，比如你github名字叫<code>abc</code>，那么仓库名字一定要是<code>abc.github.io</code>。这是大多数人会犯的错误，会导致显示不正常。</li>
+</ul>
+<h2 id="更换主题之后，配置文件是修改根目录下的还是主题目录下的？"><a href="#更换主题之后，配置文件是修改根目录下的还是主题目录下的？" class="headerlink" title="更换主题之后，配置文件是修改根目录下的还是主题目录下的？"></a>更换主题之后，配置文件是修改根目录下的还是主题目录下的？</h2><p>这个其实都要修改，一般也不会出现重复的属性。具体使用哪个，要看主题的源代码，如果是<code>config.xxx</code>那就是用的根目录配置文件，如果是<code>theme.xxx</code>那就用的是主题目录的配置文件。</p>
+<h2 id="在哪建立github分支？"><a href="#在哪建立github分支？" class="headerlink" title="在哪建立github分支？"></a>在哪建立github分支？</h2><p>点击仓库的<code>settings-branches</code>，右边点击<code>add new branch</code>即可。</p>
+<h1 id="个性化设置（beantech主题，已停更）"><a href="#个性化设置（beantech主题，已停更）" class="headerlink" title="个性化设置（beantech主题，已停更）"></a>个性化设置（beantech主题，已停更）</h1><p><strong>下面的个性化设置主要针对的是我之前使用的<code>beantech</code>主题，当然如果你想用我现在博客这个主题，可以不看这部分。这部分已经停止更新，今后我只会更新<code>matery</code>主题的各种配置。</strong></p>
+<h2 id="更换主题-1"><a href="#更换主题-1" class="headerlink" title="更换主题"></a>更换主题</h2><p>网上大多数主题都是github排名第一的<code>Next</code>主题，但是我个人不是很喜欢，我更喜欢<code>beantech</code>主题，地址在<a href="https://github.com/YenYuHsuan/hexo-theme-beantech" target="_blank" rel="noopener">传送门</a>。</p>
+<p>首先要注意的是，<strong>这个github项目不仅包含了主题文件，还包含了hexo的各种文件</strong>。</p>
+<p>所以首先下载下来这个项目，然后推荐将下图所有文件全部替换你原本博客根目录下的文件：<br><img src="9.jpg" alt></p>
+<p>当然一般的主题和这个主题有点不一样，只含有主题文件夹，所以把整个文件夹丢到<code>theme</code>下就行了。</p>
+<p>然后运行<code>hexo clean</code>清空所有生成的网页缓存，<code>hexo g</code>、<code>hexo d</code>。这时候新的主题网页就生成好了，博客根目录的情况应该大致如下：<br><img src="10.jpg" alt></p>
+<h2 id="博客目录构成介绍"><a href="#博客目录构成介绍" class="headerlink" title="博客目录构成介绍"></a>博客目录构成介绍</h2><p>从上图可以看出，博客的目录结构如下：</p>
+<pre class="line-numbers language-md"><code class="language-md">- node_modules
+- public
+- scaffolds
+- source
+    - _posts
+    - about
+    - archive
+    - img
+    - tags
+- themes<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><code>node_modules</code>是node.js各种库的目录，<code>public</code>是生成的网页文件目录，<code>scaffolds</code>里面就三个文件，存储着新文章和新页面的初始设置，<code>source</code>是我们最常用到的一个目录，里面存放着文章、各类页面、图像等文件，<code>themes</code>存放着主题文件，一般也用不到。</p>
+<p>我们平时写文章只需要关注<code>source/_posts</code>这个文件夹就行了。</p>
+<p>网站图片都保存在<code>D:\study\program\blog\source\img</code>目录下，可以修改成自己的图片。</p>
+<h2 id="修复文档分类bug"><a href="#修复文档分类bug" class="headerlink" title="修复文档分类bug"></a>修复文档分类bug</h2><p>这个主题文档分类功能有个bug，一直没有得到解决，直到最近，我才发现是源文件的单词拼错了。。。</p>
+<p>打开<code>D:\study\program\blog\scaffolds\post.md</code>，单词<code>catagories</code>改为<code>categories</code>。</p>
+<h2 id="添加畅言评论插件"><a href="#添加畅言评论插件" class="headerlink" title="添加畅言评论插件"></a>添加畅言评论插件</h2><p>主题自带了多说评论插件，但是多说已经关闭了，所以我换成了畅言评论插件。</p>
+<p>首先你得注册一个畅言账号，<a href="http://changyan.kuaizhan.com/" target="_blank" rel="noopener">地址</a>。<br>然后打开如下页面，复制该段代码：<br><img src="11.jpg" alt><br>打开<code>D:\study\program\blog\themes\beantech\layout\post.ejs</code>，将代码粘贴到如下位置：<br><img src="12.jpg" alt><br>然后重新生成一下网页，可以看到效果图如下：<br><img src="13.jpg" alt><br>更多插件例如热评话题之类的，可以自行在畅言后台找到代码添加。</p>
+<h2 id="添加图片放大功能"><a href="#添加图片放大功能" class="headerlink" title="添加图片放大功能"></a>添加图片放大功能</h2><p>首先下载<code>zooming.js</code>文件<a href="https://github.com/godweiyang/godweiyang.github.io/blob/master/js/zooming.js" target="_blank" rel="noopener">地址</a>，保存在<code>D:\study\program\blog\themes\beantech\source\js</code>目录下。</p>
+<p>打开<code>D:\study\program\blog\themes\beantech\layout\post.ejs</code>，在最下方粘贴如下代码：</p>
+<pre class="line-numbers language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>text/javascript<span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>/js/zooming.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script language-javascript"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>然后文章里的图片就可以单击全屏啦。</p>
+<h2 id="添加数学公式显示"><a href="#添加数学公式显示" class="headerlink" title="添加数学公式显示"></a>添加数学公式显示</h2><p>打开<code>D:\study\program\blog\themes\beantech\layout\post.ejs</code>，在最下方粘贴如下代码：</p>
+<pre class="line-numbers language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>text/javascript<span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>http://cdn.mathjax.org/mathjax/latest/MathJax.js?config<span class="token punctuation">=</span>default<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script language-javascript"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>由于markdown语法与mathjax语法存在冲突，所以还需要修改源文件。</p>
+<p>打开<code>D:\study\program\blog\node_modules\marked\lib\marked.js</code><br><code>escape:</code>处替换成：</p>
+<pre class="line-numbers language-json"><code class="language-json">escape<span class="token operator">:</span> /^$<span class="token punctuation">[</span>`*\<span class="token punctuation">[</span>\<span class="token punctuation">]</span>(<span class="token punctuation">)</span>#$+\-.!_><span class="token punctuation">]</span><span class="token punctuation">)</span>/<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><code>em:</code>处替换成：</p>
+<pre class="line-numbers language-json"><code class="language-json">em<span class="token operator">:</span> /^\*((?<span class="token operator">:</span>\*\*|<span class="token punctuation">[</span>\s\S<span class="token punctuation">]</span><span class="token punctuation">)</span>+?<span class="token punctuation">)</span>\*(?!\*<span class="token punctuation">)</span>/<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>这时在文章里写数学公式基本没有问题了，但是要注意：<br><strong>数学公式中如果出现了连续两个{，中间一定要加空格！</strong></p>
+<p>举个例子:<br>行内公式：$y = f(x)$<br>代码：</p>
+<pre class="line-numbers language-latex"><code class="language-latex"><span class="token equation string">$y = f(x)$</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>行间公式：<br>\[y = {f_{ {g_1}}}(x)\]<br>代码：</p>
+<pre class="line-numbers language-latex"><code class="language-latex">\<span class="token equation string">\[y = {f_{ {g_1}}}(x)<span class="token equation-command regex">\\</span>]</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><strong>注意上面花括号之间有空格！</strong></p>
+<h2 id="添加留言板"><a href="#添加留言板" class="headerlink" title="添加留言板"></a>添加留言板</h2><p>在<code>D:\study\program\blog\themes\beantech\layout</code>中新建<code>bbs.ejs</code>，文件内容如下：</p>
+<pre class="line-numbers language-html"><code class="language-html">---
+layout: page
+---
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>style</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>text/css<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token style language-css">
+    <span class="token selector">header<span class="token class">.intro-header</span></span><span class="token punctuation">{</span>
+        <span class="token property">background-position</span><span class="token punctuation">:</span> right<span class="token punctuation">;</span> 
+    <span class="token punctuation">}</span>
+</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>style</span><span class="token punctuation">></span></span>
+<span class="token comment" spellcheck="true">&lt;!-- Chinese Version --></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>zh post-container<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>%-</span> <span class="token attr-name">page.content</span> <span class="token attr-name">%</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>然后在<code>D:\study\program\blog\source</code>中新建<code>\bbs</code>文件夹，里面在新建<code>index.md</code>文件，内容如下：</p>
+<pre class="line-numbers language-json"><code class="language-json">---
+layout<span class="token operator">:</span> <span class="token string">"bbs"</span>
+title<span class="token operator">:</span> <span class="token string">"BBS"</span>
+date<span class="token operator">:</span> <span class="token number">2017</span>-<span class="token number">09</span>-<span class="token number">19</span> <span class="token number">12</span><span class="token operator">:</span><span class="token number">48</span><span class="token operator">:</span><span class="token number">33</span>
+description<span class="token operator">:</span> <span class="token string">"欢迎交换友链，一起交流学习！"</span>
+header-img<span class="token operator">:</span> <span class="token string">"img/header_img/home-bg-2-dark.png"</span>
+comments<span class="token operator">:</span> <span class="token boolean">true</span>
+---
+此处替换为你的畅言评论代码~~~<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="添加置顶功能"><a href="#添加置顶功能" class="headerlink" title="添加置顶功能"></a>添加置顶功能</h2><p>运行如下两条命令安装置顶插件：</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token function">npm</span> uninstall hexo-generator-index --save
+<span class="token function">npm</span> <span class="token function">install</span> hexo-generator-index-pin-top --save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>然后打开<code>D:\study\program\blog\themes\beantech\layout\index.ejs</code>，在如下位置添加代码：<br><img src="14.jpg" alt></p>
+<pre class="line-numbers language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>%</span> <span class="token attr-name">if</span> <span class="token attr-name">(post.top)</span> <span class="token attr-name">{%</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>i</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>fa fa-thumb-tack<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>i</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>font</span> <span class="token attr-name">color</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>7D26CD<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>置顶<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>font</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>post-meta-divider<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>|<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>%}%</span><span class="token punctuation">></span></span>&lt; code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>%}%</span><span class="token punctuation">></span></span>&lt;><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>然后在你想置顶的文章md文件里，添加如下配置选项：</p>
+<pre class="line-numbers language-json"><code class="language-json">top<span class="token operator">:</span> <span class="token boolean">true</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="添加访客人数统计和字数统计"><a href="#添加访客人数统计和字数统计" class="headerlink" title="添加访客人数统计和字数统计"></a>添加访客人数统计和字数统计</h2><p>我们使用一个国外的流量统计网站：<a href="gostats.com">gostats.com</a>，首先注册一下。</p>
+<p>然后自己添加网站地址，过程就不详细说了，然后点击<code>Get counter code</code>，选择一个自己喜欢的风格。<br>如下图所示，选择一个样式，选择<code>HTML</code>，生成代码：<br><img src="17.jpg" alt></p>
+<p>复制这段代码到<code>D:\study\program\blog\themes\beantech\layout\_partial\footer.ejs</code>，具体位置如下：<br><img src="18.jpg" alt><br>默认的代码和我图中不一样，因为我不想点击图片跳转到它统计网站的链接，可以模仿我的自行修改。</p>
+<p>字数统计首先安装插件</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token function">npm</span> i --save hexo-wordcount<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>然后打开<code>D:\study\program\blog\themes\beantech\layout\_partial\footer.ejs</code>，添加如下代码：</p>
+<pre class="line-numbers language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>post-count<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>&lt;%= totalcount(site) %> words altogether<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>具体位置见上图。</p>
+<h2 id="文章属性配置"><a href="#文章属性配置" class="headerlink" title="文章属性配置"></a>文章属性配置</h2><p>首先解释一下文章开头的属性配置，如下图所示：<br><img src="19.jpg" alt></p>
+<pre class="line-numbers language-json"><code class="language-json">title<span class="token operator">:</span> 文章标题
+catalog<span class="token operator">:</span> 是否显示段落目录
+date<span class="token operator">:</span> 文章日期
+subtitle<span class="token operator">:</span> 子标题
+header-img<span class="token operator">:</span> 顶部背景图片
+top<span class="token operator">:</span> 是否置顶
+tags<span class="token operator">:</span> 标签
+categories<span class="token operator">:</span> 分类<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>每次写文章修改每个值就行了。</p>
+
+            </div>
+            <hr />
+
+            
+            <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.88rem;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fa fa-close"></i></a>
+            <h4 class="reward-title">万水千山总是情，打赏一块行不行？</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+
+            <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    <div class="social-share" data-disabled="qzone" data-wechat-qrcode-helper="<p>微信里点“发现”->“扫一扫”二维码便可查看分享。</p>"></div>
+    
+</div>
+
+<script src="/libs/share/js/social-share.min.js"></script>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        <p class="reprint-tip">
+            <i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;
+            <span>转载规则</span>
+        </p>
+        
+            <div class="center-align">
+                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
+                    <img alt=""
+                         style="border-width:0"
+                         src="https://i.creativecommons.org/l/by/4.0/88x31.png"/>
+                </a>
+            </div>
+            <br/>
+            <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text"
+                  property="dct:title" rel="dct:type">
+                    《超详细Hexo+Github博客搭建小白教程》
+                </span> 由
+            <a xmlns:cc="http://creativecommons.org/ns#" href="/2018/04/13/hexo-blog/" property="cc:attributionName"
+               rel="cc:attributionURL">
+                韦阳
+            </a> 采用
+            <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
+                知识共享署名 4.0 国际许可协议
+            </a>进行许可。
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+        </div>
+    </div>
+
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: 'c3ac6e20697ee5422b43',
+        clientSecret: '3ccf19d2ec7e33b55f71aaeec74542a3938772f6',
+        repo: 'godweiyang.github.io',
+        owner: 'godweiyang',
+        admin: "godweiyang",
+        id: decodeURI(window.location.pathname),
+        distractionFreeMode: false,
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token'
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2018/04/16/concrete-math-8/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/26.jpg" class="responsive-img" alt="具体数学-第8课（取整进阶）">
+                        
+                        <span class="card-title">具体数学-第8课（取整进阶）</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+关注公众号【算法码上来】，每日算法干货马上就来！
+
+
+今天主要讲了取整与递归式的结合，还有取模的相关知识。
+例题1
+给出下列递归式：\[\begin{array}{l}{K_0}{\rm{ = }}1\\{K_{n + 1}} = 1 +
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="fa fa-clock-o fa-fw icon-date"></i>2018-04-16
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/数学/" class="post-category" target="_blank">
+                                    数学
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/具体数学/" target="_blank">
+                        <span class="chip bg-color">具体数学</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2018/04/09/concrete-math-7/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="具体数学-第7课（取整基础）">
+                        
+                        <span class="card-title">具体数学-第7课（取整基础）</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+关注公众号【算法码上来】，每日算法干货马上就来！
+
+
+首先声明一下，最近这段时间忙毕设，没时间更新博客了，大家见谅。
+今天这节课开始讲解取整相关知识，主要是数论相关的了。
+符号定义
+向下取整函数$\left\lfloor x \right
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2018-04-09
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/数学/" class="post-category" target="_blank">
+                                    数学
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/具体数学/" target="_blank">
+                        <span class="chip bg-color">具体数学</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
+            + '链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () { bodyElement.removeChild(newdiv); }, 200);
+    });
+</script>
+
+<!-- <script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+<script>
+    const btw = new BTWPlugin();
+    btw.init({
+        id: 'artDetail',
+        blogId: '20962-1585405055583-879',
+        name: '算法码上来',
+        qrcode: 'https://godweiyang.com/medias/gzh.jpg',
+        keyword: 'VIP',
+    });
+</script> -->
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="fa fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fa fa-list"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            // headingsOffset: -205,
+            headingSelector: 'h1, h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h1, h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).slideUp(500);
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).slideDown(500);
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+    
+
+</main>
+
+
+<script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            processEscapes: true
+        },
+        options: {
+            skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+    };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+<!-- 代码语言 -->
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+<!-- 代码块复制 -->
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+<script type="text/javascript" src="/libs/codeBlock/clipboard.min.js"></script>
+<!-- 代码块收缩 -->
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script> 
+<!-- 代码块折行 -->
+<style type="text/css">code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }</style>
+
+
+    <footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            &copy; 2017-2023 godweiyang. 版权所有
+
+            
+            &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
+            <span class="white-color">360.9k</span>
+            
+
+            <br>
+            <span id="sitetime"></span>
+
+            
+            
+            <br>
+            
+            <span id="busuanzi_container_site_pv" style='display:none'>
+                <i class="fa fa-heart-o"></i>
+                本站总访问量 <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv" style='display:none'>
+                人次,&nbsp;访客数 <span id="busuanzi_value_site_uv" class="white-color"></span> 人.
+            </span>
+            
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/godweiyang" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fa fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:godweiyang@gmail.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fa fa-envelope-open"></i>
+    </a>
+
+
+
+    <a href="https://zhihu.com/people/godweiyang" class="tooltipped" target="_blank" data-tooltip="访问我的知乎" data-position="top" data-delay="50">
+        <i class="fa fa-inverse">知</i>
+    </a>
+
+
+
+    <a href="http://wpa.qq.com/msgrd?v=3&uin=792321264&site=qq&menu=yes" class="tooltipped" target="_blank" data-tooltip="访问我的知乎" data-position="top" data-delay="50">
+        <i class="fa fa-qq"></i>
+    </a>
+
+
+
+    <a href="https://weibo.com/godweiyang" class="tooltipped" target="_blank" data-tooltip="关注我的微博" data-position="top" data-delay="50">
+        <i class="fa fa-weibo"></i>
+    </a>
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fa fa-rss"></i>
+    </a>
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+<!-- 不蒜子计数初始值纠正 -->
+<script>
+    $(document).ready(function () {
+
+        var int = setInterval(fixCount, 50);
+        var pvcountOffset = 80000;
+        var uvcountOffset = 20000;
+
+        function fixCount() {
+            if (document.getElementById("busuanzi_container_site_pv").style.display != "none") {
+                $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + pvcountOffset);
+                clearInterval(int);
+            }
+            if ($("#busuanzi_container_site_pv").css("display") != "none") {
+                $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + uvcountOffset); // 加上初始数据 
+                clearInterval(int);
+            }
+        }
+    });
+</script>
+
+<script language=javascript>
+    function siteTime() {
+        window.setTimeout("siteTime()", 1000);
+        var seconds = 1000;
+        var minutes = seconds * 60;
+        var hours = minutes * 60;
+        var days = hours * 24;
+        var years = days * 365;
+        var today = new Date();
+        var todayYear = today.getFullYear();
+        var todayMonth = today.getMonth() + 1;
+        var todayDate = today.getDate();
+        var todayHour = today.getHours();
+        var todayMinute = today.getMinutes();
+        var todaySecond = today.getSeconds();
+        /* Date.UTC() -- 返回date对象距世界标准时间(UTC)1970年1月1日午夜之间的毫秒数(时间戳)
+        year - 作为date对象的年份，为4位年份值
+        month - 0-11之间的整数，做为date对象的月份
+        day - 1-31之间的整数，做为date对象的天数
+        hours - 0(午夜24点)-23之间的整数，做为date对象的小时数
+        minutes - 0-59之间的整数，做为date对象的分钟数
+        seconds - 0-59之间的整数，做为date对象的秒数
+        microseconds - 0-999之间的整数，做为date对象的毫秒数 */
+        var t1 = Date.UTC(2017, 09, 11, 00, 00, 00); //北京时间2018-2-13 00:00:00
+        var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+        var diff = t2 - t1;
+        var diffYears = Math.floor(diff / years);
+        var diffDays = Math.floor((diff / days) - diffYears * 365);
+        var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+        var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) / minutes);
+        var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours - diffMinutes * minutes) / seconds);
+        document.getElementById("sitetime").innerHTML = "本站已运行 " + diffYears + " 年 " + diffDays + " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+    }/*因为建站时间还没有一年，就将之注释掉了。需要的可以取消*/
+    siteTime();
+</script>
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fa fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fa fa-angle-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <script type="text/javascript"> var OriginTitile = document.title, st; document.addEventListener("visibilitychange", function () { document.hidden ? (document.title = "Σ(っ °Д °;)っ喔哟，崩溃啦！", clearTimeout(st)) : (document.title = "φ(゜▽゜*)♪咦，又好了！", st = setTimeout(function () { document.title = OriginTitile }, 3e3)) })
+    </script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-145124925-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-145124925-1');
+</script>
+
+
+
+    
+    <script src="/libs/others/clicklove.js"></script>
+    
+
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+
+    <!-- 雪花特效 -->
+    
+
+</body>
+
+</html>

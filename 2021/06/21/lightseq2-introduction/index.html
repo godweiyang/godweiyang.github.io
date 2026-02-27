@@ -1,0 +1,1318 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="训练加速3倍！字节跳动推出业界首个NLP模型全流程加速引擎, 算法码上来 字节跳动 算法工程师 ECNU NLP DeepLearning AntNLP 韦阳 godweiyang WeiYang 自然语言处理 深度学习">
+    <meta name="baidu-site-verification" content="fmlEuI34ir">
+    <meta name="google-site-verification" content="yCy2azpds5XSuGZvis6OuA-XIGF5GuGpYRAaGfD6o48">
+    <meta name="360-site-verification" content="b7c11a830ef90fd1464ad6206bb7b6e7">
+    <meta name="description" content="
+如今NLP和CV领域的大部分任务都将Transformer作为基础模型。而早在2019年12月，字节跳动曾经开源过一款Transformer类模型推理加速引擎——LightSeq。作为业界第一款支持多种模型和解码方法的推理加速引擎，Lig">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>训练加速3倍！字节跳动推出业界首个NLP模型全流程加速引擎 | 韦阳的博客</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    <style type="text/css">
+        
+    </style>
+
+    <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
+    <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+    <script>
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?ce84511d3df71640a9378a69f6293044";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+    
+        <script>
+            (function(){
+                var bp = document.createElement('script');
+                var curProtocol = window.location.protocol.split(':')[0];
+                if (curProtocol === 'https') {
+                    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+                }
+                else {
+                    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+                }
+                var s = document.getElementsByTagName("script")[0];
+                s.parentNode.insertBefore(bp, s);
+            })();
+        </script>
+    
+
+    <script>
+        (function(){
+        var src = "https://jspassport.ssl.qhimg.com/11.0.1.js?d182b3f28525f2db83acfaaf6e696dba";
+        document.write('<script src="' + src + '" id="sozz"><\/script>');
+        })();
+    </script>
+
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+<body>
+
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">韦阳的博客</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fa fa-navicon"></i></a>
+<ul class="right">
+    
+    <li class="hide-on-med-and-down">
+        <a href="/" class="waves-effect waves-light">
+            
+            <i class="fa fa-home"></i>
+            
+            <span>首页</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/tags" class="waves-effect waves-light">
+            
+            <i class="fa fa-tags"></i>
+            
+            <span>标签</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories" class="waves-effect waves-light">
+            
+            <i class="fa fa-bookmark"></i>
+            
+            <span>分类</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/archives" class="waves-effect waves-light">
+            
+            <i class="fa fa-archive"></i>
+            
+            <span>归档</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/about" class="waves-effect waves-light">
+            
+            <i class="fa fa-user-circle-o"></i>
+            
+            <span>关于</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/friends" class="waves-effect waves-light">
+            
+            <i class="fa fa-address-book"></i>
+            
+            <span>友情链接</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/contact" class="waves-effect waves-light">
+            
+            <i class="fa fa-comments"></i>
+            
+            <span>留言板</span>
+        </a>
+    </li>
+    
+    <li>
+        <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+            <i id="searchIcon" class="fa fa-search" title="搜索"></i>
+        </a>
+    </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">韦阳的博客</div>
+        <div class="logo-desc">
+            
+            字节跳动 | AI Lab | 算法工程师
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li>
+            <a href="/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-home"></i>
+                
+                首页
+            </a>
+        </li>
+        
+        <li>
+            <a href="/tags" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-tags"></i>
+                
+                标签
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-bookmark"></i>
+                
+                分类
+            </a>
+        </li>
+        
+        <li>
+            <a href="/archives" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-archive"></i>
+                
+                归档
+            </a>
+        </li>
+        
+        <li>
+            <a href="/about" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-user-circle-o"></i>
+                
+                关于
+            </a>
+        </li>
+        
+        <li>
+            <a href="/friends" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-address-book"></i>
+                
+                友情链接
+            </a>
+        </li>
+        
+        <li>
+            <a href="/contact" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-comments"></i>
+                
+                留言板
+            </a>
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/godweiyang/hexo-matery-modified" class="waves-effect waves-light" target="_blank">
+                <i class="fa fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/godweiyang/hexo-matery-modified" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+<script src="/libs/cryptojs/crypto-js.min.js"></script>
+<script>
+    (function() {
+        let pwd = '';
+        if (pwd && pwd.length > 0) {
+            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
+                alert('密码错误，将返回主页！');
+                location.href = '/';
+            }
+        }
+    })();
+</script>
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/7.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        训练加速3倍！字节跳动推出业界首个NLP模型全流程加速引擎
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 20px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                        <a href="/tags/CUDA/" target="_blank">
+                            <span class="chip bg-color">CUDA</span>
+                        </a>
+                        
+                        <a href="/tags/LightSeq/" target="_blank">
+                            <span class="chip bg-color">LightSeq</span>
+                        </a>
+                        
+                        <a href="/tags/PyTorch/" target="_blank">
+                            <span class="chip bg-color">PyTorch</span>
+                        </a>
+                        
+                        <a href="/tags/TensorFlow/" target="_blank">
+                            <span class="chip bg-color">TensorFlow</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fa fa-bookmark fa-fw icon-category"></i>
+                        
+                        <a href="/categories/编程算法/" class="post-category" target="_blank">
+                            编程算法
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                <div class="post-date info-break-policy">
+                    <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2021-06-21
+                </div>
+
+                <div class="post-author info-break-policy">
+                    <i class="fa fa-user-o fa-fw"></i>作者:&nbsp;&nbsp;
+                    
+                    韦阳
+                    
+                </div>
+
+                
+                
+                <div class="info-break-policy">
+                    <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    4.1k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    14 分
+                </div>
+                
+                
+
+                
+                <div id="busuanzi_container_page_pv" class="info-break-policy">
+                    <i class="fa fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                    <span id="busuanzi_value_page_pv"></span>
+                </div>
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p><img src="ls.png" alt></p>
+<p>如今NLP和CV领域的大部分任务都将Transformer作为基础模型。而早在2019年12月，字节跳动曾经开源过一款Transformer类模型推理加速引擎——LightSeq。作为业界第一款支持多种模型和解码方法的推理加速引擎，LightSeq的推理速度快于其它同类软件，更是远远超过了TensorFlow和PyTorch。</p>
+<p>最近，LightSeq发布了最新版本，引入了引擎方面的重大更新——支持了Transformer全流程训练加速，在不同的批处理大小下相比主流训练库最高可加速3倍多！至此从训练到推理部署的整个过程都已被LightSeq打通。</p>
+<p>那么它到底采用了哪些技术呢？下面笔者根据LightSeq公布的资料为你逐个揭晓。</p>
+<h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p><img src="1.png" alt="图1：Transformer模型结构图（以机器翻译为例）"></p>
+<p>Transformer模型 [1]自从2017年被谷歌提出之后，成为了众多NLP任务以及部分CV任务的主流模型，尤其是机器翻译、文本生成、文本摘要、时间序列预测等任务。图1是机器翻译任务使用Transformer进行训练的一个例子。但由于硬件资源的匮乏，很多高校实验室或者公司都无法训练很大的模型，而降低批处理大小等措施又会导致训练时间成倍增加。因此如何利用有限的资源最快训练出模型成为了亟待解决的问题。</p>
+<p>针对这一痛点，字节跳动推出了LightSeq训练加速引擎，对Transformer训练的整个计算过程进行了优化。从词嵌入层、编码层、解码层，到最后的损失函数层，从前向传播、反向传播、梯度同步，到最后的参数更新，LightSeq都进行了细致的性能分析和优化。以机器翻译任务为例，仅需要修改几行代码开启LightSeq训练加速，就可以加速最多3倍以上。</p>
+<p>总的来说，LightSeq具有如下几个优点：</p>
+<ol>
+<li>支持Transformer的完整加速。<br>LightSeq是业界第一款完整支持整个Transformer模型加速的训练引擎，包括了词嵌入层、编码层、解码层、损失函数层等高效自定义层。相比之下，另一款知名的深度学习优化引擎DeepSpeed [2]仅支持编码层的加速，因此只能用在BERT等模型上，局限性较大。</li>
+<li>训练速度快。<br>LightSeq训练速度非常快。例如在WMT14 [3]英德机器翻译任务上，利用英伟达最新的训练显卡A100，相比于主流序列生成库，LightSeq最快仅需要三分之一的训练时间。</li>
+<li>功能全面，简单易用。<br>LightSeq提供了高效的TensorFlow和PyTorch自定义层供用户灵活使用，可以自由插入到Hugging Face等主流训练库中。除此之外，还和当前流行的训练库如Fairseq [4]、NeurST [5]等做了深度集成，用户在安装LightSeq后，只需要修改几个命令行参数，就能在这些训练库上使用LightSeq。</li>
+<li>提供丰富的二次开发工具。<br>LightSeq提供了完整的CUDA kernel和Transformer自定义层的单元测试功能，可以测试自定义算子的正确性，同时分析出运行时间和加速比，帮助开发者更快地验证功能的正确性和有效性。</li>
+</ol>
+<p>表1列举了不同训练加速引擎之间支持的功能对比：</p>
+<p><img src="t1.png" alt="表1：不同训练加速引擎支持功能对比"></p>
+<h2 id="快速上手"><a href="#快速上手" class="headerlink" title="快速上手"></a>快速上手</h2><p>LightSeq提供了多种便捷的运行方式，点击文末链接可以快速体验。这里简单讲解一下快速接入LightSeq进行训练的两种方式。</p>
+<h3 id="使用自定义层"><a href="#使用自定义层" class="headerlink" title="使用自定义层"></a>使用自定义层</h3><p>LightSeq提供了许多自定义层供用户灵活使用。</p>
+<p>例如想要将Transformer模型中的编码层替换为LightSeq的编码层，只需要提供一个编码层参数，用来初始化LightSeq编码层。然后就可以用它来替换原始的编码层，加速模型训练。详细代码如下（这里省略了部分配置参数）：</p>
+<pre class="line-numbers language-python"><code class="language-python"><span class="token keyword">from</span> lightseq<span class="token punctuation">.</span>training<span class="token punctuation">.</span>ops<span class="token punctuation">.</span>pytorch<span class="token punctuation">.</span>transformer_encoder_layer <span class="token keyword">import</span> LSTransformerEncoderLayer
+
+config <span class="token operator">=</span> LSTransformerEncoderLayer<span class="token punctuation">.</span>get_config<span class="token punctuation">(</span>
+    max_batch_tokens<span class="token operator">=</span><span class="token number">4096</span><span class="token punctuation">,</span>
+    max_seq_len<span class="token operator">=</span><span class="token number">256</span><span class="token punctuation">,</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">)</span>
+enc_layer <span class="token operator">=</span> LSTransformerEncoderLayer<span class="token punctuation">(</span>config<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="一键启动"><a href="#一键启动" class="headerlink" title="一键启动"></a>一键启动</h3><p>LightSeq还和几个当前流行的训练库（例如Fairseq和NeurST）做了深度集成，仅需修改很少的代码就能开启LightSeq加速。</p>
+<p><strong>Fairseq</strong><br>LightSeq为Fairseq提供了一套完整便捷的Transformer训练样例。</p>
+<p>首先需要安装Fairseq，以及必要的第三方库。</p>
+<p>然后用如下命令安装LightSeq加速库：</p>
+<pre class="line-numbers language-shell"><code class="language-shell">pip install lightseq<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>接着就可以通过LightSeq提供的启动器，灵活地指定使用LightSeq优化版本的Transformer模型、参数优化器和损失函数，下面是启动参数样例（这里省略了和LightSeq无关的参数）：</p>
+<pre class="line-numbers language-shell"><code class="language-shell">lightseq-train DATA_PATH \
+    --arch ls_transformer_wmt_en_de_big_t2t \
+    --optimizer ls_adam \
+    --criterion ls_label_smoothed_cross_entropy<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>NeurST</strong><br>NeurST是一款同时支持TensorFlow和PyTorch的开源序列生成库，可以用来做文本生成、机器翻译和语音翻译。LightSeq已经与其进行了深度融合，无需用户修改代码和启动参数即可直接进行加速训练。</p>
+<p>首先需要安装NeurST，官方提供了详细的安装教程 [6]。</p>
+<p>然后安装TensorFlow版本的LightSeq，命令如下：</p>
+<pre class="line-numbers language-shell"><code class="language-shell">pip install http://sf3-ttcdn-tos.pstatp.com/obj/nlp-opensource/lightseq/tensorflow/lightseq_tf-2.0.1-cp37-cp37m-linux_x86_64.whl<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>这样NeurST就会自动识别LightSeq已经安装成功，调用<code>lightseq</code>库进行模型构建来加速训练，无需修改启动参数。运行命令详见NeurST提供的机器翻译样例 [6]。</p>
+<h2 id="性能测试"><a href="#性能测试" class="headerlink" title="性能测试"></a>性能测试</h2><p>在WMT14标准的英德翻译任务上，LightSeq做了评测实验。以当前流行的Fairseq训练库（基于PyTorch）和被广泛使用Apex工具库 [7]为基准，测试了LightSeq的训练性能。实验在NVIDIA Tesla V100 和 NVIDIA Ampere A100上进行，采用单机八卡数据并行训练和16位浮点数混合精度。</p>
+<p>在不同模型大小和批处理大小下，LightSeq对单步训练速度的提升结果如图2所示：</p>
+<p><img src="2.png" alt="图2：A100和V100显卡下不同层数模型加速比"></p>
+<p>这里所有模型的词表大小为40k，编码层和解码层隐层维度是1024，注意力头数为16。e和d分别表示编码器和解码器的层数。加速比的计算采用了每秒训练有效单词数（real word per second）这一常见指标。</p>
+<p>可以发现：</p>
+<ol>
+<li>使用了LightSeq后，单步训练速度有45%-250%的提升，作为对比，Apex仅有5%-30%的提升。LightSeq能取得这种大幅度的性能提升，源自于其对模型进行了全流程的细致优化。</li>
+<li>Apex显存使用量对比原生Fairseq略有提升，例如V100上，Apex导致6e6d的模型在15000批处理大小上出现了显存溢出，而LightSeq仍然可以正常训练。这证明了LightSeq在保证高效计算的同时，也做到了高效使用显存，这个特征在显存有限或者训练大模型时非常关键。</li>
+<li>随着批处理大小的增加，LightSeq加速比逐渐降低。其原因是，经过LightSeq优化后，单步训练中矩阵乘法占比提高，显卡的计算吞吐成为训练速度的瓶颈。这表明LightSeq已经对计算资源做到了充分利用。也解释了为什么计算吞吐更高的A100，平均会取得比V100高15%左右的加速比。</li>
+</ol>
+<p>最后在WMT14英德翻译数据集上测试了图1中Transformer模型训练至收敛的时间，结果如图3所示：</p>
+<p><img src="3.png" alt="图3：A100和V100显卡下不同模型训练总时间"></p>
+<p>由于LightSeq的计算优化是无损的，不会影响模型训练至收敛的训练步数，所以收敛时间的提升和单步训练时间的提升趋于一致。观察可以发现，LightSeq最多可将模型训练时间由8.5小时降低到3.8小时。</p>
+<h3 id="可视化分析"><a href="#可视化分析" class="headerlink" title="可视化分析"></a>可视化分析</h3><p>为了更清楚地展示LightSeq优化前后模型的运算情况，用Nsight Systems [8]可视化模型训练过程中单步的算子调用情况。</p>
+<p>首先是Fairseq+Apex的可视化，结果如图4所示。总耗时在288ms左右，三个红色框分别表示前向传播、反向传播、梯度同步与参数更新。可以看出前向传播的算子排列比较稀疏，存在很大的优化空间。</p>
+<p><img src="4.png" alt="图4：Fairseq+Apex单步训练过程可视化"></p>
+<p>然后是Fairseq+LightSeq的可视化，结果如图5所示，总耗时降到了185ms左右。而且LightSeq的算子排列更加紧密，大大增加了显卡的利用率。</p>
+<p><img src="5.png" alt="图5：Fairseq+LightSeq单步训练过程可视化"></p>
+<h3 id="CUDA-kernel性能"><a href="#CUDA-kernel性能" class="headerlink" title="CUDA kernel性能"></a>CUDA kernel性能</h3><p>此外还测试了LightSeq单卡情况下所有CUDA kernel的性能，对比了PyTorch、TensorFlow（XLA编译优化）、DeepSpeed和LightSeq四种实现方式。由于kernel太多，这里只列举了部分实验结果。</p>
+<p>首先对比了最常用的dropout，图6是V100显卡上16位和32位浮点数dropout不同实现的加速对比结果：</p>
+<p><img src="6.png" alt="图6：dropout加速对比"></p>
+<p>从图6中可以看出，LightSeq的实现要远远快于PyTorch和DeepSpeed。DeepSpeed在元素数量过百万之后逐渐不如PyTorch，而LightSeq始终比PyTorch快。随着元素数量的增加，LightSeq和DeepSpeed的速度都会有明显下降。TensorFlow在开启了XLA之后速度依然落后于PyTorch，且随着元素数量的增加差距逐渐缩小。</p>
+<p>然后对比了注意力机制中的softmax函数，测试了实际训练场景中批处理大小为8192情况下的加速比。图7是V100显卡上16位和32位浮点数softmax不同实现的加速对比结果，因为DeepSpeed只支持句子长度为8的整数倍，所以这里只测试了长度为32的整数倍的句子计算速度：</p>
+<p><img src="7.png" alt="图7：softmax加速对比"></p>
+<p>可以看出，LightSeq几乎在所有情况下远远快于DeepSpeed。且随着序列长度增加，LightSeq加速比逐渐增大。而DeepSpeed在16位浮点数情况下加速比会逐渐减小，在32位浮点数情况下甚至会出现比PyTorch还要慢的情况。TensorFlow即便使用XLA融合算子，运算速度也远远落后于其它三种实现。</p>
+<p>在其它多数kernel测试中，LightSeq都要快于其它三种实现。</p>
+<h2 id="关键技术"><a href="#关键技术" class="headerlink" title="关键技术"></a>关键技术</h2><p><img src="8.png" alt="图8：模型训练过程"></p>
+<p>如图8所示，以2卡为例，一个完整的Transformer模型训练过程主要包括四个步骤：前向传播、后向传播、梯度同步和参数更新。其中前向传播和后向传播占模型训练总时间的70%多，包含了众多计算密集型和I/O密集型操作，因此是优化的重点。而梯度同步虽然耗时相对较少，但是也可以通过和反向传播并行化等方法隐藏掉大部分延时。最后优化器更新参数方面也大有文章可做，可以从计算和I/O两个方面减小延时。</p>
+<p>下面详细介绍优化这四个步骤的几种技术：算子多运算融合、输入输出层融合、动态显存复用和参数连续化，最后介绍一下LightSeq提供的单元测试功能。</p>
+<h3 id="算子多运算融合"><a href="#算子多运算融合" class="headerlink" title="算子多运算融合"></a>算子多运算融合</h3><p>在大多数深度学习框架（例如TensorFlow和PyTorch）中，一个简单的运算通常都需要很多细粒度的核函数来实现。例如在TensorFlow中，一次层归一化（Layer Normalization）操作需要调用三次核函数以及两次中间显存读写，非常耗时。而基于CUDA，LightSeq定制化了一个层归一化专用的核函数，将两次中间结果的写入寄存器。从而实现一次核函数调用，同时没有中间结果显存读写，因此大大节省了计算开销。</p>
+<p>基于这个思路，LightSeq利用CUDA矩阵运算库cuBLAS [9]提供的矩阵乘法和自定义核函数实现了Transformer的编码器和解码器。以编码层为例，具体结构如图9所示：</p>
+<p><img src="9.png" alt="图9：编码层计算过程"><br>蓝色部分是自定义核函数，黄色部分是矩阵乘法。可以发现，矩阵乘法之间的运算全部都用一个定制化核函数实现了，因此大大减少了核函数调用和显存读写，最终提升了运算速度。</p>
+<p>LightSeq还优化了核函数的实现，采用float4数据类型来进行数据读写，大大增加了数据的吞吐量，减小了核函数执行的延时。LightSeq支持任意长度的序列输入，根据不同的序列长度选择最合适的核函数来调用执行。相比之下，DeepSpeed多数核函数只支持句子长度为8的整数倍，因此速度较慢，局限性较大。</p>
+<h3 id="输入输出层融合"><a href="#输入输出层融合" class="headerlink" title="输入输出层融合"></a>输入输出层融合</h3><p>此外LightSeq还实现了词嵌入层和损失函数层的算子融合。对于词嵌入层，LightSeq将词表查找与放缩、位置向量融合以及dropout操作都写成了一个核函数。对于损失函数层，将交叉熵损失融合成一个核函数。通过输入输出层的融合，进一步减小了模型训练的时间，增加了显卡利用率。</p>
+<p>以词嵌入层为例，图10展示了输入句子中单词id之后，词嵌入层进行的计算过程：</p>
+<p><img src="10.png" alt="图10：词嵌入层计算过程"></p>
+<p>可以看出，在融合之前一个词嵌入层需要经过词向量查找与放缩、位置向量查找、两者相加、dropout五种运算，因此需要频繁调用核函数，非常耗时。而将这五个操作融合成一个核函数可以大大加快获取最终词表示的速度。</p>
+<h3 id="动态显存复用"><a href="#动态显存复用" class="headerlink" title="动态显存复用"></a>动态显存复用</h3><p>为了避免计算过程中的显存申请释放并节省显存占用，LightSeq首先对模型中所有动态的矩阵大小都定义了最大值（例如最大序列长度）。接着在模型初始化的时候，为计算过程中的每个中间计算结果按最大值分配显存，并对没有依赖的中间结果共用显存。</p>
+<h3 id="参数连续化"><a href="#参数连续化" class="headerlink" title="参数连续化"></a>参数连续化</h3><p>LightSeq将Transformer每一层中所有的参数都绑定在一起，做连续化处理。初始化模型某一层的时候只需要定义一个参数，参数量为原始模型该层总的参数量。在后续计算时，只需要从这个参数的对应位置处取出原始参数值即可。</p>
+<p>以编码层为例，自注意力层和前馈层共有16个参数，假设总参数量为S。于是可以定义一个大小为S的参数，按照原始各个参数的参数量来划分出16个块，连续存储16个参数，在计算时只需要取出对应的参数块即可。</p>
+<p>参数连续化能显著降低参数更新期间拷贝、同步、计算的次数。实验分析发现，进行了这项优化后，优化器性能提升了40%-50%。</p>
+<h2 id="开发工具"><a href="#开发工具" class="headerlink" title="开发工具"></a>开发工具</h2><p>LightSeq提供了丰富的单元测试功能，不仅可以测试所有的自定义核函数和自定义层的正确性，还可以对比测试不同实现之间的速度。用户可以自由指定测试的组数、每组重复运行次数、容差和数据类型。</p>
+<p>具体步骤上，首先用户需要构造随机数据，然后根据数据类型选择不同的CUDA核函数，最后分别实现自定义和基准的计算函数即可。这样就保证了用户可以基于自身场景进行更进一步的二次定制开发。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>LightSeq新版训练加速引擎全方面提升了Transformer模型的训练速度，打通了训练和推理部署全流程，使用灵活方便。大大缩减了科研工作者们训练模型的成本。可以期待未来像机器翻译、文本生成、摘要、对话生成、情感分析等大量NLP应用场景可以使用LightSeq来训练和推理。</p>
+<h2 id="传送门"><a href="#传送门" class="headerlink" title="传送门"></a>传送门</h2><p><strong>LightSeq地址：</strong><br><a href="https://github.com/bytedance/lightseq" target="_blank" rel="noopener">https://github.com/bytedance/lightseq</a></p>
+<p><img src="lightseq.png" alt></p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p>[1] Transformer: “Attention is all you need”, NIPS (2017)<br>[2] DeepSpeed: <a href="https://github.com/microsoft/DeepSpeed" target="_blank" rel="noopener">https://github.com/microsoft/DeepSpeed</a><br>[3] WMT14: <a href="http://www.statmt.org/wmt14/" target="_blank" rel="noopener">http://www.statmt.org/wmt14/</a><br>[4] Fairseq: <a href="https://github.com/pytorch/fairseq" target="_blank" rel="noopener">https://github.com/pytorch/fairseq</a><br>[5] NeurST: <a href="https://github.com/bytedance/neurst/tree/lightseq" target="_blank" rel="noopener">https://github.com/bytedance/neurst/tree/lightseq</a><br>[6] NeurST机器翻译样例: <a href="https://github.com/bytedance/neurst/tree/lightseq/examples/translation" target="_blank" rel="noopener">https://github.com/bytedance/neurst/tree/lightseq/examples/translation</a><br>[7] Apex: <a href="https://github.com/NVIDIA/apex" target="_blank" rel="noopener">https://github.com/NVIDIA/apex</a><br>[8] Nsight Systems: <a href="https://developer.nvidia.com/nsight-systems" target="_blank" rel="noopener">https://developer.nvidia.com/nsight-systems</a><br>[9] cuBLAS: <a href="https://docs.nvidia.com/cuda/cublas/index.html" target="_blank" rel="noopener">https://docs.nvidia.com/cuda/cublas/index.html</a></p>
+
+            </div>
+            <hr />
+
+            
+            <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.88rem;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fa fa-close"></i></a>
+            <h4 class="reward-title">万水千山总是情，打赏一块行不行？</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+
+            <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    <div class="social-share" data-disabled="qzone" data-wechat-qrcode-helper="<p>微信里点“发现”->“扫一扫”二维码便可查看分享。</p>"></div>
+    
+</div>
+
+<script src="/libs/share/js/social-share.min.js"></script>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        <p class="reprint-tip">
+            <i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;
+            <span>转载规则</span>
+        </p>
+        
+            <div class="center-align">
+                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
+                    <img alt=""
+                         style="border-width:0"
+                         src="https://i.creativecommons.org/l/by/4.0/88x31.png"/>
+                </a>
+            </div>
+            <br/>
+            <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text"
+                  property="dct:title" rel="dct:type">
+                    《训练加速3倍！字节跳动推出业界首个NLP模型全流程加速引擎》
+                </span> 由
+            <a xmlns:cc="http://creativecommons.org/ns#" href="/2021/06/21/lightseq2-introduction/" property="cc:attributionName"
+               rel="cc:attributionURL">
+                韦阳
+            </a> 采用
+            <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
+                知识共享署名 4.0 国际许可协议
+            </a>进行许可。
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+        </div>
+    </div>
+
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: 'c3ac6e20697ee5422b43',
+        clientSecret: '3ccf19d2ec7e33b55f71aaeec74542a3938772f6',
+        repo: 'godweiyang.github.io',
+        owner: 'godweiyang',
+        admin: "godweiyang",
+        id: decodeURI(window.location.pathname),
+        distractionFreeMode: false,
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token'
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2021/06/21/lightseq2-usage/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="只用几行代码，我让模型『训练』加速了3倍以上！">
+                        
+                        <span class="card-title">只用几行代码，我让模型『训练』加速了3倍以上！</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            最近总有学妹问我，论文要截稿了，模型来不及跑怎么办？
+还有学妹问我，有好多idea，验证一个就要跑一周怎么办？
+这时候我想起了下面这张图，我想这句话反映了大多数从事人工智能的科研工作者们目前的状态。
+
+于是我告诉学妹，想要快，找我就对了，我
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="fa fa-clock-o fa-fw icon-date"></i>2021-06-21
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/编程算法/" class="post-category" target="_blank">
+                                    编程算法
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/CUDA/" target="_blank">
+                        <span class="chip bg-color">CUDA</span>
+                    </a>
+                    
+                    <a href="/tags/LightSeq/" target="_blank">
+                        <span class="chip bg-color">LightSeq</span>
+                    </a>
+                    
+                    <a href="/tags/PyTorch/" target="_blank">
+                        <span class="chip bg-color">PyTorch</span>
+                    </a>
+                    
+                    <a href="/tags/TensorFlow/" target="_blank">
+                        <span class="chip bg-color">TensorFlow</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2021/05/21/master-graduate/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="七年师大，青春永不毕业">
+                        
+                        <span class="card-title">七年师大，青春永不毕业</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            2021年5月19日，我答辩顺利结束了。
+22年的学生时代终于要走到了尽头，在学校的日子过一天少一天。想到校园卡即将刷不进校门了，难免有些失落。
+七年师大，从两年的东川路500号，到五年的中山北路3663号。我见证了计算机系的三次变迁，也发
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2021-05-21
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/随笔/" class="post-category" target="_blank">
+                                    随笔
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/毕业/" target="_blank">
+                        <span class="chip bg-color">毕业</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
+            + '链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () { bodyElement.removeChild(newdiv); }, 200);
+    });
+</script>
+
+<!-- <script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+<script>
+    const btw = new BTWPlugin();
+    btw.init({
+        id: 'artDetail',
+        blogId: '20962-1585405055583-879',
+        name: '算法码上来',
+        qrcode: 'https://godweiyang.com/medias/gzh.jpg',
+        keyword: 'VIP',
+    });
+</script> -->
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="fa fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fa fa-list"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            // headingsOffset: -205,
+            headingSelector: 'h1, h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h1, h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).slideUp(500);
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).slideDown(500);
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+    
+
+</main>
+
+
+<script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            processEscapes: true
+        },
+        options: {
+            skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+    };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+<!-- 代码语言 -->
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+<!-- 代码块复制 -->
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+<script type="text/javascript" src="/libs/codeBlock/clipboard.min.js"></script>
+<!-- 代码块收缩 -->
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script> 
+<!-- 代码块折行 -->
+<style type="text/css">code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }</style>
+
+
+    <footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            &copy; 2017-2023 godweiyang. 版权所有
+
+            
+            &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
+            <span class="white-color">360.9k</span>
+            
+
+            <br>
+            <span id="sitetime"></span>
+
+            
+            
+            <br>
+            
+            <span id="busuanzi_container_site_pv" style='display:none'>
+                <i class="fa fa-heart-o"></i>
+                本站总访问量 <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv" style='display:none'>
+                人次,&nbsp;访客数 <span id="busuanzi_value_site_uv" class="white-color"></span> 人.
+            </span>
+            
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/godweiyang" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fa fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:godweiyang@gmail.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fa fa-envelope-open"></i>
+    </a>
+
+
+
+    <a href="https://zhihu.com/people/godweiyang" class="tooltipped" target="_blank" data-tooltip="访问我的知乎" data-position="top" data-delay="50">
+        <i class="fa fa-inverse">知</i>
+    </a>
+
+
+
+    <a href="http://wpa.qq.com/msgrd?v=3&uin=792321264&site=qq&menu=yes" class="tooltipped" target="_blank" data-tooltip="访问我的知乎" data-position="top" data-delay="50">
+        <i class="fa fa-qq"></i>
+    </a>
+
+
+
+    <a href="https://weibo.com/godweiyang" class="tooltipped" target="_blank" data-tooltip="关注我的微博" data-position="top" data-delay="50">
+        <i class="fa fa-weibo"></i>
+    </a>
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fa fa-rss"></i>
+    </a>
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+<!-- 不蒜子计数初始值纠正 -->
+<script>
+    $(document).ready(function () {
+
+        var int = setInterval(fixCount, 50);
+        var pvcountOffset = 80000;
+        var uvcountOffset = 20000;
+
+        function fixCount() {
+            if (document.getElementById("busuanzi_container_site_pv").style.display != "none") {
+                $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + pvcountOffset);
+                clearInterval(int);
+            }
+            if ($("#busuanzi_container_site_pv").css("display") != "none") {
+                $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + uvcountOffset); // 加上初始数据 
+                clearInterval(int);
+            }
+        }
+    });
+</script>
+
+<script language=javascript>
+    function siteTime() {
+        window.setTimeout("siteTime()", 1000);
+        var seconds = 1000;
+        var minutes = seconds * 60;
+        var hours = minutes * 60;
+        var days = hours * 24;
+        var years = days * 365;
+        var today = new Date();
+        var todayYear = today.getFullYear();
+        var todayMonth = today.getMonth() + 1;
+        var todayDate = today.getDate();
+        var todayHour = today.getHours();
+        var todayMinute = today.getMinutes();
+        var todaySecond = today.getSeconds();
+        /* Date.UTC() -- 返回date对象距世界标准时间(UTC)1970年1月1日午夜之间的毫秒数(时间戳)
+        year - 作为date对象的年份，为4位年份值
+        month - 0-11之间的整数，做为date对象的月份
+        day - 1-31之间的整数，做为date对象的天数
+        hours - 0(午夜24点)-23之间的整数，做为date对象的小时数
+        minutes - 0-59之间的整数，做为date对象的分钟数
+        seconds - 0-59之间的整数，做为date对象的秒数
+        microseconds - 0-999之间的整数，做为date对象的毫秒数 */
+        var t1 = Date.UTC(2017, 09, 11, 00, 00, 00); //北京时间2018-2-13 00:00:00
+        var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+        var diff = t2 - t1;
+        var diffYears = Math.floor(diff / years);
+        var diffDays = Math.floor((diff / days) - diffYears * 365);
+        var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+        var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) / minutes);
+        var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours - diffMinutes * minutes) / seconds);
+        document.getElementById("sitetime").innerHTML = "本站已运行 " + diffYears + " 年 " + diffDays + " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+    }/*因为建站时间还没有一年，就将之注释掉了。需要的可以取消*/
+    siteTime();
+</script>
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fa fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fa fa-angle-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <script type="text/javascript"> var OriginTitile = document.title, st; document.addEventListener("visibilitychange", function () { document.hidden ? (document.title = "Σ(っ °Д °;)っ喔哟，崩溃啦！", clearTimeout(st)) : (document.title = "φ(゜▽゜*)♪咦，又好了！", st = setTimeout(function () { document.title = OriginTitile }, 3e3)) })
+    </script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-145124925-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-145124925-1');
+</script>
+
+
+
+    
+    <script src="/libs/others/clicklove.js"></script>
+    
+
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+
+    <!-- 雪花特效 -->
+    
+
+</body>
+
+</html>

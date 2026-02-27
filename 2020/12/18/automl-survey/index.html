@@ -1,0 +1,1370 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="一文看懂AutoML, 算法码上来 字节跳动 算法工程师 ECNU NLP DeepLearning AntNLP 韦阳 godweiyang WeiYang 自然语言处理 深度学习">
+    <meta name="baidu-site-verification" content="fmlEuI34ir">
+    <meta name="google-site-verification" content="yCy2azpds5XSuGZvis6OuA-XIGF5GuGpYRAaGfD6o48">
+    <meta name="360-site-verification" content="b7c11a830ef90fd1464ad6206bb7b6e7">
+    <meta name="description" content="论文地址：AutoML: A survey of the state-of-the-art
+
+最近看了些NAS的论文，发现上面这篇综述写的很不错，非常全面，详细拜读了一下。有很多细节不是很懂，也没空去精读原论文，但是能够对大致的脉络有个初步">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>一文看懂AutoML | 韦阳的博客</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    <style type="text/css">
+        
+    </style>
+
+    <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
+    <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+    <script>
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?ce84511d3df71640a9378a69f6293044";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+    
+        <script>
+            (function(){
+                var bp = document.createElement('script');
+                var curProtocol = window.location.protocol.split(':')[0];
+                if (curProtocol === 'https') {
+                    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+                }
+                else {
+                    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+                }
+                var s = document.getElementsByTagName("script")[0];
+                s.parentNode.insertBefore(bp, s);
+            })();
+        </script>
+    
+
+    <script>
+        (function(){
+        var src = "https://jspassport.ssl.qhimg.com/11.0.1.js?d182b3f28525f2db83acfaaf6e696dba";
+        document.write('<script src="' + src + '" id="sozz"><\/script>');
+        })();
+    </script>
+
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+<body>
+
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">韦阳的博客</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fa fa-navicon"></i></a>
+<ul class="right">
+    
+    <li class="hide-on-med-and-down">
+        <a href="/" class="waves-effect waves-light">
+            
+            <i class="fa fa-home"></i>
+            
+            <span>首页</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/tags" class="waves-effect waves-light">
+            
+            <i class="fa fa-tags"></i>
+            
+            <span>标签</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories" class="waves-effect waves-light">
+            
+            <i class="fa fa-bookmark"></i>
+            
+            <span>分类</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/archives" class="waves-effect waves-light">
+            
+            <i class="fa fa-archive"></i>
+            
+            <span>归档</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/about" class="waves-effect waves-light">
+            
+            <i class="fa fa-user-circle-o"></i>
+            
+            <span>关于</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/friends" class="waves-effect waves-light">
+            
+            <i class="fa fa-address-book"></i>
+            
+            <span>友情链接</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/contact" class="waves-effect waves-light">
+            
+            <i class="fa fa-comments"></i>
+            
+            <span>留言板</span>
+        </a>
+    </li>
+    
+    <li>
+        <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+            <i id="searchIcon" class="fa fa-search" title="搜索"></i>
+        </a>
+    </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">韦阳的博客</div>
+        <div class="logo-desc">
+            
+            字节跳动 | AI Lab | 算法工程师
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li>
+            <a href="/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-home"></i>
+                
+                首页
+            </a>
+        </li>
+        
+        <li>
+            <a href="/tags" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-tags"></i>
+                
+                标签
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-bookmark"></i>
+                
+                分类
+            </a>
+        </li>
+        
+        <li>
+            <a href="/archives" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-archive"></i>
+                
+                归档
+            </a>
+        </li>
+        
+        <li>
+            <a href="/about" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-user-circle-o"></i>
+                
+                关于
+            </a>
+        </li>
+        
+        <li>
+            <a href="/friends" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-address-book"></i>
+                
+                友情链接
+            </a>
+        </li>
+        
+        <li>
+            <a href="/contact" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-comments"></i>
+                
+                留言板
+            </a>
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/godweiyang/hexo-matery-modified" class="waves-effect waves-light" target="_blank">
+                <i class="fa fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/godweiyang/hexo-matery-modified" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+<script src="/libs/cryptojs/crypto-js.min.js"></script>
+<script>
+    (function() {
+        let pwd = '';
+        if (pwd && pwd.length > 0) {
+            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
+                alert('密码错误，将返回主页！');
+                location.href = '/';
+            }
+        }
+    })();
+</script>
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/3.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        一文看懂AutoML
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 20px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                        <a href="/tags/AutoML/" target="_blank">
+                            <span class="chip bg-color">AutoML</span>
+                        </a>
+                        
+                        <a href="/tags/NAS/" target="_blank">
+                            <span class="chip bg-color">NAS</span>
+                        </a>
+                        
+                        <a href="/tags/神经架构搜索/" target="_blank">
+                            <span class="chip bg-color">神经架构搜索</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fa fa-bookmark fa-fw icon-category"></i>
+                        
+                        <a href="/categories/深度学习/" class="post-category" target="_blank">
+                            深度学习
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                <div class="post-date info-break-policy">
+                    <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2020-12-18
+                </div>
+
+                <div class="post-author info-break-policy">
+                    <i class="fa fa-user-o fa-fw"></i>作者:&nbsp;&nbsp;
+                    
+                    韦阳
+                    
+                </div>
+
+                
+                
+                <div class="info-break-policy">
+                    <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    6.1k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    21 分
+                </div>
+                
+                
+
+                
+                <div id="busuanzi_container_page_pv" class="info-break-policy">
+                    <i class="fa fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                    <span id="busuanzi_value_page_pv"></span>
+                </div>
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p><strong>论文地址：</strong><br><a href="https://arxiv.org/abs/1908.00709" title="AutoML: A survey of the state-of-the-art" target="_blank" rel="noopener">AutoML: A survey of the state-of-the-art</a></p>
+<blockquote>
+<p>最近看了些NAS的论文，发现上面这篇综述写的很不错，非常全面，详细拜读了一下。有很多细节不是很懂，也没空去精读原论文，但是能够对大致的脉络有个初步的了解。因此简单写一下这篇综述讲了些啥，第一次接触NAS，可能有理解有误，望指正批评。</p>
+</blockquote>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>首先这篇综述是讲AutoML的，不单单是NAS，但是因为NAS是AutoML中最最重要的一部分，所以主要篇章还是用来讲NAS了。据作者所说，应该是第一篇完整讲述AutoML整个流程的综述。</p>
+<p>首先，本文将AutoML划分成了如下几个流程：</p>
+<p><img src="1.png" alt></p>
+<p>先是数据准备，然后是特征工程，接着是模型生成，最后就是模型评估了。其中模型生成又可以分为搜索空间和优化方法，搜索空间有传统的ML模型或者DL模型，优化方法又分为超参数优化和结构优化。NAS的话主要就涉及到DL模型的搜索空间定义、结构优化和模型评估策略这三块。</p>
+<p>因为我主要关注NAS这块，所以其他部分就只简单介绍一下，不做过多解读。</p>
+<h3 id="数据准备"><a href="#数据准备" class="headerlink" title="数据准备"></a>数据准备</h3><p><img src="2.png" alt></p>
+<p>看上面这个图应该很清楚了，数据准备主要分为数据收集、数据清洗和数据增强三个部分。</p>
+<h3 id="数据收集"><a href="#数据收集" class="headerlink" title="数据收集"></a>数据收集</h3><p>有开源的就去下开源的，没开源的就去互联网上爬，要是什么都没有呢，那就通过GAN之类的技术来生成伪数据，有总比没有好嘛。</p>
+<h3 id="数据清洗"><a href="#数据清洗" class="headerlink" title="数据清洗"></a>数据清洗</h3><p>就是清洗数据中的噪声、脏数据，这一过程可能需要一些知识去判断什么是噪声。还有一个研究主题就是如何清洗每天更新的源源不断的新数据。</p>
+<h3 id="数据增强"><a href="#数据增强" class="headerlink" title="数据增强"></a>数据增强</h3><p><img src="3.png" alt></p>
+<p>数据增强某种程度上也可以被视为数据收集的一种工具，因为效果都是一样的，增加了新数据。但是它的目的有所不同，主要是为了防止模型过拟合。上图针对不同数据有很多增强方法，这里就不介绍了。</p>
+<h2 id="特征工程"><a href="#特征工程" class="headerlink" title="特征工程"></a>特征工程</h2><p>有句话叫：数据和特征决定了机器学习的上界，而模型和算法只是为了去近似这个上界。主要可以分成三块，特征选择、特征构建和特征提取。这里也不多介绍了，因为在DL里特征工程用得很少，DL模型可以自己从数据中学出特征，很少需要自己手动构造特征了。</p>
+<h2 id="模型生成"><a href="#模型生成" class="headerlink" title="模型生成"></a>模型生成</h2><p>从这块开始进入到了NAS的领域。之前说了，搜索空间分为ML和DL两块，本文只关注DL，而优化方法又分为超参优化和网络架构优化，本文也主要只关注网络架构优化，因为超参优化是挑选出最优网络架构之后的事情了，不过也有工作将NAS用在超参优化上的，这个就不在讨论范围内了。</p>
+<p><img src="4.png" alt></p>
+<p><img src="5.png" alt></p>
+<p>上面两张图是NAS的一般流程：</p>
+<ul>
+<li>首先针对不同的任务定义一个搜索空间，这个搜索空间就决定了你搜出来的网络架构可能长什么样子，也决定了你搜出来的架构可能性有多少，当然是越大越好，但是带来的后果就是搜索速度太慢。 </li>
+<li>然后在这个搜索空间里进行搜索，采样出一个比较好的模型架构，这里方法就非常多了，最简单的就是随机搜索，随机采样一个网络架构。 </li>
+<li>最后就是在训练集上评估你采样出的架构效果，反馈给架构优化，让它优化，然后继续采样，循环下去。评估方法也有很多，最简单的就是像正常训练模型那样完整训练一遍，得到效果，但是这样太慢了，因此需要其他方法来加速训练或者估计效果。 </li>
+</ul>
+<h3 id="搜索空间"><a href="#搜索空间" class="headerlink" title="搜索空间"></a>搜索空间</h3><p>神经网络可以看作是一个DAG，而如何定义这个DAG，其实你可以用生成图的方式做加法生成它，也可以做减法，从大图中抽取出子图等等，有很多方法。</p>
+<p>定义搜索空间需要人类知识，这一步目前还不够Auto，定义的好，生成出来的架构才可能好。而有些工作发现只要你搜索空间定义的足够好，随机搜索都能达到和各种架构优化方法相似的效果，那么NAS将变得毫无意义，所以这一块还是挺玄学的。</p>
+<h4 id="整体结构搜索"><a href="#整体结构搜索" class="headerlink" title="整体结构搜索"></a>整体结构搜索</h4><p>就是按照DAG的拓扑序，依次生成出模型架构出来。一般来说，用一个RNN来生成，每生成一个node，都要预测出它的输入是哪些node（残差）、作用在它上面的op有哪些。</p>
+<p>但是这种方法太慢了，搜索的复杂度是指数级别的，因此在最初的几篇RL论文里，都用了几百个GPU训练了几十天才搜出来，穷苦人家可搜不起。</p>
+<h4 id="cell搜索"><a href="#cell搜索" class="headerlink" title="cell搜索"></a>cell搜索</h4><p>这种方式也是借鉴了人类设计神经网络的经验，像ResNet系列都是将一个个cell层层堆叠得到的，因此如果只搜一个cell，然后将相同的cell堆叠起来岂不是大大减小了搜索空间。后面的很多工作都是基于cell来搜索的，比如NASNet。</p>
+<p><img src="6.png" alt></p>
+<p>在NASNet中，cell被分成了两种，一种是normal cell，它的输入输出维度保持相同，另一种是reduction cell，它的结构和normal cell相似，但是输出的宽度和高度减半，通道数加倍。</p>
+<p>最后搜索出最优cell之后，根据需要堆叠不同层数的cell就行了，这个层数也是人为定义的。但是这里就会存在一个训练和评估不一致的问题，一般来说，在搜索的时候，为了减小显存占用，会堆叠比较少的层数去评估。但是在得到最优cell之后，用来retrain时会堆叠比较多的层数，这里就不一定是最优解了。也有工作做这方面的优化，比如P-DARTS，在搜索阶段逐渐增加堆叠的层数。</p>
+<p><img src="7.png" alt></p>
+<h4 id="分层搜索"><a href="#分层搜索" class="headerlink" title="分层搜索"></a>分层搜索</h4><p>当然搜索cell也是存在问题的，忽视了整体结构的优化，而且每一层的cell相同也不一定最好啊。因此后来的工作又提出了分层搜索的方法。</p>
+<p>比如Auto-deeplab在搜索cell的同时，还搜索了不同层的分辨率，下一层的分辨率可以是一半、不变或两倍，这一步限制一是为了减小搜索空间，二是为了增加稳定性，防止分辨率变化太大。</p>
+<p><img src="8.png" alt></p>
+<p>再如HierNAS，按照层次结构来搜索网络架构，第一层是一些原子操作，第二层用这些原子操作生成一些比较小的网络，第三层用第二层的小网络再搭建出一个更大的网络，依次下去。</p>
+<p><img src="9.png" alt></p>
+<p>再如progressive NAS，为了减小一个cell里面的搜索空间大小，从一个cell里面只有一个block开始搜索，每次挑出top-k个cell，在基础上衍生出两个block，依次下去。评估性能用的是代理模型直接预测，不需要真的训练一遍。</p>
+<p>再如MnasNet，它将整个网络分为了若干个cell，每个cell串行了若干个block，每个cell的block数量可能不同，而单个cell里面的block结构是相同的，这样就考虑到了整体的网络搜索空间。和堆叠cell不同的是，每个block的结构比较简单，不然的话整体上搜索复杂度还是太大了。当然这篇主要还是为了做移动端部署，因此做了多目标NAS，将延时也考虑到了目标函数中去。</p>
+<p><img src="10.png" alt></p>
+<p>之前的方法还存在一个问题，就是基本都是在小数据集上做的搜索评估，最后将最优结构运用到大数据集上，这就存在不一致性。因此例如ProxylessNAS就直接在大数据集上搜索评估，为了减小显存消耗，采用BinaryConnect，每次只激活两个结点之间的一条边。</p>
+<h4 id="网络态射"><a href="#网络态射" class="headerlink" title="网络态射"></a>网络态射</h4><p>这类方法主要思想就是在已经训练好的成熟网络基础上增加宽度、深度等等，继承父网络的参数，加速子网络的训练。</p>
+<p>首先是Net2Net，扩展分为两个方向，一种是宽度上的，一种是深度上的，不能同时进行。</p>
+<p><img src="11.png" alt></p>
+<p>因此后来就有了网络态射，可以处理任意线性层和非线性层，并且深度和宽度上可以同时扩展。</p>
+<h3 id="架构优化"><a href="#架构优化" class="headerlink" title="架构优化"></a>架构优化</h3><p>定义好搜索空间后，就要采用架构优化算法来搜索出最优的架构了。</p>
+<h4 id="演化算法"><a href="#演化算法" class="headerlink" title="演化算法"></a>演化算法</h4><p><img src="12.png" alt></p>
+<p>演化算法就是模仿的生物进化过程。首先要对网络架构进行编码，方便之后的操作。可以将图结构编码为二进制串，但是这样固定长度不灵活。于是就有了Cartesian genetic programming、Neuro evolution of augmenting topologies、Cellular encoding等各种编码方法，详细就不介绍了。</p>
+<p>一般演化算法分为四步：选择、交叉、变异、替换。</p>
+<ul>
+<li>选择。就是从候选的网络架构中挑选出适应度最高的，一种可以直接挑绝对值最高的，另一种可以挑相对值最高的，第三种比较有名的是锦标赛选择算法，也就是放回抽样，每次等概率随机选k个，挑出最好的那一个，进入下一代，其余放回，重复上述操作。 </li>
+<li>交叉。交叉方式和编码方式有很大关系， </li>
+<li>变异。上面两步做完后，有很多方式可以对个体进行变异，比如随机翻转某一位，随机增加或者删除两层之间的连接等等。 </li>
+<li>替换。新的个体加入种群后，旧的个体要被删除掉。可以删除最久之前的，也可以删除效果最差的，也有工作一个都不删除，只要你内存和时间顶得住。 </li>
+</ul>
+<h4 id="强化学习"><a href="#强化学习" class="headerlink" title="强化学习"></a>强化学习</h4><p><img src="13.png" alt></p>
+<p>强化学习主要思想就是用一个控制器（一般是RNN）来生成网络架构，然后评估得到得分作为反馈更新控制器参数。有用策略梯度的，也有用Q-learning的，还有用PPO算法的等等。第一篇NAS论文就是用的RL，但是这一类方法普遍很费卡，一般人玩不起。</p>
+<h4 id="梯度下降"><a href="#梯度下降" class="headerlink" title="梯度下降"></a>梯度下降</h4><p><img src="14.png" alt></p>
+<p>前两种都是在离散空间搜结构，梯度下降方法是将离散空间变为了连续空间。第一个提出的是DARTS，在两个结点之间定义了若干种操作，然后做softmax，最后在评估的时候取argmax。</p>
+<p>这种方法也有不好，比如成倍增加了显存，本来一条边现在需要成倍的计算量，此外用了代理任务，在小数据集上训的层数比较少，迁移到大数据集上层数又很多。也有解决方法，比如P-DARTS，随着训练进行逐渐加层数，为了减小计算量，还逐渐减少了每条边上的操作数。而GDAS每次只选概率最大的那个操作边做前向，反向传播用gumbel softmax。</p>
+<p>两套参数联合优化也是很困难的，DARTS用的是交替优化，一次优化结构参数，一次优化模型权重。</p>
+<p>最后还有个问题，就是搜索后期会倾向于搜索残差连接之类的操作，这不好。于是DARTS+发现一个cell里出现两个或以上残差连接后就直接停止。P-DARTS则是给残差加了正则化，减小出现的次数。</p>
+<h4 id="代理模型"><a href="#代理模型" class="headerlink" title="代理模型"></a>代理模型</h4><p>这一类方法（SMBO）使用一个代理模型来指导最优模型的生成。传统的方法有贝叶斯优化（高斯过程、随机森林、TPE等等），就不详细介绍传统方法了。</p>
+<p>也有用神经网络当作代理模型的，比如PNAS、EPNAS、NAO都用一个LSTM或者MLP将离散的结构编码成连续的表示，然后预测性能，接着找出性能最高的最优表示，用解码器还原出离散的结构。</p>
+<h4 id="网格和随机搜索"><a href="#网格和随机搜索" class="headerlink" title="网格和随机搜索"></a>网格和随机搜索</h4><p>这就是最原始最普通的优化方法，比如直接在搜索空间随机搜索结构，然后评估，最后取最优的就行了。虽说随机搜索听起来不大行，但实际出来的效果，能和大多数NAS方法达到相似效果，还很简单。</p>
+<h4 id="混合优化方法"><a href="#混合优化方法" class="headerlink" title="混合优化方法"></a>混合优化方法</h4><p>上面这么多方法混合在一起，可能效果会更好。演化算法是全局优化的，鲁棒性很强，但是随机性有点大，不稳定，计算消耗也大。强化学习也是的，训练很不稳定。梯度下降方法训练快，但是需要提前定义好超网络结构，限制了结构的多样性。</p>
+<p>演化算法可以结合强化学习、梯度下降、SMBO，梯度下降也可以结合SMBO等等，这里就不详细介绍了，典型的例子有Evo-NAS、NAO等等。</p>
+<h3 id="超参优化"><a href="#超参优化" class="headerlink" title="超参优化"></a>超参优化</h3><p>这一步其实是脱离了NAS的，就和一般的超参优化一样，网络搜索、随机搜索、贝叶斯优化、梯度优化等等方法，这里不做过多介绍了。</p>
+<h2 id="模型评估"><a href="#模型评估" class="headerlink" title="模型评估"></a>模型评估</h2><p>在模型生成之后，需要对模型进行评估，然后指导架构优化模块生成更好的架构。最一般的方法就是从头开始训练到收敛，但是这样太慢了，一般都要生成个几百万以上的架构的，训练时间太久了。</p>
+<h3 id="低保真度"><a href="#低保真度" class="headerlink" title="低保真度"></a>低保真度</h3><p>可以在评估时降低数据集的分辨率，降低cell堆叠的层数，使用小数据集等等，这样可以快速得到架构的大致效果，但是最后得到的架构可能在目标数据集上不是全局最优的。</p>
+<h3 id="权重共享"><a href="#权重共享" class="headerlink" title="权重共享"></a>权重共享</h3><p>比如ENAS，可以在多次评估模型性能时，继承之前相同node的参数，可以加快收敛速度。网络态射也是用到了权重共享。</p>
+<h3 id="代理模型-1"><a href="#代理模型-1" class="headerlink" title="代理模型"></a>代理模型</h3><p>直接学习一个预测器，输入是网络架构，输出是它的性能，当然这需要提前先训练一些模型，得到（架构，性能）的若干数据，然后才能学习出这个预测器，PNAS就是这么干的。当然预测器的学习数据肯定不会多，所以SemiNAS就用半监督的方法，利用大量无标注的结构去预测出性能，加入到训练集中继续优化预测器。</p>
+<h3 id="early-stop"><a href="#early-stop" class="headerlink" title="early stop"></a>early stop</h3><p>可以只训练几轮，然后根据前期的学习曲线预测出最终的性能。</p>
+<h2 id="一些讨论"><a href="#一些讨论" class="headerlink" title="一些讨论"></a>一些讨论</h2><h3 id="效果对比"><a href="#效果对比" class="headerlink" title="效果对比"></a>效果对比</h3><p><img src="15.png" alt><br><img src="16.png" alt></p>
+<p>可以看出，演化算法和强化学习搜索时间都非常长，除了个别几个用了权重共享之类技巧的。梯度下降方法全部都挺快的，但是整体效果都不如其他几类方法。</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>从整体流程上来看，NAS方法还可以分为一阶段和两阶段。两阶段是一般做法，第一个阶段就是搜索评估阶段，选出最好的架构，第二个阶段就是retrain这个最优架构，在验证集上评估。而一阶段就是只需要训练一次超网络，联合优化架构参数和模型权重，之后不需要再retrain了。比如比较有名的Once-for-all，采用了progressive shrinking算法来使得子网络之间的性能相互不受到影响。</p>
+<p>NAS还可以分为one-shot和non-one-shot，one-shot意思就是搜索空间重合的，可以重复利用之前的参数，比如ENAS、网络态射、ProxylessNAS等都是的。</p>
+<p>大多数NAS都只是把最终的效果当作目标，其实在移动端部署上还要考虑延时、模型大小、计算量等目标，一般都是解帕累托最优，比如MnasNet考虑到了延时。</p>
+<h2 id="开放性问题"><a href="#开放性问题" class="headerlink" title="开放性问题"></a>开放性问题</h2><h3 id="搜索空间的灵活性"><a href="#搜索空间的灵活性" class="headerlink" title="搜索空间的灵活性"></a>搜索空间的灵活性</h3><p>现在的搜索空间基本都还是人为定义的，参考了很多人类设计神经网络的经验，比如原子操作定义成conv、pooling之类的，结构上cell堆叠等等，但是真正的auto应该是模型自动设计网络架构和原子操作，比如AutoML-Zero就用最基本的原子操作（sin、cos、mean、std等）设计出了两层的神经网络。这一块应该是今后的一大方向，例如目前工作主要在CV上，而对于NLP的Transformer模型，搜索空间如何定义的很好？目前工作还寥寥无几，看了几篇也都是堆叠conv，分支结构之类的。</p>
+<h3 id="探索更多的领域"><a href="#探索更多的领域" class="headerlink" title="探索更多的领域"></a>探索更多的领域</h3><p>如上所说，目前大多数工作都是在CV上，搜的是conv结构，而像NLP、语音等领域探索甚少，像多目标领域也只有很少的工作（韩松老师组工作很多），即使是在CV，任务也大多数局限在CIFAR-10和ImageNet上。</p>
+<h3 id="可解释性"><a href="#可解释性" class="headerlink" title="可解释性"></a>可解释性</h3><p>搜出来的网络为什么好？现在人类设计的网络大多数都能强行解释一下好处，即使它仍然是个黑盒。但是NAS搜出来的基本看不出设计的逻辑。</p>
+<h3 id="可复现"><a href="#可复现" class="headerlink" title="可复现"></a>可复现</h3><p>之前也说了，例如演化算法和强化学习这一类方法训练很不稳定，很难复现出结果。很多论文也都只是公开了最好的模型，都不放出源码的（当然我并没有质疑他们），超参数之类的也有些没有公布，这导致我们平民玩家没法复现，没法用啊。而且大家评测的环境都不相同，众说纷纭，没法公平比较，因此也有一些工作提出了NAS统一的数据集来评测。</p>
+<h3 id="鲁棒性"><a href="#鲁棒性" class="headerlink" title="鲁棒性"></a>鲁棒性</h3><p>如果目标领域数据添加了噪声，可能会对搜出来的模型产生很大影响。所以如何搜出更加鲁棒、能适应不同领域或者有噪声数据的结构可能是未来的一个研究方向。</p>
+<h3 id="联合超参优化和架构优化"><a href="#联合超参优化和架构优化" class="headerlink" title="联合超参优化和架构优化"></a>联合超参优化和架构优化</h3><p>目前大多数NAS方法都是先搜出最优架构，再调整超参在目标领域上retrain，如何同时学好这两块也是一个方向。</p>
+<h3 id="完全的AutoML的pipeline"><a href="#完全的AutoML的pipeline" class="headerlink" title="完全的AutoML的pipeline"></a>完全的AutoML的pipeline</h3><p>做到从数据收集开始一直到最后的模型生成训练全部流程化，不需要人为参与，那样才是真正的智能。目前的话有一些比较好的开源工具了，AutoKeras、NNI等等。</p>
+<h3 id="终身学习"><a href="#终身学习" class="headerlink" title="终身学习"></a>终身学习</h3><p>当新的数据源源不断进来时，当只有少量有标签数据或者有大量无标签数据时，如何做NAS，有几个不错的工作，比如UnNAS是做无监督NAS的，MetaNAS是结合meta-learning的。</p>
+<h2 id="经典论文简析"><a href="#经典论文简析" class="headerlink" title="经典论文简析"></a>经典论文简析</h2><h3 id="（NAS）-ICLR-17-Neural-Architecture-Search-with-Reinforcement-Learning"><a href="#（NAS）-ICLR-17-Neural-Architecture-Search-with-Reinforcement-Learning" class="headerlink" title="（NAS）[ICLR 17] Neural Architecture Search with Reinforcement Learning"></a>（NAS）[ICLR 17] Neural Architecture Search with Reinforcement Learning</h3><p><strong>动机</strong><br>用强化学习来采样网络，生成出最优网络结构，避免人工设计。</p>
+<p><strong>方法</strong><br>用RNN来预测CNN或者RNN的结构，采样结构，下游任务效果作为强化学习得分，策略梯度更新参数。</p>
+<p>CNN预定义好层数，LSTM每5层预测CNN一层的5个参数。</p>
+<p><img src="17.png" alt></p>
+<p>RNN预定义好cell的计算拓扑图，LSTM预测每个node的计算逻辑。</p>
+<p><img src="18.png" alt></p>
+<p><strong>实验</strong><br><img src="19.png" alt></p>
+<p>接近人类设计网络的最好水平。速度超慢，800 K40，28天，只适用于小数据集例如CIFAR-10。</p>
+<p><strong>评价</strong><br>强化学习应用到NAS的第一篇论文。</p>
+<h3 id="（NASNet）-CVPR-18-Learning-Transferable-Architectures-for-Scalable-Image-Recognition"><a href="#（NASNet）-CVPR-18-Learning-Transferable-Architectures-for-Scalable-Image-Recognition" class="headerlink" title="（NASNet）[CVPR 18] Learning Transferable Architectures for Scalable Image Recognition"></a>（NASNet）[CVPR 18] Learning Transferable Architectures for Scalable Image Recognition</h3><p><strong>动机</strong><br>RL直接搜太慢了，只能用在小数据集，ImageNet之类的大数据集没法用。</p>
+<p><strong>方法</strong><br>提出了NASNet，用堆叠相同cell的方式减小搜索空间。在CIFAR-10上面学习cell结构，通过增加堆叠层数的方式迁移到ImageNet上去。用PPO替代策略梯度。</p>
+<p><img src="20.png" alt></p>
+<p>选择之前的两个node，分别预测对应op，然后预测合并op。</p>
+<p><img src="21.png" alt></p>
+<p><strong>实验</strong><br><img src="22.png" alt><br><img src="23.png" alt></p>
+<p>效果和参数量都好于前作，达到了SOTA水平。速度加快很多，500 P100，4天，相比于前作加速7倍。</p>
+<p><strong>评价</strong><br>NASNet，通过cell堆叠加快了结构搜索的速度，同时效果达到了SOTA，并且容易迁移到其他任务上去。</p>
+<h3 id="（ENAS）-ICML-18-Efficient-Neural-Architecture-Search-via-Parameter-Sharing"><a href="#（ENAS）-ICML-18-Efficient-Neural-Architecture-Search-via-Parameter-Sharing" class="headerlink" title="（ENAS）[ICML 18] Efficient Neural Architecture Search via Parameter Sharing"></a>（ENAS）[ICML 18] Efficient Neural Architecture Search via Parameter Sharing</h3><p><strong>动机</strong><br>之前的方法采样出一个结构，在dev上得到acc，然后就会抛弃权重，重新采样训练，非常耗时。</p>
+<p><strong>方法</strong><br>定义一个超图，每次搜出的子图共享权重。</p>
+<p>对于RNN cell，LSTM的每两个step预测之前某个node作为输入，再预测op，最后出度0的node拼接作为输出。</p>
+<p><img src="24.png" alt></p>
+<p>对于CNN，一种策略是直接生成整个网络，每个node先预测之前哪些作为输入，然后预测op。</p>
+<p><img src="25.png" alt></p>
+<p>另一种策略和NASNet类似，堆叠cell，搜索空间缩小到一个cell。</p>
+<p><strong>实验</strong><br><img src="26.png" alt></p>
+<p>优于NAS和NASNet，1 1080Ti，16小时，相比NAS加速1000倍。</p>
+<p><strong>评价</strong><br>训练速度很快，AutoKeras背后就采用了ENAS。</p>
+<h3 id="（DARTS）-ICLR-19-DARTS-Differentiable-Architecture-Search"><a href="#（DARTS）-ICLR-19-DARTS-Differentiable-Architecture-Search" class="headerlink" title="（DARTS）[ICLR 19] DARTS: Differentiable Architecture Search"></a>（DARTS）[ICLR 19] DARTS: Differentiable Architecture Search</h3><p><strong>动机</strong><br>离散结构搜索太慢了，采样+验证+反馈的循环很耗时。</p>
+<p><strong>方法</strong><br>连续域结构搜索代替离散域结构搜索，用微分来优化结构。</p>
+<p>两套参数：模型参数$w$（训练集优化）、结构参数$\alpha$（验证集优化）。</p>
+<p>交替优化两套参数，softmax+relax学习最终结构。</p>
+<p><img src="27.png" alt></p>
+<p><strong>实验</strong><br><img src="28.png" alt></p>
+<p>效果达到或接近了SOTA，速度上比ENAS慢，比其他的方法快。</p>
+<p><strong>评价</strong><br>第一个用可微分方法做NAS的，第一个连续空间搜索代替离散空间搜索。</p>
+<h3 id="ICLR-19-Rethinking-the-Value-of-Network-Pruning"><a href="#ICLR-19-Rethinking-the-Value-of-Network-Pruning" class="headerlink" title="[ICLR 19] Rethinking the Value of Network Pruning"></a>[ICLR 19] Rethinking the Value of Network Pruning</h3><p><strong>动机</strong><br>现有的剪枝方法存在问题，很多操作不合理，没有必要。</p>
+<p><strong>方法</strong><br>传统剪枝方法基于两个假设：</p>
+<ul>
+<li>过参数化很重要，训练大模型再剪枝优于直接训练剪枝后的模型。 </li>
+<li>继承大模型参数，再finetune很重要，优于随机初始化剪枝后模型再重新训练。 </li>
+</ul>
+<p>本文认为都不一定对：</p>
+<ul>
+<li>对于预定义好的模型，直接训练可以达到和训练-剪枝-finetune相同甚至更好的效果。 </li>
+<li>大模型剪枝后，随机初始化重新训练，效果和继承参数finetune差不多。</li>
+</ul>
+<p>所以本文认为剪枝后的结构重要，而参数不是那么重要。</p>
+<p><strong>实验</strong><br><img src="29.png" alt></p>
+<p>一系列实验结果验证了猜想，此外本文还否定了彩票假设，认为剪枝后随机初始化即可，没必要和原始初始化相同。</p>
+<p><strong>评价</strong><br>仍然有一些局限性，比如数据分布均衡、模型比较大，估计在其他设置下不一定work。而且不如finetune速度快。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><h3 id="不错的综述或讨论"><a href="#不错的综述或讨论" class="headerlink" title="不错的综述或讨论"></a>不错的综述或讨论</h3><p><a href="https://lilianweng.github.io/lil-log/2020/08/06/neural-architecture-search.html" target="_blank" rel="noopener">https://lilianweng.github.io/lil-log/2020/08/06/neural-architecture-search.html</a><br><a href="https://jinzhuojun.blog.csdn.net/article/details/84698471" target="_blank" rel="noopener">https://jinzhuojun.blog.csdn.net/article/details/84698471</a><br><a href="http://www.tensorinfinity.com/paper_136.html" target="_blank" rel="noopener">http://www.tensorinfinity.com/paper_136.html</a><br><a href="https://zhuanlan.zhihu.com/p/73785074" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/73785074</a><br><a href="https://www.zhihu.com/question/359162202" target="_blank" rel="noopener">https://www.zhihu.com/question/359162202</a><br><a href="https://github.com/pzhren/Awesome-NAS" target="_blank" rel="noopener">https://github.com/pzhren/Awesome-NAS</a><br>Neural Architecture Search: A Survey<br>A Comprehensive Survey of Neural Architecture Search: Challenges and Solutions<br>AutoML: A Survey of the State-of-the-Art<br>A Comprehensive Survey of Neural Architecture Search: Challenges and Solutions</p>
+<h3 id="一些经典论文"><a href="#一些经典论文" class="headerlink" title="一些经典论文"></a>一些经典论文</h3><p>Neural Architecture Search with Reinforcement Learning<br>Designing Neural Network Architectures using Reinforcement Learning<br>Efficient Neural Architecture Search via Parameter Sharing<br>Learning Transferable Architectures for Scalable Image Recognition<br>DARTS: Differentiable Architecture Search<br>Neural Architecture Optimization<br>FP-NAS: Fast Probabilistic Neural Architecture Search<br>SNAS: Stochastic Neural Architecture Search<br>EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks<br>Once for All: Train One Network and Specialize it for Efficient Deployment<br>Rethinking the Value of Network Pruning<br>TextNAS: A Neural Architecture Search Space Tailored for Text Representation<br>The Evolved Transformer<br>HAT: Hardware-Aware Transformers for Efficient Natural Language Processing<br>Searching Better Architectures for Neural Machine Translation</p>
+<h3 id="一些经典源码或工具"><a href="#一些经典源码或工具" class="headerlink" title="一些经典源码或工具"></a>一些经典源码或工具</h3><p><a href="https://github.com/quark0/darts" target="_blank" rel="noopener">https://github.com/quark0/darts</a><br><a href="https://github.com/melodyguan/enas" target="_blank" rel="noopener">https://github.com/melodyguan/enas</a><br><a href="https://github.com/mit-han-lab/once-for-all" target="_blank" rel="noopener">https://github.com/mit-han-lab/once-for-all</a><br><a href="https://github.com/mit-han-lab/hardware-aware-transformers" target="_blank" rel="noopener">https://github.com/mit-han-lab/hardware-aware-transformers</a><br><a href="https://github.com/microsoft/nni" target="_blank" rel="noopener">https://github.com/microsoft/nni</a><br><a href="https://github.com/IntelLabs/distiller" target="_blank" rel="noopener">https://github.com/IntelLabs/distiller</a><br><a href="https://autokeras.com/" target="_blank" rel="noopener">https://autokeras.com/</a></p>
+
+            </div>
+            <hr />
+
+            
+            <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.88rem;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fa fa-close"></i></a>
+            <h4 class="reward-title">万水千山总是情，打赏一块行不行？</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+
+            <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    <div class="social-share" data-disabled="qzone" data-wechat-qrcode-helper="<p>微信里点“发现”->“扫一扫”二维码便可查看分享。</p>"></div>
+    
+</div>
+
+<script src="/libs/share/js/social-share.min.js"></script>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        <p class="reprint-tip">
+            <i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;
+            <span>转载规则</span>
+        </p>
+        
+            <div class="center-align">
+                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
+                    <img alt=""
+                         style="border-width:0"
+                         src="https://i.creativecommons.org/l/by/4.0/88x31.png"/>
+                </a>
+            </div>
+            <br/>
+            <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text"
+                  property="dct:title" rel="dct:type">
+                    《一文看懂AutoML》
+                </span> 由
+            <a xmlns:cc="http://creativecommons.org/ns#" href="/2020/12/18/automl-survey/" property="cc:attributionName"
+               rel="cc:attributionURL">
+                韦阳
+            </a> 采用
+            <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
+                知识共享署名 4.0 国际许可协议
+            </a>进行许可。
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+        </div>
+    </div>
+
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: 'c3ac6e20697ee5422b43',
+        clientSecret: '3ccf19d2ec7e33b55f71aaeec74542a3938772f6',
+        repo: 'godweiyang.github.io',
+        owner: 'godweiyang',
+        admin: "godweiyang",
+        id: decodeURI(window.location.pathname),
+        distractionFreeMode: false,
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token'
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2020/12/24/nas-transformer/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="如何自动搜出更好、更小、更快的NLP模型？">
+                        
+                        <span class="card-title">如何自动搜出更好、更小、更快的NLP模型？</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+关注公众号【算法码上来】，每日算法干货马上就来！
+
+
+前言最近读了不少神经架构搜索（NAS）的论文，把NAS的整体脉络大致摸清了。
+但是也发现了NAS目前还是用在CV领域居多，NLP领域和移动端优化寥寥无几。因此这里分享几篇NLP或者移动
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="fa fa-clock-o fa-fw icon-date"></i>2020-12-24
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/深度学习/" class="post-category" target="_blank">
+                                    深度学习
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/AutoML/" target="_blank">
+                        <span class="chip bg-color">AutoML</span>
+                    </a>
+                    
+                    <a href="/tags/NAS/" target="_blank">
+                        <span class="chip bg-color">NAS</span>
+                    </a>
+                    
+                    <a href="/tags/神经架构搜索/" target="_blank">
+                        <span class="chip bg-color">神经架构搜索</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2020/12/13/2020-conclusion/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="二零二零年终总结">
+                        
+                        <span class="card-title">二零二零年终总结</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+关注公众号【算法码上来】，每日算法干货马上就来！
+
+
+
+今天是我的阳历生日，今年是不平凡的一年，有许多事情值得回顾。
+
+新冠年初突如其来的疫情，谁也想不到，影响一直持续到现在。
+因为疫情，大学六年来头一次呆家里这么久，足足四个月，人养胖了
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2020-12-13
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/随笔/" class="post-category" target="_blank">
+                                    随笔
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/年终总结/" target="_blank">
+                        <span class="chip bg-color">年终总结</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: 韦阳的博客<br />'
+            + '作者: 韦阳<br />'
+            + '链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () { bodyElement.removeChild(newdiv); }, 200);
+    });
+</script>
+
+<!-- <script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+<script>
+    const btw = new BTWPlugin();
+    btw.init({
+        id: 'artDetail',
+        blogId: '20962-1585405055583-879',
+        name: '算法码上来',
+        qrcode: 'https://godweiyang.com/medias/gzh.jpg',
+        keyword: 'VIP',
+    });
+</script> -->
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="fa fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fa fa-list"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            // headingsOffset: -205,
+            headingSelector: 'h1, h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h1, h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).slideUp(500);
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).slideDown(500);
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+    
+
+</main>
+
+
+<script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            processEscapes: true
+        },
+        options: {
+            skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+    };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+<!-- 代码语言 -->
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+<!-- 代码块复制 -->
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+<script type="text/javascript" src="/libs/codeBlock/clipboard.min.js"></script>
+<!-- 代码块收缩 -->
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script> 
+<!-- 代码块折行 -->
+<style type="text/css">code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }</style>
+
+
+    <footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            &copy; 2017-2023 godweiyang. 版权所有
+
+            
+            &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
+            <span class="white-color">360.9k</span>
+            
+
+            <br>
+            <span id="sitetime"></span>
+
+            
+            
+            <br>
+            
+            <span id="busuanzi_container_site_pv" style='display:none'>
+                <i class="fa fa-heart-o"></i>
+                本站总访问量 <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv" style='display:none'>
+                人次,&nbsp;访客数 <span id="busuanzi_value_site_uv" class="white-color"></span> 人.
+            </span>
+            
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/godweiyang" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fa fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:godweiyang@gmail.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fa fa-envelope-open"></i>
+    </a>
+
+
+
+    <a href="https://zhihu.com/people/godweiyang" class="tooltipped" target="_blank" data-tooltip="访问我的知乎" data-position="top" data-delay="50">
+        <i class="fa fa-inverse">知</i>
+    </a>
+
+
+
+    <a href="http://wpa.qq.com/msgrd?v=3&uin=792321264&site=qq&menu=yes" class="tooltipped" target="_blank" data-tooltip="访问我的知乎" data-position="top" data-delay="50">
+        <i class="fa fa-qq"></i>
+    </a>
+
+
+
+    <a href="https://weibo.com/godweiyang" class="tooltipped" target="_blank" data-tooltip="关注我的微博" data-position="top" data-delay="50">
+        <i class="fa fa-weibo"></i>
+    </a>
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fa fa-rss"></i>
+    </a>
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+<!-- 不蒜子计数初始值纠正 -->
+<script>
+    $(document).ready(function () {
+
+        var int = setInterval(fixCount, 50);
+        var pvcountOffset = 80000;
+        var uvcountOffset = 20000;
+
+        function fixCount() {
+            if (document.getElementById("busuanzi_container_site_pv").style.display != "none") {
+                $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + pvcountOffset);
+                clearInterval(int);
+            }
+            if ($("#busuanzi_container_site_pv").css("display") != "none") {
+                $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + uvcountOffset); // 加上初始数据 
+                clearInterval(int);
+            }
+        }
+    });
+</script>
+
+<script language=javascript>
+    function siteTime() {
+        window.setTimeout("siteTime()", 1000);
+        var seconds = 1000;
+        var minutes = seconds * 60;
+        var hours = minutes * 60;
+        var days = hours * 24;
+        var years = days * 365;
+        var today = new Date();
+        var todayYear = today.getFullYear();
+        var todayMonth = today.getMonth() + 1;
+        var todayDate = today.getDate();
+        var todayHour = today.getHours();
+        var todayMinute = today.getMinutes();
+        var todaySecond = today.getSeconds();
+        /* Date.UTC() -- 返回date对象距世界标准时间(UTC)1970年1月1日午夜之间的毫秒数(时间戳)
+        year - 作为date对象的年份，为4位年份值
+        month - 0-11之间的整数，做为date对象的月份
+        day - 1-31之间的整数，做为date对象的天数
+        hours - 0(午夜24点)-23之间的整数，做为date对象的小时数
+        minutes - 0-59之间的整数，做为date对象的分钟数
+        seconds - 0-59之间的整数，做为date对象的秒数
+        microseconds - 0-999之间的整数，做为date对象的毫秒数 */
+        var t1 = Date.UTC(2017, 09, 11, 00, 00, 00); //北京时间2018-2-13 00:00:00
+        var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+        var diff = t2 - t1;
+        var diffYears = Math.floor(diff / years);
+        var diffDays = Math.floor((diff / days) - diffYears * 365);
+        var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+        var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) / minutes);
+        var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours - diffMinutes * minutes) / seconds);
+        document.getElementById("sitetime").innerHTML = "本站已运行 " + diffYears + " 年 " + diffDays + " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+    }/*因为建站时间还没有一年，就将之注释掉了。需要的可以取消*/
+    siteTime();
+</script>
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fa fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fa fa-angle-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <script type="text/javascript"> var OriginTitile = document.title, st; document.addEventListener("visibilitychange", function () { document.hidden ? (document.title = "Σ(っ °Д °;)っ喔哟，崩溃啦！", clearTimeout(st)) : (document.title = "φ(゜▽゜*)♪咦，又好了！", st = setTimeout(function () { document.title = OriginTitile }, 3e3)) })
+    </script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-145124925-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-145124925-1');
+</script>
+
+
+
+    
+    <script src="/libs/others/clicklove.js"></script>
+    
+
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+
+    <!-- 雪花特效 -->
+    
+
+</body>
+
+</html>

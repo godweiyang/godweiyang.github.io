@@ -1,0 +1,621 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>韦阳的博客</title>
+  
+  <subtitle>公众号：算法码上来</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="https://godweiyang.com/"/>
+  <updated>2026-02-27T14:58:51.385Z</updated>
+  <id>https://godweiyang.com/</id>
+  
+  <author>
+    <name>韦阳</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>从多线程到多进程：如何让你的小电影下载飞快？</title>
+    <link href="https://godweiyang.com/2023/07/15/cpu-parallel/"/>
+    <id>https://godweiyang.com/2023/07/15/cpu-parallel/</id>
+    <published>2023-07-15T07:31:58.000Z</published>
+    <updated>2026-02-27T14:58:51.385Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;关注公众号【算法码上来】，每日算法干货马上就来！&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&quot;/medias/contact.jpg&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="编程算法" scheme="https://godweiyang.com/categories/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95/"/>
+    
+    
+      <category term="多线程" scheme="https://godweiyang.com/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+    
+      <category term="多进程" scheme="https://godweiyang.com/tags/%E5%A4%9A%E8%BF%9B%E7%A8%8B/"/>
+    
+      <category term="并行" scheme="https://godweiyang.com/tags/%E5%B9%B6%E8%A1%8C/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>探秘火山之巅：我在字节跳动的三年奇妙旅程</title>
+    <link href="https://godweiyang.com/2023/07/15/volctrans-3-year/"/>
+    <id>https://godweiyang.com/2023/07/15/volctrans-3-year/</id>
+    <published>2023-07-15T07:05:10.000Z</published>
+    <updated>2026-02-27T14:58:51.764Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;关注公众号【算法码上来】，每日算法干货马上就来！&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&quot;/medias/contact.jpg&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="随笔" scheme="https://godweiyang.com/categories/%E9%9A%8F%E7%AC%94/"/>
+    
+    
+      <category term="字节跳动" scheme="https://godweiyang.com/tags/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8/"/>
+    
+      <category term="火山翻译" scheme="https://godweiyang.com/tags/%E7%81%AB%E5%B1%B1%E7%BF%BB%E8%AF%91/"/>
+    
+      <category term="AI Lab" scheme="https://godweiyang.com/tags/AI-Lab/"/>
+    
+      <category term="工作体验" scheme="https://godweiyang.com/tags/%E5%B7%A5%E4%BD%9C%E4%BD%93%E9%AA%8C/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>二零二二年终总结</title>
+    <link href="https://godweiyang.com/2022/12/12/2022-conclusion/"/>
+    <id>https://godweiyang.com/2022/12/12/2022-conclusion/</id>
+    <published>2022-12-12T10:37:53.000Z</published>
+    <updated>2026-02-27T14:58:51.116Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;关注公众号【算法码上来】，每日算法干货马上就来！&lt;br&gt;&lt;img src=&quot;/medias/contact.jpg&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="随笔" scheme="https://godweiyang.com/categories/%E9%9A%8F%E7%AC%94/"/>
+    
+    
+      <category term="年终总结" scheme="https://godweiyang.com/tags/%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>历时一年，论文终于被国际顶会接收了</title>
+    <link href="https://godweiyang.com/2022/06/16/sc22/"/>
+    <id>https://godweiyang.com/2022/06/16/sc22/</id>
+    <published>2022-06-16T11:38:35.000Z</published>
+    <updated>2026-02-27T14:58:51.674Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;就在昨天，超算领域的国际顶会SC22放榜了，我们组的论文也被接收了，得分44332（4分制）：&lt;br&gt;&lt;img src=&quot;1.jpg&quot; alt&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;论文地址：&lt;/strong&gt;&lt;br&gt;&lt;a
+        
+      
+    
+    </summary>
+    
+      <category term="深度学习" scheme="https://godweiyang.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="SC22" scheme="https://godweiyang.com/tags/SC22/"/>
+    
+      <category term="深度学习" scheme="https://godweiyang.com/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
+    
+      <category term="模型优化" scheme="https://godweiyang.com/tags/%E6%A8%A1%E5%9E%8B%E4%BC%98%E5%8C%96/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>手推公式之“层归一化”梯度</title>
+    <link href="https://godweiyang.com/2022/05/22/layernorm-gradient/"/>
+    <id>https://godweiyang.com/2022/05/22/layernorm-gradient/</id>
+    <published>2022-05-22T15:26:09.000Z</published>
+    <updated>2026-02-27T14:58:51.557Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;昨天推导了一下交叉熵的反向传播梯度，今天再来推导一下层归一化（LayerNorm），这是一种常见的归一化方法。&lt;/p&gt;
+&lt;h1 id=&quot;前向传播&quot;&gt;&lt;a href=&quot;#前向传播&quot; class=&quot;headerlink&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="深度学习" scheme="https://godweiyang.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="Transformer" scheme="https://godweiyang.com/tags/Transformer/"/>
+    
+      <category term="梯度" scheme="https://godweiyang.com/tags/%E6%A2%AF%E5%BA%A6/"/>
+    
+      <category term="数学" scheme="https://godweiyang.com/tags/%E6%95%B0%E5%AD%A6/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>“交叉熵”反向传播推导</title>
+    <link href="https://godweiyang.com/2022/05/21/transformer-gradient/"/>
+    <id>https://godweiyang.com/2022/05/21/transformer-gradient/</id>
+    <published>2022-05-21T09:34:00.000Z</published>
+    <updated>2026-02-27T14:58:51.725Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;交叉熵（CrossEntropy）是常见的损失函数，本文详细推导一下它的梯度，面试大厂或者工程实践中都可能会用到。&lt;/p&gt;
+&lt;h1 id=&quot;前向传播&quot;&gt;&lt;a href=&quot;#前向传播&quot; class=&quot;headerlink&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="深度学习" scheme="https://godweiyang.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="Transformer" scheme="https://godweiyang.com/tags/Transformer/"/>
+    
+      <category term="梯度" scheme="https://godweiyang.com/tags/%E6%A2%AF%E5%BA%A6/"/>
+    
+      <category term="数学" scheme="https://godweiyang.com/tags/%E6%95%B0%E5%AD%A6/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>拼图还能这么玩？</title>
+    <link href="https://godweiyang.com/2022/04/22/funny-media/"/>
+    <id>https://godweiyang.com/2022/04/22/funny-media/</id>
+    <published>2022-04-22T15:35:20.000Z</published>
+    <updated>2026-02-27T14:58:51.452Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;这两天将我所有微信好友的头像弄出来了，一共5000多张。然后想着可以用它们来做些啥，最后用它们拼图玩。&lt;/p&gt;
+&lt;p&gt;Mac微信的头像保存在：&lt;/p&gt;
+&lt;pre class=&quot;line-numbers language-txt&quot;&gt;&lt;code
+        
+      
+    
+    </summary>
+    
+      <category term="编程技术" scheme="https://godweiyang.com/categories/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="图像处理" scheme="https://godweiyang.com/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/"/>
+    
+      <category term="python" scheme="https://godweiyang.com/tags/python/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>封城第20日，起飞了（文末有字节校招惊喜）</title>
+    <link href="https://godweiyang.com/2022/04/20/2022-4-20-life/"/>
+    <id>https://godweiyang.com/2022/04/20/2022-4-20-life/</id>
+    <published>2022-04-20T10:53:24.000Z</published>
+    <updated>2026-02-27T14:58:51.084Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;封城第20天了，最近上海日新增又降到2w以下了，京东快递和外卖也部分恢复了，部分小区甚至都转成防范区了。这两天小区里核酸检测率都在95%以下，有300左右的人都没去做核酸，据说达不到要求的话没法申报解封。而我也已经4天没去做过核酸了，因为在家才是最安全的。今天因为需要拿快递
+        
+      
+    
+    </summary>
+    
+      <category term="随笔" scheme="https://godweiyang.com/categories/%E9%9A%8F%E7%AC%94/"/>
+    
+    
+      <category term="疫情" scheme="https://godweiyang.com/tags/%E7%96%AB%E6%83%85/"/>
+    
+      <category term="隔离" scheme="https://godweiyang.com/tags/%E9%9A%94%E7%A6%BB/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>封城第14日，囤了一波好货</title>
+    <link href="https://godweiyang.com/2022/04/14/2022-4-14-life/"/>
+    <id>https://godweiyang.com/2022/04/14/2022-4-14-life/</id>
+    <published>2022-04-14T15:02:47.000Z</published>
+    <updated>2026-02-27T14:58:51.080Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;封城第14天了，今天去小区里小卖部买了一箱啤酒和30个鸡蛋，一共花了110，这下明天开始可以吃菜喝酒了，夜宵也可以荷包蛋自由了。京东上看了一下大概价格在90左右，看来这个小卖部还是挺良心的，现在外面团购最起码得两倍价格。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;1.jpeg&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="随笔" scheme="https://godweiyang.com/categories/%E9%9A%8F%E7%AC%94/"/>
+    
+    
+      <category term="疫情" scheme="https://godweiyang.com/tags/%E7%96%AB%E6%83%85/"/>
+    
+      <category term="隔离" scheme="https://godweiyang.com/tags/%E9%9A%94%E7%A6%BB/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>封城第13日，大数据分析团购群的各种行为</title>
+    <link href="https://godweiyang.com/2022/04/13/2022-4-13-life/"/>
+    <id>https://godweiyang.com/2022/04/13/2022-4-13-life/</id>
+    <published>2022-04-13T14:11:28.000Z</published>
+    <updated>2026-02-27T14:58:51.072Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;封城第13天了，小区终于发放了第3次物资。这次的物资是三次以来最丰富的一次，还算不错。但是由于天降暴雨，大米都进水了，蔬菜也都泡水了。再加上昨天刚团购到货，所以我基本不怎么需要这些物资。所以最后我只拿了三根火腿肠、土豆、抽纸，其他都分给了比较缺货的室友。&lt;/p&gt;
+&lt;p&gt;&lt;i
+        
+      
+    
+    </summary>
+    
+      <category term="随笔" scheme="https://godweiyang.com/categories/%E9%9A%8F%E7%AC%94/"/>
+    
+    
+      <category term="疫情" scheme="https://godweiyang.com/tags/%E7%96%AB%E6%83%85/"/>
+    
+      <category term="隔离" scheme="https://godweiyang.com/tags/%E9%9A%94%E7%A6%BB/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>封城第12日，冰箱都快塞不下咯（附菜谱分享）</title>
+    <link href="https://godweiyang.com/2022/04/12/2022-4-12-life/"/>
+    <id>https://godweiyang.com/2022/04/12/2022-4-12-life/</id>
+    <published>2022-04-12T14:18:04.000Z</published>
+    <updated>2026-02-27T14:58:51.067Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;封城第12天了，凌晨两点多公司组织团购的物资终于送到了。虽然200的价格有点贵，但半天就送到，我也知足了。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;8.jpeg&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="随笔" scheme="https://godweiyang.com/categories/%E9%9A%8F%E7%AC%94/"/>
+    
+    
+      <category term="疫情" scheme="https://godweiyang.com/tags/%E7%96%AB%E6%83%85/"/>
+    
+      <category term="隔离" scheme="https://godweiyang.com/tags/%E9%9A%94%E7%A6%BB/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>封城第11日，只需要一个茄子就能让你干两碗饭（附菜谱分享）</title>
+    <link href="https://godweiyang.com/2022/04/11/2022-4-11-life/"/>
+    <id>https://godweiyang.com/2022/04/11/2022-4-11-life/</id>
+    <published>2022-04-11T15:37:26.000Z</published>
+    <updated>2026-02-27T14:58:51.066Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;封城第11天了，今天没有做饭，起晚了，恶性循环，随便吃点老干妈拌饭了。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;2.jpeg&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="随笔" scheme="https://godweiyang.com/categories/%E9%9A%8F%E7%AC%94/"/>
+    
+    
+      <category term="疫情" scheme="https://godweiyang.com/tags/%E7%96%AB%E6%83%85/"/>
+    
+      <category term="隔离" scheme="https://godweiyang.com/tags/%E9%9A%94%E7%A6%BB/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>封城第10日，没蔬菜了（附菜谱分享）</title>
+    <link href="https://godweiyang.com/2022/04/10/2022-4-10-life/"/>
+    <id>https://godweiyang.com/2022/04/10/2022-4-10-life/</id>
+    <published>2022-04-10T11:48:59.000Z</published>
+    <updated>2026-02-27T14:58:51.064Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;封城第10天了，今天发现我们小区美团买菜和叮咚买菜还是站点关闭，而隔壁小区的站点就是开门的，应该是那个站点出了什么异常。所以目前看来我们小区还是只能团购、盒马团购、京东物流。&lt;/p&gt;
+&lt;p&gt;京东的订单依然还没有开始处理，但是小区已经有人收到京东生鲜的快递了，看起来确实开始配
+        
+      
+    
+    </summary>
+    
+      <category term="随笔" scheme="https://godweiyang.com/categories/%E9%9A%8F%E7%AC%94/"/>
+    
+    
+      <category term="疫情" scheme="https://godweiyang.com/tags/%E7%96%AB%E6%83%85/"/>
+    
+      <category term="隔离" scheme="https://godweiyang.com/tags/%E9%9A%94%E7%A6%BB/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>封城第9日，情况好起来了（附菜谱分享）</title>
+    <link href="https://godweiyang.com/2022/04/09/2022-4-9-life/"/>
+    <id>https://godweiyang.com/2022/04/09/2022-4-9-life/</id>
+    <published>2022-04-09T11:16:10.000Z</published>
+    <updated>2026-02-27T14:58:51.111Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;封城第9天了，情况貌似有转机了。美团买菜“站点关闭”的公告没了，偷偷上架了一批新菜，看来又可以抢购了。京东物流听说也快可以配送了，只要是京东物流的商品都可以下单了，但估计买的人太多了，配送时效很难保证（说是15号到）。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;1.jpeg&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="随笔" scheme="https://godweiyang.com/categories/%E9%9A%8F%E7%AC%94/"/>
+    
+    
+      <category term="疫情" scheme="https://godweiyang.com/tags/%E7%96%AB%E6%83%85/"/>
+    
+      <category term="隔离" scheme="https://godweiyang.com/tags/%E9%9A%94%E7%A6%BB/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>记录“滋润”的隔离生活</title>
+    <link href="https://godweiyang.com/2022/04/07/2022-4-6-life/"/>
+    <id>https://godweiyang.com/2022/04/07/2022-4-6-life/</id>
+    <published>2022-04-07T04:29:46.000Z</published>
+    <updated>2026-02-27T14:58:51.106Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;居家办公快一个月了，文章也很久没更新了，聊聊近况吧。&lt;/p&gt;
+&lt;p&gt;三八妇女节那天，公司被查出有密接，要求全员回公司隔离两天。这是头一次在公司过夜，打地铺、吃盒饭，空调开得很暖。可能因为睡得早，睡前又不玩手机了吧，这是我近几个月来睡的最香的两晚。早上也是起的非常早，8点不到
+        
+      
+    
+    </summary>
+    
+      <category term="随笔" scheme="https://godweiyang.com/categories/%E9%9A%8F%E7%AC%94/"/>
+    
+    
+      <category term="疫情" scheme="https://godweiyang.com/tags/%E7%96%AB%E6%83%85/"/>
+    
+      <category term="隔离" scheme="https://godweiyang.com/tags/%E9%9A%94%E7%A6%BB/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>来字节快两年了，回答一些你们感兴趣的问题</title>
+    <link href="https://godweiyang.com/2022/02/26/bytedance-hire-2022-2/"/>
+    <id>https://godweiyang.com/2022/02/26/bytedance-hire-2022-2/</id>
+    <published>2022-02-25T17:41:27.000Z</published>
+    <updated>2026-02-27T14:58:51.298Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;最近字节跳动春招开始了，春招、暑期实习、社招、日常实习都可以准备起来了，具体的情况可以看我之前发的文章：&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://mp.weixin.qq.com/s/9PvV7g_zy87puCGTsEje0A&quot; target=&quot;_blank&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="随笔" scheme="https://godweiyang.com/categories/%E9%9A%8F%E7%AC%94/"/>
+    
+    
+      <category term="面试" scheme="https://godweiyang.com/tags/%E9%9D%A2%E8%AF%95/"/>
+    
+      <category term="字节跳动" scheme="https://godweiyang.com/tags/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8/"/>
+    
+      <category term="实习" scheme="https://godweiyang.com/tags/%E5%AE%9E%E4%B9%A0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>字节春招开始了，整理了大家最关心的20个问题</title>
+    <link href="https://godweiyang.com/2022/02/17/bytedance-hire-2022-1/"/>
+    <id>https://godweiyang.com/2022/02/17/bytedance-hire-2022-1/</id>
+    <published>2022-02-17T15:42:16.000Z</published>
+    <updated>2026-02-27T14:58:51.297Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;2023届的春招开始了，我给大家整理了一些最关心的问题。如果有任何其他疑问，请在评论区留言或者私信我。&lt;/p&gt;
+&lt;h2 id=&quot;怎么投递？&quot;&gt;&lt;a href=&quot;#怎么投递？&quot; class=&quot;headerlink&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="随笔" scheme="https://godweiyang.com/categories/%E9%9A%8F%E7%AC%94/"/>
+    
+    
+      <category term="面试" scheme="https://godweiyang.com/tags/%E9%9D%A2%E8%AF%95/"/>
+    
+      <category term="字节跳动" scheme="https://godweiyang.com/tags/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8/"/>
+    
+      <category term="实习" scheme="https://godweiyang.com/tags/%E5%AE%9E%E4%B9%A0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>当年如果有这个，语文就不会不及格了</title>
+    <link href="https://godweiyang.com/2022/01/16/anchi-translation/"/>
+    <id>https://godweiyang.com/2022/01/16/anchi-translation/</id>
+    <published>2022-01-16T14:29:31.000Z</published>
+    <updated>2026-02-27T14:58:51.249Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;最近在github上看到了一个项目，是小牛翻译开源的文言文-现代文平行语料，一共有967257个句对，地址在下面：&lt;br&gt;&lt;a href=&quot;https://github.com/NiuTrans/Classical-Modern&quot; target=&quot;_blank&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="深度学习" scheme="https://godweiyang.com/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="Transformer" scheme="https://godweiyang.com/tags/Transformer/"/>
+    
+      <category term="模型训练" scheme="https://godweiyang.com/tags/%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83/"/>
+    
+      <category term="模型加速" scheme="https://godweiyang.com/tags/%E6%A8%A1%E5%9E%8B%E5%8A%A0%E9%80%9F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>这道小学六年级的数学题，恕我直言没几个人会做</title>
+    <link href="https://godweiyang.com/2021/12/18/cuda-monte-carlo/"/>
+    <id>https://godweiyang.com/2021/12/18/cuda-monte-carlo/</id>
+    <published>2021-12-17T18:50:48.000Z</published>
+    <updated>2026-02-27T14:58:51.386Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;关注公众号【算法码上来】，每日算法干货马上就来！&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&quot;/medias/contact.jpg&quot; alt&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;1.png&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="编程算法" scheme="https://godweiyang.com/categories/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95/"/>
+    
+    
+      <category term="cuda" scheme="https://godweiyang.com/tags/cuda/"/>
+    
+      <category term="c++" scheme="https://godweiyang.com/tags/c/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>二零二一年终总结</title>
+    <link href="https://godweiyang.com/2021/12/13/2021-conclusion/"/>
+    <id>https://godweiyang.com/2021/12/13/2021-conclusion/</id>
+    <published>2021-12-13T12:29:45.000Z</published>
+    <updated>2026-02-27T14:58:51.058Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;关注公众号【算法码上来】，每日算法干货马上就来！&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&quot;/medias/contact.jpg&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="随笔" scheme="https://godweiyang.com/categories/%E9%9A%8F%E7%AC%94/"/>
+    
+    
+      <category term="年终总结" scheme="https://godweiyang.com/tags/%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/"/>
+    
+  </entry>
+  
+</feed>
