@@ -36,7 +36,6 @@
             font-size: 15px;
         }
 
-        /* ── Selection Screen ── */
         .game-selector {
             display: flex;
             justify-content: center;
@@ -65,25 +64,10 @@
             background: rgba(255,255,255,0.14);
         }
 
-        .game-card .icon {
-            font-size: 54px;
-            margin-bottom: 16px;
-            display: block;
-        }
+        .game-card .icon { font-size: 54px; margin-bottom: 16px; display: block; }
+        .game-card h2 { font-size: 1.3em; font-weight: 600; margin-bottom: 8px; }
+        .game-card p { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.5; }
 
-        .game-card h2 {
-            font-size: 1.3em;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .game-card p {
-            font-size: 13px;
-            color: rgba(255,255,255,0.55);
-            line-height: 1.5;
-        }
-
-        /* ── Game Container ── */
         .game-container {
             display: none;
             flex-direction: column;
@@ -91,9 +75,7 @@
             padding: 10px 20px 40px;
         }
 
-        .game-container.active {
-            display: flex;
-        }
+        .game-container.active { display: flex; }
 
         .game-top-bar {
             display: flex;
@@ -103,6 +85,9 @@
             max-width: 420px;
             margin-bottom: 16px;
         }
+
+        #game-gomoku .game-top-bar,
+        #game-cchess .game-top-bar { max-width: 520px; }
 
         .btn-back {
             background: rgba(255,255,255,0.12);
@@ -117,32 +102,21 @@
 
         .btn-back:hover { background: rgba(255,255,255,0.22); }
 
-        .game-title {
-            font-size: 1.4em;
-            font-weight: 600;
-        }
+        .game-title { font-size: 1.4em; font-weight: 600; }
 
-        .game-score {
+        .game-score { font-size: 14px; color: rgba(255,255,255,0.7); }
+        .game-score span { color: #ffd200; font-weight: 700; }
+
+        .game-status {
             font-size: 14px;
             color: rgba(255,255,255,0.7);
+            min-width: 80px;
+            text-align: right;
         }
 
-        .game-score span {
-            color: #ffd200;
-            font-weight: 700;
-        }
+        canvas { border-radius: 12px; display: block; touch-action: none; }
 
-        canvas {
-            border-radius: 12px;
-            display: block;
-            touch-action: none;
-        }
-
-        .game-hint {
-            margin-top: 14px;
-            font-size: 13px;
-            color: rgba(255,255,255,0.45);
-        }
+        .game-hint { margin-top: 14px; font-size: 13px; color: rgba(255,255,255,0.45); }
 
         .btn-restart {
             margin-top: 14px;
@@ -159,16 +133,13 @@
 
         .btn-restart:hover { opacity: 0.85; }
 
-        /* ── 2048 specific ── */
         #game-2048-canvas { background: #bbada0; }
-
-        /* ── Snake specific ── */
         #game-snake-canvas { background: #1a1a2e; border: 2px solid rgba(255,255,255,0.15); }
-
-        /* ── Tetris specific ── */
         #game-tetris-canvas { background: #0a0a1a; border: 2px solid rgba(255,255,255,0.15); }
+        #game-gomoku-canvas { border-radius: 4px; }
+        #game-cchess-canvas { border-radius: 4px; }
+        #game-match3-canvas { background: #1a1a2e; border: 2px solid rgba(255,255,255,0.15); }
 
-        /* ── Mobile controls ── */
         .mobile-controls {
             display: none;
             gap: 6px;
@@ -176,17 +147,10 @@
         }
 
         .mobile-controls button {
-            width: 56px;
-            height: 56px;
-            border-radius: 14px;
+            width: 56px; height: 56px; border-radius: 14px;
             border: 1px solid rgba(255,255,255,0.2);
-            background: rgba(255,255,255,0.1);
-            color: #fff;
-            font-size: 22px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background: rgba(255,255,255,0.1); color: #fff; font-size: 22px;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -194,28 +158,19 @@
 
         .ctrl-grid {
             display: grid;
-            grid-template-areas:
-                ". up ."
-                "left down right";
+            grid-template-areas: ". up ." "left down right";
             grid-template-columns: repeat(3, 56px);
             grid-template-rows: repeat(2, 56px);
             gap: 6px;
         }
 
-        .ctrl-grid .up    { grid-area: up; }
-        .ctrl-grid .down  { grid-area: down; }
-        .ctrl-grid .left  { grid-area: left; }
+        .ctrl-grid .up { grid-area: up; }
+        .ctrl-grid .down { grid-area: down; }
+        .ctrl-grid .left { grid-area: left; }
         .ctrl-grid .right { grid-area: right; }
 
-        .tetris-controls {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .tetris-controls .ctrl-grid {
-            margin-right: 12px;
-        }
+        .tetris-controls { display: flex; gap: 8px; align-items: center; }
+        .tetris-controls .ctrl-grid { margin-right: 12px; }
 
         @media (max-width: 600px) {
             .page-header { padding: 30px 16px 20px; }
@@ -225,9 +180,7 @@
             .mobile-controls { display: flex; }
         }
 
-        @media (pointer: coarse) {
-            .mobile-controls { display: flex; }
-        }
+        @media (pointer: coarse) { .mobile-controls { display: flex; } }
     </style>
 <link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
 <link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
@@ -240,19 +193,28 @@
     </div>
     <div class="game-selector">
         <div class="game-card" onclick="openGame('2048')">
-            <span class="icon">🔢</span>
-            <h2>2048</h2>
+            <span class="icon">🔢</span><h2>2048</h2>
             <p>滑动合并数字，挑战最高分</p>
         </div>
         <div class="game-card" onclick="openGame('snake')">
-            <span class="icon">🐍</span>
-            <h2>贪吃蛇</h2>
+            <span class="icon">🐍</span><h2>贪吃蛇</h2>
             <p>控制蛇吃食物，不断变长</p>
         </div>
         <div class="game-card" onclick="openGame('tetris')">
-            <span class="icon">🧱</span>
-            <h2>俄罗斯方块</h2>
+            <span class="icon">🧱</span><h2>俄罗斯方块</h2>
             <p>旋转方块消除行，经典玩法</p>
+        </div>
+        <div class="game-card" onclick="openGame('gomoku')">
+            <span class="icon">⚫</span><h2>五子棋</h2>
+            <p>与高难度AI对弈，先连五子者胜</p>
+        </div>
+        <div class="game-card" onclick="openGame('cchess')">
+            <span class="icon">♛</span><h2>中国象棋</h2>
+            <p>与强力AI对弈，执红先行</p>
+        </div>
+        <div class="game-card" onclick="openGame('match3')">
+            <span class="icon">💎</span><h2>消消乐</h2>
+            <p>交换宝石消除匹配，连锁得高分</p>
         </div>
     </div>
 </div>
@@ -318,6 +280,42 @@
     </div>
 </div>
 
+<!-- Gomoku -->
+<div id="game-gomoku" class="game-container">
+    <div class="game-top-bar">
+        <button class="btn-back" onclick="backToSelector()">← 返回</button>
+        <span class="game-title">五子棋</span>
+        <span class="game-status" id="status-gomoku">你的回合 (黑子)</span>
+    </div>
+    <canvas id="game-gomoku-canvas" width="480" height="480"></canvas>
+    <button class="btn-restart" onclick="initGomoku()">重新开始</button>
+    <div class="game-hint">点击棋盘落子</div>
+</div>
+
+<!-- Chinese Chess -->
+<div id="game-cchess" class="game-container">
+    <div class="game-top-bar">
+        <button class="btn-back" onclick="backToSelector()">← 返回</button>
+        <span class="game-title">中国象棋</span>
+        <span class="game-status" id="status-cchess">你的回合 (红方)</span>
+    </div>
+    <canvas id="game-cchess-canvas" width="480" height="530"></canvas>
+    <button class="btn-restart" onclick="initCChess()">重新开始</button>
+    <div class="game-hint">点击棋子选择，再点击目标位置移动</div>
+</div>
+
+<!-- Match-3 -->
+<div id="game-match3" class="game-container">
+    <div class="game-top-bar">
+        <button class="btn-back" onclick="backToSelector()">← 返回</button>
+        <span class="game-title">消消乐</span>
+        <span class="game-score">分数: <span id="score-match3">0</span></span>
+    </div>
+    <canvas id="game-match3-canvas" width="400" height="400"></canvas>
+    <button class="btn-restart" onclick="initMatch3()">重新开始</button>
+    <div class="game-hint">点击选择宝石，再点击相邻宝石交换</div>
+</div>
+
 <script>
 /* ═══════════════════════════════════════
    Navigation
@@ -331,6 +329,9 @@ function openGame(name) {
     if (name === '2048') init2048();
     else if (name === 'snake') initSnake();
     else if (name === 'tetris') initTetris();
+    else if (name === 'gomoku') initGomoku();
+    else if (name === 'cchess') initCChess();
+    else if (name === 'match3') initMatch3();
 }
 
 function backToSelector() {
@@ -344,6 +345,18 @@ function backToSelector() {
 }
 
 /* ═══════════════════════════════════════
+   Shared Utilities
+   ═══════════════════════════════════════ */
+function roundRect(ctx, x, y, w, h, r) {
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+}
+
+/* ═══════════════════════════════════════
    2048
    ═══════════════════════════════════════ */
 var grid2048, score2048, canvas2048, ctx2048;
@@ -354,7 +367,6 @@ var tileColors = {
     32:'#f67c5f',64:'#f65e3b',128:'#edcf72',256:'#edcc61',
     512:'#edc850',1024:'#edc53f',2048:'#edc22e'
 };
-
 var tileTextColors = {
     0:'#cdc1b4',2:'#776e65',4:'#776e65',8:'#f9f6f2',16:'#f9f6f2',
     32:'#f9f6f2',64:'#f9f6f2',128:'#f9f6f2',256:'#f9f6f2',
@@ -368,9 +380,7 @@ function init2048() {
     canvas2048.width = canvas2048.height = w;
     grid2048 = Array.from({length: gridSize}, function() { return new Array(gridSize).fill(0); });
     score2048 = 0;
-    addRandom2048();
-    addRandom2048();
-    draw2048();
+    addRandom2048(); addRandom2048(); draw2048();
 }
 
 function addRandom2048() {
@@ -409,26 +419,13 @@ function draw2048() {
     document.getElementById('score-2048').textContent = score2048;
 }
 
-function roundRect(ctx, x, y, w, h, r) {
-    ctx.moveTo(x + r, y);
-    ctx.arcTo(x + w, y, x + w, y + h, r);
-    ctx.arcTo(x + w, y + h, x, y + h, r);
-    ctx.arcTo(x, y + h, x, y, r);
-    ctx.arcTo(x, y, x + w, y, r);
-    ctx.closePath();
-}
-
 function slide(row) {
     var arr = row.filter(function(v) { return v !== 0; });
     var result = [];
     for (var i = 0; i < arr.length; i++) {
         if (i + 1 < arr.length && arr[i] === arr[i + 1]) {
-            result.push(arr[i] * 2);
-            score2048 += arr[i] * 2;
-            i++;
-        } else {
-            result.push(arr[i]);
-        }
+            result.push(arr[i] * 2); score2048 += arr[i] * 2; i++;
+        } else { result.push(arr[i]); }
     }
     while (result.length < gridSize) result.push(0);
     return result;
@@ -442,22 +439,17 @@ function move2048(dir) {
         for (var r = 0; r < gridSize; r++) grid2048[r] = slide(grid2048[r].slice().reverse()).reverse();
     } else if (dir === 'up') {
         for (var c = 0; c < gridSize; c++) {
-            var col = [];
-            for (var r = 0; r < gridSize; r++) col.push(grid2048[r][c]);
-            col = slide(col);
-            for (var r = 0; r < gridSize; r++) grid2048[r][c] = col[r];
+            var col = []; for (var r = 0; r < gridSize; r++) col.push(grid2048[r][c]);
+            col = slide(col); for (var r = 0; r < gridSize; r++) grid2048[r][c] = col[r];
         }
     } else if (dir === 'down') {
         for (var c = 0; c < gridSize; c++) {
-            var col = [];
-            for (var r = 0; r < gridSize; r++) col.push(grid2048[r][c]);
-            col = slide(col.reverse()).reverse();
-            for (var r = 0; r < gridSize; r++) grid2048[r][c] = col[r];
+            var col = []; for (var r = 0; r < gridSize; r++) col.push(grid2048[r][c]);
+            col = slide(col.reverse()).reverse(); for (var r = 0; r < gridSize; r++) grid2048[r][c] = col[r];
         }
     }
     if (JSON.stringify(grid2048) !== oldGrid) {
-        addRandom2048();
-        draw2048();
+        addRandom2048(); draw2048();
         if (isGameOver2048()) setTimeout(function() { alert('游戏结束！得分: ' + score2048); }, 100);
     }
 }
@@ -485,10 +477,8 @@ function initSnake() {
     var w = snakeGridSize * snakeCellSize;
     canvasSnake.width = canvasSnake.height = w;
     var mid = Math.floor(snakeGridSize / 2);
-    snakeCells = [{x: mid, y: mid}, {x: mid - 1, y: mid}, {x: mid - 2, y: mid}];
-    snakeDir = 'right';
-    snakeNextDir = 'right';
-    snakeScore = 0;
+    snakeCells = [{x:mid,y:mid},{x:mid-1,y:mid},{x:mid-2,y:mid}];
+    snakeDir = 'right'; snakeNextDir = 'right'; snakeScore = 0;
     placeFood();
     if (snakeTimer) clearInterval(snakeTimer);
     snakeTimer = setInterval(tickSnake, 130);
@@ -496,94 +486,60 @@ function initSnake() {
 }
 
 function placeFood() {
-    var occupied = {};
-    snakeCells.forEach(function(c) { occupied[c.x + ',' + c.y] = true; });
+    var occ = {};
+    snakeCells.forEach(function(c) { occ[c.x+','+c.y] = true; });
     var empty = [];
     for (var x = 0; x < snakeGridSize; x++)
         for (var y = 0; y < snakeGridSize; y++)
-            if (!occupied[x + ',' + y]) empty.push({x: x, y: y});
+            if (!occ[x+','+y]) empty.push({x:x,y:y});
     snakeFood = empty[Math.floor(Math.random() * empty.length)];
 }
 
 function changeSnakeDir(d) {
-    var opposites = {up:'down',down:'up',left:'right',right:'left'};
-    if (d !== opposites[snakeDir]) snakeNextDir = d;
+    var opp = {up:'down',down:'up',left:'right',right:'left'};
+    if (d !== opp[snakeDir]) snakeNextDir = d;
 }
 
 function tickSnake() {
     snakeDir = snakeNextDir;
-    var head = {x: snakeCells[0].x, y: snakeCells[0].y};
-    if (snakeDir === 'up') head.y--;
-    else if (snakeDir === 'down') head.y++;
-    else if (snakeDir === 'left') head.x--;
-    else if (snakeDir === 'right') head.x++;
-
-    if (head.x < 0 || head.x >= snakeGridSize || head.y < 0 || head.y >= snakeGridSize) {
-        clearInterval(snakeTimer); snakeTimer = null;
-        alert('游戏结束！得分: ' + snakeScore);
-        return;
+    var head = {x:snakeCells[0].x, y:snakeCells[0].y};
+    if (snakeDir==='up') head.y--; else if (snakeDir==='down') head.y++;
+    else if (snakeDir==='left') head.x--; else head.x++;
+    if (head.x<0||head.x>=snakeGridSize||head.y<0||head.y>=snakeGridSize) {
+        clearInterval(snakeTimer); snakeTimer=null; alert('游戏结束！得分: '+snakeScore); return;
     }
-    for (var i = 0; i < snakeCells.length; i++) {
-        if (snakeCells[i].x === head.x && snakeCells[i].y === head.y) {
-            clearInterval(snakeTimer); snakeTimer = null;
-            alert('游戏结束！得分: ' + snakeScore);
-            return;
+    for (var i=0;i<snakeCells.length;i++) {
+        if (snakeCells[i].x===head.x&&snakeCells[i].y===head.y) {
+            clearInterval(snakeTimer); snakeTimer=null; alert('游戏结束！得分: '+snakeScore); return;
         }
     }
-
     snakeCells.unshift(head);
-    if (head.x === snakeFood.x && head.y === snakeFood.y) {
-        snakeScore += 10;
-        placeFood();
-    } else {
-        snakeCells.pop();
-    }
+    if (head.x===snakeFood.x&&head.y===snakeFood.y) { snakeScore+=10; placeFood(); }
+    else snakeCells.pop();
     drawSnake();
 }
 
 function drawSnake() {
     var w = canvasSnake.width;
-    ctxSnake.clearRect(0, 0, w, w);
-    ctxSnake.fillStyle = '#1a1a2e';
-    ctxSnake.fillRect(0, 0, w, w);
-
-    for (var x = 0; x < snakeGridSize; x++)
-        for (var y = 0; y < snakeGridSize; y++) {
-            ctxSnake.fillStyle = 'rgba(255,255,255,0.03)';
-            ctxSnake.fillRect(x * snakeCellSize, y * snakeCellSize, snakeCellSize - 1, snakeCellSize - 1);
-        }
-
-    snakeCells.forEach(function(c, i) {
-        var gradient = ctxSnake.createLinearGradient(
-            c.x * snakeCellSize, c.y * snakeCellSize,
-            (c.x + 1) * snakeCellSize, (c.y + 1) * snakeCellSize
-        );
-        if (i === 0) {
-            gradient.addColorStop(0, '#00e676');
-            gradient.addColorStop(1, '#00c853');
-        } else {
-            gradient.addColorStop(0, '#4caf50');
-            gradient.addColorStop(1, '#388e3c');
-        }
-        ctxSnake.fillStyle = gradient;
-        ctxSnake.beginPath();
-        roundRect(ctxSnake, c.x * snakeCellSize + 1, c.y * snakeCellSize + 1, snakeCellSize - 2, snakeCellSize - 2, 4);
+    ctxSnake.clearRect(0,0,w,w);
+    ctxSnake.fillStyle='#1a1a2e'; ctxSnake.fillRect(0,0,w,w);
+    for (var x=0;x<snakeGridSize;x++) for (var y=0;y<snakeGridSize;y++) {
+        ctxSnake.fillStyle='rgba(255,255,255,0.03)';
+        ctxSnake.fillRect(x*snakeCellSize,y*snakeCellSize,snakeCellSize-1,snakeCellSize-1);
+    }
+    snakeCells.forEach(function(c,i) {
+        var g = ctxSnake.createLinearGradient(c.x*snakeCellSize,c.y*snakeCellSize,(c.x+1)*snakeCellSize,(c.y+1)*snakeCellSize);
+        if (i===0) { g.addColorStop(0,'#00e676'); g.addColorStop(1,'#00c853'); }
+        else { g.addColorStop(0,'#4caf50'); g.addColorStop(1,'#388e3c'); }
+        ctxSnake.fillStyle=g; ctxSnake.beginPath();
+        roundRect(ctxSnake,c.x*snakeCellSize+1,c.y*snakeCellSize+1,snakeCellSize-2,snakeCellSize-2,4);
         ctxSnake.fill();
     });
-
-    ctxSnake.fillStyle = '#ff1744';
-    ctxSnake.shadowColor = '#ff1744';
-    ctxSnake.shadowBlur = 8;
+    ctxSnake.fillStyle='#ff1744'; ctxSnake.shadowColor='#ff1744'; ctxSnake.shadowBlur=8;
     ctxSnake.beginPath();
-    ctxSnake.arc(
-        snakeFood.x * snakeCellSize + snakeCellSize / 2,
-        snakeFood.y * snakeCellSize + snakeCellSize / 2,
-        snakeCellSize / 2 - 2, 0, Math.PI * 2
-    );
-    ctxSnake.fill();
-    ctxSnake.shadowBlur = 0;
-
-    document.getElementById('score-snake').textContent = snakeScore;
+    ctxSnake.arc(snakeFood.x*snakeCellSize+snakeCellSize/2,snakeFood.y*snakeCellSize+snakeCellSize/2,snakeCellSize/2-2,0,Math.PI*2);
+    ctxSnake.fill(); ctxSnake.shadowBlur=0;
+    document.getElementById('score-snake').textContent=snakeScore;
 }
 
 /* ═══════════════════════════════════════
@@ -591,154 +547,821 @@ function drawSnake() {
    ═══════════════════════════════════════ */
 var tetrisBoard, tetrisCurrent, tetrisCurrentPos, tetrisScore, tetrisTimer, tetrisGameOver;
 var canvasTetris, ctxTetris;
-var tetrisCols = 10, tetrisRows = 20, tetrisCellSize = 30;
-
+var tetrisCols=10, tetrisRows=20, tetrisCellSize=30;
 var TETROMINOS = [
-    {shape: [[1,1,1,1]], color: '#00bcd4'},
-    {shape: [[1,1],[1,1]], color: '#ffd200'},
-    {shape: [[0,1,0],[1,1,1]], color: '#9c27b0'},
-    {shape: [[1,0,0],[1,1,1]], color: '#ff9800'},
-    {shape: [[0,0,1],[1,1,1]], color: '#2196f3'},
-    {shape: [[1,1,0],[0,1,1]], color: '#4caf50'},
-    {shape: [[0,1,1],[1,1,0]], color: '#f44336'}
+    {shape:[[1,1,1,1]],color:'#00bcd4'},{shape:[[1,1],[1,1]],color:'#ffd200'},
+    {shape:[[0,1,0],[1,1,1]],color:'#9c27b0'},{shape:[[1,0,0],[1,1,1]],color:'#ff9800'},
+    {shape:[[0,0,1],[1,1,1]],color:'#2196f3'},{shape:[[1,1,0],[0,1,1]],color:'#4caf50'},
+    {shape:[[0,1,1],[1,1,0]],color:'#f44336'}
 ];
 
 function initTetris() {
-    canvasTetris = document.getElementById('game-tetris-canvas');
-    ctxTetris = canvasTetris.getContext('2d');
-    canvasTetris.width = tetrisCols * tetrisCellSize;
-    canvasTetris.height = tetrisRows * tetrisCellSize;
-    tetrisBoard = Array.from({length: tetrisRows}, function() { return new Array(tetrisCols).fill(null); });
-    tetrisScore = 0;
-    tetrisGameOver = false;
+    canvasTetris=document.getElementById('game-tetris-canvas');
+    ctxTetris=canvasTetris.getContext('2d');
+    canvasTetris.width=tetrisCols*tetrisCellSize; canvasTetris.height=tetrisRows*tetrisCellSize;
+    tetrisBoard=Array.from({length:tetrisRows},function(){return new Array(tetrisCols).fill(null);});
+    tetrisScore=0; tetrisGameOver=false;
     spawnTetromino();
     if (tetrisTimer) clearInterval(tetrisTimer);
-    tetrisTimer = setInterval(tickTetris, 500);
-    drawTetris();
+    tetrisTimer=setInterval(tickTetris,500); drawTetris();
 }
 
 function spawnTetromino() {
-    var t = TETROMINOS[Math.floor(Math.random() * TETROMINOS.length)];
-    tetrisCurrent = {shape: t.shape.map(function(r) { return r.slice(); }), color: t.color};
-    tetrisCurrentPos = {r: 0, c: Math.floor((tetrisCols - tetrisCurrent.shape[0].length) / 2)};
-    if (!canPlace(tetrisCurrent.shape, tetrisCurrentPos.r, tetrisCurrentPos.c)) {
-        tetrisGameOver = true;
-        clearInterval(tetrisTimer); tetrisTimer = null;
-        drawTetris();
-        setTimeout(function() { alert('游戏结束！得分: ' + tetrisScore); }, 100);
+    var t=TETROMINOS[Math.floor(Math.random()*TETROMINOS.length)];
+    tetrisCurrent={shape:t.shape.map(function(r){return r.slice();}),color:t.color};
+    tetrisCurrentPos={r:0,c:Math.floor((tetrisCols-tetrisCurrent.shape[0].length)/2)};
+    if (!canPlace(tetrisCurrent.shape,tetrisCurrentPos.r,tetrisCurrentPos.c)) {
+        tetrisGameOver=true; clearInterval(tetrisTimer); tetrisTimer=null;
+        drawTetris(); setTimeout(function(){alert('游戏结束！得分: '+tetrisScore);},100);
     }
 }
 
-function canPlace(shape, row, col) {
-    for (var r = 0; r < shape.length; r++)
-        for (var c = 0; c < shape[r].length; c++) {
-            if (!shape[r][c]) continue;
-            var nr = row + r, nc = col + c;
-            if (nr < 0 || nr >= tetrisRows || nc < 0 || nc >= tetrisCols) return false;
-            if (tetrisBoard[nr][nc]) return false;
-        }
+function canPlace(shape,row,col) {
+    for (var r=0;r<shape.length;r++) for (var c=0;c<shape[r].length;c++) {
+        if (!shape[r][c]) continue;
+        var nr=row+r,nc=col+c;
+        if (nr<0||nr>=tetrisRows||nc<0||nc>=tetrisCols) return false;
+        if (tetrisBoard[nr][nc]) return false;
+    }
     return true;
 }
 
 function lockPiece() {
-    var shape = tetrisCurrent.shape;
-    for (var r = 0; r < shape.length; r++)
-        for (var c = 0; c < shape[r].length; c++)
-            if (shape[r][c])
-                tetrisBoard[tetrisCurrentPos.r + r][tetrisCurrentPos.c + c] = tetrisCurrent.color;
-    clearLines();
-    spawnTetromino();
+    var s=tetrisCurrent.shape;
+    for (var r=0;r<s.length;r++) for (var c=0;c<s[r].length;c++)
+        if (s[r][c]) tetrisBoard[tetrisCurrentPos.r+r][tetrisCurrentPos.c+c]=tetrisCurrent.color;
+    clearLines(); spawnTetromino();
 }
 
 function clearLines() {
-    var linesCleared = 0;
-    for (var r = tetrisRows - 1; r >= 0; r--) {
-        if (tetrisBoard[r].every(function(v) { return v !== null; })) {
-            tetrisBoard.splice(r, 1);
-            tetrisBoard.unshift(new Array(tetrisCols).fill(null));
-            linesCleared++;
-            r++;
+    var lc=0;
+    for (var r=tetrisRows-1;r>=0;r--) {
+        if (tetrisBoard[r].every(function(v){return v!==null;})) {
+            tetrisBoard.splice(r,1); tetrisBoard.unshift(new Array(tetrisCols).fill(null)); lc++; r++;
         }
     }
-    var points = [0, 100, 300, 500, 800];
-    tetrisScore += points[linesCleared] || 0;
+    tetrisScore += [0,100,300,500,800][lc]||0;
 }
 
 function rotateTetromino() {
-    var shape = tetrisCurrent.shape;
-    var rows = shape.length, cols = shape[0].length;
-    var rotated = Array.from({length: cols}, function(_, c) {
-        return Array.from({length: rows}, function(_, r) { return shape[rows - 1 - r][c]; });
+    var s=tetrisCurrent.shape,rows=s.length,cols=s[0].length;
+    var rot=Array.from({length:cols},function(_,c){
+        return Array.from({length:rows},function(_,r){return s[rows-1-r][c];});
     });
-    if (canPlace(rotated, tetrisCurrentPos.r, tetrisCurrentPos.c)) {
-        tetrisCurrent.shape = rotated;
-    }
+    if (canPlace(rot,tetrisCurrentPos.r,tetrisCurrentPos.c)) tetrisCurrent.shape=rot;
 }
 
 function tickTetris() {
     if (tetrisGameOver) return;
-    if (canPlace(tetrisCurrent.shape, tetrisCurrentPos.r + 1, tetrisCurrentPos.c)) {
-        tetrisCurrentPos.r++;
-    } else {
-        lockPiece();
-    }
+    if (canPlace(tetrisCurrent.shape,tetrisCurrentPos.r+1,tetrisCurrentPos.c)) tetrisCurrentPos.r++;
+    else lockPiece();
     drawTetris();
 }
 
-function tetrisAction(action) {
+function tetrisAction(a) {
     if (tetrisGameOver) return;
-    if (action === 'left') {
-        if (canPlace(tetrisCurrent.shape, tetrisCurrentPos.r, tetrisCurrentPos.c - 1)) tetrisCurrentPos.c--;
-    } else if (action === 'right') {
-        if (canPlace(tetrisCurrent.shape, tetrisCurrentPos.r, tetrisCurrentPos.c + 1)) tetrisCurrentPos.c++;
-    } else if (action === 'down') {
-        if (canPlace(tetrisCurrent.shape, tetrisCurrentPos.r + 1, tetrisCurrentPos.c)) tetrisCurrentPos.r++;
-    } else if (action === 'rotate') {
-        rotateTetromino();
-    } else if (action === 'drop') {
-        while (canPlace(tetrisCurrent.shape, tetrisCurrentPos.r + 1, tetrisCurrentPos.c)) tetrisCurrentPos.r++;
-        lockPiece();
-    }
+    if (a==='left'){if(canPlace(tetrisCurrent.shape,tetrisCurrentPos.r,tetrisCurrentPos.c-1))tetrisCurrentPos.c--;}
+    else if(a==='right'){if(canPlace(tetrisCurrent.shape,tetrisCurrentPos.r,tetrisCurrentPos.c+1))tetrisCurrentPos.c++;}
+    else if(a==='down'){if(canPlace(tetrisCurrent.shape,tetrisCurrentPos.r+1,tetrisCurrentPos.c))tetrisCurrentPos.r++;}
+    else if(a==='rotate') rotateTetromino();
+    else if(a==='drop'){while(canPlace(tetrisCurrent.shape,tetrisCurrentPos.r+1,tetrisCurrentPos.c))tetrisCurrentPos.r++;lockPiece();}
     drawTetris();
 }
 
 function drawTetris() {
-    var w = canvasTetris.width, h = canvasTetris.height;
-    ctxTetris.clearRect(0, 0, w, h);
-    ctxTetris.fillStyle = '#0a0a1a';
-    ctxTetris.fillRect(0, 0, w, h);
-
-    for (var x = 0; x < tetrisCols; x++)
-        for (var y = 0; y < tetrisRows; y++) {
-            ctxTetris.fillStyle = 'rgba(255,255,255,0.02)';
-            ctxTetris.fillRect(x * tetrisCellSize, y * tetrisCellSize, tetrisCellSize - 1, tetrisCellSize - 1);
+    var w=canvasTetris.width,h=canvasTetris.height;
+    ctxTetris.clearRect(0,0,w,h); ctxTetris.fillStyle='#0a0a1a'; ctxTetris.fillRect(0,0,w,h);
+    for(var x=0;x<tetrisCols;x++) for(var y=0;y<tetrisRows;y++){
+        ctxTetris.fillStyle='rgba(255,255,255,0.02)';
+        ctxTetris.fillRect(x*tetrisCellSize,y*tetrisCellSize,tetrisCellSize-1,tetrisCellSize-1);
+    }
+    for(var r=0;r<tetrisRows;r++) for(var c=0;c<tetrisCols;c++) if(tetrisBoard[r][c]){
+        ctxTetris.fillStyle=tetrisBoard[r][c];
+        ctxTetris.fillRect(c*tetrisCellSize+1,r*tetrisCellSize+1,tetrisCellSize-2,tetrisCellSize-2);
+        ctxTetris.fillStyle='rgba(255,255,255,0.15)';
+        ctxTetris.fillRect(c*tetrisCellSize+1,r*tetrisCellSize+1,tetrisCellSize-2,3);
+    }
+    if(tetrisCurrent&&!tetrisGameOver){
+        var s=tetrisCurrent.shape;
+        for(var r=0;r<s.length;r++) for(var c=0;c<s[r].length;c++) if(s[r][c]){
+            var px=(tetrisCurrentPos.c+c)*tetrisCellSize,py=(tetrisCurrentPos.r+r)*tetrisCellSize;
+            ctxTetris.fillStyle=tetrisCurrent.color;
+            ctxTetris.fillRect(px+1,py+1,tetrisCellSize-2,tetrisCellSize-2);
+            ctxTetris.fillStyle='rgba(255,255,255,0.2)';
+            ctxTetris.fillRect(px+1,py+1,tetrisCellSize-2,3);
         }
+    }
+    document.getElementById('score-tetris').textContent=tetrisScore;
+}
 
-    for (var r = 0; r < tetrisRows; r++)
-        for (var c = 0; c < tetrisCols; c++)
-            if (tetrisBoard[r][c]) {
-                ctxTetris.fillStyle = tetrisBoard[r][c];
-                ctxTetris.fillRect(c * tetrisCellSize + 1, r * tetrisCellSize + 1, tetrisCellSize - 2, tetrisCellSize - 2);
-                ctxTetris.fillStyle = 'rgba(255,255,255,0.15)';
-                ctxTetris.fillRect(c * tetrisCellSize + 1, r * tetrisCellSize + 1, tetrisCellSize - 2, 3);
+/* ═══════════════════════════════════════
+   Gomoku (五子棋) — with Alpha-Beta AI
+   ═══════════════════════════════════════ */
+var gomokuBoard, gomokuCanvas, gomokuCtx;
+var GK_SIZE = 15, GK_CELL = 30, GK_PAD = 30;
+var gomokuOver, gomokuPlayerTurn;
+
+function initGomoku() {
+    gomokuCanvas = document.getElementById('game-gomoku-canvas');
+    gomokuCtx = gomokuCanvas.getContext('2d');
+    var sz = (GK_SIZE - 1) * GK_CELL + GK_PAD * 2;
+    gomokuCanvas.width = gomokuCanvas.height = sz;
+    gomokuBoard = [];
+    for (var i = 0; i < GK_SIZE; i++) { gomokuBoard[i] = []; for (var j = 0; j < GK_SIZE; j++) gomokuBoard[i][j] = 0; }
+    gomokuOver = false;
+    gomokuPlayerTurn = true;
+    document.getElementById('status-gomoku').textContent = '你的回合 (黑子)';
+    drawGomoku();
+}
+
+function drawGomoku() {
+    var ctx = gomokuCtx, sz = gomokuCanvas.width;
+    ctx.fillStyle = '#dcb35c'; ctx.fillRect(0, 0, sz, sz);
+    ctx.strokeStyle = '#333'; ctx.lineWidth = 1;
+    for (var i = 0; i < GK_SIZE; i++) {
+        ctx.beginPath(); ctx.moveTo(GK_PAD + i * GK_CELL, GK_PAD); ctx.lineTo(GK_PAD + i * GK_CELL, GK_PAD + (GK_SIZE-1) * GK_CELL); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(GK_PAD, GK_PAD + i * GK_CELL); ctx.lineTo(GK_PAD + (GK_SIZE-1) * GK_CELL, GK_PAD + i * GK_CELL); ctx.stroke();
+    }
+    [3,7,11].forEach(function(a) { [3,7,11].forEach(function(b) {
+        ctx.fillStyle = '#333'; ctx.beginPath(); ctx.arc(GK_PAD + b * GK_CELL, GK_PAD + a * GK_CELL, 3.5, 0, Math.PI*2); ctx.fill();
+    });});
+    for (var r = 0; r < GK_SIZE; r++) for (var c = 0; c < GK_SIZE; c++) {
+        if (gomokuBoard[r][c] === 0) continue;
+        var x = GK_PAD + c * GK_CELL, y = GK_PAD + r * GK_CELL, rad = GK_CELL * 0.43;
+        ctx.beginPath(); ctx.arc(x, y, rad, 0, Math.PI*2);
+        if (gomokuBoard[r][c] === 1) {
+            var g = ctx.createRadialGradient(x-3,y-3,2,x,y,rad);
+            g.addColorStop(0,'#555'); g.addColorStop(1,'#000'); ctx.fillStyle = g;
+        } else {
+            var g = ctx.createRadialGradient(x-3,y-3,2,x,y,rad);
+            g.addColorStop(0,'#fff'); g.addColorStop(1,'#ccc'); ctx.fillStyle = g;
+        }
+        ctx.fill();
+        ctx.strokeStyle = gomokuBoard[r][c]===1 ? '#000' : '#999'; ctx.lineWidth = 0.5; ctx.stroke();
+    }
+}
+
+function gkPatternScore(count, openEnds) {
+    if (count >= 5) return 10000000;
+    if (openEnds === 0) return 0;
+    var scores = {
+        '4_2': 1000000, '4_1': 100000,
+        '3_2': 100000,  '3_1': 8000,
+        '2_2': 8000,    '2_1': 500,
+        '1_2': 100,     '1_1': 10
+    };
+    return scores[count + '_' + openEnds] || 0;
+}
+
+function gkEvalBoard(board, player) {
+    var score = 0, opp = 3 - player;
+    for (var r = 0; r < GK_SIZE; r++) for (var c = 0; c < GK_SIZE; c++) {
+        if (board[r][c] === 0) continue;
+        var color = board[r][c];
+        var dirs = [[0,1],[1,0],[1,1],[1,-1]];
+        for (var di = 0; di < dirs.length; di++) {
+            var d = dirs[di];
+            var pr = r - d[0], pc = c - d[1];
+            if (pr >= 0 && pr < GK_SIZE && pc >= 0 && pc < GK_SIZE && board[pr][pc] === color) continue;
+            var cnt = 0, cr = r, cc = c;
+            while (cr >= 0 && cr < GK_SIZE && cc >= 0 && cc < GK_SIZE && board[cr][cc] === color) { cnt++; cr += d[0]; cc += d[1]; }
+            var open = 0;
+            if (pr >= 0 && pr < GK_SIZE && pc >= 0 && pc < GK_SIZE && board[pr][pc] === 0) open++;
+            if (cr >= 0 && cr < GK_SIZE && cc >= 0 && cc < GK_SIZE && board[cr][cc] === 0) open++;
+            var s = gkPatternScore(cnt, open);
+            if (color === player) score += s; else score -= s * 1.15;
+        }
+    }
+    return score;
+}
+
+function gkCheckWin(board) {
+    var dirs = [[0,1],[1,0],[1,1],[1,-1]];
+    for (var r = 0; r < GK_SIZE; r++) for (var c = 0; c < GK_SIZE; c++) {
+        if (board[r][c] === 0) continue;
+        for (var di = 0; di < dirs.length; di++) {
+            var d = dirs[di], ok = true;
+            for (var k = 1; k < 5; k++) {
+                var nr = r+d[0]*k, nc = c+d[1]*k;
+                if (nr < 0 || nr >= GK_SIZE || nc < 0 || nc >= GK_SIZE || board[nr][nc] !== board[r][c]) { ok = false; break; }
             }
+            if (ok) return board[r][c];
+        }
+    }
+    return 0;
+}
 
-    if (tetrisCurrent && !tetrisGameOver) {
-        var shape = tetrisCurrent.shape;
-        for (var r = 0; r < shape.length; r++)
-            for (var c = 0; c < shape[r].length; c++)
-                if (shape[r][c]) {
-                    var px = (tetrisCurrentPos.c + c) * tetrisCellSize;
-                    var py = (tetrisCurrentPos.r + r) * tetrisCellSize;
-                    ctxTetris.fillStyle = tetrisCurrent.color;
-                    ctxTetris.fillRect(px + 1, py + 1, tetrisCellSize - 2, tetrisCellSize - 2);
-                    ctxTetris.fillStyle = 'rgba(255,255,255,0.2)';
-                    ctxTetris.fillRect(px + 1, py + 1, tetrisCellSize - 2, 3);
+function gkCandidates(board) {
+    var seen = {}, cands = [], hasStone = false;
+    for (var r = 0; r < GK_SIZE; r++) for (var c = 0; c < GK_SIZE; c++) {
+        if (board[r][c] !== 0) {
+            hasStone = true;
+            for (var dr = -2; dr <= 2; dr++) for (var dc = -2; dc <= 2; dc++) {
+                var nr = r+dr, nc = c+dc, key = nr*GK_SIZE+nc;
+                if (nr>=0 && nr<GK_SIZE && nc>=0 && nc<GK_SIZE && board[nr][nc]===0 && !seen[key]) {
+                    seen[key] = true; cands.push([nr, nc]);
                 }
+            }
+        }
+    }
+    if (!hasStone) return [[7,7]];
+    cands.sort(function(a, b) {
+        var sa = gkMoveHeuristic(board, a[0], a[1], 2) + gkMoveHeuristic(board, a[0], a[1], 1);
+        var sb = gkMoveHeuristic(board, b[0], b[1], 2) + gkMoveHeuristic(board, b[0], b[1], 1);
+        return sb - sa;
+    });
+    return cands.slice(0, 20);
+}
+
+function gkMoveHeuristic(board, r, c, player) {
+    var score = 0, dirs = [[0,1],[1,0],[1,1],[1,-1]];
+    board[r][c] = player;
+    for (var di = 0; di < dirs.length; di++) {
+        var d = dirs[di], cnt = 1, open = 0;
+        var nr = r+d[0], nc = c+d[1];
+        while (nr>=0&&nr<GK_SIZE&&nc>=0&&nc<GK_SIZE&&board[nr][nc]===player) { cnt++; nr+=d[0]; nc+=d[1]; }
+        if (nr>=0&&nr<GK_SIZE&&nc>=0&&nc<GK_SIZE&&board[nr][nc]===0) open++;
+        nr=r-d[0]; nc=c-d[1];
+        while (nr>=0&&nr<GK_SIZE&&nc>=0&&nc<GK_SIZE&&board[nr][nc]===player) { cnt++; nr-=d[0]; nc-=d[1]; }
+        if (nr>=0&&nr<GK_SIZE&&nc>=0&&nc<GK_SIZE&&board[nr][nc]===0) open++;
+        score += gkPatternScore(cnt, open);
+    }
+    board[r][c] = 0;
+    return score;
+}
+
+function gkMinimax(board, depth, alpha, beta, isMax) {
+    var w = gkCheckWin(board);
+    if (w === 2) return 10000000 + depth;
+    if (w === 1) return -10000000 - depth;
+    if (depth === 0) return gkEvalBoard(board, 2);
+    var cands = gkCandidates(board);
+    if (cands.length === 0) return 0;
+    if (isMax) {
+        var best = -Infinity;
+        for (var i = 0; i < cands.length; i++) {
+            var m = cands[i];
+            board[m[0]][m[1]] = 2;
+            var v = gkMinimax(board, depth-1, alpha, beta, false);
+            board[m[0]][m[1]] = 0;
+            best = Math.max(best, v); alpha = Math.max(alpha, v);
+            if (beta <= alpha) break;
+        }
+        return best;
+    } else {
+        var best = Infinity;
+        for (var i = 0; i < cands.length; i++) {
+            var m = cands[i];
+            board[m[0]][m[1]] = 1;
+            var v = gkMinimax(board, depth-1, alpha, beta, true);
+            board[m[0]][m[1]] = 0;
+            best = Math.min(best, v); beta = Math.min(beta, v);
+            if (beta <= alpha) break;
+        }
+        return best;
+    }
+}
+
+function gomokuAIMove() {
+    var cands = gkCandidates(gomokuBoard);
+    if (cands.length === 0) return;
+
+    for (var i = 0; i < cands.length; i++) {
+        gomokuBoard[cands[i][0]][cands[i][1]] = 2;
+        if (gkCheckWin(gomokuBoard) === 2) { drawGomoku(); gomokuOver = true;
+            document.getElementById('status-gomoku').textContent = 'AI 赢了！';
+            setTimeout(function(){alert('AI赢了！');},100); return; }
+        gomokuBoard[cands[i][0]][cands[i][1]] = 0;
+    }
+    for (var i = 0; i < cands.length; i++) {
+        gomokuBoard[cands[i][0]][cands[i][1]] = 1;
+        if (gkCheckWin(gomokuBoard) === 1) {
+            gomokuBoard[cands[i][0]][cands[i][1]] = 2; drawGomoku();
+            gomokuPlayerTurn = true;
+            document.getElementById('status-gomoku').textContent = '你的回合 (黑子)'; return;
+        }
+        gomokuBoard[cands[i][0]][cands[i][1]] = 0;
     }
 
-    document.getElementById('score-tetris').textContent = tetrisScore;
+    var bestMove = cands[0], bestScore = -Infinity;
+    for (var i = 0; i < cands.length; i++) {
+        var m = cands[i];
+        gomokuBoard[m[0]][m[1]] = 2;
+        var sc = gkMinimax(gomokuBoard, 3, -Infinity, Infinity, false);
+        gomokuBoard[m[0]][m[1]] = 0;
+        if (sc > bestScore) { bestScore = sc; bestMove = m; }
+    }
+    gomokuBoard[bestMove[0]][bestMove[1]] = 2;
+    drawGomoku();
+    if (gkCheckWin(gomokuBoard) === 2) {
+        gomokuOver = true;
+        document.getElementById('status-gomoku').textContent = 'AI 赢了！';
+        setTimeout(function(){alert('AI赢了！');},100); return;
+    }
+    gomokuPlayerTurn = true;
+    document.getElementById('status-gomoku').textContent = '你的回合 (黑子)';
 }
+
+(function() {
+    var cv = document.getElementById('game-gomoku-canvas');
+    cv.addEventListener('click', function(e) {
+        if (!gomokuPlayerTurn || gomokuOver) return;
+        var rect = cv.getBoundingClientRect();
+        var col = Math.round((e.clientX - rect.left - GK_PAD) / GK_CELL);
+        var row = Math.round((e.clientY - rect.top - GK_PAD) / GK_CELL);
+        if (row < 0 || row >= GK_SIZE || col < 0 || col >= GK_SIZE || gomokuBoard[row][col] !== 0) return;
+        gomokuBoard[row][col] = 1;
+        drawGomoku();
+        if (gkCheckWin(gomokuBoard) === 1) {
+            gomokuOver = true;
+            document.getElementById('status-gomoku').textContent = '你赢了！';
+            setTimeout(function(){alert('恭喜你赢了！');},100); return;
+        }
+        gomokuPlayerTurn = false;
+        document.getElementById('status-gomoku').textContent = 'AI 思考中...';
+        setTimeout(function() { gomokuAIMove(); }, 50);
+    });
+})();
+
+/* ═══════════════════════════════════════
+   Chinese Chess (中国象棋) — with AI
+   ═══════════════════════════════════════ */
+var ccBoard, ccCanvas, ccCtx, ccSel, ccValid, ccPlayerTurn, ccOver;
+var CC_CELL = 50, CC_PAD = 40;
+var CC_CHARS = {
+    r: {K:'帅',A:'仕',B:'相',N:'马',R:'车',C:'炮',P:'兵'},
+    b: {K:'将',A:'士',B:'象',N:'马',R:'车',C:'炮',P:'卒'}
+};
+var CC_VAL = {K:100000, R:600, C:285, N:270, A:120, B:120, P:30};
+
+function ccP(t,c) { return {t:t,c:c}; }
+
+function initCChess() {
+    ccCanvas = document.getElementById('game-cchess-canvas');
+    ccCtx = ccCanvas.getContext('2d');
+    ccCanvas.width = CC_PAD*2 + 8*CC_CELL;
+    ccCanvas.height = CC_PAD*2 + 9*CC_CELL;
+    ccBoard = [];
+    for (var r=0;r<10;r++) { ccBoard[r]=[]; for(var c=0;c<9;c++) ccBoard[r][c]=null; }
+    ccBoard[0]=[ccP('R','b'),ccP('N','b'),ccP('B','b'),ccP('A','b'),ccP('K','b'),ccP('A','b'),ccP('B','b'),ccP('N','b'),ccP('R','b')];
+    ccBoard[2][1]=ccP('C','b'); ccBoard[2][7]=ccP('C','b');
+    for(var i=0;i<9;i+=2) ccBoard[3][i]=ccP('P','b');
+    ccBoard[9]=[ccP('R','r'),ccP('N','r'),ccP('B','r'),ccP('A','r'),ccP('K','r'),ccP('A','r'),ccP('B','r'),ccP('N','r'),ccP('R','r')];
+    ccBoard[7][1]=ccP('C','r'); ccBoard[7][7]=ccP('C','r');
+    for(var i=0;i<9;i+=2) ccBoard[6][i]=ccP('P','r');
+    ccSel = null; ccValid = null; ccPlayerTurn = true; ccOver = false;
+    document.getElementById('status-cchess').textContent = '你的回合 (红方)';
+    drawCChess();
+}
+
+function drawCChess() {
+    var ctx=ccCtx, w=ccCanvas.width, h=ccCanvas.height;
+    ctx.fillStyle='#f0d9a0'; ctx.fillRect(0,0,w,h);
+    ctx.strokeStyle='#333'; ctx.lineWidth=2;
+    ctx.strokeRect(CC_PAD-1,CC_PAD-1,8*CC_CELL+2,9*CC_CELL+2);
+    ctx.lineWidth=1;
+    for(var r=0;r<10;r++){ctx.beginPath();ctx.moveTo(CC_PAD,CC_PAD+r*CC_CELL);ctx.lineTo(CC_PAD+8*CC_CELL,CC_PAD+r*CC_CELL);ctx.stroke();}
+    ctx.beginPath();ctx.moveTo(CC_PAD,CC_PAD);ctx.lineTo(CC_PAD,CC_PAD+9*CC_CELL);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(CC_PAD+8*CC_CELL,CC_PAD);ctx.lineTo(CC_PAD+8*CC_CELL,CC_PAD+9*CC_CELL);ctx.stroke();
+    for(var c=1;c<8;c++){
+        ctx.beginPath();ctx.moveTo(CC_PAD+c*CC_CELL,CC_PAD);ctx.lineTo(CC_PAD+c*CC_CELL,CC_PAD+4*CC_CELL);ctx.stroke();
+        ctx.beginPath();ctx.moveTo(CC_PAD+c*CC_CELL,CC_PAD+5*CC_CELL);ctx.lineTo(CC_PAD+c*CC_CELL,CC_PAD+9*CC_CELL);ctx.stroke();
+    }
+    ctx.beginPath();ctx.moveTo(CC_PAD+3*CC_CELL,CC_PAD);ctx.lineTo(CC_PAD+5*CC_CELL,CC_PAD+2*CC_CELL);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(CC_PAD+5*CC_CELL,CC_PAD);ctx.lineTo(CC_PAD+3*CC_CELL,CC_PAD+2*CC_CELL);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(CC_PAD+3*CC_CELL,CC_PAD+7*CC_CELL);ctx.lineTo(CC_PAD+5*CC_CELL,CC_PAD+9*CC_CELL);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(CC_PAD+5*CC_CELL,CC_PAD+7*CC_CELL);ctx.lineTo(CC_PAD+3*CC_CELL,CC_PAD+9*CC_CELL);ctx.stroke();
+    ctx.fillStyle='#333'; ctx.font='bold 18px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText('楚  河',CC_PAD+2*CC_CELL,CC_PAD+4.5*CC_CELL);
+    ctx.fillText('汉  界',CC_PAD+6*CC_CELL,CC_PAD+4.5*CC_CELL);
+    for(var r=0;r<10;r++) for(var c=0;c<9;c++) {
+        var p=ccBoard[r][c]; if(!p) continue;
+        var x=CC_PAD+c*CC_CELL, y=CC_PAD+r*CC_CELL, rad=CC_CELL*0.42;
+        ctx.beginPath(); ctx.arc(x,y,rad,0,Math.PI*2);
+        ctx.fillStyle='#f5deb3'; ctx.fill();
+        ctx.strokeStyle=p.c==='r'?'#cc0000':'#111'; ctx.lineWidth=2; ctx.stroke();
+        ctx.beginPath(); ctx.arc(x,y,rad-3,0,Math.PI*2); ctx.stroke();
+        ctx.fillStyle=p.c==='r'?'#cc0000':'#111';
+        ctx.font='bold '+(CC_CELL*0.42)+'px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.fillText(CC_CHARS[p.c][p.t],x,y+1);
+    }
+    if(ccSel){
+        var x=CC_PAD+ccSel.c*CC_CELL, y=CC_PAD+ccSel.r*CC_CELL;
+        ctx.strokeStyle='#ff6600'; ctx.lineWidth=3;
+        ctx.beginPath(); ctx.arc(x,y,CC_CELL*0.46,0,Math.PI*2); ctx.stroke();
+    }
+    if(ccValid) ccValid.forEach(function(m){
+        var x=CC_PAD+m.tc*CC_CELL, y=CC_PAD+m.tr*CC_CELL;
+        if(ccBoard[m.tr][m.tc]){
+            ctx.strokeStyle='rgba(255,0,0,0.6)'; ctx.lineWidth=3;
+            ctx.beginPath(); ctx.arc(x,y,CC_CELL*0.46,0,Math.PI*2); ctx.stroke();
+        } else {
+            ctx.fillStyle='rgba(0,180,0,0.45)'; ctx.beginPath(); ctx.arc(x,y,8,0,Math.PI*2); ctx.fill();
+        }
+    });
+}
+
+function ccGenRaw(board, color) {
+    var moves = [];
+    for(var r=0;r<10;r++) for(var c=0;c<9;c++) {
+        var p=board[r][c]; if(!p||p.c!==color) continue;
+        switch(p.t) {
+        case 'K':
+            var pal=color==='r'?[7,9,3,5]:[0,2,3,5];
+            [[0,1],[0,-1],[1,0],[-1,0]].forEach(function(d){
+                var nr=r+d[0],nc=c+d[1];
+                if(nr<pal[0]||nr>pal[1]||nc<pal[2]||nc>pal[3]) return;
+                if(board[nr][nc]&&board[nr][nc].c===color) return;
+                moves.push({fr:r,fc:c,tr:nr,tc:nc});
+            }); break;
+        case 'A':
+            var pal=color==='r'?[7,9,3,5]:[0,2,3,5];
+            [[1,1],[1,-1],[-1,1],[-1,-1]].forEach(function(d){
+                var nr=r+d[0],nc=c+d[1];
+                if(nr<pal[0]||nr>pal[1]||nc<pal[2]||nc>pal[3]) return;
+                if(board[nr][nc]&&board[nr][nc].c===color) return;
+                moves.push({fr:r,fc:c,tr:nr,tc:nc});
+            }); break;
+        case 'B':
+            [[2,2],[2,-2],[-2,2],[-2,-2]].forEach(function(d){
+                var nr=r+d[0],nc=c+d[1],er=r+d[0]/2,ec=c+d[1]/2;
+                if(nr<0||nr>9||nc<0||nc>8) return;
+                if(color==='r'&&nr<5) return; if(color==='b'&&nr>4) return;
+                if(board[er][ec]) return;
+                if(board[nr][nc]&&board[nr][nc].c===color) return;
+                moves.push({fr:r,fc:c,tr:nr,tc:nc});
+            }); break;
+        case 'N':
+            [[-2,-1,-1,0],[-2,1,-1,0],[2,-1,1,0],[2,1,1,0],[-1,-2,0,-1],[1,-2,0,-1],[-1,2,0,1],[1,2,0,1]].forEach(function(j){
+                var nr=r+j[0],nc=c+j[1],lr=r+j[2],lc=c+j[3];
+                if(nr<0||nr>9||nc<0||nc>8) return;
+                if(board[lr][lc]) return;
+                if(board[nr][nc]&&board[nr][nc].c===color) return;
+                moves.push({fr:r,fc:c,tr:nr,tc:nc});
+            }); break;
+        case 'R':
+            [[0,1],[0,-1],[1,0],[-1,0]].forEach(function(d){
+                var nr=r+d[0],nc=c+d[1];
+                while(nr>=0&&nr<=9&&nc>=0&&nc<=8){
+                    if(board[nr][nc]){
+                        if(board[nr][nc].c!==color) moves.push({fr:r,fc:c,tr:nr,tc:nc});
+                        break;
+                    }
+                    moves.push({fr:r,fc:c,tr:nr,tc:nc}); nr+=d[0]; nc+=d[1];
+                }
+            }); break;
+        case 'C':
+            [[0,1],[0,-1],[1,0],[-1,0]].forEach(function(d){
+                var nr=r+d[0],nc=c+d[1],jumped=false;
+                while(nr>=0&&nr<=9&&nc>=0&&nc<=8){
+                    if(!jumped){
+                        if(board[nr][nc]) jumped=true;
+                        else moves.push({fr:r,fc:c,tr:nr,tc:nc});
+                    } else {
+                        if(board[nr][nc]){
+                            if(board[nr][nc].c!==color) moves.push({fr:r,fc:c,tr:nr,tc:nc});
+                            break;
+                        }
+                    }
+                    nr+=d[0]; nc+=d[1];
+                }
+            }); break;
+        case 'P':
+            var fwd=color==='r'?-1:1, crossed=color==='r'?(r<=4):(r>=5);
+            var nr=r+fwd;
+            if(nr>=0&&nr<=9&&(!board[nr][c]||board[nr][c].c!==color)) moves.push({fr:r,fc:c,tr:nr,tc:c});
+            if(crossed) [-1,1].forEach(function(dc){
+                var nc=c+dc;
+                if(nc>=0&&nc<=8&&(!board[r][nc]||board[r][nc].c!==color)) moves.push({fr:r,fc:c,tr:r,tc:nc});
+            }); break;
+        }
+    }
+    return moves;
+}
+
+function ccFindKing(board, color) {
+    for(var r=0;r<10;r++) for(var c=0;c<9;c++)
+        if(board[r][c]&&board[r][c].t==='K'&&board[r][c].c===color) return {r:r,c:c};
+    return null;
+}
+
+function ccKingDanger(board, color) {
+    var king=ccFindKing(board,color);
+    if(!king) return true;
+    var opp=color==='r'?'b':'r', kr=king.r, kc=king.c;
+    var ok=ccFindKing(board,opp);
+    if(ok&&ok.c===kc){
+        var clear=true, minR=Math.min(ok.r,kr), maxR=Math.max(ok.r,kr);
+        for(var rr=minR+1;rr<maxR;rr++) if(board[rr][kc]){clear=false;break;}
+        if(clear) return true;
+    }
+    var dirs=[[0,1],[0,-1],[1,0],[-1,0]];
+    for(var di=0;di<4;di++){
+        var d=dirs[di],nr=kr+d[0],nc=kc+d[1];
+        while(nr>=0&&nr<=9&&nc>=0&&nc<=8){
+            var p=board[nr][nc];
+            if(p){if(p.c===opp&&p.t==='R') return true; break;}
+            nr+=d[0]; nc+=d[1];
+        }
+    }
+    for(var di=0;di<4;di++){
+        var d=dirs[di],nr=kr+d[0],nc=kc+d[1],scr=false;
+        while(nr>=0&&nr<=9&&nc>=0&&nc<=8){
+            var p=board[nr][nc];
+            if(p){if(!scr) scr=true; else {if(p.c===opp&&p.t==='C') return true; break;}}
+            nr+=d[0]; nc+=d[1];
+        }
+    }
+    var nj=[[-2,-1,-1,0],[-2,1,-1,0],[2,-1,1,0],[2,1,1,0],[-1,-2,0,-1],[1,-2,0,-1],[-1,2,0,1],[1,2,0,1]];
+    for(var ji=0;ji<8;ji++){
+        var j=nj[ji],nr=kr-j[0],nc=kc-j[1],lr=nr+j[2],lc=nc+j[3];
+        if(nr>=0&&nr<=9&&nc>=0&&nc<=8&&lr>=0&&lr<=9&&lc>=0&&lc<=8){
+            if(!board[lr][lc]){var p=board[nr][nc]; if(p&&p.c===opp&&p.t==='N') return true;}
+        }
+    }
+    var oppFwd=opp==='r'?-1:1;
+    var pr=kr-oppFwd;
+    if(pr>=0&&pr<=9){var p=board[pr][kc]; if(p&&p.c===opp&&p.t==='P') return true;}
+    var pcrossed=opp==='r'?(kr<=4):(kr>=5);
+    if(pcrossed) for(var dc=-1;dc<=1;dc+=2){
+        var nc2=kc+dc;
+        if(nc2>=0&&nc2<=8){var p=board[kr][nc2]; if(p&&p.c===opp&&p.t==='P') return true;}
+    }
+    return false;
+}
+
+function ccLegalMoves(board, color) {
+    return ccGenRaw(board,color).filter(function(m){
+        var cap=board[m.tr][m.tc];
+        board[m.tr][m.tc]=board[m.fr][m.fc]; board[m.fr][m.fc]=null;
+        var ok=!ccKingDanger(board,color);
+        board[m.fr][m.fc]=board[m.tr][m.tc]; board[m.tr][m.tc]=cap;
+        return ok;
+    });
+}
+
+function ccEval(board, color) {
+    var score=0, opp=color==='r'?'b':'r';
+    for(var r=0;r<10;r++) for(var c=0;c<9;c++){
+        var p=board[r][c]; if(!p) continue;
+        var v=CC_VAL[p.t];
+        if(p.t==='P'){var crossed=p.c==='r'?(r<=4):(r>=5); if(crossed) v=70;}
+        if(p.t==='N'){
+            var centerDist=Math.abs(c-4)+Math.abs(r-4.5);
+            v += Math.max(0, 20 - centerDist * 3);
+        }
+        if(p.t==='R') v += 15;
+        if(p.c===color) score+=v; else score-=v;
+    }
+    return score;
+}
+
+function ccMinimax(board, depth, alpha, beta, isMax, aiColor) {
+    if(depth===0) return ccEval(board,aiColor);
+    var color=isMax?aiColor:(aiColor==='r'?'b':'r');
+    var moves=ccLegalMoves(board,color);
+    if(moves.length===0) return isMax?-9999999:9999999;
+    moves.sort(function(a,b){
+        var va=board[a.tr][a.tc]?CC_VAL[board[a.tr][a.tc].t]:0;
+        var vb=board[b.tr][b.tc]?CC_VAL[board[b.tr][b.tc].t]:0;
+        return vb-va;
+    });
+    if(isMax){
+        var best=-Infinity;
+        for(var i=0;i<moves.length;i++){
+            var m=moves[i],cap=board[m.tr][m.tc];
+            board[m.tr][m.tc]=board[m.fr][m.fc]; board[m.fr][m.fc]=null;
+            var v=ccMinimax(board,depth-1,alpha,beta,false,aiColor);
+            board[m.fr][m.fc]=board[m.tr][m.tc]; board[m.tr][m.tc]=cap;
+            best=Math.max(best,v); alpha=Math.max(alpha,v); if(beta<=alpha) break;
+        }
+        return best;
+    } else {
+        var best=Infinity;
+        for(var i=0;i<moves.length;i++){
+            var m=moves[i],cap=board[m.tr][m.tc];
+            board[m.tr][m.tc]=board[m.fr][m.fc]; board[m.fr][m.fc]=null;
+            var v=ccMinimax(board,depth-1,alpha,beta,true,aiColor);
+            board[m.fr][m.fc]=board[m.tr][m.tc]; board[m.tr][m.tc]=cap;
+            best=Math.min(best,v); beta=Math.min(beta,v); if(beta<=alpha) break;
+        }
+        return best;
+    }
+}
+
+function ccAIMove() {
+    var moves=ccLegalMoves(ccBoard,'b');
+    if(moves.length===0){
+        ccOver=true; drawCChess();
+        document.getElementById('status-cchess').textContent='你赢了！';
+        setTimeout(function(){alert('恭喜你赢了！');},100); return;
+    }
+    moves.sort(function(a,b){
+        var va=ccBoard[a.tr][a.tc]?CC_VAL[ccBoard[a.tr][a.tc].t]:0;
+        var vb=ccBoard[b.tr][b.tc]?CC_VAL[ccBoard[b.tr][b.tc].t]:0;
+        return vb-va;
+    });
+    var bestMove=null, bestScore=-Infinity;
+    for(var i=0;i<moves.length;i++){
+        var m=moves[i],cap=ccBoard[m.tr][m.tc];
+        ccBoard[m.tr][m.tc]=ccBoard[m.fr][m.fc]; ccBoard[m.fr][m.fc]=null;
+        var sc=ccMinimax(ccBoard,3,-Infinity,Infinity,false,'b');
+        ccBoard[m.fr][m.fc]=ccBoard[m.tr][m.tc]; ccBoard[m.tr][m.tc]=cap;
+        if(sc>bestScore){bestScore=sc; bestMove=m;}
+    }
+    if(bestMove){
+        ccBoard[bestMove.tr][bestMove.tc]=ccBoard[bestMove.fr][bestMove.fc];
+        ccBoard[bestMove.fr][bestMove.fc]=null;
+    }
+    var playerMoves=ccLegalMoves(ccBoard,'r');
+    if(playerMoves.length===0||!ccFindKing(ccBoard,'r')){
+        ccOver=true; drawCChess();
+        document.getElementById('status-cchess').textContent='AI 赢了！';
+        setTimeout(function(){alert('AI赢了！');},100); return;
+    }
+    ccPlayerTurn=true;
+    document.getElementById('status-cchess').textContent='你的回合 (红方)';
+    drawCChess();
+}
+
+(function(){
+    var cv=document.getElementById('game-cchess-canvas');
+    cv.addEventListener('click',function(e){
+        if(!ccPlayerTurn||ccOver) return;
+        var rect=cv.getBoundingClientRect();
+        var col=Math.round((e.clientX-rect.left-CC_PAD)/CC_CELL);
+        var row=Math.round((e.clientY-rect.top-CC_PAD)/CC_CELL);
+        if(row<0||row>9||col<0||col>8) return;
+        if(ccSel){
+            var vm=ccValid?ccValid.find(function(m){return m.tr===row&&m.tc===col;}):null;
+            if(vm){
+                ccBoard[vm.tr][vm.tc]=ccBoard[vm.fr][vm.fc]; ccBoard[vm.fr][vm.fc]=null;
+                ccSel=null; ccValid=null;
+                if(!ccFindKing(ccBoard,'b')){
+                    ccOver=true; drawCChess();
+                    document.getElementById('status-cchess').textContent='你赢了！';
+                    setTimeout(function(){alert('恭喜你赢了！');},100); return;
+                }
+                ccPlayerTurn=false;
+                document.getElementById('status-cchess').textContent='AI 思考中...';
+                drawCChess();
+                setTimeout(function(){ccAIMove();},50);
+                return;
+            }
+            if(ccBoard[row][col]&&ccBoard[row][col].c==='r'){
+                ccSel={r:row,c:col};
+                ccValid=ccLegalMoves(ccBoard,'r').filter(function(m){return m.fr===row&&m.fc===col;});
+                drawCChess(); return;
+            }
+            ccSel=null; ccValid=null; drawCChess();
+        } else {
+            if(ccBoard[row][col]&&ccBoard[row][col].c==='r'){
+                ccSel={r:row,c:col};
+                ccValid=ccLegalMoves(ccBoard,'r').filter(function(m){return m.fr===row&&m.fc===col;});
+                drawCChess();
+            }
+        }
+    });
+})();
+
+/* ═══════════════════════════════════════
+   Match-3 (消消乐)
+   ═══════════════════════════════════════ */
+var m3Board, m3Canvas, m3Ctx, m3Score, m3Sel, m3Busy;
+var M3_SZ = 8, M3_CL = 50;
+var M3_COLORS = ['#ff4444','#44aaff','#44dd44','#ffdd44','#dd44ff','#ff8844'];
+
+function initMatch3() {
+    m3Canvas = document.getElementById('game-match3-canvas');
+    m3Ctx = m3Canvas.getContext('2d');
+    m3Canvas.width = m3Canvas.height = M3_SZ * M3_CL;
+    m3Score = 0; m3Sel = null; m3Busy = false;
+    var tries = 0;
+    do {
+        m3Board = [];
+        for(var r=0;r<M3_SZ;r++){m3Board[r]=[];for(var c=0;c<M3_SZ;c++) m3Board[r][c]=Math.floor(Math.random()*M3_COLORS.length);}
+        tries++;
+    } while((m3FindMatches().length > 0 || !m3HasValidMove()) && tries < 200);
+    drawMatch3();
+}
+
+function m3HasValidMove() {
+    for(var r=0;r<M3_SZ;r++) for(var c=0;c<M3_SZ;c++){
+        if(c+1<M3_SZ){
+            var t=m3Board[r][c];m3Board[r][c]=m3Board[r][c+1];m3Board[r][c+1]=t;
+            if(m3FindMatches().length>0){m3Board[r][c+1]=m3Board[r][c];m3Board[r][c]=t;return true;}
+            m3Board[r][c+1]=m3Board[r][c];m3Board[r][c]=t;
+        }
+        if(r+1<M3_SZ){
+            var t=m3Board[r][c];m3Board[r][c]=m3Board[r+1][c];m3Board[r+1][c]=t;
+            if(m3FindMatches().length>0){m3Board[r+1][c]=m3Board[r][c];m3Board[r][c]=t;return true;}
+            m3Board[r+1][c]=m3Board[r][c];m3Board[r][c]=t;
+        }
+    }
+    return false;
+}
+
+function m3FindMatches() {
+    var matches = [], seen = {};
+    function add(r,c){var k=r*M3_SZ+c;if(!seen[k]){seen[k]=true;matches.push([r,c]);}}
+    for(var r=0;r<M3_SZ;r++) for(var c=0;c<M3_SZ-2;c++){
+        if(m3Board[r][c]>=0&&m3Board[r][c]===m3Board[r][c+1]&&m3Board[r][c]===m3Board[r][c+2]){
+            var len=3; while(c+len<M3_SZ&&m3Board[r][c]===m3Board[r][c+len]) len++;
+            for(var i=0;i<len;i++) add(r,c+i); c+=len-1;
+        }
+    }
+    for(var c=0;c<M3_SZ;c++) for(var r=0;r<M3_SZ-2;r++){
+        if(m3Board[r][c]>=0&&m3Board[r][c]===m3Board[r+1][c]&&m3Board[r][c]===m3Board[r+2][c]){
+            var len=3; while(r+len<M3_SZ&&m3Board[r][c]===m3Board[r+len][c]) len++;
+            for(var i=0;i<len;i++) add(r+i,c); r+=len-1;
+        }
+    }
+    return matches;
+}
+
+function m3Process(combo) {
+    var matches = m3FindMatches();
+    if(matches.length===0){
+        m3Busy=false;
+        if(!m3HasValidMove()){
+            setTimeout(function(){ m3Reshuffle(); },300);
+        }
+        return;
+    }
+    m3Score += matches.length * 10 * combo;
+    matches.forEach(function(m){m3Board[m[0]][m[1]]=-1;});
+    drawMatch3();
+    setTimeout(function(){
+        for(var c=0;c<M3_SZ;c++){
+            var wr=M3_SZ-1;
+            for(var r=M3_SZ-1;r>=0;r--){
+                if(m3Board[r][c]!==-1){m3Board[wr][c]=m3Board[r][c];if(wr!==r)m3Board[r][c]=-1;wr--;}
+            }
+            for(var r=wr;r>=0;r--) m3Board[r][c]=Math.floor(Math.random()*M3_COLORS.length);
+        }
+        drawMatch3();
+        setTimeout(function(){m3Process(combo+1);},200);
+    },250);
+}
+
+function m3Reshuffle() {
+    var flat=[];
+    for(var r=0;r<M3_SZ;r++) for(var c=0;c<M3_SZ;c++) flat.push(m3Board[r][c]);
+    for(var i=flat.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=flat[i];flat[i]=flat[j];flat[j]=t;}
+    var idx=0;
+    for(var r=0;r<M3_SZ;r++) for(var c=0;c<M3_SZ;c++) m3Board[r][c]=flat[idx++];
+    var matches=m3FindMatches();
+    if(matches.length>0){m3Busy=true;drawMatch3();setTimeout(function(){m3Process(1);},200);}
+    else if(!m3HasValidMove()){m3Reshuffle();}
+    else{drawMatch3();}
+}
+
+function drawMatch3() {
+    var ctx=m3Ctx, sz=m3Canvas.width;
+    ctx.clearRect(0,0,sz,sz);
+    ctx.fillStyle='#1a1a2e'; ctx.fillRect(0,0,sz,sz);
+    for(var r=0;r<M3_SZ;r++) for(var c=0;c<M3_SZ;c++){
+        var x=c*M3_CL+M3_CL/2, y=r*M3_CL+M3_CL/2;
+        ctx.fillStyle=(r+c)%2===0?'rgba(255,255,255,0.03)':'rgba(255,255,255,0.06)';
+        ctx.fillRect(c*M3_CL,r*M3_CL,M3_CL,M3_CL);
+        if(m3Board[r][c]>=0){
+            ctx.beginPath(); ctx.arc(x,y,M3_CL*0.38,0,Math.PI*2);
+            ctx.fillStyle=M3_COLORS[m3Board[r][c]]; ctx.fill();
+            ctx.beginPath(); ctx.arc(x-4,y-5,M3_CL*0.16,0,Math.PI*2);
+            ctx.fillStyle='rgba(255,255,255,0.3)'; ctx.fill();
+        }
+        if(m3Sel&&m3Sel[0]===r&&m3Sel[1]===c){
+            ctx.strokeStyle='#fff'; ctx.lineWidth=3;
+            ctx.strokeRect(c*M3_CL+2,r*M3_CL+2,M3_CL-4,M3_CL-4);
+        }
+    }
+    document.getElementById('score-match3').textContent=m3Score;
+}
+
+(function(){
+    var cv=document.getElementById('game-match3-canvas');
+    cv.addEventListener('click',function(e){
+        if(m3Busy) return;
+        var col=Math.floor(e.offsetX/M3_CL);
+        var row=Math.floor(e.offsetY/M3_CL);
+        if(row<0||row>=M3_SZ||col<0||col>=M3_SZ) return;
+        if(!m3Sel){m3Sel=[row,col];drawMatch3();return;}
+        var sr=m3Sel[0],sc=m3Sel[1];
+        if(Math.abs(sr-row)+Math.abs(sc-col)===1){
+            var tmp=m3Board[sr][sc]; m3Board[sr][sc]=m3Board[row][col]; m3Board[row][col]=tmp;
+            m3Sel=null; m3Busy=true;
+            drawMatch3();
+            if(m3FindMatches().length>0){
+                setTimeout(function(){m3Process(1);},150);
+            } else {
+                setTimeout(function(){
+                    m3Board[row][col]=m3Board[sr][sc]; m3Board[sr][sc]=tmp;
+                    m3Busy=false; drawMatch3();
+                },250);
+            }
+        } else { m3Sel=[row,col]; drawMatch3(); }
+    });
+})();
 
 /* ═══════════════════════════════════════
    Keyboard Controls
@@ -746,7 +1369,6 @@ function drawTetris() {
 document.addEventListener('keydown', function(e) {
     if (!currentGame) return;
     var key = e.key;
-
     if (currentGame === '2048') {
         var map = {ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right'};
         if (map[key]) { e.preventDefault(); move2048(map[key]); }
@@ -764,29 +1386,21 @@ document.addEventListener('keydown', function(e) {
 });
 
 /* ═══════════════════════════════════════
-   Touch / Swipe Controls (for 2048 & Snake)
+   Touch / Swipe Controls
    ═══════════════════════════════════════ */
 (function() {
     var startX, startY;
-    var targets = ['game-2048-canvas', 'game-snake-canvas'];
-
-    targets.forEach(function(id) {
+    ['game-2048-canvas', 'game-snake-canvas'].forEach(function(id) {
         var el = document.getElementById(id);
         el.addEventListener('touchstart', function(e) {
-            var t = e.touches[0];
-            startX = t.clientX;
-            startY = t.clientY;
+            var t = e.touches[0]; startX = t.clientX; startY = t.clientY;
         }, {passive: true});
-
         el.addEventListener('touchend', function(e) {
-            var t = e.changedTouches[0];
-            var dx = t.clientX - startX;
-            var dy = t.clientY - startY;
+            var t = e.changedTouches[0], dx = t.clientX - startX, dy = t.clientY - startY;
             if (Math.abs(dx) < 20 && Math.abs(dy) < 20) return;
             var dir;
             if (Math.abs(dx) > Math.abs(dy)) dir = dx > 0 ? 'right' : 'left';
             else dir = dy > 0 ? 'down' : 'up';
-
             if (id === 'game-2048-canvas') move2048(dir);
             else changeSnakeDir(dir);
         }, {passive: true});
