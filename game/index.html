@@ -1584,7 +1584,9 @@ var poolCushionTouched, poolShotPocketed, poolFoulMsg;
 var poolMousePos, poolDirLocked, poolLockedDir, poolPowerDrag, poolPowerLevel;
 var poolPlaceValid;
 var PL_W = 800, PL_H = 440, PL_R = 11, PL_RAIL = 30, PL_PKT = 25;
-var PL_FRICTION = 0.985, PL_MIN_V = 0.12, PL_SPIN_DECAY = 0.988;
+var PL_G = 0.14;
+var PL_MU_SLIDE = 0.18, PL_MU_ROLL = 0.012, PL_WZ_DECAY = 0.994;
+var PL_SLIDE_THRESH = 0.15, PL_MIN_V = 0.08;
 
 var PL_BALL_COLORS = [
     null,
@@ -1663,7 +1665,7 @@ function initPool() {
     plMakePockets();
     poolBalls = [];
     var cx = PL_W * 0.25, cy = PL_H / 2;
-    poolBalls.push({x: cx, y: cy, vx: 0, vy: 0, n: 0, pocketed: false, spinX: 0, spinY: 0});
+    poolBalls.push({x: cx, y: cy, vx: 0, vy: 0, n: 0, pocketed: false, sx: 0, sy: 0, wz: 0});
 
     var rackOrder = [1, 9, 2, 10, 8, 3, 11, 4, 14, 5, 13, 12, 6, 15, 7];
     var sx = PL_W * 0.7, sy = PL_H / 2;
@@ -1672,7 +1674,7 @@ function initPool() {
         for (var row = 0; row <= col; row++) {
             var bx = sx + col * d * Math.cos(Math.PI / 6);
             var by = sy - col * d * 0.5 + row * d;
-            poolBalls.push({x: bx, y: by, vx: 0, vy: 0, n: rackOrder[idx], pocketed: false, spinX: 0, spinY: 0});
+            poolBalls.push({x: bx, y: by, vx: 0, vy: 0, n: rackOrder[idx], pocketed: false, sx: 0, sy: 0, wz: 0});
             idx++;
         }
     }
@@ -2140,23 +2142,23 @@ function plRayCushion(ox, oy, dx, dy) {
     return best;
 }
 
-/* --- Physics Engine with Spin --- */
+/* --- Physics Engine (Two-Phase Sliding/Rolling) --- */
 function plUpdate() {
     var moving = false;
     var R = PL_RAIL, br = PL_R;
+    var G = PL_G, muS = PL_MU_SLIDE, muR = PL_MU_ROLL;
 
     for (var i = 0; i < poolBalls.length; i++) {
         var b = poolBalls[i];
         if (b.pocketed) continue;
 
-        // Pocket detection FIRST - before cushion bounce
         var wasPocketed = false;
         for (var pi = 0; pi < PL_POCKETS.length; pi++) {
             var p = PL_POCKETS[pi];
             var pdx = b.x - p.x, pdy = b.y - p.y;
             if (Math.sqrt(pdx * pdx + pdy * pdy) < PL_PKT) {
                 b.pocketed = true;
-                b.vx = 0; b.vy = 0;
+                b.vx = 0; b.vy = 0; b.sx = 0; b.sy = 0; b.wz = 0;
                 poolShotPocketed.push(b.n);
                 wasPocketed = true;
                 break;
@@ -2164,33 +2166,46 @@ function plUpdate() {
         }
         if (wasPocketed) continue;
 
-        if (b.n === 0 && (Math.abs(b.spinX) > 0.005 || Math.abs(b.spinY) > 0.005)) {
-            var speed = Math.sqrt(b.vx * b.vx + b.vy * b.vy);
-            if (speed > 0.2) {
-                var dirX = b.vx / speed, dirY = b.vy / speed;
-                var perpX = -dirY, perpY = dirX;
-                if (Math.abs(b.spinX) > 0.005) {
-                    b.vx += perpX * b.spinX * 0.30;
-                    b.vy += perpY * b.spinX * 0.30;
-                }
-                if (Math.abs(b.spinY) > 0.005) {
-                    b.vx += dirX * (-b.spinY) * 0.12;
-                    b.vy += dirY * (-b.spinY) * 0.12;
-                }
+        var speed = Math.sqrt(b.vx * b.vx + b.vy * b.vy);
+        var slideSpd = Math.sqrt(b.sx * b.sx + b.sy * b.sy);
+
+        if (slideSpd > PL_SLIDE_THRESH) {
+            var shx = b.sx / slideSpd, shy = b.sy / slideSpd;
+            var Fs = muS * G;
+            b.vx -= shx * Fs;
+            b.vy -= shy * Fs;
+            var sDecay = 3.5 * Fs;
+            var newSx = b.sx - shx * sDecay;
+            var newSy = b.sy - shy * sDecay;
+            if (newSx * b.sx < 0) newSx = 0;
+            if (newSy * b.sy < 0) newSy = 0;
+            b.sx = newSx;
+            b.sy = newSy;
+        } else {
+            b.sx = 0; b.sy = 0;
+            if (speed > PL_MIN_V) {
+                var vhx = b.vx / speed, vhy = b.vy / speed;
+                var Fr = muR * G;
+                b.vx -= vhx * Fr;
+                b.vy -= vhy * Fr;
+                if (b.vx * vhx < 0) b.vx = 0;
+                if (b.vy * vhy < 0) b.vy = 0;
             }
-            b.spinX *= PL_SPIN_DECAY;
-            b.spinY *= PL_SPIN_DECAY;
-            if (Math.abs(b.spinX) < 0.005) b.spinX = 0;
-            if (Math.abs(b.spinY) < 0.005) b.spinY = 0;
+        }
+
+        if (Math.abs(b.wz) > 0.01) {
+            b.wz *= PL_WZ_DECAY;
+            if (Math.abs(b.wz) < 0.01) b.wz = 0;
         }
 
         b.x += b.vx;
         b.y += b.vy;
-        b.vx *= PL_FRICTION;
-        b.vy *= PL_FRICTION;
-        if (Math.abs(b.vx) < PL_MIN_V && Math.abs(b.vy) < PL_MIN_V) {
+        speed = Math.sqrt(b.vx * b.vx + b.vy * b.vy);
+        if (speed < PL_MIN_V) {
             b.vx = 0; b.vy = 0;
-        } else {
+            if (Math.abs(b.wz) < 0.01) { b.wz = 0; b.sx = 0; b.sy = 0; }
+        }
+        if (b.vx !== 0 || b.vy !== 0 || b.sx !== 0 || b.sy !== 0 || Math.abs(b.wz) > 0.01) {
             moving = true;
         }
 
@@ -2198,44 +2213,47 @@ function plUpdate() {
         if (!nearPkt) {
             if (b.x - br < R) {
                 b.x = R + br;
-                b.vx = -b.vx * 0.78;
+                b.vx = -b.vx * 0.8;
                 poolCushionTouched = true;
-                if (b.n === 0) {
-                    if (Math.abs(b.spinX) > 0.03) { b.vy += b.spinX * 1.5; b.spinX *= 0.25; }
-                    if (Math.abs(b.spinY) > 0.03) { b.vx += b.spinY * -0.6; b.spinY *= 0.5; }
+                if (Math.abs(b.wz) > 0.05) {
+                    b.vy += b.wz * 1.2;
+                    b.wz *= 0.4;
                 }
+                b.sx = b.vx * 0.3; b.sy = b.vy * 0.3;
             }
             if (b.x + br > PL_W - R) {
                 b.x = PL_W - R - br;
-                b.vx = -b.vx * 0.78;
+                b.vx = -b.vx * 0.8;
                 poolCushionTouched = true;
-                if (b.n === 0) {
-                    if (Math.abs(b.spinX) > 0.03) { b.vy -= b.spinX * 1.5; b.spinX *= 0.25; }
-                    if (Math.abs(b.spinY) > 0.03) { b.vx += b.spinY * 0.6; b.spinY *= 0.5; }
+                if (Math.abs(b.wz) > 0.05) {
+                    b.vy -= b.wz * 1.2;
+                    b.wz *= 0.4;
                 }
+                b.sx = b.vx * 0.3; b.sy = b.vy * 0.3;
             }
             if (b.y - br < R) {
                 b.y = R + br;
-                b.vy = -b.vy * 0.78;
+                b.vy = -b.vy * 0.8;
                 poolCushionTouched = true;
-                if (b.n === 0) {
-                    if (Math.abs(b.spinX) > 0.03) { b.vx -= b.spinX * 1.5; b.spinX *= 0.25; }
-                    if (Math.abs(b.spinY) > 0.03) { b.vy += b.spinY * -0.6; b.spinY *= 0.5; }
+                if (Math.abs(b.wz) > 0.05) {
+                    b.vx -= b.wz * 1.2;
+                    b.wz *= 0.4;
                 }
+                b.sx = b.vx * 0.3; b.sy = b.vy * 0.3;
             }
             if (b.y + br > PL_H - R) {
                 b.y = PL_H - R - br;
-                b.vy = -b.vy * 0.78;
+                b.vy = -b.vy * 0.8;
                 poolCushionTouched = true;
-                if (b.n === 0) {
-                    if (Math.abs(b.spinX) > 0.03) { b.vx += b.spinX * 1.5; b.spinX *= 0.25; }
-                    if (Math.abs(b.spinY) > 0.03) { b.vy += b.spinY * 0.6; b.spinY *= 0.5; }
+                if (Math.abs(b.wz) > 0.05) {
+                    b.vx += b.wz * 1.2;
+                    b.wz *= 0.4;
                 }
+                b.sx = b.vx * 0.3; b.sy = b.vy * 0.3;
             }
         }
     }
 
-    // Ball-ball collisions
     for (var i = 0; i < poolBalls.length; i++) {
         for (var j = i + 1; j < poolBalls.length; j++) {
             var a = poolBalls[i], b2 = poolBalls[j];
@@ -2262,21 +2280,20 @@ function plUpdate() {
                     var cueBall = (a.n === 0) ? a : (b2.n === 0 ? b2 : null);
                     var objBall = (a.n === 0) ? b2 : (b2.n === 0 ? a : null);
                     if (cueBall && objBall) {
-                        if (Math.abs(cueBall.spinX) > 0.05) {
-                            var throwAmt = cueBall.spinX * 0.45;
+                        if (Math.abs(cueBall.wz) > 0.1) {
+                            var throwAmt = cueBall.wz * 0.35;
                             var perpOx = -ny, perpOy = nx;
                             objBall.vx += perpOx * throwAmt;
                             objBall.vy += perpOy * throwAmt;
-                            cueBall.spinX *= 0.5;
+                            cueBall.wz *= 0.6;
                         }
-                        if (Math.abs(cueBall.spinY) > 0.05) {
-                            var collN_x = nx, collN_y = ny;
-                            if (a.n === 0) { collN_x = -nx; collN_y = -ny; }
-                            cueBall.vx += collN_x * cueBall.spinY * -2.0;
-                            cueBall.vy += collN_y * cueBall.spinY * -2.0;
-                            cueBall.spinY *= 0.25;
-                        }
+                        var preSlideX = cueBall.sx, preSlideY = cueBall.sy;
+                        cueBall.sx = preSlideX * 0.7;
+                        cueBall.sy = preSlideY * 0.7;
                     }
+
+                    a.sx = a.vx * 0.4; a.sy = a.vy * 0.4;
+                    b2.sx = b2.vx * 0.4; b2.sy = b2.vy * 0.4;
 
                     if (poolFirstHit === null) {
                         if (a.n === 0) poolFirstHit = b2.n;
@@ -2403,6 +2420,7 @@ function plHandleShotEnd() {
                     poolBalls[i].x = PL_W * 0.25;
                     poolBalls[i].y = PL_H / 2;
                     poolBalls[i].vx = 0; poolBalls[i].vy = 0;
+                    poolBalls[i].sx = 0; poolBalls[i].sy = 0; poolBalls[i].wz = 0;
                 }
             }
         }
@@ -2525,6 +2543,7 @@ function plAIPlaceCue() {
 
     cb.x = bestX; cb.y = bestY;
     cb.vx = 0; cb.vy = 0;
+    cb.sx = 0; cb.sy = 0; cb.wz = 0;
     drawPool();
     setTimeout(plAIShoot, 500);
 }
@@ -2615,8 +2634,19 @@ function plAIShoot() {
     cb.vx = bestVx;
     cb.vy = bestVy;
     var aiPower = Math.sqrt(bestVx * bestVx + bestVy * bestVy);
-    cb.spinX = (Math.random() - 0.5) * aiPower * 0.4;
-    cb.spinY = (Math.random() - 0.5) * aiPower * 0.3;
+    if (aiPower > 0.1) {
+        var aiDirX = bestVx / aiPower, aiDirY = bestVy / aiPower;
+        var aiPerpX = -aiDirY, aiPerpY = aiDirX;
+        var aiSpinY = (Math.random() - 0.5) * 0.4;
+        var aiSpinX = (Math.random() - 0.5) * 0.3;
+        cb.sx = aiDirX * aiSpinY * aiPower * 0.5;
+        cb.sy = aiDirY * aiSpinY * aiPower * 0.5;
+        cb.sx += aiPerpX * aiSpinX * aiPower * 0.08;
+        cb.sy += aiPerpY * aiSpinX * aiPower * 0.08;
+        cb.wz = aiSpinX * aiPower * 0.5;
+    } else {
+        cb.sx = 0; cb.sy = 0; cb.wz = 0;
+    }
     plStartShot();
 }
 
@@ -2816,8 +2846,12 @@ function plGameLoop() {
         var aim = poolLockedDir;
         cb.vx = aim.x * power;
         cb.vy = aim.y * power;
-        cb.spinX = poolSpin.x * power * 0.9;
-        cb.spinY = poolSpin.y * power * 0.8;
+        var perpX = -aim.y, perpY = aim.x;
+        cb.sx = aim.x * poolSpin.y * power * 0.65;
+        cb.sy = aim.y * poolSpin.y * power * 0.65;
+        cb.sx += perpX * poolSpin.x * power * 0.12;
+        cb.sy += perpY * poolSpin.x * power * 0.12;
+        cb.wz = poolSpin.x * power * 0.7;
         plStartShot();
     }
     powerTrack.addEventListener('mousedown', plPowerDown);
