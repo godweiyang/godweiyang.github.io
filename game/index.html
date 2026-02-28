@@ -141,7 +141,80 @@
         #game-cchess-canvas { border-radius: 4px; }
         #game-match3-canvas { background: #1a1a2e; border: 2px solid rgba(255,255,255,0.15); }
         #game-pool-canvas { border-radius: 4px; }
-        #game-pool .game-top-bar { max-width: 820px; }
+        #game-pool .game-top-bar { max-width: 900px; }
+
+        .pool-wrapper {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .pool-main { display: flex; flex-direction: column; align-items: center; }
+        .pool-side-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            min-width: 90px;
+        }
+        .pool-spin-ctrl {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 14px;
+            padding: 10px;
+            text-align: center;
+        }
+        .pool-spin-ctrl canvas { cursor: crosshair; display: block; margin: 0 auto; }
+        .pool-spin-ctrl .label { font-size: 11px; color: rgba(255,255,255,0.5); margin-bottom: 6px; }
+        .pool-spin-ctrl .reset-spin {
+            margin-top: 6px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        .pool-spin-ctrl .reset-spin:hover { background: rgba(255,255,255,0.2); }
+
+        .pool-player-panel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 800px;
+            padding: 6px 10px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.05);
+            font-size: 13px;
+        }
+        .pool-player-panel.active-turn { background: rgba(255,200,0,0.1); border: 1px solid rgba(255,200,0,0.25); }
+        .pool-player-panel .player-name { font-weight: 600; min-width: 100px; }
+        .pool-player-panel .player-name .group-tag {
+            font-weight: 400; font-size: 11px;
+            color: rgba(255,255,255,0.5);
+            margin-left: 4px;
+        }
+        .pool-pocketed-balls {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .pool-pocketed-balls .mini-ball {
+            width: 16px; height: 16px; border-radius: 50%;
+            display: inline-flex; align-items: center; justify-content: center;
+            font-size: 7px; font-weight: 700; color: #fff;
+            border: 1px solid rgba(0,0,0,0.3);
+        }
+        .pool-msg {
+            text-align: center;
+            font-size: 13px;
+            color: #ffd200;
+            min-height: 20px;
+            margin-top: 4px;
+        }
 
         .mobile-controls {
             display: none;
@@ -332,9 +405,29 @@
         <span class="game-title">中式八球</span>
         <span class="game-status" id="status-pool">你的回合</span>
     </div>
-    <canvas id="game-pool-canvas" width="800" height="440"></canvas>
+    <div class="pool-player-panel" id="pool-panel-1">
+        <span class="player-name">玩家 <span class="group-tag" id="pool-gtag-1"></span></span>
+        <div class="pool-pocketed-balls" id="pool-balls-1"></div>
+    </div>
+    <div class="pool-wrapper">
+        <div class="pool-main">
+            <canvas id="game-pool-canvas" width="800" height="440"></canvas>
+        </div>
+        <div class="pool-side-panel">
+            <div class="pool-spin-ctrl">
+                <div class="label">加塞控制</div>
+                <canvas id="pool-spin-canvas" width="70" height="70"></canvas>
+                <button class="reset-spin" onclick="resetPoolSpin()">重置</button>
+            </div>
+        </div>
+    </div>
+    <div class="pool-player-panel" id="pool-panel-2">
+        <span class="player-name">电脑 <span class="group-tag" id="pool-gtag-2"></span></span>
+        <div class="pool-pocketed-balls" id="pool-balls-2"></div>
+    </div>
+    <div class="pool-msg" id="pool-msg"></div>
     <button class="btn-restart" onclick="initPool()">重新开始</button>
-    <div class="game-hint">点击拖拽瞄准，松开击球（拖拽距离越远力度越大）</div>
+    <div class="game-hint">移动鼠标瞄准 → 单击锁定方向 → 向后拖动设置力度 → 松开击球 | 右键/Esc取消 | 右侧设置加塞</div>
 </div>
 
 <script>
@@ -1407,13 +1500,18 @@ function drawMatch3() {
 })();
 
 /* ═══════════════════════════════════════
-   Pool (中式八球) — 2D Physics
+   Pool (中式八球) — Full Rules + Spin
    ═══════════════════════════════════════ */
-var poolCanvas, poolCtx, poolRAF, poolBalls, poolCue;
-var poolAiming, poolAimStart, poolAimEnd, poolMoving, poolOver;
+var poolCanvas, poolCtx, poolRAF, poolBalls;
+var poolMoving, poolOver;
 var poolTurn, poolGroups, poolPocketed;
+var poolSpin, poolSpinCanvas, poolSpinCtx;
+var poolFreeBall, poolPlacingCue, poolIsBreak, poolFirstHit;
+var poolCushionTouched, poolShotPocketed, poolFoulMsg;
+var poolMousePos, poolDirLocked, poolLockedDir, poolPowerDrag, poolPowerLevel;
+var poolPlaceValid;
 var PL_W = 800, PL_H = 440, PL_R = 11, PL_RAIL = 30, PL_PKT = 22;
-var PL_FRICTION = 0.986, PL_MIN_V = 0.15;
+var PL_FRICTION = 0.985, PL_MIN_V = 0.12, PL_SPIN_DECAY = 0.985;
 
 var PL_BALL_COLORS = [
     null,
@@ -1436,34 +1534,90 @@ function plMakePockets() {
     ];
 }
 
+function plBallGroup(n) {
+    if (n >= 1 && n <= 7) return 'solid';
+    if (n >= 9 && n <= 15) return 'stripe';
+    return null;
+}
+
+function resetPoolSpin() {
+    poolSpin = {x: 0, y: 0};
+    drawPoolSpinCtrl();
+    drawPool();
+}
+
+function drawPoolSpinCtrl() {
+    if (!poolSpinCtx) return;
+    var c = poolSpinCtx, w = 70, cx = w / 2, cy = w / 2, r = 28;
+    c.clearRect(0, 0, w, w);
+    var g = c.createRadialGradient(cx - 4, cy - 4, 2, cx, cy, r);
+    g.addColorStop(0, '#fff'); g.addColorStop(1, '#d0d0d0');
+    c.beginPath(); c.arc(cx, cy, r, 0, Math.PI * 2);
+    c.fillStyle = g; c.fill();
+    c.strokeStyle = 'rgba(0,0,0,0.2)'; c.lineWidth = 1; c.stroke();
+    c.beginPath(); c.moveTo(cx - r, cy); c.lineTo(cx + r, cy);
+    c.strokeStyle = 'rgba(0,0,0,0.08)'; c.stroke();
+    c.beginPath(); c.moveTo(cx, cy - r); c.lineTo(cx, cy + r);
+    c.stroke();
+    var sx = cx + poolSpin.x * (r - 4), sy = cy + poolSpin.y * (r - 4);
+    c.beginPath(); c.arc(sx, sy, 5, 0, Math.PI * 2);
+    c.fillStyle = '#e53935'; c.fill();
+    c.strokeStyle = '#b71c1c'; c.lineWidth = 1.5; c.stroke();
+    c.font = '9px sans-serif'; c.fillStyle = 'rgba(0,0,0,0.4)';
+    c.textAlign = 'center'; c.textBaseline = 'top';
+    var label = '';
+    if (Math.abs(poolSpin.y) > 0.15) label += poolSpin.y < 0 ? '高杆' : '低杆';
+    if (Math.abs(poolSpin.x) > 0.15) label += (label ? '+' : '') + (poolSpin.x < 0 ? '左塞' : '右塞');
+    if (label) c.fillText(label, cx, cy + r + 4);
+}
+
 function initPool() {
     poolCanvas = document.getElementById('game-pool-canvas');
     poolCtx = poolCanvas.getContext('2d');
     poolCanvas.width = PL_W;
     poolCanvas.height = PL_H;
+    poolSpinCanvas = document.getElementById('pool-spin-canvas');
+    poolSpinCtx = poolSpinCanvas.getContext('2d');
     plMakePockets();
     poolBalls = [];
     var cx = PL_W * 0.25, cy = PL_H / 2;
-    poolBalls.push({x: cx, y: cy, vx: 0, vy: 0, n: 0, pocketed: false});
+    poolBalls.push({x: cx, y: cy, vx: 0, vy: 0, n: 0, pocketed: false, spinX: 0, spinY: 0});
 
     var rackOrder = [1, 9, 2, 10, 8, 3, 11, 4, 14, 5, 13, 12, 6, 15, 7];
     var sx = PL_W * 0.7, sy = PL_H / 2;
-    var d = PL_R * 2 + 1, idx = 0;
+    var d = PL_R * 2 + 0.5, idx = 0;
     for (var col = 0; col < 5; col++) {
         for (var row = 0; row <= col; row++) {
             var bx = sx + col * d * Math.cos(Math.PI / 6);
             var by = sy - col * d * 0.5 + row * d;
-            poolBalls.push({x: bx, y: by, vx: 0, vy: 0, n: rackOrder[idx], pocketed: false});
+            poolBalls.push({x: bx, y: by, vx: 0, vy: 0, n: rackOrder[idx], pocketed: false, spinX: 0, spinY: 0});
             idx++;
         }
     }
 
-    poolAiming = false; poolMoving = false; poolOver = false;
+    poolMoving = false; poolOver = false;
     poolTurn = 1;
     poolGroups = {1: null, 2: null};
     poolPocketed = {1: [], 2: []};
-    document.getElementById('status-pool').textContent = '你的回合';
+    poolSpin = {x: 0, y: 0};
+    poolFreeBall = false;
+    poolPlacingCue = false;
+    poolIsBreak = true;
+    poolFirstHit = null;
+    poolCushionTouched = false;
+    poolShotPocketed = [];
+    poolFoulMsg = '';
+    poolMousePos = null;
+    poolDirLocked = false;
+    poolLockedDir = {x: 0, y: 0};
+    poolPowerDrag = false;
+    poolPowerLevel = 0;
+    poolPlaceValid = true;
+    document.getElementById('status-pool').textContent = '你的回合 (开球)';
+    document.getElementById('pool-msg').textContent = '';
     if (poolRAF) cancelAnimationFrame(poolRAF);
+    plUpdateUI();
+    drawPoolSpinCtrl();
     drawPool();
 }
 
@@ -1473,139 +1627,389 @@ function plCueBall() {
     return null;
 }
 
+function plGroupCleared(player) {
+    var g = poolGroups[player];
+    if (!g) return false;
+    var need = g === 'solid' ? [1,2,3,4,5,6,7] : [9,10,11,12,13,14,15];
+    for (var i = 0; i < need.length; i++) {
+        for (var j = 0; j < poolBalls.length; j++) {
+            if (poolBalls[j].n === need[i] && !poolBalls[j].pocketed) return false;
+        }
+    }
+    return true;
+}
+
+function plGetAimDir() {
+    if (poolDirLocked) return {x: poolLockedDir.x, y: poolLockedDir.y};
+    var cb = plCueBall();
+    if (!cb || !poolMousePos) return null;
+    var dx = poolMousePos.x - cb.x, dy = poolMousePos.y - cb.y;
+    var d = Math.sqrt(dx * dx + dy * dy);
+    if (d < 1) return null;
+    return {x: -dx / d, y: -dy / d};
+}
+
+/* --- Drawing --- */
 function drawPool() {
     var ctx = poolCtx, R = PL_RAIL;
 
-    ctx.fillStyle = '#5c3a1e';
+    var woodG = ctx.createLinearGradient(0, 0, PL_W, PL_H);
+    woodG.addColorStop(0, '#6b3e20'); woodG.addColorStop(0.3, '#8b5e3c');
+    woodG.addColorStop(0.7, '#7a4e2d'); woodG.addColorStop(1, '#5c3a1e');
+    ctx.fillStyle = woodG;
     ctx.fillRect(0, 0, PL_W, PL_H);
 
-    ctx.fillStyle = '#0a7e42';
+    ctx.strokeStyle = '#4a2a10'; ctx.lineWidth = 2;
+    ctx.strokeRect(R - 1, R - 1, PL_W - R * 2 + 2, PL_H - R * 2 + 2);
+
+    var clothG = ctx.createRadialGradient(PL_W / 2, PL_H / 2, 50, PL_W / 2, PL_H / 2, PL_W * 0.55);
+    clothG.addColorStop(0, '#0d8f4a'); clothG.addColorStop(1, '#0a7538');
+    ctx.fillStyle = clothG;
     ctx.fillRect(R, R, PL_W - R * 2, PL_H - R * 2);
 
-    PL_POCKETS.forEach(function(p) {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, PL_PKT, 0, Math.PI * 2);
-        ctx.fillStyle = '#111';
-        ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,0.18)';
+    var diaY = [R * 0.45, PL_H - R * 0.45];
+    var diaXs = [];
+    for (var di = 1; di <= 3; di++) {
+        diaXs.push(R + (PL_W / 2 - R) * di / 4);
+        diaXs.push(PL_W / 2 + (PL_W / 2 - R) * di / 4);
+    }
+    diaY.forEach(function(dy) {
+        diaXs.forEach(function(dx) {
+            ctx.beginPath();
+            ctx.moveTo(dx, dy - 3); ctx.lineTo(dx + 3, dy);
+            ctx.lineTo(dx, dy + 3); ctx.lineTo(dx - 3, dy);
+            ctx.closePath(); ctx.fill();
+        });
+    });
+    var diaX = [R * 0.45, PL_W - R * 0.45];
+    var diaYs = [];
+    for (var di = 1; di <= 3; di++) diaYs.push(R + (PL_H - R * 2) * di / 4);
+    diaX.forEach(function(dx) {
+        diaYs.forEach(function(dy) {
+            ctx.beginPath();
+            ctx.moveTo(dx, dy - 3); ctx.lineTo(dx + 3, dy);
+            ctx.lineTo(dx, dy + 3); ctx.lineTo(dx - 3, dy);
+            ctx.closePath(); ctx.fill();
+        });
     });
 
-    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+    PL_POCKETS.forEach(function(p) {
+        var pg = ctx.createRadialGradient(p.x, p.y, PL_PKT * 0.3, p.x, p.y, PL_PKT + 2);
+        pg.addColorStop(0, '#000'); pg.addColorStop(0.7, '#111');
+        pg.addColorStop(1, '#2a1a0a');
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, PL_PKT + 2, 0, Math.PI * 2);
+        ctx.fillStyle = pg; ctx.fill();
+    });
+
+    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
     ctx.lineWidth = 1;
     ctx.setLineDash([4, 8]);
     var headX = PL_W * 0.25;
+    ctx.beginPath(); ctx.moveTo(headX, R); ctx.lineTo(headX, PL_H - R);
+    ctx.stroke(); ctx.setLineDash([]);
+
     ctx.beginPath();
-    ctx.moveTo(headX, R);
-    ctx.lineTo(headX, PL_H - R);
-    ctx.stroke();
-    ctx.setLineDash([]);
+    ctx.arc(PL_W * 0.7, PL_H / 2, 3, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255,255,255,0.12)'; ctx.fill();
 
     for (var i = 0; i < poolBalls.length; i++) {
         var b = poolBalls[i];
         if (b.pocketed) continue;
-        var isStripe = b.n >= 9 && b.n <= 15;
-
         ctx.beginPath();
-        ctx.arc(b.x, b.y, PL_R, 0, Math.PI * 2);
-        if (b.n === 0) {
-            ctx.fillStyle = '#f0f0f0';
-        } else if (isStripe) {
-            ctx.fillStyle = '#f0f0f0';
-        } else {
-            ctx.fillStyle = PL_BALL_COLORS[b.n];
-        }
-        ctx.fill();
-        ctx.strokeStyle = 'rgba(0,0,0,0.3)';
-        ctx.lineWidth = 1;
-        ctx.stroke();
-
-        if (isStripe) {
-            ctx.save();
-            ctx.beginPath();
-            ctx.arc(b.x, b.y, PL_R, 0, Math.PI * 2);
-            ctx.clip();
-            ctx.fillStyle = PL_BALL_COLORS[b.n];
-            ctx.fillRect(b.x - PL_R, b.y - PL_R * 0.45, PL_R * 2, PL_R * 0.9);
-            ctx.restore();
-        }
-
-        if (b.n > 0) {
-            ctx.beginPath();
-            ctx.arc(b.x, b.y, PL_R * 0.42, 0, Math.PI * 2);
-            ctx.fillStyle = '#fff';
-            ctx.fill();
-            ctx.fillStyle = '#000';
-            ctx.font = 'bold 10px sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(b.n, b.x, b.y + 0.5);
-        }
-
-        ctx.beginPath();
-        ctx.arc(b.x - PL_R * 0.3, b.y - PL_R * 0.3, PL_R * 0.22, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(255,255,255,0.25)';
-        ctx.fill();
+        ctx.ellipse(b.x + 2, b.y + 3, PL_R * 0.9, PL_R * 0.6, 0, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(0,0,0,0.18)'; ctx.fill();
     }
 
-    if (poolAiming && poolAimStart && poolAimEnd) {
+    for (var i = 0; i < poolBalls.length; i++) {
+        var b = poolBalls[i];
+        if (b.pocketed) continue;
+        plDrawBall(ctx, b);
+    }
+
+    // Free ball placement overlay
+    if (poolPlacingCue) {
         var cb = plCueBall();
         if (cb) {
-            var dx = poolAimEnd.x - cb.x, dy = poolAimEnd.y - cb.y;
-            var dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist > 1) {
-                var nx = dx / dist, ny = dy / dist;
-
-                ctx.strokeStyle = 'rgba(255,255,255,0.3)';
-                ctx.lineWidth = 1;
-                ctx.setLineDash([4, 6]);
+            if (poolPlaceValid) {
                 ctx.beginPath();
-                ctx.moveTo(cb.x, cb.y);
-                ctx.lineTo(cb.x - nx * 300, cb.y - ny * 300);
+                ctx.arc(cb.x, cb.y, PL_R + 5, 0, Math.PI * 2);
+                ctx.strokeStyle = 'rgba(255,200,0,0.7)'; ctx.lineWidth = 2;
+                ctx.setLineDash([5, 4]); ctx.stroke(); ctx.setLineDash([]);
+            } else {
+                ctx.beginPath();
+                ctx.arc(cb.x, cb.y, PL_R + 5, 0, Math.PI * 2);
+                ctx.strokeStyle = 'rgba(255,60,60,0.7)'; ctx.lineWidth = 2;
+                ctx.stroke();
+                ctx.strokeStyle = 'rgba(255,60,60,0.6)'; ctx.lineWidth = 2;
+                ctx.beginPath(); ctx.moveTo(cb.x - 6, cb.y - 6); ctx.lineTo(cb.x + 6, cb.y + 6); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(cb.x + 6, cb.y - 6); ctx.lineTo(cb.x - 6, cb.y + 6); ctx.stroke();
+            }
+        }
+        ctx.fillStyle = 'rgba(0,0,0,0.45)';
+        ctx.fillRect(PL_W / 2 - 100, PL_H / 2 - 18, 200, 36);
+        ctx.fillStyle = '#ffd200';
+        ctx.font = 'bold 16px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText('点击放置母球', PL_W / 2, PL_H / 2);
+    }
+
+    // Cue stick + aim prediction (always visible when idle and it's player's turn)
+    if (!poolMoving && !poolOver && !poolPlacingCue && poolTurn === 1) {
+        plDrawCueAndAim(ctx);
+    }
+
+    // Power bar (always visible in bottom-left, fills when dragging)
+    if (!poolMoving && !poolOver && !poolPlacingCue && poolTurn === 1) {
+        var barX = 12, barY = PL_RAIL + 10;
+        var barH = PL_H - PL_RAIL * 2 - 20, barW = 10;
+        ctx.fillStyle = 'rgba(0,0,0,0.3)';
+        ctx.fillRect(barX, barY, barW, barH);
+        var fill = poolPowerLevel;
+        if (fill > 0) {
+            var pG = ctx.createLinearGradient(barX, barY + barH, barX, barY);
+            pG.addColorStop(0, '#4caf50'); pG.addColorStop(0.5, '#ff9800'); pG.addColorStop(1, '#f44336');
+            ctx.fillStyle = pG;
+            ctx.fillRect(barX, barY + barH * (1 - fill), barW, barH * fill);
+        }
+        ctx.strokeStyle = 'rgba(255,255,255,0.2)'; ctx.lineWidth = 1;
+        ctx.strokeRect(barX, barY, barW, barH);
+        ctx.fillStyle = 'rgba(255,255,255,0.7)';
+        ctx.font = '9px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+        ctx.fillText(Math.round(fill * 100) + '%', barX + barW / 2, barY + barH + 3);
+    }
+
+    // Lock indicator
+    if (poolDirLocked && !poolMoving && !poolOver && poolTurn === 1) {
+        ctx.fillStyle = 'rgba(0,0,0,0.4)';
+        ctx.fillRect(PL_W / 2 - 65, PL_H - PL_RAIL + 4, 130, 20);
+        ctx.fillStyle = '#ffd200';
+        ctx.font = '11px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText('方向已锁定 · 拖动击球 · 右键取消', PL_W / 2, PL_H - PL_RAIL + 14);
+    }
+}
+
+function plDrawCueAndAim(ctx) {
+    var cb = plCueBall();
+    if (!cb) return;
+    var aim = plGetAimDir();
+    if (!aim) return;
+
+    var aimDirX = aim.x, aimDirY = aim.y;
+    var cueBackX = -aimDirX, cueBackY = -aimDirY;
+
+    // --- Aim prediction ---
+    var hitBall = null, hitDist = Infinity;
+    for (var i = 0; i < poolBalls.length; i++) {
+        var tb = poolBalls[i];
+        if (tb.pocketed || tb.n === 0) continue;
+        var d = plRayCircle(cb.x, cb.y, aimDirX, aimDirY, tb.x, tb.y, PL_R * 2);
+        if (d > 0 && d < hitDist) { hitDist = d; hitBall = tb; }
+    }
+
+    var cushionDist = plRayCushion(cb.x, cb.y, aimDirX, aimDirY);
+    var aimLen = hitBall ? hitDist : Math.min(cushionDist, 1200);
+
+    // Aim line - long dotted line
+    ctx.strokeStyle = poolDirLocked ? 'rgba(255,220,100,0.5)' : 'rgba(255,255,255,0.35)';
+    ctx.lineWidth = poolDirLocked ? 1.5 : 1;
+    ctx.setLineDash([5, 5]);
+    ctx.beginPath();
+    ctx.moveTo(cb.x, cb.y);
+    ctx.lineTo(cb.x + aimDirX * aimLen, cb.y + aimDirY * aimLen);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // If no ball hit, show cushion bounce prediction
+    if (!hitBall && cushionDist < 1200) {
+        var bounceX = cb.x + aimDirX * cushionDist;
+        var bounceY = cb.y + aimDirY * cushionDist;
+        var bnx = aimDirX, bny = aimDirY;
+        if (bounceX - PL_R <= PL_RAIL || bounceX + PL_R >= PL_W - PL_RAIL) bnx = -bnx;
+        if (bounceY - PL_R <= PL_RAIL || bounceY + PL_R >= PL_H - PL_RAIL) bny = -bny;
+        ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([3, 6]);
+        ctx.beginPath();
+        ctx.moveTo(bounceX, bounceY);
+        ctx.lineTo(bounceX + bnx * 200, bounceY + bny * 200);
+        ctx.stroke();
+        ctx.setLineDash([]);
+    }
+
+    if (hitBall) {
+        var gx = cb.x + aimDirX * hitDist;
+        var gy = cb.y + aimDirY * hitDist;
+
+        // Ghost ball - filled semi-transparent + stroke
+        ctx.beginPath();
+        ctx.arc(gx, gy, PL_R, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,255,0.12)';
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(255,255,255,0.45)';
+        ctx.lineWidth = 1.5; ctx.stroke();
+
+        // Contact point marker
+        var cpx = (gx + hitBall.x) / 2, cpy = (gy + hitBall.y) / 2;
+        ctx.beginPath();
+        ctx.arc(cpx, cpy, 2, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,200,0,0.7)'; ctx.fill();
+
+        // Target ball direction
+        var tdx = hitBall.x - gx, tdy = hitBall.y - gy;
+        var tdd = Math.sqrt(tdx * tdx + tdy * tdy);
+        if (tdd > 0.1) {
+            var tnx = tdx / tdd, tny = tdy / tdd;
+            ctx.strokeStyle = 'rgba(255,200,0,0.5)';
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([4, 4]);
+            ctx.beginPath();
+            ctx.moveTo(hitBall.x, hitBall.y);
+            ctx.lineTo(hitBall.x + tnx * 150, hitBall.y + tny * 150);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Cue ball deflection
+            var cdx = aimDirX - (aimDirX * tnx + aimDirY * tny) * tnx;
+            var cdy = aimDirY - (aimDirX * tnx + aimDirY * tny) * tny;
+            var cdd = Math.sqrt(cdx * cdx + cdy * cdy);
+            if (cdd > 0.01) {
+                ctx.strokeStyle = 'rgba(180,180,255,0.35)';
+                ctx.lineWidth = 1;
+                ctx.setLineDash([3, 5]);
+                ctx.beginPath();
+                ctx.moveTo(gx, gy);
+                ctx.lineTo(gx + (cdx / cdd) * 100, gy + (cdy / cdd) * 100);
                 ctx.stroke();
                 ctx.setLineDash([]);
-
-                var power = Math.min(dist, 200);
-                var cueLen = 200, cueGap = PL_R + 4 + power * 0.5;
-                ctx.strokeStyle = '#c8a25c';
-                ctx.lineWidth = 5;
-                ctx.beginPath();
-                ctx.moveTo(cb.x + nx * cueGap, cb.y + ny * cueGap);
-                ctx.lineTo(cb.x + nx * (cueGap + cueLen), cb.y + ny * (cueGap + cueLen));
-                ctx.stroke();
-                ctx.strokeStyle = '#f0e6d0';
-                ctx.lineWidth = 3;
-                ctx.beginPath();
-                ctx.moveTo(cb.x + nx * cueGap, cb.y + ny * cueGap);
-                ctx.lineTo(cb.x + nx * (cueGap + 20), cb.y + ny * (cueGap + 20));
-                ctx.stroke();
-
-                var barX = PL_W - PL_RAIL - 10, barY = PL_RAIL + 10;
-                var barH = PL_H - PL_RAIL * 2 - 20, barW = 12;
-                ctx.fillStyle = 'rgba(0,0,0,0.4)';
-                ctx.fillRect(barX, barY, barW, barH);
-                var fill = power / 200;
-                ctx.fillStyle = fill < 0.5 ? '#4caf50' : fill < 0.8 ? '#ff9800' : '#f44336';
-                ctx.fillRect(barX, barY + barH * (1 - fill), barW, barH * fill);
-                ctx.strokeStyle = 'rgba(255,255,255,0.3)';
-                ctx.lineWidth = 1;
-                ctx.strokeRect(barX, barY, barW, barH);
             }
         }
     }
 
-    var g1 = poolGroups[1], g2 = poolGroups[2];
-    var p1 = poolPocketed[1], p2 = poolPocketed[2];
-    var infoY = PL_H - 8;
-    ctx.font = '12px sans-serif';
-    ctx.textBaseline = 'bottom';
-    ctx.textAlign = 'left';
-    ctx.fillStyle = 'rgba(255,255,255,0.7)';
-    var g1Label = g1 === 'solid' ? '全色' : g1 === 'stripe' ? '花色' : '未定';
-    var g2Label = g2 === 'solid' ? '全色' : g2 === 'stripe' ? '花色' : '未定';
-    ctx.fillText('你(' + g1Label + '): ' + p1.length, R + 4, infoY);
-    ctx.textAlign = 'right';
-    ctx.fillText('AI(' + g2Label + '): ' + p2.length, PL_W - R - 4, infoY);
+    // --- Cue stick ---
+    var cueLen = 220;
+    var cueGap = PL_R + 4;
+    if (poolPowerDrag) {
+        cueGap += poolPowerLevel * 120;
+    }
+
+    ctx.save();
+    ctx.lineWidth = 6;
+    var cueG = ctx.createLinearGradient(
+        cb.x + cueBackX * cueGap, cb.y + cueBackY * cueGap,
+        cb.x + cueBackX * (cueGap + cueLen), cb.y + cueBackY * (cueGap + cueLen)
+    );
+    cueG.addColorStop(0, '#f0e6d0'); cueG.addColorStop(0.05, '#d4b87a');
+    cueG.addColorStop(0.12, '#c8a25c'); cueG.addColorStop(0.5, '#a07838');
+    cueG.addColorStop(1, '#6b4e2a');
+    ctx.strokeStyle = cueG;
+    ctx.beginPath();
+    ctx.moveTo(cb.x + cueBackX * cueGap, cb.y + cueBackY * cueGap);
+    ctx.lineTo(cb.x + cueBackX * (cueGap + cueLen), cb.y + cueBackY * (cueGap + cueLen));
+    ctx.stroke();
+    ctx.strokeStyle = '#f0e8d8'; ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.moveTo(cb.x + cueBackX * cueGap, cb.y + cueBackY * cueGap);
+    ctx.lineTo(cb.x + cueBackX * (cueGap + 10), cb.y + cueBackY * (cueGap + 10));
+    ctx.stroke();
+    // Tip
+    ctx.beginPath();
+    ctx.arc(cb.x + cueBackX * cueGap, cb.y + cueBackY * cueGap, 3, 0, Math.PI * 2);
+    ctx.fillStyle = '#5599cc'; ctx.fill();
+    ctx.restore();
 }
 
+function plDrawBall(ctx, b) {
+    var isStripe = b.n >= 9 && b.n <= 15;
+    var r = PL_R;
+    var bColor = PL_BALL_COLORS[b.n] || '#f0f0f0';
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(b.x, b.y, r, 0, Math.PI * 2);
+
+    if (b.n === 0) {
+        var g = ctx.createRadialGradient(b.x - r * 0.3, b.y - r * 0.3, r * 0.1, b.x, b.y, r);
+        g.addColorStop(0, '#ffffff'); g.addColorStop(1, '#d8d8d8');
+        ctx.fillStyle = g;
+    } else if (b.n === 8) {
+        var g = ctx.createRadialGradient(b.x - r * 0.3, b.y - r * 0.3, r * 0.1, b.x, b.y, r);
+        g.addColorStop(0, '#444'); g.addColorStop(1, '#000');
+        ctx.fillStyle = g;
+    } else if (isStripe) {
+        ctx.fillStyle = '#f0f0f0';
+    } else {
+        var g = ctx.createRadialGradient(b.x - r * 0.3, b.y - r * 0.3, r * 0.1, b.x, b.y, r);
+        g.addColorStop(0, plLighten(bColor, 40)); g.addColorStop(1, bColor);
+        ctx.fillStyle = g;
+    }
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(0,0,0,0.25)'; ctx.lineWidth = 0.8; ctx.stroke();
+
+    if (isStripe) {
+        ctx.save();
+        ctx.beginPath(); ctx.arc(b.x, b.y, r, 0, Math.PI * 2); ctx.clip();
+        var sg = ctx.createLinearGradient(b.x - r, b.y, b.x + r, b.y);
+        sg.addColorStop(0, bColor); sg.addColorStop(0.5, plLighten(bColor, 20)); sg.addColorStop(1, bColor);
+        ctx.fillStyle = sg;
+        ctx.fillRect(b.x - r, b.y - r * 0.42, r * 2, r * 0.84);
+        ctx.restore();
+    }
+
+    if (b.n > 0) {
+        ctx.beginPath();
+        ctx.arc(b.x, b.y, r * 0.38, 0, Math.PI * 2);
+        ctx.fillStyle = '#fff'; ctx.fill();
+        ctx.fillStyle = '#000';
+        ctx.font = 'bold ' + (b.n >= 10 ? '8' : '9') + 'px sans-serif';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText(b.n, b.x, b.y + 0.5);
+    }
+
+    ctx.beginPath();
+    ctx.arc(b.x - r * 0.28, b.y - r * 0.28, r * 0.2, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.fill();
+
+    if (b.n === 0 && (poolSpin.x !== 0 || poolSpin.y !== 0) && !poolMoving) {
+        var sdx = poolSpin.x * r * 0.6, sdy = poolSpin.y * r * 0.6;
+        ctx.beginPath();
+        ctx.arc(b.x + sdx, b.y + sdy, 2.5, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(229,57,53,0.8)'; ctx.fill();
+    }
+
+    ctx.restore();
+}
+
+function plLighten(hex, amt) {
+    var num = parseInt(hex.replace('#', ''), 16);
+    var rr = Math.min(255, (num >> 16) + amt);
+    var gg = Math.min(255, ((num >> 8) & 0xff) + amt);
+    var bb = Math.min(255, (num & 0xff) + amt);
+    return '#' + ((1 << 24) + (rr << 16) + (gg << 8) + bb).toString(16).slice(1);
+}
+
+/* --- Ray helpers --- */
+function plRayCircle(ox, oy, dx, dy, cx, cy, r) {
+    var fx = ox - cx, fy = oy - cy;
+    var a = dx * dx + dy * dy;
+    var b = 2 * (fx * dx + fy * dy);
+    var c = fx * fx + fy * fy - r * r;
+    var disc = b * b - 4 * a * c;
+    if (disc < 0) return -1;
+    var t = (-b - Math.sqrt(disc)) / (2 * a);
+    return t > 0.1 ? t : -1;
+}
+
+function plRayCushion(ox, oy, dx, dy) {
+    var R = PL_RAIL, br = PL_R, best = 9999;
+    if (dx < 0) { var t = (R + br - ox) / dx; if (t > 0) best = Math.min(best, t); }
+    if (dx > 0) { var t = (PL_W - R - br - ox) / dx; if (t > 0) best = Math.min(best, t); }
+    if (dy < 0) { var t = (R + br - oy) / dy; if (t > 0) best = Math.min(best, t); }
+    if (dy > 0) { var t = (PL_H - R - br - oy) / dy; if (t > 0) best = Math.min(best, t); }
+    return best;
+}
+
+/* --- Physics Engine with Spin --- */
 function plUpdate() {
     var moving = false;
     var R = PL_RAIL, br = PL_R;
@@ -1613,6 +2017,18 @@ function plUpdate() {
     for (var i = 0; i < poolBalls.length; i++) {
         var b = poolBalls[i];
         if (b.pocketed) continue;
+
+        if (b.n === 0 && (Math.abs(b.spinX) > 0.01)) {
+            var speed = Math.sqrt(b.vx * b.vx + b.vy * b.vy);
+            if (speed > 0.3) {
+                var perpX = -b.vy / speed, perpY = b.vx / speed;
+                b.vx += perpX * b.spinX * 0.18;
+                b.vy += perpY * b.spinX * 0.18;
+            }
+            b.spinX *= PL_SPIN_DECAY;
+            if (Math.abs(b.spinX) < 0.01) b.spinX = 0;
+        }
+
         b.x += b.vx;
         b.y += b.vy;
         b.vx *= PL_FRICTION;
@@ -1623,10 +2039,42 @@ function plUpdate() {
             moving = true;
         }
 
-        if (b.x - br < R) { b.x = R + br; b.vx = -b.vx * 0.8; }
-        if (b.x + br > PL_W - R) { b.x = PL_W - R - br; b.vx = -b.vx * 0.8; }
-        if (b.y - br < R) { b.y = R + br; b.vy = -b.vy * 0.8; }
-        if (b.y + br > PL_H - R) { b.y = PL_H - R - br; b.vy = -b.vy * 0.8; }
+        if (b.x - br < R) {
+            b.x = R + br;
+            b.vx = -b.vx * 0.78;
+            if (b.n === 0 && Math.abs(b.spinX) > 0.05) {
+                b.vy += b.spinX * 1.2;
+                b.spinX *= 0.3;
+            }
+            poolCushionTouched = true;
+        }
+        if (b.x + br > PL_W - R) {
+            b.x = PL_W - R - br;
+            b.vx = -b.vx * 0.78;
+            if (b.n === 0 && Math.abs(b.spinX) > 0.05) {
+                b.vy -= b.spinX * 1.2;
+                b.spinX *= 0.3;
+            }
+            poolCushionTouched = true;
+        }
+        if (b.y - br < R) {
+            b.y = R + br;
+            b.vy = -b.vy * 0.78;
+            if (b.n === 0 && Math.abs(b.spinX) > 0.05) {
+                b.vx -= b.spinX * 1.2;
+                b.spinX *= 0.3;
+            }
+            poolCushionTouched = true;
+        }
+        if (b.y + br > PL_H - R) {
+            b.y = PL_H - R - br;
+            b.vy = -b.vy * 0.78;
+            if (b.n === 0 && Math.abs(b.spinX) > 0.05) {
+                b.vx += b.spinX * 1.2;
+                b.spinX *= 0.3;
+            }
+            poolCushionTouched = true;
+        }
     }
 
     for (var i = 0; i < poolBalls.length; i++) {
@@ -1651,12 +2099,35 @@ function plUpdate() {
                     a.vy -= dvn * ny;
                     b2.vx += dvn * nx;
                     b2.vy += dvn * ny;
+
+                    var cueBall = (a.n === 0) ? a : (b2.n === 0 ? b2 : null);
+                    var objBall = (a.n === 0) ? b2 : (b2.n === 0 ? a : null);
+                    if (cueBall && objBall) {
+                        if (Math.abs(cueBall.spinX) > 0.1) {
+                            var throwAmt = cueBall.spinX * 0.35;
+                            var perpOx = -ny, perpOy = nx;
+                            objBall.vx += perpOx * throwAmt;
+                            objBall.vy += perpOy * throwAmt;
+                        }
+                    }
+
+                    if (cueBall && objBall && Math.abs(cueBall.spinY) > 0.1) {
+                        var fwdX = nx, fwdY = ny;
+                        if (a.n === 0) { fwdX = -nx; fwdY = -ny; }
+                        cueBall.vx += fwdX * cueBall.spinY * -1.5;
+                        cueBall.vy += fwdY * cueBall.spinY * -1.5;
+                        cueBall.spinY *= 0.3;
+                    }
+
+                    if (poolFirstHit === null) {
+                        if (a.n === 0) poolFirstHit = b2.n;
+                        else if (b2.n === 0) poolFirstHit = a.n;
+                    }
                 }
             }
         }
     }
 
-    var turnPocketed = [];
     for (var i = 0; i < poolBalls.length; i++) {
         var b = poolBalls[i];
         if (b.pocketed) continue;
@@ -1666,84 +2137,251 @@ function plUpdate() {
             if (Math.sqrt(pdx * pdx + pdy * pdy) < PL_PKT - 2) {
                 b.pocketed = true;
                 b.vx = 0; b.vy = 0;
-                turnPocketed.push(b.n);
+                poolShotPocketed.push(b.n);
                 break;
             }
         }
     }
 
-    if (turnPocketed.length > 0 && !poolOver) {
-        plHandlePocketed(turnPocketed);
-    }
-
     return moving;
 }
 
-function plHandlePocketed(nums) {
-    var scratch = false;
-    for (var i = 0; i < nums.length; i++) {
-        var n = nums[i];
-        if (n === 0) {
-            scratch = true;
-            continue;
+/* --- Rule Engine --- */
+function plCheckFoul() {
+    var foul = false;
+    var foulReasons = [];
+    var cuePocketed = poolShotPocketed.indexOf(0) >= 0;
+    var eightPocketed = poolShotPocketed.indexOf(8) >= 0;
+
+    if (eightPocketed) {
+        var cleared = plGroupCleared(poolTurn);
+        var who = poolTurn === 1 ? '玩家' : '电脑';
+        if (cleared && !cuePocketed) {
+            poolOver = true;
+            document.getElementById('status-pool').textContent = who + '赢了！';
+            plShowMsg(who + '赢了！恭喜！');
+            return 'win';
+        } else {
+            poolOver = true;
+            var opp = poolTurn === 1 ? '电脑' : '玩家';
+            var reason = cuePocketed ? '打8号球时母球落袋' : '己方球未清完就打进8号球';
+            document.getElementById('status-pool').textContent = opp + '赢了！';
+            plShowMsg(who + '犯规(' + reason + ')，' + opp + '获胜！');
+            return 'lose';
         }
-        if (n === 8) {
-            var cleared = plGroupCleared(poolTurn);
-            var who = poolTurn === 1 ? '你' : 'AI';
-            if (cleared) {
-                poolOver = true;
-                document.getElementById('status-pool').textContent = who + '赢了！';
-                setTimeout(function() { alert(who + '赢了！'); }, 300);
-            } else {
-                poolOver = true;
-                document.getElementById('status-pool').textContent = who + '犯规输了！';
-                setTimeout(function() { alert(who + '提前打进8号球，犯规输了！'); }, 300);
+    }
+
+    if (cuePocketed) {
+        foul = true;
+        foulReasons.push('母球落袋');
+    }
+
+    if (poolFirstHit === null && !poolIsBreak) {
+        foul = true;
+        foulReasons.push('母球未碰到任何球');
+    }
+
+    if (poolFirstHit !== null && poolGroups[poolTurn]) {
+        var myGroup = poolGroups[poolTurn];
+        var firstGroup = plBallGroup(poolFirstHit);
+        if (poolFirstHit === 8) {
+            if (!plGroupCleared(poolTurn)) {
+                foul = true;
+                foulReasons.push('先碰到8号球(己方球未清完)');
             }
-            return;
+        } else if (firstGroup && firstGroup !== myGroup) {
+            foul = true;
+            foulReasons.push('先碰到对方的球');
         }
-        var group = (n >= 1 && n <= 7) ? 'solid' : 'stripe';
-        if (!poolGroups[1]) {
-            poolGroups[poolTurn] = group;
-            poolGroups[poolTurn === 1 ? 2 : 1] = group === 'solid' ? 'stripe' : 'solid';
+    }
+
+    if (!poolIsBreak && poolFirstHit !== null && !poolCushionTouched) {
+        var pocketedNonCue = poolShotPocketed.filter(function(n) { return n !== 0; });
+        if (pocketedNonCue.length === 0) {
+            foul = true;
+            foulReasons.push('击球后无球碰库');
         }
-        if (poolGroups[poolTurn] === group) {
+    }
+
+    if (poolIsBreak) {
+        var breakPocketed = poolShotPocketed.filter(function(n) { return n !== 0; });
+        if (breakPocketed.length === 0 && !poolCushionTouched) {
+            foul = true;
+            foulReasons.push('开球无效');
+        }
+    }
+
+    if (foul) {
+        poolFoulMsg = foulReasons.join('、');
+    }
+
+    return foul ? 'foul' : 'ok';
+}
+
+function plHandleShotEnd() {
+    if (poolOver) return;
+
+    var nonCuePocketed = poolShotPocketed.filter(function(n) { return n !== 0 && n !== 8; });
+    if (!poolIsBreak && nonCuePocketed.length > 0 && !poolGroups[1]) {
+        var firstGroup = plBallGroup(nonCuePocketed[0]);
+        if (firstGroup) {
+            poolGroups[poolTurn] = firstGroup;
+            var opp = poolTurn === 1 ? 2 : 1;
+            poolGroups[opp] = firstGroup === 'solid' ? 'stripe' : 'solid';
+        }
+    }
+
+    for (var i = 0; i < nonCuePocketed.length; i++) {
+        var n = nonCuePocketed[i];
+        var g = plBallGroup(n);
+        if (!g) continue;
+        if (poolGroups[poolTurn] === g) {
             poolPocketed[poolTurn].push(n);
         } else {
             var opp = poolTurn === 1 ? 2 : 1;
             poolPocketed[opp].push(n);
         }
     }
-    if (scratch) {
-        plResetCueBall();
-        poolTurn = poolTurn === 1 ? 2 : 1;
-        var who = poolTurn === 1 ? '你' : 'AI';
-        document.getElementById('status-pool').textContent = who + '的回合 (对方犯规)';
-    }
-}
 
-function plGroupCleared(player) {
-    var g = poolGroups[player];
-    if (!g) return false;
-    var need = g === 'solid' ? [1,2,3,4,5,6,7] : [9,10,11,12,13,14,15];
-    for (var i = 0; i < need.length; i++) {
-        for (var j = 0; j < poolBalls.length; j++) {
-            if (poolBalls[j].n === need[i] && !poolBalls[j].pocketed) return false;
+    var result = plCheckFoul();
+    if (result === 'win' || result === 'lose') {
+        plUpdateUI();
+        return;
+    }
+
+    var opp = poolTurn === 1 ? 2 : 1;
+    if (result === 'foul') {
+        var cuePocketed = poolShotPocketed.indexOf(0) >= 0;
+        if (cuePocketed) {
+            for (var i = 0; i < poolBalls.length; i++) {
+                if (poolBalls[i].n === 0) {
+                    poolBalls[i].pocketed = false;
+                    poolBalls[i].x = PL_W * 0.25;
+                    poolBalls[i].y = PL_H / 2;
+                    poolBalls[i].vx = 0; poolBalls[i].vy = 0;
+                }
+            }
         }
+        poolTurn = opp;
+        poolFreeBall = true;
+        var who = poolTurn === 1 ? '你' : '电脑';
+        plShowMsg('犯规: ' + poolFoulMsg + ' — ' + who + '获得自由球');
+        document.getElementById('status-pool').textContent = who + '的回合 (自由球)';
+    } else {
+        var ownPocketed = false;
+        if (poolGroups[poolTurn]) {
+            for (var i = 0; i < nonCuePocketed.length; i++) {
+                if (plBallGroup(nonCuePocketed[i]) === poolGroups[poolTurn]) {
+                    ownPocketed = true; break;
+                }
+            }
+        } else if (nonCuePocketed.length > 0) {
+            ownPocketed = true;
+        }
+
+        if (!ownPocketed) {
+            poolTurn = opp;
+        }
+        var who = poolTurn === 1 ? '你' : '电脑';
+        var gl = poolGroups[poolTurn] === 'solid' ? '全色' : poolGroups[poolTurn] === 'stripe' ? '花色' : '';
+        document.getElementById('status-pool').textContent = who + '的回合' + (gl ? ' (' + gl + ')' : '');
+        if (ownPocketed) plShowMsg('好球！继续击球');
     }
-    return true;
+
+    poolIsBreak = false;
+    poolDirLocked = false;
+    poolPowerDrag = false;
+    poolPowerLevel = 0;
+    plUpdateUI();
+
+    if (poolTurn === 2 && !poolOver) {
+        if (poolFreeBall) {
+            setTimeout(function() { plAIPlaceCue(); }, 400);
+        } else {
+            setTimeout(plAIShoot, 600);
+        }
+    } else if (poolTurn === 1 && poolFreeBall) {
+        poolPlacingCue = true;
+        drawPool();
+    }
 }
 
-function plResetCueBall() {
+function plShowMsg(msg) {
+    document.getElementById('pool-msg').textContent = msg;
+}
+
+function plUpdateUI() {
+    for (var p = 1; p <= 2; p++) {
+        var panel = document.getElementById('pool-panel-' + p);
+        var gtag = document.getElementById('pool-gtag-' + p);
+        var ballsEl = document.getElementById('pool-balls-' + p);
+        panel.classList.toggle('active-turn', poolTurn === p && !poolOver);
+        var g = poolGroups[p];
+        gtag.textContent = g === 'solid' ? '(全色 1-7)' : g === 'stripe' ? '(花色 9-15)' : '';
+        ballsEl.innerHTML = '';
+        poolPocketed[p].forEach(function(n) {
+            var span = document.createElement('span');
+            span.className = 'mini-ball';
+            span.style.background = PL_BALL_COLORS[n] || '#888';
+            var isS = n >= 9 && n <= 15;
+            if (isS) {
+                span.style.background = 'linear-gradient(180deg, #f0f0f0 30%, ' + PL_BALL_COLORS[n] + ' 30%, ' + PL_BALL_COLORS[n] + ' 70%, #f0f0f0 70%)';
+            }
+            span.textContent = n;
+            ballsEl.appendChild(span);
+        });
+    }
+}
+
+/* --- AI --- */
+function plAIPlaceCue() {
+    if (poolOver) return;
+    poolFreeBall = false;
+    poolPlacingCue = false;
+    var cb = null;
     for (var i = 0; i < poolBalls.length; i++) {
-        if (poolBalls[i].n === 0) {
-            poolBalls[i].pocketed = false;
-            poolBalls[i].x = PL_W * 0.25;
-            poolBalls[i].y = PL_H / 2;
-            poolBalls[i].vx = 0;
-            poolBalls[i].vy = 0;
-            return;
+        if (poolBalls[i].n === 0) { cb = poolBalls[i]; break; }
+    }
+    if (!cb) return;
+    cb.pocketed = false;
+
+    var myGroup = poolGroups[2];
+    var bestX = PL_W * 0.25, bestY = PL_H / 2, bestScore = -Infinity;
+
+    var candidates = [];
+    for (var xi = 0; xi < 10; xi++) {
+        for (var yi = 0; yi < 6; yi++) {
+            var px = PL_RAIL + PL_R + (PL_W - PL_RAIL * 2 - PL_R * 2) * xi / 9;
+            var py = PL_RAIL + PL_R + (PL_H - PL_RAIL * 2 - PL_R * 2) * yi / 5;
+            var overlap = false;
+            for (var bi = 0; bi < poolBalls.length; bi++) {
+                if (poolBalls[bi].pocketed || poolBalls[bi].n === 0) continue;
+                var ddx = poolBalls[bi].x - px, ddy = poolBalls[bi].y - py;
+                if (Math.sqrt(ddx * ddx + ddy * ddy) < PL_R * 2.5) { overlap = true; break; }
+            }
+            if (!overlap) candidates.push({x: px, y: py});
         }
     }
+
+    candidates.forEach(function(pos) {
+        var score = 0;
+        for (var bi = 0; bi < poolBalls.length; bi++) {
+            var tb = poolBalls[bi];
+            if (tb.pocketed || tb.n === 0 || tb.n === 8) continue;
+            var tg = plBallGroup(tb.n);
+            var isOwn = myGroup ? (tg === myGroup) : true;
+            if (!isOwn) continue;
+            var dx = tb.x - pos.x, dy = tb.y - pos.y;
+            var dd = Math.sqrt(dx * dx + dy * dy);
+            score += 1000 / (dd + 50);
+        }
+        if (score > bestScore) { bestScore = score; bestX = pos.x; bestY = pos.y; }
+    });
+
+    cb.x = bestX; cb.y = bestY;
+    cb.vx = 0; cb.vy = 0;
+    drawPool();
+    setTimeout(plAIShoot, 500);
 }
 
 function plAIShoot() {
@@ -1756,10 +2394,12 @@ function plAIShoot() {
     for (var i = 0; i < poolBalls.length; i++) {
         var b = poolBalls[i];
         if (b.pocketed || b.n === 0) continue;
-        var bGroup = (b.n >= 1 && b.n <= 7) ? 'solid' : (b.n >= 9 ? 'stripe' : null);
-        var is8 = b.n === 8;
-        if (is8 && !plGroupCleared(2)) continue;
-        targets.push(b);
+        if (b.n === 8) {
+            if (plGroupCleared(2)) targets.push(b);
+            continue;
+        }
+        var bGroup = plBallGroup(b.n);
+        if (!myGroup || bGroup === myGroup) targets.push(b);
     }
     if (targets.length === 0) {
         targets = poolBalls.filter(function(b) { return !b.pocketed && b.n !== 0; });
@@ -1769,7 +2409,7 @@ function plAIShoot() {
 
     for (var ti = 0; ti < targets.length; ti++) {
         var tgt = targets[ti];
-        var tGroup = (tgt.n >= 1 && tgt.n <= 7) ? 'solid' : (tgt.n >= 9 ? 'stripe' : null);
+        var tGroup = plBallGroup(tgt.n);
         var isOwn = myGroup ? (tGroup === myGroup || tgt.n === 8) : true;
 
         for (var pi = 0; pi < PL_POCKETS.length; pi++) {
@@ -1789,24 +2429,32 @@ function plAIShoot() {
                 var ob = poolBalls[bi];
                 if (ob.pocketed || ob.n === 0 || ob === tgt) continue;
                 var ox = ob.x - cb.x, oy = ob.y - cb.y;
-                var proj = (ox * cax + oy * cay) / cad;
-                if (proj < PL_R || proj > cad - PL_R) continue;
-                var perpX = ox - (cax / cad) * proj, perpY = oy - (cay / cad) * proj;
-                var perpD = Math.sqrt(perpX * perpX + perpY * perpY);
+                var proj = (ox * cax + oy * cay) / (cad * cad);
+                if (proj < 0.05 || proj > 0.95) continue;
+                var projX = cax * proj, projY = cay * proj;
+                var perpD = Math.sqrt((ox - projX) * (ox - projX) + (oy - projY) * (oy - projY));
                 if (perpD < PL_R * 2.2) { blocked = true; break; }
             }
 
             var dot = -(bpx * cax + bpy * cay) / (bpd * cad);
             var score = dot * 100;
-            score -= cad * 0.08;
-            score -= bpd * 0.04;
-            if (isOwn) score += 30;
+            score -= cad * 0.06;
+            score -= bpd * 0.03;
+            if (isOwn) score += 40;
             if (blocked) score -= 200;
-            score += (Math.random() - 0.5) * 8;
+
+            if (myGroup) {
+                var firstHitCheck = plRayFirstHit(cb.x, cb.y, cax / cad, cay / cad);
+                if (firstHitCheck && plBallGroup(firstHitCheck) && plBallGroup(firstHitCheck) !== myGroup && firstHitCheck !== 8) {
+                    score -= 150;
+                }
+            }
+
+            score += (Math.random() - 0.5) * 6;
 
             if (score > bestScore) {
                 bestScore = score;
-                var power = Math.min(12, 6 + cad * 0.015);
+                var power = Math.min(14, 6 + cad * 0.018);
                 bestVx = (cax / cad) * power;
                 bestVy = (cay / cad) * power;
             }
@@ -1815,48 +2463,51 @@ function plAIShoot() {
 
     if (bestScore <= -200) {
         var angle = Math.random() * Math.PI * 2;
-        bestVx = Math.cos(angle) * 6;
-        bestVy = Math.sin(angle) * 6;
+        bestVx = Math.cos(angle) * 7;
+        bestVy = Math.sin(angle) * 7;
     }
 
     cb.vx = bestVx;
     cb.vy = bestVy;
+    var aiPower = Math.sqrt(bestVx * bestVx + bestVy * bestVy);
+    cb.spinX = (Math.random() - 0.5) * aiPower * 0.4;
+    cb.spinY = (Math.random() - 0.5) * aiPower * 0.3;
+    plStartShot();
+}
+
+function plRayFirstHit(ox, oy, dx, dy) {
+    var closest = Infinity, hitN = null;
+    for (var i = 0; i < poolBalls.length; i++) {
+        var b = poolBalls[i];
+        if (b.pocketed || b.n === 0) continue;
+        var d = plRayCircle(ox, oy, dx, dy, b.x, b.y, PL_R * 2);
+        if (d > 0 && d < closest) { closest = d; hitN = b.n; }
+    }
+    return hitN;
+}
+
+function plStartShot() {
+    poolFirstHit = null;
+    poolCushionTouched = false;
+    poolShotPocketed = [];
+    poolFoulMsg = '';
+    poolDirLocked = false;
+    poolPowerDrag = false;
+    poolPowerLevel = 0;
+    document.getElementById('pool-msg').textContent = '';
     poolMoving = true;
     for (var j = 0; j < poolBalls.length; j++) poolBalls[j]._counted = poolBalls[j].pocketed;
     plGameLoop();
 }
 
+/* --- Game Loop --- */
 function plGameLoop() {
     if (poolMoving) {
         var still = !plUpdate();
         drawPool();
         if (still) {
             poolMoving = false;
-            if (!poolOver) {
-                var ownPocketed = false;
-                var g = poolGroups[poolTurn];
-                if (g) {
-                    var need = g === 'solid' ? [1,2,3,4,5,6,7] : [9,10,11,12,13,14,15];
-                    for (var i = 0; i < need.length; i++) {
-                        for (var j = 0; j < poolBalls.length; j++) {
-                            if (poolBalls[j].n === need[i] && poolBalls[j].pocketed) {
-                                if (!poolBalls[j]._counted) { ownPocketed = true; }
-                            }
-                        }
-                    }
-                }
-                for (var j = 0; j < poolBalls.length; j++) poolBalls[j]._counted = poolBalls[j].pocketed;
-
-                if (!ownPocketed) {
-                    poolTurn = poolTurn === 1 ? 2 : 1;
-                }
-                var gl = poolGroups[poolTurn] === 'solid' ? '全色' : poolGroups[poolTurn] === 'stripe' ? '花色' : '';
-                var who = poolTurn === 1 ? '你' : 'AI';
-                document.getElementById('status-pool').textContent = who + '的回合' + (gl ? ' (' + gl + ')' : '');
-                if (poolTurn === 2 && !poolOver) {
-                    setTimeout(plAIShoot, 600);
-                }
-            }
+            plHandleShotEnd();
         }
         poolRAF = requestAnimationFrame(plGameLoop);
     } else {
@@ -1864,6 +2515,7 @@ function plGameLoop() {
     }
 }
 
+/* --- Event Handlers --- */
 (function() {
     var cv = document.getElementById('game-pool-canvas');
 
@@ -1874,42 +2526,108 @@ function plGameLoop() {
         return {x: (t.clientX - r.left) * sx, y: (t.clientY - r.top) * sy};
     }
 
+    function plCheckPlaceValid(px, py) {
+        var R = PL_RAIL, br = PL_R;
+        if (px - br < R || px + br > PL_W - R || py - br < R || py + br > PL_H - R) return false;
+        for (var i = 0; i < poolBalls.length; i++) {
+            var ob = poolBalls[i];
+            if (ob.pocketed || ob.n === 0) continue;
+            var ddx = ob.x - px, ddy = ob.y - py;
+            if (Math.sqrt(ddx * ddx + ddy * ddy) < br * 2.2) return false;
+        }
+        return true;
+    }
+
     function onDown(e) {
-        if (poolMoving || poolOver || !plCueBall() || poolTurn !== 1) return;
+        if (poolMoving || poolOver || poolTurn !== 1) return;
         var pos = getPos(e);
         var cb = plCueBall();
-        var dx = pos.x - cb.x, dy = pos.y - cb.y;
-        poolAiming = true;
-        poolAimStart = {x: pos.x, y: pos.y};
-        poolAimEnd = {x: pos.x, y: pos.y};
-        drawPool();
+
+        if (poolPlacingCue && cb) {
+            var R = PL_RAIL, br = PL_R;
+            var nx = Math.max(R + br, Math.min(PL_W - R - br, pos.x));
+            var ny = Math.max(R + br, Math.min(PL_H - R - br, pos.y));
+            if (plCheckPlaceValid(nx, ny)) {
+                cb.x = nx; cb.y = ny;
+                poolPlacingCue = false;
+                poolFreeBall = false;
+                plShowMsg('母球已放置，请瞄准击球');
+                drawPool();
+            }
+            e.preventDefault();
+            return;
+        }
+
+        if (!cb) return;
+
+        if (!poolDirLocked) {
+            var aim = plGetAimDir();
+            if (aim) {
+                poolDirLocked = true;
+                poolLockedDir = {x: aim.x, y: aim.y};
+                drawPool();
+            }
+        } else {
+            poolPowerDrag = true;
+            poolPowerLevel = 0;
+        }
         e.preventDefault();
     }
 
     function onMove(e) {
-        if (!poolAiming) return;
-        poolAimEnd = getPos(e);
+        if (poolMoving || poolOver) return;
+        var pos = getPos(e);
+        poolMousePos = pos;
+
+        if (poolPlacingCue) {
+            var cb = plCueBall();
+            if (cb) {
+                var R = PL_RAIL, br = PL_R;
+                cb.x = Math.max(R + br, Math.min(PL_W - R - br, pos.x));
+                cb.y = Math.max(R + br, Math.min(PL_H - R - br, pos.y));
+                poolPlaceValid = plCheckPlaceValid(cb.x, cb.y);
+                drawPool();
+            }
+            e.preventDefault();
+            return;
+        }
+
+        if (poolTurn !== 1) return;
+
+        if (poolPowerDrag && poolDirLocked) {
+            var cb = plCueBall();
+            if (cb) {
+                var backX = -poolLockedDir.x, backY = -poolLockedDir.y;
+                var dx = pos.x - cb.x, dy = pos.y - cb.y;
+                var proj = dx * backX + dy * backY;
+                poolPowerLevel = Math.max(0, Math.min(1, proj / 200));
+            }
+        }
+
         drawPool();
         e.preventDefault();
     }
 
     function onUp(e) {
-        if (!poolAiming) return;
-        poolAiming = false;
+        if (poolPlacingCue) { e.preventDefault(); return; }
+        if (!poolPowerDrag) return;
+        poolPowerDrag = false;
         var cb = plCueBall();
         if (!cb) return;
-        var pos = getPos(e);
-        var dx = pos.x - cb.x, dy = pos.y - cb.y;
-        var dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 3) { poolAimStart = null; poolAimEnd = null; drawPool(); return; }
-        var power = Math.min(dist, 200) / 200 * 18;
-        cb.vx = -(dx / dist) * power;
-        cb.vy = -(dy / dist) * power;
-        poolAimStart = null;
-        poolAimEnd = null;
-        poolMoving = true;
-        for (var j = 0; j < poolBalls.length; j++) poolBalls[j]._counted = poolBalls[j].pocketed;
-        plGameLoop();
+
+        if (poolPowerLevel < 0.02) {
+            poolPowerLevel = 0;
+            drawPool();
+            e.preventDefault();
+            return;
+        }
+
+        var power = poolPowerLevel * 20;
+        cb.vx = poolLockedDir.x * power;
+        cb.vy = poolLockedDir.y * power;
+        cb.spinX = poolSpin.x * power * 0.8;
+        cb.spinY = poolSpin.y * power * 0.7;
+        plStartShot();
         e.preventDefault();
     }
 
@@ -1917,11 +2635,56 @@ function plGameLoop() {
     cv.addEventListener('mousemove', onMove);
     cv.addEventListener('mouseup', onUp);
     cv.addEventListener('mouseleave', function() {
-        if (poolAiming) { poolAiming = false; poolAimStart = null; poolAimEnd = null; drawPool(); }
+        poolMousePos = null;
+        if (!poolMoving && !poolPowerDrag) drawPool();
+    });
+    cv.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        if (poolDirLocked && !poolMoving) {
+            poolDirLocked = false;
+            poolPowerDrag = false;
+            poolPowerLevel = 0;
+            drawPool();
+        }
     });
     cv.addEventListener('touchstart', onDown, {passive: false});
     cv.addEventListener('touchmove', onMove, {passive: false});
     cv.addEventListener('touchend', onUp, {passive: false});
+
+    document.addEventListener('keydown', function(e) {
+        if (currentGame !== 'pool') return;
+        if (e.key === 'Escape' && poolDirLocked && !poolMoving) {
+            poolDirLocked = false;
+            poolPowerDrag = false;
+            poolPowerLevel = 0;
+            drawPool();
+        }
+    });
+
+    var spinCv = document.getElementById('pool-spin-canvas');
+    function onSpinInput(e) {
+        if (poolMoving || poolTurn !== 1) return;
+        var rect = spinCv.getBoundingClientRect();
+        var sx = spinCv.width / rect.width, sy = spinCv.height / rect.height;
+        var t = e.touches ? e.touches[0] || e.changedTouches[0] : e;
+        var mx = (t.clientX - rect.left) * sx;
+        var my = (t.clientY - rect.top) * sy;
+        var cx = 35, cy = 35, r = 24;
+        var dx = mx - cx, dy = my - cy;
+        var d = Math.sqrt(dx * dx + dy * dy);
+        if (d > r) { dx = dx / d * r; dy = dy / d * r; }
+        poolSpin.x = dx / r;
+        poolSpin.y = dy / r;
+        drawPoolSpinCtrl();
+        drawPool();
+        e.preventDefault();
+    }
+    var spinDragging = false;
+    spinCv.addEventListener('mousedown', function(e) { spinDragging = true; onSpinInput(e); });
+    document.addEventListener('mousemove', function(e) { if (spinDragging) onSpinInput(e); });
+    document.addEventListener('mouseup', function() { spinDragging = false; });
+    spinCv.addEventListener('touchstart', function(e) { onSpinInput(e); }, {passive: false});
+    spinCv.addEventListener('touchmove', function(e) { onSpinInput(e); }, {passive: false});
 })();
 
 /* ═══════════════════════════════════════
