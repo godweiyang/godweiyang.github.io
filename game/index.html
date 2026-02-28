@@ -84,6 +84,7 @@
             width: 100%;
             max-width: 420px;
             margin-bottom: 16px;
+            padding: 0 4px;
         }
 
         #game-gomoku .game-top-bar,
@@ -114,7 +115,7 @@
             text-align: right;
         }
 
-        canvas { border-radius: 12px; display: block; touch-action: none; }
+        canvas { border-radius: 12px; display: block; touch-action: none; max-width: 100%; height: auto; }
 
         .game-hint { margin-top: 14px; font-size: 13px; color: rgba(255,255,255,0.45); }
 
@@ -139,6 +140,8 @@
         #game-gomoku-canvas { border-radius: 4px; }
         #game-cchess-canvas { border-radius: 4px; }
         #game-match3-canvas { background: #1a1a2e; border: 2px solid rgba(255,255,255,0.15); }
+        #game-pool-canvas { border-radius: 4px; }
+        #game-pool .game-top-bar { max-width: 820px; }
 
         .mobile-controls {
             display: none;
@@ -178,6 +181,8 @@
             .game-selector { gap: 16px; padding: 10px 16px 40px; }
             .game-card { width: 100%; max-width: 300px; padding: 28px 20px 22px; }
             .mobile-controls { display: flex; }
+            .game-top-bar { max-width: 100% !important; }
+            .game-container { padding: 0 8px; box-sizing: border-box; }
         }
 
         @media (pointer: coarse) { .mobile-controls { display: flex; } }
@@ -215,6 +220,10 @@
         <div class="game-card" onclick="openGame('match3')">
             <span class="icon">💎</span><h2>消消乐</h2>
             <p>交换宝石消除匹配，连锁得高分</p>
+        </div>
+        <div class="game-card" onclick="openGame('pool')">
+            <span class="icon">🎱</span><h2>中式八球</h2>
+            <p>瞄准击球，先进完己方球再打8号球</p>
         </div>
     </div>
 </div>
@@ -316,6 +325,18 @@
     <div class="game-hint">点击选择宝石，再点击相邻宝石交换</div>
 </div>
 
+<!-- Pool -->
+<div id="game-pool" class="game-container">
+    <div class="game-top-bar">
+        <button class="btn-back" onclick="backToSelector()">← 返回</button>
+        <span class="game-title">中式八球</span>
+        <span class="game-status" id="status-pool">你的回合</span>
+    </div>
+    <canvas id="game-pool-canvas" width="800" height="440"></canvas>
+    <button class="btn-restart" onclick="initPool()">重新开始</button>
+    <div class="game-hint">点击拖拽瞄准，松开击球（拖拽距离越远力度越大）</div>
+</div>
+
 <script>
 /* ═══════════════════════════════════════
    Navigation
@@ -332,6 +353,7 @@ function openGame(name) {
     else if (name === 'gomoku') initGomoku();
     else if (name === 'cchess') initCChess();
     else if (name === 'match3') initMatch3();
+    else if (name === 'pool') initPool();
 }
 
 function backToSelector() {
@@ -340,6 +362,7 @@ function backToSelector() {
     }
     if (snakeTimer) { clearInterval(snakeTimer); snakeTimer = null; }
     if (tetrisTimer) { clearInterval(tetrisTimer); tetrisTimer = null; }
+    if (poolRAF) { cancelAnimationFrame(poolRAF); poolRAF = null; }
     document.getElementById('selector-screen').style.display = '';
     currentGame = null;
 }
@@ -867,8 +890,9 @@ function gomokuAIMove() {
     cv.addEventListener('click', function(e) {
         if (!gomokuPlayerTurn || gomokuOver) return;
         var rect = cv.getBoundingClientRect();
-        var col = Math.round((e.clientX - rect.left - GK_PAD) / GK_CELL);
-        var row = Math.round((e.clientY - rect.top - GK_PAD) / GK_CELL);
+        var sx = cv.width / rect.width, sy = cv.height / rect.height;
+        var col = Math.round(((e.clientX - rect.left) * sx - GK_PAD) / GK_CELL);
+        var row = Math.round(((e.clientY - rect.top) * sy - GK_PAD) / GK_CELL);
         if (row < 0 || row >= GK_SIZE || col < 0 || col >= GK_SIZE || gomokuBoard[row][col] !== 0) return;
         gomokuBoard[row][col] = 1;
         drawGomoku();
@@ -886,7 +910,7 @@ function gomokuAIMove() {
 /* ═══════════════════════════════════════
    Chinese Chess (中国象棋) — with AI
    ═══════════════════════════════════════ */
-var ccBoard, ccCanvas, ccCtx, ccSel, ccValid, ccPlayerTurn, ccOver;
+var ccBoard, ccCanvas, ccCtx, ccSel, ccValid, ccPlayerTurn, ccOver, ccLastMove;
 var CC_CELL = 50, CC_PAD = 40;
 var CC_CHARS = {
     r: {K:'帅',A:'仕',B:'相',N:'马',R:'车',C:'炮',P:'兵'},
@@ -909,7 +933,7 @@ function initCChess() {
     ccBoard[9]=[ccP('R','r'),ccP('N','r'),ccP('B','r'),ccP('A','r'),ccP('K','r'),ccP('A','r'),ccP('B','r'),ccP('N','r'),ccP('R','r')];
     ccBoard[7][1]=ccP('C','r'); ccBoard[7][7]=ccP('C','r');
     for(var i=0;i<9;i+=2) ccBoard[6][i]=ccP('P','r');
-    ccSel = null; ccValid = null; ccPlayerTurn = true; ccOver = false;
+    ccSel = null; ccValid = null; ccPlayerTurn = true; ccOver = false; ccLastMove = null;
     document.getElementById('status-cchess').textContent = '你的回合 (红方)';
     drawCChess();
 }
@@ -944,6 +968,22 @@ function drawCChess() {
         ctx.fillStyle=p.c==='r'?'#cc0000':'#111';
         ctx.font='bold '+(CC_CELL*0.42)+'px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
         ctx.fillText(CC_CHARS[p.c][p.t],x,y+1);
+    }
+    if(ccLastMove){
+        var hl=[[ccLastMove.fr,ccLastMove.fc],[ccLastMove.tr,ccLastMove.tc]];
+        ctx.lineWidth=3;
+        hl.forEach(function(pos){
+            var hx=CC_PAD+pos[1]*CC_CELL, hy=CC_PAD+pos[0]*CC_CELL, s=CC_CELL*0.38;
+            ctx.strokeStyle='rgba(0,120,255,0.7)';
+            ctx.beginPath(); ctx.moveTo(hx-s,hy-s); ctx.lineTo(hx-s,hy-s+10); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(hx-s,hy-s); ctx.lineTo(hx-s+10,hy-s); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(hx+s,hy-s); ctx.lineTo(hx+s,hy-s+10); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(hx+s,hy-s); ctx.lineTo(hx+s-10,hy-s); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(hx-s,hy+s); ctx.lineTo(hx-s,hy+s-10); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(hx-s,hy+s); ctx.lineTo(hx-s+10,hy+s); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(hx+s,hy+s); ctx.lineTo(hx+s,hy+s-10); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(hx+s,hy+s); ctx.lineTo(hx+s-10,hy+s); ctx.stroke();
+        });
     }
     if(ccSel){
         var x=CC_PAD+ccSel.c*CC_CELL, y=CC_PAD+ccSel.r*CC_CELL;
@@ -1172,6 +1212,7 @@ function ccAIMove() {
     if(bestMove){
         ccBoard[bestMove.tr][bestMove.tc]=ccBoard[bestMove.fr][bestMove.fc];
         ccBoard[bestMove.fr][bestMove.fc]=null;
+        ccLastMove={fr:bestMove.fr,fc:bestMove.fc,tr:bestMove.tr,tc:bestMove.tc};
     }
     var playerMoves=ccLegalMoves(ccBoard,'r');
     if(playerMoves.length===0||!ccFindKing(ccBoard,'r')){
@@ -1189,14 +1230,16 @@ function ccAIMove() {
     cv.addEventListener('click',function(e){
         if(!ccPlayerTurn||ccOver) return;
         var rect=cv.getBoundingClientRect();
-        var col=Math.round((e.clientX-rect.left-CC_PAD)/CC_CELL);
-        var row=Math.round((e.clientY-rect.top-CC_PAD)/CC_CELL);
+        var sx=cv.width/rect.width, sy=cv.height/rect.height;
+        var col=Math.round(((e.clientX-rect.left)*sx-CC_PAD)/CC_CELL);
+        var row=Math.round(((e.clientY-rect.top)*sy-CC_PAD)/CC_CELL);
         if(row<0||row>9||col<0||col>8) return;
         if(ccSel){
             var vm=ccValid?ccValid.find(function(m){return m.tr===row&&m.tc===col;}):null;
             if(vm){
                 ccBoard[vm.tr][vm.tc]=ccBoard[vm.fr][vm.fc]; ccBoard[vm.fr][vm.fc]=null;
                 ccSel=null; ccValid=null;
+                ccLastMove={fr:vm.fr,fc:vm.fc,tr:vm.tr,tc:vm.tc};
                 if(!ccFindKing(ccBoard,'b')){
                     ccOver=true; drawCChess();
                     document.getElementById('status-cchess').textContent='你赢了！';
@@ -1361,6 +1404,524 @@ function drawMatch3() {
             }
         } else { m3Sel=[row,col]; drawMatch3(); }
     });
+})();
+
+/* ═══════════════════════════════════════
+   Pool (中式八球) — 2D Physics
+   ═══════════════════════════════════════ */
+var poolCanvas, poolCtx, poolRAF, poolBalls, poolCue;
+var poolAiming, poolAimStart, poolAimEnd, poolMoving, poolOver;
+var poolTurn, poolGroups, poolPocketed;
+var PL_W = 800, PL_H = 440, PL_R = 11, PL_RAIL = 30, PL_PKT = 22;
+var PL_FRICTION = 0.986, PL_MIN_V = 0.15;
+
+var PL_BALL_COLORS = [
+    null,
+    '#f5d442','#0055cc','#cc0000','#6b1f8a','#e86e1a','#1a8a3c','#8b1a1a',
+    '#111',
+    '#f5d442','#0055cc','#cc0000','#6b1f8a','#e86e1a','#1a8a3c','#8b1a1a'
+];
+
+var PL_POCKETS;
+
+function plMakePockets() {
+    var r = PL_RAIL, co = 6;
+    PL_POCKETS = [
+        {x: r - co, y: r - co},
+        {x: PL_W / 2, y: r - 4},
+        {x: PL_W - r + co, y: r - co},
+        {x: r - co, y: PL_H - r + co},
+        {x: PL_W / 2, y: PL_H - r + 4},
+        {x: PL_W - r + co, y: PL_H - r + co}
+    ];
+}
+
+function initPool() {
+    poolCanvas = document.getElementById('game-pool-canvas');
+    poolCtx = poolCanvas.getContext('2d');
+    poolCanvas.width = PL_W;
+    poolCanvas.height = PL_H;
+    plMakePockets();
+    poolBalls = [];
+    var cx = PL_W * 0.25, cy = PL_H / 2;
+    poolBalls.push({x: cx, y: cy, vx: 0, vy: 0, n: 0, pocketed: false});
+
+    var rackOrder = [1, 9, 2, 10, 8, 3, 11, 4, 14, 5, 13, 12, 6, 15, 7];
+    var sx = PL_W * 0.7, sy = PL_H / 2;
+    var d = PL_R * 2 + 1, idx = 0;
+    for (var col = 0; col < 5; col++) {
+        for (var row = 0; row <= col; row++) {
+            var bx = sx + col * d * Math.cos(Math.PI / 6);
+            var by = sy - col * d * 0.5 + row * d;
+            poolBalls.push({x: bx, y: by, vx: 0, vy: 0, n: rackOrder[idx], pocketed: false});
+            idx++;
+        }
+    }
+
+    poolAiming = false; poolMoving = false; poolOver = false;
+    poolTurn = 1;
+    poolGroups = {1: null, 2: null};
+    poolPocketed = {1: [], 2: []};
+    document.getElementById('status-pool').textContent = '你的回合';
+    if (poolRAF) cancelAnimationFrame(poolRAF);
+    drawPool();
+}
+
+function plCueBall() {
+    for (var i = 0; i < poolBalls.length; i++)
+        if (poolBalls[i].n === 0 && !poolBalls[i].pocketed) return poolBalls[i];
+    return null;
+}
+
+function drawPool() {
+    var ctx = poolCtx, R = PL_RAIL;
+
+    ctx.fillStyle = '#5c3a1e';
+    ctx.fillRect(0, 0, PL_W, PL_H);
+
+    ctx.fillStyle = '#0a7e42';
+    ctx.fillRect(R, R, PL_W - R * 2, PL_H - R * 2);
+
+    PL_POCKETS.forEach(function(p) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, PL_PKT, 0, Math.PI * 2);
+        ctx.fillStyle = '#111';
+        ctx.fill();
+    });
+
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 8]);
+    var headX = PL_W * 0.25;
+    ctx.beginPath();
+    ctx.moveTo(headX, R);
+    ctx.lineTo(headX, PL_H - R);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    for (var i = 0; i < poolBalls.length; i++) {
+        var b = poolBalls[i];
+        if (b.pocketed) continue;
+        var isStripe = b.n >= 9 && b.n <= 15;
+
+        ctx.beginPath();
+        ctx.arc(b.x, b.y, PL_R, 0, Math.PI * 2);
+        if (b.n === 0) {
+            ctx.fillStyle = '#f0f0f0';
+        } else if (isStripe) {
+            ctx.fillStyle = '#f0f0f0';
+        } else {
+            ctx.fillStyle = PL_BALL_COLORS[b.n];
+        }
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(0,0,0,0.3)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        if (isStripe) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(b.x, b.y, PL_R, 0, Math.PI * 2);
+            ctx.clip();
+            ctx.fillStyle = PL_BALL_COLORS[b.n];
+            ctx.fillRect(b.x - PL_R, b.y - PL_R * 0.45, PL_R * 2, PL_R * 0.9);
+            ctx.restore();
+        }
+
+        if (b.n > 0) {
+            ctx.beginPath();
+            ctx.arc(b.x, b.y, PL_R * 0.42, 0, Math.PI * 2);
+            ctx.fillStyle = '#fff';
+            ctx.fill();
+            ctx.fillStyle = '#000';
+            ctx.font = 'bold 10px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(b.n, b.x, b.y + 0.5);
+        }
+
+        ctx.beginPath();
+        ctx.arc(b.x - PL_R * 0.3, b.y - PL_R * 0.3, PL_R * 0.22, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,255,0.25)';
+        ctx.fill();
+    }
+
+    if (poolAiming && poolAimStart && poolAimEnd) {
+        var cb = plCueBall();
+        if (cb) {
+            var dx = poolAimEnd.x - cb.x, dy = poolAimEnd.y - cb.y;
+            var dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist > 1) {
+                var nx = dx / dist, ny = dy / dist;
+
+                ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+                ctx.lineWidth = 1;
+                ctx.setLineDash([4, 6]);
+                ctx.beginPath();
+                ctx.moveTo(cb.x, cb.y);
+                ctx.lineTo(cb.x - nx * 300, cb.y - ny * 300);
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                var power = Math.min(dist, 200);
+                var cueLen = 200, cueGap = PL_R + 4 + power * 0.5;
+                ctx.strokeStyle = '#c8a25c';
+                ctx.lineWidth = 5;
+                ctx.beginPath();
+                ctx.moveTo(cb.x + nx * cueGap, cb.y + ny * cueGap);
+                ctx.lineTo(cb.x + nx * (cueGap + cueLen), cb.y + ny * (cueGap + cueLen));
+                ctx.stroke();
+                ctx.strokeStyle = '#f0e6d0';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(cb.x + nx * cueGap, cb.y + ny * cueGap);
+                ctx.lineTo(cb.x + nx * (cueGap + 20), cb.y + ny * (cueGap + 20));
+                ctx.stroke();
+
+                var barX = PL_W - PL_RAIL - 10, barY = PL_RAIL + 10;
+                var barH = PL_H - PL_RAIL * 2 - 20, barW = 12;
+                ctx.fillStyle = 'rgba(0,0,0,0.4)';
+                ctx.fillRect(barX, barY, barW, barH);
+                var fill = power / 200;
+                ctx.fillStyle = fill < 0.5 ? '#4caf50' : fill < 0.8 ? '#ff9800' : '#f44336';
+                ctx.fillRect(barX, barY + barH * (1 - fill), barW, barH * fill);
+                ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(barX, barY, barW, barH);
+            }
+        }
+    }
+
+    var g1 = poolGroups[1], g2 = poolGroups[2];
+    var p1 = poolPocketed[1], p2 = poolPocketed[2];
+    var infoY = PL_H - 8;
+    ctx.font = '12px sans-serif';
+    ctx.textBaseline = 'bottom';
+    ctx.textAlign = 'left';
+    ctx.fillStyle = 'rgba(255,255,255,0.7)';
+    var g1Label = g1 === 'solid' ? '全色' : g1 === 'stripe' ? '花色' : '未定';
+    var g2Label = g2 === 'solid' ? '全色' : g2 === 'stripe' ? '花色' : '未定';
+    ctx.fillText('你(' + g1Label + '): ' + p1.length, R + 4, infoY);
+    ctx.textAlign = 'right';
+    ctx.fillText('AI(' + g2Label + '): ' + p2.length, PL_W - R - 4, infoY);
+}
+
+function plUpdate() {
+    var moving = false;
+    var R = PL_RAIL, br = PL_R;
+
+    for (var i = 0; i < poolBalls.length; i++) {
+        var b = poolBalls[i];
+        if (b.pocketed) continue;
+        b.x += b.vx;
+        b.y += b.vy;
+        b.vx *= PL_FRICTION;
+        b.vy *= PL_FRICTION;
+        if (Math.abs(b.vx) < PL_MIN_V && Math.abs(b.vy) < PL_MIN_V) {
+            b.vx = 0; b.vy = 0;
+        } else {
+            moving = true;
+        }
+
+        if (b.x - br < R) { b.x = R + br; b.vx = -b.vx * 0.8; }
+        if (b.x + br > PL_W - R) { b.x = PL_W - R - br; b.vx = -b.vx * 0.8; }
+        if (b.y - br < R) { b.y = R + br; b.vy = -b.vy * 0.8; }
+        if (b.y + br > PL_H - R) { b.y = PL_H - R - br; b.vy = -b.vy * 0.8; }
+    }
+
+    for (var i = 0; i < poolBalls.length; i++) {
+        for (var j = i + 1; j < poolBalls.length; j++) {
+            var a = poolBalls[i], b2 = poolBalls[j];
+            if (a.pocketed || b2.pocketed) continue;
+            var ddx = b2.x - a.x, ddy = b2.y - a.y;
+            var dist = Math.sqrt(ddx * ddx + ddy * ddy);
+            var minD = br * 2;
+            if (dist < minD && dist > 0) {
+                var nx = ddx / dist, ny = ddy / dist;
+                var overlap = minD - dist;
+                a.x -= nx * overlap * 0.5;
+                a.y -= ny * overlap * 0.5;
+                b2.x += nx * overlap * 0.5;
+                b2.y += ny * overlap * 0.5;
+
+                var dvx = a.vx - b2.vx, dvy = a.vy - b2.vy;
+                var dvn = dvx * nx + dvy * ny;
+                if (dvn > 0) {
+                    a.vx -= dvn * nx;
+                    a.vy -= dvn * ny;
+                    b2.vx += dvn * nx;
+                    b2.vy += dvn * ny;
+                }
+            }
+        }
+    }
+
+    var turnPocketed = [];
+    for (var i = 0; i < poolBalls.length; i++) {
+        var b = poolBalls[i];
+        if (b.pocketed) continue;
+        for (var pi = 0; pi < PL_POCKETS.length; pi++) {
+            var p = PL_POCKETS[pi];
+            var pdx = b.x - p.x, pdy = b.y - p.y;
+            if (Math.sqrt(pdx * pdx + pdy * pdy) < PL_PKT - 2) {
+                b.pocketed = true;
+                b.vx = 0; b.vy = 0;
+                turnPocketed.push(b.n);
+                break;
+            }
+        }
+    }
+
+    if (turnPocketed.length > 0 && !poolOver) {
+        plHandlePocketed(turnPocketed);
+    }
+
+    return moving;
+}
+
+function plHandlePocketed(nums) {
+    var scratch = false;
+    for (var i = 0; i < nums.length; i++) {
+        var n = nums[i];
+        if (n === 0) {
+            scratch = true;
+            continue;
+        }
+        if (n === 8) {
+            var cleared = plGroupCleared(poolTurn);
+            var who = poolTurn === 1 ? '你' : 'AI';
+            if (cleared) {
+                poolOver = true;
+                document.getElementById('status-pool').textContent = who + '赢了！';
+                setTimeout(function() { alert(who + '赢了！'); }, 300);
+            } else {
+                poolOver = true;
+                document.getElementById('status-pool').textContent = who + '犯规输了！';
+                setTimeout(function() { alert(who + '提前打进8号球，犯规输了！'); }, 300);
+            }
+            return;
+        }
+        var group = (n >= 1 && n <= 7) ? 'solid' : 'stripe';
+        if (!poolGroups[1]) {
+            poolGroups[poolTurn] = group;
+            poolGroups[poolTurn === 1 ? 2 : 1] = group === 'solid' ? 'stripe' : 'solid';
+        }
+        if (poolGroups[poolTurn] === group) {
+            poolPocketed[poolTurn].push(n);
+        } else {
+            var opp = poolTurn === 1 ? 2 : 1;
+            poolPocketed[opp].push(n);
+        }
+    }
+    if (scratch) {
+        plResetCueBall();
+        poolTurn = poolTurn === 1 ? 2 : 1;
+        var who = poolTurn === 1 ? '你' : 'AI';
+        document.getElementById('status-pool').textContent = who + '的回合 (对方犯规)';
+    }
+}
+
+function plGroupCleared(player) {
+    var g = poolGroups[player];
+    if (!g) return false;
+    var need = g === 'solid' ? [1,2,3,4,5,6,7] : [9,10,11,12,13,14,15];
+    for (var i = 0; i < need.length; i++) {
+        for (var j = 0; j < poolBalls.length; j++) {
+            if (poolBalls[j].n === need[i] && !poolBalls[j].pocketed) return false;
+        }
+    }
+    return true;
+}
+
+function plResetCueBall() {
+    for (var i = 0; i < poolBalls.length; i++) {
+        if (poolBalls[i].n === 0) {
+            poolBalls[i].pocketed = false;
+            poolBalls[i].x = PL_W * 0.25;
+            poolBalls[i].y = PL_H / 2;
+            poolBalls[i].vx = 0;
+            poolBalls[i].vy = 0;
+            return;
+        }
+    }
+}
+
+function plAIShoot() {
+    if (poolOver || poolMoving || poolTurn !== 2) return;
+    var cb = plCueBall();
+    if (!cb) return;
+
+    var myGroup = poolGroups[2];
+    var targets = [];
+    for (var i = 0; i < poolBalls.length; i++) {
+        var b = poolBalls[i];
+        if (b.pocketed || b.n === 0) continue;
+        var bGroup = (b.n >= 1 && b.n <= 7) ? 'solid' : (b.n >= 9 ? 'stripe' : null);
+        var is8 = b.n === 8;
+        if (is8 && !plGroupCleared(2)) continue;
+        targets.push(b);
+    }
+    if (targets.length === 0) {
+        targets = poolBalls.filter(function(b) { return !b.pocketed && b.n !== 0; });
+    }
+
+    var bestScore = -Infinity, bestVx = 0, bestVy = 0;
+
+    for (var ti = 0; ti < targets.length; ti++) {
+        var tgt = targets[ti];
+        var tGroup = (tgt.n >= 1 && tgt.n <= 7) ? 'solid' : (tgt.n >= 9 ? 'stripe' : null);
+        var isOwn = myGroup ? (tGroup === myGroup || tgt.n === 8) : true;
+
+        for (var pi = 0; pi < PL_POCKETS.length; pi++) {
+            var pkt = PL_POCKETS[pi];
+            var bpx = tgt.x - pkt.x, bpy = tgt.y - pkt.y;
+            var bpd = Math.sqrt(bpx * bpx + bpy * bpy);
+            if (bpd < 1) continue;
+            var aimX = tgt.x + (bpx / bpd) * PL_R * 2;
+            var aimY = tgt.y + (bpy / bpd) * PL_R * 2;
+
+            var cax = aimX - cb.x, cay = aimY - cb.y;
+            var cad = Math.sqrt(cax * cax + cay * cay);
+            if (cad < 1) continue;
+
+            var blocked = false;
+            for (var bi = 0; bi < poolBalls.length; bi++) {
+                var ob = poolBalls[bi];
+                if (ob.pocketed || ob.n === 0 || ob === tgt) continue;
+                var ox = ob.x - cb.x, oy = ob.y - cb.y;
+                var proj = (ox * cax + oy * cay) / cad;
+                if (proj < PL_R || proj > cad - PL_R) continue;
+                var perpX = ox - (cax / cad) * proj, perpY = oy - (cay / cad) * proj;
+                var perpD = Math.sqrt(perpX * perpX + perpY * perpY);
+                if (perpD < PL_R * 2.2) { blocked = true; break; }
+            }
+
+            var dot = -(bpx * cax + bpy * cay) / (bpd * cad);
+            var score = dot * 100;
+            score -= cad * 0.08;
+            score -= bpd * 0.04;
+            if (isOwn) score += 30;
+            if (blocked) score -= 200;
+            score += (Math.random() - 0.5) * 8;
+
+            if (score > bestScore) {
+                bestScore = score;
+                var power = Math.min(12, 6 + cad * 0.015);
+                bestVx = (cax / cad) * power;
+                bestVy = (cay / cad) * power;
+            }
+        }
+    }
+
+    if (bestScore <= -200) {
+        var angle = Math.random() * Math.PI * 2;
+        bestVx = Math.cos(angle) * 6;
+        bestVy = Math.sin(angle) * 6;
+    }
+
+    cb.vx = bestVx;
+    cb.vy = bestVy;
+    poolMoving = true;
+    for (var j = 0; j < poolBalls.length; j++) poolBalls[j]._counted = poolBalls[j].pocketed;
+    plGameLoop();
+}
+
+function plGameLoop() {
+    if (poolMoving) {
+        var still = !plUpdate();
+        drawPool();
+        if (still) {
+            poolMoving = false;
+            if (!poolOver) {
+                var ownPocketed = false;
+                var g = poolGroups[poolTurn];
+                if (g) {
+                    var need = g === 'solid' ? [1,2,3,4,5,6,7] : [9,10,11,12,13,14,15];
+                    for (var i = 0; i < need.length; i++) {
+                        for (var j = 0; j < poolBalls.length; j++) {
+                            if (poolBalls[j].n === need[i] && poolBalls[j].pocketed) {
+                                if (!poolBalls[j]._counted) { ownPocketed = true; }
+                            }
+                        }
+                    }
+                }
+                for (var j = 0; j < poolBalls.length; j++) poolBalls[j]._counted = poolBalls[j].pocketed;
+
+                if (!ownPocketed) {
+                    poolTurn = poolTurn === 1 ? 2 : 1;
+                }
+                var gl = poolGroups[poolTurn] === 'solid' ? '全色' : poolGroups[poolTurn] === 'stripe' ? '花色' : '';
+                var who = poolTurn === 1 ? '你' : 'AI';
+                document.getElementById('status-pool').textContent = who + '的回合' + (gl ? ' (' + gl + ')' : '');
+                if (poolTurn === 2 && !poolOver) {
+                    setTimeout(plAIShoot, 600);
+                }
+            }
+        }
+        poolRAF = requestAnimationFrame(plGameLoop);
+    } else {
+        drawPool();
+    }
+}
+
+(function() {
+    var cv = document.getElementById('game-pool-canvas');
+
+    function getPos(e) {
+        var r = cv.getBoundingClientRect();
+        var sx = cv.width / r.width, sy = cv.height / r.height;
+        var t = e.touches ? e.touches[0] || e.changedTouches[0] : e;
+        return {x: (t.clientX - r.left) * sx, y: (t.clientY - r.top) * sy};
+    }
+
+    function onDown(e) {
+        if (poolMoving || poolOver || !plCueBall() || poolTurn !== 1) return;
+        var pos = getPos(e);
+        var cb = plCueBall();
+        var dx = pos.x - cb.x, dy = pos.y - cb.y;
+        poolAiming = true;
+        poolAimStart = {x: pos.x, y: pos.y};
+        poolAimEnd = {x: pos.x, y: pos.y};
+        drawPool();
+        e.preventDefault();
+    }
+
+    function onMove(e) {
+        if (!poolAiming) return;
+        poolAimEnd = getPos(e);
+        drawPool();
+        e.preventDefault();
+    }
+
+    function onUp(e) {
+        if (!poolAiming) return;
+        poolAiming = false;
+        var cb = plCueBall();
+        if (!cb) return;
+        var pos = getPos(e);
+        var dx = pos.x - cb.x, dy = pos.y - cb.y;
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 3) { poolAimStart = null; poolAimEnd = null; drawPool(); return; }
+        var power = Math.min(dist, 200) / 200 * 18;
+        cb.vx = -(dx / dist) * power;
+        cb.vy = -(dy / dist) * power;
+        poolAimStart = null;
+        poolAimEnd = null;
+        poolMoving = true;
+        for (var j = 0; j < poolBalls.length; j++) poolBalls[j]._counted = poolBalls[j].pocketed;
+        plGameLoop();
+        e.preventDefault();
+    }
+
+    cv.addEventListener('mousedown', onDown);
+    cv.addEventListener('mousemove', onMove);
+    cv.addEventListener('mouseup', onUp);
+    cv.addEventListener('mouseleave', function() {
+        if (poolAiming) { poolAiming = false; poolAimStart = null; poolAimEnd = null; drawPool(); }
+    });
+    cv.addEventListener('touchstart', onDown, {passive: false});
+    cv.addEventListener('touchmove', onMove, {passive: false});
+    cv.addEventListener('touchend', onUp, {passive: false});
 })();
 
 /* ═══════════════════════════════════════
