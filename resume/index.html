@@ -1,6 +1,7 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
+<head><meta name="generator" content="Hexo 3.9.0">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>韦阳 - 个人简历</title>
@@ -34,154 +35,100 @@
             padding: 40px 24px 60px;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 12px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #eaecef;
-        }
-
-        .header h1 {
+        .resume-content h1 {
             font-size: 2em;
             font-weight: 700;
-            margin-bottom: 10px;
+            text-align: center;
+            margin-bottom: 6px;
             letter-spacing: 2px;
         }
 
-        .contact-info {
+        .resume-content h1 + p {
+            text-align: center;
             color: #586069;
             font-size: 14px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 6px 18px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eaecef;
+            margin-bottom: 8px;
         }
 
-        .contact-info a {
-            color: #586069;
-        }
-
-        .contact-info a:hover {
-            color: #0366d6;
-        }
-
-        .contact-info .sep {
-            color: #ccc;
-        }
-
-        section {
-            margin-top: 28px;
-        }
-
-        section > h2 {
+        .resume-content h2 {
             font-size: 1.35em;
             font-weight: 700;
             padding-bottom: 6px;
             border-bottom: 1px solid #eaecef;
+            margin-top: 28px;
             margin-bottom: 14px;
         }
 
-        .entry {
-            margin-bottom: 18px;
-        }
-
-        .entry-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            flex-wrap: wrap;
-            gap: 4px 12px;
-        }
-
-        .entry-title {
+        .resume-content h3 {
             font-weight: 600;
             font-size: 15px;
+            margin-top: 16px;
+            margin-bottom: 4px;
         }
 
-        .entry-meta {
-            color: #586069;
-            font-size: 14px;
-            white-space: nowrap;
-        }
-
-        .entry-subtitle {
-            color: #586069;
-            font-size: 14px;
-            margin-top: 1px;
-        }
-
-        .entry-body {
-            margin-top: 6px;
-        }
-
-        .entry-body ul {
-            padding-left: 20px;
-        }
-
-        .entry-body li {
+        .resume-content p {
             margin-bottom: 6px;
         }
 
-        .project-title {
+        .resume-content ul {
+            padding-left: 20px;
+            margin-bottom: 8px;
+        }
+
+        .resume-content li {
+            margin-bottom: 6px;
+        }
+
+        .resume-content strong {
             font-weight: 600;
         }
 
-        .pub {
-            margin-bottom: 14px;
-        }
-
-        .pub-title {
-            font-weight: 600;
-        }
-
-        .pub-venue {
+        .resume-content em {
+            font-style: normal;
             color: #586069;
             font-size: 14px;
         }
 
-        .pub-desc {
-            margin-top: 3px;
-        }
-
-        .tag {
-            display: inline-block;
+        .resume-content code {
             background: #f1f8ff;
             color: #0366d6;
+            font-family: inherit;
             font-size: 12px;
             padding: 1px 8px;
             border-radius: 3px;
-            margin-right: 4px;
         }
 
-        .awards-list {
-            list-style: none;
-            padding: 0;
+        .resume-content hr {
+            border: none;
+            border-top: 1px solid #eaecef;
+            margin: 32px 0 16px;
         }
 
-        .awards-list li {
-            padding: 4px 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            flex-wrap: wrap;
-            gap: 4px 12px;
+        .resume-content blockquote {
+            border-left: 3px solid #dfe2e5;
+            padding-left: 16px;
+            color: #586069;
+            margin: 8px 0;
         }
 
-        .skills-grid {
-            display: grid;
-            grid-template-columns: 120px 1fr;
-            gap: 8px 16px;
-            align-items: baseline;
+        .resume-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 8px 0 16px;
         }
 
-        .skills-grid dt {
+        .resume-content th,
+        .resume-content td {
+            text-align: left;
+            padding: 6px 12px;
+            border-bottom: 1px solid #eaecef;
+        }
+
+        .resume-content th {
             font-weight: 600;
-            text-align: right;
-            color: #24292e;
-        }
-
-        .skills-grid dd {
-            color: #444;
+            background: #f6f8fa;
         }
 
         .footer {
@@ -193,181 +140,109 @@
             font-size: 13px;
         }
 
+        .footer a {
+            color: #999;
+        }
+
+        .footer a:hover {
+            color: #0366d6;
+        }
+
         @media (max-width: 600px) {
             .container {
                 padding: 24px 16px 40px;
             }
 
-            .header h1 {
+            .resume-content h1 {
                 font-size: 1.6em;
-            }
-
-            .entry-header {
-                flex-direction: column;
-            }
-
-            .skills-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .skills-grid dt {
-                text-align: left;
-            }
-
-            .awards-list li {
-                flex-direction: column;
             }
         }
     </style>
-</head>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
 <body>
     <div class="container">
+        <div class="resume-content">
+            <h1 id="韦阳"><a href="#韦阳" class="headerlink" title="韦阳"></a>韦阳</h1><p>📧 <a href="mailto:i@godweiyang.com">i@godweiyang.com</a> · 📱 15221856016 · 🌐 <a href="https://godweiyang.com">godweiyang.com</a> · 💻 <a href="https://github.com/godweiyang" target="_blank" rel="noopener">GitHub</a> · 📝 <a href="https://www.zhihu.com/people/godweiyang" target="_blank" rel="noopener">知乎</a></p>
+<h2 id="教育背景"><a href="#教育背景" class="headerlink" title="教育背景"></a>教育背景</h2><h3 id="华东师范大学-·-计算机科学与技术-·-硕士-2018-9-–-2021-6"><a href="#华东师范大学-·-计算机科学与技术-·-硕士-2018-9-–-2021-6" class="headerlink" title="华东师范大学 · 计算机科学与技术 · 硕士 2018.9 – 2021.6"></a>华东师范大学 · 计算机科学与技术 · 硕士 <em>2018.9 – 2021.6</em></h3><p>专业排名 1/105</p>
+<h3 id="华东师范大学-·-计算机科学与技术-·-学士-2014-9-–-2018-6"><a href="#华东师范大学-·-计算机科学与技术-·-学士-2014-9-–-2018-6" class="headerlink" title="华东师范大学 · 计算机科学与技术 · 学士 2014.9 – 2018.6"></a>华东师范大学 · 计算机科学与技术 · 学士 <em>2014.9 – 2018.6</em></h3><p>专业排名 1/110</p>
+<h2 id="工作经历"><a href="#工作经历" class="headerlink" title="工作经历"></a>工作经历</h2><h3 id="字节跳动-AI-Lab-·-算法工程师-2021-7-–-至今"><a href="#字节跳动-AI-Lab-·-算法工程师-2021-7-–-至今" class="headerlink" title="字节跳动 AI Lab · 算法工程师 2021.7 – 至今"></a>字节跳动 AI Lab · 算法工程师 <em>2021.7 – 至今</em></h3><ul>
+<li><strong>大模型训练</strong> <em>（2023.4 – 至今）</em><br>基于 DeepSpeed 和 Megatron 框架进行大模型训练，支持 300 亿参数规模，集成 Flash Attention，支持 finetune。</li>
+<li><strong>AI 绘画</strong> <em>（2023.1 – 2023.3）</em><br>基于 Stable Diffusion 的 AI 绘画项目，集成 Textual Inversion、LoRA、ControlNet 等技术。</li>
+<li><strong>LightSeq 推理/训练加速引擎</strong> <em>（2021.2 – 2022.12）</em><br>开源项目 <a href="https://github.com/bytedance/lightseq" target="_blank" rel="noopener">github.com/bytedance/lightseq</a>，GitHub 2900+ Star。支持 FP32/FP16/INT8 多精度，Transformer 系列模型推理加速最高 14 倍，训练加速最高 3.5 倍。</li>
+</ul>
+<h3 id="字节跳动-AI-Lab-·-研究实习生-2020-5-–-2021-6"><a href="#字节跳动-AI-Lab-·-研究实习生-2020-5-–-2021-6" class="headerlink" title="字节跳动 AI Lab · 研究实习生 2020.5 – 2021.6"></a>字节跳动 AI Lab · 研究实习生 <em>2020.5 – 2021.6</em></h3><ul>
+<li><strong>端侧模型压缩与部署</strong> <em>（2020.5 – 2021.1）</em><br>Transformer 模型压缩，模型大小缩小至原来的 1/20，使用 TFLite + Swift 部署到 iOS 端。</li>
+</ul>
+<h2 id="学术论文"><a href="#学术论文" class="headerlink" title="学术论文"></a>学术论文</h2><p><strong>LightSeq2: Accelerated Training for Transformer-based Models on GPUs</strong><br>SC 2022 <code>CCF A</code><br>提出 LightSeq2 训练加速引擎，支持 BERT、GPT、ViT 等 Transformer 模型训练加速，相比 PyTorch 和 TensorFlow 最高加速 3.5 倍。<br><a href="https://dl.acm.org/doi/abs/10.5555/3571885.3571935" target="_blank" rel="noopener">[论文链接]</a></p>
+<p><strong>LightSeq: A High Performance Inference Library for Transformers</strong><br>NAACL 2021 Industry Track <code>CCF C</code><br>提出 LightSeq 推理加速引擎，支持 BERT、GPT、ViT 等 Transformer 模型推理加速，相比 TensorFlow 最高加速 14 倍。<br><a href="https://aclanthology.org/2021.naacl-industry.15" target="_blank" rel="noopener">[论文链接]</a></p>
+<p><strong>A Span-based Linearization for Constituent Trees</strong><br>ACL 2020 <code>CCF A</code><br>提出基于 Span 的成分句法树线性化方法，将时间复杂度从 O(n³) 降低到 O(n log n)。<br><a href="https://aclanthology.org/2020.acl-main.299" target="_blank" rel="noopener">[论文链接]</a></p>
+<h2 id="荣誉奖项"><a href="#荣誉奖项" class="headerlink" title="荣誉奖项"></a>荣誉奖项</h2><table>
+<thead>
+<tr>
+<th>奖项</th>
+<th>年份</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>国家奖学金（研究生）</td>
+<td>2021</td>
+</tr>
+<tr>
+<td>国家奖学金（本科生）</td>
+<td>2020</td>
+</tr>
+<tr>
+<td>国家奖学金（本科生）</td>
+<td>2015</td>
+</tr>
+<tr>
+<td>ACM-ICPC 亚洲区域赛奖牌</td>
+<td>2017</td>
+</tr>
+<tr>
+<td>ACM-ICPC 亚洲区域赛奖牌</td>
+<td>2016</td>
+</tr>
+</tbody></table>
+<h2 id="技能-amp-其他"><a href="#技能-amp-其他" class="headerlink" title="技能 &amp; 其他"></a>技能 &amp; 其他</h2><table>
+<thead>
+<tr>
+<th>类别</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>编程语言</td>
+<td>Python, C++, C, CUDA</td>
+</tr>
+<tr>
+<td>框架工具</td>
+<td>PyTorch, TensorFlow</td>
+</tr>
+<tr>
+<td>个人博客</td>
+<td><a href="https://godweiyang.com">godweiyang.com</a></td>
+</tr>
+<tr>
+<td>GitHub</td>
+<td><a href="https://github.com/godweiyang" target="_blank" rel="noopener">github.com/godweiyang</a></td>
+</tr>
+<tr>
+<td>知乎</td>
+<td><a href="https://www.zhihu.com/people/godweiyang" target="_blank" rel="noopener">23,000+ 关注者</a></td>
+</tr>
+<tr>
+<td>微信公众号</td>
+<td>算法码上来（11,000+ 关注者）</td>
+</tr>
+</tbody></table>
 
-        <div class="header">
-            <h1>韦阳</h1>
-            <div class="contact-info">
-                <span>📧 <a href="mailto:i@godweiyang.com">i@godweiyang.com</a></span>
-                <span class="sep">·</span>
-                <span>📱 15221856016</span>
-                <span class="sep">·</span>
-                <span>🌐 <a href="https://godweiyang.com" target="_blank">godweiyang.com</a></span>
-                <span class="sep">·</span>
-                <span>💻 <a href="https://github.com/godweiyang" target="_blank">GitHub</a></span>
-                <span class="sep">·</span>
-                <span>📝 <a href="https://www.zhihu.com/people/godweiyang" target="_blank">知乎</a></span>
-            </div>
         </div>
-
-        <section>
-            <h2>教育背景</h2>
-
-            <div class="entry">
-                <div class="entry-header">
-                    <span class="entry-title">华东师范大学 · 计算机科学与技术 · 硕士</span>
-                    <span class="entry-meta">2018.9 – 2021.6</span>
-                </div>
-                <div class="entry-subtitle">专业排名 1/105</div>
-            </div>
-
-            <div class="entry">
-                <div class="entry-header">
-                    <span class="entry-title">华东师范大学 · 计算机科学与技术 · 学士</span>
-                    <span class="entry-meta">2014.9 – 2018.6</span>
-                </div>
-                <div class="entry-subtitle">专业排名 1/110</div>
-            </div>
-        </section>
-
-        <section>
-            <h2>工作经历</h2>
-
-            <div class="entry">
-                <div class="entry-header">
-                    <span class="entry-title">字节跳动 AI Lab · 算法工程师</span>
-                    <span class="entry-meta">2021.7 – 至今</span>
-                </div>
-                <div class="entry-body">
-                    <ul>
-                        <li>
-                            <span class="project-title">大模型训练</span>
-                            <span class="entry-meta">（2023.4 – 至今）</span>
-                            <br>基于 DeepSpeed 和 Megatron 框架进行大模型训练，支持 300 亿参数规模，集成 Flash Attention，支持 finetune。
-                        </li>
-                        <li>
-                            <span class="project-title">AI 绘画</span>
-                            <span class="entry-meta">（2023.1 – 2023.3）</span>
-                            <br>基于 Stable Diffusion 的 AI 绘画项目，集成 Textual Inversion、LoRA、ControlNet 等技术。
-                        </li>
-                        <li>
-                            <span class="project-title">LightSeq 推理/训练加速引擎</span>
-                            <span class="entry-meta">（2021.2 – 2022.12）</span>
-                            <br>开源项目 <a href="https://github.com/bytedance/lightseq" target="_blank">github.com/bytedance/lightseq</a>，GitHub 2900+ Star。支持 FP32/FP16/INT8 多精度，Transformer 系列模型推理加速最高 14 倍，训练加速最高 3.5 倍。
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="entry">
-                <div class="entry-header">
-                    <span class="entry-title">字节跳动 AI Lab · 研究实习生</span>
-                    <span class="entry-meta">2020.5 – 2021.6</span>
-                </div>
-                <div class="entry-body">
-                    <ul>
-                        <li>
-                            <span class="project-title">端侧模型压缩与部署</span>
-                            <span class="entry-meta">（2020.5 – 2021.1）</span>
-                            <br>Transformer 模型压缩，模型大小缩小至原来的 1/20，使用 TFLite + Swift 部署到 iOS 端。
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <section>
-            <h2>学术论文</h2>
-
-            <div class="pub">
-                <div class="pub-title">LightSeq2: Accelerated Training for Transformer-based Models on GPUs</div>
-                <div class="pub-venue">SC 2022 &nbsp;<span class="tag">CCF A</span></div>
-                <div class="pub-desc">
-                    提出 LightSeq2 训练加速引擎，支持 BERT、GPT、ViT 等 Transformer 模型训练加速，相比 PyTorch 和 TensorFlow 最高加速 3.5 倍。
-                    <br><a href="https://dl.acm.org/doi/abs/10.5555/3571885.3571935" target="_blank">[论文链接]</a>
-                </div>
-            </div>
-
-            <div class="pub">
-                <div class="pub-title">LightSeq: A High Performance Inference Library for Transformers</div>
-                <div class="pub-venue">NAACL 2021 Industry Track &nbsp;<span class="tag">CCF C</span></div>
-                <div class="pub-desc">
-                    提出 LightSeq 推理加速引擎，支持 BERT、GPT、ViT 等 Transformer 模型推理加速，相比 TensorFlow 最高加速 14 倍。
-                    <br><a href="https://aclanthology.org/2021.naacl-industry.15" target="_blank">[论文链接]</a>
-                </div>
-            </div>
-
-            <div class="pub">
-                <div class="pub-title">A Span-based Linearization for Constituent Trees</div>
-                <div class="pub-venue">ACL 2020 &nbsp;<span class="tag">CCF A</span></div>
-                <div class="pub-desc">
-                    提出基于 Span 的成分句法树线性化方法，将时间复杂度从 O(n³) 降低到 O(n log n)。
-                    <br><a href="https://aclanthology.org/2020.acl-main.299" target="_blank">[论文链接]</a>
-                </div>
-            </div>
-        </section>
-
-        <section>
-            <h2>荣誉奖项</h2>
-            <ul class="awards-list">
-                <li><span>国家奖学金（研究生）</span><span class="entry-meta">2021</span></li>
-                <li><span>国家奖学金（本科生）</span><span class="entry-meta">2020</span></li>
-                <li><span>国家奖学金（本科生）</span><span class="entry-meta">2015</span></li>
-                <li><span>ACM-ICPC 亚洲区域赛奖牌</span><span class="entry-meta">2017</span></li>
-                <li><span>ACM-ICPC 亚洲区域赛奖牌</span><span class="entry-meta">2016</span></li>
-            </ul>
-        </section>
-
-        <section>
-            <h2>技能 &amp; 其他</h2>
-            <dl class="skills-grid">
-                <dt>编程语言</dt>
-                <dd>Python, C++, C, CUDA</dd>
-                <dt>框架工具</dt>
-                <dd>PyTorch, TensorFlow</dd>
-                <dt>个人博客</dt>
-                <dd><a href="https://godweiyang.com" target="_blank">godweiyang.com</a></dd>
-                <dt>GitHub</dt>
-                <dd><a href="https://github.com/godweiyang" target="_blank">github.com/godweiyang</a></dd>
-                <dt>知乎</dt>
-                <dd><a href="https://www.zhihu.com/people/godweiyang" target="_blank">23,000+ 关注者</a></dd>
-                <dt>微信公众号</dt>
-                <dd>算法码上来（11,000+ 关注者）</dd>
-            </dl>
-        </section>
-
         <div class="footer">
             <a href="/medias/files/cv-zh.pdf" target="_blank">📄 下载 PDF 版本</a>
         </div>
-
     </div>
 </body>
 </html>
+
