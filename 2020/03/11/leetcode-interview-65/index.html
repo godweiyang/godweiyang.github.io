@@ -761,28 +761,28 @@ a = 1, b = 1
     </div>
 
     
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
-<link rel="stylesheet" href="/css/my-gitalk.css">
-
-<div class="card gitalk-card" data-aos="fade-up">
-    <div id="gitalk-container" class="card-content"></div>
+    <div class="card giscus-card" data-aos="fade-up">
+    <div class="card-content">
+        <script src="https://giscus.app/client.js"
+                data-repo="godweiyang/godweiyang.github.io"
+                data-repo-id="MDEwOlJlcG9zaXRvcnkxMDMwOTU0MTQ="
+                data-category="Announcements"
+                data-category-id="DIC_kwDOBiUcds4C3YZn"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="top"
+                data-theme="light"
+                data-lang="zh-CN"
+                crossorigin="anonymous"
+                async>
+        </script>
+    </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
-<script>
-    let gitalk = new Gitalk({
-        clientID: 'c3ac6e20697ee5422b43',
-        clientSecret: '3ccf19d2ec7e33b55f71aaeec74542a3938772f6',
-        repo: 'godweiyang.github.io',
-        owner: 'godweiyang',
-        admin: "godweiyang",
-        id: decodeURI(window.location.pathname),
-        distractionFreeMode: false,
-        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token'
-    });
+    
 
-    gitalk.render('gitalk-container');
-</script>
     
 
     
