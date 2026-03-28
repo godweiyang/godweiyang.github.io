@@ -2,6 +2,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://godweiyang.com/about/index.html</loc>
+    
+    <lastmod>2026-03-28T07:12:55.149Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://godweiyang.com/contact/index.html</loc>
+    
+    <lastmod>2026-03-28T06:55:48.925Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://godweiyang.com/friends/index.html</loc>
+    
+    <lastmod>2026-03-28T06:55:45.538Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://godweiyang.com/2020/08/30/acl20-yangwei-parsing/</loc>
     
     <lastmod>2026-03-06T13:57:49.462Z</lastmod>
@@ -12,20 +33,6 @@
     <loc>https://godweiyang.com/tags/index.html</loc>
     
     <lastmod>2026-03-06T13:17:34.272Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://godweiyang.com/friends/index.html</loc>
-    
-    <lastmod>2026-03-06T13:17:34.270Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://godweiyang.com/contact/index.html</loc>
-    
-    <lastmod>2026-03-06T13:17:34.270Z</lastmod>
     
   </url>
   
@@ -52,13 +59,6 @@
   
   <url>
     <loc>https://godweiyang.com/2019/07/27/wordcloud/</loc>
-    
-    <lastmod>2026-03-06T13:17:34.199Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://godweiyang.com/about/index.html</loc>
     
     <lastmod>2026-03-06T13:17:34.199Z</lastmod>
     
