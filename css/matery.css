@@ -144,6 +144,7 @@ pre {
   margin: 1rem 0 !important;
   background: #272822;
   overflow: auto;
+  position: relative;
   border-radius: 0.35rem;
   tab-size: 4;
 }

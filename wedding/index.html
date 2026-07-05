@@ -1,0 +1,975 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>我们结婚啦</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;700&display=swap');
+
+        :root {
+            --gold: #d4a853;
+            --gold-light: #f0d48a;
+            --rose: #e8a0b4;
+            --rose-dark: #c77d94;
+            --bg-dark: #1a0a1e;
+            --bg-section: #120812;
+            --text-light: #f5ede3;
+            --text-muted: #c9b8a8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Noto Serif SC', serif;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* ===== Particle Canvas ===== */
+        #particles-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ===== Hero Section ===== */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px 20px;
+            background: radial-gradient(ellipse at center, rgba(212,168,83,0.08) 0%, transparent 70%);
+            z-index: 1;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(212,168,83,0.03), transparent, rgba(232,160,180,0.03), transparent);
+            animation: heroRotate 20s linear infinite;
+        }
+
+        @keyframes heroRotate {
+            to { transform: rotate(360deg); }
+        }
+
+        .hero-badge {
+            font-size: 14px;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeInUp 1s 0.3s forwards;
+        }
+
+        .hero-photo {
+            position: relative;
+            width: 220px; height: 220px;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeInScale 1.2s 0.5s forwards;
+        }
+
+        .hero-photo img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid var(--gold);
+            box-shadow: 0 0 40px rgba(212,168,83,0.3), 0 0 80px rgba(212,168,83,0.1);
+        }
+
+        .hero-photo::after {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            border: 1px solid rgba(212,168,83,0.3);
+            animation: pulse-ring 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-ring {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.5; }
+        }
+
+        .hero-names {
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 3.2em;
+            background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--rose));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            opacity: 0;
+            animation: fadeInUp 1s 0.8s forwards;
+        }
+
+        .hero-ampersand {
+            display: inline-block;
+            margin: 0 10px;
+            font-size: 0.7em;
+            vertical-align: middle;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1em;
+            color: var(--text-muted);
+            letter-spacing: 3px;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeInUp 1s 1s forwards;
+        }
+
+        .hero-date {
+            font-size: 1.6em;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 2px;
+            padding: 12px 30px;
+            border: 1px solid rgba(212,168,83,0.4);
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            animation: fadeInUp 1s 1.2s forwards;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 30px;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            width: fit-content;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            font-size: 12px;
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: fadeInUp 1s 1.5s forwards;
+        }
+
+        .scroll-hint .arrow {
+            width: 20px; height: 20px;
+            border-right: 2px solid var(--gold);
+            border-bottom: 2px solid var(--gold);
+            transform: rotate(45deg);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: rotate(45deg) translateY(0); }
+            40% { transform: rotate(45deg) translateY(8px); }
+            60% { transform: rotate(45deg) translateY(4px); }
+        }
+
+        /* ===== Section Styles ===== */
+        .section {
+            position: relative;
+            padding: 80px 20px;
+            z-index: 1;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 2.4em;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+
+        .section-title .divider {
+            width: 60px; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 0 auto;
+        }
+
+        /* ===== Love Story Section ===== */
+        .story-section {
+            background: linear-gradient(180deg, transparent, rgba(212,168,83,0.02), transparent);
+        }
+
+        .story-content {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+            line-height: 2;
+            color: var(--text-muted);
+            font-size: 1.05em;
+        }
+
+        .story-content p {
+            margin-bottom: 20px;
+        }
+
+        /* ===== Gallery Section ===== */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            position: relative;
+            aspect-ratio: 3/4;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(212,168,83,0.2);
+        }
+
+        .gallery-item img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-item .overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(26,10,30,0.7), transparent);
+            display: flex;
+            align-items: flex-end;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .gallery-item:hover .overlay {
+            opacity: 1;
+        }
+
+        .gallery-item .overlay span {
+            color: var(--gold-light);
+            font-size: 0.9em;
+            letter-spacing: 1px;
+        }
+
+        /* ===== Timeline Section ===== */
+        .timeline {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px; top: 0;
+            width: 2px; height: 100%;
+            background: linear-gradient(to bottom, var(--gold), var(--rose), var(--gold));
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 40px;
+            padding: 20px 25px;
+            background: rgba(212,168,83,0.05);
+            border: 1px solid rgba(212,168,83,0.15);
+            border-radius: 12px;
+            backdrop-filter: blur(5px);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .timeline-item:hover {
+            transform: translateX(5px);
+            border-color: rgba(212,168,83,0.4);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -33px; top: 28px;
+            width: 12px; height: 12px;
+            background: var(--gold);
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(212,168,83,0.5);
+        }
+
+        .timeline-item .time {
+            font-size: 0.85em;
+            color: var(--gold);
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .timeline-item .event {
+            font-size: 1.1em;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .timeline-item .desc {
+            font-size: 0.9em;
+            color: var(--text-muted);
+        }
+
+        /* ===== Info Cards ===== */
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, rgba(212,168,83,0.08), rgba(232,160,180,0.05));
+            border: 1px solid rgba(212,168,83,0.2);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(212,168,83,0.15);
+        }
+
+        .info-card .icon {
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+
+        .info-card h3 {
+            font-size: 1.2em;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+
+        .info-card p {
+            font-size: 0.95em;
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        /* ===== Countdown ===== */
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .countdown-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 70px;
+        }
+
+        .countdown-item .number {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: var(--gold);
+            line-height: 1;
+            text-shadow: 0 0 20px rgba(212,168,83,0.3);
+        }
+
+        .countdown-item .label {
+            font-size: 0.8em;
+            color: var(--text-muted);
+            margin-top: 8px;
+            letter-spacing: 2px;
+        }
+
+        /* ===== RSVP Section ===== */
+        .rsvp-section {
+            text-align: center;
+        }
+
+        .rsvp-qr {
+            width: 180px; height: 180px;
+            margin: 30px auto;
+            border-radius: 12px;
+            border: 2px solid rgba(212,168,83,0.3);
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(212,168,83,0.1);
+        }
+
+        .rsvp-qr img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+        }
+
+        .rsvp-text {
+            color: var(--text-muted);
+            font-size: 0.95em;
+            line-height: 1.8;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .rsvp-contact {
+            margin-top: 25px;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .rsvp-contact a {
+            color: var(--gold);
+            text-decoration: none;
+            font-size: 0.95em;
+            padding: 10px 24px;
+            border: 1px solid rgba(212,168,83,0.4);
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .rsvp-contact a:hover {
+            background: rgba(212,168,83,0.1);
+            border-color: var(--gold);
+            box-shadow: 0 0 15px rgba(212,168,83,0.2);
+        }
+
+        /* ===== Footer ===== */
+        .wedding-footer {
+            text-align: center;
+            padding: 60px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .wedding-footer .heart {
+            font-size: 2em;
+            animation: heartbeat 1.5s infinite;
+            display: inline-block;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            14% { transform: scale(1.2); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.2); }
+            56% { transform: scale(1); }
+        }
+
+        .wedding-footer p {
+            color: var(--text-muted);
+            font-size: 0.9em;
+            margin-top: 15px;
+            letter-spacing: 2px;
+        }
+
+        /* ===== Animations ===== */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== Music Button ===== */
+        .music-btn {
+            position: fixed;
+            top: 20px; right: 20px;
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            border: 1px solid rgba(212,168,83,0.4);
+            background: rgba(26,10,30,0.8);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .music-btn:hover {
+            border-color: var(--gold);
+            box-shadow: 0 0 15px rgba(212,168,83,0.3);
+        }
+
+        .music-btn .bars {
+            display: flex;
+            gap: 2px;
+            align-items: flex-end;
+            height: 16px;
+        }
+
+        .music-btn .bar {
+            width: 3px;
+            background: var(--gold);
+            border-radius: 2px;
+            animation: musicBar 0.8s ease-in-out infinite alternate;
+        }
+
+        .music-btn .bar:nth-child(1) { height: 6px; animation-delay: 0s; }
+        .music-btn .bar:nth-child(2) { height: 12px; animation-delay: 0.2s; }
+        .music-btn .bar:nth-child(3) { height: 8px; animation-delay: 0.4s; }
+        .music-btn .bar:nth-child(4) { height: 14px; animation-delay: 0.1s; }
+
+        @keyframes musicBar {
+            from { height: 4px; }
+            to { height: 16px; }
+        }
+
+        .music-btn.paused .bar {
+            animation: none;
+            height: 3px !important;
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 768px) {
+            .hero-names { font-size: 2.4em; }
+            .hero-photo { width: 180px; height: 180px; }
+            .hero-date { font-size: 1.2em; padding: 10px 24px; }
+            .section { padding: 60px 16px; }
+            .section-title h2 { font-size: 2em; }
+            .gallery { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .countdown-item .number { font-size: 2em; }
+            .timeline { padding-left: 35px; }
+            .info-cards { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 400px) {
+            .hero-names { font-size: 2em; }
+            .hero-photo { width: 150px; height: 150px; }
+            .countdown { gap: 12px; }
+            .countdown-item .number { font-size: 1.6em; }
+            .gallery { grid-template-columns: 1fr; }
+        }
+
+        /* ===== Map Section ===== */
+        .map-wrapper {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        #amap-container {
+            width: 100%;
+            height: 350px;
+            border-radius: 16px;
+            border: 1px solid rgba(212,168,83,0.2);
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .nav-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 36px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            color: var(--bg-dark);
+            font-weight: 700;
+            font-size: 1em;
+            text-decoration: none;
+            border-radius: 30px;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(212,168,83,0.3);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212,168,83,0.5);
+        }
+
+        @media (max-width: 768px) {
+            #amap-container { height: 280px; }
+        }
+
+        /* ===== Placeholder Images ===== */
+        .placeholder-img {
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(212,168,83,0.15), rgba(232,160,180,0.1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 0.85em;
+            letter-spacing: 1px;
+        }
+    </style>
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="韦阳的博客" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+<body>
+    <!-- Background Particles -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- Music Button -->
+    <div class="music-btn paused" id="musicBtn" onclick="toggleMusic()">
+        <div class="bars">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </div>
+    <!-- BGM: 恶作剧 — 替换 src 为你自己的音频文件路径 -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="/medias/wedding-bgm.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-badge">WE ARE GETTING MARRIED</div>
+        <div class="hero-photo">
+            <!-- TODO: 替换为你们的合照 -->
+            <img src="https://picsum.photos/400/400?random=1" alt="合照">
+        </div>
+        <h1 class="hero-names">
+            <span>韦阳</span>
+            <span class="hero-ampersand">&</span>
+            <span>沙陈雯</span>
+        </h1>
+        <p class="hero-subtitle">诚邀您见证我们的幸福时刻</p>
+        <div class="hero-date">2026年5月16日</div>
+        <div class="scroll-hint">
+            <span>往下滑动</span>
+            <div class="arrow"></div>
+        </div>
+    </section>
+
+    <!-- Love Story -->
+    <section class="section story-section">
+        <div class="section-title reveal">
+            <h2>我们的故事</h2>
+            <div class="divider"></div>
+        </div>
+        <div class="story-content reveal">
+            <!-- TODO: 替换为你们的爱情故事 -->
+            <p>在那个阳光明媚的午后，我们在校园的图书馆相遇。你手里捧着一本《小王子》，阳光透过窗户洒在你的侧脸上，那一刻，时间仿佛静止了。</p>
+            <p>从相识到相知，从相知到相爱，我们一起走过了春夏秋冬，一起看过了日出日落。每一个平凡的日子，因为有你，都变得闪闪发光。</p>
+            <p>如今，我们决定携手走进婚姻的殿堂，开启人生新的篇章。感谢命运让我们相遇，感谢你愿意与我共度余生。</p>
+        </div>
+    </section>
+
+    <!-- Photo Gallery -->
+    <section class="section">
+        <div class="section-title reveal">
+            <h2>甜蜜瞬间</h2>
+            <div class="divider"></div>
+        </div>
+        <div class="gallery reveal">
+            <!-- TODO: 替换为你们的照片 -->
+            <div class="gallery-item">
+                <img src="https://picsum.photos/400/530?random=2" alt="照片1">
+                <div class="overlay"><span>初次约会</span></div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://picsum.photos/400/530?random=3" alt="照片2">
+                <div class="overlay"><span>一起旅行</span></div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://picsum.photos/400/530?random=4" alt="照片3">
+                <div class="overlay"><span>求婚纪念</span></div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://picsum.photos/400/530?random=5" alt="照片4">
+                <div class="overlay"><span>领证啦</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline -->
+    <section class="section">
+        <div class="section-title reveal">
+            <h2>婚礼流程</h2>
+            <div class="divider"></div>
+        </div>
+        <div class="timeline reveal">
+            <div class="timeline-item">
+                <div class="time">14:30</div>
+                <div class="event">迎宾签到</div>
+                <div class="desc">宾客到场签到，合影留念</div>
+            </div>
+            <div class="timeline-item">
+                <div class="time">15:00</div>
+                <div class="event">婚礼仪式</div>
+                <div class="desc">交换誓词，见证幸福时刻</div>
+            </div>
+            <div class="timeline-item">
+                <div class="time">16:00</div>
+                <div class="event">婚宴开席</div>
+                <div class="desc">共享喜悦，举杯庆贺</div>
+            </div>
+            <div class="timeline-item">
+                <div class="time">17:30</div>
+                <div class="event">互动环节</div>
+                <div class="desc">游戏互动，抛花球</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Wedding Info -->
+    <section class="section">
+        <div class="section-title reveal">
+            <h2>婚礼信息</h2>
+            <div class="divider"></div>
+        </div>
+        <div class="info-cards reveal">
+            <div class="info-card">
+                <div class="icon">📅</div>
+                <h3>时间</h3>
+                <p>2026年5月16日<br>星期六 下午15:00</p>
+            </div>
+            <div class="info-card">
+                <div class="icon">📍</div>
+                <h3>地点</h3>
+                <p>上海市崇明区<br>香朵开心农场</p>
+            </div>
+        </div>
+
+        <!-- Countdown -->
+        <div class="countdown reveal" id="countdown">
+            <div class="countdown-item">
+                <span class="number" id="days">--</span>
+                <span class="label">天</span>
+            </div>
+            <div class="countdown-item">
+                <span class="number" id="hours">--</span>
+                <span class="label">时</span>
+            </div>
+            <div class="countdown-item">
+                <span class="number" id="minutes">--</span>
+                <span class="label">分</span>
+            </div>
+            <div class="countdown-item">
+                <span class="number" id="seconds">--</span>
+                <span class="label">秒</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Map Section -->
+    <section class="section">
+        <div class="section-title reveal">
+            <h2>婚礼地点</h2>
+            <div class="divider"></div>
+        </div>
+        <div class="map-wrapper reveal">
+            <div id="amap-container"></div>
+            <p style="color: var(--text-muted); margin-top: 15px; font-size: 0.9em;">上海市崇明区庙镇小星公路1500号</p>
+            <a class="nav-btn" href="https://uri.amap.com/marker?position=121.358300,31.626800&name=香朵开心农场&src=wedding&callnative=1" target="_blank">
+                导航到这里
+            </a>
+        </div>
+    </section>
+
+    <!-- RSVP -->
+    <section class="section rsvp-section">
+        <div class="section-title reveal">
+            <h2>敬请出席</h2>
+            <div class="divider"></div>
+        </div>
+        <div class="reveal">
+            <p class="rsvp-text">您的到来，是我们最大的荣幸。<br>如需确认出席或有任何疑问，请联系我们。</p>
+            <div class="rsvp-qr">
+                <!-- TODO: 替换为你的微信二维码或地图导航二维码 -->
+                <div class="placeholder-img">二维码占位</div>
+            </div>
+            <div class="rsvp-contact">
+                <a href="tel:15221856016">韦阳: 152-2185-6016</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="wedding-footer">
+        <div class="heart">💕</div>
+        <p>韦阳 & 沙陈雯 · 2026.5.16</p>
+    </footer>
+
+    <script>
+        // ===== Particle System =====
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.3;
+                this.speedY = (Math.random() - 0.5) * 0.3;
+                this.opacity = Math.random() * 0.5 + 0.1;
+                this.hue = Math.random() > 0.5 ? 42 : 340;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                    this.reset();
+                }
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `hsla(${this.hue}, 60%, 60%, ${this.opacity})`;
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 60; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // ===== Scroll Reveal =====
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.15 });
+
+        reveals.forEach(el => observer.observe(el));
+
+        // ===== Countdown =====
+        const weddingDate = new Date('2026-05-16T15:00:00').getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+
+            if (distance < 0) {
+                document.getElementById('days').textContent = '0';
+                document.getElementById('hours').textContent = '0';
+                document.getElementById('minutes').textContent = '0';
+                document.getElementById('seconds').textContent = '0';
+                return;
+            }
+
+            document.getElementById('days').textContent = Math.floor(distance / (1000 * 60 * 60 * 24));
+            document.getElementById('hours').textContent = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            document.getElementById('minutes').textContent = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            document.getElementById('seconds').textContent = Math.floor((distance % (1000 * 60)) / 1000);
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        // ===== Music Control =====
+        const bgAudio = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicBtn');
+
+        function playMusic() {
+            bgAudio.play().then(() => {
+                musicBtn.classList.remove('paused');
+            }).catch(() => {});
+        }
+
+        function toggleMusic() {
+            if (bgAudio.paused) {
+                playMusic();
+            } else {
+                bgAudio.pause();
+                musicBtn.classList.add('paused');
+            }
+        }
+
+        // 尝试自动播放；若浏览器拦截，则在首次用户交互时播放
+        playMusic();
+        const autoplayEvents = ['touchstart', 'click', 'scroll'];
+        function onFirstInteraction() {
+            if (bgAudio.paused) playMusic();
+            autoplayEvents.forEach(e => document.removeEventListener(e, onFirstInteraction));
+        }
+        autoplayEvents.forEach(e => document.addEventListener(e, onFirstInteraction, { once: true }));
+    </script>
+
+    <!-- 高德地图 JS API -->
+    <script src="https://webapi.amap.com/maps?v=2.0&key=YOUR_AMAP_KEY"></script>
+    <script>
+        // TODO: 将上面 script 标签中的 YOUR_AMAP_KEY 替换为你申请的高德地图 Web端(JS API) Key
+        // 申请地址: https://console.amap.com/dev/key/app
+        var map = new AMap.Map('amap-container', {
+            zoom: 14,
+            center: [121.358300, 31.626800],
+            mapStyle: 'amap://styles/dark',
+            viewMode: '2D'
+        });
+
+        var marker = new AMap.Marker({
+            position: [121.358300, 31.626800],
+            title: '香朵开心农场'
+        });
+        map.add(marker);
+
+        var infoWindow = new AMap.InfoWindow({
+            content: '<div style="padding:8px 12px;font-size:14px;color:#333;"><strong>香朵开心农场</strong><br><span style="font-size:12px;color:#666;">上海市崇明区庙镇小星公路1500号</span></div>',
+            offset: new AMap.Pixel(0, -30)
+        });
+        infoWindow.open(map, [121.358300, 31.626800]);
+    </script>
+</body>
+</html>
+

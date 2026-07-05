@@ -1,1 +1,120 @@
 /* Here is your custom css styles. */
+
+/* Compatibility styling for Hexo highlight output (<figure class="highlight">...) */
+figure.highlight {
+  margin: 1rem 0;
+}
+
+figure.highlight table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+figure.highlight td {
+  border: 0;
+  padding: 0;
+}
+
+figure.highlight pre {
+  margin: 0 !important;
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: #ccc;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Prevent theme `.title { font-size: 2rem; }` etc from affecting code tokens. */
+figure.highlight .title,
+figure.highlight .class_,
+figure.highlight .function_ {
+  font-size: inherit !important;
+  line-height: inherit !important;
+  margin: 0 !important;
+  font-weight: inherit !important;
+}
+
+/* Highlight.js-like token colors for <figure class="highlight"> output */
+figure.highlight .comment,
+figure.highlight .block-comment,
+figure.highlight .prolog,
+figure.highlight .doctype,
+figure.highlight .cdata {
+  color: #999;
+}
+
+figure.highlight .punctuation {
+  color: #ccc;
+}
+
+figure.highlight .tag,
+figure.highlight .attr-name,
+figure.highlight .attr,
+figure.highlight .attribute,
+figure.highlight .name,
+figure.highlight .namespace,
+figure.highlight .deleted {
+  color: #e2777a;
+}
+
+figure.highlight .function-name,
+figure.highlight .title,
+figure.highlight .function_ {
+  color: #6196cc;
+}
+
+figure.highlight .boolean,
+figure.highlight .number,
+figure.highlight .literal {
+  color: #f08d49;
+}
+
+figure.highlight .property,
+figure.highlight .class-name,
+figure.highlight .class_,
+figure.highlight .type,
+figure.highlight .constant,
+figure.highlight .symbol,
+figure.highlight .params {
+  color: #f8c555;
+}
+
+figure.highlight .selector,
+figure.highlight .selector-class,
+figure.highlight .selector-id,
+figure.highlight .selector-tag,
+figure.highlight .important,
+figure.highlight .atrule,
+figure.highlight .keyword,
+figure.highlight .builtin,
+figure.highlight .built_in {
+  color: #cc99cd;
+}
+
+figure.highlight .meta {
+  color: #999;
+}
+
+figure.highlight .string,
+figure.highlight .char,
+figure.highlight .attr-value,
+figure.highlight .regex,
+figure.highlight .variable {
+  color: #7ec699;
+}
+
+figure.highlight .operator,
+figure.highlight .entity,
+figure.highlight .url {
+  color: #67cdcc;
+}
+
+figure.highlight .important,
+figure.highlight .bold {
+  font-weight: bold;
+}
+
+figure.highlight .italic {
+  font-style: italic;
+}

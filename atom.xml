@@ -6,7 +6,7 @@
   <link href="https://godweiyang.com/atom.xml" rel="self"/>
   
   <link href="https://godweiyang.com/"/>
-  <updated>2026-03-06T13:17:34.112Z</updated>
+  <updated>2026-07-05T12:19:14.909Z</updated>
   <id>https://godweiyang.com/</id>
   
   <author>
@@ -15,6 +15,39 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>我做了一个安卓工具百宝箱，专治生活里的各种“等一下”</title>
+    <link href="https://godweiyang.com/2026/07/05/toolbox-app/"/>
+    <id>https://godweiyang.com/2026/07/05/toolbox-app/</id>
+    <published>2026-07-05T12:17:00.000Z</published>
+    <updated>2026-07-05T12:19:14.909Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;关注公众号【算法码上来】，每日算法干货马上就来！&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&quot;/medias/contact.jpg&quot;&gt;&lt;/p&gt;
+&lt;p&gt;不知道大家有没有这种感觉：手机里的 App</summary>
+        
+      
+    
+    
+    
+    <category term="软件" scheme="https://godweiyang.com/categories/%E8%BD%AF%E4%BB%B6/"/>
+    
+    
+    <category term="Android" scheme="https://godweiyang.com/tags/Android/"/>
+    
+    <category term="工具" scheme="https://godweiyang.com/tags/%E5%B7%A5%E5%85%B7/"/>
+    
+    <category term="App" scheme="https://godweiyang.com/tags/App/"/>
+    
+  </entry>
   
   <entry>
     <title>从多线程到多进程：如何让你的小电影下载飞快？</title>
@@ -567,34 +600,6 @@
     <category term="cuda" scheme="https://godweiyang.com/tags/cuda/"/>
     
     <category term="c++" scheme="https://godweiyang.com/tags/c/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>二零二一年终总结</title>
-    <link href="https://godweiyang.com/2021/12/13/2021-conclusion/"/>
-    <id>https://godweiyang.com/2021/12/13/2021-conclusion/</id>
-    <published>2021-12-13T12:29:45.000Z</published>
-    <updated>2026-03-06T13:17:34.071Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;关注公众号【算法码上来】，每日算法干货马上就来！&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&lt;img</summary>
-        
-      
-    
-    
-    
-    <category term="随笔" scheme="https://godweiyang.com/categories/%E9%9A%8F%E7%AC%94/"/>
-    
-    
-    <category term="年终总结" scheme="https://godweiyang.com/tags/%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/"/>
     
   </entry>
   
