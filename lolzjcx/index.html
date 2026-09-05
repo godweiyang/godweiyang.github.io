@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
@@ -124,7 +124,14 @@ th{background:#f6f3fb}
     </div>
     <div class="row" style="margin-top:8px">
       <input id="copy_white" placeholder="复制白名单：逗号/顿号/空格/换行分隔用户名，这些人不会写入复制内容"
-        style="flex:1;min-width:260px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;font-size:13px;background:#fff;color:var(--ink)">
+        style="flex:1;min-width:220px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;font-size:13px;background:#fff;color:var(--ink)">
+      <span style="display:flex;gap:10px;align-items:center;white-space:nowrap;font-size:13px;color:var(--ink)">
+        <span class="muted">复制明细</span>
+        <label style="display:flex;align-items:center;gap:3px;cursor:pointer"><input type="checkbox" class="cp_tier" value="A" checked>上等马</label>
+        <label style="display:flex;align-items:center;gap:3px;cursor:pointer"><input type="checkbox" class="cp_tier" value="B">中等马</label>
+        <label style="display:flex;align-items:center;gap:3px;cursor:pointer"><input type="checkbox" class="cp_tier" value="C">下等马</label>
+        <label style="display:flex;align-items:center;gap:3px;cursor:pointer"><input type="checkbox" class="cp_tier" value="D" checked>牛马</label>
+      </span>
     </div>
     <div id="queryJobBox" style="display:none;margin-top:10px">
       <div class="progress"><i id="qPbar"></i></div>
@@ -324,15 +331,24 @@ function premadeColors(results){
   return out;
 }
 let liveTimer;
-const WHITE_KEY='lolzjcx_copy_white',QUERY_KEY='lolzjcx_query_input';
+const WHITE_KEY='lolzjcx_copy_white',QUERY_KEY='lolzjcx_query_input',TIER_KEY='lolzjcx_copy_tiers',DEFAULT_TIERS=['A','D'];
 function bindPersist(el,key){
   try{const saved=localStorage.getItem(key);if(saved)el.value=saved;}catch(e){}
   el.addEventListener('input',()=>{try{localStorage.setItem(key,el.value||'');}catch(e){}});
 }
+function selectedTiers(){return ['A','B','C','D'].filter(t=>{const c=document.querySelector(`.cp_tier[value="${t}"]`);return c&&c.checked;});}
 document.addEventListener('DOMContentLoaded',()=>{
   const ta=$('query_input');
   if(ta){ta.addEventListener('input',()=>{clearTimeout(liveTimer);liveTimer=setTimeout(refreshPreview,350)});bindPersist(ta,QUERY_KEY);}
   bindPersist($('copy_white'),WHITE_KEY);
+  // 马型多选：默认上等马+牛马，选择持久化
+  let savedTiers=null;
+  try{const s=localStorage.getItem(TIER_KEY);if(s)savedTiers=JSON.parse(s);}catch(e){}
+  const tiers=savedTiers&&Array.isArray(savedTiers)?savedTiers:DEFAULT_TIERS;
+  document.querySelectorAll('.cp_tier').forEach(c=>{
+    c.checked=tiers.includes(c.value);
+    c.addEventListener('change',()=>{try{localStorage.setItem(TIER_KEY,JSON.stringify(selectedTiers()));}catch(e){}});
+  });
 });
 async function refreshPreview(){try{const list=await call('preview_summoners',$('query_input').value||'');
   const over=list.length>5;
@@ -367,8 +383,8 @@ function copySummary(){
       .slice(0,3).map(fmtMatch).join('、')||'—';
     lines.push(`${r.summoner.name}（${horseLabel(tier)}）常用英雄：${champs}，最近战绩：${rec}`);
   });
-  detail('A',true);   // 上等马：KDA 最高的 3 场
-  detail('D',false);  // 牛马：KDA 最低的 3 场
+  // 按勾选的马型展开详情：牛马取 KDA 最低 3 场，其余类型取最高 3 场；顺序 上→中→下→牛马
+  selectedTiers().forEach(t=>detail(t,t!=='D'));
   copyText(lines.join('\n'));
 }
 async function startQuery(){
