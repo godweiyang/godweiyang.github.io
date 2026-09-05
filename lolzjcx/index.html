@@ -153,7 +153,7 @@ async function call(name,...args){
     opt.body=JSON.stringify(p);
   }
   let resp;
-  try{resp=await rawFetch('/api/'+name,opt);}catch(e){setConnected(false);throw new Error('本地服务未连接，请先启动 Lolso1Tool');}
+  try{resp=await rawFetch('/api/'+name,opt);}catch(e){setConnected(false);throw new Error('本地服务未连接，请先启动 lolzjcx_service');}
   if(!resp.ok)throw new Error('本地服务返回 '+resp.status);
   const r=await resp.json();
   setConnected(true);
