@@ -123,7 +123,7 @@ th{background:#f6f3fb}
       <span id="query_preview" class="muted"></span>
     </div>
     <div class="row" style="margin-top:8px">
-      <input id="copy_white" placeholder="复制白名单：逗号/顿号/空格/换行分隔用户名，这些人不会写入复制内容"
+      <input id="copy_white" placeholder="过滤白名单：这些人直接跳过不查询、也不复制（逗号/顿号/空格/换行分隔，可带#id）"
         style="flex:1;min-width:220px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;font-size:13px;background:#fff;color:var(--ink)">
       <span style="display:flex;gap:10px;align-items:center;white-space:nowrap;font-size:13px;color:var(--ink)">
         <span class="muted">复制明细</span>
@@ -340,7 +340,9 @@ function selectedTiers(){return ['A','B','C','D'].filter(t=>{const c=document.qu
 document.addEventListener('DOMContentLoaded',()=>{
   const ta=$('query_input');
   if(ta){ta.addEventListener('input',()=>{clearTimeout(liveTimer);liveTimer=setTimeout(refreshPreview,350)});bindPersist(ta,QUERY_KEY);}
-  bindPersist($('copy_white'),WHITE_KEY);
+  const wlBox=$('copy_white');
+  bindPersist(wlBox,WHITE_KEY);
+  wlBox.addEventListener('input',()=>{clearTimeout(liveTimer);liveTimer=setTimeout(refreshPreview,300)});
   // 马型多选：默认上等马+牛马，选择持久化
   let savedTiers=null;
   try{const s=localStorage.getItem(TIER_KEY);if(s)savedTiers=JSON.parse(s);}catch(e){}
@@ -350,9 +352,12 @@ document.addEventListener('DOMContentLoaded',()=>{
     c.addEventListener('change',()=>{try{localStorage.setItem(TIER_KEY,JSON.stringify(selectedTiers()));}catch(e){}});
   });
 });
-async function refreshPreview(){try{const list=await call('preview_summoners',$('query_input').value||'');
+async function refreshPreview(){try{const raw=await call('preview_summoners',$('query_input').value||'');
+  const list=applyWhitelist(raw),skipped=raw.length-list.length;
   const over=list.length>5;
-  $('query_preview').innerHTML=`识别到 <b>${list.length}</b> 个`+(over?' <span style="color:var(--red)">（超过 5 个，只取前 5）</span>':'');}catch(e){}}
+  $('query_preview').innerHTML=`识别到 <b>${list.length}</b> 个`
+    +(skipped?` <span class="muted">（已过滤白名单 ${skipped} 个）</span>`:'')
+    +(over?' <span style="color:var(--red)">（超过 5 个，只取前 5）</span>':'');}catch(e){}}
 function clearResults(){$('batchResult').innerHTML='';window.__last=null}
 /* ===== 一键复制战报 ===== */
 const HORSE_LABEL={A:'上等马',B:'中等马',C:'下等马',D:'牛马',N:'暂无评级'};
@@ -363,6 +368,12 @@ function getWhitelist(){const INVIS=new RegExp("[\\u200B-\\u200F\\u202A-\\u202E\
   return ($('copy_white').value||'').split(/[\n,，、;；\s]+/)
   .map(s=>s.replace(INVIS,'').replace(/加入了队伍聊天.*$/,'').split('#')[0].trim())
   .filter(Boolean)}
+// 过滤白名单：命中的召唤师直接剔除（不查询、不复制）。入参为 [{name,tag}]，返回保留项
+function applyWhitelist(list){
+  const wl=new Set(getWhitelist());
+  if(!wl.size)return list;
+  return (list||[]).filter(x=>!wl.has(String(x.name||'').trim()));
+}
 async function copyText(text){
   try{await navigator.clipboard.writeText(text);toast('已复制到剪贴板','s');return}catch(e){}
   try{const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();toast('已复制到剪贴板','s')}
@@ -390,8 +401,11 @@ function copySummary(){
 async function startQuery(){
   if(!online){toast('本地服务未运行，请先点右上角“下载并运行 EXE”','e');return}
   try{
-    let list=await call('preview_summoners',$('query_input').value);
-    if(!list.length){toast('没识别到任何“名字#尾标”','e');return}
+    const raw=await call('preview_summoners',$('query_input').value);
+    if(!raw.length){toast('没识别到任何“名字#尾标”','e');return}
+    const list=applyWhitelist(raw);   // 白名单内的直接不查询，省额度、更快
+    if(!list.length){toast('都在过滤白名单里，没有需要查询的人','e');return}
+    if(raw.length-list.length>0)toast(`已按白名单跳过 ${raw.length-list.length} 人`,'w');
     if(list.length>5){list=list.slice(0,5);toast('一次最多 5 个，已取前 5','w')}
     const text=list.map(x=>`${x.name}#${x.tag}`).join('\n');
     const r=await call('start_batch_query',{summoners:text});
