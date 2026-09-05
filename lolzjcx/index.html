@@ -102,7 +102,7 @@ th{background:#f6f3fb}
         <button class="sec" style="padding:3px 10px" onclick="clearAccounts('all')">清空账号池</button>
         <button class="sec" style="padding:3px 10px" onclick="openData()">数据目录</button></span></h2>
     <div id="poolOverview" class="row" style="margin:0 0 8px;gap:8px"></div>
-    <table><thead><tr><th>编号</th><th>用户名</th><th>占位邮箱</th><th>密码</th><th>状态</th><th>今日剩余/总额</th><th>Cookie</th><th>最近使用</th><th>操作</th></tr></thead>
+    <table><thead><tr><th>编号</th><th>用户名</th><th>占位邮箱</th><th>密码</th><th>状态</th><th>今日可查/总可查(人)</th><th>Cookie</th><th>最近使用</th><th>操作</th></tr></thead>
       <tbody id="accBody"><tr><td colspan="9" class="muted">暂无（首次查询时会自动注册）</td></tr></tbody></table>
     <div id="checkJobBox" style="display:none;margin-top:10px">
       <div class="progress"><i id="cPbar"></i></div>
@@ -245,15 +245,17 @@ async function loadAccounts(){
       else if(r.remaining<=0)st='<span class="tag t-ex">额度用完</span>';
       else if(r.logged_in)st='<span class="tag t-ok">已登录</span>';
       else st='<span class="tag t-no">未检测</span>';
-      const low=r.remaining<=3;
+      // 每完整查 1 人耗 3 次，统一换算成“可查人数”展示
+      const leftP=Math.floor((r.remaining||0)/3),totalP=Math.floor((r.daily_quota||0)/3),usedP=Math.round((r.used_today||0)/3);
+      const low=leftP<=0;
       return `<tr><td><span class="tag t-use">${r.num}</span></td><td>${esc(r.username||'')}</td><td>${esc(r.email||'')}</td><td>${esc(r.password||'')}</td><td>${st}</td>
-      <td><b style="color:${low?'var(--org)':'var(--green)'}">${r.remaining}</b> / ${r.daily_quota}（已用 ${r.used_today}）</td>
+      <td><b style="color:${low?'var(--org)':'var(--green)'}">${leftP}</b> / ${totalP} 人（已查 ${usedP} 人）</td>
       <td>${r.cookie_file?'有':'无'}</td><td>${esc(r.last_used||r.updated_at||'')}</td>
       <td><button class="sec" onclick="delAccount(${r.num})">删除</button></td></tr>`}).join('');
     const ov=await call('pool_overview');
     $('poolOverview').innerHTML=`<span class="tag t-ok">账号 ${ov.count}（可用 ${ov.available}）</span>
-      <span class="tag t-use">今日总剩余 ${ov.total_remaining}</span>
-      <span class="tag t-no">今日已用 ${ov.used_today} / 总额 ${ov.total_quota}</span>
+      <span class="tag t-use">今日还可查 ${Math.floor((ov.total_remaining||0)/3)} 人</span>
+      <span class="tag t-no">今日已查 ${Math.round((ov.used_today||0)/3)} / 共 ${Math.floor((ov.total_quota||0)/3)} 人</span>
       <span class="muted">每完整查 1 人消耗 3 次（约 7 人/号/天），跨天自动恢复</span>`;
   }catch(e){}
 }
@@ -403,8 +405,8 @@ function copySummary(){
       .slice(0,3).map(fmtMatch).join('、')||'—';
     lines.push(`${r.summoner.name}（${horseLabel(tier)}）常用英雄：${champs}，最近战绩：${rec}`);
   });
-  // 按勾选的马型展开详情：牛马取 KDA 最低 3 场，其余类型取最高 3 场；顺序 上→中→下→牛马
-  selectedTiers().forEach(t=>detail(t,t!=='D'));
+  // 按勾选的马型展开详情：上等马/中等马取 KDA 最高 3 场，下等马/牛马取最低 3 场；顺序 上→中→下→牛马
+  selectedTiers().forEach(t=>detail(t,t==='A'||t==='B'));
   copyText(lines.join('\n'));
 }
 async function startQuery(){
