@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
@@ -119,7 +119,12 @@ th{background:#f6f3fb}
       <button onclick="startQuery()">开始查询（≤5）</button>
       <button class="danger" id="stopQuery" disabled onclick="stopJob()">停止</button>
       <button class="sec" onclick="clearResults()">清空结果</button>
+      <button class="sec" onclick="copySummary()">一键复制</button>
       <span id="query_preview" class="muted"></span>
+    </div>
+    <div class="row" style="margin-top:8px">
+      <input id="copy_white" placeholder="复制白名单：逗号/顿号/空格/换行分隔用户名，这些人不会写入复制内容"
+        style="flex:1;min-width:260px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;font-size:13px;background:#fff;color:var(--ink)">
     </div>
     <div id="queryJobBox" style="display:none;margin-top:10px">
       <div class="progress"><i id="qPbar"></i></div>
@@ -319,11 +324,53 @@ function premadeColors(results){
   return out;
 }
 let liveTimer;
-document.addEventListener('DOMContentLoaded',()=>{const ta=$('query_input');if(ta)ta.addEventListener('input',()=>{clearTimeout(liveTimer);liveTimer=setTimeout(refreshPreview,350)})});
+const WHITE_KEY='lolzjcx_copy_white',QUERY_KEY='lolzjcx_query_input';
+function bindPersist(el,key){
+  try{const saved=localStorage.getItem(key);if(saved)el.value=saved;}catch(e){}
+  el.addEventListener('input',()=>{try{localStorage.setItem(key,el.value||'');}catch(e){}});
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  const ta=$('query_input');
+  if(ta){ta.addEventListener('input',()=>{clearTimeout(liveTimer);liveTimer=setTimeout(refreshPreview,350)});bindPersist(ta,QUERY_KEY);}
+  bindPersist($('copy_white'),WHITE_KEY);
+});
 async function refreshPreview(){try{const list=await call('preview_summoners',$('query_input').value||'');
   const over=list.length>5;
   $('query_preview').innerHTML=`识别到 <b>${list.length}</b> 个`+(over?' <span style="color:var(--red)">（超过 5 个，只取前 5）</span>':'');}catch(e){}}
-function clearResults(){$('batchResult').innerHTML=''}
+function clearResults(){$('batchResult').innerHTML='';window.__last=null}
+/* ===== 一键复制战报 ===== */
+const HORSE_LABEL={A:'上等马',B:'中等马',C:'下等马',D:'牛马',N:'暂无评级'};
+function horseLabel(t){return HORSE_LABEL[t]||'暂无评级'}
+function matchKda(m){return Number(m.d)>0?(Number(m.k)+Number(m.a))/Number(m.d):((Number(m.k)+Number(m.a))>0?Infinity:0)}
+function fmtMatch(m){return `${m.k}/${m.d}/${m.a}-${m.championCn||m.champion||''}`}
+function getWhitelist(){const INVIS=new RegExp("[\\u200B-\\u200F\\u202A-\\u202E\\u2060-\\u2064\\u2066-\\u2069\\uFEFF]","g");
+  return ($('copy_white').value||'').split(/[\n,，、;；\s]+/)
+  .map(s=>s.replace(INVIS,'').replace(/加入了队伍聊天.*$/,'').split('#')[0].trim())
+  .filter(Boolean)}
+async function copyText(text){
+  try{await navigator.clipboard.writeText(text);toast('已复制到剪贴板','s');return}catch(e){}
+  try{const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();toast('已复制到剪贴板','s')}
+  catch(e){toast('复制失败，请手动选择','e')}
+}
+function copySummary(){
+  const all=(window.__last||[]).filter(r=>r&&r.ok&&r.summoner&&r.summary);
+  if(!all.length){toast('暂无可复制的查询结果，请先查询','e');return}
+  const wl=new Set(getWhitelist());
+  const list=all.filter(r=>!wl.has(String(r.summoner.name||'').trim()));
+  if(!list.length){toast('都在白名单里，没有可复制的内容','e');return}
+  const lines=[];
+  lines.push('本局游戏：'+list.map(r=>`${r.summoner.name}-${horseLabel(r.summary.horseTier)}（${r.summary.avgKda}）`).join('、'));
+  const detail=(tier,best)=>list.filter(r=>r.summary.horseTier===tier).forEach(r=>{
+    const champs=(r.summary.topChampions||[]).map(c=>c.champion).join('、')||'—';
+    const rec=(r.matches||[]).filter(m=>!m.remake).slice()
+      .sort((a,b)=>best?matchKda(b)-matchKda(a):matchKda(a)-matchKda(b))
+      .slice(0,3).map(fmtMatch).join('、')||'—';
+    lines.push(`${r.summoner.name}（${horseLabel(tier)}）常用英雄：${champs}，最近战绩：${rec}`);
+  });
+  detail('A',true);   // 上等马：KDA 最高的 3 场
+  detail('D',false);  // 牛马：KDA 最低的 3 场
+  copyText(lines.join('\n'));
+}
 async function startQuery(){
   if(!online){toast('本地服务未运行，请先点右上角“下载并运行 EXE”','e');return}
   try{
@@ -337,6 +384,7 @@ async function startQuery(){
 }
 function renderBatch(results){
   const box=$('batchResult'),list=results||[],n=list.length||1;
+  window.__last=list;
   box.style.gridTemplateColumns=`repeat(${Math.min(Math.max(n,1),5)},minmax(0,1fr))`;
   const colors=premadeColors(list);
   box.innerHTML=list.map((r,i)=>resultBlockHtml(r,colors[i])).join('');
