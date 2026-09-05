@@ -88,6 +88,8 @@ th{background:#f6f3fb}
       <span class="svc" id="svcPill"><i></i><span id="svcText">检测中…</span></span>
       <span class="svc-tip" id="svcTip" style="display:none">查询需先在本机运行服务</span>
       <a class="svc-dl" id="dlBtn" href="/medias/files/lolzjcx_service.exe" download style="display:none">下载并运行 EXE</a>
+      <a class="svc-dl" id="updBtn" href="/medias/files/lolzjcx_service.exe" download
+        style="display:none;background:#f59e0b;border-color:#f59e0b" title="下载后关闭旧服务、双击新 EXE 即可"></a>
       <button class="svc-stop" id="stopSvc" style="display:none" onclick="shutdownSvc()">关闭服务</button>
     </div>
   </header>
@@ -171,7 +173,17 @@ async function call(name,...args){
   return r.data;
 }
 /* ===== 服务在线状态：自动探测 / 掉线遮罩 / 上线自动连接 ===== */
-let online=null,inited=false;
+let online=null,inited=false,svcVer='';
+const LATEST_VERSION='1.1.0';   // 与 exe 内 server.VERSION 同步；页面永远是最新，用来判断本机 exe 是否过时
+function cmpVer(a,b){const pa=String(a||'0').split('.').map(x=>parseInt(x)||0),pb=String(b||'0').split('.').map(x=>parseInt(x)||0);
+  for(let i=0;i<Math.max(pa.length,pb.length);i++){const x=pa[i]||0,y=pb[i]||0;if(x!==y)return x<y?-1:1;}return 0;}
+function setSvcVersion(v){
+  svcVer=v||'';const u=$('updBtn'),pill=$('svcPill');
+  const outdated=!!svcVer&&cmpVer(svcVer,LATEST_VERSION)<0;
+  pill.title=(!online||!svcVer)?'':('本地服务版本 v'+svcVer+(outdated?'（有新版 v'+LATEST_VERSION+'）':''));
+  u.style.display=(online&&outdated)?'':'none';
+  u.textContent=outdated?`服务可更新 v${svcVer}→v${LATEST_VERSION}，点此下载`:'';
+}
 function setConnected(on){
   if(on===online)return;online=on;
   const pill=$('svcPill'),txt=$('svcText'),dl=$('dlBtn');
@@ -180,6 +192,7 @@ function setConnected(on){
     if(!inited){inited=true;boot();}else{loadAccounts();}}
   else{pill.classList.remove('on');txt.textContent='服务未运行';dl.style.display='';stop.style.display='none';tip.style.display='';
     if(jobTimer){clearInterval(jobTimer);jobTimer=null;}}
+  setSvcVersion(svcVer);
 }
 async function shutdownSvc(){
   if(!confirm('确定关闭本地服务吗？关闭后将无法查询，需要时重新双击 EXE 即可。'))return;
@@ -189,7 +202,7 @@ async function shutdownSvc(){
 async function probe(){
   try{
     const resp=await rawFetch('/api/health',{method:'GET'},1500);
-    if(resp.ok){const j=await resp.json();if(j&&j.ok){setConnected(true);return;}}
+    if(resp.ok){const j=await resp.json();if(j&&j.ok){setConnected(true);setSvcVersion(j.data&&j.data.version);return;}}
     setConnected(false);
   }catch(e){setConnected(false);}
 }
