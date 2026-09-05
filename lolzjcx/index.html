@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LOL 战绩查询</title>
+<style>
+:root{--bg:#eef1f5;--card:#fff;--ink:#1f2329;--sub:#6b7280;--line:#e3e7ee;--blue:#2563eb;--teal:#0f766e;--red:#dc2626;--org:#d97706;--green:#16a34a;--code:#0f172a;--win:#16a34a;--lose:#dc2626;--remake:#9ca3af}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.6 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif;-webkit-user-select:text;user-select:text}
+html,body,div,span,p,b,td,th,label,h1,h2,li,code,pre{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
+button{-webkit-user-select:none;user-select:none}
+.wrap{max-width:1120px;margin:0 auto;padding:18px 16px 60px}
+header.top{background:linear-gradient(135deg,#3a1d5e,#5b2a86);color:#fff;border-radius:14px;padding:16px 20px;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;position:relative}
+header.top h1{font-size:20px;margin:0;letter-spacing:2px}
+.svcbar{position:absolute;right:16px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:8px}
+.svc{font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,.16);display:inline-flex;align-items:center;gap:6px}
+.svc i{width:8px;height:8px;border-radius:50%;background:#cbd5e1;display:inline-block}
+.svc.on{background:rgba(255,255,255,.2)}.svc.on i{background:#4ade80;box-shadow:0 0 6px #4ade80}
+.svc-tip{font-size:12px;color:rgba(255,255,255,.85);white-space:nowrap}
+.svc-dl{font-size:12px;font-weight:700;color:#fff;background:linear-gradient(135deg,#7c3aed,#9a6dd7);padding:4px 13px;border-radius:999px;text-decoration:none;white-space:nowrap}
+.svc-dl:hover{filter:brightness(1.08)}
+.svc-stop{font-size:12px;font-weight:700;color:#fff;background:rgba(220,38,38,.85);padding:4px 13px;border-radius:999px;white-space:nowrap}
+.svc-stop:hover{background:rgba(220,38,38,1)}
+.step{display:inline-flex;width:22px;height:22px;border-radius:50%;background:#5b2a86;color:#fff;align-items:center;justify-content:center;font-size:12px;margin-right:7px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+.card h2{font-size:15px;margin:0 0 12px;display:flex;align-items:center}
+textarea{width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:8px;font-size:13px;background:#fff;color:var(--ink);font-family:inherit}
+textarea{min-height:120px;resize:vertical;line-height:1.5}
+textarea:focus{outline:none;border-color:var(--blue)}
+button{cursor:pointer;border:0;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:600;background:var(--blue);color:#fff}
+button.sec{background:#efeaf7;color:#5b2a86}button.warn{background:var(--org);color:#fff}button.danger{background:var(--red);color:#fff}
+button:disabled{opacity:.5;cursor:not-allowed}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.muted{color:var(--sub);font-size:12px}
+.progress{height:10px;background:#e9edf3;border-radius:999px;overflow:hidden;margin:10px 0}
+.progress>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#5b2a86,#9a6dd7);transition:width .3s}
+.log{background:#0f172a;color:#cbd5e1;border-radius:10px;padding:10px 12px;font:12px/1.6 ui-monospace,Consolas,monospace;height:150px;overflow:auto;white-space:pre-wrap;word-break:break-all}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:left}
+th{background:#f6f3fb}
+.tag{display:inline-block;padding:1px 8px;border-radius:6px;font-size:11px;font-weight:700;color:#fff}
+.t-ok{background:var(--green)}.t-no{background:#9ca3af}.t-use{background:var(--teal)}.t-ex{background:var(--org)}
+.toast{position:fixed;right:18px;bottom:18px;display:flex;flex-direction:column;gap:8px;z-index:99}
+.toast div{padding:9px 14px;border-radius:8px;color:#fff;font-size:13px;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+.t-e{background:var(--red)}.t-s{background:var(--green)}.t-w{background:var(--org)}
+/* 战绩可视化 */
+.sumhead{margin:0 0 6px;display:flex;flex-direction:column;gap:2px}
+.sumhead .nm{font-size:14px;font-weight:800;line-height:20px;height:40px;word-break:break-word;overflow:hidden}
+.sumhead .horse{height:18px;line-height:18px;font-size:13px;font-weight:800;text-align:center}
+.sumhead .horse.h-A{color:#16a34a}.sumhead .horse.h-B{color:#2563eb}
+.sumhead .horse.h-C{color:#ea8a16}.sumhead .horse.h-D{color:#dc2626}.sumhead .horse.h-N{color:var(--sub)}
+.kd .kk{color:#16a34a}.kd .dd{color:#dc2626}.kd .aa{color:#111827}
+.kd .sep{color:var(--sub);font-weight:400;margin:0 1px}
+.sumhead .reg{font-size:11px;line-height:16px;height:16px;color:var(--sub);word-break:break-word;overflow:hidden}
+.sumhead .priv-lock{color:#dc2626;font-weight:800}
+.txt-rank{margin:4px 0 6px}
+.rk-row{display:flex;align-items:center;gap:4px;height:20px;line-height:20px;font-size:11.5px;flex-wrap:nowrap;white-space:nowrap;overflow:hidden}
+.rk-row .rk{flex:0 0 auto;color:var(--sub)}
+.rk-val{word-break:break-word}
+.txt-sum{font-size:11px;background:#f8f6fc;border-radius:6px;padding:6px 8px;margin:4px 0 8px}
+.txt-sum .sl{height:16px;line-height:16px;white-space:nowrap;overflow:hidden}
+.hero-block{font-size:11px;background:#f8f6fc;border-radius:6px;padding:6px 8px;margin:4px 0 8px;text-align:left}
+.hero-block .hl{height:32px;line-height:16px;word-break:break-word;text-align:left;padding:0;margin:0;text-indent:0;overflow:hidden}
+.hero-block .hl .tag{color:var(--sub)}
+.cols{display:grid;gap:10px;align-items:start;grid-template-columns:repeat(5,minmax(0,1fr));overflow:hidden;min-width:0}
+.block{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:#fff;display:flex;flex-direction:column;margin:0;min-width:0}
+.cols .block{padding:10px;box-sizing:border-box}
+.cols .block *{box-sizing:border-box}
+.block.err{border-color:#f3c0c0;background:#fef6f6}
+.tm{height:54px;margin-bottom:3px;padding:5px 6px;border-radius:6px;display:flex;flex-direction:column;justify-content:center;gap:1px}
+.tm .tl{line-height:15px;min-height:15px;word-break:break-word;overflow:hidden;font-size:11.5px}
+.tm .t2 b{font-size:13px}
+.tm .t2 b.champ{font-size:11.5px}
+.tm .r{font-size:13px}
+.tm .t3{color:var(--sub);font-size:10.5px}
+.tm .r{font-weight:800;margin-right:5px}
+.tm.win{background:#ecfdf3}.tm.win .r{color:#16a34a}
+.tm.lose{background:#fdecec}.tm.lose .r{color:#dc2626}
+.tm.ph{background:none}
+</style>
+</head>
+<body>
+<div class="wrap" id="app">
+  <header class="top">
+    <h1>LOL 战绩查询</h1>
+    <div class="svcbar">
+      <span class="svc" id="svcPill"><i></i><span id="svcText">检测中…</span></span>
+      <span class="svc-tip" id="svcTip" style="display:none">查询需先在本机运行服务</span>
+      <a class="svc-dl" id="dlBtn" href="/medias/files/Lolso1Tool.exe" download style="display:none">下载并运行 EXE</a>
+      <button class="svc-stop" id="stopSvc" style="display:none" onclick="shutdownSvc()">关闭服务</button>
+    </div>
+  </header>
+
+  <!-- ① 账号池 -->
+  <div class="card">
+    <h2><span class="step">1</span>账号池（查询缺号时自动注册补入；每号每天约 7 人，跨天恢复）
+      <span style="margin-left:auto;display:flex;gap:8px">
+        <button class="sec" style="padding:3px 10px" onclick="startCheck()">检测账号</button>
+        <button class="danger" style="padding:3px 10px" id="stopCheck" disabled onclick="stopJob()">停止检测</button>
+        <button class="sec" style="padding:3px 10px" onclick="clearAccounts('invalid')">清理失效</button>
+        <button class="sec" style="padding:3px 10px" onclick="clearAccounts('all')">清空账号池</button>
+        <button class="sec" style="padding:3px 10px" onclick="openData()">数据目录</button></span></h2>
+    <div id="poolOverview" class="row" style="margin:0 0 8px;gap:8px"></div>
+    <table><thead><tr><th>编号</th><th>用户名</th><th>占位邮箱</th><th>密码</th><th>状态</th><th>今日剩余/总额</th><th>Cookie</th><th>最近使用</th><th>操作</th></tr></thead>
+      <tbody id="accBody"><tr><td colspan="9" class="muted">暂无（首次查询时会自动注册）</td></tr></tbody></table>
+    <div id="checkJobBox" style="display:none;margin-top:10px">
+      <div class="progress"><i id="cPbar"></i></div>
+      <div id="cJobState" class="muted"></div>
+      <div class="log" id="cJobLog" style="margin-top:8px;height:120px"></div>
+    </div>
+  </div>
+
+  <!-- ② 查询 -->
+  <div class="card">
+    <h2><span class="step">2</span>战绩查询（粘贴若干“名字#尾标”，自动识别，一次最多 5 个；串行轮换、缺号自动补）</h2>
+    <textarea id="query_input" placeholder="每行一个，或直接粘贴整段队伍聊天：&#10;godweiyang⁩ #⁦23456⁩⁩加入了队伍聊天&#10;老公你努努力呀⁩ #⁦83805⁩⁩加入了队伍聊天&#10;也支持：名字#12345"></textarea>
+    <div class="row">
+      <button onclick="startQuery()">开始查询（≤5）</button>
+      <button class="danger" id="stopQuery" disabled onclick="stopJob()">停止</button>
+      <button class="sec" onclick="clearResults()">清空结果</button>
+      <span id="query_preview" class="muted"></span>
+    </div>
+    <div id="queryJobBox" style="display:none;margin-top:10px">
+      <div class="progress"><i id="qPbar"></i></div>
+      <div id="qJobState" class="muted"></div>
+      <div class="log" id="qJobLog" style="margin-top:8px;height:120px"></div>
+    </div>
+    <div id="batchResult" class="cols" style="margin-top:12px"></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+/* ===== 本机后台服务：http://127.0.0.1:17530 ===== */
+const API='http://127.0.0.1:17530';
+const GET_ONLY={health:1,accounts:1,pool_overview:1,job_status:1};
+async function rawFetch(path,opt,timeout=20000){
+  const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),timeout);
+  try{return await fetch(API+path,Object.assign({signal:ctrl.signal},opt));}
+  finally{clearTimeout(to);}
+}
+async function call(name,...args){
+  let opt={method:'POST',headers:{'content-type':'application/json'},body:'{}'};
+  if(GET_ONLY[name]){opt={method:'GET'};}
+  else{
+    let p={};
+    if(name==='delete_account')p.num=args[0];
+    else if(name==='clear_accounts')p.mode=args[0]||'all';
+    else if(name==='preview_summoners')p.text=args[0]||'';
+    else if(name==='start_batch_query')p.params=args[0]||{};
+    opt.body=JSON.stringify(p);
+  }
+  let resp;
+  try{resp=await rawFetch('/api/'+name,opt);}catch(e){setConnected(false);throw new Error('本地服务未连接，请先启动 Lolso1Tool');}
+  if(!resp.ok)throw new Error('本地服务返回 '+resp.status);
+  const r=await resp.json();
+  setConnected(true);
+  if(!r.ok)throw new Error(r.error||'操作失败');
+  return r.data;
+}
+/* ===== 服务在线状态：自动探测 / 掉线遮罩 / 上线自动连接 ===== */
+let online=null,inited=false;
+function setConnected(on){
+  if(on===online)return;online=on;
+  const pill=$('svcPill'),txt=$('svcText'),dl=$('dlBtn');
+  const stop=$('stopSvc'),tip=$('svcTip');
+  if(on){pill.classList.add('on');txt.textContent='服务已运行';dl.style.display='none';stop.style.display='';tip.style.display='none';
+    if(!inited){inited=true;boot();}else{loadAccounts();}}
+  else{pill.classList.remove('on');txt.textContent='服务未运行';dl.style.display='';stop.style.display='none';tip.style.display='';
+    if(jobTimer){clearInterval(jobTimer);jobTimer=null;}}
+}
+async function shutdownSvc(){
+  if(!confirm('确定关闭本地服务吗？关闭后将无法查询，需要时重新双击 EXE 即可。'))return;
+  try{await call('shutdown');}catch(e){}
+  setConnected(false);toast('本地服务已关闭','w');
+}
+async function probe(){
+  try{
+    const resp=await rawFetch('/api/health',{method:'GET'},1500);
+    if(resp.ok){const j=await resp.json();if(j&&j.ok){setConnected(true);return;}}
+    setConnected(false);
+  }catch(e){setConnected(false);}
+}
+setInterval(probe,1500);probe();
+
+let jobTimer=null;
+function toast(msg,type='s'){const t=$('toast');const d=document.createElement('div');d.className='t-'+type;d.textContent=msg;t.appendChild(d);setTimeout(()=>d.remove(),3600)}
+function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function fmtGold(n){n=Number(n)||0;return n>=1000?(n/1000).toFixed(1)+'k':n}
+const TIER_COLOR={IRON:'#6b7280',BRONZE:'#a1693c',SILVER:'#7d8a99',GOLD:'#d4a017',PLATINUM:'#2fa88a',EMERALD:'#1f9e6b',DIAMOND:'#3b76d6',MASTER:'#8b5cf6',GRANDMASTER:'#d14141',CHALLENGER:'#e0a028'};
+
+async function boot(){
+  try{const h=await call('health');loadAccounts();}catch(e){toast(e.message,'e')}
+}
+async function openData(){try{await call('open_data_dir')}catch(e){toast(e.message,'e')}}
+async function stopJob(){try{await call('stop_job');toast('已请求停止','w')}catch(e){toast(e.message,'e')}}
+
+function watchJob(){
+  if(jobTimer)clearInterval(jobTimer);
+  jobTimer=setInterval(async()=>{try{
+    const j=await call('job_status');if(!j)return;
+    const isQ=j.type==='batch_query', isC=j.type==='check';
+    $('stopQuery').disabled=!isQ||!j.running; $('stopCheck').disabled=!isC||!j.running;
+    const qBox=$('queryJobBox'),cBox=$('checkJobBox');
+    qBox.style.display=(isQ&&j.running)?'':'none';
+    cBox.style.display=(isC&&j.running)?'':'none';
+    if(isQ){
+      const pct=j.total?Math.round(100*j.done/j.total):0;$('qPbar').style.width=pct+'%';
+      $('qJobState').textContent=`${j.done}/${j.total}｜当前 ${j.current??'-'}｜成功 ${j.ok} 失败 ${j.fail}｜${j.running?'进行中…':'已结束'}`;
+      $('qJobLog').textContent=(j.logs||[]).slice(-200).join('\n');$('qJobLog').scrollTop=$('qJobLog').scrollHeight;
+      renderBatch(j.results||[]);
+    }else if(isC){
+      const pct=j.total?Math.round(100*j.done/j.total):0;$('cPbar').style.width=pct+'%';
+      $('cJobState').textContent=`检测 ${j.done}/${j.total}｜正常 ${j.ok} 异常 ${j.fail}｜${j.running?'进行中…':'已结束'}`;
+      $('cJobLog').textContent=(j.logs||[]).slice(-200).join('\n');$('cJobLog').scrollTop=$('cJobLog').scrollHeight;
+    }
+    if(!j.running){clearInterval(jobTimer);jobTimer=null;$('stopQuery').disabled=true;$('stopCheck').disabled=true;loadAccounts();}
+  }catch(e){}},800);
+}
+
+// ① 账号池
+async function loadAccounts(){
+  try{const list=await call('accounts');
+    const tb=$('accBody');
+    if(!list.length){tb.innerHTML='<tr><td colspan="9" class="muted">暂无（首次查询时会自动注册）</td></tr>';$('poolOverview').innerHTML='';return}
+    tb.innerHTML=list.map(r=>{let st;
+      if(r.check_status==='ok')st='<span class="tag t-ok">正常</span>';
+      else if(r.check_status==='banned'||r.disabled)st='<span class="tag t-ex">已封禁</span>';
+      else if(r.check_status==='badpass')st='<span class="tag t-ex">冲突/失效</span>';
+      else if(r.check_status==='neterr')st='<span class="tag t-no">网络异常</span>';
+      else if(r.remaining<=0)st='<span class="tag t-ex">额度用完</span>';
+      else if(r.logged_in)st='<span class="tag t-ok">已登录</span>';
+      else st='<span class="tag t-no">未检测</span>';
+      const low=r.remaining<=3;
+      return `<tr><td><span class="tag t-use">${r.num}</span></td><td>${esc(r.username||'')}</td><td>${esc(r.email||'')}</td><td>${esc(r.password||'')}</td><td>${st}</td>
+      <td><b style="color:${low?'var(--org)':'var(--green)'}">${r.remaining}</b> / ${r.daily_quota}（已用 ${r.used_today}）</td>
+      <td>${r.cookie_file?'有':'无'}</td><td>${esc(r.last_used||r.updated_at||'')}</td>
+      <td><button class="sec" onclick="delAccount(${r.num})">删除</button></td></tr>`}).join('');
+    const ov=await call('pool_overview');
+    $('poolOverview').innerHTML=`<span class="tag t-ok">账号 ${ov.count}（可用 ${ov.available}）</span>
+      <span class="tag t-use">今日总剩余 ${ov.total_remaining}</span>
+      <span class="tag t-no">今日已用 ${ov.used_today} / 总额 ${ov.total_quota}</span>
+      <span class="muted">每完整查 1 人消耗 3 次（约 7 人/号/天），跨天自动恢复</span>`;
+  }catch(e){}
+}
+async function delAccount(num){
+  if(!confirm(`确定删除账号 #${num} 吗？\n将同时移除本地记录和 Cookie（不影响网站账号）。`))return;
+  try{const r=await call('delete_account',num);if(r&&r.deleted){toast(`已删除 ${num}`);loadAccounts()}else toast('删除失败：'+((r&&r.reason)||'未知'),'e')}catch(e){toast(e.message,'e')}
+}
+async function clearAccounts(mode){
+  if(mode==='all'&&!confirm('确定清空整个账号池？只删本地记录和 Cookie。'))return;
+  try{const r=await call('clear_accounts',mode);toast(`已清理 ${r.removed} 个，剩余 ${r.left} 个`);loadAccounts()}catch(e){toast(e.message,'e')}
+}
+async function startCheck(){if(!online){toast('本地服务未运行，请先点右上角“下载并运行 EXE”','e');return}try{const r=await call('start_check');toast(`开始检测 ${r.total} 个账号`);watchJob();}catch(e){toast(e.message,'e')}}
+
+// ② 查询 —— 可视化渲染
+function rankOne(c){return (!c||!c.placed)?'<span class="muted">—</span>':`<b style="color:${TIER_COLOR[c.tier]||'#6b7280'}">${esc(c.tierCn)}${esc(c.division)}</b>`}
+function prevOne(c){if(!c||!c.prevTier||c.prevCn==='—')return '<span class="muted">—</span>';return `<b style="color:${TIER_COLOR[c.prevTier]||'#6b7280'}">${esc(c.prevCn)}</b>`}
+function rankCardsHtml(cards){
+  const map={};(cards||[]).forEach(c=>{map[c.queueType]=c});
+  return `<div class="txt-rank">
+    <div class="rk-row"><span class="rk">本赛季</span> 单双 ${rankOne(map['RANKED_SOLO_5x5'])} <span class="muted">/</span> 灵活 ${rankOne(map['RANKED_FLEX_SR'])}</div>
+    <div class="rk-row"><span class="rk">上赛季</span> 单双 ${prevOne(map['RANKED_SOLO_5x5'])} <span class="muted">/</span> 灵活 ${prevOne(map['RANKED_FLEX_SR'])}</div></div>`;
+}
+function fmtLast(ms){if(!ms)return '—';const d=new Date(Number(ms));const p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`}
+function heroBlockHtml(s){
+  const tops=(s&&s.topChampions||[]).slice(0,3).map(c=>`${esc(c.champion)}${c.games}场${c.winRate}%`).join('、');
+  return `<div class="hero-block"><div class="hl"><span class="muted">常用英雄：</span>${tops||'<span class="muted">—</span>'}</div></div>`;
+}
+function summaryHtml(s){
+  const l1=(s&&s.games)?`近${s.games}场 <b>${s.wins}胜${s.losses}负</b> · 胜率${s.winRate}%`:'';
+  const l2=(s&&s.games)?`场均KDA <b>${s.avgKda}</b> · ${esc(s.streakText)}`:'';
+  return `<div class="txt-sum"><div class="sl">${l1}</div><div class="sl">${l2}</div></div>`;
+}
+function matchHtml(m){
+  const cls=m.remake?'tm':(m.win?'tm win':'tm lose');
+  const tag=m.remake?'重':(m.win?'胜':'负');
+  return `<div class="${cls}">
+    <div class="tl t2"><span class="r">${tag}</span><b class="champ">${esc(m.championCn||m.champion)}</b> <b class="kd"><span class="kk">${m.k}</span><span class="sep">/</span><span class="dd">${m.d}</span><span class="sep">/</span><span class="aa">${m.a}</span></b></div>
+    <div class="tl t3">${esc(m.queueName)}${m.position?' · '+m.position:''}${m.level?' · '+m.level+'级':''}</div>
+    <div class="tl t3">补刀${m.cs} · 金钱${fmtGold(m.gold)} · 伤害${fmtGold(m.damage)}</div></div>`;
+}
+function resultBlockHtml(r,nameColor){
+  if(!r.ok)return `<div class="block err"><div class="sumhead"><div class="nm">${esc(r.name)}#${esc(r.tag)}</div><div class="reg">查询失败：${esc(r.error||'')}</div></div></div>`;
+  const s=r.summoner||{},ms=r.matches||[];
+  const pad=Math.max(0,15-ms.length);
+  const body=ms.length?ms.map(matchHtml).join('')+'<div class="muted" style="font-size:10.5px;height:16px;line-height:16px">'+(pad?`仅 ${ms.length} 场记录`:'')+'</div>'+Array(pad).fill('<div class="tm ph"></div>').join(''):'<div class="muted">没有查到对局</div>';
+  const horse=(r.summary&&r.summary.horse)?`<div class="horse h-${r.summary.horseTier}">${esc(r.summary.horse)}</div>`:'<div class="horse"></div>';
+  const nmStyle=nameColor?` style="color:${nameColor}"`:'';
+  const privUpper=String(s.privacy||'').toUpperCase();
+  const privHtml=!s.privacy?'':(privUpper==='PUBLIC'?'隐私公开':'<span class="priv-lock">隐私私密</span>');
+  const lastHtml=s.lastGameMs?('最后游戏 '+fmtLast(s.lastGameMs)):'';
+  const meta=[privHtml,lastHtml].filter(Boolean).join(' · ');
+  return `<div class="block">
+    <div class="sumhead"><div class="nm"${nmStyle} title="${esc(s.name)}#${esc(s.tag)}">${esc(s.name)}#${esc(s.tag)}</div>
+      <div class="reg" title="${esc(s.region)}">大区 ${esc(s.region)}${s.level?' · 等级 '+s.level:''}</div>
+      <div class="reg">${meta||'&nbsp;'}</div>${horse}</div>
+    ${rankCardsHtml(r.rank_cards)}${summaryHtml(r.summary)}${heroBlockHtml(r.summary)}
+    <div>${body}</div></div>`;
+}
+function premadeColors(results){
+  const list=results||[],N=list.length,parent=[...Array(N).keys()];
+  const find=x=>{while(parent[x]!==x){parent[x]=parent[parent[x]];x=parent[x]}return x};
+  const union=(a,b)=>{parent[find(a)]=find(b)};
+  const puuidIdx={};list.forEach((r,i)=>{const pu=r&&r.ok&&r.summoner&&r.summoner.puuid;if(pu)puuidIdx[String(pu)]=i});
+  list.forEach((r,i)=>{if(!r.ok)return;const pool=r.coop&&r.coop.length?r.coop:(r.matches||[]);
+    pool.forEach(m=>{if(m.remake)return;
+      const mates=(m.teamPuuids||[]).map(p=>puuidIdx[String(p)]).filter(x=>x!==undefined);
+      if(!mates.length){const key=(m.gameId?('g'+m.gameId):('t'+m.creationMs))+'#'+m.teamId;
+        list.forEach((o,j)=>{if(!o.ok)return;const op=(o.coop&&o.coop.length?o.coop:(o.matches||[])).some(x=>!x.remake&&((x.gameId?('g'+x.gameId):('t'+x.creationMs))+'#'+x.teamId)===key);if(op)union(i,j)});return}
+      mates.forEach(j=>union(i,j));});});
+  const size={};list.forEach((r,i)=>{if(r.ok){const g=find(i);size[g]=(size[g]||0)+1}});
+  const palette=['#2563eb','#9333ea','#d97706','#0891b2','#db2777','#4f46e5'];
+  const groupColor={},out={};let ci=0;
+  list.forEach((r,i)=>{if(!r.ok){out[i]='';return}const g=find(i);
+    if(size[g]>=2){if(groupColor[g]===undefined)groupColor[g]=palette[ci++%palette.length];out[i]=groupColor[g]}else out[i]=''});
+  return out;
+}
+let liveTimer;
+document.addEventListener('DOMContentLoaded',()=>{const ta=$('query_input');if(ta)ta.addEventListener('input',()=>{clearTimeout(liveTimer);liveTimer=setTimeout(refreshPreview,350)})});
+async function refreshPreview(){try{const list=await call('preview_summoners',$('query_input').value||'');
+  const over=list.length>5;
+  $('query_preview').innerHTML=`识别到 <b>${list.length}</b> 个`+(over?' <span style="color:var(--red)">（超过 5 个，只取前 5）</span>':'');}catch(e){}}
+function clearResults(){$('batchResult').innerHTML=''}
+async function startQuery(){
+  if(!online){toast('本地服务未运行，请先点右上角“下载并运行 EXE”','e');return}
+  try{
+    let list=await call('preview_summoners',$('query_input').value);
+    if(!list.length){toast('没识别到任何“名字#尾标”','e');return}
+    if(list.length>5){list=list.slice(0,5);toast('一次最多 5 个，已取前 5','w')}
+    const text=list.map(x=>`${x.name}#${x.tag}`).join('\n');
+    const r=await call('start_batch_query',{summoners:text});
+    $('batchResult').innerHTML='';toast(`开始查询 ${r.parsed.length} 个召唤师（缺号会自动补）`);watchJob();
+  }catch(e){toast(e.message,'e')}
+}
+function renderBatch(results){
+  const box=$('batchResult'),list=results||[],n=list.length||1;
+  box.style.gridTemplateColumns=`repeat(${Math.min(Math.max(n,1),5)},minmax(0,1fr))`;
+  const colors=premadeColors(list);
+  box.innerHTML=list.map((r,i)=>resultBlockHtml(r,colors[i])).join('');
+}
+</script>
+</body>
+</html>
