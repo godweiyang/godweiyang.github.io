@@ -11,15 +11,18 @@ body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.6 -apple-system,
 html,body,div,span,p,b,td,th,label,h1,h2,li,code,pre{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
 button{-webkit-user-select:none;user-select:none}
 .wrap{max-width:1120px;margin:0 auto;padding:18px 16px 60px}
-header.top{background:linear-gradient(135deg,#3a1d5e,#5b2a86);color:#fff;border-radius:14px;padding:16px 20px;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;position:relative}
-header.top h1{font-size:20px;margin:0;letter-spacing:2px}
-.svcbar{position:absolute;right:16px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:8px}
+header.top{background:linear-gradient(135deg,#3a1d5e,#5b2a86);color:#fff;border-radius:14px;padding:16px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+header.top h1{font-size:20px;margin:0;letter-spacing:2px;text-align:center}
+.svcbar{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
 .svc{font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,.16);display:inline-flex;align-items:center;gap:6px}
 .svc i{width:8px;height:8px;border-radius:50%;background:#cbd5e1;display:inline-block}
 .svc.on{background:rgba(255,255,255,.2)}.svc.on i{background:#4ade80;box-shadow:0 0 6px #4ade80}
 .svc-tip{font-size:12px;color:rgba(255,255,255,.85);white-space:nowrap}
 .svc-dl{font-size:12px;font-weight:700;color:#fff;background:linear-gradient(135deg,#7c3aed,#9a6dd7);padding:4px 13px;border-radius:999px;text-decoration:none;white-space:nowrap}
 .svc-dl:hover{filter:brightness(1.08)}
+.svc-sep{width:14px;display:inline-block}
+.svc-mini{font-size:12px;color:rgba(255,255,255,.78);text-decoration:underline;white-space:nowrap}
+.svc-mini:hover{color:#fff}
 .svc-stop{font-size:12px;font-weight:700;color:#fff;background:rgba(220,38,38,.85);padding:4px 13px;border-radius:999px;white-space:nowrap}
 .svc-stop:hover{background:rgba(220,38,38,1)}
 .step{display:inline-flex;width:22px;height:22px;border-radius:50%;background:#5b2a86;color:#fff;align-items:center;justify-content:center;font-size:12px;margin-right:7px}
@@ -86,11 +89,11 @@ th{background:#f6f3fb}
     <h1>LOL 战绩查询</h1>
     <div class="svcbar">
       <span class="svc" id="svcPill"><i></i><span id="svcText">检测中…</span></span>
-      <span class="svc-tip" id="svcTip" style="display:none">查询需先在本机运行服务</span>
-      <a class="svc-dl" id="dlBtn" href="/medias/files/lolzjcx_service.exe" download style="display:none">下载并运行 EXE</a>
-      <a class="svc-dl" id="updBtn" href="/medias/files/lolzjcx_service.exe" download
-        style="display:none;background:#f59e0b;border-color:#f59e0b" title="下载后关闭旧服务、双击新 EXE 即可"></a>
+      <a class="svc-dl" id="launchBtn" href="lolzjcx://start" style="display:none" title="已装过 EXE 时一键启动；浏览器若询问是否打开，选允许">启动服务</a>
       <button class="svc-stop" id="stopSvc" style="display:none" onclick="shutdownSvc()">关闭服务</button>
+      <a class="svc-dl" id="updBtn" href="/medias/files/lolzjcx_service.exe" download
+        style="display:none;background:#f59e0b;border-color:#f59e0b" title="下载后双击新 EXE，会自动替换旧服务"></a>
+      <span class="svc-tip" id="svcTip" style="display:none"></span>
     </div>
   </header>
 
@@ -173,29 +176,59 @@ async function call(name,...args){
   return r.data;
 }
 /* ===== 服务在线状态：自动探测 / 掉线遮罩 / 上线自动连接 ===== */
-let online=null,inited=false,svcVer='';
-const LATEST_VERSION='1.1.0';   // 与 exe 内 server.VERSION 同步；页面永远是最新，用来判断本机 exe 是否过时
+let online=null,inited=false,svcVer='',forceDl=false,launchWatch=null;
+const LATEST_VERSION='1.2.0';   // 与 exe 内 server.VERSION 同步；页面永远是最新，用来判断本机 exe 是否过时
+// 点“启动服务”后若 4.5s 内仍未连上（如 EXE 被删/协议失效），自动回退显示下载入口
+function onLaunchClick(){
+  if(online)return;
+  let installed=false;try{installed=localStorage.getItem('lolzjcx_installed')==='1';}catch(e){}
+  if(!installed||forceDl)return;   // 下载模式：本来就是下文件，不需要超时兜底
+  clearTimeout(launchWatch);
+  launchWatch=setTimeout(()=>{if(online)return;forceDl=true;setConnected(false,true);
+    toast('没有检测到服务启动；若 EXE 已被删除或移动，请点「重新下载 EXE」','w');},4500);
+}
 function cmpVer(a,b){const pa=String(a||'0').split('.').map(x=>parseInt(x)||0),pb=String(b||'0').split('.').map(x=>parseInt(x)||0);
   for(let i=0;i<Math.max(pa.length,pb.length);i++){const x=pa[i]||0,y=pb[i]||0;if(x!==y)return x<y?-1:1;}return 0;}
 function setSvcVersion(v){
   svcVer=v||'';const u=$('updBtn'),pill=$('svcPill');
-  const outdated=!!svcVer&&cmpVer(svcVer,LATEST_VERSION)<0;
-  pill.title=(!online||!svcVer)?'':('本地服务版本 v'+svcVer+(outdated?'（有新版 v'+LATEST_VERSION+'）':''));
+  // 旧到连 version 字段都没有（<1.1.0）也算过时
+  const noVer=online&&!svcVer, outdated=noVer||cmpVer(svcVer,LATEST_VERSION)<0;
+  pill.title=!online?'':(svcVer?('本地服务版本 v'+svcVer+(cmpVer(svcVer,LATEST_VERSION)<0?'（有新版 v'+LATEST_VERSION+'）':'')):'本地服务版本过旧，请下载新版');
   u.style.display=(online&&outdated)?'':'none';
-  u.textContent=outdated?`服务可更新 v${svcVer}→v${LATEST_VERSION}，点此下载`:'';
+  u.textContent=noVer?'服务版本过旧，点此下载新版':`服务可更新 v${svcVer}→v${LATEST_VERSION}，点此下载`;
 }
-function setConnected(on){
-  if(on===online)return;online=on;
-  const pill=$('svcPill'),txt=$('svcText'),dl=$('dlBtn');
+const EXE_URL='/medias/files/lolzjcx_service.exe';
+// 离线时把主按钮按状态切换：没装过→下载；装过→协议启动；启动失败→重新下载
+function morphLaunch(installed){
+  const b=$('launchBtn'),tip=$('svcTip');
+  if(!installed||forceDl){
+    b.href=EXE_URL;b.setAttribute('download','');
+    b.textContent=installed?'重新下载 EXE':'下载 EXE（首次使用）';
+    tip.textContent=installed?'没启动起来？下载后双击运行一次即可':'下载后双击运行一次，以后直接点「启动服务」';
+    tip.style.display='';
+  }else{
+    b.href='lolzjcx://start';b.removeAttribute('download');
+    b.textContent='启动服务';tip.style.display='none';
+  }
+}
+function setConnected(on,force){
+  if(on===online&&!force)return;online=on;
+  const pill=$('svcPill'),txt=$('svcText'),launch=$('launchBtn');
   const stop=$('stopSvc'),tip=$('svcTip');
-  if(on){pill.classList.add('on');txt.textContent='服务已运行';dl.style.display='none';stop.style.display='';tip.style.display='none';
+  if(on){
+    clearTimeout(launchWatch);forceDl=false;   // 连上了，取消兜底
+    try{localStorage.setItem('lolzjcx_installed','1');}catch(e){}   // 曾连上服务=本机已装过
+    pill.classList.add('on');txt.textContent='服务已运行';launch.style.display='none';stop.style.display='';tip.style.display='none';
     if(!inited){inited=true;boot();}else{loadAccounts();}}
-  else{pill.classList.remove('on');txt.textContent='服务未运行';dl.style.display='';stop.style.display='none';tip.style.display='';
+  else{
+    let installed=false;try{installed=localStorage.getItem('lolzjcx_installed')==='1';}catch(e){}
+    pill.classList.remove('on');txt.textContent='服务未运行';launch.style.display='';stop.style.display='none';
+    morphLaunch(installed);
     if(jobTimer){clearInterval(jobTimer);jobTimer=null;}}
   setSvcVersion(svcVer);
 }
 async function shutdownSvc(){
-  if(!confirm('确定关闭本地服务吗？关闭后将无法查询，需要时重新双击 EXE 即可。'))return;
+  if(!confirm('确定关闭本地服务吗？关闭后将暂停查询，需要时点页面上的「启动服务」即可，无需再找 EXE。'))return;
   try{await call('shutdown');}catch(e){}
   setConnected(false);toast('本地服务已关闭','w');
 }
@@ -359,6 +392,7 @@ function bindPersist(el,key){
 }
 function selectedTiers(){return ['A','B','C','D'].filter(t=>{const c=document.querySelector(`.cp_tier[value="${t}"]`);return c&&c.checked;});}
 document.addEventListener('DOMContentLoaded',()=>{
+  $('launchBtn').addEventListener('click',onLaunchClick);
   const ta=$('query_input');
   if(ta){ta.addEventListener('input',()=>{clearTimeout(liveTimer);liveTimer=setTimeout(refreshPreview,350)});bindPersist(ta,QUERY_KEY);}
   const wlBox=$('copy_white');
