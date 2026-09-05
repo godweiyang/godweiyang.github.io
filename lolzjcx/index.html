@@ -21,6 +21,8 @@ header.top h1{font-size:20px;margin:0;letter-spacing:2px;text-align:center}
 .svc-dl{font-size:12px;font-weight:700;color:#fff;background:linear-gradient(135deg,#7c3aed,#9a6dd7);padding:4px 13px;border-radius:999px;text-decoration:none;white-space:nowrap}
 .svc-dl:hover{filter:brightness(1.08)}
 .svc-sep{width:14px;display:inline-block}
+.svc-opt{font-size:12px;color:rgba(255,255,255,.9);display:inline-flex;align-items:center;gap:4px;white-space:nowrap;cursor:pointer}
+.svc-opt input{margin:0;cursor:pointer}
 .svc-mini{font-size:12px;color:rgba(255,255,255,.78);text-decoration:underline;white-space:nowrap}
 .svc-mini:hover{color:#fff}
 .svc-stop{font-size:12px;font-weight:700;color:#fff;background:rgba(220,38,38,.85);padding:4px 13px;border-radius:999px;white-space:nowrap}
@@ -91,6 +93,7 @@ th{background:#f6f3fb}
       <span class="svc" id="svcPill"><i></i><span id="svcText">检测中…</span></span>
       <a class="svc-dl" id="launchBtn" href="lolzjcx://start" style="display:none" title="已装过 EXE 时一键启动；浏览器若询问是否打开，选允许">启动服务</a>
       <button class="svc-stop" id="stopSvc" style="display:none" onclick="shutdownSvc()">关闭服务</button>
+      <label id="autoStopWrap" class="svc-opt" style="display:none"><input type="checkbox" id="autoStopChk" checked>关闭页面后自动停</label>
       <a class="svc-dl" id="updBtn" href="/medias/files/lolzjcx_service.exe" download
         style="display:none;background:#f59e0b;border-color:#f59e0b" title="下载后双击新 EXE，会自动替换旧服务"></a>
       <span class="svc-tip" id="svcTip" style="display:none"></span>
@@ -177,7 +180,7 @@ async function call(name,...args){
 }
 /* ===== 服务在线状态：自动探测 / 掉线遮罩 / 上线自动连接 ===== */
 let online=null,inited=false,svcVer='',forceDl=false,launchWatch=null;
-const LATEST_VERSION='1.2.0';   // 与 exe 内 server.VERSION 同步；页面永远是最新，用来判断本机 exe 是否过时
+const LATEST_VERSION='1.3.0';   // 与 exe 内 server.VERSION 同步；页面永远是最新，用来判断本机 exe 是否过时
 // 点“启动服务”后若 4.5s 内仍未连上（如 EXE 被删/协议失效），自动回退显示下载入口
 function onLaunchClick(){
   if(online)return;
@@ -213,16 +216,16 @@ function morphLaunch(installed){
 }
 function setConnected(on,force){
   if(on===online&&!force)return;online=on;
-  const pill=$('svcPill'),txt=$('svcText'),launch=$('launchBtn');
+  const pill=$('svcPill'),txt=$('svcText'),launch=$('launchBtn'),aw=$('autoStopWrap');
   const stop=$('stopSvc'),tip=$('svcTip');
   if(on){
     clearTimeout(launchWatch);forceDl=false;   // 连上了，取消兜底
     try{localStorage.setItem('lolzjcx_installed','1');}catch(e){}   // 曾连上服务=本机已装过
-    pill.classList.add('on');txt.textContent='服务已运行';launch.style.display='none';stop.style.display='';tip.style.display='none';
+    pill.classList.add('on');txt.textContent='服务已运行';launch.style.display='none';stop.style.display='';tip.style.display='none';if(aw)aw.style.display='';
     if(!inited){inited=true;boot();}else{loadAccounts();}}
   else{
     let installed=false;try{installed=localStorage.getItem('lolzjcx_installed')==='1';}catch(e){}
-    pill.classList.remove('on');txt.textContent='服务未运行';launch.style.display='';stop.style.display='none';
+    pill.classList.remove('on');txt.textContent='服务未运行';launch.style.display='';stop.style.display='none';if(aw)aw.style.display='none';
     morphLaunch(installed);
     if(jobTimer){clearInterval(jobTimer);jobTimer=null;}}
   setSvcVersion(svcVer);
@@ -232,9 +235,11 @@ async function shutdownSvc(){
   try{await call('shutdown');}catch(e){}
   setConnected(false);toast('本地服务已关闭','w');
 }
+function autoStopOn(){const c=$('autoStopChk');return !c||c.checked;}
 async function probe(){
   try{
-    const resp=await rawFetch('/api/health',{method:'GET'},1500);
+    // hb=页面心跳；as=是否允许“页面都关闭后自动停服务”
+    const resp=await rawFetch('/api/health?hb=1&as='+(autoStopOn()?'1':'0'),{method:'GET'},1500);
     if(resp.ok){const j=await resp.json();if(j&&j.ok){setConnected(true);setSvcVersion(j.data&&j.data.version);return;}}
     setConnected(false);
   }catch(e){setConnected(false);}
@@ -393,6 +398,9 @@ function bindPersist(el,key){
 function selectedTiers(){return ['A','B','C','D'].filter(t=>{const c=document.querySelector(`.cp_tier[value="${t}"]`);return c&&c.checked;});}
 document.addEventListener('DOMContentLoaded',()=>{
   $('launchBtn').addEventListener('click',onLaunchClick);
+  const asc=$('autoStopChk');
+  try{const v=localStorage.getItem('lolzjcx_auto_stop');if(v!==null)asc.checked=v==='1';}catch(e){}
+  asc.addEventListener('change',()=>{try{localStorage.setItem('lolzjcx_auto_stop',asc.checked?'1':'0');}catch(e){}});
   const ta=$('query_input');
   if(ta){ta.addEventListener('input',()=>{clearTimeout(liveTimer);liveTimer=setTimeout(refreshPreview,350)});bindPersist(ta,QUERY_KEY);}
   const wlBox=$('copy_white');
