@@ -331,7 +331,7 @@ function premadeColors(results){
   return out;
 }
 let liveTimer;
-const WHITE_KEY='lolzjcx_copy_white',QUERY_KEY='lolzjcx_query_input',TIER_KEY='lolzjcx_copy_tiers',DEFAULT_TIERS=['A','D'];
+const WHITE_KEY='lolzjcx_copy_white',QUERY_KEY='lolzjcx_query_input',TIER_KEY='lolzjcx_copy_tiers',RESULTS_KEY='lolzjcx_last_results',DEFAULT_TIERS=['A','D'];
 function bindPersist(el,key){
   try{const saved=localStorage.getItem(key);if(saved)el.value=saved;}catch(e){}
   el.addEventListener('input',()=>{try{localStorage.setItem(key,el.value||'');}catch(e){}});
@@ -351,6 +351,8 @@ document.addEventListener('DOMContentLoaded',()=>{
     c.checked=tiers.includes(c.value);
     c.addEventListener('change',()=>{try{localStorage.setItem(TIER_KEY,JSON.stringify(selectedTiers()));}catch(e){}});
   });
+  // 刷新后还原上一次战绩
+  try{const saved=localStorage.getItem(RESULTS_KEY);if(saved){const arr=JSON.parse(saved);if(Array.isArray(arr)&&arr.length)renderBatch(arr);}}catch(e){}
 });
 async function refreshPreview(){try{const raw=await call('preview_summoners',$('query_input').value||'');
   const list=applyWhitelist(raw),skipped=raw.length-list.length;
@@ -358,7 +360,13 @@ async function refreshPreview(){try{const raw=await call('preview_summoners',$('
   $('query_preview').innerHTML=`识别到 <b>${list.length}</b> 个`
     +(skipped?` <span class="muted">（已过滤白名单 ${skipped} 个）</span>`:'')
     +(over?' <span style="color:var(--red)">（超过 5 个，只取前 5）</span>':'');}catch(e){}}
-function clearResults(){$('batchResult').innerHTML='';window.__last=null}
+function clearResults(){
+  $('batchResult').innerHTML='';window.__last=null;
+  const qi=$('query_input');if(qi){qi.value='';}   // 同时清空查询文本框
+  try{localStorage.removeItem(RESULTS_KEY);localStorage.removeItem(QUERY_KEY);}catch(e){}
+  // 过滤白名单、复制明细勾选保持不变
+  refreshPreview();
+}
 /* ===== 一键复制战报 ===== */
 const HORSE_LABEL={A:'上等马',B:'中等马',C:'下等马',D:'牛马',N:'暂无评级'};
 function horseLabel(t){return HORSE_LABEL[t]||'暂无评级'}
@@ -385,8 +393,9 @@ function copySummary(){
   const wl=new Set(getWhitelist());
   const list=all.filter(r=>!wl.has(String(r.summoner.name||'').trim()));
   if(!list.length){toast('都在白名单里，没有可复制的内容','e');return}
+  const isHidden=r=>{const p=String(r.summoner.privacy||'').toUpperCase();return !!p&&p!=='PUBLIC';};
   const lines=[];
-  lines.push('本局游戏：'+list.map(r=>`${r.summoner.name}-${horseLabel(r.summary.horseTier)}（${r.summary.avgKda}）`).join('、'));
+  lines.push('本局游戏：'+list.map(r=>`${r.summoner.name}-${horseLabel(r.summary.horseTier)}（${r.summary.avgKda}${isHidden(r)?'-隐藏战绩':''}）`).join('、'));
   const detail=(tier,best)=>list.filter(r=>r.summary.horseTier===tier).forEach(r=>{
     const champs=(r.summary.topChampions||[]).map(c=>c.champion).join('、')||'—';
     const rec=(r.matches||[]).filter(m=>!m.remake).slice()
@@ -418,6 +427,7 @@ function renderBatch(results){
   box.style.gridTemplateColumns=`repeat(${Math.min(Math.max(n,1),5)},minmax(0,1fr))`;
   const colors=premadeColors(list);
   box.innerHTML=list.map((r,i)=>resultBlockHtml(r,colors[i])).join('');
+  try{localStorage.setItem(RESULTS_KEY,JSON.stringify(list));}catch(e){}
 }
 </script>
 </body>
