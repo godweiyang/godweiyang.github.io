@@ -94,7 +94,7 @@ th{background:#f6f3fb}
 
   <!-- ① 账号池 -->
   <div class="card">
-    <h2><span class="step">1</span>账号池（查询缺号时自动注册补入；每号每天约 7 人，跨天恢复）
+    <h2><span class="step">1</span>账号池（缺号自动补号，每号每天约 7 人、跨天恢复）
       <span style="margin-left:auto;display:flex;gap:8px">
         <button class="sec" style="padding:3px 10px" onclick="startCheck()">检测账号</button>
         <button class="danger" style="padding:3px 10px" id="stopCheck" disabled onclick="stopJob()">停止检测</button>
@@ -255,8 +255,7 @@ async function loadAccounts(){
     const ov=await call('pool_overview');
     $('poolOverview').innerHTML=`<span class="tag t-ok">账号 ${ov.count}（可用 ${ov.available}）</span>
       <span class="tag t-use">今日还可查 ${Math.floor((ov.total_remaining||0)/3)} 人</span>
-      <span class="tag t-no">今日已查 ${Math.round((ov.used_today||0)/3)} / 共 ${Math.floor((ov.total_quota||0)/3)} 人</span>
-      <span class="muted">每完整查 1 人消耗 3 次（约 7 人/号/天），跨天自动恢复</span>`;
+      <span class="tag t-no">今日已查 ${Math.round((ov.used_today||0)/3)} / 共 ${Math.floor((ov.total_quota||0)/3)} 人</span>`;
   }catch(e){}
 }
 async function delAccount(num){
