@@ -374,15 +374,26 @@ const HORSE_LABEL={A:'上等马',B:'中等马',C:'下等马',D:'牛马',N:'暂�
 function horseLabel(t){return HORSE_LABEL[t]||'暂无评级'}
 function matchKda(m){return Number(m.d)>0?(Number(m.k)+Number(m.a))/Number(m.d):((Number(m.k)+Number(m.a))>0?Infinity:0)}
 function fmtMatch(m){return `${m.k}/${m.d}/${m.a}-${m.championCn||m.champion||''}`}
-function getWhitelist(){const INVIS=new RegExp("[\\u200B-\\u200F\\u202A-\\u202E\\u2060-\\u2064\\u2066-\\u2069\\uFEFF]","g");
-  return ($('copy_white').value||'').split(/[\n,，、;；\s]+/)
-  .map(s=>s.replace(INVIS,'').replace(/加入了队伍聊天.*$/,'').split('#')[0].trim())
-  .filter(Boolean)}
+// 白名单解析为 [{name,tag}]：写了#id 就精确到该 id，没写则按名字匹配所有同名
+const INVIS_RE=new RegExp("[\\u200B-\\u200F\\u202A-\\u202E\\u2060-\\u2064\\u2066-\\u2069\\uFEFF]","g");
+function getWhitelist(){
+  let t=($('copy_white').value||'').replace(INVIS_RE,'').replace(/加入了队伍聊天/g,'');
+  t=t.replace(/\s+#/g,'#');   // 名字与 #id 之间允许有空格
+  return t.split(/[\n,，、;；\s]+/).map(tok=>{tok=tok.trim();if(!tok)return null;
+    const i=tok.indexOf('#');if(i<0)return {name:tok,tag:null};
+    const name=tok.slice(0,i).trim(),tag=tok.slice(i+1).trim();
+    return name?{name,tag:tag||null}:null;}).filter(Boolean);
+}
+// 某召唤师是否命中白名单：条目带 id 时必须名字+id 都一致，不带 id 时同名即命中
+function wlHit(entries,name,tag){
+  name=String(name||'').trim();tag=String(tag||'').trim();
+  return (entries||[]).some(e=>e.name===name&&(e.tag===null||e.tag===tag));
+}
 // 过滤白名单：命中的召唤师直接剔除（不查询、不复制）。入参为 [{name,tag}]，返回保留项
 function applyWhitelist(list){
-  const wl=new Set(getWhitelist());
-  if(!wl.size)return list;
-  return (list||[]).filter(x=>!wl.has(String(x.name||'').trim()));
+  const wl=getWhitelist();
+  if(!wl.length)return list;
+  return (list||[]).filter(x=>!wlHit(wl,x.name,x.tag));
 }
 async function copyText(text){
   try{await navigator.clipboard.writeText(text);toast('已复制到剪贴板','s');return}catch(e){}
@@ -392,8 +403,8 @@ async function copyText(text){
 function copySummary(){
   const all=(window.__last||[]).filter(r=>r&&r.ok&&r.summoner&&r.summary);
   if(!all.length){toast('暂无可复制的查询结果，请先查询','e');return}
-  const wl=new Set(getWhitelist());
-  const list=all.filter(r=>!wl.has(String(r.summoner.name||'').trim()));
+  const wl=getWhitelist();
+  const list=all.filter(r=>!wlHit(wl,r.summoner.name,r.summoner.tag));
   if(!list.length){toast('都在白名单里，没有可复制的内容','e');return}
   const isHidden=r=>{const p=String(r.summoner.privacy||'').toUpperCase();return !!p&&p!=='PUBLIC';};
   const lines=[];
