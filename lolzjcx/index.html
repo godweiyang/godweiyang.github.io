@@ -96,8 +96,7 @@ th{background:#f6f3fb}
   <div class="card">
     <h2><span class="step">1</span>账号池（缺号自动补号，每号每天约 7 人、跨天恢复）
       <span style="margin-left:auto;display:flex;gap:8px">
-        <button class="sec" style="padding:3px 10px" onclick="startCheck()">检测账号</button>
-        <button class="danger" style="padding:3px 10px" id="stopCheck" disabled onclick="stopJob()">停止检测</button>
+        <button class="sec" style="padding:3px 10px" id="checkBtn" onclick="toggleCheck()">检测账号</button>
         <button class="sec" style="padding:3px 10px" onclick="clearAccounts('invalid')">清理失效</button>
         <button class="sec" style="padding:3px 10px" onclick="clearAccounts('all')">清空账号池</button>
         <button class="sec" style="padding:3px 10px" onclick="openData()">数据目录</button></span></h2>
@@ -116,8 +115,7 @@ th{background:#f6f3fb}
     <h2><span class="step">2</span>战绩查询（粘贴若干“名字#尾标”，自动识别，一次最多 5 个；串行轮换、缺号自动补）</h2>
     <textarea id="query_input" placeholder="每行一个，或直接粘贴整段队伍聊天：&#10;godweiyang⁩ #⁦23456⁩⁩加入了队伍聊天&#10;老公你努努力呀⁩ #⁦83805⁩⁩加入了队伍聊天&#10;也支持：名字#12345"></textarea>
     <div class="row">
-      <button onclick="startQuery()">开始查询（≤5）</button>
-      <button class="danger" id="stopQuery" disabled onclick="stopJob()">停止</button>
+      <button id="queryBtn" onclick="toggleQuery()">开始查询（≤5）</button>
       <button class="sec" onclick="clearResults()">清空结果</button>
       <button class="sec" onclick="copySummary()">一键复制</button>
       <span id="query_preview" class="muted"></span>
@@ -208,13 +206,19 @@ async function boot(){
 }
 async function openData(){try{await call('open_data_dir')}catch(e){toast(e.message,'e')}}
 async function stopJob(){try{await call('stop_job');toast('已请求停止','w')}catch(e){toast(e.message,'e')}}
+// 同一个按钮在“开始/停止”间切换：running 时变红并显示停止文案
+function setJobBtn(id,running,idleCls,idleTxt,runTxt){const b=$(id);if(!b)return;b.textContent=running?runTxt:idleTxt;b.className=running?'danger':idleCls;}
+async function jobRunning(type){try{const j=await call('job_status');return !!(j&&j.running&&(!type||j.type===type));}catch(e){return false}}
+async function toggleCheck(){if(await jobRunning('check'))stopJob();else startCheck();}
+async function toggleQuery(){if(await jobRunning('batch_query'))stopJob();else startQuery();}
 
 function watchJob(){
   if(jobTimer)clearInterval(jobTimer);
   jobTimer=setInterval(async()=>{try{
     const j=await call('job_status');if(!j)return;
     const isQ=j.type==='batch_query', isC=j.type==='check';
-    $('stopQuery').disabled=!isQ||!j.running; $('stopCheck').disabled=!isC||!j.running;
+    setJobBtn('checkBtn',isC&&j.running,'sec','检测账号','停止检测');
+    setJobBtn('queryBtn',isQ&&j.running,'','开始查询（≤5）','停止');
     const qBox=$('queryJobBox'),cBox=$('checkJobBox');
     qBox.style.display=(isQ&&j.running)?'':'none';
     cBox.style.display=(isC&&j.running)?'':'none';
@@ -228,7 +232,10 @@ function watchJob(){
       $('cJobState').textContent=`检测 ${j.done}/${j.total}｜正常 ${j.ok} 异常 ${j.fail}｜${j.running?'进行中…':'已结束'}`;
       $('cJobLog').textContent=(j.logs||[]).slice(-200).join('\n');$('cJobLog').scrollTop=$('cJobLog').scrollHeight;
     }
-    if(!j.running){clearInterval(jobTimer);jobTimer=null;$('stopQuery').disabled=true;$('stopCheck').disabled=true;loadAccounts();}
+    if(!j.running){clearInterval(jobTimer);jobTimer=null;
+      setJobBtn('checkBtn',false,'sec','检测账号','停止检测');
+      setJobBtn('queryBtn',false,'','开始查询（≤5）','停止');
+      loadAccounts();}
   }catch(e){}},800);
 }
 
