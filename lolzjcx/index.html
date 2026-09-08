@@ -277,15 +277,27 @@ async function shutdownSvc(){
   setConnected(false);toast('本地服务已关闭','w');
 }
 function autoStopOn(){const c=$('autoStopChk');return !c||c.checked;}
+// 探测加固（移动端 https→http loopback 首次有 PNA 预检，冷启动较慢）：
+//  - 超时放宽到 4s；连续失败 FAIL_GRACE 次才判离线，避免首检误闪“启动服务”
+//  - 用序号忽略乱序/过期响应；标签重新回到前台立即补探一次
+let probeSeq=0, failCount=0; const FAIL_GRACE=3;
 async function probe(){
+  const seq=++probeSeq;
   try{
     // hb=页面心跳；as=是否允许“页面都关闭后自动停服务”
-    const resp=await rawFetch('/api/health?hb=1&as='+(autoStopOn()?'1':'0'),{method:'GET'},1500);
-    if(resp.ok){const j=await resp.json();if(j&&j.ok){const d=j.data||{};setConnected(true);setSvcVersion(d.version,d.path);return;}}
-    setConnected(false);
-  }catch(e){setConnected(false);}
+    const resp=await rawFetch('/api/health?hb=1&as='+(autoStopOn()?'1':'0'),{method:'GET'},4000);
+    if(seq!==probeSeq)return;            // 已有更新的探测，丢弃旧结果
+    if(resp.ok){const j=await resp.json();if(j&&j.ok){failCount=0;const d=j.data||{};setConnected(true);setSvcVersion(d.version,d.path);return;}}
+    if(seq!==probeSeq)return;
+  }catch(e){if(seq!==probeSeq)return;}
+  failCount++;
+  if(failCount>=FAIL_GRACE)setConnected(false);   // 前几次失败仍保持“检测中”
 }
 setInterval(probe,1500);probe();
+// 切回标签/重新聚焦/从 App 返回浏览器时立刻探测，做到回页即连
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')probe();});
+window.addEventListener('pageshow',probe);
+window.addEventListener('focus',probe);
 
 let jobTimer=null;
 function toast(msg,type='s'){const t=$('toast');const d=document.createElement('div');d.className='t-'+type;d.textContent=msg;t.appendChild(d);setTimeout(()=>d.remove(),3600)}
