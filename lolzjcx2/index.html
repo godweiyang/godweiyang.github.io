@@ -206,7 +206,8 @@ input:focus{outline:none;border-color:var(--blue)}
       <button class="svc-stop" id="stopSvc" style="display:none">停止服务</button>
       <a class="svc-dl svc-b" id="dlBtn" href="/medias/files/lolzjcx_service.exe" download>下载本地服务</a>
       <label id="autoStopWrap" class="svc-opt" style="display:none"><input type="checkbox" id="autoStopChk" checked>关闭页面后自动停</label>
-      <a class="navlink" href="/lolzjcx/">多人对比版</a>
+      <a class="navlink" href="/lolzjcx3/">多人对比（完整）</a>
+      <a class="navlink" href="/lolzjcx/">简版多人页</a>
       <span class="svc-tip" id="svcTip" style="display:none"></span>
       <span class="svc-path" id="svcPath" style="display:none"></span>
       <span class="svc-macsh" id="macShWrap">
@@ -252,7 +253,7 @@ async function api(name,body,timeout=30000){
   return r.data;
 }
 let online=null,inited=false,svcVer='',svcPath='',forceDl=false,launchWatch=null;
-const LATEST_VERSION='1.4.0';
+const LATEST_VERSION='1.5.0';
 const UA=(navigator.userAgent||'')+' '+(navigator.platform||'');
 const IS_MAC=/macintosh|mac os x|iphone|ipad|ipod/i.test(UA);
 const IS_ANDROID=/android/i.test(UA);
@@ -310,6 +311,7 @@ function setConnected(on){
   if(on===online)return;online=on;
   if(on){try{localStorage.setItem('lolzjcx_installed','1');}catch(e){}if(!inited)inited=true;}
   renderSvc();
+  if(on&&autoQuery){const q=autoQuery;autoQuery=null;setTimeout(()=>doSearch(q),300);}
 }
 async function shutdownSvc(){
   if(!confirm('确定关闭本地服务吗？关闭后将暂停查询，需要时点页面上的「启动服务」即可，无需再找本地程序。'))return;
@@ -391,6 +393,7 @@ function tierRank(t,r,arena){if(!t||String(t).toUpperCase()==='NONE'||String(t).
  * ============================================================ */
 const state={ctx:null,overview:null,ma:null,queue:-1,page:1,size:15,loading:false};
 const QKEY='lolzjcx2_query';
+let autoQuery=null;   // 来自 URL 参数 ?name=&tag= 的自动查询（多人页跳转过来时）
 function parseOne(text){
   const s=String(text||'').replace(/[\u200B-\u200F\u202A-\u202E\u2060-\u2064\u2066-\u2069\uFEFF]/g,'').trim();
   const m=s.match(/^(.+?)#\s*(\d{2,})\s*$/);
@@ -398,9 +401,10 @@ function parseOne(text){
   return {name:m[1].replace(/加入了队伍聊天.*$/,'').replace(/[\s,，、:：·\-]+$/,'').trim(),tag:m[2]};
 }
 function setLoading(t){const r=$('root');if(t)r.innerHTML='<div class="loading">加载中…</div>';}
-async function doSearch(){
+async function doSearch(preset){
   if(online!==true){await probe(true);if(online!==true){toast('本地服务未运行，请先点右上角「启动服务」或下载本地服务','e');return;}}
-  const one=parseOne($('qInput').value);
+  let one=preset||null;
+  if(!one){one=parseOne($('qInput').value);}else{$('qInput').value=`${one.name}#${one.tag}`;}
   if(!one){toast('请输入正确格式：名字#尾标（如 godweiyang#23456）','e');return;}
   try{localStorage.setItem(QKEY,$('qInput').value);}catch(e){}
   state.queue=-1;state.page=1;state.loading=true;setLoading(true);$('qBtn').disabled=true;
@@ -694,8 +698,17 @@ document.addEventListener('DOMContentLoaded',()=>{
   const asc=$('autoStopChk');
   try{const v=localStorage.getItem('lolzjcx_auto_stop');if(v!==null)asc.checked=v==='1';}catch(e){}
   asc.addEventListener('change',()=>{try{localStorage.setItem('lolzjcx_auto_stop',asc.checked?'1':'0');}catch(e){}});
-  try{const v=localStorage.getItem(QKEY);if(v)$('qInput').value=v;}catch(e){}
-  $('qBtn').onclick=doSearch;
+  // URL 参数 ?name=&tag=（从多人页跳转）优先，其次恢复上次输入
+  const usp=new URLSearchParams(location.search);
+  const uName=(usp.get('name')||usp.get('n')||'').trim();
+  const uTag=(usp.get('tag')||usp.get('t')||'').trim().replace(/^#/,'');
+  if(uName&&/^\d{2,}$/.test(uTag)){
+    $('qInput').value=`${uName}#${uTag}`;
+    autoQuery={name:uName,tag:uTag};
+  }else{
+    try{const v=localStorage.getItem(QKEY);if(v)$('qInput').value=v;}catch(e){}
+  }
+  $('qBtn').onclick=()=>doSearch();
   $('qInput').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
 });
 </script>

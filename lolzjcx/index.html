@@ -150,6 +150,8 @@ html,body{overflow-x:hidden;-webkit-text-size-adjust:100%}
       <button class="svc-stop" id="stopSvc" style="display:none" onclick="shutdownSvc()">停止服务</button>
       <a class="svc-dl svc-b" id="dlBtn" href="/medias/files/lolzjcx_service.exe" download>下载本地服务</a>
       <label id="autoStopWrap" class="svc-opt" style="display:none"><input type="checkbox" id="autoStopChk" checked>关闭页面后自动停</label>
+      <a href="/lolzjcx3/" style="font-size:12px;color:rgba(255,255,255,.85);text-decoration:underline;white-space:nowrap">多人对比（完整）</a>
+      <a href="/lolzjcx2/" style="font-size:12px;color:rgba(255,255,255,.85);text-decoration:underline;white-space:nowrap">单人详情版</a>
       <span class="svc-tip" id="svcTip" style="display:none"></span>
       <span class="svc-path" id="svcPath" style="display:none"></span>
       <span class="svc-macsh" id="macShWrap">
@@ -245,7 +247,7 @@ async function call(name,...args){
 }
 /* ===== 服务在线状态：自动探测 / 掉线遮罩 / 上线自动连接 ===== */
 let online=null,inited=false,svcVer='',svcPath='',forceDl=false,launchWatch=null;
-const LATEST_VERSION='1.4.0';   // 与本机服务内 server.VERSION 同步；页面永远是最新，用来判断本机服务是否过时
+const LATEST_VERSION='1.5.0';   // 与本机服务内 server.VERSION 同步；页面永远是最新，用来判断本机服务是否过时
 // 按操作系统给出对应的本地服务安装包：Windows=exe，macOS=app.zip，安卓=apk
 const UA=(navigator.userAgent||'')+' '+(navigator.platform||'');
 const IS_MAC=/macintosh|mac os x|iphone|ipad|ipod/i.test(UA);
