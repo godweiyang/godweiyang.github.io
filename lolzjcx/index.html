@@ -221,8 +221,11 @@ async function call(name,...args){
     else if(name==='start_batch_query')p.params=args[0]||{};
     opt.body=JSON.stringify(p);
   }
+  // 控制接口都是本机回环、应毫秒级返回；手机上预检/回环偶发卡顿时，用较短超时快速暴露而非干等
+  const tmo=(name==='health'||name==='job_status')?3000
+           :(name==='start_batch_query'||name==='preview_summoners'||name==='start_check')?10000:8000;
   let resp;
-  try{resp=await rawFetch('/api/'+name,opt);}catch(e){setConnected(false);throw new Error('本地服务未连接，请先启动 lolzjcx_service');}
+  try{resp=await rawFetch('/api/'+name,opt,tmo);}catch(e){setConnected(false);throw new Error('本地服务未连接，请先启动 lolzjcx_service');}
   if(!resp.ok)throw new Error('本地服务返回 '+resp.status);
   const r=await resp.json();
   setConnected(true);
@@ -325,18 +328,20 @@ function autoStopOn(){const c=$('autoStopChk');return !c||c.checked;}
 //  - 串行：上一个探测未结束不发下一个，避免请求堆积在手机上互相拖死
 //  - 单次成功即上线并清零；连续 FAIL_GRACE 次失败才判离线，抗抖动、不来回跳
 //  - 切回标签/重新聚焦/从 App 返回浏览器时强制立即探一次，做到回页即连
-let failCount=0, probing=false; const FAIL_GRACE=4;
+let failCount=0, probing=false;
 async function probe(force){
   if(probing && !force)return;
   probing=true;
+  // 刚加载（检测中）阶段用短超时快速判定；稳态后用稍长超时抗抖动
+  const t0=online===null?1200:3000, grace=online===null?3:4;
   try{
     // hb=页面心跳；as=是否允许“页面都关闭后自动停服务”
-    const resp=await rawFetch('/api/health?hb=1&as='+(autoStopOn()?'1':'0'),{method:'GET'},3500);
+    const resp=await rawFetch('/api/health?hb=1&as='+(autoStopOn()?'1':'0'),{method:'GET'},t0);
     if(resp.ok){const j=await resp.json();if(j&&j.ok){failCount=0;const d=j.data||{};setConnected(true);setSvcVersion(d.version,d.path);}else failCount++;}
     else failCount++;
   }catch(e){failCount++;}
   probing=false;
-  if(failCount>=FAIL_GRACE)setConnected(false);
+  if(failCount>=grace)setConnected(false);
 }
 setInterval(()=>probe(false),2000);probe(true);
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')probe(true);});
@@ -522,6 +527,7 @@ async function refreshPreview(){try{const raw=await call('preview_summoners',$('
     +(over?' <span style="color:var(--red)">（超过 5 个，只取前 5）</span>':'');}catch(e){}}
 function clearResults(){
   $('batchResult').innerHTML='';window.__last=null;
+  const qb=$('queryJobBox');if(qb)qb.style.display='none';   // 收起查询日志框
   const qi=$('query_input');if(qi){qi.value='';}   // 同时清空查询文本框
   try{localStorage.removeItem(RESULTS_KEY);localStorage.removeItem(QUERY_KEY);}catch(e){}
   // 过滤白名单、复制明细勾选保持不变
@@ -579,18 +585,33 @@ function copySummary(){
   copyText(lines.join('\n'));
 }
 async function startQuery(){
-  if(!online){toast('本地服务未运行，请先点右上角“下载并运行本地服务（'+PKG+'）”','e');return}
+  if(online!==true){ // 可能只是探测还没确认，先强制探一次再决定是否拦截
+    await probe(true);
+    if(online!==true){toast('本地服务未运行，请先点右上角“启动服务”（'+PKG+'）','e');return}
+  }
+  const qBox=$('queryJobBox');
   try{
+    // 立即给出反馈：先展开日志框，避免手机上预检卡顿时“点了没反应”
+    qBox.style.display='';$('qPbar').style.width='0%';
+    $('qJobState').textContent='正在连接本地服务…';$('qJobLog').textContent='连接 127.0.0.1:17530 …';
     const raw=await call('preview_summoners',$('query_input').value);
-    if(!raw.length){toast('没识别到任何“名字#尾标”','e');return}
+    if(!raw.length){qBox.style.display='none';toast('没识别到任何“名字#尾标”','e');return}
     const list=applyWhitelist(raw);   // 白名单内的直接不查询，省额度、更快
-    if(!list.length){toast('都在过滤白名单里，没有需要查询的人','e');return}
+    if(!list.length){qBox.style.display='none';toast('都在过滤白名单里，没有需要查询的人','e');return}
     if(raw.length-list.length>0)toast(`已按白名单跳过 ${raw.length-list.length} 人`,'w');
-    if(list.length>5){list=list.slice(0,5);toast('一次最多 5 个，已取前 5','w')}
-    const text=list.map(x=>`${x.name}#${x.tag}`).join('\n');
+    if(list.length>5){toast('一次最多 5 个，已取前 5','w')}
+    const use=list.slice(0,5);
+    const text=use.map(x=>`${x.name}#${x.tag}`).join('\n');
+    $('qJobState').textContent='已连接，正在提交查询…';
     const r=await call('start_batch_query',{summoners:text});
     $('batchResult').innerHTML='';toast(`开始查询 ${r.parsed.length} 个召唤师（缺号会自动补）`);watchJob();
-  }catch(e){toast(e.message,'e')}
+  }catch(e){
+    // 失败也把原因留在日志框里，不再“没反应、没窗口”
+    $('qJobState').textContent='连接/启动失败';
+    $('qJobLog').textContent='失败：'+e.message+'\n请确认右上角为“服务已运行”；若刚启动服务，稍等几秒再点查询。';
+    setJobBtn('queryBtn',false,'','开始查询（≤5）','停止');
+    toast(e.message,'e');
+  }
 }
 function renderBatch(results){
   const box=$('batchResult'),list=results||[],n=list.length||1;
