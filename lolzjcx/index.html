@@ -245,7 +245,7 @@ async function call(name,...args){
 }
 /* ===== 服务在线状态：自动探测 / 掉线遮罩 / 上线自动连接 ===== */
 let online=null,inited=false,svcVer='',svcPath='',forceDl=false,launchWatch=null;
-const LATEST_VERSION='1.3.3';   // 与本机服务内 server.VERSION 同步；页面永远是最新，用来判断本机服务是否过时
+const LATEST_VERSION='1.4.0';   // 与本机服务内 server.VERSION 同步；页面永远是最新，用来判断本机服务是否过时
 // 按操作系统给出对应的本地服务安装包：Windows=exe，macOS=app.zip，安卓=apk
 const UA=(navigator.userAgent||'')+' '+(navigator.platform||'');
 const IS_MAC=/macintosh|mac os x|iphone|ipad|ipod/i.test(UA);

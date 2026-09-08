@@ -1,0 +1,703 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LOL 战绩详情</title>
+<style>
+:root{--bg:#eef1f5;--card:#fff;--ink:#1f2329;--sub:#6b7280;--line:#e3e7ee;--blue:#2563eb;--pri:#5b2a86;--red:#dc2626;--org:#d97706;--green:#16a34a;--win:#16a34a;--lose:#dc2626;--blueSide:#2f6fd0;--redSide:#d04545;--code:#0f172a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.6 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif;-webkit-user-select:text;user-select:text}
+html,body,div,span,p,b,td,th,label,h1,h2,h3,li,code{--webkit-user-select:text;-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
+button{-webkit-user-select:none;user-select:none}
+img{display:block}
+.wrap{max-width:1120px;margin:0 auto;padding:18px 16px 60px}
+/* 顶部服务栏 */
+header.top{background:linear-gradient(135deg,#3a1d5e,#5b2a86);color:#fff;border-radius:14px;padding:14px 20px;display:flex;flex-direction:column;align-items:center;gap:9px}
+header.top h1{font-size:19px;margin:0;letter-spacing:2px;text-align:center}
+.svcbar{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;width:100%}
+.svc{font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,.16);display:inline-flex;align-items:center;gap:6px}
+.svc i{width:8px;height:8px;border-radius:50%;background:#cbd5e1;display:inline-block}
+.svc.on{background:rgba(255,255,255,.2)}.svc.on i{background:#4ade80;box-shadow:0 0 6px #4ade80}
+.svc-tip{font-size:12px;color:rgba(255,255,255,.85)}
+.svc-dl{font-size:12px;font-weight:700;color:#fff;background:linear-gradient(135deg,#7c3aed,#9a6dd7);padding:4px 13px;border-radius:999px;text-decoration:none;white-space:nowrap}
+.svc-dl:hover{filter:brightness(1.08)}
+.svc-opt{font-size:12px;color:rgba(255,255,255,.9);display:inline-flex;align-items:center;gap:4px;white-space:nowrap;cursor:pointer}
+.svc-b{background:transparent!important;border:1px solid rgba(255,255,255,.55)!important;color:rgba(255,255,255,.92)!important;font-weight:400}
+.svc-b.primary{background:var(--pri)!important;border-color:var(--pri)!important;color:#fff!important;font-weight:700}
+.svc-b.warn{background:#f59e0b!important;border-color:#f59e0b!important;color:#fff!important;font-weight:700}
+.svc-path{flex-basis:100%;text-align:center;font-size:11px;color:rgba(255,255,255,.6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:92%}
+.svc-macsh{flex-basis:100%;display:none;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;font-size:11px;color:rgba(255,255,255,.8)}
+.svc-macsh code{font-family:ui-monospace,Menlo,Consolas,monospace;background:rgba(255,255,255,.13);border-radius:6px;padding:2px 8px;font-size:11px;color:#fff;word-break:break-all;text-align:left;line-height:1.5}
+.svc-macsh button{font-size:11px;background:rgba(255,255,255,.18);color:#fff;border:0;border-radius:6px;padding:2px 10px;cursor:pointer}
+a.svc-dis{opacity:.5;pointer-events:none}
+.svc-stop{font-size:12px;font-weight:700;color:#fff;background:rgba(220,38,38,.85);padding:4px 13px;border-radius:999px;white-space:nowrap;border:0}
+.svc-stop:hover{background:rgba(220,38,38,1)}
+.navlink{font-size:12px;color:rgba(255,255,255,.85);text-decoration:underline;white-space:nowrap}
+/* 卡片 */
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+.card h2{font-size:15px;margin:0 0 12px;display:flex;align-items:center;gap:8px}
+.muted{color:var(--sub);font-size:12px}
+button{cursor:pointer;border:0;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:600;background:var(--blue);color:#fff}
+button.sec{background:#efeaf7;color:var(--pri)}
+button:disabled{opacity:.45;cursor:not-allowed}
+input{padding:9px 12px;border:1px solid var(--line);border-radius:8px;font-size:14px;background:#fff;color:var(--ink);font-family:inherit}
+input:focus{outline:none;border-color:var(--blue)}
+/* 搜索 */
+.search-row{display:flex;gap:8px}
+.search-row input{flex:1;min-width:0;font-size:16px}
+.toast{position:fixed;right:18px;bottom:18px;display:flex;flex-direction:column;gap:8px;z-index:99}
+.toast div{padding:9px 14px;border-radius:8px;color:#fff;font-size:13px;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+.t-e{background:var(--red)}.t-s{background:var(--green)}.t-w{background:var(--org)}
+/* 玩家头部 */
+.profile{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.avatar{width:72px;height:72px;border-radius:14px;border:1px solid var(--line);background:#f3f4f6;flex:0 0 auto}
+.pf-main{flex:1;min-width:220px}
+.pf-name{font-size:21px;font-weight:800;line-height:1.25;word-break:break-word}
+.pf-name .tag{color:var(--sub);font-weight:600;font-size:15px}
+.pf-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;font-size:12.5px;color:var(--sub);align-items:center}
+.pill{display:inline-block;padding:1px 9px;border-radius:999px;font-size:11px;font-weight:700;background:#eef2ff;color:#3730a3}
+.pill.priv{background:#fdecec;color:var(--red)}
+.exp{margin-top:8px;max-width:340px}
+.exp .bar{height:8px;background:#eef0f4;border-radius:999px;overflow:hidden}
+.exp .bar i{display:block;height:100%;background:linear-gradient(90deg,#5b2a86,#9a6dd7)}
+.exp .lab{font-size:11px;color:var(--sub);margin-top:3px}
+/* 段位卡 */
+.ranks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.rank-card{border:1px solid var(--line);border-radius:12px;padding:13px 14px;background:linear-gradient(180deg,#fbfaff,#fff)}
+.rc-head{display:flex;align-items:center;gap:10px}
+.rc-emblem{width:46px;height:46px;flex:0 0 auto}
+.rc-tier{font-size:16px;font-weight:800;line-height:1.2}
+.rc-queue{font-size:12px;color:var(--sub)}
+.rc-lp{font-size:12px;color:var(--org);font-weight:700;margin-top:2px}
+.rc-rows{margin-top:9px;font-size:12px;line-height:1.85;border-top:1px dashed var(--line);padding-top:7px}
+.rc-rows .rk{color:var(--sub);display:inline-block;min-width:74px}
+.rc-unranked{color:var(--sub);font-size:13px}
+/* 数据总览 */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:12px}
+.stat-box{background:#f8f6fc;border-radius:10px;padding:10px 12px}
+.stat-box .v{font-size:20px;font-weight:800;color:var(--pri)}
+.stat-box .l{font-size:11.5px;color:var(--sub);margin-top:2px}
+.share-tbl{width:100%;border-collapse:collapse;font-size:12.5px}
+.share-tbl td{padding:5px 6px;border-bottom:1px solid #f0eef6}
+.share-tbl .lab{white-space:nowrap;color:var(--ink);width:96px}
+.share-tbl .pct{width:52px;text-align:right;font-variant-numeric:tabular-nums}
+.meter{flex:1;height:9px;max-height:9px;background:#eef0f4;border-radius:999px;overflow:hidden;min-width:60px;position:relative}
+.meter i{position:absolute;left:0;top:0;bottom:0;border-radius:999px}
+.meter.team i{background:linear-gradient(90deg,#7c3aed,#9a6dd7)}
+.meter.top i{background:linear-gradient(90deg,#2563eb,#60a5fa)}
+.meter-row{display:flex;align-items:center;gap:7px}
+.dmg3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px;font-size:11.5px}
+.dmg3 .c{background:#f8f6fc;border-radius:8px;padding:6px 9px;text-align:center}
+.dmg3 .c b{display:block;font-size:14px}
+.dmg3 .phy b{color:#d97706}.dmg3 .mag b{color:#2563eb}.dmg3 .tru b{color:#16a34a}
+/* 分路 & 英雄池 */
+.two-col{display:grid;grid-template-columns:1fr 1.6fr;gap:14px}
+.pos-list,.champ-list{display:flex;flex-direction:column;gap:8px}
+.pos-item,.champ-item{display:flex;align-items:center;gap:9px;font-size:12.5px}
+.pos-item .nm,.champ-item .nm{width:52px;flex:0 0 auto;font-weight:600}
+.champ-item .nm{width:auto;min-width:64px}
+.champ-item img,.mini-champ{width:34px;height:34px;border-radius:8px;flex:0 0 auto;background:#f3f4f6}
+.champ-item .info{flex:1;min-width:0}
+.champ-item .top{display:flex;justify-content:space-between;gap:6px}
+.winbar{height:6px;background:#fdecec;border-radius:999px;overflow:hidden;margin-top:3px}
+.winbar i{display:block;height:100%;background:linear-gradient(90deg,#16a34a,#4ade80)}
+.pos-item .meter{max-width:120px}
+/* 开黑队友 */
+.mate-list{display:flex;flex-direction:column;gap:7px}
+.mate{display:flex;align-items:center;gap:9px;font-size:12.5px}
+.mate img{width:30px;height:30px;border-radius:8px;background:#f3f4f6;flex:0 0 auto}
+.mate .mn{font-weight:600;min-width:150px}
+.mate .mc{color:var(--sub)}
+/* 模式 tab */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.tabs button{background:#f1f2f6;color:var(--ink);font-weight:600;font-size:12.5px;padding:6px 13px;border-radius:999px}
+.tabs button.on{background:var(--pri);color:#fff}
+/* 战绩行 */
+.match{border:1px solid var(--line);border-radius:10px;margin-bottom:9px;overflow:hidden;background:#fff}
+.m-row{display:flex;align-items:center;gap:10px;padding:9px 12px;cursor:pointer}
+.m-row:hover{background:#faf9fd}
+.m-res{flex:0 0 46px;text-align:center;font-weight:800;font-size:13px;border-radius:8px;padding:14px 0;color:#fff;line-height:1.2}
+.m-res.win{background:var(--win)}.m-res.lose{background:var(--lose)}.m-res.remake{background:#9ca3af}
+.m-champ{display:flex;align-items:center;gap:8px;flex:0 0 150px;min-width:0}
+.m-champ img{width:40px;height:40px;border-radius:9px}
+.m-champ .cn{font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.m-champ .sub{font-size:11px;color:var(--sub)}
+.m-kda{flex:0 0 120px;text-align:center;font-weight:800;font-size:15px}
+.m-kda .kk{color:var(--green)}.m-kda .dd{color:var(--red)}.m-kda .aa{color:#111827}.m-kda .sep{color:var(--sub);font-weight:400}
+.m-kda .ratio{font-size:11px;color:var(--sub);font-weight:600}
+.m-icons{flex:0 0 auto;display:flex;gap:3px;align-items:center}
+.m-icons img{width:22px;height:22px;border-radius:5px}
+.m-items{flex:1;display:flex;gap:3px;justify-content:flex-end;min-width:0;overflow:hidden}
+.m-items .slot{width:24px;height:24px;border-radius:5px;background:#f3f4f6;flex:0 0 auto}
+.m-items img{width:24px;height:24px;border-radius:5px}
+.m-info{flex:0 0 132px;font-size:11.5px;color:var(--sub);line-height:1.5;text-align:right}
+.m-detail{display:none;border-top:1px solid var(--line);background:#fbfafd}
+.match.open .m-detail{display:block}
+.team{padding:8px 12px}
+.team.t100{background:#f4f8ff}.team.t200{background:#fff6f6}
+.team-head{display:flex;align-items:center;gap:10px;font-weight:800;font-size:13px;padding:4px 0 7px;flex-wrap:wrap}
+.team-head .side{padding:2px 9px;border-radius:6px;color:#fff}
+.team.t100 .side{background:var(--blueSide)}.team.t200 .side{background:var(--redSide)}
+.team-head .res{font-weight:800}
+.team.t100 .res.win,.team.t200 .res.win{color:var(--green)}
+.team.t100 .res.lose,.team.t200 .res.lose{color:var(--red)}
+.obj{display:inline-flex;align-items:center;gap:3px;font-size:11px;background:#fff;border:1px solid var(--line);border-radius:6px;padding:1px 7px;color:#374151;font-weight:600}
+.bans{display:inline-flex;gap:3px;align-items:center}
+.bans img{width:20px;height:20px;border-radius:4px}
+.bans .slot{width:20px;height:20px;border-radius:4px;background:#e5e7eb;display:block}
+.bans .lab{font-size:11px;color:var(--sub);margin-right:2px}
+.pl{display:grid;grid-template-columns:24px 30px minmax(120px,1.4fr) repeat(6,minmax(48px,.7fr)) 58px minmax(150px,1fr);gap:6px;align-items:center;padding:5px 2px;font-size:11.5px;border-top:1px solid #f1f0f6}
+.pl.hl{background:#f1ecfb;border-radius:6px}
+.pl img.c{width:26px;height:26px;border-radius:6px}
+.pl .pname{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pl .pname .t{color:var(--sub);font-weight:400}
+.pl .num{text-align:right;font-variant-numeric:tabular-nums}
+.pl .pk{color:var(--green);font-weight:700}.pl .pd{color:var(--red);font-weight:700}
+.pl .picons{display:flex;gap:2px;align-items:center}
+.pl .picons img{width:18px;height:18px;border-radius:4px}
+.pl .pitems{display:flex;gap:2px;align-items:center;justify-content:flex-end}
+.pl .pitems img{width:19px;height:19px;border-radius:4px}
+.pl .pitems .slot{width:19px;height:19px;border-radius:4px;background:#eceef2}
+.pl-head{font-size:10.5px;color:var(--sub);font-weight:600}
+.pl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.pl{min-width:820px}
+.pager{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:14px}
+.pager .pg{font-size:13px;color:var(--sub)}
+.empty{color:var(--sub);text-align:center;padding:30px 0;font-size:13px}
+.loading{color:var(--sub);text-align:center;padding:24px 0;font-size:13px}
+.hint{font-size:11.5px;color:var(--sub);margin-top:6px}
+@media (max-width:820px){
+  .ranks{grid-template-columns:1fr}
+  .two-col{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  .wrap{max-width:100%;padding:10px 8px 46px}
+  header.top{padding:12px 11px;border-radius:12px}
+  header.top h1{font-size:17px;letter-spacing:1px}
+  .card{padding:12px 11px;margin:11px 0;border-radius:11px}
+  .card h2{font-size:14px;flex-wrap:wrap}
+  input,textarea{font-size:16px}
+  .avatar{width:60px;height:60px}
+  .pf-name{font-size:18px}
+  /* 战绩行：紧凑两排，装备/信息收进展开详情 */
+  .m-row{flex-wrap:wrap;gap:7px}
+  .m-champ{flex:1 1 130px}
+  .m-kda{flex:0 0 100px;order:3;text-align:left}
+  .m-info{order:4;flex:1;text-align:left}
+  .m-items{order:5;flex:1 1 100%;justify-content:flex-start;flex-wrap:nowrap}
+  .m-icons{order:6}
+  /* 10 人详情：改为可横向滑动，避免挤压 */
+  .pl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .pl{min-width:760px}
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+  .dmg3{grid-template-columns:1fr}
+  .toast{left:12px;right:12px;bottom:12px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>LOL 战绩详情</h1>
+    <div class="svcbar">
+      <span class="svc" id="svcPill"><i></i><span id="svcText">检测中…</span></span>
+      <a class="svc-dl" id="launchBtn" href="lolzjcx://start" style="display:none" title="浏览器若询问是否打开，选允许">启动服务</a>
+      <button class="svc-stop" id="stopSvc" style="display:none">停止服务</button>
+      <a class="svc-dl svc-b" id="dlBtn" href="/medias/files/lolzjcx_service.exe" download>下载本地服务</a>
+      <label id="autoStopWrap" class="svc-opt" style="display:none"><input type="checkbox" id="autoStopChk" checked>关闭页面后自动停</label>
+      <a class="navlink" href="/lolzjcx/">多人对比版</a>
+      <span class="svc-tip" id="svcTip" style="display:none"></span>
+      <span class="svc-path" id="svcPath" style="display:none"></span>
+      <span class="svc-macsh" id="macShWrap">
+        <span>免安全提示安装：打开「终端」粘贴执行一行命令</span>
+        <code id="macShCmd">curl -fsSL https://godweiyang.com/medias/files/install_mac.sh | bash</code>
+        <button type="button" id="macShCopy">复制命令</button>
+      </span>
+    </div>
+  </header>
+
+  <!-- 查询 -->
+  <div class="card">
+    <h2>召唤师查询（单人完整详情）</h2>
+    <div class="search-row">
+      <input id="qInput" placeholder="输入 召唤师名字#尾标，例如 godweiyang#23456" autocomplete="off">
+      <button id="qBtn">查询</button>
+    </div>
+    <div class="hint">展示段位、近期数据、分路/英雄池、常排队友与近 15 场完整对局（点击对局展开双方 10 人详情）；切换模式或翻页每次仅消耗 1 次额度。</div>
+  </div>
+
+  <div id="root"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+ * 本机后台服务：http://127.0.0.1:17530（探测/启停/下载，与 lolzjcx 同一套）
+ * ============================================================ */
+const API='http://127.0.0.1:17530';
+const $=id=>document.getElementById(id);
+async function rawFetch(path,opt,timeout=20000){
+  const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),timeout);
+  try{return await fetch(API+path,Object.assign({signal:ctrl.signal},opt));}
+  finally{clearTimeout(to);}
+}
+async function api(name,body,timeout=30000){
+  let resp;
+  try{resp=await rawFetch('/api/'+name,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body||{})},timeout);}
+  catch(e){setConnected(false);throw new Error('本地服务未连接，请先启动本地服务');}
+  if(!resp.ok)throw new Error('本地服务返回 '+resp.status);
+  const r=await resp.json();setConnected(true);
+  if(!r.ok)throw new Error(r.error||'操作失败');
+  return r.data;
+}
+let online=null,inited=false,svcVer='',svcPath='',forceDl=false,launchWatch=null;
+const LATEST_VERSION='1.4.0';
+const UA=(navigator.userAgent||'')+' '+(navigator.platform||'');
+const IS_MAC=/macintosh|mac os x|iphone|ipad|ipod/i.test(UA);
+const IS_ANDROID=/android/i.test(UA);
+const DL_URL=IS_MAC?'/medias/files/lolzjcx_service_mac.zip':(IS_ANDROID?'/medias/files/lolzjcx_service_android.apk':'/medias/files/lolzjcx_service.exe');
+const PTAG=IS_MAC?'Mac':(IS_ANDROID?'安卓':'Windows');
+const L_DL=`下载本地服务（${PTAG}）`,L_FIRST=`下载本地服务（${PTAG}·首次使用）`,L_REDL=`重新下载本地服务（${PTAG}）`;
+const L_UP_NOVER='更新本地服务（版本过旧）',L_UP=(o,n)=>`更新本地服务 v${o}→v${n}`;
+const TIP_FIRST=IS_MAC?'推荐用下方终端命令一键安装（免 Gatekeeper 安全提示）；也可下载解压后右键→打开 App 一次'
+  :IS_ANDROID?'下载 APK 安装（需允许“安装未知来源应用”），打开 App 点一次「启动服务」；以后直接点网页「启动服务」'
+  :'下载后双击运行一次，以后直接点「启动服务」';
+const TIP_RETRY=IS_MAC?'没启动起来？重跑下方终端命令，或下载解压后双击 App 运行一次'
+  :IS_ANDROID?'没启动起来？打开已安装的 App 点「启动服务」即可':'没启动起来？下载后双击运行一次即可';
+const TIP_UPDATE=IS_MAC?'推荐重跑下方终端命令自动更新（免安全提示）；或下载解压后右键→打开 App'
+  :IS_ANDROID?'下载新版 APK 覆盖安装即可，账号数据保留':'下载后双击即可，新版会自动停掉旧服务并接管';
+function protoUrl(){const h=location.hostname;return(h==='localhost'||h==='127.0.0.1'||h==='[::1]')?'lolzjcxdev://start':'lolzjcx://start';}
+function isInstalled(){try{return localStorage.getItem('lolzjcx_installed')==='1';}catch(e){return false;}}
+function agoText(ts){if(!ts)return'';const s=(Date.now()-ts)/1000;if(s<60)return'刚刚';if(s<3600)return Math.floor(s/60)+' 分钟前';if(s<86400)return Math.floor(s/3600)+' 小时前';return Math.floor(s/86400)+' 天前';}
+function onLaunchClick(){
+  if(online!==false||!isInstalled()||forceDl)return;
+  clearTimeout(launchWatch);
+  launchWatch=setTimeout(()=>{if(online)return;forceDl=true;renderSvc();
+    toast(`没有检测到服务启动；若本地服务${IS_ANDROID?'未安装或被卸载':'已被删除或移动'}，请点右上角「${L_REDL}」`,'w');},4500);
+}
+function cmpVer(a,b){const pa=String(a||'0').split('.').map(x=>parseInt(x)||0),pb=String(b||'0').split('.').map(x=>parseInt(x)||0);
+  for(let i=0;i<Math.max(pa.length,pb.length);i++){const x=pa[i]||0,y=pb[i]||0;if(x!==y)return x<y?-1:1;}return 0;}
+function setSvcVersion(v,path){svcVer=v||'';if(path)svcPath=path;
+  if(online&&path){try{localStorage.setItem('lolzjcx_last_svc',JSON.stringify({path,ts:Date.now()}));}catch(e){}}renderSvc();}
+function renderSvc(){
+  const pill=$('svcPill'),txt=$('svcText'),launch=$('launchBtn'),stop=$('stopSvc'),
+        dl=$('dlBtn'),aw=$('autoStopWrap'),tip=$('svcTip'),pathEl=$('svcPath'),macSh=$('macShWrap');
+  const macCmd=show=>{macSh.style.display=(IS_MAC&&show)?'flex':'none';};
+  dl.href=DL_URL;dl.classList.remove('primary','warn');
+  const setTip=t=>{if(t){tip.textContent=t;tip.style.display='';}else tip.style.display='none';};
+  const setPath=t=>{if(t){pathEl.textContent=t;pathEl.style.display='';}else pathEl.style.display='none';};
+  if(online===null){pill.classList.remove('on');txt.textContent='检测中…';stop.style.display='none';launch.style.display='none';
+    dl.textContent=L_DL;setTip('');setPath('');aw.style.display='none';macCmd(true);return;}
+  launch.classList.remove('svc-dis');
+  if(online){clearTimeout(launchWatch);forceDl=false;pill.classList.add('on');txt.textContent='服务已运行';
+    launch.style.display='none';stop.style.display='';aw.style.display='';
+    const noVer=!svcVer,outdated=noVer||cmpVer(svcVer,LATEST_VERSION)<0;macCmd(outdated);
+    pill.title=svcVer?('本地服务 v'+svcVer+(outdated?'（最新 v'+LATEST_VERSION+'）':'')):'';
+    if(outdated){dl.classList.add('warn');dl.textContent=noVer?L_UP_NOVER:L_UP(svcVer,LATEST_VERSION);setTip(TIP_UPDATE);}
+    else{dl.textContent=L_DL;setTip('');}
+    setPath(svcPath?('当前服务：'+svcPath):'');return;}
+  pill.classList.remove('on');txt.textContent='服务未运行';
+  stop.style.display='none';aw.style.display='none';launch.style.display='';launch.href=protoUrl();
+  if(!isInstalled()){launch.textContent='启动服务';launch.classList.add('svc-dis');
+    dl.classList.add('primary');dl.textContent=L_FIRST;setTip(TIP_FIRST);setPath('');macCmd(true);return;}
+  macCmd(true);launch.classList.remove('svc-dis');launch.textContent='启动服务';
+  if(forceDl){dl.classList.add('warn');dl.textContent=L_REDL;setTip(TIP_RETRY);}else{dl.textContent=L_DL;setTip('');}
+  let last=null;try{last=JSON.parse(localStorage.getItem('lolzjcx_last_svc')||'null');}catch(e){}
+  setPath(last&&last.path?('上次运行：'+last.path+' · '+agoText(last.ts)):'');
+}
+function setConnected(on){
+  if(on===online)return;online=on;
+  if(on){try{localStorage.setItem('lolzjcx_installed','1');}catch(e){}if(!inited)inited=true;}
+  renderSvc();
+}
+async function shutdownSvc(){
+  if(!confirm('确定关闭本地服务吗？关闭后将暂停查询，需要时点页面上的「启动服务」即可，无需再找本地程序。'))return;
+  try{await api('shutdown',{},6000);}catch(e){}setConnected(false);toast('本地服务已关闭','w');
+}
+function autoStopOn(){const c=$('autoStopChk');return !c||c.checked;}
+let failCount=0,probing=false;
+async function probe(force){
+  if(probing&&!force)return;probing=true;
+  const t0=online===null?1200:3000,grace=online===null?3:4;
+  try{const resp=await rawFetch('/api/health?hb=1&as='+(autoStopOn()?'1':'0'),{method:'GET'},t0);
+    if(resp.ok){const j=await resp.json();if(j&&j.ok){failCount=0;const d=j.data||{};setConnected(true);setSvcVersion(d.version,d.path);}else failCount++;}
+    else failCount++;
+  }catch(e){failCount++;}
+  probing=false;if(failCount>=grace)setConnected(false);
+}
+setInterval(()=>probe(false),2000);probe(true);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')probe(true);});
+window.addEventListener('pageshow',()=>probe(true));
+window.addEventListener('focus',()=>probe(true));
+function toast(msg,type='s'){const t=$('toast');const d=document.createElement('div');d.className='t-'+type;d.textContent=msg;t.appendChild(d);setTimeout(()=>d.remove(),3600);}
+function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+
+/* ============================================================
+ * 静态字典（英雄/符文/召唤师技能），同源加载；图片热链腾讯 CDN / lolso1
+ * ============================================================ */
+const DICT_BASE=location.pathname.replace(/[^/]*$/,'')+'data/';
+let HERO={},RUNE={},SPELL={};
+async function loadDict(){
+  const get=async f=>{try{const r=await fetch(DICT_BASE+f,{cache:'force-cache'});return r.ok?await r.json():{};}catch(e){return {};}};
+  [HERO,RUNE,SPELL]=await Promise.all([get('hero.json'),get('rune.json'),get('spell.json')]);
+}
+loadDict();
+const CDN='https://game.gtimg.cn/images/lol/act/img', WG='https://wegame.gtimg.com/g.26-r.c2d3c/helper/lol';
+const ITEM_FIX={7013:3802,7004:3068};
+function champEn(id,fallback){const h=HERO[String(id)];return (h&&h.en)||fallback||'';}
+function champCn(id,fallback){const h=HERO[String(id)];return (h&&h.cn)||fallback||('英雄'+(id??'?'));}
+function champIcon(id,fallback){const en=champEn(id,fallback);return en?`${CDN}/champion/${en}.png`:'';}
+function itemIcon(id){id=ITEM_FIX[id]||id;if(!id||id<=0)return '';return `${CDN}/item/${id}.png`;}
+function spellIcon(id){const s=SPELL[String(id)];return s?s.i:'';}
+function runeIcon(id){const r=RUNE[String(id)];return r?r.i:'';}
+function avatarUrl(id){return id?`${WG}/assis/images/resources/usericon/${id}.png`:'';}
+function rankIcon(tier){const t=String(tier||'').toLowerCase();return t?`https://lolso1.com/lol-assets/ranked-simple-icons/${t}.png`:`https://lolso1.com/lol-assets/ranked-simple-icons/none-tier.svg`;}
+function img(url,cls,alt){return url?`<img class="${cls||''}" src="${url}" alt="${esc(alt||'')}" loading="lazy">`:'';}
+
+/* ============================================================
+ * 映射表
+ * ============================================================ */
+const TIER_CN={IRON:'黑铁',BRONZE:'青铜',SILVER:'白银',GOLD:'黄金',PLATINUM:'铂金',EMERALD:'翡翠',DIAMOND:'钻石',MASTER:'大师',GRANDMASTER:'傲世宗师',CHALLENGER:'最强王者'};
+const TIER_COLOR={IRON:'#6b7280',BRONZE:'#a1693c',SILVER:'#7d8a99',GOLD:'#d4a017',PLATINUM:'#2fa88a',EMERALD:'#1f9e6b',DIAMOND:'#3b76d6',MASTER:'#8b5cf6',GRANDMASTER:'#d14141',CHALLENGER:'#e0a028'};
+const ARENA_TIER={SALT:'灰木',WOOD:'灰木',BRONZE:'青铜',SILVER:'白银',GOLD:'黄金',PLATINUM:'铂金',EMERALD:'翡翠',DIAMOND:'钻石',MASTER:'大师',GLADIATOR:'角斗士'};
+const QUEUE_TABS=[{v:-1,n:'所有队列'},{v:420,n:'单双排'},{v:430,n:'匹配模式'},{v:440,n:'灵活组排'},{v:450,n:'极地大乱斗'},{v:480,n:'快速模式'},{v:2400,n:'海克斯大乱斗'}];
+const QUEUE_NAME={0:'全部模式',400:'征召模式',420:'单双排',430:'匹配模式',440:'灵活组排',450:'极地大乱斗',480:'快速模式',325:'灵活组排(旧)',700:'克隆模式',
+  830:'入门人机',840:'新手人机',850:'一般人机',870:'入门人机',880:'新手人机',890:'人机模式',900:'无限乱斗',1020:'无限火力',1300:'终极魔典',
+  1700:'斗魂竞技场',1750:'斗魂竞技场',1900:'无限火力',2400:'海克斯大乱斗',2450:'经典海斗',4310:'经典匹配'};
+const MODE_CN={CLASSIC:'召唤师峡谷',ARAM:'极地大乱斗',ARENA:'斗魂竞技场',CHERRY:'斗魂竞技场',KIWI:'海克斯大乱斗',KIWI_JADE:'经典海斗',URF:'无限火力',ULTBOOK:'终极魔典',ONERORALL:'克隆模式'};
+const REGION_CN={HN1:'艾欧尼亚',HN2:'祖安',HN3:'诺克萨斯',HN4:'班德尔城',HN5:'皮尔特沃夫',HN6:'战争学院',HN7:'巨神峰',HN8:'雷瑟守备',HN9:'裁决之地',HN10:'黑色玫瑰',
+  HN11:'暗影岛',HN12:'钢铁烈阳',HN13:'水晶之痕',HN14:'均衡教派',HN15:'影流',HN16:'守望之海',HN17:'征服之海',HN18:'卡拉曼达',HN19:'皮城警备',BGP2:'峡谷之巅',PBE:'试炼之地'};
+const POS_CN={TOP:'上路',JUNGLE:'打野',MIDDLE:'中路',MID:'中路',BOTTOM:'下路',UTILITY:'辅助',SUPPORT:'辅助',ADC:'下路',CARRY:'下路',APEX:'竞技场'};
+function regionName(c){if(!c)return'—';const k=String(c).toUpperCase().replace('TENCENT_','');return REGION_CN[k]||k;}
+function tierCn(t){return TIER_CN[String(t||'').toUpperCase()]||String(t||'');}
+function tierColor(t){return TIER_COLOR[String(t||'').toUpperCase()]||'#6b7280';}
+function arenaCn(t){const k=String(t||'').toUpperCase();return ARENA_TIER[k]||k;}
+function queueName(qid,mode){return QUEUE_NAME[qid]||MODE_CN[String(mode||'').toUpperCase()]||(qid?('模式'+qid):'未知');}
+function posCn(p){return POS_CN[String(p||'').toUpperCase()]||'';}
+function pct(x,d){if(x==null||isNaN(x))return'—';return (x*100).toFixed(d==null?0:d)+'%';}
+function fmtK(n){n=Number(n)||0;return n>=10000?(n/1000).toFixed(1)+'万':(n>=1000?(n/1000).toFixed(1)+'k':String(n));}
+function fmtNum(n){return (Number(n)||0).toLocaleString('en-US');}
+function fmtDur(sec){sec=Math.max(0,Math.round(sec));return Math.floor(sec/60)+':'+String(sec%60).padStart(2,'0');}
+function fmtDate(ms){if(!ms)return'—';const d=new Date(Number(ms)),p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`;}
+function fmtDateTime(ms){if(!ms)return'—';const d=new Date(Number(ms)),p=n=>String(n).padStart(2,'0');return `${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;}
+function kdaOf(k,d,a){return d>0?((k+a)/d):(k+a);}
+function tierRank(t,r,arena){if(!t||String(t).toUpperCase()==='NONE'||String(t).toUpperCase()==='UNRANKED')return'';
+  const noRank=['MASTER','GRANDMASTER','CHALLENGER'];const tn=arena?arenaCn(t):tierCn(t);
+  return tn+(noRank.includes(String(t).toUpperCase())||!r?'':(' '+r));}
+
+/* ============================================================
+ * 状态与查询
+ * ============================================================ */
+const state={ctx:null,overview:null,ma:null,queue:-1,page:1,size:15,loading:false};
+const QKEY='lolzjcx2_query';
+function parseOne(text){
+  const s=String(text||'').replace(/[\u200B-\u200F\u202A-\u202E\u2060-\u2064\u2066-\u2069\uFEFF]/g,'').trim();
+  const m=s.match(/^(.+?)#\s*(\d{2,})\s*$/);
+  if(!m)return null;
+  return {name:m[1].replace(/加入了队伍聊天.*$/,'').replace(/[\s,，、:：·\-]+$/,'').trim(),tag:m[2]};
+}
+function setLoading(t){const r=$('root');if(t)r.innerHTML='<div class="loading">加载中…</div>';}
+async function doSearch(){
+  if(online!==true){await probe(true);if(online!==true){toast('本地服务未运行，请先点右上角「启动服务」或下载本地服务','e');return;}}
+  const one=parseOne($('qInput').value);
+  if(!one){toast('请输入正确格式：名字#尾标（如 godweiyang#23456）','e');return;}
+  try{localStorage.setItem(QKEY,$('qInput').value);}catch(e){}
+  state.queue=-1;state.page=1;state.loading=true;setLoading(true);$('qBtn').disabled=true;
+  try{
+    const d=await api('detail_init',{name:one.name,tag:one.tag,queue:state.queue,size:state.size},60000);
+    state.ctx={name:one.name,tag:one.tag,serverId:d.serverId,puuid:d.puuid};
+    state.overview=d.overview;state.ma=d.match_analysis;
+    state.loading=false;
+    renderAll();toast('查询完成','s');
+  }catch(e){state.loading=false;$('root').innerHTML='';toast(e.message,'e');}
+  finally{$('qBtn').disabled=false;}
+}
+async function loadPage(page,queue){
+  if(!state.ctx||state.loading)return;
+  state.loading=true;state.page=page;state.queue=queue;
+  renderMatchesHolder(true);
+  try{
+    const d=await api('detail_page',{serverId:state.ctx.serverId,puuid:state.ctx.puuid,page:page,queue:queue,size:state.size},30000);
+    state.ma=d.match_analysis;
+    state.loading=false;
+    renderStats();renderMatches();
+  }catch(e){state.loading=false;toast(e.message,'e');renderMatchesHolder(false);renderMatches();}
+}
+function renderAll(){$('root').innerHTML='';renderProfile();renderRanks();renderStats();renderTwoCol();renderMates();renderMatchesHolder(false);renderMatches();}
+
+/* ---------- 玩家头部 ---------- */
+function renderProfile(){
+  const b=(state.overview&&state.overview.base)||{},rk=state.overview.ranked||{};
+  const priv=String(b.privacy||'').toUpperCase();
+  const expPct=b.expToNextLevel?Math.min(100,Math.round(100*b.expPoints/b.expToNextLevel)):0;
+  const hist=tierRank(rk.highestPreviousSeasonEndTier,rk.highestPreviousSeasonEndRank);
+  $('root').insertAdjacentHTML('beforeend',`
+  <div class="card" id="cProfile">
+    <div class="profile">
+      ${img(avatarUrl(b.profileIconId),'avatar')}
+      <div class="pf-main">
+        <div class="pf-name">${esc(b.gameName||state.ctx.name)}<span class="tag">#${esc(b.tagLine||state.ctx.tag)}</span></div>
+        <div class="pf-meta">
+          <span class="pill">${esc(regionName(state.ctx.serverId))}</span>
+          <span>等级 <b>${b.level??'—'}</b></span>
+          ${priv&&priv!=='PUBLIC'?'<span class="pill priv">隐私私密</span>':'<span class="pill" style="background:#ecfdf3;color:#15803d">战绩公开</span>'}
+          <span>最后游戏 ${fmtDateTime(b.lastGameDate)}</span>
+          ${hist?`<span>历史最高赛季 <b style="color:${tierColor(rk.highestPreviousSeasonEndTier)}">${esc(hist)}</b></span>`:''}
+        </div>
+        <div class="exp"><div class="bar"><i style="width:${expPct}%"></i></div>
+          <div class="lab">经验 ${b.expPoints??0} / ${b.expToNextLevel??0}（${expPct}%）</div></div>
+      </div>
+    </div>
+  </div>`);
+}
+
+/* ---------- 段位卡 ---------- */
+function rankRows(q,arena){
+  const placed=q.tier&&!['NONE','UNRANKED'].includes(String(q.tier).toUpperCase());
+  const prov=(q.provisionalGameThreshold>0&&(q.provisionalGamesRemaining??0)>0);
+  const tr=(t,r)=>{const x=tierRank(t,r,arena);return x?`<b style="color:${arena?'#7c3aed':tierColor(t)}">${esc(x)}</b>`:'<span class="muted">—</span>';};
+  if(!placed&&!prov)return '<div class="rc-unranked">未定级</div>';
+  if(prov){const done=q.provisionalGameThreshold-q.provisionalGamesRemaining;
+    return `<div class="rc-rows"><div>定级赛 <b>${done}/${q.provisionalGameThreshold}</b></div>
+      <div><span class="rk">上赛季结算</span>${tr(q.previousSeasonEndTier,q.previousSeasonEndRank)}</div></div>`;}
+  const total=(q.wins||0)+(q.losses||0),wr=total?Math.round(100*q.wins/total):null;
+  let rows=`<div class="rc-rows">`;
+  if(!arena||total>0)rows+=`<div><span class="rk">战绩</span>${q.wins||0}胜 ${q.losses||0}负${wr!=null?` · 胜率 ${wr}%`:''}</div>`;
+  rows+=`<div><span class="rk">本赛季最高</span>${tr(q.highestTier,q.highestRank)}</div>`;
+  if(!arena){
+    rows+=`<div><span class="rk">上赛季结算</span>${tr(q.previousSeasonEndTier,q.previousSeasonEndRank)}</div>`;
+    rows+=`<div><span class="rk">上赛季最高</span>${tr(q.previousSeasonHighestTier,q.previousSeasonHighestRank)}</div>`;
+  }
+  rows+=`</div>`;
+  return rows;
+}
+function rankCard(q,title,arena){
+  const placed=q&&q.tier&&!['NONE','UNRANKED'].includes(String(q.tier).toUpperCase());
+  const prov=q&&q.provisionalGameThreshold>0&&(q.provisionalGamesRemaining??0)>0;
+  const tierTxt=q?tierRank(q.tier,q.rank,arena):'';
+  const emblem=arena?'':(placed?rankIcon(q.tier):rankIcon(null));
+  return `<div class="rank-card">
+    <div class="rc-head">
+      ${arena?`<div class="rc-emblem" style="display:flex;align-items:center;justify-content:center;border-radius:10px;background:#f1ecfb;font-size:20px">⚔</div>`
+            :`<img class="rc-emblem" src="${emblem}" alt="">`}
+      <div><div class="rc-tier" ${placed?`style="color:${arena?'#7c3aed':tierColor(q.tier)}"`:''}>${placed?esc(tierTxt):(prov?'定级赛中':'未定级')}</div>
+      <div class="rc-queue">${title}</div>
+      ${placed&&!arena?`<div class="rc-lp">${q.leaguePoints??0} 胜点 · 累计 ${q.cumulativeLp??0}</div>`:''}</div>
+    </div>${q?rankRows(q,arena):'<div class="rc-unranked">—</div>'}</div>`;
+}
+function renderRanks(){
+  const q=((state.overview&&state.overview.ranked&&state.overview.ranked.queues)||{});
+  $('root').insertAdjacentHTML('beforeend',`
+  <div class="card" id="cRanks"><h2>段位信息</h2>
+    <div class="ranks">
+      ${rankCard(q.RANKED_SOLO_5x5,'单双排',false)}
+      ${rankCard(q.RANKED_FLEX_SR,'灵活组排',false)}
+      ${rankCard(q.JADE_RANKED_SOLO_5x5,'斗魂竞技场',true)}
+    </div></div>`);
+}
+
+/* ---------- 数据总览 ---------- */
+function meter(cls,val,cap){const w=Math.max(0,Math.min(1,val/cap))*100;return `<div class="meter ${cls}"><i style="width:${w}%"></i></div>`;}
+function shareRow(label,team,top){
+  return `<tr><td class="lab">${label}</td>
+    <td><div class="meter-row">${meter('team',team??0,.35)}<span class="pct">${pct(team,1)}</span></div></td>
+    <td><div class="meter-row">${meter('top',top??0,1)}<span class="pct">${pct(top,1)}</span></div></td></tr>`;
+}
+function renderStats(){
+  const el=document.getElementById('cStats');if(el)el.remove();
+  const st=(state.ma&&state.ma.statistics)||{},s=st.summary||{};
+  if(!s.count){$('root').insertAdjacentHTML('beforeend',`<div class="card" id="cStats"><h2>近期数据</h2><div class="empty">该模式下暂无足够对局数据</div></div>`);return;}
+  const streak=s.winningStreak>=2?`${s.winningStreak} 连胜`:(s.losingStreak>=2?`${s.losingStreak} 连败`:'—');
+  const d3=(l,cls,key)=>`<div class="c ${cls}"><span>${l}</span><b>${pct(s[key],1)}</b></div>`;
+  const html=`<div class="card" id="cStats"><h2>近期数据 · 近 ${s.count} 场</h2>
+    <div class="stat-grid">
+      <div class="stat-box"><div class="v" style="color:var(--green)">${s.win}胜 ${s.lose}负</div><div class="l">胜率 ${pct(s.winRate)}</div></div>
+      <div class="stat-box"><div class="v">${(s.averageKda??0).toFixed(2)}</div><div class="l">场均 KDA</div></div>
+      <div class="stat-box"><div class="v">${pct(s.averageKillParticipationRate,1)}</div><div class="l">场均参团率</div></div>
+      <div class="stat-box"><div class="v">${(s.averageCsPerMinute??0).toFixed(1)}</div><div class="l">分均补刀</div></div>
+      <div class="stat-box"><div class="v" style="color:var(--org)">${streak}</div><div class="l">连胜 / 连败</div></div>
+    </div>
+    <table class="share-tbl">
+      <tr><td class="lab muted">数据占比</td><td class="muted" style="font-size:11px">团队占比</td><td class="muted" style="font-size:11px">对位/全场最高</td></tr>
+      ${shareRow('英雄伤害',s.averageDamageDealtToChampionShareOfTeam,s.averageDamageDealtToChampionShareToTop)}
+      ${shareRow('总伤害',s.averageDamageShareOfTeam,s.averageDamageShareToTop)}
+      ${shareRow('承受伤害',s.averageDamageTakenShareOfTeam,s.averageDamageTakenShareToTop)}
+      ${shareRow('经济',s.averageGoldShareOfTeam,s.averageGoldShareToTop)}
+      ${shareRow('补刀',s.averageCsShareOfTeam,s.averageCsShareToTop)}
+    </table>
+    <div class="dmg3">
+      ${d3('物理伤害·团队','phy','averagePhysicalDamageDealtToChampionShareOfTeam')}
+      ${d3('魔法伤害·团队','mag','averageMagicDamageDealtToChampionShareOfTeam')}
+      ${d3('真实伤害·团队','tru','averageTrueDamageDealtToChampionShareOfTeam')}
+    </div></div>`;
+  // 插到段位卡后面
+  const rc=document.getElementById('cRanks');rc.insertAdjacentHTML('afterend',html);
+}
+
+/* ---------- 分路 + 英雄池 ---------- */
+function renderTwoCol(){
+  const st=(state.ma&&state.ma.statistics)||{};
+  const pos=st.positions||{},champs=st.champions||{},primary=st.primaryPosition;
+  const posArr=Object.values(pos).sort((a,b)=>b.count-a.count);
+  const champArr=Object.values(champs).sort((a,b)=>b.count-a.count||b.win-a.win);
+  const posHtml=posArr.length?posArr.map(p=>{
+    const wr=p.count?p.win/p.count:0;
+    return `<div class="pos-item"><span class="nm">${posCn(p.position)||p.position}${p.position===primary?' ★':''}</span>
+      ${meter('team',p.count,posArr[0].count)}<span class="muted">${p.count}场 ${p.win}胜${p.lose}负 · ${pct(wr,0)}</span></div>`;
+  }).join(''):'<div class="muted">暂无</div>';
+  const champHtml=champArr.length?champArr.map(c=>{
+    const wr=c.count?c.win/c.count:0;
+    return `<div class="champ-item">${img(champIcon(c.id),'mini-champ')}
+      <div class="info"><div class="top"><span class="nm">${esc(champCn(c.id))}</span><span class="muted">${c.count}场 ${c.win}胜${c.lose}负 · ${pct(wr,0)}</span></div>
+      <div class="winbar"><i style="width:${wr*100}%"></i></div></div></div>`;
+  }).join(''):'<div class="muted">暂无</div>';
+  $('root').insertAdjacentHTML('beforeend',`
+  <div class="card" id="cTwoCol"><h2>分路分布 / 英雄池</h2>
+    <div class="two-col">
+      <div><div class="muted" style="margin-bottom:8px">主打位置：<b>${posCn(primary)||'—'}</b></div><div class="pos-list">${posHtml}</div></div>
+      <div class="champ-list">${champHtml}</div>
+    </div></div>`);
+}
+
+/* ---------- 常排队友 ---------- */
+function renderMates(){
+  const rel=(state.ma&&state.ma.relationship)||[];
+  const self=state.ctx.puuid;
+  const list=rel.filter(r=>String(r.targetPuuid)!==String(self))
+    .sort((a,b)=>(b.teammateGames||0)-(a.teammateGames||0)||(b.totalGames||0)-(a.totalGames||0)).slice(0,8);
+  const html=list.length?list.map(r=>`<div class="mate">
+      ${img(avatarUrl(r.targetProfileIconId),'')}
+      <span class="mn">${esc(r.targetGameName)}<span class="muted">#${esc(r.targetTagLine)}</span></span>
+      <span class="mc">同队 <b style="color:var(--green)">${r.teammateGames||0}</b> 场（${r.teammateWins||0}胜）</span>
+      <span class="mc">对手 ${r.opponentGames||0} 场</span>
+      <span class="mc">近期同局 ${r.recentGames||0}</span></div>`).join('')
+    :'<div class="muted">近期没有检测到固定队友</div>';
+  $('root').insertAdjacentHTML('beforeend',`<div class="card" id="cMates"><h2>常排队友（近窗口）</h2><div class="mate-list">${html}</div></div>`);
+}
+
+/* ---------- 战绩列表 ---------- */
+function renderMatchesHolder(loading){
+  let el=document.getElementById('cMatches');if(el)el.remove();
+  $('root').insertAdjacentHTML('beforeend',`<div class="card" id="cMatches"><h2>对局记录</h2>
+    <div class="tabs" id="mTabs"></div><div id="mList">${loading?'<div class="loading">加载中…</div>':''}</div>
+    <div class="pager" id="mPagers"></div></div>`);
+  const tabs=$('mTabs');
+  tabs.innerHTML=QUEUE_TABS.map(t=>`<button data-v="${t.v}" class="${state.queue===t.v?'on':''}">${t.n}</button>`).join('');
+  tabs.querySelectorAll('button').forEach(b=>b.onclick=()=>{if(state.loading)return;loadPage(1,Number(b.dataset.v));});
+}
+function csOf(p){return (Number(p.totalMinionsKilled)||0)+(Number(p.neutralMinionsKilled)||0);}
+function matchHead(m,self){
+  const p=(m.participants||[]).find(x=>String(x.puuid)===String(self))||m.participants[0]||{};
+  const win=String(p.win).toLowerCase()==='true'||p.win===true;
+  const remake=(m.gameDuration||0)>0&&m.gameDuration<=180;
+  const k=p.kills||0,d=p.deaths||0,a=p.assists||0;
+  const cid=p.championID??p.championId;
+  const items=[];for(let i=0;i<7;i++){const id=p['item'+i];const u=itemIcon(id);items.push(u?`<img src="${u}" loading="lazy">`:'<span class="slot"></span>');}
+  const spells=[spellIcon(p.spell1Id),spellIcon(p.spell2Id)].filter(Boolean).map(u=>`<img src="${u}" loading="lazy">`).join('');
+  const ksRune=p.perks&&p.perks.styles&&p.perks.styles[0]?runeIcon(p.perks.styles[0].selections[0].perk):'';
+  const flags=[];
+  if(remake)flags.push('重开');
+  if(p.gameEndedInSurrender||p.gameEndedInEarlySurrender)flags.push('投降');
+  if(p.firstBloodKill)flags.push('一血');
+  if(p.pentaKills>0)flags.push('五杀');else if(p.quadraKills>0)flags.push('四杀');else if(p.tripleKills>0)flags.push('三杀');
+  const resCls=remake?'remake':(win?'win':'lose'),resTxt=remake?'重开':(win?'胜':'负');
+  return `<div class="m-row" data-open="0">
+    <div class="m-res ${resCls}">${resTxt}</div>
+    <div class="m-champ">${img(champIcon(cid,p.championName))}
+      <div style="min-width:0"><div class="cn">${esc(champCn(cid,p.championName))}</div>
+      <div class="sub">${posCn(p.individualPosition||p.teamPosition)||'—'} · ${p.champLevel||0}级${flags.length?' · '+flags.join('·'):''}</div></div></div>
+    <div class="m-kda"><span class="kk">${k}</span><span class="sep">/</span><span class="dd">${d}</span><span class="sep">/</span><span class="aa">${a}</span>
+      <div class="ratio">${kdaOf(k,d,a).toFixed(2)} KDA</div></div>
+    <div class="m-icons">${spells}${ksRune?`<img src="${ksRune}" loading="lazy">`:''}</div>
+    <div class="m-items">${items.join('')}</div>
+    <div class="m-info">${esc(queueName(m.queueId,m.gameMode))}<br>${fmtDateTime(m.gameStartTimestamp||m.gameCreation)} · ${fmtDur(m.gameDuration)}<br>补刀 ${csOf(p)} · 金钱 ${fmtK(p.goldEarned)} · 伤害 ${fmtK(p.totalDamageDealtToChampions)}</div>
+  </div>`;
+}
+const OBJ_LABELS=[['champion','击杀'],['baron','大龙'],['dragon','小龙'],['riftHerald','先锋'],['tower','防御塔'],['inhibitor','水晶'],['atakhan','Atakhan'],['horde','部落']];
+function teamBlock(m,t,self){
+  const players=(m.participants||[]).filter(p=>Number(p.teamId)===Number(t.teamId));
+  const objs=t.objectives||{};
+  const objChips=OBJ_LABELS.filter(([k])=>objs[k]&&objs[k].kills>0).map(([k,n])=>`<span class="obj">${n} ${objs[k].kills}</span>`).join('');
+  const bans=(t.bans||[]).map(b=>{const u=champIcon(b.championId);return b.championId>0&&u?`<img src="${u}" loading="lazy">`:'<span class="slot"></span>';}).join('');
+  const win=String(t.win).toLowerCase()==='true'||t.win===true;
+  const headCols=`<div class="pl pl-head"><span></span><span></span><span>玩家</span>
+      <span class="num">K/D/A</span><span class="num">等级</span><span class="num">补刀</span><span class="num">金钱</span><span class="num">伤害</span><span class="num">承伤</span><span>技能/符文</span><span></span></div>`;
+  const rows=players.map(p=>{
+    const cid=p.championID??p.championId;
+    const hl=String(p.puuid)===String(self);
+    const spells=[spellIcon(p.spell1Id),spellIcon(p.spell2Id)].filter(Boolean).map(u=>`<img src="${u}" loading="lazy">`);
+    let runes=[];
+    if(p.perks&&p.perks.styles){const st=p.perks.styles;
+      if(st[0]&&st[0].selections&&st[0].selections[0])runes.push(runeIcon(st[0].selections[0].perk));
+      if(st[1])runes.push(runeIcon(st[1].style));}
+    const items=[];for(let i=0;i<7;i++){const u=itemIcon(p['item'+i]);items.push(u?`<img src="${u}" loading="lazy">`:'<span class="slot"></span>');}
+    return `<div class="pl ${hl?'hl':''}">
+      <span>${Number(p.teamId)===100?'蓝':'红'}</span>
+      ${img(champIcon(cid,p.championName),'c')}
+      <span class="pname">${esc(p.riotIdGameName||'—')}<span class="t">#${esc(p.riotIdTagline||'')}</span>${hl?' ★':''}</span>
+      <span class="num"><span class="pk">${p.kills||0}</span>/<span class="pd">${p.deaths||0}</span>/<span>${p.assists||0}</span></span>
+      <span class="num">${p.champLevel||0}</span>
+      <span class="num">${csOf(p)}</span>
+      <span class="num">${fmtK(p.goldEarned)}</span>
+      <span class="num">${fmtK(p.totalDamageDealtToChampions)}</span>
+      <span class="num">${fmtK(p.totalDamageTaken)}</span>
+      <span class="picons">${spells.join('')}${runes.filter(Boolean).map(u=>`<img src="${u}" loading="lazy">`).join('')}</span>
+      <span class="pitems">${items.join('')}</span></div>`;
+  }).join('');
+  return `<div class="team t${t.teamId}">
+    <div class="team-head">
+      <span class="side">${Number(t.teamId)===100?'蓝色方':'红色方'}</span>
+      <span class="res ${win?'win':'lose'}">${win?'胜利':'失败'}</span>
+      ${objChips}
+      <span class="bans"><span class="lab">BAN</span>${bans}</span>
+    </div>
+    <div class="pl-scroll">${headCols}${rows}</div>
+  </div>`;
+}
+function matchDetail(m,self){
+  const teams=(m.teams||[]).slice().sort((a,b)=>Number(a.teamId)-Number(b.teamId));
+  return `<div class="m-detail">${teams.map(t=>teamBlock(m,t,self)).join('')}</div>`;
+}
+function renderMatches(){
+  const list=(state.ma&&state.ma.matchHistory)||[];
+  const box=$('mList');
+  if(!list.length){box.innerHTML='<div class="empty">该模式下没有查到对局</div>';renderPager(0);return;}
+  box.innerHTML=list.map(m=>`<div class="match" data-gid="${m.gameId}">${matchHead(m,state.ctx.puuid)}${matchDetail(m,state.ctx.puuid)}</div>`).join('');
+  box.querySelectorAll('.m-row').forEach(row=>row.onclick=()=>{
+    const wrap=row.closest('.match');const open=wrap.classList.toggle('open');
+    row.dataset.open=open?'1':'0';
+  });
+  renderPager(list.length);
+}
+function renderPager(n){
+  const pg=$('mPagers');
+  const hasMore=n>=state.size;
+  pg.innerHTML=`<button class="sec" ${state.page<=1||state.loading?'disabled':''} id="pgPrev">上一页</button>
+    <span class="pg">第 ${state.page} 页${hasMore?'':'（已到最早）'}</span>
+    <button class="sec" ${!hasMore||state.loading?'disabled':''} id="pgNext">下一页</button>`;
+  const pre=$('pgPrev'),nx=$('pgNext');
+  if(pre)pre.onclick=()=>loadPage(state.page-1,state.queue);
+  if(nx)nx.onclick=()=>loadPage(state.page+1,state.queue);
+}
+
+/* ---------- 初始化 ---------- */
+document.addEventListener('DOMContentLoaded',()=>{
+  $('launchBtn').addEventListener('click',onLaunchClick);
+  $('stopSvc').addEventListener('click',shutdownSvc);
+  $('macShCopy').addEventListener('click',async()=>{
+    const t=$('macShCmd').textContent.trim();
+    try{await navigator.clipboard.writeText(t);toast('安装命令已复制','s');}
+    catch(e){const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();
+      try{document.execCommand('copy');toast('安装命令已复制','s');}catch(_){toast('复制失败，请手动复制','w');}ta.remove();}
+  });
+  const asc=$('autoStopChk');
+  try{const v=localStorage.getItem('lolzjcx_auto_stop');if(v!==null)asc.checked=v==='1';}catch(e){}
+  asc.addEventListener('change',()=>{try{localStorage.setItem('lolzjcx_auto_stop',asc.checked?'1':'0');}catch(e){}});
+  try{const v=localStorage.getItem(QKEY);if(v)$('qInput').value=v;}catch(e){}
+  $('qBtn').onclick=doSearch;
+  $('qInput').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
+});
+</script>
+</body>
+</html>
