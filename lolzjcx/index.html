@@ -188,10 +188,22 @@ async function call(name,...args){
 /* ===== 服务在线状态：自动探测 / 掉线遮罩 / 上线自动连接 ===== */
 let online=null,inited=false,svcVer='',svcPath='',forceDl=false,launchWatch=null;
 const LATEST_VERSION='1.3.2';   // 与本机服务内 server.VERSION 同步；页面永远是最新，用来判断本机服务是否过时
-// 按操作系统给出对应的本地服务安装包：Windows=exe，macOS=app.zip
-const IS_MAC=/macintosh|mac os x|iphone|ipad|ipod/i.test((navigator.userAgent||'')+' '+(navigator.platform||''));
-const DL_URL=IS_MAC?'/medias/files/lolzjcx_service_mac.zip':'/medias/files/lolzjcx_service.exe';
-const PKG=IS_MAC?'Mac':'Windows';
+// 按操作系统给出对应的本地服务安装包：Windows=exe，macOS=app.zip，安卓=apk
+const UA=(navigator.userAgent||'')+' '+(navigator.platform||'');
+const IS_MAC=/macintosh|mac os x|iphone|ipad|ipod/i.test(UA);
+const IS_ANDROID=/android/i.test(UA);
+const DL_URL=IS_MAC?'/medias/files/lolzjcx_service_mac.zip':(IS_ANDROID?'/medias/files/lolzjcx_service_android.apk':'/medias/files/lolzjcx_service.exe');
+const PKG=IS_MAC?'Mac':(IS_ANDROID?'安卓':'Windows');
+// 各平台“下载后怎么运行”的提示语
+const TIP_FIRST=IS_MAC?'下载解压得到 .app，双击运行一次（若被 Gatekeeper 拦截，右键→打开）；以后直接点「启动服务」'
+  :IS_ANDROID?'下载 APK 安装（需允许“安装未知来源应用”），打开 App 点一次「启动服务」；以后直接点网页「启动服务」'
+  :'下载后双击运行一次，以后直接点「启动服务」';
+const TIP_RETRY=IS_MAC?'没启动起来？下载解压后双击 App 运行一次即可'
+  :IS_ANDROID?'没启动起来？打开已安装的 App 点「启动服务」即可'
+  :'没启动起来？下载后双击运行一次即可';
+const TIP_UPDATE=IS_MAC?'下载解压后双击 App 即可，新版会自动停掉旧服务并接管（首次被拦可右键→打开）'
+  :IS_ANDROID?'下载新版 APK 覆盖安装即可，账号数据保留'
+  :'下载后双击即可，新版会自动停掉旧服务并接管';
 // 本地预览页唤起开发协议 lolzjcxdev://，线上正式页唤起 lolzjcx://，互不劫持
 function protoUrl(){const h=location.hostname;return(h==='localhost'||h==='127.0.0.1'||h==='[::1]')?'lolzjcxdev://start':'lolzjcx://start';}
 function isInstalled(){try{return localStorage.getItem('lolzjcx_installed')==='1';}catch(e){return false;}}
@@ -201,7 +213,7 @@ function onLaunchClick(){
   if(online!==false||!isInstalled()||forceDl)return;
   clearTimeout(launchWatch);
   launchWatch=setTimeout(()=>{if(online)return;forceDl=true;renderSvc();
-    toast(IS_MAC?'没有检测到服务启动；若 App 已被删除，请点「重新下载 Mac」':'没有检测到服务启动；若本地服务已被删除或移动，请点「重新下载 Windows」','w');},4500);
+    toast(`没有检测到服务启动；若本地服务${IS_ANDROID?'未安装或被卸载':'已被删除或移动'}，请点「重新下载 ${PKG}」`,'w');},4500);
 }
 function cmpVer(a,b){const pa=String(a||'0').split('.').map(x=>parseInt(x)||0),pb=String(b||'0').split('.').map(x=>parseInt(x)||0);
   for(let i=0;i<Math.max(pa.length,pb.length);i++){const x=pa[i]||0,y=pb[i]||0;if(x!==y)return x<y?-1:1;}return 0;}
@@ -232,7 +244,7 @@ function renderSvc(){
     pill.title=svcVer?('本地服务 v'+svcVer+(outdated?'（最新 v'+LATEST_VERSION+'）':'')):'';
     if(outdated){dl.classList.add('warn');
       dl.textContent=noVer?`更新 ${PKG}（版本过旧）`:`更新 ${PKG} v${svcVer}→v${LATEST_VERSION}`;
-      setTip(IS_MAC?'下载解压后双击 App 即可，新版会自动停掉旧服务并接管（首次被拦可右键→打开）':'下载后双击即可，新版会自动停掉旧服务并接管');}
+      setTip(TIP_UPDATE);}
     else{dl.textContent='下载 '+PKG;setTip('');}
     setPath(svcPath?('当前服务：'+svcPath):'');return;
   }
@@ -242,11 +254,11 @@ function renderSvc(){
   if(!isInstalled()){ // 首次：A 置灰，B 主按钮
     launch.textContent='启动服务';launch.classList.add('svc-dis');
     dl.classList.add('primary');dl.textContent='下载 '+PKG+'（首次使用）';
-    setTip(IS_MAC?'下载解压得到 .app，双击运行一次（若被 Gatekeeper 拦截，右键→打开）；以后直接点「启动服务」':'下载后双击运行一次，以后直接点「启动服务」');setPath('');return;
+    setTip(TIP_FIRST);setPath('');return;
   }
   launch.classList.remove('svc-dis');launch.textContent='启动服务';
   if(forceDl){dl.classList.add('warn');dl.textContent='重新下载 '+PKG;
-    setTip(IS_MAC?'没启动起来？下载解压后双击 App 运行一次即可':'没启动起来？下载后双击运行一次即可');}
+    setTip(TIP_RETRY);}
   else{dl.textContent='下载 '+PKG;setTip('');}
   let last=null;try{last=JSON.parse(localStorage.getItem('lolzjcx_last_svc')||'null');}catch(e){}
   setPath(last&&last.path?('上次运行：'+last.path+' · '+agoText(last.ts)):'');
