@@ -148,7 +148,7 @@ html,body{overflow-x:hidden;-webkit-text-size-adjust:100%}
       <span class="svc" id="svcPill"><i></i><span id="svcText">检测中…</span></span>
       <a class="svc-dl" id="launchBtn" href="lolzjcx://start" style="display:none" title="浏览器若询问是否打开，选允许">启动服务</a>
       <button class="svc-stop" id="stopSvc" style="display:none" onclick="shutdownSvc()">停止服务</button>
-      <a class="svc-dl svc-b" id="dlBtn" href="/medias/files/lolzjcx_service.exe" download>下载服务</a>
+      <a class="svc-dl svc-b" id="dlBtn" href="/medias/files/lolzjcx_service.exe" download>下载本地服务</a>
       <label id="autoStopWrap" class="svc-opt" style="display:none"><input type="checkbox" id="autoStopChk" checked>关闭页面后自动停</label>
       <span class="svc-tip" id="svcTip" style="display:none"></span>
       <span class="svc-path" id="svcPath" style="display:none"></span>
@@ -251,7 +251,12 @@ const UA=(navigator.userAgent||'')+' '+(navigator.platform||'');
 const IS_MAC=/macintosh|mac os x|iphone|ipad|ipod/i.test(UA);
 const IS_ANDROID=/android/i.test(UA);
 const DL_URL=IS_MAC?'/medias/files/lolzjcx_service_mac.zip':(IS_ANDROID?'/medias/files/lolzjcx_service_android.apk':'/medias/files/lolzjcx_service.exe');
-const PKG=IS_MAC?'Mac 版':(IS_ANDROID?'安卓版':'Windows 版');
+const PTAG=IS_MAC?'Mac':(IS_ANDROID?'安卓':'Windows');   // 平台名（用于按钮/提示）
+const L_DL=`下载本地服务（${PTAG}）`;                    // 常规下载
+const L_FIRST=`下载本地服务（${PTAG}·首次使用）`;        // 首次使用
+const L_REDL=`重新下载本地服务（${PTAG}）`;              // 程序被删/找不到时重下
+const L_UP_NOVER='更新本地服务（版本过旧）';
+const L_UP=(o,n)=>`更新本地服务 v${o}→v${n}`;
 // 各平台“下载后怎么运行”的提示语
 const TIP_FIRST=IS_MAC?'推荐用下方终端命令一键安装（免 Gatekeeper 安全提示）；也可下载解压后右键→打开 App 一次'
   :IS_ANDROID?'下载 APK 安装（需允许“安装未知来源应用”），打开 App 点一次「启动服务」；以后直接点网页「启动服务」'
@@ -271,7 +276,7 @@ function onLaunchClick(){
   if(online!==false||!isInstalled()||forceDl)return;
   clearTimeout(launchWatch);
   launchWatch=setTimeout(()=>{if(online)return;forceDl=true;renderSvc();
-    toast(`没有检测到服务启动；若本地服务${IS_ANDROID?'未安装或被卸载':'已被删除或移动'}，请点「重新下载 ${PKG}」`,'w');},4500);
+    toast(`没有检测到服务启动；若本地服务${IS_ANDROID?'未安装或被卸载':'已被删除或移动'}，请点右上角「${L_REDL}」`,'w');},4500);
 }
 function cmpVer(a,b){const pa=String(a||'0').split('.').map(x=>parseInt(x)||0),pb=String(b||'0').split('.').map(x=>parseInt(x)||0);
   for(let i=0;i<Math.max(pa.length,pb.length);i++){const x=pa[i]||0,y=pb[i]||0;if(x!==y)return x<y?-1:1;}return 0;}
@@ -292,7 +297,7 @@ function renderSvc(){
   if(online===null){ // 检测中：只显示灰色状态药丸，不显示紫色“启动服务”按钮（避免出现多余椭圆）
     pill.classList.remove('on');txt.textContent='检测中…';
     stop.style.display='none';launch.style.display='none';
-    dl.textContent='下载 '+PKG;setTip('');setPath('');aw.style.display='none';macCmd(true);return;
+    dl.textContent=L_DL;setTip('');setPath('');aw.style.display='none';macCmd(true);return;
   }
   launch.classList.remove('svc-dis');
   if(online){ // —— 在线 ——
@@ -303,9 +308,9 @@ function renderSvc(){
     macCmd(outdated);
     pill.title=svcVer?('本地服务 v'+svcVer+(outdated?'（最新 v'+LATEST_VERSION+'）':'')):'';
     if(outdated){dl.classList.add('warn');
-      dl.textContent=noVer?`更新 ${PKG}（版本过旧）`:`更新 ${PKG} v${svcVer}→v${LATEST_VERSION}`;
+      dl.textContent=noVer?L_UP_NOVER:L_UP(svcVer,LATEST_VERSION);
       setTip(TIP_UPDATE);}
-    else{dl.textContent='下载 '+PKG;setTip('');}
+    else{dl.textContent=L_DL;setTip('');}
     setPath(svcPath?('当前服务：'+svcPath):'');return;
   }
   // —— 离线 ——
@@ -313,14 +318,14 @@ function renderSvc(){
   stop.style.display='none';aw.style.display='none';launch.style.display='';launch.href=protoUrl();
   if(!isInstalled()){ // 首次：A 置灰，B 主按钮
     launch.textContent='启动服务';launch.classList.add('svc-dis');
-    dl.classList.add('primary');dl.textContent='下载 '+PKG+'（首次使用）';
+    dl.classList.add('primary');dl.textContent=L_FIRST;
     setTip(TIP_FIRST);setPath('');macCmd(true);return;
   }
   macCmd(true);
   launch.classList.remove('svc-dis');launch.textContent='启动服务';
-  if(forceDl){dl.classList.add('warn');dl.textContent='重新下载 '+PKG;
+  if(forceDl){dl.classList.add('warn');dl.textContent=L_REDL;
     setTip(TIP_RETRY);}
-  else{dl.textContent='下载 '+PKG;setTip('');}
+  else{dl.textContent=L_DL;setTip('');}
   let last=null;try{last=JSON.parse(localStorage.getItem('lolzjcx_last_svc')||'null');}catch(e){}
   setPath(last&&last.path?('上次运行：'+last.path+' · '+agoText(last.ts)):'');
 }
@@ -440,7 +445,7 @@ async function clearAccounts(mode){
   if(mode==='all'&&!confirm('确定清空整个账号池？只删本地记录和 Cookie。'))return;
   try{const r=await call('clear_accounts',mode);toast(`已清理 ${r.removed} 个，剩余 ${r.left} 个`);loadAccounts()}catch(e){toast(e.message,'e')}
 }
-async function startCheck(){if(!online){toast('本地服务未运行，请先点右上角“下载并运行本地服务（'+PKG+'）”','e');return}try{const r=await call('start_check');toast(`开始检测 ${r.total} 个账号`);watchJob();}catch(e){toast(e.message,'e')}}
+async function startCheck(){if(!online){toast(`本地服务未运行，请先点右上角「${L_FIRST}」并运行一次`,'e');return}try{const r=await call('start_check');toast(`开始检测 ${r.total} 个账号`);watchJob();}catch(e){toast(e.message,'e')}}
 
 // ② 查询 —— 可视化渲染
 function rankOne(c){return (!c||!c.placed)?'<span class="muted">—</span>':`<b style="color:${TIER_COLOR[c.tier]||'#6b7280'}">${esc(c.tierCn)}${esc(c.division)}</b>`}
@@ -609,7 +614,7 @@ function copySummary(){
 async function startQuery(){
   if(online!==true){ // 可能只是探测还没确认，先强制探一次再决定是否拦截
     await probe(true);
-    if(online!==true){toast('本地服务未运行，请先点右上角“启动服务”（'+PKG+'）','e');return}
+    if(online!==true){toast('本地服务未运行，请先点右上角「启动服务」或下载本地服务','e');return}
   }
   const qBox=$('queryJobBox');
   try{
