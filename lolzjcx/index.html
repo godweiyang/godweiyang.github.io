@@ -100,7 +100,7 @@ th{background:#f6f3fb}
       <span class="svc" id="svcPill"><i></i><span id="svcText">检测中…</span></span>
       <a class="svc-dl" id="launchBtn" href="lolzjcx://start" style="display:none" title="浏览器若询问是否打开，选允许">启动服务</a>
       <button class="svc-stop" id="stopSvc" style="display:none" onclick="shutdownSvc()">停止服务</button>
-      <a class="svc-dl svc-b" id="dlBtn" href="/medias/files/lolzjcx_service.exe" download>下载 EXE</a>
+      <a class="svc-dl svc-b" id="dlBtn" href="/medias/files/lolzjcx_service.exe" download>下载服务</a>
       <label id="autoStopWrap" class="svc-opt" style="display:none"><input type="checkbox" id="autoStopChk" checked>关闭页面后自动停</label>
       <span class="svc-tip" id="svcTip" style="display:none"></span>
       <span class="svc-path" id="svcPath" style="display:none"></span>
@@ -187,7 +187,11 @@ async function call(name,...args){
 }
 /* ===== 服务在线状态：自动探测 / 掉线遮罩 / 上线自动连接 ===== */
 let online=null,inited=false,svcVer='',svcPath='',forceDl=false,launchWatch=null;
-const LATEST_VERSION='1.3.1';   // 与 exe 内 server.VERSION 同步；页面永远是最新，用来判断本机 exe 是否过时
+const LATEST_VERSION='1.3.2';   // 与本机服务内 server.VERSION 同步；页面永远是最新，用来判断本机服务是否过时
+// 按操作系统给出对应的本地服务安装包：Windows=exe，macOS=app.zip
+const IS_MAC=/macintosh|mac os x|iphone|ipad|ipod/i.test((navigator.userAgent||'')+' '+(navigator.platform||''));
+const DL_URL=IS_MAC?'/medias/files/lolzjcx_service_mac.zip':'/medias/files/lolzjcx_service.exe';
+const PKG=IS_MAC?'Mac':'Windows';
 // 本地预览页唤起开发协议 lolzjcxdev://，线上正式页唤起 lolzjcx://，互不劫持
 function protoUrl(){const h=location.hostname;return(h==='localhost'||h==='127.0.0.1'||h==='[::1]')?'lolzjcxdev://start':'lolzjcx://start';}
 function isInstalled(){try{return localStorage.getItem('lolzjcx_installed')==='1';}catch(e){return false;}}
@@ -197,7 +201,7 @@ function onLaunchClick(){
   if(online!==false||!isInstalled()||forceDl)return;
   clearTimeout(launchWatch);
   launchWatch=setTimeout(()=>{if(online)return;forceDl=true;renderSvc();
-    toast('没有检测到服务启动；若 EXE 已被删除或移动，请点「重新下载 EXE」','w');},4500);
+    toast(IS_MAC?'没有检测到服务启动；若 App 已被删除，请点「重新下载 Mac」':'没有检测到服务启动；若本地服务已被删除或移动，请点「重新下载 Windows」','w');},4500);
 }
 function cmpVer(a,b){const pa=String(a||'0').split('.').map(x=>parseInt(x)||0),pb=String(b||'0').split('.').map(x=>parseInt(x)||0);
   for(let i=0;i<Math.max(pa.length,pb.length);i++){const x=pa[i]||0,y=pb[i]||0;if(x!==y)return x<y?-1:1;}return 0;}
@@ -210,13 +214,14 @@ function setSvcVersion(v,path){
 function renderSvc(){
   const pill=$('svcPill'),txt=$('svcText'),launch=$('launchBtn'),stop=$('stopSvc'),
         dl=$('dlBtn'),aw=$('autoStopWrap'),tip=$('svcTip'),pathEl=$('svcPath');
+  dl.href=DL_URL;
   dl.classList.remove('primary','warn');
   const setTip=t=>{if(t){tip.textContent=t;tip.style.display='';}else tip.style.display='none';};
   const setPath=t=>{if(t){pathEl.textContent=t;pathEl.title=t.replace(/^.*?:/,'').trim();pathEl.style.display='';}else pathEl.style.display='none';};
   if(online===null){ // 检测中
     pill.classList.remove('on');txt.textContent='检测中…';
     stop.style.display='none';launch.style.display='';launch.textContent='检测中…';launch.classList.add('svc-dis');
-    dl.textContent='下载 EXE';setTip('');setPath('');aw.style.display='none';return;
+    dl.textContent='下载 '+PKG;setTip('');setPath('');aw.style.display='none';return;
   }
   launch.classList.remove('svc-dis');
   if(online){ // —— 在线 ——
@@ -226,9 +231,9 @@ function renderSvc(){
     const noVer=!svcVer,outdated=noVer||cmpVer(svcVer,LATEST_VERSION)<0;
     pill.title=svcVer?('本地服务 v'+svcVer+(outdated?'（最新 v'+LATEST_VERSION+'）':'')):'';
     if(outdated){dl.classList.add('warn');
-      dl.textContent=noVer?'更新 EXE（版本过旧）':`更新 EXE v${svcVer}→v${LATEST_VERSION}`;
-      setTip('下载后双击即可，新版会自动停掉旧服务并接管');}
-    else{dl.textContent='下载 EXE';setTip('');}
+      dl.textContent=noVer?`更新 ${PKG}（版本过旧）`:`更新 ${PKG} v${svcVer}→v${LATEST_VERSION}`;
+      setTip(IS_MAC?'下载解压后双击 App 即可，新版会自动停掉旧服务并接管（首次被拦可右键→打开）':'下载后双击即可，新版会自动停掉旧服务并接管');}
+    else{dl.textContent='下载 '+PKG;setTip('');}
     setPath(svcPath?('当前服务：'+svcPath):'');return;
   }
   // —— 离线 ——
@@ -236,13 +241,13 @@ function renderSvc(){
   stop.style.display='none';aw.style.display='none';launch.style.display='';launch.href=protoUrl();
   if(!isInstalled()){ // 首次：A 置灰，B 主按钮
     launch.textContent='启动服务';launch.classList.add('svc-dis');
-    dl.classList.add('primary');dl.textContent='下载 EXE（首次使用）';
-    setTip('下载后双击运行一次，以后直接点「启动服务」');setPath('');return;
+    dl.classList.add('primary');dl.textContent='下载 '+PKG+'（首次使用）';
+    setTip(IS_MAC?'下载解压得到 .app，双击运行一次（若被 Gatekeeper 拦截，右键→打开）；以后直接点「启动服务」':'下载后双击运行一次，以后直接点「启动服务」');setPath('');return;
   }
   launch.classList.remove('svc-dis');launch.textContent='启动服务';
-  if(forceDl){dl.classList.add('warn');dl.textContent='重新下载 EXE';
-    setTip('没启动起来？下载后双击运行一次即可');}
-  else{dl.textContent='下载 EXE';setTip('');}
+  if(forceDl){dl.classList.add('warn');dl.textContent='重新下载 '+PKG;
+    setTip(IS_MAC?'没启动起来？下载解压后双击 App 运行一次即可':'没启动起来？下载后双击运行一次即可');}
+  else{dl.textContent='下载 '+PKG;setTip('');}
   let last=null;try{last=JSON.parse(localStorage.getItem('lolzjcx_last_svc')||'null');}catch(e){}
   setPath(last&&last.path?('上次运行：'+last.path+' · '+agoText(last.ts)):'');
 }
@@ -255,7 +260,7 @@ function setConnected(on){
   renderSvc();
 }
 async function shutdownSvc(){
-  if(!confirm('确定关闭本地服务吗？关闭后将暂停查询，需要时点页面上的「启动服务」即可，无需再找 EXE。'))return;
+  if(!confirm('确定关闭本地服务吗？关闭后将暂停查询，需要时点页面上的「启动服务」即可，无需再找本地程序。'))return;
   try{await call('shutdown');}catch(e){}
   setConnected(false);toast('本地服务已关闭','w');
 }
@@ -348,7 +353,7 @@ async function clearAccounts(mode){
   if(mode==='all'&&!confirm('确定清空整个账号池？只删本地记录和 Cookie。'))return;
   try{const r=await call('clear_accounts',mode);toast(`已清理 ${r.removed} 个，剩余 ${r.left} 个`);loadAccounts()}catch(e){toast(e.message,'e')}
 }
-async function startCheck(){if(!online){toast('本地服务未运行，请先点右上角“下载并运行 EXE”','e');return}try{const r=await call('start_check');toast(`开始检测 ${r.total} 个账号`);watchJob();}catch(e){toast(e.message,'e')}}
+async function startCheck(){if(!online){toast('本地服务未运行，请先点右上角“下载并运行本地服务（'+PKG+'）”','e');return}try{const r=await call('start_check');toast(`开始检测 ${r.total} 个账号`);watchJob();}catch(e){toast(e.message,'e')}}
 
 // ② 查询 —— 可视化渲染
 function rankOne(c){return (!c||!c.placed)?'<span class="muted">—</span>':`<b style="color:${TIER_COLOR[c.tier]||'#6b7280'}">${esc(c.tierCn)}${esc(c.division)}</b>`}
@@ -506,7 +511,7 @@ function copySummary(){
   copyText(lines.join('\n'));
 }
 async function startQuery(){
-  if(!online){toast('本地服务未运行，请先点右上角“下载并运行 EXE”','e');return}
+  if(!online){toast('本地服务未运行，请先点右上角“下载并运行本地服务（'+PKG+'）”','e');return}
   try{
     const raw=await call('preview_summoners',$('query_input').value);
     if(!raw.length){toast('没识别到任何“名字#尾标”','e');return}
