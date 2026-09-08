@@ -251,7 +251,7 @@ const UA=(navigator.userAgent||'')+' '+(navigator.platform||'');
 const IS_MAC=/macintosh|mac os x|iphone|ipad|ipod/i.test(UA);
 const IS_ANDROID=/android/i.test(UA);
 const DL_URL=IS_MAC?'/medias/files/lolzjcx_service_mac.zip':(IS_ANDROID?'/medias/files/lolzjcx_service_android.apk':'/medias/files/lolzjcx_service.exe');
-const PKG=IS_MAC?'Mac':(IS_ANDROID?'安卓':'Windows');
+const PKG=IS_MAC?'Mac 版':(IS_ANDROID?'安卓版':'Windows 版');
 // 各平台“下载后怎么运行”的提示语
 const TIP_FIRST=IS_MAC?'推荐用下方终端命令一键安装（免 Gatekeeper 安全提示）；也可下载解压后右键→打开 App 一次'
   :IS_ANDROID?'下载 APK 安装（需允许“安装未知来源应用”），打开 App 点一次「启动服务」；以后直接点网页「启动服务」'
