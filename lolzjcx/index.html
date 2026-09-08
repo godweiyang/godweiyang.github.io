@@ -51,6 +51,8 @@ button:disabled{opacity:.5;cursor:not-allowed}
 table{border-collapse:collapse;width:100%;font-size:12.5px}
 th,td{border:1px solid var(--line);padding:6px 8px;text-align:left}
 th{background:#f6f3fb}
+.twrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:8px}
+.twrap table{min-width:680px}
 .tag{display:inline-block;padding:1px 8px;border-radius:6px;font-size:11px;font-weight:700;color:#fff}
 .t-ok{background:var(--green)}.t-no{background:#9ca3af}.t-use{background:var(--teal)}.t-ex{background:var(--org)}
 .toast{position:fixed;right:18px;bottom:18px;display:flex;flex-direction:column;gap:8px;z-index:99}
@@ -90,6 +92,45 @@ th{background:#f6f3fb}
 .tm.win{background:#ecfdf3}.tm.win .r{color:#16a34a}
 .tm.lose{background:#fdecec}.tm.lose .r{color:#dc2626}
 .tm.ph{background:none}
+
+/* ===== 手机端自适应（≤640px）：桌面仍保持 5 列并排 ===== */
+html,body{overflow-x:hidden;-webkit-text-size-adjust:100%}
+@media (max-width:640px){
+  .wrap{max-width:100%;padding:10px 9px 48px}
+  header.top{padding:13px 12px;gap:8px;border-radius:12px}
+  header.top h1{font-size:18px;letter-spacing:1px}
+  .svcbar{gap:6px}
+  .svc-tip{white-space:normal;flex-basis:100%;text-align:center;line-height:1.5}
+  .svc-path{max-width:100%;white-space:normal;line-height:1.4}
+  .svc-dl,.svc-stop{padding:5px 12px;font-size:12px}
+  .card{padding:12px 11px;margin:11px 0;border-radius:11px}
+  .card h2{font-size:13.5px;line-height:1.5;flex-wrap:wrap;gap:6px}
+  .card h2>span:last-child{flex-basis:100%;justify-content:flex-start;flex-wrap:wrap}
+  .step{margin-right:5px}
+  button{padding:8px 12px;font-size:12.5px}
+  .row{gap:6px}
+  /* 输入框/复选框区在窄屏整行换行，避免横向溢出 */
+  #copy_white{min-width:0!important;flex-basis:100%;width:100%}
+  .row>span[style*="white-space:nowrap"]{flex-basis:100%;white-space:normal!important;flex-wrap:wrap;row-gap:6px}
+  textarea,input{font-size:16px}      /* ≥16px 防止 iOS 聚焦自动放大 */
+  .log{font-size:11px;height:130px}
+  /* 账号池表格仅自身横向滚动，不撑破页面 */
+  .twrap{margin:0 -2px}
+  .twrap table{min-width:680px}
+  /* 战绩卡片：横向滑动、逐张吸附，页面本身不出现横向滚动条 */
+  .cols{display:flex;overflow-x:auto;overflow-y:hidden;gap:10px;padding:2px 2px 8px;
+        scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+  .cols .block{flex:0 0 84vw;max-width:84vw;min-width:0;scroll-snap-align:start;margin:0}
+  .sumhead .nm{font-size:14px}
+  .rk-row{font-size:11px}
+  .tm .t3{font-size:10.5px}
+  .toast{left:12px;right:12px;bottom:12px}
+  .toast div{font-size:12.5px}
+}
+@media (max-width:380px){
+  .cols .block{flex-basis:88vw;max-width:88vw}
+  button{padding:7px 10px}
+}
 </style>
 </head>
 <body>
@@ -116,8 +157,10 @@ th{background:#f6f3fb}
         <button class="sec" style="padding:3px 10px" onclick="clearAccounts('all')">清空账号池</button>
         <button class="sec" style="padding:3px 10px" onclick="openData()">数据目录</button></span></h2>
     <div id="poolOverview" class="row" style="margin:0 0 8px;gap:8px"></div>
+    <div class="twrap">
     <table><thead><tr><th>编号</th><th>用户名</th><th>占位邮箱</th><th>密码</th><th>状态</th><th>今日可查/总可查(人)</th><th>Cookie</th><th>最近使用</th><th>操作</th></tr></thead>
       <tbody id="accBody"><tr><td colspan="9" class="muted">暂无（首次查询时会自动注册）</td></tr></tbody></table>
+    </div>
     <div id="checkJobBox" style="display:none;margin-top:10px">
       <div class="progress"><i id="cPbar"></i></div>
       <div id="cJobState" class="muted"></div>
