@@ -10,7 +10,8 @@
 body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.6 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif;-webkit-user-select:text;user-select:text}
 html,body,div,span,p,b,td,th,label,h1,h2,li,code,pre{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
 button{-webkit-user-select:none;user-select:none}
-.wrap{max-width:1120px;margin:0 auto;padding:18px 16px 60px}
+.wrap{max-width:1440px;margin:0 auto;padding:18px 16px 60px}
+@media (min-width:1700px){.wrap{max-width:1600px}}
 header.top{background:linear-gradient(135deg,#3a1d5e,#5b2a86);color:#fff;border-radius:14px;padding:16px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
 header.top h1{font-size:20px;margin:0;letter-spacing:2px;text-align:center}
 .svcbar{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
@@ -105,7 +106,7 @@ html,body{overflow-x:hidden;-webkit-text-size-adjust:100%}
   .svc-dl,.svc-stop{padding:5px 12px;font-size:12px}
   .card{padding:12px 11px;margin:11px 0;border-radius:11px}
   .card h2{font-size:13.5px;line-height:1.5;flex-wrap:wrap;gap:6px}
-  .card h2>span:last-child{flex-basis:100%;justify-content:flex-start;flex-wrap:wrap}
+  .card h2 .h2btns{flex-basis:100%;justify-content:flex-start;flex-wrap:wrap}
   .step{margin-right:5px}
   button{padding:8px 12px;font-size:12.5px}
   .row{gap:6px}
@@ -151,7 +152,7 @@ html,body{overflow-x:hidden;-webkit-text-size-adjust:100%}
   <!-- ① 账号池 -->
   <div class="card">
     <h2><span class="step">1</span>账号池（缺号自动补号，每号每天约 7 人、跨天恢复）
-      <span style="margin-left:auto;display:flex;gap:8px">
+      <span class="h2btns" style="margin-left:auto;display:flex;gap:8px">
         <button class="sec" style="padding:3px 10px" id="checkBtn" onclick="toggleCheck()">检测账号</button>
         <button class="sec" style="padding:3px 10px" onclick="clearAccounts('invalid')">清理失效</button>
         <button class="sec" style="padding:3px 10px" onclick="clearAccounts('all')">清空账号池</button>
@@ -273,9 +274,9 @@ function renderSvc(){
   dl.classList.remove('primary','warn');
   const setTip=t=>{if(t){tip.textContent=t;tip.style.display='';}else tip.style.display='none';};
   const setPath=t=>{if(t){pathEl.textContent=t;pathEl.title=t.replace(/^.*?:/,'').trim();pathEl.style.display='';}else pathEl.style.display='none';};
-  if(online===null){ // 检测中
+  if(online===null){ // 检测中：只显示灰色状态药丸，不显示紫色“启动服务”按钮（避免出现多余椭圆）
     pill.classList.remove('on');txt.textContent='检测中…';
-    stop.style.display='none';launch.style.display='';launch.textContent='检测中…';launch.classList.add('svc-dis');
+    stop.style.display='none';launch.style.display='none';
     dl.textContent='下载 '+PKG;setTip('');setPath('');aw.style.display='none';return;
   }
   launch.classList.remove('svc-dis');
@@ -322,17 +323,14 @@ async function shutdownSvc(){
 function autoStopOn(){const c=$('autoStopChk');return !c||c.checked;}
 // 探测加固（移动端 https→http loopback 首次有 PNA 预检，冷启动较慢）：
 //  - 超时放宽到 4s；连续失败 FAIL_GRACE 次才判离线，避免首检误闪“启动服务”
-//  - 用序号忽略乱序/过期响应；标签重新回到前台立即补探一次
-let probeSeq=0, failCount=0; const FAIL_GRACE=3;
+//  - 探测可重叠：成功即清零并上线，失败累计；标签重新回到前台立即补探一次
+let failCount=0; const FAIL_GRACE=3;
 async function probe(){
-  const seq=++probeSeq;
   try{
     // hb=页面心跳；as=是否允许“页面都关闭后自动停服务”
     const resp=await rawFetch('/api/health?hb=1&as='+(autoStopOn()?'1':'0'),{method:'GET'},4000);
-    if(seq!==probeSeq)return;            // 已有更新的探测，丢弃旧结果
     if(resp.ok){const j=await resp.json();if(j&&j.ok){failCount=0;const d=j.data||{};setConnected(true);setSvcVersion(d.version,d.path);return;}}
-    if(seq!==probeSeq)return;
-  }catch(e){if(seq!==probeSeq)return;}
+  }catch(e){}
   failCount++;
   if(failCount>=FAIL_GRACE)setConnected(false);   // 前几次失败仍保持“检测中”
 }
