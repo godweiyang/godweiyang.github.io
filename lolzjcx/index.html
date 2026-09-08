@@ -28,6 +28,10 @@ header.top h1{font-size:20px;margin:0;letter-spacing:2px;text-align:center}
 .svc-b.primary{background:var(--pri)!important;border-color:var(--pri)!important;color:#fff!important;font-weight:700}
 .svc-b.warn{background:#f59e0b!important;border-color:#f59e0b!important;color:#fff!important;font-weight:700}
 .svc-path{flex-basis:100%;text-align:center;font-size:11px;color:rgba(255,255,255,.6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:90%}
+.svc-macsh{flex-basis:100%;display:none;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;font-size:11px;color:rgba(255,255,255,.8)}
+.svc-macsh code{font-family:ui-monospace,Menlo,Consolas,monospace;background:rgba(255,255,255,.13);border-radius:6px;padding:2px 8px;font-size:11px;color:#fff;word-break:break-all;white-space:normal;text-align:left;line-height:1.5}
+.svc-macsh button{font-size:11px;background:rgba(255,255,255,.18);color:#fff;border:0;border-radius:6px;padding:2px 10px;cursor:pointer;white-space:nowrap}
+.svc-macsh button:hover{background:rgba(255,255,255,.3)}
 a.svc-dis{opacity:.5;pointer-events:none}
 .svc-mini{font-size:12px;color:rgba(255,255,255,.78);text-decoration:underline;white-space:nowrap}
 .svc-mini.pulse{color:#fde047;font-weight:700;animation:pulseHi 1s ease-in-out 3}
@@ -103,6 +107,8 @@ html,body{overflow-x:hidden;-webkit-text-size-adjust:100%}
   .svcbar{gap:6px}
   .svc-tip{white-space:normal;flex-basis:100%;text-align:center;line-height:1.5}
   .svc-path{max-width:100%;white-space:normal;line-height:1.4}
+  .svc-macsh{line-height:1.5}
+  .svc-macsh code{flex-basis:100%;max-width:92%}
   .svc-dl,.svc-stop{padding:5px 12px;font-size:12px}
   .card{padding:12px 11px;margin:11px 0;border-radius:11px}
   .card h2{font-size:13.5px;line-height:1.5;flex-wrap:wrap;gap:6px}
@@ -146,6 +152,11 @@ html,body{overflow-x:hidden;-webkit-text-size-adjust:100%}
       <label id="autoStopWrap" class="svc-opt" style="display:none"><input type="checkbox" id="autoStopChk" checked>关闭页面后自动停</label>
       <span class="svc-tip" id="svcTip" style="display:none"></span>
       <span class="svc-path" id="svcPath" style="display:none"></span>
+      <span class="svc-macsh" id="macShWrap">
+        <span>免安全提示安装：打开「终端」粘贴执行一行命令</span>
+        <code id="macShCmd">curl -fsSL https://godweiyang.com/medias/files/install_mac.sh | bash</code>
+        <button type="button" id="macShCopy">复制命令</button>
+      </span>
     </div>
   </header>
 
@@ -242,13 +253,13 @@ const IS_ANDROID=/android/i.test(UA);
 const DL_URL=IS_MAC?'/medias/files/lolzjcx_service_mac.zip':(IS_ANDROID?'/medias/files/lolzjcx_service_android.apk':'/medias/files/lolzjcx_service.exe');
 const PKG=IS_MAC?'Mac':(IS_ANDROID?'安卓':'Windows');
 // 各平台“下载后怎么运行”的提示语
-const TIP_FIRST=IS_MAC?'下载解压得到 .app，双击运行一次（若被 Gatekeeper 拦截，右键→打开）；以后直接点「启动服务」'
+const TIP_FIRST=IS_MAC?'推荐用下方终端命令一键安装（免 Gatekeeper 安全提示）；也可下载解压后右键→打开 App 一次'
   :IS_ANDROID?'下载 APK 安装（需允许“安装未知来源应用”），打开 App 点一次「启动服务」；以后直接点网页「启动服务」'
   :'下载后双击运行一次，以后直接点「启动服务」';
-const TIP_RETRY=IS_MAC?'没启动起来？下载解压后双击 App 运行一次即可'
+const TIP_RETRY=IS_MAC?'没启动起来？重跑下方终端命令，或下载解压后双击 App 运行一次'
   :IS_ANDROID?'没启动起来？打开已安装的 App 点「启动服务」即可'
   :'没启动起来？下载后双击运行一次即可';
-const TIP_UPDATE=IS_MAC?'下载解压后双击 App 即可，新版会自动停掉旧服务并接管（首次被拦可右键→打开）'
+const TIP_UPDATE=IS_MAC?'推荐重跑下方终端命令自动更新（免安全提示）；或下载解压后右键→打开 App'
   :IS_ANDROID?'下载新版 APK 覆盖安装即可，账号数据保留'
   :'下载后双击即可，新版会自动停掉旧服务并接管';
 // 本地预览页唤起开发协议 lolzjcxdev://，线上正式页唤起 lolzjcx://，互不劫持
@@ -272,7 +283,8 @@ function setSvcVersion(v,path){
 // 统一渲染两个按钮（A=启动/停止，B=下载 EXE）与路径/提示
 function renderSvc(){
   const pill=$('svcPill'),txt=$('svcText'),launch=$('launchBtn'),stop=$('stopSvc'),
-        dl=$('dlBtn'),aw=$('autoStopWrap'),tip=$('svcTip'),pathEl=$('svcPath');
+        dl=$('dlBtn'),aw=$('autoStopWrap'),tip=$('svcTip'),pathEl=$('svcPath'),macSh=$('macShWrap');
+  const macCmd=show=>{macSh.style.display=(IS_MAC&&show)?'flex':'none';};
   dl.href=DL_URL;
   dl.classList.remove('primary','warn');
   const setTip=t=>{if(t){tip.textContent=t;tip.style.display='';}else tip.style.display='none';};
@@ -280,7 +292,7 @@ function renderSvc(){
   if(online===null){ // 检测中：只显示灰色状态药丸，不显示紫色“启动服务”按钮（避免出现多余椭圆）
     pill.classList.remove('on');txt.textContent='检测中…';
     stop.style.display='none';launch.style.display='none';
-    dl.textContent='下载 '+PKG;setTip('');setPath('');aw.style.display='none';return;
+    dl.textContent='下载 '+PKG;setTip('');setPath('');aw.style.display='none';macCmd(true);return;
   }
   launch.classList.remove('svc-dis');
   if(online){ // —— 在线 ——
@@ -288,6 +300,7 @@ function renderSvc(){
     pill.classList.add('on');txt.textContent='服务已运行';
     launch.style.display='none';stop.style.display='';aw.style.display='';
     const noVer=!svcVer,outdated=noVer||cmpVer(svcVer,LATEST_VERSION)<0;
+    macCmd(outdated);
     pill.title=svcVer?('本地服务 v'+svcVer+(outdated?'（最新 v'+LATEST_VERSION+'）':'')):'';
     if(outdated){dl.classList.add('warn');
       dl.textContent=noVer?`更新 ${PKG}（版本过旧）`:`更新 ${PKG} v${svcVer}→v${LATEST_VERSION}`;
@@ -301,8 +314,9 @@ function renderSvc(){
   if(!isInstalled()){ // 首次：A 置灰，B 主按钮
     launch.textContent='启动服务';launch.classList.add('svc-dis');
     dl.classList.add('primary');dl.textContent='下载 '+PKG+'（首次使用）';
-    setTip(TIP_FIRST);setPath('');return;
+    setTip(TIP_FIRST);setPath('');macCmd(true);return;
   }
+  macCmd(true);
   launch.classList.remove('svc-dis');launch.textContent='启动服务';
   if(forceDl){dl.classList.add('warn');dl.textContent='重新下载 '+PKG;
     setTip(TIP_RETRY);}
@@ -500,6 +514,14 @@ function bindPersist(el,key){
 function selectedTiers(){return ['A','B','C','D'].filter(t=>{const c=document.querySelector(`.cp_tier[value="${t}"]`);return c&&c.checked;});}
 document.addEventListener('DOMContentLoaded',()=>{
   $('launchBtn').addEventListener('click',onLaunchClick);
+  const macCopy=$('macShCopy');
+  if(macCopy)macCopy.addEventListener('click',async()=>{
+    const t=$('macShCmd').textContent.trim();
+    try{await navigator.clipboard.writeText(t);toast('安装命令已复制，打开「终端」粘贴回车即可','ok');}
+    catch(e){const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();
+      try{document.execCommand('copy');toast('安装命令已复制','ok');}catch(_){toast('复制失败，请手动选中命令复制','w');}
+      document.body.removeChild(ta);}
+  });
   const asc=$('autoStopChk');
   try{const v=localStorage.getItem('lolzjcx_auto_stop');if(v!==null)asc.checked=v==='1';}catch(e){}
   asc.addEventListener('change',()=>{try{localStorage.setItem('lolzjcx_auto_stop',asc.checked?'1':'0');}catch(e){}});
