@@ -5,19 +5,11 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="【每日算法Day 80】所有人都会做的入门题，高级解法来了！, 算法码上来 字节跳动 Seed 推理 Infra 工程师 大语言模型 多模态生成 推理优化 算法工程师 ECNU NLP DeepLearning AntNLP 韦阳 godweiyang WeiYang 自然语言处理 深度学习 LLM">
+    <meta name="keywords" content="算法码上来 字节跳动 Seed 推理 Infra 工程师 大语言模型 多模态生成 推理优化 算法工程师 ECNU NLP DeepLearning AntNLP 韦阳 godweiyang WeiYang 自然语言处理 深度学习 LLM">
     <meta name="baidu-site-verification" content="fmlEuI34ir" />
     <meta name="google-site-verification" content="yCy2azpds5XSuGZvis6OuA-XIGF5GuGpYRAaGfD6o48" />
     <meta name="360-site-verification" content="b7c11a830ef90fd1464ad6206bb7b6e7" />
-    <meta name="description" content="
-关注公众号【算法码上来】，每日算法干货马上就来！
-
-
-
-题目还是昨天的题，昨天已经介绍了三种解法了，今天介绍一个最快的方法。
-
-题目链接LeetCode 面试题 08.01. 三步问题
-题目描述三步问题。有个小孩正在上楼梯，楼梯有 $n$">
+    <meta name="description" content="韦阳的博客">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -25,7 +17,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>【每日算法Day 80】所有人都会做的入门题，高级解法来了！ | 韦阳的博客</title>
+    <title>韦阳的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -339,13 +331,13 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/17.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/4.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        【每日算法Day 80】所有人都会做的入门题，高级解法来了！
+                        
                     </div>
                 </div>
             </div>
@@ -455,28 +447,11 @@
                 <div class="col s7">
                     
                     <div class="article-tag">
-                        
-                        <a href="/tags/%E7%AE%97%E6%B3%95/" target="_blank">
-                            <span class="chip bg-color">算法</span>
-                        </a>
-                        
-                        <a href="/tags/leetcode/" target="_blank">
-                            <span class="chip bg-color">leetcode</span>
-                        </a>
-                        
+                        <span class="chip bg-color">无标签</span>
                     </div>
                     
                 </div>
                 <div class="col s5 right-align">
-                    
-                    <div class="post-cate">
-                        <i class="fa fa-bookmark fa-fw icon-category"></i>
-                        
-                        <a href="/categories/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95/" class="post-category" target="_blank">
-                            编程算法
-                        </a>
-                        
-                    </div>
                     
                 </div>
             </div>
@@ -484,7 +459,7 @@
             <div class="post-info">
                 <div class="post-date info-break-policy">
                     <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-03-25
+                    2026-09-10
                 </div>
 
                 <div class="post-author info-break-policy">
@@ -498,14 +473,14 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.1k
+                    1.7k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    5 分
+                    9 分
                 </div>
                 
                 
@@ -521,42 +496,289 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <blockquote>
-<p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
-</blockquote>
-<p><img src="/medias/contact.jpg"></p>
-<blockquote>
-<p>题目还是昨天的题，昨天已经介绍了三种解法了，今天介绍一个最快的方法。</p>
-</blockquote>
-<h2 id="题目链接"><a href="#题目链接" class="headerlink" title="题目链接"></a>题目链接</h2><p><a href="https://leetcode-cn.com/problems/three-steps-problem-lcci/" title="LeetCode 面试题 08.01. 三步问题">LeetCode 面试题 08.01. 三步问题</a></p>
-<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>三步问题。有个小孩正在上楼梯，楼梯有 $n$ 阶台阶，小孩一次可以上 $1$ 阶、$2$ 阶或 $3$ 阶。实现一种方法，计算小孩有多少种上楼梯的方式。结果可能很大，你需要对结果模 $1000000007$。</p>
-<p><strong>示例1</strong></p>
-<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">输入：</span><br><span class="line">n = 3</span><br><span class="line">输出：</span><br><span class="line">4</span><br><span class="line">解释：</span><br><span class="line">有四种走法</span><br></pre></td></tr></table></figure>
+                <!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>五维战马星盘 · 分享卡（演示假数据）</title>
+<style>
+  :root{
+    --tian:#FFB300;   /* 天选马 金 */
+    --shang:#A855F7;  /* 上等马 紫 */
+    --zhong:#3B82F6;  /* 中等马 蓝 */
+    --xia:#14B8A6;    /* 下等马 青 */
+    --niu:#EF4444;    /* 牛马   红 */
+    --ink:#EAF0FF;
+    --ink-dim:rgba(234,240,255,.62);
+    --line:rgba(255,255,255,.10);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-user-select:none;user-select:none;}
+  html,body{background:#05070f;}
+  body{display:flex;justify-content:center;padding:24px 0;font-family:"PingFang SC","Microsoft YaHei","Segoe UI",system-ui,sans-serif;color:var(--ink);}
+  .card{
+    width:1080px;max-width:100vw;border-radius:28px;overflow:hidden;position:relative;
+    background:
+      radial-gradient(900px 620px at 50% 26%, rgba(255,179,0,.10), transparent 60%),
+      radial-gradient(760px 760px at 50% 30%, rgba(59,130,246,.10), transparent 66%),
+      linear-gradient(180deg,#101527 0%,#0b0f1d 46%,#080b16 100%);
+    border:1px solid rgba(255,255,255,.08);
+    box-shadow:0 30px 80px rgba(0,0,0,.6);
+  }
+  /* 细网格星点底纹 */
+  .card::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
+    background-image:radial-gradient(rgba(255,255,255,.10) 1px,transparent 1px);
+    background-size:34px 34px;mask-image:linear-gradient(180deg,rgba(0,0,0,.9),transparent 60%);}
 
-<p><strong>示例2</strong></p>
-<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">输入：</span><br><span class="line">n = 5</span><br><span class="line">输出：</span><br><span class="line">13</span><br></pre></td></tr></table></figure>
+  /* ===== 顶栏 ===== */
+  .head{display:flex;align-items:center;gap:22px;padding:34px 44px 6px;position:relative;z-index:2;}
+  .avatar{width:84px;height:84px;border-radius:20px;flex:none;display:grid;place-items:center;
+    font-size:38px;font-weight:800;color:#1a1206;
+    background:linear-gradient(145deg,#FFD666,#FFA400);box-shadow:0 8px 24px rgba(255,179,0,.35);}
+  .who .name{font-size:38px;font-weight:800;letter-spacing:.5px;display:flex;align-items:center;gap:14px;}
+  .who .name .tag{font-size:24px;color:var(--ink-dim);font-weight:600;}
+  .who .meta{margin-top:8px;display:flex;gap:12px;align-items:center;font-size:21px;color:var(--ink-dim);}
+  .rank-badge{padding:4px 14px;border-radius:999px;font-size:20px;font-weight:700;color:#7C5BFF;
+    background:rgba(168,85,247,.14);border:1px solid rgba(168,85,247,.4);}
+  .demo-tag{margin-left:auto;flex:none;font-size:18px;font-weight:700;letter-spacing:2px;color:#ffd98a;
+    border:1px dashed rgba(255,179,0,.55);border-radius:10px;padding:8px 14px;background:rgba(255,179,0,.08);}
+  .title-top{text-align:center;margin:14px 0 0;font-size:22px;letter-spacing:10px;color:var(--ink-dim);font-weight:600;position:relative;z-index:2;}
 
-<h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>昨天的题解地址：<br><a href="https://godweiyang.com/2020/03/24/leetcode-inteview-08-01/" title="韦阳的博客：【每日算法Day 79】所有人都会做的入门题，但是能看出你的代码能力！">韦阳的博客：【每日算法Day 79】所有人都会做的入门题，但是能看出你的代码能力！</a></p>
-<p><a href="https://zhuanlan.zhihu.com/p/115799226" title="知乎专栏：【每日算法Day 79】所有人都会做的入门题，但是能看出你的代码能力！">知乎专栏：【每日算法Day 79】所有人都会做的入门题，但是能看出你的代码能力！</a></p>
-<p>昨天是通过动态规划来解决的，转移方程为：</p>
-<p>$$<br>f[i] &#x3D; f[i-1] + f[i-2] + f[i-3]<br>$$</p>
-<p>初始情况是 $f[1] &#x3D; 1, f[2] &#x3D; 2, f[3] &#x3D; 4$ 。</p>
-<p>如果通过递推的方式来求解的话，时间复杂度是 $O(n)$ ，但是我们还可以用矩阵快速幂的方法加速到 $O(\log n)$ 。</p>
-<p>相信大家快速幂一定听说过（没听说过当我没说），如果让你求 $a^n$，那么可以分两种情况。如果 $n$ 是偶数，那么可以计算 $a^{n&#x2F;2}$，然后求它的平方 $(a^{n&#x2F;2})^2$ 就行了。如果 $n$ 是奇数，那么可以计算 $a^{(n-1)&#x2F;2}$，然后求它的平方 $a \cdot (a^{(n-1)&#x2F;2})^2$ 就行了。这样只需要用 $O(\log n)$ 的复杂度就可以计算出 $a^n$ 了。</p>
-<p>类似的，如果我们要计算一个矩阵的幂 $A^n$，也可以将其拆分成两半，然后计算一半再平方就行了。</p>
-<p>那么这题跟矩阵有什么关系呢？如果我们把转移方程右边三项写成向量形式：</p>
-<p>$$<br>\begin{bmatrix}<br>    f_{i-3} &amp; f_{i-2} &amp; f_{i-1}<br>\end{bmatrix}<br>$$</p>
-<p>那么给它右边乘上一个矩阵 $A$：</p>
-<p>$$<br>\begin{bmatrix}<br>    0 &amp; 0 &amp; 1 \<br>    1 &amp; 0 &amp; 1 \<br>    0 &amp; 1 &amp; 1<br>\end{bmatrix}<br>$$</p>
-<p>那么就会得到向量：</p>
-<p>$$<br>\begin{bmatrix}<br>    f_{i-2} &amp; f_{i-1} &amp; f_{i-1}+f_{i-2}+f_{i-3}<br>\end{bmatrix}<br>$$</p>
-<p>即：</p>
-<p>$$<br>\begin{bmatrix}<br>    f_{i-2} &amp; f_{i-1} &amp; f_{i}<br>\end{bmatrix}<br>$$</p>
-<p>所以乘一次矩阵 $A$ 就可以得到下一个 $f$ 值，那么从初始的向量 $\begin{bmatrix}1 &amp; 2 &amp; 4\end{bmatrix}$ 开始，乘上 $A^{n-3}$ 就可以得到 $\begin{bmatrix}f_{n-2} &amp; f_{n-1} &amp; f_{n}\end{bmatrix}$ 了。</p>
-<p>而这里的 $A^{n-3}$ 就可以通过矩阵快速幂来计算得到。</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="c"><a href="#c" class="headerlink" title="c++"></a>c++</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="type">long</span> <span class="type">long</span> ll;</span><br><span class="line"><span class="keyword">typedef</span> vector&lt;vector&lt;ll&gt;&gt; vvl;</span><br><span class="line"><span class="keyword">typedef</span> vector&lt;ll&gt; vl;</span><br><span class="line"><span class="type">const</span> ll p = <span class="number">1e9</span><span class="number">+7</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vvl <span class="title">mat_mul</span><span class="params">(vvl&amp; A, vvl&amp; B)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> a = A.<span class="built_in">size</span>(), b = B.<span class="built_in">size</span>(), c = B[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line">        <span class="function">vvl <span class="title">C</span><span class="params">(a, vl(c, <span class="number">0</span>))</span></span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; a; ++i) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; c; ++j) &#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="type">int</span> k = <span class="number">0</span>; k &lt; b; ++k) &#123;</span><br><span class="line">                    (C[i][j] += A[i][k] * B[k][j]) %= p;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> C;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">vvl <span class="title">mat_pow</span><span class="params">(vvl&amp; A, <span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> m = A.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function">vvl <span class="title">B</span><span class="params">(m, vl(m, <span class="number">0</span>))</span></span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; m; ++i) B[i][i] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (n &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (n&amp;<span class="number">1</span>) B = <span class="built_in">mat_mul</span>(B, A);</span><br><span class="line">            A = <span class="built_in">mat_mul</span>(A, A);</span><br><span class="line">            n &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> B;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">vvl <span class="title">mat_pow_rec</span><span class="params">(vvl&amp; A, <span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (n == <span class="number">1</span>) <span class="keyword">return</span> A;</span><br><span class="line">        vvl B = <span class="built_in">mat_pow_rec</span>(A, n/<span class="number">2</span>);</span><br><span class="line">        B = <span class="built_in">mat_mul</span>(B, B);</span><br><span class="line">        <span class="keyword">if</span> (n&amp;<span class="number">1</span>) <span class="keyword">return</span> <span class="built_in">mat_mul</span>(A, B);</span><br><span class="line">        <span class="keyword">return</span> B;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">waysToStep</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">        vl f = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>&#125;;</span><br><span class="line">        <span class="keyword">if</span> (n &lt;= <span class="number">3</span>) <span class="keyword">return</span> f[n<span class="number">-1</span>];</span><br><span class="line">        vvl A = &#123;&#123;<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>&#125;, &#123;<span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>&#125;, &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>&#125;&#125;;</span><br><span class="line">        vvl B = <span class="built_in">mat_pow</span>(A, n<span class="number">-3</span>);</span><br><span class="line">        ll res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; ++i) &#123;</span><br><span class="line">            (res += f[i] * B[i][<span class="number">2</span>]) %= p;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+  /* ===== 星盘 ===== */
+  .star-wrap{position:relative;z-index:2;}
+  svg{display:block;width:100%;height:auto;}
 
-<h3 id="python"><a href="#python" class="headerlink" title="python"></a>python</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">mat_pow</span>(<span class="params">self, A, n</span>):</span><br><span class="line">        m = A.shape[<span class="number">0</span>]</span><br><span class="line">        B = np.eye(m, dtype=np.int64)</span><br><span class="line">        <span class="keyword">while</span> n &gt; <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">if</span> (n&amp;<span class="number">1</span>)!=<span class="number">0</span>:</span><br><span class="line">                B = np.mod(np.matmul(B, A), <span class="variable language_">self</span>.p).astype(np.int64)</span><br><span class="line">            A = np.mod(np.matmul(A, A), <span class="variable language_">self</span>.p).astype(np.int64)</span><br><span class="line">            n &gt;&gt;= <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> B;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">waysToStep</span>(<span class="params">self, n: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        <span class="variable language_">self</span>.p = <span class="built_in">int</span>(<span class="number">1e9</span>+<span class="number">7</span>)</span><br><span class="line">        f = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>]</span><br><span class="line">        <span class="keyword">if</span> n &lt;= <span class="number">3</span>: <span class="keyword">return</span> f[n-<span class="number">1</span>]</span><br><span class="line">        A = np.array([[<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>], [<span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>], [<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>]], dtype=np.int64)</span><br><span class="line">        B = <span class="variable language_">self</span>.mat_pow(A, n-<span class="number">3</span>)</span><br><span class="line">        res = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>):</span><br><span class="line">            res += f[i] * B[i][<span class="number">2</span>]</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">int</span>(res%<span class="variable language_">self</span>.p)</span><br></pre></td></tr></table></figure>
+  /* ===== 星盘下：上下限 + 堆叠条 ===== */
+  .band{padding:6px 56px 0;position:relative;z-index:2;}
+  .limits{display:flex;gap:22px;margin-bottom:20px;}
+  .limit{flex:1;border-radius:18px;padding:18px 24px;border:1px solid var(--line);
+    background:rgba(255,255,255,.03);display:flex;align-items:center;gap:18px;}
+  .limit .ic{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;font-size:26px;flex:none;}
+  .limit.up .ic{background:linear-gradient(145deg,rgba(255,179,0,.25),rgba(168,85,247,.25));}
+  .limit.down .ic{background:linear-gradient(145deg,rgba(20,184,166,.22),rgba(239,68,68,.22));}
+  .limit .lab{font-size:20px;color:var(--ink-dim);}
+  .limit .val{font-size:34px;font-weight:800;margin-top:2px;}
+  .limit .sub{font-size:18px;color:var(--ink-dim);margin-left:auto;text-align:right;line-height:1.5;}
+
+  .stack-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;}
+  .stack-head .t{font-size:22px;font-weight:700;}
+  .stack-head .s{font-size:18px;color:var(--ink-dim);}
+  .stack{display:flex;height:34px;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,.12);}
+  .stack i{display:block;height:100%;position:relative;}
+  .legend{display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:14px;}
+  .legend span{font-size:19px;color:var(--ink-dim);display:flex;align-items:center;gap:9px;}
+  .legend b{width:14px;height:14px;border-radius:4px;display:inline-block;}
+  .legend em{font-style:normal;color:var(--ink);font-weight:700;}
+
+  .stability{margin-top:22px;display:flex;align-items:center;gap:18px;}
+  .stability .lab{font-size:21px;font-weight:700;flex:none;}
+  .meter{flex:1;height:14px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;}
+  .meter i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#3B82F6,#22C55E);}
+  .stability .num{font-size:21px;font-weight:800;flex:none;white-space:nowrap;}
+
+  /* ===== 2x2 数据格 ===== */
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;padding:26px 56px 0;position:relative;z-index:2;}
+  .cell{border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.03);padding:20px 22px;}
+  .cell .k{font-size:19px;color:var(--ink-dim);}
+  .cell .v{font-size:42px;font-weight:800;margin-top:8px;line-height:1;}
+  .cell .v small{font-size:22px;color:var(--ink-dim);font-weight:600;margin-left:4px;}
+  .cell .d{font-size:18px;color:var(--ink-dim);margin-top:9px;}
+  .hl{display:flex;gap:12px;flex-wrap:wrap;padding:18px 56px 0;position:relative;z-index:2;}
+  .hl span{font-size:19px;font-weight:700;padding:8px 16px;border-radius:999px;border:1px solid var(--line);
+    background:rgba(255,255,255,.04);color:var(--ink);}
+  .hl span b{color:var(--tian);}
+
+  /* ===== 命格横幅 ===== */
+  .fate{margin:26px 56px 0;border-radius:20px;padding:26px 30px;position:relative;overflow:hidden;z-index:2;
+    background:linear-gradient(120deg,rgba(255,179,0,.16),rgba(168,85,247,.14) 55%,rgba(59,130,246,.10));
+    border:1px solid rgba(255,179,0,.35);}
+  .fate .ft{font-size:24px;font-weight:800;letter-spacing:2px;background:linear-gradient(90deg,#FFD666,#C99BFF);
+    -webkit-background-clip:text;background-clip:text;color:transparent;}
+  .fate .fr{margin-top:12px;font-size:21px;line-height:1.65;color:var(--ink);}
+
+  /* ===== 底栏 ===== */
+  .foot{display:flex;justify-content:space-between;align-items:center;padding:26px 56px 32px;margin-top:24px;
+    position:relative;z-index:2;color:var(--ink-dim);font-size:19px;border-top:1px solid var(--line);}
+  .foot .wm{font-weight:800;color:var(--ink);letter-spacing:.5px;}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="head">
+    <div class="avatar">伟</div>
+    <div class="who">
+      <div class="name">godweiyang <span class="tag">#23456</span></div>
+      <div class="meta"><span class="rank-badge">艾欧尼亚 · 单双排 翡翠 II</span><span>近 15 场样本</span></div>
+    </div>
+    <div class="demo-tag">演示假数据</div>
+  </div>
+  <div class="title-top">五 维 战 马 星 盘</div>
+
+  <div class="star-wrap"><svg id="star" viewBox="0 0 1080 760" aria-hidden="true"></svg></div>
+
+  <div class="band">
+    <div class="limits">
+      <div class="limit up">
+        <div class="ic">⬆</div>
+        <div><div class="lab">上限（天选+上等）</div><div class="val" style="color:#FFD666">47%</div></div>
+        <div class="sub">7 场带队起飞<br>天花板高</div>
+      </div>
+      <div class="limit down">
+        <div class="ic">⬇</div>
+        <div><div class="lab">下限（下等+牛马）</div><div class="val" style="color:#f88">27%</div></div>
+        <div class="sub">4 场状态掉线<br>偶尔隐身</div>
+      </div>
+    </div>
+
+    <div class="stack-head"><span class="t">五型场次构成</span><span class="s">共 15 场</span></div>
+    <div class="stack" id="stack"></div>
+    <div class="legend" id="legend"></div>
+
+    <div class="stability">
+      <span class="lab">稳定指数</span>
+      <div class="meter"><i style="width:72%"></i></div>
+      <span class="num">72 / 100 · 偏稳定</span>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="cell"><div class="k">场均 KDA</div><div class="v">3.4</div><div class="d">7.2 / 3.1 / 8.5</div></div>
+    <div class="cell"><div class="k">巅峰 KDA</div><div class="v">35.0</div><div class="d">21 / 1 / 14（天选局）</div></div>
+    <div class="cell"><div class="k">近期胜率</div><div class="v">67%</div><div class="d">10 胜 5 负</div></div>
+    <div class="cell"><div class="k">全服排名</div><div class="v">前8<small>%</small></div><div class="d">同段位区间</div></div>
+  </div>
+  <div class="hl">
+    <span>三杀 <b>×3</b></span><span>超神 <b>×2</b></span><span>翻盘局 <b>×1</b></span><span>单局最高伤害 <b>38.2k</b></span>
+  </div>
+
+  <div class="fate">
+    <div class="ft">命格鉴定：上等战将 · 天命 Carry 命格</div>
+    <div class="fr">近 15 场七度带队起飞，输出拉满、偶有掉线；星形尖角明显上扬，是队伍里最稳的那条大腿，建议围绕你打。</div>
+  </div>
+
+  <div class="foot">
+    <span class="wm">godweiyang.com/lolzjcx</span>
+    <span>五维战马星盘 · 生成于 2026-09-10 · 本图为演示假数据</span>
+  </div>
+</div>
+
+<script>
+// ===== 假数据（接真实数据时只改这里）=====
+const TIERS=[
+  {name:'天选马', count:2, color:'#FFB300'},
+  {name:'上等马', count:5, color:'#A855F7'},
+  {name:'中等马', count:4, color:'#3B82F6'},
+  {name:'下等马', count:3, color:'#14B8A6'},
+  {name:'牛马',   count:1, color:'#EF4444'},
+];
+const TOTAL=TIERS.reduce((s,t)=>s+t.count,0);
+const MAXC=Math.max(...TIERS.map(t=>t.count));
+const DOM=TIERS.findIndex(t=>t.count===MAXC);   // 主马型（点亮星尖）
+const SCORE=65;                                  // 综合战力分（真实版按 100/80/60/40/20 加权）
+
+// ===== 星盘几何 =====
+const CX=540, CY=386, R=240, R_INNER=R*0.40;
+const $=s=>document.querySelector(s);
+const pt=(angDeg,r)=>{const a=angDeg*Math.PI/180;return [CX+r*Math.cos(a), CY+r*Math.sin(a)];};
+const ang=i=>-90+i*72;                 // 天选在正上方，顺时针
+const rayR=i=>R*(0.45+0.55*TIERS[i].count/MAXC);   // 星芒长度（相对最大值缩放，保底 0.45R）
+const pct=i=>Math.round(TIERS[i].count/TOTAL*100);
+
+let s='';
+// 发光滤镜
+s+=`<defs>
+  <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+    <feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <radialGradient id="core" cx="50%" cy="46%" r="55%">
+    <stop offset="0%" stop-color="#FFD666" stop-opacity=".30"/>
+    <stop offset="55%" stop-color="#A855F7" stop-opacity=".12"/>
+    <stop offset="100%" stop-color="#0b0f1d" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="starFill" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#FFD666" stop-opacity=".50"/>
+    <stop offset="38%" stop-color="#C084FC" stop-opacity=".34"/>
+    <stop offset="66%" stop-color="#60A5FA" stop-opacity=".30"/>
+    <stop offset="100%" stop-color="#F87171" stop-opacity=".30"/>
+  </linearGradient>
+</defs>`;
+
+// 中心光晕
+s+=`<circle cx="${CX}" cy="${CY}" r="${R+70}" fill="url(#core)"/>`;
+
+// 外圈缓转刻度环（SMIL，静态帧也完整）
+let ticks='';
+for(let d=0;d<360;d+=6){const major=d%30===0;const r1=R+46,r2=R+(major?64:54);
+  const [x1,y1]=pt(d,r1),[x2,y2]=pt(d,r2);
+  ticks+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="rgba(255,255,255,${major?.22:.10})" stroke-width="${major?2:1}"/>`;}
+s+=`<g><animateTransform attributeName="transform" type="rotate" from="0 ${CX} ${CY}" to="360 ${CX} ${CY}" dur="80s" repeatCount="indef"/>${ticks}</g>`;
+
+// 同心环
+[0.25,0.5,0.75,1].forEach(k=>{s+=`<circle cx="${CX}" cy="${CY}" r="${(R*k).toFixed(1)}" fill="none" stroke="rgba(255,255,255,.10)" stroke-width="1" ${k===1?'stroke-dasharray="3 7"':''}/>`;});
+s+=`<circle cx="${CX}" cy="${CY}" r="${R+46}" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="1.2"/>`;
+
+// 背景标准五芒星（淡，装饰，定在最大半径外侧）
+let frame='';
+for(let i=0;i<5;i++){const a=pt(ang(i),R+46),b=pt(ang((i+2)%5),R+46);
+  frame+=`<line x1="${a[0].toFixed(1)}" y1="${a[1].toFixed(1)}" x2="${b[0].toFixed(1)}" y2="${b[1].toFixed(1)}" stroke="rgba(255,255,255,.07)" stroke-width="1.4"/>`;}
+s+=frame;
+
+// 五条轴线（中心到星尖）
+for(let i=0;i<5;i++){const [x,y]=pt(ang(i),R);
+  s+=`<line x1="${CX}" y1="${CY}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="rgba(255,255,255,.06)" stroke-width="1"/>`;}
+
+// 中心暗色底盘（压住星线，让中心文字清晰）
+s+=`<circle cx="${CX}" cy="${CY}" r="${R_INNER+26}" fill="#0a0e1c" opacity=".55"/>`;
+// 数据：星尖（外点）与星谷（内点）
+const outer=TIERS.map((t,i)=>pt(ang(i),rayR(i)));
+const valley=TIERS.map((t,i)=>pt(ang(i)+36,R_INNER));
+// 五芒星路径（变长星芒）
+let star='M'+outer[0].map(n=>n.toFixed(1)).join(' ');
+for(let i=0;i<5;i++){star+=' L'+valley[i].map(n=>n.toFixed(1)).join(' ')+' L'+outer[(i+1)%5].map(n=>n.toFixed(1)).join(' ');}
+star+=' Z';
+// 雷达五边形路径
+let poly='M'+outer.map(p=>p.map(n=>n.toFixed(1)).join(' ')).join(' L ')+' Z';
+s+=`<path d="${poly}" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.35)" stroke-width="1.5"/>`;
+s+=`<path d="${star}" fill="url(#starFill)" stroke="rgba(255,255,255,.55)" stroke-width="2" filter="url(#glow)"/>`;
+
+// 星尖光点 + 标签 + 主尖皇冠
+TIERS.forEach((t,i)=>{
+  const [x,y]=outer[i];
+  s+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="16" fill="${t.color}" opacity=".35" filter="url(#glow)"/>`;
+  s+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="8" fill="${t.color}" stroke="#fff" stroke-width="2"/>`;
+  // 外侧标签
+  const [lx,ly]=pt(ang(i),R+90);
+  const cos=Math.cos(ang(i)*Math.PI/180);
+  const anchor=Math.abs(cos)<.3?'middle':(cos>0?'start':'end');
+  s+=`<text x="${lx.toFixed(1)}" y="${(ly-6).toFixed(1)}" text-anchor="${anchor}" font-size="27" font-weight="800" fill="${t.color}">${t.name}</text>`;
+  s+=`<text x="${lx.toFixed(1)}" y="${(ly+24).toFixed(1)}" text-anchor="${anchor}" font-size="21" fill="rgba(234,240,255,.75)">${t.count} 场 · ${pct(i)}%</text>`;
+  // 主马型皇冠
+  if(i===DOM){
+    const [cx2,cy2]=pt(ang(i),rayR(i)+40);
+    const cw=20;
+    s+=`<path transform="translate(${cx2.toFixed(1)} ${cy2.toFixed(1)})"
+       d="M-${cw} 10 L-${cw} -8 L-${cw/2} 2 L0 -14 L${cw/2} 2 L${cw} -8 L${cw} 10 Z"
+       fill="#FFD666" stroke="#FFF3D0" stroke-width="1.5" filter="url(#glow)"/>`;
+  }
+});
+
+// 星眼中心：主马型 + 战力分
+s+=`<text x="${CX}" y="${CY-40}" text-anchor="middle" font-size="30" font-weight="800" fill="${TIERS[DOM].color}">${TIERS[DOM].name}</text>`;
+s+=`<text x="${CX}" y="${CY+34}" text-anchor="middle" font-size="86" font-weight="900" fill="#FFFFFF">${SCORE}<tspan font-size="26" fill="rgba(234,240,255,.6)" font-weight="600"> /100</tspan></text>`;
+s+=`<text x="${CX}" y="${CY+70}" text-anchor="middle" font-size="20" fill="rgba(234,240,255,.62)">综合战力 · 近 ${TOTAL} 场</text>`;
+
+$('#star').innerHTML=s;
+
+// ===== 堆叠条 + 图例 =====
+const stack=$('#stack'),legend=$('#legend');
+TIERS.forEach(t=>{
+  const w=(t.count/TOTAL*100);
+  stack.insertAdjacentHTML('beforeend',`<i style="width:${w}%;background:${t.color}"></i>`);
+  legend.insertAdjacentHTML('beforeend',`<span><b style="background:${t.color}"></b>${t.name} <em>${t.count}场 · ${Math.round(w)}%</em></span>`);
+});
+</script>
+</body>
+</html>
 
             </div>
             <hr />
@@ -715,9 +937,9 @@
             <br/>
             <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text"
                   property="dct:title" rel="dct:type">
-                    《【每日算法Day 80】所有人都会做的入门题，高级解法来了！》
+                    《》
                 </span> 由
-            <a xmlns:cc="http://creativecommons.org/ns#" href="/2020/03/25/leetcode-inteview-08-31-v2/" property="cc:attributionName"
+            <a xmlns:cc="http://creativecommons.org/ns#" href="/starcard/index.html" property="cc:attributionName"
                rel="cc:attributionURL">
                 韦阳
             </a> 采用
@@ -780,58 +1002,46 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="fa fa-dot-circle-o"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2020/03/26/leetcode-inteview-17-09/">
+                <a href="/starcard/index.html">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/24.jpg" class="responsive-img" alt="【每日算法Day 81】面试经典题：关于丑数，你真的理解为什么这么算吗？">
+                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="">
                         
-                        <span class="card-title">【每日算法Day 81】面试经典题：关于丑数，你真的理解为什么这么算吗？</span>
+                        <span class="card-title"></span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
                             
-关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-题目链接LeetCode 面试题 17.09. 第 k 个数
-题目描述有些数的素因子只有 3，5，7，请设计一个算法找出第 k 个数。注意，不是必须有这些素因子，而是必须不包含其他的素
+
+
+五维战马星盘 · 分享卡（演示假数据）
+
+  :root{
+    --tian:#FFB300;   /* 天选马 金 */
+    --shang:#A855F7;  /* 上等马 紫 */
+    --zhong:#3B82
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="fa fa-clock-o fa-fw icon-date"></i>2020-03-26
-                        </span>
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2026-09-10
+                            </span>
                         <span class="publish-author">
-                            
-                            <i class="fa fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95/" class="post-category" target="_blank">
-                                    编程算法
-                                </a>
-                            
                             
                         </span>
                     </div>
                 </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/%E7%AE%97%E6%B3%95/" target="_blank">
-                        <span class="chip bg-color">算法</span>
-                    </a>
-                    
-                    <a href="/tags/leetcode/" target="_blank">
-                        <span class="chip bg-color">leetcode</span>
-                    </a>
-                    
-                </div>
+
                 
             </div>
         </div>
@@ -839,59 +1049,44 @@
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
+                本篇&nbsp;<i class="fa fa-dot-circle-o"></i>
             </div>
             <div class="card">
-                <a href="/2020/03/24/leetcode-inteview-08-01/">
+                <a href="/starcard/index.html">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="【每日算法Day 79】所有人都会做的入门题，但是能看出你的代码能力！">
+                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="">
                         
-                        <span class="card-title">【每日算法Day 79】所有人都会做的入门题，但是能看出你的代码能力！</span>
+                        <span class="card-title"></span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
                             
-关注公众号【算法码上来】，每日算法干货马上就来！
 
 
 
-这两天要帮老师录制一下题解视频，所以题目挑简单一点的，减（shui）轻（liang）大（pian）家（wen）压（zhang）力。
 
-题目链接LeetCode 面试题 08.01. 
+五维战马星盘 · 分享卡（演示假数据）
+
+  :root{
+    --tian:#FFB300;   /* 天选马 金 */
+    --shang:#A855F7;  /* 上等马 紫 */
+    --zhong:#3B82
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="fa fa-clock-o fa-fw icon-date"></i>2020-03-24
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2026-09-10
                             </span>
                         <span class="publish-author">
-                            
-                            <i class="fa fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95/" class="post-category" target="_blank">
-                                    编程算法
-                                </a>
-                            
                             
                         </span>
                     </div>
                 </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/%E7%AE%97%E6%B3%95/" target="_blank">
-                        <span class="chip bg-color">算法</span>
-                    </a>
-                    
-                    <a href="/tags/leetcode/" target="_blank">
-                        <span class="chip bg-color">leetcode</span>
-                    </a>
-                    
-                </div>
+
                 
             </div>
         </div>
@@ -1047,20 +1242,6 @@
 
 </main>
 
-
-<script>
-    window.MathJax = {
-        tex: {
-            inlineMath: [['$', '$'], ['\\(', '\\)']],
-            displayMath: [['$$', '$$'], ['\\[', '\\]']],
-            processEscapes: true
-        },
-        options: {
-            skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-        }
-    };
-</script>
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
 
 <script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
