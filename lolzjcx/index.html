@@ -3,155 +3,164 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>LOL 战绩查询</title>
+<title>LOL 战绩多人对比</title>
 <style>
-:root{--bg:#eef1f5;--card:#fff;--ink:#1f2329;--sub:#6b7280;--line:#e3e7ee;--blue:#2563eb;--teal:#0f766e;--red:#dc2626;--org:#d97706;--green:#16a34a;--code:#0f172a;--win:#16a34a;--lose:#dc2626;--remake:#9ca3af}
+:root{--bg:#eef1f5;--card:#fff;--ink:#1f2329;--sub:#6b7280;--line:#e3e7ee;--blue:#2563eb;--pri:#5b2a86;--red:#dc2626;--org:#d97706;--green:#16a34a;--win:#16a34a;--lose:#dc2626}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.6 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif;-webkit-user-select:text;user-select:text}
-html,body,div,span,p,b,td,th,label,h1,h2,li,code,pre{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
+html,body,div,span,p,b,td,th,label,h1,h2,h3,li,code{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
 button{-webkit-user-select:none;user-select:none}
+img{display:block}
 .wrap{max-width:1440px;margin:0 auto;padding:18px 16px 60px}
-@media (min-width:1700px){.wrap{max-width:1600px}}
-header.top{background:linear-gradient(135deg,#3a1d5e,#5b2a86);color:#fff;border-radius:14px;padding:16px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
-header.top h1{font-size:20px;margin:0;letter-spacing:2px;text-align:center}
-.svcbar{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+@media(min-width:1700px){.wrap{max-width:1600px}}
+/* 顶部服务栏（与 lolzjcx2 同一套） */
+header.top{background:linear-gradient(135deg,#3a1d5e,#5b2a86);color:#fff;border-radius:14px;padding:14px 20px;display:flex;flex-direction:column;align-items:center;gap:9px}
+header.top h1{font-size:19px;margin:0;letter-spacing:2px;text-align:center}
+.svcbar{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;width:100%}
 .svc{font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,.16);display:inline-flex;align-items:center;gap:6px}
 .svc i{width:8px;height:8px;border-radius:50%;background:#cbd5e1;display:inline-block}
 .svc.on{background:rgba(255,255,255,.2)}.svc.on i{background:#4ade80;box-shadow:0 0 6px #4ade80}
-.svc-tip{font-size:12px;color:rgba(255,255,255,.85);white-space:nowrap}
+.svc-tip{font-size:12px;color:rgba(255,255,255,.85)}
 .svc-dl{font-size:12px;font-weight:700;color:#fff;background:linear-gradient(135deg,#7c3aed,#9a6dd7);padding:4px 13px;border-radius:999px;text-decoration:none;white-space:nowrap}
 .svc-dl:hover{filter:brightness(1.08)}
-.svc-sep{width:14px;display:inline-block}
 .svc-opt{font-size:12px;color:rgba(255,255,255,.9);display:inline-flex;align-items:center;gap:4px;white-space:nowrap;cursor:pointer}
-.svc-opt input{margin:0;cursor:pointer}
 .svc-b{background:transparent!important;border:1px solid rgba(255,255,255,.55)!important;color:rgba(255,255,255,.92)!important;font-weight:400}
 .svc-b.primary{background:var(--pri)!important;border-color:var(--pri)!important;color:#fff!important;font-weight:700}
 .svc-b.warn{background:#f59e0b!important;border-color:#f59e0b!important;color:#fff!important;font-weight:700}
-.svc-path{flex-basis:100%;text-align:center;font-size:11px;color:rgba(255,255,255,.6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:90%}
+.svc-path{flex-basis:100%;text-align:center;font-size:11px;color:rgba(255,255,255,.6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:92%}
 .svc-macsh{flex-basis:100%;display:none;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;font-size:11px;color:rgba(255,255,255,.8)}
-.svc-macsh code{font-family:ui-monospace,Menlo,Consolas,monospace;background:rgba(255,255,255,.13);border-radius:6px;padding:2px 8px;font-size:11px;color:#fff;word-break:break-all;white-space:normal;text-align:left;line-height:1.5}
-.svc-macsh button{font-size:11px;background:rgba(255,255,255,.18);color:#fff;border:0;border-radius:6px;padding:2px 10px;cursor:pointer;white-space:nowrap}
-.svc-macsh button:hover{background:rgba(255,255,255,.3)}
+.svc-macsh code{font-family:ui-monospace,Menlo,Consolas,monospace;background:rgba(255,255,255,.13);border-radius:6px;padding:2px 8px;font-size:11px;color:#fff;word-break:break-all;text-align:left;line-height:1.5}
+.svc-macsh button{font-size:11px;background:rgba(255,255,255,.18);color:#fff;border:0;border-radius:6px;padding:2px 10px;cursor:pointer}
 a.svc-dis{opacity:.5;pointer-events:none}
-.svc-mini{font-size:12px;color:rgba(255,255,255,.78);text-decoration:underline;white-space:nowrap}
-.svc-mini.pulse{color:#fde047;font-weight:700;animation:pulseHi 1s ease-in-out 3}
-@keyframes pulseHi{0%,100%{opacity:1}50%{opacity:.35}}
-.svc-mini:hover{color:#fff}
-.svc-stop{font-size:12px;font-weight:700;color:#fff;background:rgba(220,38,38,.85);padding:4px 13px;border-radius:999px;white-space:nowrap}
+.svc-stop{font-size:12px;font-weight:700;color:#fff;background:rgba(220,38,38,.85);padding:4px 13px;border-radius:999px;white-space:nowrap;border:0}
 .svc-stop:hover{background:rgba(220,38,38,1)}
-.step{display:inline-flex;width:22px;height:22px;border-radius:50%;background:#5b2a86;color:#fff;align-items:center;justify-content:center;font-size:12px;margin-right:7px}
+.navlink{font-size:12px;color:rgba(255,255,255,.85);text-decoration:underline;white-space:nowrap}
+/* 卡片/通用 */
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
-.card h2{font-size:15px;margin:0 0 12px;display:flex;align-items:center}
-textarea{width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:8px;font-size:13px;background:#fff;color:var(--ink);font-family:inherit}
-textarea{min-height:120px;resize:vertical;line-height:1.5}
-textarea:focus{outline:none;border-color:var(--blue)}
-button{cursor:pointer;border:0;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:600;background:var(--blue);color:#fff}
-button.sec{background:#efeaf7;color:#5b2a86}button.warn{background:var(--org);color:#fff}button.danger{background:var(--red);color:#fff}
-button:disabled{opacity:.5;cursor:not-allowed}
-.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.card h2{font-size:15px;margin:0 0 12px;display:flex;align-items:center;gap:8px}
 .muted{color:var(--sub);font-size:12px}
-.progress{height:10px;background:#e9edf3;border-radius:999px;overflow:hidden;margin:10px 0}
-.progress>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#5b2a86,#9a6dd7);transition:width .3s}
-.log{background:#0f172a;color:#cbd5e1;border-radius:10px;padding:10px 12px;font:12px/1.6 ui-monospace,Consolas,monospace;height:150px;overflow:auto;white-space:pre-wrap;word-break:break-all}
-table{border-collapse:collapse;width:100%;font-size:12.5px}
-th,td{border:1px solid var(--line);padding:6px 8px;text-align:left}
-th{background:#f6f3fb}
-.twrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:8px}
-.twrap table{min-width:680px}
-.tag{display:inline-block;padding:1px 8px;border-radius:6px;font-size:11px;font-weight:700;color:#fff}
-.t-ok{background:var(--green)}.t-no{background:#9ca3af}.t-use{background:var(--teal)}.t-ex{background:var(--org)}
+button{cursor:pointer;border:0;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:600;background:var(--blue);color:#fff}
+button.sec{background:#efeaf7;color:var(--pri)}
+button:disabled{opacity:.45;cursor:not-allowed}
+input,select,textarea{padding:9px 12px;border:1px solid var(--line);border-radius:8px;font-size:14px;background:#fff;color:var(--ink);font-family:inherit}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue)}
+textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:16px}
 .toast{position:fixed;right:18px;bottom:18px;display:flex;flex-direction:column;gap:8px;z-index:99}
 .toast div{padding:9px 14px;border-radius:8px;color:#fff;font-size:13px;box-shadow:0 4px 14px rgba(0,0,0,.18)}
 .t-e{background:var(--red)}.t-s{background:var(--green)}.t-w{background:var(--org)}
-/* 战绩可视化 */
-.sumhead{margin:0 0 6px;display:flex;flex-direction:column;gap:2px}
-.sumhead .nm{font-size:14px;font-weight:800;line-height:20px;height:40px;word-break:break-word;overflow:hidden}
-.sumhead .horse{height:18px;line-height:18px;font-size:13px;font-weight:800;text-align:left}
-.sumhead .horse.h-A{color:#16a34a}.sumhead .horse.h-B{color:#2563eb}
-.sumhead .horse.h-C{color:#ea8a16}.sumhead .horse.h-D{color:#dc2626}.sumhead .horse.h-N{color:var(--sub)}
-.kd .kk{color:#16a34a}.kd .dd{color:#dc2626}.kd .aa{color:#111827}
-.kd .sep{color:var(--sub);font-weight:400;margin:0 1px}
-.sumhead .reg{font-size:11px;line-height:16px;height:16px;color:var(--sub);word-break:break-word;overflow:hidden}
-.sumhead .priv-lock{color:#dc2626;font-weight:800}
-.txt-rank{margin:4px 0 6px}
-.rk-row{display:flex;align-items:center;gap:4px;height:20px;line-height:20px;font-size:11.5px;flex-wrap:nowrap;white-space:nowrap;overflow:hidden}
-.rk-row .rk{flex:0 0 auto;color:var(--sub)}
-.rk-val{word-break:break-word}
-.txt-sum{font-size:11px;background:#f8f6fc;border-radius:6px;padding:6px 8px;margin:4px 0 8px}
-.txt-sum .sl{height:16px;line-height:16px;white-space:nowrap;overflow:hidden}
-.hero-block{font-size:11px;background:#f8f6fc;border-radius:6px;padding:6px 8px;margin:4px 0 8px;text-align:left}
-.hero-block .hl{height:32px;line-height:16px;word-break:break-word;text-align:left;padding:0;margin:0;text-indent:0;overflow:hidden}
-.hero-block .hl .tag{color:var(--sub)}
-.cols{display:grid;gap:10px;align-items:start;grid-template-columns:repeat(5,minmax(0,1fr));overflow:hidden;min-width:0}
-.block{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:#fff;display:flex;flex-direction:column;margin:0;min-width:0}
-.cols .block{padding:10px;box-sizing:border-box}
-.cols .block *{box-sizing:border-box}
-.block.err{border-color:#f3c0c0;background:#fef6f6}
-.tm{height:54px;margin-bottom:3px;padding:5px 6px;border-radius:6px;display:flex;flex-direction:column;justify-content:center;gap:1px}
-.tm .tl{line-height:15px;min-height:15px;word-break:break-word;overflow:hidden;font-size:11.5px}
-.tm .t2 b{font-size:13px}
-.tm .t2 b.champ{font-size:11.5px}
-.tm .r{font-size:13px}
-.tm .t3{color:var(--sub);font-size:10.5px}
-.tm .r{font-weight:800;margin-right:5px}
-.tm.win{background:#ecfdf3}.tm.win .r{color:#16a34a}
-.tm.lose{background:#fdecec}.tm.lose .r{color:#dc2626}
-.tm.ph{background:none}
-
-/* ===== 手机端自适应（≤640px）：桌面仍保持 5 列并排 ===== */
-html,body{overflow-x:hidden;-webkit-text-size-adjust:100%}
-@media (max-width:640px){
-  .wrap{max-width:100%;padding:10px 9px 48px}
-  header.top{padding:13px 12px;gap:8px;border-radius:12px}
-  header.top h1{font-size:18px;letter-spacing:1px}
-  .svcbar{gap:6px}
-  .svc-tip{white-space:normal;flex-basis:100%;text-align:center;line-height:1.5}
-  .svc-path{max-width:100%;white-space:normal;line-height:1.4}
-  .svc-macsh{line-height:1.5}
-  .svc-macsh code{flex-basis:100%;max-width:92%}
-  .svc-dl,.svc-stop{padding:5px 12px;font-size:12px}
-  .card{padding:12px 11px;margin:11px 0;border-radius:11px}
-  .card h2{font-size:13.5px;line-height:1.5;flex-wrap:wrap;gap:6px}
-  .card h2 .h2btns{flex-basis:100%;justify-content:flex-start;flex-wrap:wrap}
-  .step{margin-right:5px}
-  button{padding:8px 12px;font-size:12.5px}
-  .row{gap:6px}
-  /* 输入框/复选框区在窄屏整行换行，避免横向溢出 */
-  #copy_white{min-width:0!important;flex-basis:100%;width:100%}
-  .row>span[style*="white-space:nowrap"]{flex-basis:100%;white-space:normal!important;flex-wrap:wrap;row-gap:6px}
-  textarea,input{font-size:16px}      /* ≥16px 防止 iOS 聚焦自动放大 */
-  .log{font-size:11px;height:130px}
-  /* 账号池表格仅自身横向滚动，不撑破页面 */
-  .twrap{margin:0 -2px}
-  .twrap table{min-width:680px}
-  /* 战绩卡片：横向滑动、逐张吸附，页面本身不出现横向滚动条 */
-  .cols{display:flex;overflow-x:auto;overflow-y:hidden;gap:10px;padding:2px 2px 8px;
-        scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
-  .cols .block{flex:0 0 84vw;max-width:84vw;min-width:0;scroll-snap-align:start;margin:0}
-  .sumhead .nm{font-size:14px}
-  .rk-row{font-size:11px}
-  .tm .t3{font-size:10.5px}
-  .toast{left:12px;right:12px;bottom:12px}
-  .toast div{font-size:12.5px}
+.hint{font-size:11.5px;color:var(--sub);margin-top:6px}
+.search-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.search-row select{min-width:130px}
+.search-row button{min-width:96px}
+/* 结果元信息条 */
+.resbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--sub);margin:4px 2px 0}
+.resbar b{color:var(--ink)}
+.resbar .spacer{flex:1}
+/* ===== 结果：按行对齐的网格（每个 band 一行，各列同局等高对齐） ===== */
+.cgrid{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:12px;--n:1}
+.band{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));border-bottom:1px solid var(--line)}
+.band:last-child{border-bottom:0}
+.cell{min-width:0;border-right:1px solid var(--line);padding:11px 12px;display:flex;flex-direction:column;justify-content:center}
+.cell:last-child{border-right:0}
+/* 列头 */
+.head-cell{position:relative;justify-content:flex-start}
+.ch-top{display:flex;gap:10px;align-items:flex-start}
+.ch-avatar{width:52px;height:52px;border-radius:12px;border:1px solid var(--line);background:#f3f4f6;flex:0 0 auto}
+.ch-avatar.pm{box-shadow:0 0 0 2px var(--pm,#6d4ce8)}
+.ch-info{flex:1;min-width:0;padding-right:30px}
+.ch-name{font-size:16px;font-weight:800;line-height:1.25;word-break:break-word;color:var(--ink);text-decoration:none;display:inline}
+.ch-name:hover{color:var(--pri)}
+.ch-name .tag{color:var(--sub);font-weight:600;font-size:13px}
+.ch-go{position:absolute;top:10px;right:10px;width:26px;height:26px;border-radius:7px;background:#f1ecfb;color:var(--pri);display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:14px}
+.ch-go:hover{background:#e4daf7}
+.ch-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;font-size:11.5px;color:var(--sub);align-items:center}
+.pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:10.5px;font-weight:700;background:#eef2ff;color:#3730a3}
+.pill.priv{background:#fdecec;color:var(--red)}
+.pill.pm{color:#fff;background:var(--pm,#6d4ce8)}
+.ch-horse{text-align:center;font-size:15px;font-weight:800;letter-spacing:1px;margin-top:auto;padding-top:10px;min-height:20px}
+.h-A{color:#16a34a}.h-B{color:#2563eb}.h-C{color:#ea8a16}.h-D{color:#dc2626}.h-N{color:var(--sub);font-weight:600;font-size:12px}
+/* 单局马型小标记 */
+.mm .mh{flex:0 0 auto;font-size:10px;font-weight:800;border-radius:5px;padding:0 4px;line-height:16px;margin-left:1px}
+.mm .mh.h-A{background:#e8f7ee;color:#16a34a}.mm .mh.h-B{background:#e8f0fe;color:#2563eb}.mm .mh.h-C{background:#fdf1e2;color:#ea8a16}.mm .mh.h-D{background:#fdecec;color:#dc2626}
+/* 复制/白名单/马型选择 */
+.copy-tools{margin-top:11px;border-top:1px dashed var(--line);padding-top:10px;display:flex;flex-direction:column;gap:8px}
+.copy-tools .ct-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.copy-tools textarea{min-height:54px;font-size:13px;line-height:1.6}
+.cp-tiers{display:flex;gap:12px;flex-wrap:wrap;font-size:12.5px;color:var(--sub)}
+.cp-tiers label{display:inline-flex;align-items:center;gap:3px;cursor:pointer}
+.pool-btn{background:rgba(255,255,255,.16)!important;color:#fff!important;font-size:12px!important;font-weight:700!important;padding:4px 13px!important;border-radius:999px!important;white-space:nowrap}
+/* 迷你段位 */
+.rankmini{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rm{display:flex;align-items:center;gap:7px;background:#faf9fd;border:1px solid var(--line);border-radius:9px;padding:6px 8px;min-width:0}
+.rm img{width:30px;height:30px;flex:0 0 auto}
+.rm .rm-t{font-size:12px;font-weight:800;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rm .rm-q{font-size:10.5px;color:var(--sub)}
+.rm .rm-lp{font-size:10.5px;color:var(--org);font-weight:700}
+.rm.none{justify-content:center;color:var(--sub);font-size:11.5px}
+.rm.none span{white-space:nowrap}
+/* 汇总四宫格 */
+.sumrow{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.sm{text-align:center;background:#f8f6fc;border-radius:8px;padding:6px 2px}
+.sm .v{font-size:15px;font-weight:800;color:var(--pri);line-height:1.2}
+.sm .l{font-size:10.5px;color:var(--sub);margin-top:1px}
+/* 常用英雄图标 */
+.champrow{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.champrow img{width:32px;height:32px;border-radius:8px;background:#f3f4f6}
+.champrow .lab{font-size:11px;color:var(--sub);margin-right:2px;white-space:nowrap}
+/* 对局行：每一局一个 band，各列等高对齐，无列内滚动条，整体向下展开 */
+.band.mb{border-bottom:0}
+.cell.mcell{border-right:0;padding:5px 6px;display:flex}
+.mm{flex:1;border-radius:9px;padding:7px 9px;border:1px solid #eee;background:#fff}
+.mm.win{background:#ecfdf3;border-color:#c9ebd3}
+.mm.lose{background:#fdecec;border-color:#f3c9c9}
+.mm.remake{background:#f3f4f6;border-color:#e5e7eb}
+.mm .r1{display:flex;align-items:center;gap:7px}
+.mm .res{flex:0 0 26px;height:26px;border-radius:7px;color:#fff;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center}
+.mm.win .res{background:var(--win)}.mm.lose .res{background:var(--lose)}.mm.remake .res{background:#9ca3af}
+.mm .cn{font-weight:700;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:0 1 auto;min-width:0}
+.mm .kda{font-weight:800;font-size:13px;white-space:nowrap;flex:0 0 auto}
+.mm .kda .kk{color:var(--green)}.mm .kda .dd{color:var(--red)}.mm .kda .aa{color:#111827}.mm .kda .sep{color:var(--sub);font-weight:400}
+.mm .ic{margin-left:auto;display:flex;gap:2px;align-items:center;flex:0 0 auto}
+.mm .ic img{width:19px;height:19px;border-radius:4px}
+.mm .r2{font-size:10.8px;color:var(--sub);margin-top:3px;line-height:1.5;display:flex;justify-content:space-between;gap:6px}
+.mm .r2 .t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mm .r2 .tm{white-space:nowrap;flex:0 0 auto}
+/* 列状态 */
+.cell .col-status{text-align:center;color:var(--sub);font-size:12.5px;padding:18px 4px;word-break:break-word}
+.cell .col-status.err{color:var(--red)}
+.spinner{width:26px;height:26px;border:3px solid #e3e7ee;border-top-color:var(--pri);border-radius:50%;margin:0 auto 10px;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.empty{color:var(--sub);text-align:center;padding:18px 0;font-size:12.5px}
+/* 翻页（整行横跨所有列） */
+.pager-cell{grid-column:1/-1;border-right:0;flex-direction:row;align-items:center;justify-content:center;gap:14px;padding:10px;background:#faf9fd}
+.pager-cell .pg{font-size:12.5px;color:var(--sub);white-space:nowrap}
+.pager-cell button{padding:6px 16px;font-size:12.5px}
+@media (max-width:900px){
+  .cgrid{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .band{grid-template-columns:repeat(var(--n),82vw)}
 }
-@media (max-width:380px){
-  .cols .block{flex-basis:88vw;max-width:88vw}
-  button{padding:7px 10px}
+@media (max-width:640px){
+  .wrap{max-width:100%;padding:10px 8px 46px}
+  header.top{padding:12px 11px;border-radius:12px}
+  header.top h1{font-size:17px;letter-spacing:1px}
+  .card{padding:12px 11px;margin:11px 0;border-radius:11px}
+  input,select,textarea{font-size:16px}
+  .toast{left:12px;right:12px;bottom:12px}
 }
 </style>
 </head>
 <body>
-<div class="wrap" id="app">
+<div class="wrap">
   <header class="top">
     <h1>LOL 战绩查询</h1>
     <div class="svcbar">
       <span class="svc" id="svcPill"><i></i><span id="svcText">检测中…</span></span>
       <a class="svc-dl" id="launchBtn" href="lolzjcx://start" style="display:none" title="浏览器若询问是否打开，选允许">启动服务</a>
-      <button class="svc-stop" id="stopSvc" style="display:none" onclick="shutdownSvc()">停止服务</button>
+      <button class="svc-stop" id="stopSvc" style="display:none">停止服务</button>
       <a class="svc-dl svc-b" id="dlBtn" href="/medias/files/lolzjcx_service.exe" download>下载本地服务</a>
       <label id="autoStopWrap" class="svc-opt" style="display:none"><input type="checkbox" id="autoStopChk" checked>关闭页面后自动停</label>
-      <a href="/lolzjcx3/" style="font-size:12px;color:rgba(255,255,255,.85);text-decoration:underline;white-space:nowrap">多人对比（完整）</a>
-      <a href="/lolzjcx2/" style="font-size:12px;color:rgba(255,255,255,.85);text-decoration:underline;white-space:nowrap">单人详情版</a>
+      <button type="button" class="pool-btn" id="poolBtn">积分/账号池</button>
+      <a class="navlink" href="/lolzjcx2/">单人详情版</a>
       <span class="svc-tip" id="svcTip" style="display:none"></span>
       <span class="svc-path" id="svcPath" style="display:none"></span>
       <span class="svc-macsh" id="macShWrap">
@@ -162,118 +171,76 @@ html,body{overflow-x:hidden;-webkit-text-size-adjust:100%}
     </div>
   </header>
 
-  <!-- ① 账号池 -->
+  <!-- 查询 -->
   <div class="card">
-    <h2><span class="step">1</span>账号池（缺号自动补号，每号每天约 7 人、跨天恢复）
-      <span class="h2btns" style="margin-left:auto;display:flex;gap:8px">
-        <button class="sec" style="padding:3px 10px" id="checkBtn" onclick="toggleCheck()">检测账号</button>
-        <button class="sec" style="padding:3px 10px" onclick="clearAccounts('invalid')">清理失效</button>
-        <button class="sec" style="padding:3px 10px" onclick="clearAccounts('all')">清空账号池</button>
-        <button class="sec" style="padding:3px 10px" onclick="openData()">数据目录</button></span></h2>
-    <div id="poolOverview" class="row" style="margin:0 0 8px;gap:8px"></div>
-    <div class="twrap">
-    <table><thead><tr><th>编号</th><th>用户名</th><th>占位邮箱</th><th>密码</th><th>状态</th><th>今日可查/总可查(人)</th><th>Cookie</th><th>最近使用</th><th>操作</th></tr></thead>
-      <tbody id="accBody"><tr><td colspan="9" class="muted">暂无（首次查询时会自动注册）</td></tr></tbody></table>
+    <h2>多人对比查询（每人一列 · 近 15 场 · 可翻页）</h2>
+    <textarea id="qInput" placeholder="每行一个 名字#尾标，可直接粘贴队伍聊天，例如：&#10;godweiyang#23456&#10;老公你努努力呀 #83805 加入了队伍聊天&#10;（最多 5 人）"></textarea>
+    <div class="search-row" style="margin-top:9px">
+      <label class="muted">队列</label>
+      <select id="qQueue"></select>
+      <div class="spacer" style="flex:1"></div>
+      <button id="qBtn">开始查询</button>
+      <button class="sec" id="copyBtn" type="button">一键复制</button>
     </div>
-    <div id="checkJobBox" style="display:none;margin-top:10px">
-      <div class="progress"><i id="cPbar"></i></div>
-      <div id="cJobState" class="muted"></div>
-      <div class="log" id="cJobLog" style="margin-top:8px;height:120px"></div>
+    <div class="copy-tools">
+      <textarea id="whiteInput" placeholder="过滤白名单：这些人直接跳过不查询、也不复制（逗号/顿号/空格/换行分隔，可带#id）"></textarea>
+      <div class="ct-row">
+        <span class="muted">复制明细</span>
+        <div class="cp-tiers" id="cpTiers">
+          <label><input type="checkbox" class="cp_tier" value="A" checked>上等马</label>
+          <label><input type="checkbox" class="cp_tier" value="B">中等马</label>
+          <label><input type="checkbox" class="cp_tier" value="C">下等马</label>
+          <label><input type="checkbox" class="cp_tier" value="D" checked>牛马</label>
+        </div>
+      </div>
     </div>
+    <div class="hint">积分口径：每号每天 21 积分（跨天自动恢复）；完整查 1 人消耗 3 积分，翻页每人 1 积分，号不够会自动补号。点卡片右上角图标可在新标签页打开该玩家单人详情；同队开黑的玩家名字与头像会同色标记。</div>
   </div>
 
-  <!-- ② 查询 -->
-  <div class="card">
-    <h2><span class="step">2</span>战绩查询（粘贴若干“名字#尾标”，自动识别，一次最多 5 个；串行轮换、缺号自动补）</h2>
-    <textarea id="query_input" placeholder="每行一个，或直接粘贴整段队伍聊天：&#10;godweiyang⁩ #⁦23456⁩⁩加入了队伍聊天&#10;老公你努努力呀⁩ #⁦83805⁩⁩加入了队伍聊天&#10;也支持：名字#12345"></textarea>
-    <div class="row">
-      <button id="queryBtn" onclick="toggleQuery()">开始查询（≤5）</button>
-      <button class="sec" onclick="clearResults()">清空结果</button>
-      <button class="sec" onclick="copySummary()">一键复制</button>
-      <span id="query_preview" class="muted"></span>
-    </div>
-    <div class="row" style="margin-top:8px">
-      <input id="copy_white" placeholder="过滤白名单：这些人直接跳过不查询、也不复制（逗号/顿号/空格/换行分隔，可带#id）"
-        style="flex:1;min-width:220px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;font-size:13px;background:#fff;color:var(--ink)">
-      <span style="display:flex;gap:10px;align-items:center;white-space:nowrap;font-size:13px;color:var(--ink)">
-        <span class="muted">复制明细</span>
-        <label style="display:flex;align-items:center;gap:3px;cursor:pointer"><input type="checkbox" class="cp_tier" value="A" checked>上等马</label>
-        <label style="display:flex;align-items:center;gap:3px;cursor:pointer"><input type="checkbox" class="cp_tier" value="B">中等马</label>
-        <label style="display:flex;align-items:center;gap:3px;cursor:pointer"><input type="checkbox" class="cp_tier" value="C">下等马</label>
-        <label style="display:flex;align-items:center;gap:3px;cursor:pointer"><input type="checkbox" class="cp_tier" value="D" checked>牛马</label>
-      </span>
-    </div>
-    <div id="queryJobBox" style="display:none;margin-top:10px">
-      <div class="progress"><i id="qPbar"></i></div>
-      <div id="qJobState" class="muted"></div>
-      <div class="log" id="qJobLog" style="margin-top:8px;height:120px"></div>
-    </div>
-    <div id="batchResult" class="cols" style="margin-top:12px"></div>
-  </div>
+  <div id="resBar"></div>
+  <div id="cols" class="cgrid"></div>
+  <div id="emptyTip"></div>
 </div>
 <div class="toast" id="toast"></div>
 
+<script src="/lolzjcx2/pool.js"></script>
 <script>
-const $=id=>document.getElementById(id);
-/* ===== 本机后台服务：http://127.0.0.1:17530 ===== */
+/* ============================================================ 本机服务（与 lolzjcx2 同一套） */
 const API='http://127.0.0.1:17530';
-const GET_ONLY={health:1,accounts:1,pool_overview:1,job_status:1};
+const $=id=>document.getElementById(id);
 async function rawFetch(path,opt,timeout=20000){
   const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),timeout);
   try{return await fetch(API+path,Object.assign({signal:ctrl.signal},opt));}
   finally{clearTimeout(to);}
 }
-async function call(name,...args){
-  let opt={method:'POST',headers:{'content-type':'application/json'},body:'{}'};
-  if(GET_ONLY[name]){opt={method:'GET'};}
-  else{
-    let p={};
-    if(name==='delete_account')p.num=args[0];
-    else if(name==='clear_accounts')p.mode=args[0]||'all';
-    else if(name==='preview_summoners')p.text=args[0]||'';
-    else if(name==='start_batch_query')p.params=args[0]||{};
-    opt.body=JSON.stringify(p);
-  }
-  // 控制接口都是本机回环、应毫秒级返回；手机上预检/回环偶发卡顿时，用较短超时快速暴露而非干等
-  const tmo=(name==='health'||name==='job_status')?3000
-           :(name==='start_batch_query'||name==='preview_summoners'||name==='start_check')?10000:8000;
+async function api(name,body,timeout=30000){
   let resp;
-  try{resp=await rawFetch('/api/'+name,opt,tmo);}catch(e){setConnected(false);throw new Error('本地服务未连接，请先启动 lolzjcx_service');}
+  try{resp=await rawFetch('/api/'+name,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body||{})},timeout);}
+  catch(e){setConnected(false);throw new Error('本地服务未连接，请先启动本地服务');}
   if(!resp.ok)throw new Error('本地服务返回 '+resp.status);
-  const r=await resp.json();
-  setConnected(true);
+  const r=await resp.json();setConnected(true);
   if(!r.ok)throw new Error(r.error||'操作失败');
   return r.data;
 }
-/* ===== 服务在线状态：自动探测 / 掉线遮罩 / 上线自动连接 ===== */
 let online=null,inited=false,svcVer='',svcPath='',forceDl=false,launchWatch=null;
-const LATEST_VERSION='1.5.0';   // 与本机服务内 server.VERSION 同步；页面永远是最新，用来判断本机服务是否过时
-// 按操作系统给出对应的本地服务安装包：Windows=exe，macOS=app.zip，安卓=apk
+const LATEST_VERSION='1.5.0';
 const UA=(navigator.userAgent||'')+' '+(navigator.platform||'');
 const IS_MAC=/macintosh|mac os x|iphone|ipad|ipod/i.test(UA);
 const IS_ANDROID=/android/i.test(UA);
 const DL_URL=IS_MAC?'/medias/files/lolzjcx_service_mac.zip':(IS_ANDROID?'/medias/files/lolzjcx_service_android.apk':'/medias/files/lolzjcx_service.exe');
-const PTAG=IS_MAC?'Mac':(IS_ANDROID?'安卓':'Windows');   // 平台名（用于按钮/提示）
-const L_DL=`下载本地服务（${PTAG}）`;                    // 常规下载
-const L_FIRST=`下载本地服务（${PTAG}·首次使用）`;        // 首次使用
-const L_REDL=`重新下载本地服务（${PTAG}）`;              // 程序被删/找不到时重下
-const L_UP_NOVER='更新本地服务（版本过旧）';
-const L_UP=(o,n)=>`更新本地服务 v${o}→v${n}`;
-// 各平台“下载后怎么运行”的提示语
+const PTAG=IS_MAC?'Mac':(IS_ANDROID?'安卓':'Windows');
+const L_DL=`下载本地服务（${PTAG}）`,L_FIRST=`下载本地服务（${PTAG}·首次使用）`,L_REDL=`重新下载本地服务（${PTAG}）`;
+const L_UP_NOVER='更新本地服务（版本过旧）',L_UP=(o,n)=>`更新本地服务 v${o}→v${n}`;
 const TIP_FIRST=IS_MAC?'推荐用下方终端命令一键安装（免 Gatekeeper 安全提示）；也可下载解压后右键→打开 App 一次'
   :IS_ANDROID?'下载 APK 安装（需允许“安装未知来源应用”），打开 App 点一次「启动服务」；以后直接点网页「启动服务」'
   :'下载后双击运行一次，以后直接点「启动服务」';
 const TIP_RETRY=IS_MAC?'没启动起来？重跑下方终端命令，或下载解压后双击 App 运行一次'
-  :IS_ANDROID?'没启动起来？打开已安装的 App 点「启动服务」即可'
-  :'没启动起来？下载后双击运行一次即可';
+  :IS_ANDROID?'没启动起来？打开已安装的 App 点「启动服务」即可':'没启动起来？下载后双击运行一次即可';
 const TIP_UPDATE=IS_MAC?'推荐重跑下方终端命令自动更新（免安全提示）；或下载解压后右键→打开 App'
-  :IS_ANDROID?'下载新版 APK 覆盖安装即可，账号数据保留'
-  :'下载后双击即可，新版会自动停掉旧服务并接管';
-// 本地预览页唤起开发协议 lolzjcxdev://，线上正式页唤起 lolzjcx://，互不劫持
+  :IS_ANDROID?'下载新版 APK 覆盖安装即可，账号数据保留':'下载后双击即可，新版会自动停掉旧服务并接管';
 function protoUrl(){const h=location.hostname;return(h==='localhost'||h==='127.0.0.1'||h==='[::1]')?'lolzjcxdev://start':'lolzjcx://start';}
 function isInstalled(){try{return localStorage.getItem('lolzjcx_installed')==='1';}catch(e){return false;}}
 function agoText(ts){if(!ts)return'';const s=(Date.now()-ts)/1000;if(s<60)return'刚刚';if(s<3600)return Math.floor(s/60)+' 分钟前';if(s<86400)return Math.floor(s/3600)+' 小时前';return Math.floor(s/86400)+' 天前';}
-// 点“启动服务”后若 4.5s 内仍未连上（如 EXE 被删/协议失效），把下载按钮升级为强提示
 function onLaunchClick(){
   if(online!==false||!isInstalled()||forceDl)return;
   clearTimeout(launchWatch);
@@ -282,374 +249,516 @@ function onLaunchClick(){
 }
 function cmpVer(a,b){const pa=String(a||'0').split('.').map(x=>parseInt(x)||0),pb=String(b||'0').split('.').map(x=>parseInt(x)||0);
   for(let i=0;i<Math.max(pa.length,pb.length);i++){const x=pa[i]||0,y=pb[i]||0;if(x!==y)return x<y?-1:1;}return 0;}
-function setSvcVersion(v,path){
-  svcVer=v||'';if(path)svcPath=path;
-  if(online&&path){try{localStorage.setItem('lolzjcx_last_svc',JSON.stringify({path,ts:Date.now()}));}catch(e){}}
-  renderSvc();
-}
-// 统一渲染两个按钮（A=启动/停止，B=下载 EXE）与路径/提示
+function setSvcVersion(v,path){svcVer=v||'';if(path)svcPath=path;
+  if(online&&path){try{localStorage.setItem('lolzjcx_last_svc',JSON.stringify({path,ts:Date.now()}));}catch(e){}}renderSvc();}
 function renderSvc(){
   const pill=$('svcPill'),txt=$('svcText'),launch=$('launchBtn'),stop=$('stopSvc'),
         dl=$('dlBtn'),aw=$('autoStopWrap'),tip=$('svcTip'),pathEl=$('svcPath'),macSh=$('macShWrap');
   const macCmd=show=>{macSh.style.display=(IS_MAC&&show)?'flex':'none';};
-  dl.href=DL_URL;
-  dl.classList.remove('primary','warn');
+  dl.href=DL_URL;dl.classList.remove('primary','warn');
   const setTip=t=>{if(t){tip.textContent=t;tip.style.display='';}else tip.style.display='none';};
-  const setPath=t=>{if(t){pathEl.textContent=t;pathEl.title=t.replace(/^.*?:/,'').trim();pathEl.style.display='';}else pathEl.style.display='none';};
-  if(online===null){ // 检测中：只显示灰色状态药丸，不显示紫色“启动服务”按钮（避免出现多余椭圆）
-    pill.classList.remove('on');txt.textContent='检测中…';
-    stop.style.display='none';launch.style.display='none';
-    dl.textContent=L_DL;setTip('');setPath('');aw.style.display='none';macCmd(true);return;
-  }
+  const setPath=t=>{if(t){pathEl.textContent=t;pathEl.style.display='';}else pathEl.style.display='none';};
+  if(online===null){pill.classList.remove('on');txt.textContent='检测中…';stop.style.display='none';launch.style.display='none';
+    dl.textContent=L_DL;setTip('');setPath('');aw.style.display='none';macCmd(true);return;}
   launch.classList.remove('svc-dis');
-  if(online){ // —— 在线 ——
-    clearTimeout(launchWatch);forceDl=false;
-    pill.classList.add('on');txt.textContent='服务已运行';
+  if(online){clearTimeout(launchWatch);forceDl=false;pill.classList.add('on');txt.textContent='服务已运行';
     launch.style.display='none';stop.style.display='';aw.style.display='';
-    const noVer=!svcVer,outdated=noVer||cmpVer(svcVer,LATEST_VERSION)<0;
-    macCmd(outdated);
+    const noVer=!svcVer,outdated=noVer||cmpVer(svcVer,LATEST_VERSION)<0;macCmd(outdated);
     pill.title=svcVer?('本地服务 v'+svcVer+(outdated?'（最新 v'+LATEST_VERSION+'）':'')):'';
-    if(outdated){dl.classList.add('warn');
-      dl.textContent=noVer?L_UP_NOVER:L_UP(svcVer,LATEST_VERSION);
-      setTip(TIP_UPDATE);}
+    if(outdated){dl.classList.add('warn');dl.textContent=noVer?L_UP_NOVER:L_UP(svcVer,LATEST_VERSION);setTip(TIP_UPDATE);}
     else{dl.textContent=L_DL;setTip('');}
-    setPath(svcPath?('当前服务：'+svcPath):'');return;
-  }
-  // —— 离线 ——
+    setPath(svcPath?('当前服务：'+svcPath):'');return;}
   pill.classList.remove('on');txt.textContent='服务未运行';
   stop.style.display='none';aw.style.display='none';launch.style.display='';launch.href=protoUrl();
-  if(!isInstalled()){ // 首次：A 置灰，B 主按钮
-    launch.textContent='启动服务';launch.classList.add('svc-dis');
-    dl.classList.add('primary');dl.textContent=L_FIRST;
-    setTip(TIP_FIRST);setPath('');macCmd(true);return;
-  }
-  macCmd(true);
-  launch.classList.remove('svc-dis');launch.textContent='启动服务';
-  if(forceDl){dl.classList.add('warn');dl.textContent=L_REDL;
-    setTip(TIP_RETRY);}
-  else{dl.textContent=L_DL;setTip('');}
+  if(!isInstalled()){launch.textContent='启动服务';launch.classList.add('svc-dis');
+    dl.classList.add('primary');dl.textContent=L_FIRST;setTip(TIP_FIRST);setPath('');macCmd(true);return;}
+  macCmd(true);launch.classList.remove('svc-dis');launch.textContent='启动服务';
+  if(forceDl){dl.classList.add('warn');dl.textContent=L_REDL;setTip(TIP_RETRY);}else{dl.textContent=L_DL;setTip('');}
   let last=null;try{last=JSON.parse(localStorage.getItem('lolzjcx_last_svc')||'null');}catch(e){}
   setPath(last&&last.path?('上次运行：'+last.path+' · '+agoText(last.ts)):'');
 }
 function setConnected(on){
   if(on===online)return;online=on;
-  if(on){
-    try{localStorage.setItem('lolzjcx_installed','1');}catch(e){}   // 曾连上服务=本机已装过
-    if(!inited){inited=true;boot();}else{loadAccounts();}
-  }else if(jobTimer){clearInterval(jobTimer);jobTimer=null;}
+  if(on){try{localStorage.setItem('lolzjcx_installed','1');}catch(e){}if(!inited)inited=true;}
   renderSvc();
 }
 async function shutdownSvc(){
   if(!confirm('确定关闭本地服务吗？关闭后将暂停查询，需要时点页面上的「启动服务」即可，无需再找本地程序。'))return;
-  try{await call('shutdown');}catch(e){}
-  setConnected(false);toast('本地服务已关闭','w');
+  try{await api('shutdown',{},6000);}catch(e){}setConnected(false);toast('本地服务已关闭','w');
 }
 function autoStopOn(){const c=$('autoStopChk');return !c||c.checked;}
-// 服务探测（移动端 https→http loopback 有 PNA 私网预检，偶发慢/失败）：
-//  - 串行：上一个探测未结束不发下一个，避免请求堆积在手机上互相拖死
-//  - 单次成功即上线并清零；连续 FAIL_GRACE 次失败才判离线，抗抖动、不来回跳
-//  - 切回标签/重新聚焦/从 App 返回浏览器时强制立即探一次，做到回页即连
-let failCount=0, probing=false;
+let failCount=0,probing=false;
 async function probe(force){
-  if(probing && !force)return;
-  probing=true;
-  // 刚加载（检测中）阶段用短超时快速判定；稳态后用稍长超时抗抖动
-  const t0=online===null?1200:3000, grace=online===null?3:4;
-  try{
-    // hb=页面心跳；as=是否允许“页面都关闭后自动停服务”
-    const resp=await rawFetch('/api/health?hb=1&as='+(autoStopOn()?'1':'0'),{method:'GET'},t0);
+  if(probing&&!force)return;probing=true;
+  const t0=online===null?1200:300,grace=online===null?3:4;
+  try{const resp=await rawFetch('/api/health?hb=1&as='+(autoStopOn()?'1':'0'),{method:'GET'},t0);
     if(resp.ok){const j=await resp.json();if(j&&j.ok){failCount=0;const d=j.data||{};setConnected(true);setSvcVersion(d.version,d.path);}else failCount++;}
     else failCount++;
   }catch(e){failCount++;}
-  probing=false;
-  if(failCount>=grace)setConnected(false);
+  probing=false;if(failCount>=grace)setConnected(false);
 }
 setInterval(()=>probe(false),2000);probe(true);
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')probe(true);});
 window.addEventListener('pageshow',()=>probe(true));
 window.addEventListener('focus',()=>probe(true));
+function toast(msg,type='s'){const t=$('toast');const d=document.createElement('div');d.className='t-'+type;d.textContent=msg;t.appendChild(d);setTimeout(()=>d.remove(),3600);}
+function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 
-let jobTimer=null;
-function toast(msg,type='s'){const t=$('toast');const d=document.createElement('div');d.className='t-'+type;d.textContent=msg;t.appendChild(d);setTimeout(()=>d.remove(),3600)}
-function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
-function fmtGold(n){n=Number(n)||0;return n>=1000?(n/1000).toFixed(1)+'k':n}
+/* ============================================================ 静态字典（复用 lolzjcx2 的 data） */
+const DICT_BASE=location.pathname.replace(/[^/]*$/,'')+'../lolzjcx2/data/';
+let HERO={},RUNE={},SPELL={};
+async function loadDict(){
+  const get=async f=>{try{const r=await fetch(DICT_BASE+f,{cache:'force-cache'});return r.ok?await r.json():{};}catch(e){return {};}};
+  [HERO,RUNE,SPELL]=await Promise.all([get('hero.json'),get('rune.json'),get('spell.json')]);
+}
+loadDict().then(()=>{ if(state.targets.length) renderColumns(); });
+const CDN='https://game.gtimg.cn/images/lol/act/img', WG='https://wegame.gtimg.com/g.26-r.c2d3c/helper/lol';
+function champEn(id,fb){const h=HERO[String(id)];return (h&&h.en)||fb||'';}
+function champCn(id,fb){const h=HERO[String(id)];return (h&&h.cn)||fb||('英雄'+(id??'?'));}
+function champIcon(id,fb){const en=champEn(id,fb);return en?`${CDN}/champion/${en}.png`:'';}
+function spellIcon(id){const s=SPELL[String(id)];return s?s.i:'';}
+function runeIcon(id){const r=RUNE[String(id)];return r?r.i:'';}
+function avatarUrl(id){return id?`${WG}/assis/images/resources/usericon/${id}.png`:'';}
+function rankIcon(tier){const t=String(tier||'').toLowerCase();return t?`https://lolso1.com/lol-assets/ranked-simple-icons/${t}.png`:`https://lolso1.com/lol-assets/ranked-simple-icons/none-tier.svg`;}
+function img(url,cls,alt){return url?`<img class="${cls||''}" src="${url}" alt="${esc(alt||'')}" loading="lazy">`:'';}
+
+/* ============================================================ 映射表 */
+const TIER_CN={IRON:'黑铁',BRONZE:'青铜',SILVER:'白银',GOLD:'黄金',PLATINUM:'铂金',EMERALD:'翡翠',DIAMOND:'钻石',MASTER:'大师',GRANDMASTER:'傲世宗师',CHALLENGER:'最强王者'};
 const TIER_COLOR={IRON:'#6b7280',BRONZE:'#a1693c',SILVER:'#7d8a99',GOLD:'#d4a017',PLATINUM:'#2fa88a',EMERALD:'#1f9e6b',DIAMOND:'#3b76d6',MASTER:'#8b5cf6',GRANDMASTER:'#d14141',CHALLENGER:'#e0a028'};
+const QUEUE_TABS=[{v:-1,n:'所有队列'},{v:420,n:'单双排'},{v:430,n:'匹配模式'},{v:440,n:'灵活组排'},{v:450,n:'极地大乱斗'},{v:480,n:'快速模式'},{v:2400,n:'海克斯大乱斗'}];
+const QUEUE_NAME={0:'全部模式',400:'征召模式',420:'单双排',430:'匹配模式',440:'灵活组排',450:'极地大乱斗',480:'快速模式',325:'灵活组排(旧)',700:'克隆模式',
+  830:'入门人机',840:'新手人机',850:'一般人机',870:'入门人机',880:'新手人机',890:'人机模式',900:'无限乱斗',1020:'无限火力',1300:'终极魔典',
+  1700:'斗魂竞技场',1750:'斗魂竞技场',1900:'无限火力',2400:'海克斯大乱斗',2450:'经典海斗',4310:'经典匹配'};
+const MODE_CN={CLASSIC:'召唤师峡谷',ARAM:'极地大乱斗',ARENA:'斗魂竞技场',CHERRY:'斗魂竞技场',KIWI:'海克斯大乱斗',KIWI_JADE:'经典海斗',URF:'无限火力',ULTBOOK:'终极魔典',ONERORALL:'克隆模式'};
+const REGION_CN={HN1:'艾欧尼亚',HN2:'祖安',HN3:'诺克萨斯',HN4:'班德尔城',HN5:'皮尔特沃夫',HN6:'战争学院',HN7:'巨神峰',HN8:'雷瑟守备',HN9:'裁决之地',HN10:'黑色玫瑰',
+  HN11:'暗影岛',HN12:'钢铁烈阳',HN13:'水晶之痕',HN14:'均衡教派',HN15:'影流',HN16:'守望之海',HN17:'征服之海',HN18:'卡拉曼达',HN19:'皮城警备',BGP2:'峡谷之巅',PBE:'试炼之地'};
+const POS_CN={TOP:'上路',JUNGLE:'打野',MIDDLE:'中路',MID:'中路',BOTTOM:'下路',UTILITY:'辅助',SUPPORT:'辅助',ADC:'下路',CARRY:'下路',APEX:'竞技场'};
+function regionName(c){if(!c)return'—';const k=String(c).toUpperCase().replace('TENCENT_','');return REGION_CN[k]||k;}
+function tierCn(t){return TIER_CN[String(t||'').toUpperCase()]||String(t||'');}
+function tierColor(t){return TIER_COLOR[String(t||'').toUpperCase()]||'#6b7280';}
+function queueName(qid,mode){return QUEUE_NAME[qid]||MODE_CN[String(mode||'').toUpperCase()]||(qid?('模式'+qid):'未知');}
+function posCn(p){return POS_CN[String(p||'').toUpperCase()]||'';}
+function pct(x,d){if(x==null||isNaN(x))return'—';return (x*100).toFixed(d==null?0:d)+'%';}
+function fmtK(n){n=Number(n)||0;return n>=10000?(n/1000).toFixed(1)+'万':(n>=1000?(n/1000).toFixed(1)+'k':String(n));}
+function fmtDur(sec){sec=Math.max(0,Math.round(sec));return Math.floor(sec/60)+':'+String(sec%60).padStart(2,'0');}
+function fmtDateTime(ms){if(!ms)return'—';const d=new Date(Number(ms)),p=n=>String(n).padStart(2,'0');return `${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;}
+function kdaOf(k,d,a){return d>0?((k+a)/d):(k+a);}
+function tierRank(t,r){if(!t||['NONE','UNRANKED'].includes(String(t).toUpperCase()))return'';
+  const no=['MASTER','GRANDMASTER','CHALLENGER'];const tn=tierCn(t);return tn+(no.includes(String(t).toUpperCase())||!r?'':(' '+r));}
+function csOf(p){return (Number(p.totalMinionsKilled)||0)+(Number(p.neutralMinionsKilled)||0);}
 
-async function boot(){
-  try{const h=await call('health');loadAccounts();}catch(e){toast(e.message,'e')}
-}
-async function openData(){try{await call('open_data_dir')}catch(e){toast(e.message,'e')}}
-async function stopJob(){try{await call('stop_job');toast('已请求停止','w')}catch(e){toast(e.message,'e')}}
-// 同一个按钮在“开始/停止”间切换：running 时变红并显示停止文案
-function setJobBtn(id,running,idleCls,idleTxt,runTxt){const b=$(id);if(!b)return;b.textContent=running?runTxt:idleTxt;b.className=running?'danger':idleCls;}
-async function jobRunning(type){try{const j=await call('job_status');return !!(j&&j.running&&(!type||j.type===type));}catch(e){return false}}
-async function toggleCheck(){if(await jobRunning('check'))stopJob();else startCheck();}
-async function toggleQuery(){if(await jobRunning('batch_query'))stopJob();else startQuery();}
-
-function watchJob(){
-  if(jobTimer)clearInterval(jobTimer);
-  jobTimer=setInterval(async()=>{try{
-    const j=await call('job_status');if(!j)return;
-    const isQ=j.type==='batch_query', isC=j.type==='check';
-    setJobBtn('checkBtn',isC&&j.running,'sec','检测账号','停止检测');
-    setJobBtn('queryBtn',isQ&&j.running,'','开始查询（≤5）','停止');
-    const qBox=$('queryJobBox'),cBox=$('checkJobBox');
-    qBox.style.display=(isQ&&j.running)?'':'none';
-    cBox.style.display=(isC&&j.running)?'':'none';
-    if(isQ){
-      const pct=j.total?Math.round(100*j.done/j.total):0;$('qPbar').style.width=pct+'%';
-      $('qJobState').textContent=`${j.done}/${j.total}｜当前 ${j.current??'-'}｜成功 ${j.ok} 失败 ${j.fail}｜${j.running?'进行中…':'已结束'}`;
-      $('qJobLog').textContent=(j.logs||[]).slice(-200).join('\n');$('qJobLog').scrollTop=$('qJobLog').scrollHeight;
-      renderBatch(j.results||[]);
-    }else if(isC){
-      const pct=j.total?Math.round(100*j.done/j.total):0;$('cPbar').style.width=pct+'%';
-      $('cJobState').textContent=`检测 ${j.done}/${j.total}｜正常 ${j.ok} 异常 ${j.fail}｜${j.running?'进行中…':'已结束'}`;
-      $('cJobLog').textContent=(j.logs||[]).slice(-200).join('\n');$('cJobLog').scrollTop=$('cJobLog').scrollHeight;
-    }
-    if(!j.running){clearInterval(jobTimer);jobTimer=null;
-      setJobBtn('checkBtn',false,'sec','检测账号','停止检测');
-      setJobBtn('queryBtn',false,'','开始查询（≤5）','停止');
-      loadAccounts();}
-  }catch(e){}},800);
-}
-
-// ① 账号池
-async function loadAccounts(){
-  try{const list=await call('accounts');
-    const tb=$('accBody');
-    if(!list.length){tb.innerHTML='<tr><td colspan="9" class="muted">暂无（首次查询时会自动注册）</td></tr>';$('poolOverview').innerHTML='';return}
-    tb.innerHTML=list.map(r=>{let st;
-      if(r.check_status==='ok')st='<span class="tag t-ok">正常</span>';
-      else if(r.check_status==='banned'||r.disabled)st='<span class="tag t-ex">已封禁</span>';
-      else if(r.check_status==='badpass')st='<span class="tag t-ex">冲突/失效</span>';
-      else if(r.check_status==='neterr')st='<span class="tag t-no">网络异常</span>';
-      else if(r.remaining<=0)st='<span class="tag t-ex">额度用完</span>';
-      else if(r.logged_in)st='<span class="tag t-ok">已登录</span>';
-      else st='<span class="tag t-no">未检测</span>';
-      // 每完整查 1 人耗 3 次，统一换算成“可查人数”展示
-      const leftP=Math.floor((r.remaining||0)/3),totalP=Math.floor((r.daily_quota||0)/3),usedP=Math.round((r.used_today||0)/3);
-      const low=leftP<=0;
-      return `<tr><td><span class="tag t-use">${r.num}</span></td><td>${esc(r.username||'')}</td><td>${esc(r.email||'')}</td><td>${esc(r.password||'')}</td><td>${st}</td>
-      <td><b style="color:${low?'var(--org)':'var(--green)'}">${leftP}</b> / ${totalP} 人（已查 ${usedP} 人）</td>
-      <td>${r.cookie_file?'有':'无'}</td><td>${esc(r.last_used||r.updated_at||'')}</td>
-      <td><button class="sec" onclick="delAccount(${r.num})">删除</button></td></tr>`}).join('');
-    const ov=await call('pool_overview');
-    $('poolOverview').innerHTML=`<span class="tag t-ok">账号 ${ov.count}（可用 ${ov.available}）</span>
-      <span class="tag t-use">今日还可查 ${Math.floor((ov.total_remaining||0)/3)} 人</span>
-      <span class="tag t-no">今日已查 ${Math.round((ov.used_today||0)/3)} / 共 ${Math.floor((ov.total_quota||0)/3)} 人</span>`;
-  }catch(e){}
-}
-async function delAccount(num){
-  if(!confirm(`确定删除账号 #${num} 吗？\n将同时移除本地记录和 Cookie（不影响网站账号）。`))return;
-  try{const r=await call('delete_account',num);if(r&&r.deleted){toast(`已删除 ${num}`);loadAccounts()}else toast('删除失败：'+((r&&r.reason)||'未知'),'e')}catch(e){toast(e.message,'e')}
-}
-async function clearAccounts(mode){
-  if(mode==='all'&&!confirm('确定清空整个账号池？只删本地记录和 Cookie。'))return;
-  try{const r=await call('clear_accounts',mode);toast(`已清理 ${r.removed} 个，剩余 ${r.left} 个`);loadAccounts()}catch(e){toast(e.message,'e')}
-}
-async function startCheck(){if(!online){toast(`本地服务未运行，请先点右上角「${L_FIRST}」并运行一次`,'e');return}try{const r=await call('start_check');toast(`开始检测 ${r.total} 个账号`);watchJob();}catch(e){toast(e.message,'e')}}
-
-// ② 查询 —— 可视化渲染
-function rankOne(c){return (!c||!c.placed)?'<span class="muted">—</span>':`<b style="color:${TIER_COLOR[c.tier]||'#6b7280'}">${esc(c.tierCn)}${esc(c.division)}</b>`}
-function prevOne(c){if(!c||!c.prevTier||c.prevCn==='—')return '<span class="muted">—</span>';return `<b style="color:${TIER_COLOR[c.prevTier]||'#6b7280'}">${esc(c.prevCn)}</b>`}
-function rankCardsHtml(cards){
-  const map={};(cards||[]).forEach(c=>{map[c.queueType]=c});
-  return `<div class="txt-rank">
-    <div class="rk-row"><span class="rk">本赛季</span> 单双 ${rankOne(map['RANKED_SOLO_5x5'])} <span class="muted">/</span> 灵活 ${rankOne(map['RANKED_FLEX_SR'])}</div>
-    <div class="rk-row"><span class="rk">上赛季</span> 单双 ${prevOne(map['RANKED_SOLO_5x5'])} <span class="muted">/</span> 灵活 ${prevOne(map['RANKED_FLEX_SR'])}</div></div>`;
-}
-function fmtLast(ms){if(!ms)return '—';const d=new Date(Number(ms));const p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`}
-function heroBlockHtml(s){
-  const tops=(s&&s.topChampions||[]).slice(0,3).map(c=>`${esc(c.champion)}${c.games}场${c.winRate}%`).join('、');
-  return `<div class="hero-block"><div class="hl"><span class="muted">常用英雄：</span>${tops||'<span class="muted">—</span>'}</div></div>`;
-}
-function summaryHtml(s){
-  const l1=(s&&s.games)?`近${s.games}场 <b>${s.wins}胜${s.losses}负</b> · 胜率${s.winRate}%`:'';
-  const l2=(s&&s.games)?`场均KDA <b>${s.avgKda}</b> · ${esc(s.streakText)}`:'';
-  return `<div class="txt-sum"><div class="sl">${l1}</div><div class="sl">${l2}</div></div>`;
-}
-function matchHtml(m){
-  const cls=m.remake?'tm':(m.win?'tm win':'tm lose');
-  const tag=m.remake?'重':(m.win?'胜':'负');
-  return `<div class="${cls}">
-    <div class="tl t2"><span class="r">${tag}</span><b class="champ">${esc(m.championCn||m.champion)}</b> <b class="kd"><span class="kk">${m.k}</span><span class="sep">/</span><span class="dd">${m.d}</span><span class="sep">/</span><span class="aa">${m.a}</span></b></div>
-    <div class="tl t3">${esc(m.queueName)}${m.position?' · '+m.position:''}${m.level?' · '+m.level+'级':''}</div>
-    <div class="tl t3">补刀${m.cs} · 金钱${fmtGold(m.gold)} · 伤害${fmtGold(m.damage)}</div></div>`;
-}
-function resultBlockHtml(r,nameColor){
-  if(!r.ok)return `<div class="block err"><div class="sumhead"><div class="nm">${esc(r.name)}#${esc(r.tag)}</div><div class="reg">查询失败：${esc(r.error||'')}</div></div></div>`;
-  const s=r.summoner||{},ms=r.matches||[];
-  const pad=Math.max(0,15-ms.length);
-  const body=ms.length?ms.map(matchHtml).join('')+'<div class="muted" style="font-size:10.5px;height:16px;line-height:16px">'+(pad?`仅 ${ms.length} 场记录`:'')+'</div>'+Array(pad).fill('<div class="tm ph"></div>').join(''):'<div class="muted">没有查到对局</div>';
-  const horse=(r.summary&&r.summary.horse)?`<div class="horse h-${r.summary.horseTier}">${esc(r.summary.horse)}</div>`:'<div class="horse"></div>';
-  const nmStyle=nameColor?` style="color:${nameColor}"`:'';
-  const privUpper=String(s.privacy||'').toUpperCase();
-  const privHtml=!s.privacy?'':(privUpper==='PUBLIC'?'隐私公开':'<span class="priv-lock">隐私私密</span>');
-  const lastHtml=s.lastGameMs?('最后游戏 '+fmtLast(s.lastGameMs)):'';
-  const meta=[privHtml,lastHtml].filter(Boolean).join(' · ');
-  return `<div class="block">
-    <div class="sumhead"><div class="nm"${nmStyle} title="${esc(s.name)}#${esc(s.tag)}">${esc(s.name)}#${esc(s.tag)}</div>
-      <div class="reg" title="${esc(s.region)}">大区 ${esc(s.region)}${s.level?' · 等级 '+s.level:''}</div>
-      <div class="reg">${meta||'&nbsp;'}</div>${horse}</div>
-    ${rankCardsHtml(r.rank_cards)}${summaryHtml(r.summary)}${heroBlockHtml(r.summary)}
-    <div>${body}</div></div>`;
-}
-function premadeColors(results){
-  const list=results||[],N=list.length,parent=[...Array(N).keys()];
-  const find=x=>{while(parent[x]!==x){parent[x]=parent[parent[x]];x=parent[x]}return x};
-  const union=(a,b)=>{parent[find(a)]=find(b)};
-  const puuidIdx={};list.forEach((r,i)=>{const pu=r&&r.ok&&r.summoner&&r.summoner.puuid;if(pu)puuidIdx[String(pu)]=i});
-  list.forEach((r,i)=>{if(!r.ok)return;const pool=r.coop&&r.coop.length?r.coop:(r.matches||[]);
-    pool.forEach(m=>{if(m.remake)return;
-      const mates=(m.teamPuuids||[]).map(p=>puuidIdx[String(p)]).filter(x=>x!==undefined);
-      if(!mates.length){const key=(m.gameId?('g'+m.gameId):('t'+m.creationMs))+'#'+m.teamId;
-        list.forEach((o,j)=>{if(!o.ok)return;const op=(o.coop&&o.coop.length?o.coop:(o.matches||[])).some(x=>!x.remake&&((x.gameId?('g'+x.gameId):('t'+x.creationMs))+'#'+x.teamId)===key);if(op)union(i,j)});return}
-      mates.forEach(j=>union(i,j));});});
-  const size={};list.forEach((r,i)=>{if(r.ok){const g=find(i);size[g]=(size[g]||0)+1}});
-  const palette=['#2563eb','#9333ea','#d97706','#0891b2','#db2777','#4f46e5'];
-  const groupColor={},out={};let ci=0;
-  list.forEach((r,i)=>{if(!r.ok){out[i]='';return}const g=find(i);
-    if(size[g]>=2){if(groupColor[g]===undefined)groupColor[g]=palette[ci++%palette.length];out[i]=groupColor[g]}else out[i]=''});
+/* ============================================================ 输入解析（与后端 parse_summoners 同口径） */
+const INVIS_RE=new RegExp("[\\u200B-\\u200F\\u202A-\\u202E\\u2060-\\u2064\\u2066-\\u2069\\uFEFF]","g");
+function stripInvis(s){return String(s||'').replace(/[​-‏‪-‮⁠-⁤⁦-⁩﻿]/g,'');}
+function parseSummoners(text){
+  const parts=String(text||'').split(/[\r\n;；]+/).map(stripInvis);
+  const out=[],seen=new Set(),noise=/(加入了队伍聊天|加入队伍|队伍聊天|joined\s+the\s+team|joined\s+queue).*$/i;
+  for(let raw of parts){
+    let seg=raw.trim();if(!seg)continue;
+    let m=seg.match(/#\s*(\d{2,})/);
+    if(!m)m=seg.match(/\s(\d{3,})\s*$/);
+    if(!m)continue;
+    let name=seg.slice(0,m.index).replace(noise,'');
+    name=name.replace(/^\s*\d+\s*[.\)、\-:：]\s*/,'').replace(/[\s,，、:：·\-]+$/,'').trim();
+    if(!name)continue;
+    const key=name.toLowerCase()+'|'+m[1];
+    if(seen.has(key))continue;seen.add(key);
+    out.push({name,tag:m[1]});
+  }
   return out;
 }
-let liveTimer;
-const WHITE_KEY='lolzjcx_copy_white',QUERY_KEY='lolzjcx_query_input',TIER_KEY='lolzjcx_copy_tiers',RESULTS_KEY='lolzjcx_last_results',DEFAULT_TIERS=['A','D'];
-function bindPersist(el,key){
-  try{const saved=localStorage.getItem(key);if(saved)el.value=saved;}catch(e){}
-  el.addEventListener('input',()=>{try{localStorage.setItem(key,el.value||'');}catch(e){}});
-}
-function selectedTiers(){return ['A','B','C','D'].filter(t=>{const c=document.querySelector(`.cp_tier[value="${t}"]`);return c&&c.checked;});}
-document.addEventListener('DOMContentLoaded',()=>{
-  $('launchBtn').addEventListener('click',onLaunchClick);
-  const macCopy=$('macShCopy');
-  if(macCopy)macCopy.addEventListener('click',async()=>{
-    const t=$('macShCmd').textContent.trim();
-    try{await navigator.clipboard.writeText(t);toast('安装命令已复制，打开「终端」粘贴回车即可','ok');}
-    catch(e){const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();
-      try{document.execCommand('copy');toast('安装命令已复制','ok');}catch(_){toast('复制失败，请手动选中命令复制','w');}
-      document.body.removeChild(ta);}
-  });
-  const asc=$('autoStopChk');
-  try{const v=localStorage.getItem('lolzjcx_auto_stop');if(v!==null)asc.checked=v==='1';}catch(e){}
-  asc.addEventListener('change',()=>{try{localStorage.setItem('lolzjcx_auto_stop',asc.checked?'1':'0');}catch(e){}});
-  const ta=$('query_input');
-  if(ta){ta.addEventListener('input',()=>{clearTimeout(liveTimer);liveTimer=setTimeout(refreshPreview,350)});bindPersist(ta,QUERY_KEY);}
-  const wlBox=$('copy_white');
-  bindPersist(wlBox,WHITE_KEY);
-  wlBox.addEventListener('input',()=>{clearTimeout(liveTimer);liveTimer=setTimeout(refreshPreview,300)});
-  // 马型多选：默认上等马+牛马，选择持久化
-  let savedTiers=null;
-  try{const s=localStorage.getItem(TIER_KEY);if(s)savedTiers=JSON.parse(s);}catch(e){}
-  const tiers=savedTiers&&Array.isArray(savedTiers)?savedTiers:DEFAULT_TIERS;
-  document.querySelectorAll('.cp_tier').forEach(c=>{
-    c.checked=tiers.includes(c.value);
-    c.addEventListener('change',()=>{try{localStorage.setItem(TIER_KEY,JSON.stringify(selectedTiers()));}catch(e){}});
-  });
-  // 刷新后还原上一次战绩
-  try{const saved=localStorage.getItem(RESULTS_KEY);if(saved){const arr=JSON.parse(saved);if(Array.isArray(arr)&&arr.length)renderBatch(arr);}}catch(e){}
-});
-async function refreshPreview(){try{const raw=await call('preview_summoners',$('query_input').value||'');
-  const list=applyWhitelist(raw),skipped=raw.length-list.length;
-  const over=list.length>5;
-  $('query_preview').innerHTML=`识别到 <b>${list.length}</b> 个`
-    +(skipped?` <span class="muted">（已过滤白名单 ${skipped} 个）</span>`:'')
-    +(over?' <span style="color:var(--red)">（超过 5 个，只取前 5）</span>':'');}catch(e){}}
-function clearResults(){
-  $('batchResult').innerHTML='';window.__last=null;
-  const qb=$('queryJobBox');if(qb)qb.style.display='none';   // 收起查询日志框
-  const qi=$('query_input');if(qi){qi.value='';}   // 同时清空查询文本框
-  try{localStorage.removeItem(RESULTS_KEY);localStorage.removeItem(QUERY_KEY);}catch(e){}
-  // 过滤白名单、复制明细勾选保持不变
-  refreshPreview();
-}
-/* ===== 一键复制战报 ===== */
+
+/* ============================================================ 状态与查询 */
+const QKEY='lolzjcxm_query',QUEUE_KEY='lolzjcxm_queue',RES_KEY='lolzjcxm_results',
+      WHITE_KEY='lolzjcx_copy_white',TIER_KEY='lolzjcx_copy_tiers',DEFAULT_TIERS=['A','D'];
+const PAGE_SIZE=15;
+const S2='/lolzjcx2/';
 const HORSE_LABEL={A:'上等马',B:'中等马',C:'下等马',D:'牛马',N:'暂无评级'};
-function horseLabel(t){return HORSE_LABEL[t]||'暂无评级'}
-function matchKda(m){return Number(m.d)>0?(Number(m.k)+Number(m.a))/Number(m.d):((Number(m.k)+Number(m.a))>0?Infinity:0)}
-function fmtMatch(m){return `${m.k}/${m.d}/${m.a}-${m.championCn||m.champion||''}`}
-// 白名单解析为 [{name,tag}]：写了#id 就精确到该 id，没写则按名字匹配所有同名
-const INVIS_RE=new RegExp("[\\u200B-\\u200F\\u202A-\\u202E\\u2060-\\u2064\\u2066-\\u2069\\uFEFF]","g");
+const HORSE_CHAR={A:'上',B:'中',C:'下',D:'牛'};
+const state={running:false,poll:null,targets:[],results:[],queue:-1,ts:null,page:1,pageLoading:false};
+function singleUrl(name,tag){return S2+'?name='+encodeURIComponent(name)+'&tag='+encodeURIComponent(tag);}
+function keyOf(name,tag){return String(name).toLowerCase()+'|'+tag;}
+/* ---- 过滤白名单（写 #id 精确到人，不写则同名即命中）；命中的不查询、不复制 ---- */
 function getWhitelist(){
-  let t=($('copy_white').value||'').replace(INVIS_RE,'').replace(/加入了队伍聊天/g,'');
-  t=t.replace(/\s+#/g,'#');   // 名字与 #id 之间允许有空格
+  let t=($('whiteInput')?($('whiteInput').value||''):'').replace(INVIS_RE,'').replace(/加入了队伍聊天/g,'');
+  t=t.replace(/\s+#/g,'#');
   return t.split(/[\n,，、;；\s]+/).map(tok=>{tok=tok.trim();if(!tok)return null;
-    const i=tok.indexOf('#');if(i<0)return {name:tok,tag:null};
+    const i=tok.indexOf('#');if(i<0)return{name:tok,tag:null};
     const name=tok.slice(0,i).trim(),tag=tok.slice(i+1).trim();
     return name?{name,tag:tag||null}:null;}).filter(Boolean);
 }
-// 某召唤师是否命中白名单：条目带 id 时必须名字+id 都一致，不带 id 时同名即命中
 function wlHit(entries,name,tag){
   name=String(name||'').trim();tag=String(tag||'').trim();
   return (entries||[]).some(e=>e.name===name&&(e.tag===null||e.tag===tag));
 }
-// 过滤白名单：命中的召唤师直接剔除（不查询、不复制）。入参为 [{name,tag}]，返回保留项
-function applyWhitelist(list){
-  const wl=getWhitelist();
-  if(!wl.length)return list;
-  return (list||[]).filter(x=>!wlHit(wl,x.name,x.tag));
-}
-async function copyText(text){
-  try{await navigator.clipboard.writeText(text);toast('已复制到剪贴板','s');return}catch(e){}
-  try{const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();toast('已复制到剪贴板','s')}
-  catch(e){toast('复制失败，请手动选择','e')}
-}
-function copySummary(){
-  const all=(window.__last||[]).filter(r=>r&&r.ok&&r.summoner&&r.summary);
-  if(!all.length){toast('暂无可复制的查询结果，请先查询','e');return}
-  const wl=getWhitelist();
-  const list=all.filter(r=>!wlHit(wl,r.summoner.name,r.summoner.tag));
-  if(!list.length){toast('都在白名单里，没有可复制的内容','e');return}
-  const isHidden=r=>{const p=String(r.summoner.privacy||'').toUpperCase();return !!p&&p!=='PUBLIC';};
-  const lines=[];
-  lines.push('本局游戏：'+list.map(r=>`${r.summoner.name}-${horseLabel(r.summary.horseTier)}（${r.summary.avgKda}${isHidden(r)?'-隐藏战绩':''}）`).join('、'));
-  const detail=(tier,best)=>list.filter(r=>r.summary.horseTier===tier).forEach(r=>{
-    const champs=(r.summary.topChampions||[]).map(c=>c.champion).join('、')||'—';
-    const rec=(r.matches||[]).filter(m=>!m.remake).slice()
-      .sort((a,b)=>best?matchKda(b)-matchKda(a):matchKda(a)-matchKda(b))
-      .slice(0,3).map(fmtMatch).join('、')||'—';
-    lines.push(`${r.summoner.name}（${horseLabel(tier)}）常用英雄：${champs}，最近战绩：${rec}`);
+function applyWhitelist(list){const wl=getWhitelist();return wl.length?list.filter(x=>!wlHit(wl,x.name,x.tag)):list;}
+function selectedTiers(){return ['A','B','C','D'].filter(t=>{const c=document.querySelector(`.cp_tier[value="${t}"]`);return c&&c.checked;});}
+function bindPersist(el,key){try{const v=localStorage.getItem(key);if(v)el.value=v;}catch(e){}
+  el.addEventListener('input',()=>{try{localStorage.setItem(key,el.value||'');}catch(e){}});}
+/* ---- 开黑分组：跨全部对局做并查集，同一场 gameId 且同队(teamId)即连边（剔除重开）。
+   某人最后一把不在不影响整体分组（A、B 前 10 场同队、B、C 后 10 场同队 → 三人一组） ---- */
+function selfTeamKey(m,puuid){const p=selfPart(m,puuid);if(!p.teamId&&p.teamId!==0)return null;
+  return (m.gameId!=null?('g'+m.gameId):('t'+(m.gameStartTimestamp||m.gameCreation)))+'|'+p.teamId;}
+function premadeGroups(results){
+  const list=results||[],N=list.length,parent=[...Array(N).keys()];
+  const find=x=>{while(parent[x]!==x){parent[x]=parent[parent[x]];x=parent[x];}return x;};
+  const union=(a,b)=>{parent[find(a)]=find(b);};
+  const keys=list.map(r=>{
+    if(!r||!r.ok||!r.puuid)return new Set();
+    const s=new Set();(((r.match_analysis||{}).matchHistory)||[]).forEach(m=>{
+      if((m.gameDuration||0)>0&&m.gameDuration<=180)return;const k=selfTeamKey(m,r.puuid);if(k)s.add(k);});
+    return s;
   });
-  // 按勾选的马型展开详情：上等马/中等马取 KDA 最高 3 场，下等马/牛马取最低 3 场；顺序 上→中→下→牛马
-  selectedTiers().forEach(t=>detail(t,t==='A'||t==='B'));
+  for(let i=0;i<N;i++)for(let j=i+1;j<N;j++){
+    if(!keys[i].size||!keys[j].size)continue;
+    for(const k of keys[i]){if(keys[j].has(k)){union(i,j);break;}}
+  }
+  const size={};list.forEach((r,i)=>{if(r&&r.ok){const g=find(i);size[g]=(size[g]||0)+1;}});
+  const palette=['#2563eb','#9333ea','#d97706','#0891b2','#db2777','#4f46e5'];
+  const groupColor={},out={};let ci=0;
+  list.forEach((r,i)=>{if(!r||!r.ok)return;const g=find(i);
+    if(size[g]>=2){if(groupColor[g]===undefined)groupColor[g]=palette[ci++%palette.length];
+      out[i]={color:groupColor[g],size:size[g]};}});
+  return out;
+}
+const BLACK_CN={2:'二黑',3:'三黑',4:'四黑',5:'五黑'};
+function resultMap(){const m={};state.results.forEach(r=>{if(r&&r.ok)m[keyOf(r.name,r.tag)]=r;});return m;}
+function setQueueOptions(){
+  const sel=$('qQueue');sel.innerHTML=QUEUE_TABS.map(t=>`<option value="${t.v}">${t.n}</option>`).join('');
+  let q=-1;try{q=parseInt(localStorage.getItem(QUEUE_KEY)||'-1');}catch(e){}
+  sel.value=String(QUEUE_TABS.some(t=>t.v===q)?q:-1);
+  sel.onchange=()=>{try{localStorage.setItem(QUEUE_KEY,sel.value);}catch(e){}};
+}
+function setBtn(){const b=$('qBtn');if(state.running){b.textContent='停止';b.style.background='var(--red)';}else{b.textContent='开始查询';b.style.background='';}}
+async function toggleQuery(){
+  if(state.running){try{await api('stop_job',{});}catch(e){}return;}
+  if(online!==true){await probe(true);if(online!==true){toast('本地服务未运行，请先点右上角「启动服务」或下载本地服务','e');return;}}
+  const text=$('qInput').value;
+  const parsed=parseSummoners(text);
+  if(!parsed.length){toast('没有识别到“名字#尾标”，请每行一个或直接粘贴队伍聊天','e');return;}
+  const filtered=applyWhitelist(parsed);
+  if(parsed.length-filtered.length>0)toast(`已按白名单跳过 ${parsed.length-filtered.length} 人`,'w');
+  if(!filtered.length){toast('都在过滤白名单里，没有需要查询的人','e');return;}
+  if(filtered.length>5){toast(`一次最多 5 人，当前识别到 ${filtered.length} 人，已取前 5`,'w');}
+  const list=filtered.slice(0,5);
+  const sendText=list.map(x=>`${x.name}#${x.tag}`).join('\n');
+  try{localStorage.setItem(QKEY,text);}catch(e){}
+  state.queue=parseInt($('qQueue').value||'-1');
+  state.targets=list;state.results=[];state.ts=Date.now();state.running=true;state.page=1;state.pageLoading=false;setBtn();
+  renderColumns();renderResBar();
+  try{
+    await api('start_detail_batch',{params:{summoners:sendText,queue:state.queue,size:PAGE_SIZE}},20000);
+  }catch(e){state.running=false;setBtn();toast(e.message,'e');return;}
+  pollLoop();
+}
+async function pollLoop(){
+  if(state.poll)return;
+  const tick=async()=>{
+    if(!state.running)return;
+    let job=null;
+    try{const resp=await rawFetch('/api/job_status',{method:'GET'},10000);
+      if(resp.ok){const j=await resp.json();if(j&&j.ok){setConnected(true);job=j.data;}}
+    }catch(e){/* 忽略单次轮询失败 */}
+    if(job&&job.type==='detail_batch'){
+      state.results=Array.isArray(job.results)?job.results:[];
+      renderColumns();renderResBar();
+      if(job.finished){state.running=false;setBtn();state.poll=null;persist();renderColumns();renderResBar();
+        if(job.fail>0)toast(`完成：成功 ${job.ok}，失败 ${job.fail}`,'w');else toast('全部查询完成','s');return;}
+    }
+    state.poll=setTimeout(tick,1000);
+  };
+  tick();
+}
+function persist(){try{localStorage.setItem(RES_KEY,JSON.stringify({ts:state.ts,queue:state.queue,page:state.page,targets:state.targets,results:state.results}));}catch(e){}}
+
+/* ---------- 翻页（整批逐人串行，每人 1 次额度；全部成功后一次性提交，保证各列对齐） ---------- */
+async function gotoPage(p){
+  if(state.pageLoading||state.running)return;
+  p=Math.max(1,p|0);if(p===state.page)return;
+  const oks=state.results.filter(r=>r&&r.ok&&r.serverId&&r.puuid);
+  if(!oks.length)return;
+  state.pageLoading=true;renderColumns();
+  const next={};
+  try{
+    for(let i=0;i<oks.length;i++){
+      const r=oks[i];
+      const d=await api('detail_page',{serverId:r.serverId,puuid:r.puuid,page:p,queue:state.queue,size:PAGE_SIZE},30000);
+      next[keyOf(r.name,r.tag)]=d.match_analysis||{};
+    }
+    Object.keys(next).forEach(k=>{const rr=state.results.find(x=>x&&x.ok&&keyOf(x.name,x.tag)===k);if(rr)rr.match_analysis=next[k];});
+    state.page=p;persist();
+  }catch(e){
+    toast('翻页失败：'+e.message,'e');
+  }finally{
+    state.pageLoading=false;renderColumns();renderResBar();
+  }
+}
+
+/* ---------- 马评级（与 lolview.summarize 同口径，按本人近15场，剔除重开） ---------- */
+function selfPart(m,puuid){return (m.participants||[]).find(x=>String(x.puuid)===String(puuid))||(m.participants||[])[0]||{};}
+function horseOf(ma,puuid){
+  const games=(ma.matchHistory||[]).filter(m=>(m.gameDuration||0)>180).map(m=>selfPart(m,puuid));
+  const pool=games.length?games:(ma.matchHistory||[]).map(m=>selfPart(m,puuid));
+  if(!pool.length)return{tier:'N',label:'暂无评级'};
+  let tk=0,td=0,ta=0;pool.forEach(p=>{tk+=p.kills||0;td+=p.deaths||0;ta+=p.assists||0;});
+  const ratio=td>0?((tk+ta)/td):null;let tier;
+  if(ratio===null)tier=(tk+ta)>0?'A':'N';else if(ratio>=5)tier='A';else if(ratio>=3)tier='B';else if(ratio>=2)tier='C';else tier='D';
+  const label={A:'上等马',B:'中等马',C:'下等马',D:'牛马',N:'暂无评级'}[tier];
+  return{tier,label};
+}
+/* 单局马型：口径与整体一致，按这一局的 (K+A)/D */
+function matchHorse(p){
+  const k=p.kills||0,d=p.deaths||0,a=p.assists||0;
+  const ratio=d>0?((k+a)/d):null;let tier;
+  if(ratio===null)tier=(k+a)>0?'A':'D';else if(ratio>=5)tier='A';else if(ratio>=3)tier='B';else if(ratio>=2)tier='C';else tier='D';
+  return{tier,ch:HORSE_CHAR[tier]};
+}
+
+/* ---------- 渲染（按行 band 网格，各列同局等高对齐） ---------- */
+function copyText(text){
+  navigator.clipboard&&navigator.clipboard.writeText(text).then(()=>toast('已复制到剪贴板','s')).catch(()=>fallbackCopy(text));
+  if(!(navigator.clipboard))fallbackCopy(text);
+}
+function fallbackCopy(text){
+  try{const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();toast('已复制到剪贴板','s');}
+  catch(e){toast('复制失败，请手动选择','e');}
+}
+/* 从原始 detail 结果抽取复制所需的视图模型 */
+function copyVM(r){
+  const b=((r||{}).overview||{}).base||{},ma=(r||{}).match_analysis||{},st=(ma.statistics||{}).summary||{};
+  const name=b.gameName||r.name,tag=b.tagLine||r.tag;
+  const priv=String(b.privacy||'').toUpperCase(),hidden=!!priv&&priv!=='PUBLIC';
+  const {tier}=horseOf(ma,r.puuid);
+  const avg=st.averageKda!=null?Number(st.averageKda).toFixed(2):'—';
+  const champs=Object.values((ma.statistics||{}).champions||{}).sort((x,y)=>y.count-x.count).slice(0,3).map(c=>champCn(c.id)).join('、')||'—';
+  const games=(ma.matchHistory||[]).filter(m=>(m.gameDuration||0)>180).map(m=>{const p=selfPart(m,r.puuid),cid=p.championID??p.championId;
+    return{k:p.kills||0,d:p.deaths||0,a:p.assists||0,cn:champCn(cid,p.championName)};});
+  return{name,tag,hidden,tier,avg,champs,games};
+}
+function vmKda(g){return Number(g.d)>0?((Number(g.k)+Number(g.a))/Number(g.d)):((Number(g.k)+Number(g.a))>0?Infinity:0);}
+function fmtVM(g){return `${g.k}/${g.d}/${g.a}-${g.cn}`;}
+function copySummary(){
+  const all=state.results.filter(r=>r&&r.ok&&r.overview).map(copyVM);
+  if(!all.length){toast('暂无可复制的查询结果，请先查询','e');return;}
+  const wl=getWhitelist();
+  const list=all.filter(v=>!wlHit(wl,v.name,v.tag));
+  if(!list.length){toast('都在白名单里，没有可复制的内容','e');return;}
+  const lines=[];
+  lines.push('本局游戏：'+list.map(v=>`${v.name}-${HORSE_LABEL[v.tier]}（${v.avg}${v.hidden?'-隐藏战绩':''}）`).join('、'));
+  const detail=tier=>{const best=(tier==='A'||tier==='B');
+    list.filter(v=>v.tier===tier).forEach(v=>{
+      const rec=v.games.slice().sort((x,y)=>best?vmKda(y)-vmKda(x):vmKda(x)-vmKda(y)).slice(0,3).map(fmtVM).join('、')||'—';
+      lines.push(`${v.name}（${HORSE_LABEL[tier]}）常用英雄：${v.champs}，最近战绩：${rec}`);});};
+  selectedTiers().forEach(detail);
   copyText(lines.join('\n'));
 }
-async function startQuery(){
-  if(online!==true){ // 可能只是探测还没确认，先强制探一次再决定是否拦截
-    await probe(true);
-    if(online!==true){toast('本地服务未运行，请先点右上角「启动服务」或下载本地服务','e');return}
-  }
-  const qBox=$('queryJobBox');
-  try{
-    // 立即给出反馈：先展开日志框，避免手机上预检卡顿时“点了没反应”
-    qBox.style.display='';$('qPbar').style.width='0%';
-    $('qJobState').textContent='正在连接本地服务…';$('qJobLog').textContent='连接 127.0.0.1:17530 …';
-    const raw=await call('preview_summoners',$('query_input').value);
-    if(!raw.length){qBox.style.display='none';toast('没识别到任何“名字#尾标”','e');return}
-    const list=applyWhitelist(raw);   // 白名单内的直接不查询，省额度、更快
-    if(!list.length){qBox.style.display='none';toast('都在过滤白名单里，没有需要查询的人','e');return}
-    if(raw.length-list.length>0)toast(`已按白名单跳过 ${raw.length-list.length} 人`,'w');
-    if(list.length>5){toast('一次最多 5 个，已取前 5','w')}
-    const use=list.slice(0,5);
-    const text=use.map(x=>`${x.name}#${x.tag}`).join('\n');
-    $('qJobState').textContent='已连接，正在提交查询…';
-    const r=await call('start_batch_query',{summoners:text});
-    $('batchResult').innerHTML='';toast(`开始查询 ${r.parsed.length} 个召唤师（缺号会自动补）`);watchJob();
-  }catch(e){
-    // 失败也把原因留在日志框里，不再“没反应、没窗口”
-    $('qJobState').textContent='连接/启动失败';
-    $('qJobLog').textContent='失败：'+e.message+'\n请确认右上角为“服务已运行”；若刚启动服务，稍等几秒再点查询。';
-    setJobBtn('queryBtn',false,'','开始查询（≤5）','停止');
-    toast(e.message,'e');
-  }
+function renderResBar(){
+  const bar=$('resBar');
+  if(!state.targets.length){bar.innerHTML='';return;}
+  const regions=[...new Set(state.results.filter(r=>r.ok).map(r=>regionName(r.serverId)))];
+  const qn=(QUEUE_TABS.find(t=>t.v===state.queue)||{}).n||'所有队列';
+  const done=state.results.length,total=state.targets.length;
+  const prog=state.running?` · 查询中 ${done}/${total}`:(done?` · 共 ${done} 人`:'');
+  bar.innerHTML=`<div class="card" style="padding:11px 16px;margin:12px 0 0">
+    <div class="resbar">
+      <span>聚合查询：<b>${esc(qn)}</b></span>
+      <span>查询时间：<b>${state.ts?fmtDateTime(state.ts):'—'}</b></span>
+      <span>大区：<b>${regions.length?regions.join('、'):'—'}</b></span>
+      <span class="spacer"></span>
+      <button class="sec" id="reBtn" style="padding:6px 14px">重新搜索</button>
+    </div>
+    <div class="hint" style="margin:4px 0 0">${state.pageLoading?'翻页中，请稍候…':(state.running?'逐人串行查询，请勿重复点击'+prog:'查询完成'+prog+(state.page>1?(' · 第 '+state.page+' 页'):''))}</div>
+  </div>`;
+  $('reBtn').onclick=()=>{state.targets=[];state.results=[];state.ts=null;state.page=1;bar.innerHTML='';$('cols').innerHTML='';$('emptyTip').innerHTML='';
+    try{localStorage.removeItem(RES_KEY);}catch(e){}
+    $('qInput').focus();window.scrollTo({top:0,behavior:'smooth'});};
 }
-function renderBatch(results){
-  const box=$('batchResult'),list=results||[],n=list.length||1;
-  window.__last=list;
-  box.style.gridTemplateColumns=`repeat(${Math.min(Math.max(n,1),5)},minmax(0,1fr))`;
-  const colors=premadeColors(list);
-  box.innerHTML=list.map((r,i)=>resultBlockHtml(r,colors[i])).join('');
-  try{localStorage.setItem(RESULTS_KEY,JSON.stringify(list));}catch(e){}
+function miniRank(q,label){
+  const placed=q&&q.tier&&!['NONE','UNRANKED'].includes(String(q.tier).toUpperCase());
+  if(!placed)return `<div class="rm none"><span>${label} —</span></div>`;
+  return `<div class="rm">
+    <img src="${rankIcon(q.tier)}" alt="">
+    <div style="min-width:0"><div class="rm-t" style="color:${tierColor(q.tier)}">${esc(tierRank(q.tier,q.rank))}</div>
+    <div class="rm-q">${label}<span class="rm-lp"> · ${q.leaguePoints??0}胜点</span></div></div></div>`;
 }
+function matchMini(m,puuid){
+  const p=selfPart(m,puuid);
+  const win=p.win===true||String(p.win).toLowerCase()==='true';
+  const remake=(m.gameDuration||0)>0&&m.gameDuration<=180;
+  const cid=p.championID??p.championId;
+  const k=p.kills||0,d=p.deaths||0,a=p.assists||0;
+  const cls=remake?'remake':(win?'win':'lose'),tag=remake?'重':(win?'胜':'负');
+  const spells=[spellIcon(p.spell1Id),spellIcon(p.spell2Id)].filter(Boolean);
+  const ks=(p.perks&&p.perks.styles&&p.perks.styles[0]&&p.perks.styles[0].selections[0])?runeIcon(p.perks.styles[0].selections[0].perk):'';
+  const icons=[...spells,ks].filter(Boolean).map(u=>`<img src="${u}" loading="lazy">`).join('');
+  const mh=remake?'':(()=>{const h=matchHorse(p);return `<span class="mh h-${h.tier}" title="${HORSE_LABEL[h.tier]}">${h.ch}</span>`;})();
+  const flags=[];if(p.gameEndedInSurrender||p.gameEndedInEarlySurrender)flags.push('投降');if(p.firstBloodKill)flags.push('一血');
+  return `<div class="mm ${cls}">
+    <div class="r1">
+      <span class="res">${tag}</span>
+      <span class="cn">${esc(champCn(cid,p.championName))}</span>
+      <span class="kda"><span class="kk">${k}</span><span class="sep">/</span><span class="dd">${d}</span><span class="sep">/</span><span class="aa">${a}</span></span>
+      ${mh}
+      <span class="ic">${icons}</span>
+    </div>
+    <div class="r2">
+      <span class="t">${esc(queueName(m.queueId,m.gameMode))} · ${posCn(p.individualPosition||p.teamPosition)||'—'} · ${p.champLevel||0}级${flags.length?' · '+flags.join('·'):''}</span>
+      <span class="tm">${fmtDateTime(m.gameStartTimestamp||m.gameCreation)}</span>
+    </div>
+    <div class="r2"><span class="t">补刀 ${csOf(p)} · 金钱 ${fmtK(p.goldEarned)} · 伤害 ${fmtK(p.totalDamageDealtToChampions)} · ${fmtDur(m.gameDuration)}</span></div>
+  </div>`;
+}
+/* 各列视图模型 */
+function columnVM(t,i,map,errMap){
+  const k=keyOf(t.name,t.tag);
+  if(map[k])return{st:'ok',r:map[k]};
+  if(errMap[k])return{st:'err',r:errMap[k]};
+  return{st:(state.running&&i===state.results.length)?'loading':'wait',r:null};
+}
+function headCell(vm,t,grp){
+  if(vm.st==='ok'){
+    const r=vm.r,ov=r.overview||{},b=ov.base||{},ma=r.match_analysis||{};
+    const priv=String(b.privacy||'').toUpperCase();
+    const horse=horseOf(ma,r.puuid);
+    const link=singleUrl(r.name,r.tag);
+    const pmStyle=grp?` style="--pm:${grp.color}"`:'';
+    const pmPill=grp?`<span class="pill pm" style="--pm:${grp.color}">${BLACK_CN[grp.size]||(grp.size+'黑')}</span>`:'';
+    return `<div class="cell head-cell"${pmStyle}>
+      <a class="ch-go" href="${link}" target="_blank" rel="noopener" title="打开单人完整详情（新标签页）">⤢</a>
+      <div class="ch-top">
+        ${img(avatarUrl(b.profileIconId),'ch-avatar'+(grp?' pm':''))}
+        <div class="ch-info">
+          <a class="ch-name" href="${link}" target="_blank" rel="noopener"${grp?` style="color:${grp.color}"`:''}>${esc(b.gameName||r.name)}<span class="tag">#${esc(b.tagLine||r.tag)}</span></a>
+          <div class="ch-meta">
+            <span class="pill">${esc(regionName(r.serverId))}</span>
+            <span>等级 ${b.level??'—'}</span>
+            ${priv&&priv!=='PUBLIC'?'<span class="pill priv">隐私私密</span>':''}
+            ${pmPill}
+          </div>
+        </div>
+      </div>
+      <div class="ch-horse h-${horse.tier}">${esc(horse.label)}</div>
+    </div>`;
+  }
+  if(vm.st==='err'){
+    return `<div class="cell head-cell">
+      <div class="ch-top"><div class="ch-info">
+        <div class="ch-name" style="color:var(--sub)">${esc(t.name)}<span class="tag">#${esc(t.tag)}</span></div>
+      </div></div>
+      <div class="ch-horse h-N">查询失败</div>
+      <div class="col-status err">${esc(vm.r.error||'未知错误')}</div>
+    </div>`;
+  }
+  const lab=vm.st==='loading'?'查询中':'等待查询';
+  return `<div class="cell head-cell"><div class="col-status"><div class="spinner"></div>${lab}<br>${esc(t.name)}#${esc(t.tag)}</div></div>`;
+}
+function blankCell(){return '<div class="cell"></div>';}
+function rankCell(vm){
+  if(vm.st!=='ok')return blankCell();
+  const rk=((vm.r.overview||{}).ranked||{}).queues||{};
+  return `<div class="cell"><div class="rankmini">${miniRank(rk.RANKED_SOLO_5x5,'单双')}${miniRank(rk.RANKED_FLEX_SR,'灵活')}</div></div>`;
+}
+function sumCell(vm){
+  if(vm.st!=='ok')return blankCell();
+  const s=(((vm.r.match_analysis||{}).statistics||{}).summary)||{};
+  return `<div class="cell"><div class="sumrow">
+    <div class="sm"><div class="v">${s.averageKda!=null?Number(s.averageKda).toFixed(2):'—'}</div><div class="l">KDA</div></div>
+    <div class="sm"><div class="v">${pct(s.winRate)}</div><div class="l">胜率</div></div>
+    <div class="sm"><div class="v">${pct(s.averageKillParticipationRate,1)}</div><div class="l">参团</div></div>
+    <div class="sm"><div class="v">${pct(s.averageGoldShareOfTeam,1)}</div><div class="l">经济</div></div>
+  </div></div>`;
+}
+function champCell(vm){
+  if(vm.st!=='ok')return blankCell();
+  const st=((vm.r.match_analysis||{}).statistics)||{};
+  const champs=Object.values(st.champions||{}).sort((x,y)=>y.count-x.count||y.win-x.win).slice(0,5);
+  return `<div class="cell"><div class="champrow"><span class="lab">常用</span>${champs.length?champs.map(c=>img(champIcon(c.id),'')).join(''):'<span class="muted">—</span>'}</div></div>`;
+}
+function gamesOf(vm){return vm.st==='ok'?(((vm.r.match_analysis||{}).matchHistory)||[]):[];}
+function pagerBand(anyOk,hasMore){
+  if(!anyOk)return '';
+  const busy=state.pageLoading||state.running;
+  const pgTxt=state.pageLoading?'翻页中…':(`第 ${state.page} 页${hasMore?'':'（已到最早）'}`);
+  return `<div class="band"><div class="cell pager-cell">
+    <button class="sec" id="pgPrev" ${state.page<=1||busy?'disabled':''}>上一页</button>
+    <span class="pg">${pgTxt}</span>
+    <button class="sec" id="pgNext" ${!hasMore||busy?'disabled':''}>下一页</button>
+  </div></div>`;
+}
+function renderColumns(){
+  const wrap=$('cols');
+  const N=Math.max(1,state.targets.length);
+  wrap.style.setProperty('--n',N);
+  if(!state.targets.length){wrap.innerHTML='';$('emptyTip').innerHTML='';return;}
+  const map=resultMap(),errMap={};
+  state.results.forEach(r=>{if(r&&!r.ok)errMap[keyOf(r.name,r.tag)]=r;});
+  const vms=state.targets.map((t,i)=>columnVM(t,i,map,errMap));
+  const groups=premadeGroups(state.results);
+  const bands=[];
+  // 头部 / 段位 / 汇总 / 常用（四个结构行）
+  bands.push('<div class="band">'+vms.map((vm,i)=>headCell(vm,state.targets[i],groups[i])).join('')+'</div>');
+  bands.push('<div class="band">'+vms.map(rankCell).join('')+'</div>');
+  bands.push('<div class="band">'+vms.map(sumCell).join('')+'</div>');
+  bands.push('<div class="band">'+vms.map(champCell).join('')+'</div>');
+  // 对局行：每一局一个 band，各列等高对齐
+  const games=vms.map(gamesOf);
+  const M=Math.max(0,...games.map(g=>g.length));
+  const anyOk=vms.some(v=>v.st==='ok');
+  if(anyOk&&M===0&&!state.running){
+    bands.push('<div class="band"><div class="cell mcell" style="border-right:0"><div class="empty">该模式下没有查到对局</div></div></div>');
+  }
+  for(let i=0;i<M;i++){
+    const cells=vms.map((vm,ci)=>{
+      const m=games[ci][i];
+      if(m)return `<div class="cell mcell">${matchMini(m,vm.r.puuid)}</div>`;
+      return '<div class="cell mcell"></div>';
+    }).join('');
+    bands.push(`<div class="band mb">${cells}</div>`);
+  }
+  // 翻页
+  const hasMore=games.some(g=>g.length>=PAGE_SIZE);
+  bands.push(pagerBand(anyOk,hasMore));
+  wrap.innerHTML=bands.join('');
+  const pre=$('pgPrev'),nx=$('pgNext');
+  if(pre)pre.onclick=()=>gotoPage(state.page-1);
+  if(nx)nx.onclick=()=>gotoPage(state.page+1);
+  $('emptyTip').innerHTML='';
+}
+
+/* ---------- 初始化 ---------- */
+document.addEventListener('DOMContentLoaded',()=>{
+  setQueueOptions();
+  $('launchBtn').addEventListener('click',onLaunchClick);
+  $('stopSvc').addEventListener('click',shutdownSvc);
+  $('macShCopy').addEventListener('click',async()=>{
+    const t=$('macShCmd').textContent.trim();
+    try{await navigator.clipboard.writeText(t);toast('安装命令已复制','s');}
+    catch(e){const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();
+      try{document.execCommand('copy');toast('安装命令已复制','s');}catch(_){toast('复制失败，请手动复制','w');}ta.remove();}
+  });
+  const asc=$('autoStopChk');
+  try{const v=localStorage.getItem('lolzjcx_auto_stop');if(v!==null)asc.checked=v==='1';}catch(e){}
+  asc.addEventListener('change',()=>{try{localStorage.setItem('lolzjcx_auto_stop',asc.checked?'1':'0');}catch(e){}});
+  try{const v=localStorage.getItem(QKEY);if(v)$('qInput').value=v;}catch(e){}
+  $('qBtn').onclick=toggleQuery;
+  $('copyBtn').onclick=copySummary;
+  // 积分/账号池弹窗（共用组件）
+  if(window.LolPool)LolPool.bind('poolBtn');
+  // 过滤白名单持久化
+  if($('whiteInput'))bindPersist($('whiteInput'),WHITE_KEY);
+  // 马型多选：默认上等马+牛马，选择持久化
+  (function(){let saved=null;try{const s=localStorage.getItem(TIER_KEY);if(s)saved=JSON.parse(s);}catch(e){}
+    const tiers=Array.isArray(saved)?saved:DEFAULT_TIERS;
+    document.querySelectorAll('.cp_tier').forEach(c=>{c.checked=tiers.includes(c.value);
+      c.addEventListener('change',()=>{try{localStorage.setItem(TIER_KEY,JSON.stringify(selectedTiers()));}catch(e){}});});})();
+  // 还原上次结果（刷新不清空，含页码）
+  try{const saved=JSON.parse(localStorage.getItem(RES_KEY)||'null');
+    if(saved&&Array.isArray(saved.results)&&saved.results.length){
+      state.targets=saved.targets||[];state.results=saved.results;state.queue=saved.queue??-1;state.ts=saved.ts||null;
+      state.page=saved.page||1;
+      $('qQueue').value=String(state.queue);renderColumns();renderResBar();}
+  }catch(e){}
+});
 </script>
 </body>
 </html>

@@ -11,7 +11,8 @@ body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.6 -apple-system,
 html,body,div,span,p,b,td,th,label,h1,h2,h3,li,code{--webkit-user-select:text;-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
 button{-webkit-user-select:none;user-select:none}
 img{display:block}
-.wrap{max-width:1120px;margin:0 auto;padding:18px 16px 60px}
+.wrap{max-width:1400px;margin:0 auto;padding:18px 16px 60px}
+@media(min-width:1700px){.wrap{max-width:1560px}}
 /* 顶部服务栏 */
 header.top{background:linear-gradient(135deg,#3a1d5e,#5b2a86);color:#fff;border-radius:14px;padding:14px 20px;display:flex;flex-direction:column;align-items:center;gap:9px}
 header.top h1{font-size:19px;margin:0;letter-spacing:2px;text-align:center}
@@ -34,6 +35,7 @@ a.svc-dis{opacity:.5;pointer-events:none}
 .svc-stop{font-size:12px;font-weight:700;color:#fff;background:rgba(220,38,38,.85);padding:4px 13px;border-radius:999px;white-space:nowrap;border:0}
 .svc-stop:hover{background:rgba(220,38,38,1)}
 .navlink{font-size:12px;color:rgba(255,255,255,.85);text-decoration:underline;white-space:nowrap}
+.pool-btn{background:rgba(255,255,255,.16);color:#fff;font-size:12px;font-weight:700;padding:4px 13px;border-radius:999px;white-space:nowrap;border:0;cursor:pointer}
 /* 卡片 */
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
 .card h2{font-size:15px;margin:0 0 12px;display:flex;align-items:center;gap:8px}
@@ -126,6 +128,8 @@ input:focus{outline:none;border-color:var(--blue)}
 .m-kda{flex:0 0 120px;text-align:center;font-weight:800;font-size:15px}
 .m-kda .kk{color:var(--green)}.m-kda .dd{color:var(--red)}.m-kda .aa{color:#111827}.m-kda .sep{color:var(--sub);font-weight:400}
 .m-kda .ratio{font-size:11px;color:var(--sub);font-weight:600}
+.m-horse{display:inline-block;margin-left:5px;font-size:10px;font-weight:800;border-radius:5px;padding:0 5px;line-height:16px}
+.m-horse.h-A{background:#e8f7ee;color:#16a34a}.m-horse.h-B{background:#e8f0fe;color:#2563eb}.m-horse.h-C{background:#fdf1e2;color:#ea8a16}.m-horse.h-D{background:#fdecec;color:#dc2626}
 .m-icons{flex:0 0 auto;display:flex;gap:3px;align-items:center}
 .m-icons img{width:22px;height:22px;border-radius:5px}
 .m-items{flex:1;display:flex;gap:3px;justify-content:flex-end;min-width:0;overflow:hidden}
@@ -206,8 +210,8 @@ input:focus{outline:none;border-color:var(--blue)}
       <button class="svc-stop" id="stopSvc" style="display:none">停止服务</button>
       <a class="svc-dl svc-b" id="dlBtn" href="/medias/files/lolzjcx_service.exe" download>下载本地服务</a>
       <label id="autoStopWrap" class="svc-opt" style="display:none"><input type="checkbox" id="autoStopChk" checked>关闭页面后自动停</label>
-      <a class="navlink" href="/lolzjcx3/">多人对比（完整）</a>
-      <a class="navlink" href="/lolzjcx/">简版多人页</a>
+      <button type="button" class="pool-btn" id="poolBtn">积分/账号池</button>
+      <a class="navlink" href="/lolzjcx/">多人对比</a>
       <span class="svc-tip" id="svcTip" style="display:none"></span>
       <span class="svc-path" id="svcPath" style="display:none"></span>
       <span class="svc-macsh" id="macShWrap">
@@ -225,13 +229,14 @@ input:focus{outline:none;border-color:var(--blue)}
       <input id="qInput" placeholder="输入 召唤师名字#尾标，例如 godweiyang#23456" autocomplete="off">
       <button id="qBtn">查询</button>
     </div>
-    <div class="hint">展示段位、近期数据、分路/英雄池、常排队友与近 15 场完整对局（点击对局展开双方 10 人详情）；切换模式或翻页每次仅消耗 1 次额度。</div>
+    <div class="hint">展示段位、近期数据、分路/英雄池、常排队友与近 15 场完整对局（点击对局展开双方 10 人详情）；完整查询 1 人消耗 3 积分，切换模式或翻页每次仅消耗 1 积分。</div>
   </div>
 
   <div id="root"></div>
 </div>
 <div class="toast" id="toast"></div>
 
+<script src="/lolzjcx2/pool.js"></script>
 <script>
 /* ============================================================
  * 本机后台服务：http://127.0.0.1:17530（探测/启停/下载，与 lolzjcx 同一套）
@@ -607,13 +612,17 @@ function matchHead(m,self){
   if(p.firstBloodKill)flags.push('一血');
   if(p.pentaKills>0)flags.push('五杀');else if(p.quadraKills>0)flags.push('四杀');else if(p.tripleKills>0)flags.push('三杀');
   const resCls=remake?'remake':(win?'win':'lose'),resTxt=remake?'重开':(win?'胜':'负');
+  const mh=(()=>{const ratio=d>0?((k+a)/d):null;let t;
+    if(ratio===null)t=(k+a)>0?'A':'D';else if(ratio>=5)t='A';else if(ratio>=3)t='B';else if(ratio>=2)t='C';else t='D';
+    const ch={A:'上',B:'中',C:'下',D:'牛'}[t],lb={A:'上等马',B:'中等马',C:'下等马',D:'牛马'}[t];
+    return remake?'':`<span class="m-horse h-${t}" title="${lb}">${ch}</span>`;})();
   return `<div class="m-row" data-open="0">
     <div class="m-res ${resCls}">${resTxt}</div>
     <div class="m-champ">${img(champIcon(cid,p.championName))}
       <div style="min-width:0"><div class="cn">${esc(champCn(cid,p.championName))}</div>
       <div class="sub">${posCn(p.individualPosition||p.teamPosition)||'—'} · ${p.champLevel||0}级${flags.length?' · '+flags.join('·'):''}</div></div></div>
     <div class="m-kda"><span class="kk">${k}</span><span class="sep">/</span><span class="dd">${d}</span><span class="sep">/</span><span class="aa">${a}</span>
-      <div class="ratio">${kdaOf(k,d,a).toFixed(2)} KDA</div></div>
+      <div class="ratio">${kdaOf(k,d,a).toFixed(2)} KDA ${mh}</div></div>
     <div class="m-icons">${spells}${ksRune?`<img src="${ksRune}" loading="lazy">`:''}${secRune?`<img src="${secRune}" loading="lazy">`:''}</div>
     <div class="m-items">${items.join('')}</div>
     <div class="m-info">${esc(queueName(m.queueId,m.gameMode))}<br>${fmtDateTime(m.gameStartTimestamp||m.gameCreation)} · ${fmtDur(m.gameDuration)}<br>补刀 ${csOf(p)} · 金钱 ${fmtK(p.goldEarned)} · 伤害 ${fmtK(p.totalDamageDealtToChampions)}</div>
@@ -690,6 +699,7 @@ function renderPager(n){
 document.addEventListener('DOMContentLoaded',()=>{
   $('launchBtn').addEventListener('click',onLaunchClick);
   $('stopSvc').addEventListener('click',shutdownSvc);
+  if(window.LolPool)LolPool.bind('poolBtn');
   $('macShCopy').addEventListener('click',async()=>{
     const t=$('macShCmd').textContent.trim();
     try{await navigator.clipboard.writeText(t);toast('安装命令已复制','s');}
