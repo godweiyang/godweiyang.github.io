@@ -502,7 +502,7 @@ async function api(name,body,timeout=30000){
   return r.data;
 }
 let online=null,inited=false,svcVer='',svcPath='',forceDl=false,launchWatch=null;
-const LATEST_VERSION='1.5.0';
+const LATEST_VERSION='1.5.1';
 const UA=(navigator.userAgent||'')+' '+(navigator.platform||'');
 const IS_MAC=/macintosh|mac os x|iphone|ipad|ipod/i.test(UA);
 const IS_ANDROID=/android/i.test(UA);
