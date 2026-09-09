@@ -147,21 +147,21 @@ input:focus{outline:none;border-color:var(--blue)}
 .bans img{width:20px;height:20px;border-radius:4px}
 .bans .slot{width:20px;height:20px;border-radius:4px;background:#e5e7eb;display:block}
 .bans .lab{font-size:11px;color:var(--sub);margin-right:2px}
-.pl{display:grid;grid-template-columns:24px 30px minmax(120px,1.4fr) repeat(6,minmax(48px,.7fr)) 58px minmax(150px,1fr);gap:6px;align-items:center;padding:5px 2px;font-size:11.5px;border-top:1px solid #f1f0f6}
+.pl{display:grid;grid-template-columns:24px 30px minmax(120px,1.4fr) repeat(6,minmax(48px,.7fr)) 86px minmax(150px,1fr);gap:6px;align-items:center;padding:5px 2px;font-size:11.5px;border-top:1px solid #f1f0f6}
 .pl.hl{background:#f1ecfb;border-radius:6px}
 .pl img.c{width:26px;height:26px;border-radius:6px}
 .pl .pname{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pl .pname .t{color:var(--sub);font-weight:400}
 .pl .num{text-align:right;font-variant-numeric:tabular-nums}
 .pl .pk{color:var(--green);font-weight:700}.pl .pd{color:var(--red);font-weight:700}
-.pl .picons{display:flex;gap:2px;align-items:center}
+.pl .picons{display:flex;gap:2px;align-items:center;flex-wrap:nowrap;overflow:hidden}
 .pl .picons img{width:18px;height:18px;border-radius:4px}
 .pl .pitems{display:flex;gap:2px;align-items:center;justify-content:flex-end}
 .pl .pitems img{width:19px;height:19px;border-radius:4px}
 .pl .pitems .slot{width:19px;height:19px;border-radius:4px;background:#eceef2}
 .pl-head{font-size:10.5px;color:var(--sub);font-weight:600}
 .pl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
-.pl{min-width:820px}
+.pl{min-width:850px}
 .pager{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:14px}
 .pager .pg{font-size:13px;color:var(--sub)}
 .empty{color:var(--sub);text-align:center;padding:30px 0;font-size:13px}
@@ -189,7 +189,7 @@ input:focus{outline:none;border-color:var(--blue)}
   .m-icons{order:6}
   /* 10 人详情：改为可横向滑动，避免挤压 */
   .pl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
-  .pl{min-width:760px}
+  .pl{min-width:790px}
   .stat-grid{grid-template-columns:repeat(2,1fr)}
   .dmg3{grid-template-columns:1fr}
   .toast{left:12px;right:12px;bottom:12px}
@@ -600,6 +600,7 @@ function matchHead(m,self){
   const items=[];for(let i=0;i<7;i++){const id=p['item'+i];const u=itemIcon(id);items.push(u?`<img src="${u}" loading="lazy">`:'<span class="slot"></span>');}
   const spells=[spellIcon(p.spell1Id),spellIcon(p.spell2Id)].filter(Boolean).map(u=>`<img src="${u}" loading="lazy">`).join('');
   const ksRune=p.perks&&p.perks.styles&&p.perks.styles[0]?runeIcon(p.perks.styles[0].selections[0].perk):'';
+  const secRune=p.perks&&p.perks.styles&&p.perks.styles[1]?runeIcon(p.perks.styles[1].style):'';
   const flags=[];
   if(remake)flags.push('重开');
   if(p.gameEndedInSurrender||p.gameEndedInEarlySurrender)flags.push('投降');
@@ -613,7 +614,7 @@ function matchHead(m,self){
       <div class="sub">${posCn(p.individualPosition||p.teamPosition)||'—'} · ${p.champLevel||0}级${flags.length?' · '+flags.join('·'):''}</div></div></div>
     <div class="m-kda"><span class="kk">${k}</span><span class="sep">/</span><span class="dd">${d}</span><span class="sep">/</span><span class="aa">${a}</span>
       <div class="ratio">${kdaOf(k,d,a).toFixed(2)} KDA</div></div>
-    <div class="m-icons">${spells}${ksRune?`<img src="${ksRune}" loading="lazy">`:''}</div>
+    <div class="m-icons">${spells}${ksRune?`<img src="${ksRune}" loading="lazy">`:''}${secRune?`<img src="${secRune}" loading="lazy">`:''}</div>
     <div class="m-items">${items.join('')}</div>
     <div class="m-info">${esc(queueName(m.queueId,m.gameMode))}<br>${fmtDateTime(m.gameStartTimestamp||m.gameCreation)} · ${fmtDur(m.gameDuration)}<br>补刀 ${csOf(p)} · 金钱 ${fmtK(p.goldEarned)} · 伤害 ${fmtK(p.totalDamageDealtToChampions)}</div>
   </div>`;
