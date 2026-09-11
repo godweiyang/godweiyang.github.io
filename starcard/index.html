@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>五维战马星盘 · 分享卡（演示假数据）</title>
+<title>godweiyang#23456 · 五维战马星盘</title>
 <style>
   :root{
     --tian:#FFB300;   /* 天选马 金 */
@@ -27,12 +27,10 @@
     border:1px solid rgba(255,255,255,.08);
     box-shadow:0 30px 80px rgba(0,0,0,.6);
   }
-  /* 细网格星点底纹 */
   .card::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
     background-image:radial-gradient(rgba(255,255,255,.10) 1px,transparent 1px);
     background-size:34px 34px;mask-image:linear-gradient(180deg,rgba(0,0,0,.9),transparent 60%);}
 
-  /* ===== 顶栏 ===== */
   .head{display:flex;align-items:center;gap:22px;padding:34px 44px 6px;position:relative;z-index:2;}
   .avatar{width:84px;height:84px;border-radius:20px;flex:none;display:grid;place-items:center;
     font-size:38px;font-weight:800;color:#1a1206;
@@ -42,15 +40,13 @@
   .who .meta{margin-top:8px;display:flex;gap:12px;align-items:center;font-size:21px;color:var(--ink-dim);}
   .rank-badge{padding:4px 14px;border-radius:999px;font-size:20px;font-weight:700;color:#7C5BFF;
     background:rgba(168,85,247,.14);border:1px solid rgba(168,85,247,.4);}
-  .demo-tag{margin-left:auto;flex:none;font-size:18px;font-weight:700;letter-spacing:2px;color:#ffd98a;
-    border:1px dashed rgba(255,179,0,.55);border-radius:10px;padding:8px 14px;background:rgba(255,179,0,.08);}
+  .demo-tag{margin-left:auto;flex:none;font-size:18px;font-weight:700;letter-spacing:2px;color:#8be9d8;
+    border:1px dashed rgba(20,184,166,.55);border-radius:10px;padding:8px 14px;background:rgba(20,184,166,.08);}
   .title-top{text-align:center;margin:14px 0 0;font-size:22px;letter-spacing:10px;color:var(--ink-dim);font-weight:600;position:relative;z-index:2;}
 
-  /* ===== 星盘 ===== */
   .star-wrap{position:relative;z-index:2;}
   svg{display:block;width:100%;height:auto;}
 
-  /* ===== 星盘下：上下限 + 堆叠条 ===== */
   .band{padding:6px 56px 0;position:relative;z-index:2;}
   .limits{display:flex;gap:22px;margin-bottom:20px;}
   .limit{flex:1;border-radius:18px;padding:18px 24px;border:1px solid var(--line);
@@ -78,7 +74,6 @@
   .meter i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#3B82F6,#22C55E);}
   .stability .num{font-size:21px;font-weight:800;flex:none;white-space:nowrap;}
 
-  /* ===== 2x2 数据格 ===== */
   .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;padding:26px 56px 0;position:relative;z-index:2;}
   .cell{border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.03);padding:20px 22px;}
   .cell .k{font-size:19px;color:var(--ink-dim);}
@@ -90,7 +85,6 @@
     background:rgba(255,255,255,.04);color:var(--ink);}
   .hl span b{color:var(--tian);}
 
-  /* ===== 命格横幅 ===== */
   .fate{margin:26px 56px 0;border-radius:20px;padding:26px 30px;position:relative;overflow:hidden;z-index:2;
     background:linear-gradient(120deg,rgba(255,179,0,.16),rgba(168,85,247,.14) 55%,rgba(59,130,246,.10));
     border:1px solid rgba(255,179,0,.35);}
@@ -98,7 +92,6 @@
     -webkit-background-clip:text;background-clip:text;color:transparent;}
   .fate .fr{margin-top:12px;font-size:21px;line-height:1.65;color:var(--ink);}
 
-  /* ===== 底栏 ===== */
   .foot{display:flex;justify-content:space-between;align-items:center;padding:26px 56px 32px;margin-top:24px;
     position:relative;z-index:2;color:var(--ink-dim);font-size:19px;border-top:1px solid var(--line);}
   .foot .wm{font-weight:800;color:var(--ink);letter-spacing:.5px;}
@@ -107,12 +100,12 @@
 <body>
 <div class="card">
   <div class="head">
-    <div class="avatar">伟</div>
+    <div class="avatar">G</div>
     <div class="who">
       <div class="name">godweiyang <span class="tag">#23456</span></div>
-      <div class="meta"><span class="rank-badge">艾欧尼亚 · 单双排 翡翠 II</span><span>近 15 场样本</span></div>
+      <div class="meta"><span class="rank-badge">艾欧尼亚 · 单双 青铜 III · 灵活 青铜 III</span><span>近 30 场样本 · Lv.599</span></div>
     </div>
-    <div class="demo-tag">演示假数据</div>
+    <div class="demo-tag">真实战绩</div>
   </div>
   <div class="title-top">五 维 战 马 星 盘</div>
 
@@ -122,72 +115,61 @@
     <div class="limits">
       <div class="limit up">
         <div class="ic">⬆</div>
-        <div><div class="lab">上限（天选+上等）</div><div class="val" style="color:#FFD666">47%</div></div>
-        <div class="sub">7 场带队起飞<br>天花板高</div>
+        <div><div class="lab">上限（天选+上等）</div><div class="val" style="color:#FFD666">27%</div></div>
+        <div class="sub">8 场带队起飞<br>高光偏少</div>
       </div>
       <div class="limit down">
         <div class="ic">⬇</div>
-        <div><div class="lab">下限（下等+牛马）</div><div class="val" style="color:#f88">27%</div></div>
-        <div class="sub">4 场状态掉线<br>偶尔隐身</div>
+        <div><div class="lab">下限（下等+牛马）</div><div class="val" style="color:#f88">53%</div></div>
+        <div class="sub">16 场状态掉线<br>经常隐身</div>
       </div>
     </div>
 
-    <div class="stack-head"><span class="t">五型场次构成</span><span class="s">共 15 场</span></div>
+    <div class="stack-head"><span class="t">五型场次构成</span><span class="s">共 30 场</span></div>
     <div class="stack" id="stack"></div>
     <div class="legend" id="legend"></div>
 
     <div class="stability">
       <span class="lab">稳定指数</span>
-      <div class="meter"><i style="width:72%"></i></div>
-      <span class="num">72 / 100 · 偏稳定</span>
+      <div class="meter"><i style="width:74%"></i></div>
+      <span class="num">74 / 100 · 偏稳定</span>
     </div>
   </div>
 
   <div class="grid">
-    <div class="cell"><div class="k">场均 KDA</div><div class="v">3.4</div><div class="d">7.2 / 3.1 / 8.5</div></div>
-    <div class="cell"><div class="k">巅峰 KDA</div><div class="v">35.0</div><div class="d">21 / 1 / 14（天选局）</div></div>
-    <div class="cell"><div class="k">近期胜率</div><div class="v">67%</div><div class="d">10 胜 5 负</div></div>
-    <div class="cell"><div class="k">全服排名</div><div class="v">前8<small>%</small></div><div class="d">同段位区间</div></div>
+    <div class="cell"><div class="k">场均 KDA</div><div class="v">3.1</div><div class="d">9.7 / 8.7 / 17.1</div></div>
+    <div class="cell"><div class="k">巅峰 KDA</div><div class="v">∞</div><div class="d">13 / 0 / 13（零封·天选马局）</div></div>
+    <div class="cell"><div class="k">近期胜率</div><div class="v">57%</div><div class="d">17 胜 13 负</div></div>
+    <div class="cell"><div class="k">场均参团率</div><div class="v">59%</div><div class="d">伤害占全队 16%</div></div>
   </div>
-  <div class="hl">
-    <span>三杀 <b>×3</b></span><span>超神 <b>×2</b></span><span>翻盘局 <b>×1</b></span><span>单局最高伤害 <b>38.2k</b></span>
-  </div>
+  <div class="hl"><span>四杀 <b>×1</b></span><span>三杀 <b>×12</b></span><span>超神 <b>×1</b></span><span>最高连杀 <b>13</b></span><span>单局最高伤害 <b>90.8k</b></span></div>
 
   <div class="fate">
-    <div class="ft">命格鉴定：上等战将 · 天命 Carry 命格</div>
-    <div class="fr">近 15 场七度带队起飞，输出拉满、偶有掉线；星形尖角明显上扬，是队伍里最稳的那条大腿，建议围绕你打。</div>
+    <div class="ft">命格鉴定：摇摆不定 · 神经刀命格</div>
+    <div class="fr">近 30 场 17 胜 13 负、胜率 57%，综合战力 52 分；其中 8 场打出天选/上等马表现，16 场沦为下等/牛马。场均 KDA 3.1、参团率 59%、伤害占全队 16%，稳定性 74（偏稳定）。星形忽长忽短，上限能carry、下限会隐身，稳住心态就是大腿。</div>
   </div>
 
   <div class="foot">
     <span class="wm">godweiyang.com/lolzjcx</span>
-    <span>五维战马星盘 · 生成于 2026-09-10 · 本图为演示假数据</span>
+    <span>五维战马星盘 · 生成于 2026-09-12 · 近 30 场真实战绩</span>
   </div>
 </div>
 
 <script>
-// ===== 假数据（接真实数据时只改这里）=====
-const TIERS=[
-  {name:'天选马', count:2, color:'#FFB300'},
-  {name:'上等马', count:5, color:'#A855F7'},
-  {name:'中等马', count:4, color:'#3B82F6'},
-  {name:'下等马', count:3, color:'#14B8A6'},
-  {name:'牛马',   count:1, color:'#EF4444'},
-];
+const TIERS=[{name:'天选马',count:1,color:'#FFB300'},{name:'上等马',count:7,color:'#A855F7'},{name:'中等马',count:6,color:'#3B82F6'},{name:'下等马',count:11,color:'#14B8A6'},{name:'牛马',count:5,color:'#EF4444'}];
 const TOTAL=TIERS.reduce((s,t)=>s+t.count,0);
 const MAXC=Math.max(...TIERS.map(t=>t.count));
-const DOM=TIERS.findIndex(t=>t.count===MAXC);   // 主马型（点亮星尖）
-const SCORE=65;                                  // 综合战力分（真实版按 100/80/60/40/20 加权）
+const DOM=3;
+const SCORE=52;
 
-// ===== 星盘几何 =====
 const CX=540, CY=386, R=240, R_INNER=R*0.40;
 const $=s=>document.querySelector(s);
 const pt=(angDeg,r)=>{const a=angDeg*Math.PI/180;return [CX+r*Math.cos(a), CY+r*Math.sin(a)];};
-const ang=i=>-90+i*72;                 // 天选在正上方，顺时针
-const rayR=i=>R*(0.45+0.55*TIERS[i].count/MAXC);   // 星芒长度（相对最大值缩放，保底 0.45R）
+const ang=i=>-90+i*72;
+const rayR=i=>R*(0.45+0.55*TIERS[i].count/MAXC);
 const pct=i=>Math.round(TIERS[i].count/TOTAL*100);
 
 let s='';
-// 发光滤镜
 s+=`<defs>
   <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
     <feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
@@ -204,57 +186,38 @@ s+=`<defs>
     <stop offset="100%" stop-color="#F87171" stop-opacity=".30"/>
   </linearGradient>
 </defs>`;
-
-// 中心光晕
 s+=`<circle cx="${CX}" cy="${CY}" r="${R+70}" fill="url(#core)"/>`;
-
-// 外圈缓转刻度环（SMIL，静态帧也完整）
 let ticks='';
 for(let d=0;d<360;d+=6){const major=d%30===0;const r1=R+46,r2=R+(major?64:54);
   const [x1,y1]=pt(d,r1),[x2,y2]=pt(d,r2);
   ticks+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="rgba(255,255,255,${major?.22:.10})" stroke-width="${major?2:1}"/>`;}
-s+=`<g><animateTransform attributeName="transform" type="rotate" from="0 ${CX} ${CY}" to="360 ${CX} ${CY}" dur="80s" repeatCount="indef"/>${ticks}</g>`;
-
-// 同心环
+s+=`<g><animateTransform attributeName="transform" type="rotate" from="0 ${CX} ${CY}" to="360 ${CX} ${CY}" dur="80s" repeatCount="indefinite"/>${ticks}</g>`;
 [0.25,0.5,0.75,1].forEach(k=>{s+=`<circle cx="${CX}" cy="${CY}" r="${(R*k).toFixed(1)}" fill="none" stroke="rgba(255,255,255,.10)" stroke-width="1" ${k===1?'stroke-dasharray="3 7"':''}/>`;});
 s+=`<circle cx="${CX}" cy="${CY}" r="${R+46}" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="1.2"/>`;
-
-// 背景标准五芒星（淡，装饰，定在最大半径外侧）
 let frame='';
 for(let i=0;i<5;i++){const a=pt(ang(i),R+46),b=pt(ang((i+2)%5),R+46);
   frame+=`<line x1="${a[0].toFixed(1)}" y1="${a[1].toFixed(1)}" x2="${b[0].toFixed(1)}" y2="${b[1].toFixed(1)}" stroke="rgba(255,255,255,.07)" stroke-width="1.4"/>`;}
 s+=frame;
-
-// 五条轴线（中心到星尖）
 for(let i=0;i<5;i++){const [x,y]=pt(ang(i),R);
   s+=`<line x1="${CX}" y1="${CY}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="rgba(255,255,255,.06)" stroke-width="1"/>`;}
-
-// 中心暗色底盘（压住星线，让中心文字清晰）
 s+=`<circle cx="${CX}" cy="${CY}" r="${R_INNER+26}" fill="#0a0e1c" opacity=".55"/>`;
-// 数据：星尖（外点）与星谷（内点）
 const outer=TIERS.map((t,i)=>pt(ang(i),rayR(i)));
 const valley=TIERS.map((t,i)=>pt(ang(i)+36,R_INNER));
-// 五芒星路径（变长星芒）
 let star='M'+outer[0].map(n=>n.toFixed(1)).join(' ');
 for(let i=0;i<5;i++){star+=' L'+valley[i].map(n=>n.toFixed(1)).join(' ')+' L'+outer[(i+1)%5].map(n=>n.toFixed(1)).join(' ');}
 star+=' Z';
-// 雷达五边形路径
 let poly='M'+outer.map(p=>p.map(n=>n.toFixed(1)).join(' ')).join(' L ')+' Z';
 s+=`<path d="${poly}" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.35)" stroke-width="1.5"/>`;
 s+=`<path d="${star}" fill="url(#starFill)" stroke="rgba(255,255,255,.55)" stroke-width="2" filter="url(#glow)"/>`;
-
-// 星尖光点 + 标签 + 主尖皇冠
 TIERS.forEach((t,i)=>{
   const [x,y]=outer[i];
   s+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="16" fill="${t.color}" opacity=".35" filter="url(#glow)"/>`;
   s+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="8" fill="${t.color}" stroke="#fff" stroke-width="2"/>`;
-  // 外侧标签
   const [lx,ly]=pt(ang(i),R+90);
   const cos=Math.cos(ang(i)*Math.PI/180);
   const anchor=Math.abs(cos)<.3?'middle':(cos>0?'start':'end');
   s+=`<text x="${lx.toFixed(1)}" y="${(ly-6).toFixed(1)}" text-anchor="${anchor}" font-size="27" font-weight="800" fill="${t.color}">${t.name}</text>`;
   s+=`<text x="${lx.toFixed(1)}" y="${(ly+24).toFixed(1)}" text-anchor="${anchor}" font-size="21" fill="rgba(234,240,255,.75)">${t.count} 场 · ${pct(i)}%</text>`;
-  // 主马型皇冠
   if(i===DOM){
     const [cx2,cy2]=pt(ang(i),rayR(i)+40);
     const cw=20;
@@ -263,15 +226,10 @@ TIERS.forEach((t,i)=>{
        fill="#FFD666" stroke="#FFF3D0" stroke-width="1.5" filter="url(#glow)"/>`;
   }
 });
-
-// 星眼中心：主马型 + 战力分
 s+=`<text x="${CX}" y="${CY-40}" text-anchor="middle" font-size="30" font-weight="800" fill="${TIERS[DOM].color}">${TIERS[DOM].name}</text>`;
 s+=`<text x="${CX}" y="${CY+34}" text-anchor="middle" font-size="86" font-weight="900" fill="#FFFFFF">${SCORE}<tspan font-size="26" fill="rgba(234,240,255,.6)" font-weight="600"> /100</tspan></text>`;
 s+=`<text x="${CX}" y="${CY+70}" text-anchor="middle" font-size="20" fill="rgba(234,240,255,.62)">综合战力 · 近 ${TOTAL} 场</text>`;
-
 $('#star').innerHTML=s;
-
-// ===== 堆叠条 + 图例 =====
 const stack=$('#stack'),legend=$('#legend');
 TIERS.forEach(t=>{
   const w=(t.count/TOTAL*100);
