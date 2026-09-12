@@ -121,7 +121,6 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
 .cell .col-status.warn{color:var(--org);font-weight:700}
 .rate-banner{background:#fef3e2;border:1px solid #f3cd9c;color:#92400e;border-radius:9px;padding:9px 12px;font-size:12.5px;line-height:1.6;margin:8px 0 2px}
 .rate-banner b{color:var(--org);font-size:14px}
-.swipe-hint{display:none;text-align:center;color:var(--sub);font-size:12px;padding:6px 0 0;letter-spacing:1px}
 .spinner{width:26px;height:26px;border:3px solid #e3e7ee;border-top-color:var(--pri);border-radius:50%;margin:0 auto 10px;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .empty{color:var(--sub);text-align:center;padding:18px 0;font-size:12.5px}
@@ -131,10 +130,9 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
   .cgrid::-webkit-scrollbar{height:5px}
   .cgrid::-webkit-scrollbar-track{background:transparent}
   .cgrid::-webkit-scrollbar-thumb{background:#cfc8ea;border-radius:3px}
-  /* 每列保持可读宽度，整体左右滑动查看其余队友（首屏露出下一列作提示），人数再多也不挤压 */
+  /* 每列保持可读宽度，容器可横向滚动查看其余列（首屏露出下一列作提示），人数再多也不挤压 */
   .band{grid-template-columns:repeat(var(--n),74vw)}
   .cell{scroll-snap-align:start}
-  .swipe-hint{display:block}
 }
 @media (max-width:640px){
   .wrap{max-width:100%;padding:10px 8px 46px}
@@ -206,7 +204,7 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
       <button class="kbtn" id="testBtn" type="button">测试连接</button>
       <span class="kstatus" id="keyStatus"><i></i><span id="keyStatusText">未填写 Key</span></span>
     </div>
-    <div class="keytip">Key 仅存于本浏览器 localStorage，请求直接从浏览器发往 api.pubg.com（官方已开启 CORS），不经过任何后端；免费 Key 默认限流约 10 次/分钟，触发上限后请约 1 分钟后再试。<a href="https://developer.pubg.com/" target="_blank" rel="noopener">没有 Key？去 developer.pubg.com 免费注册 →</a></div>
+    <div class="keytip">Key 仅存于本浏览器 localStorage，请求直接从浏览器发往 api.pubg.com（官方已开启 CORS），不经过任何后端；免费 Key 默认限流约 10 次/分钟，触发后页面会自动排队、等待冷却并继续查询，无需重复点击，期间可随时点「停止」。<a href="https://developer.pubg.com/" target="_blank" rel="noopener">没有 Key？去 developer.pubg.com 免费注册 →</a></div>
   </header>
 
   <nav class="viewtabs">
@@ -357,31 +355,50 @@ async function testConnection(){
    一旦命中官方 429（免费 Key 约 10 次/分钟）立即熔断并提示约 1 分钟后重试。
    /matches 与 telemetry 不计限流，走并发池。 */
 class RateLimitError extends Error{constructor(resetSec){super('RATE_LIMIT');this.name='RateLimitError';this.resetSec=resetSec||60;}}
-const RATE_CONC=4;
-const rateLimit={hit:false,resetAt:0};
-let rateRunning=0;const rateQueue=[];
-function rateGate(){return new Promise(res=>{if(rateRunning<RATE_CONC){rateRunning++;res();}else rateQueue.push(res);});}
-function rateRelease(){rateRunning=Math.max(0,rateRunning-1);const nxt=rateQueue.shift();if(nxt){rateRunning++;nxt();}}
-function rateReset(){rateLimit.hit=false;rateLimit.resetAt=0;}
-function rateWaitSec(){return rateLimit.hit?Math.max(0,Math.ceil((rateLimit.resetAt-Date.now())/1000)):0;}
-let rateTimer=null;
-function startRateCountdown(){
-  const tick=()=>{
-    const w=rateWaitSec();
-    document.querySelectorAll('.rate-cd').forEach(el=>{el.textContent=w>0?w:0;});
-    if(w<=0){rateLimit.hit=false;if(rateTimer){clearInterval(rateTimer);rateTimer=null;}document.querySelectorAll('.rate-banner').forEach(b=>b.remove());}
-  };
-  if(rateTimer)clearInterval(rateTimer);
-  tick();rateTimer=setInterval(tick,1000);
+class CancelledError extends Error{constructor(){super('cancelled');this.name='CancelledError';}}
+/* 任务取消令牌：点「停止」时递增，令所有在途排队/冷却等待在 1 秒内快速中止（停止后再查即全部重查） */
+let cancelTick=0;
+/* 自适应节流：把计限流请求平滑控制在约 RATE_MAX 次/分钟，主动避开官方 429；在途并发不超过 RATE_CONC */
+const RATE_WIN=60000,RATE_MAX=9,RATE_CONC=3;
+const sent=[];let concRun=0;const concQ=[];
+function concAcquire(){return new Promise(res=>{if(concRun<RATE_CONC){concRun++;res();}else concQ.push(res);});}
+function concRelease(){concRun=Math.max(0,concRun-1);const nxt=concQ.shift();if(nxt){concRun++;nxt();}}
+/* 自动等待提示：节流排队(queue)或 429 冷却(cool)时，进度条显示倒计时，全程自动续查、无需重复点击 */
+const waiter={until:0,mode:''};
+function waitSec(){return waiter.until?Math.max(0,Math.ceil((waiter.until-Date.now())/1000)):0;}
+function setWait(ms,mode){const u=Date.now()+ms;if(u>waiter.until)waiter.until=u;if(mode==='cool'||!waiter.mode)waiter.mode=mode;}
+function resetWait(){waiter.until=0;waiter.mode='';}
+async function acquire(){
+  const tick=cancelTick;
+  for(;;){ // 滑动窗口：额度不足就分段睡到有额度为止（分段睡以便刷新倒计时/响应停止）
+    if(cancelTick!==tick)throw new CancelledError();
+    const now=Date.now();
+    while(sent.length&&now-sent[0]>=RATE_WIN)sent.shift();
+    if(sent.length<RATE_MAX){sent.push(Date.now());break;}
+    const w=RATE_WIN-(now-sent[0])+250;
+    setWait(w,'queue');await sleep(Math.min(w,1000));
+  }
+  await concAcquire();
 }
 async function limited(path){
-  const w0=rateWaitSec();if(w0>0)throw new RateLimitError(w0);
-  await rateGate();
-  try{return await apiGet(base()+path);}
-  catch(e){
-    if(e instanceof RateLimitError){rateLimit.hit=true;rateLimit.resetAt=Date.now()+e.resetSec*1000;startRateCountdown();}
-    throw e;
-  }finally{rateRelease();}
+  const tick=cancelTick;
+  let lastErr=null;
+  for(let attempt=0;attempt<3;attempt++){
+    if(cancelTick!==tick)throw new CancelledError();
+    await acquire();
+    let res,err=null;
+    try{res=await apiGet(base()+path);}catch(e){err=e;}finally{concRelease();}
+    if(!err)return res;
+    if(err instanceof RateLimitError){ // 兜底 429：自动冷却后原地重试，冷却可被「停止」打断，不把失败抛给用户
+      lastErr=err;setWait(err.resetSec*1000+500,'cool');
+      let left=err.resetSec*1000+500;
+      while(left>0){if(cancelTick!==tick)throw new CancelledError();const s=Math.min(1000,left);await sleep(s);left-=s;}
+      continue;
+    }
+    throw err;
+  }
+  if(cancelTick!==tick)throw new CancelledError();
+  throw lastErr||new RateLimitError(60); // 连续多次仍受限，才作为该玩家失败交给上层
 }
 async function pool(items,limit,worker){
   const ret=new Array(items.length);let i=0;
@@ -545,82 +562,102 @@ function parseNames(text){
   return out.slice(0,5);
 }
 async function runMulti(){
-  if(M.running){M.running=false;setMBtn();return;}
+  if(M.running){cancelTick++;M.running=false;setMBtn();return;}
   if(!getKey()){toast('请先在顶部填写 API Key','e');return;}
   const names=parseNames($('qInput').value);
   if(!names.length){toast('没有识别到昵称，请每行一个','e');return;}
   M.filter=$('modeFilter').value;M.recent=parseInt($('recentN').value)||20;
-  M.targets=names;M.players=names.map(n=>({name:n,status:'loading'}));M.matchOrder=[];M.ts=Date.now();M.running=true;rateReset();
+  // 每次开始都作为全新任务全量查询；中途限流自动等待冷却续查到底，只有点「停止」才中断（停止后再查即全部重查）
+  M.targets=names;M.players=names.map(n=>({name:n,status:'loading'}));
+  M.matchOrder=[];M.ts=Date.now();M.running=true;resetWait();
   setMBtn();renderMulti();renderMBar();
-  // 阶段A：逐人定位（容错，单个不存在不影响其他人）
-  await pool(names,5,async(name)=>{
-    try{
-      const p=await fetchPlayerByName(name);
-      const idx=M.players.findIndex(x=>x.name===name);
-      if(!p){M.players[idx]={name,status:'notfound'};}
-      else{M.players[idx]=Object.assign(p,{status:'found',detail:null,clan:null,games:[],agg:null,horse:null});}
-    }catch(e){const idx=M.players.findIndex(x=>x.name===name);M.players[idx]={name,status:'error',error:(e instanceof RateLimitError)?'RATE_LIMIT':e.message};}
-    renderMulti();renderMBar();
-  });
-  // 阶段B：并发拉详情（小并发快速发出；命中 429 立即熔断，该玩家标记为限流，其余已成功的不受影响）
-  const found0=M.players.filter(p=>p.status==='found');
-  await pool(found0,2,async pl=>{
-    if(!M.running)return;
-    try{
-      pl.detail=await fetchPlayerDetail(pl.id);
-      if(pl.clanId)pl.clan=await fetchClan(pl.clanId);
-      // 先用生涯口径占位（四宫格/马型带 *），对局明细到位后再替换为近期口径
-      pl.agg=lifeAgg(pl.detail);pl.horse=horseOf(pl.agg);
-    }catch(e){pl.status='error';pl.error=(e instanceof RateLimitError)?'RATE_LIMIT':e.message;}
-    renderMulti();renderMBar();
-  });
-  // 阶段C：拉取近期对局（不计限流，并发池）
-  const found=M.players.filter(p=>p.status==='found');
-  const need=new Set();
-  found.forEach(p=>p.matchIds.slice(0,M.recent).forEach(id=>need.add(id)));
-  const ids=[...need];
-  await pool(ids,8,async id=>{await fetchMatch(id);});
-  M.matchTotal=ids.length;M.matchFail=ids.filter(id=>!matchCache[id]).length;
-  // 装配：遍历并集场次，凡该玩家参与即纳入（保证共同对局跨列对齐，不受各自近 N 截断影响）
-  const order=[];const byTime={};
-  found.forEach(p=>{p.games=[];});
-  ids.forEach(id=>{
-    const mt=matchCache[id];if(!mt)return;
-    byTime[id]=mt.createdAt;order.push(id);
-    found.forEach(p=>{
-      const s=mt.parts[p.id],tm=mt.accTeam[p.id];if(!s)return;
-      if(!passMode(mt.mode,mt.type,mt.custom,M.filter))return;
-      p.games.push({matchId:id,rank:tm?tm.rank:num(s.winPlace),won:tm?tm.won:s.winPlace===1,teamId:tm?tm.teamId:null,
-        kills:num(s.kills),dbno:num(s.DBNOs),dmg:num(s.damageDealt),hs:num(s.headshotKills),assists:num(s.assists),revives:num(s.revives),
-        time:num(s.timeSurvived),longest:num(s.longestKill),death:s.deathType,mode:mt.mode,map:mt.map,type:mt.type,custom:mt.custom,
-        duration:mt.duration,createdAt:mt.createdAt});
+  if(M.barTimer)clearInterval(M.barTimer);
+  M.barTimer=setInterval(renderMBar,1000);
+  try{
+    // 阶段A：仅定位还没有 id 的玩家（容错，单个不存在不影响其他人）
+    const needLookup=M.players.filter(p=>p.status==='loading');
+    await pool(needLookup,3,async(pl)=>{
+      if(!M.running)return;
+      try{
+        const p=await fetchPlayerByName(pl.name);
+        const idx=M.players.findIndex(x=>x.name===pl.name);
+        if(!p){M.players[idx]={name:pl.name,status:'notfound'};}
+        else{M.players[idx]=Object.assign(p,{status:'found',detail:null,clan:null,games:[],agg:null,horse:null});}
+      }catch(e){if(e instanceof CancelledError)return;const idx=M.players.findIndex(x=>x.name===pl.name);M.players[idx]={name:pl.name,status:'error',error:(e instanceof RateLimitError)?'RATE_LIMIT':e.message};}
+      renderMulti();renderMBar();
     });
-  });
-  found.forEach(p=>{
-    p.games.sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)));
-    p.agg=(p.games.length===0&&p.detail)?lifeAgg(p.detail):aggGames(p.games);
-    p.horse=horseOf(p.agg);
-  });
-  order.sort((a,b)=>String(byTime[b]).localeCompare(String(byTime[a])));
-  M.matchOrder=order;
-  M.running=false;setMBtn();renderMulti();renderMBar();persistMulti();
-  const fail=M.players.filter(p=>p.status==='notfound'||p.status==='error').length;
-  toast(fail?(`完成，${M.players.length-fail} 人成功，${fail} 人失败`):'全部查询完成',fail?'w':'s');
+    if(!M.running)return;
+    // 阶段B：仅给已定位但还没详情的玩家拉详情（节流自动排队；万一 429 会在 limited 内自动冷却续查，无需重点）
+    const needDetail=M.players.filter(p=>p.status==='found'&&!p.detail);
+    await pool(needDetail,2,async pl=>{
+      if(!M.running)return;
+      try{
+        pl.detail=await fetchPlayerDetail(pl.id);
+        if(pl.clanId)pl.clan=await fetchClan(pl.clanId);
+        // 先用生涯口径占位（四宫格/马型带 *），对局明细到位后再替换为近期口径
+        pl.agg=lifeAgg(pl.detail);pl.horse=horseOf(pl.agg);
+      }catch(e){if(e instanceof CancelledError)return;pl.status='error';pl.error=(e instanceof RateLimitError)?'RATE_LIMIT':e.message;}
+      renderMulti();renderMBar();
+    });
+    if(!M.running)return;
+    // 阶段C：拉取近期对局（/matches 不计限流；已缓存的场次不会重复请求）
+    const found=M.players.filter(p=>p.status==='found');
+    const need=new Set();
+    found.forEach(p=>p.matchIds.slice(0,M.recent).forEach(id=>need.add(id)));
+    const ids=[...need];
+    await pool(ids,8,async id=>{if(!M.running)return;await fetchMatch(id);});
+    if(!M.running)return;
+    M.matchTotal=ids.length;M.matchFail=ids.filter(id=>!matchCache[id]).length;
+    // 装配：遍历并集场次，凡该玩家参与即纳入（保证共同对局跨列对齐，不受各自近 N 截断影响）
+    const order=[];const byTime={};
+    found.forEach(p=>{p.games=[];});
+    ids.forEach(id=>{
+      const mt=matchCache[id];if(!mt)return;
+      byTime[id]=mt.createdAt;order.push(id);
+      found.forEach(p=>{
+        const s=mt.parts[p.id],tm=mt.accTeam[p.id];if(!s)return;
+        if(!passMode(mt.mode,mt.type,mt.custom,M.filter))return;
+        p.games.push({matchId:id,rank:tm?tm.rank:num(s.winPlace),won:tm?tm.won:s.winPlace===1,teamId:tm?tm.teamId:null,
+          kills:num(s.kills),dbno:num(s.DBNOs),dmg:num(s.damageDealt),hs:num(s.headshotKills),assists:num(s.assists),revives:num(s.revives),
+          time:num(s.timeSurvived),longest:num(s.longestKill),death:s.deathType,mode:mt.mode,map:mt.map,type:mt.type,custom:mt.custom,
+          duration:mt.duration,createdAt:mt.createdAt});
+      });
+    });
+    found.forEach(p=>{
+      p.games.sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)));
+      p.agg=(p.games.length===0&&p.detail)?lifeAgg(p.detail):aggGames(p.games);
+      p.horse=horseOf(p.agg);
+    });
+    order.sort((a,b)=>String(byTime[b]).localeCompare(String(byTime[a])));
+    M.matchOrder=order;
+    const fail=M.players.filter(p=>p.status==='notfound'||p.status==='error').length;
+    toast(fail?(`完成，${M.players.length-fail} 人成功，${fail} 人失败`):'全部查询完成',fail?'w':'s');
+  }finally{
+    if(!M.running)M.players.forEach(p=>{if(p.status==='loading'||(p.status==='found'&&!p.detail)){p.status='error';p.error='已停止';}});
+    M.running=false;if(M.barTimer){clearInterval(M.barTimer);M.barTimer=null;}
+    setMBtn();renderMulti();renderMBar();persistMulti();
+  }
 }
 function setMBtn(){const b=$('qBtn');if(M.running){b.textContent='停止';b.style.background='var(--red)';}else{b.textContent='开始查询';b.style.background='';}}
 function renderMBar(){
   const bar=$('mResBar');
   if(!M.targets.length){bar.innerHTML='';return;}
   const done=M.players.filter(p=>p.status!=='loading').length,total=M.targets.length;
+  const stopped=M.players.some(p=>p.status==='error'&&p.error==='已停止');
+  const okN=M.players.filter(p=>p.status==='found').length;
   const modeTxt=$('modeFilter').selectedOptions[0].textContent;
-  const rw=rateWaitSec();
-  const rateBanner=rw>0?`<div class="rate-banner">⚠️ 已触发官方限流（免费 Key 约 10 次/分钟），未完成的队友请 <b class="rate-cd">${rw}</b> 秒后点「开始查询」重试；已查到的数据不受影响。</div>`:'';
-  const swipe=M.targets.length>1?'<div class="swipe-hint">‹ 左右滑动查看其他队友 ›</div>':'';
+  const ws=waitSec();
+  let banner='';
+  if(M.running&&ws>0){
+    banner=waiter.mode==='cool'
+      ?`<div class="rate-banner">⚠️ 官方接口限流（免费 Key 约 10 次/分钟），系统正在自动等待冷却，<b class="rate-cd">${ws}</b> 秒后自动续查，请耐心等待、无需任何操作；已查到的数据保留。</div>`
+      :`<div class="rate-banner">请求较多，正按官方限流（约 10 次/分钟）自动排队，<b class="rate-cd">${ws}</b> 秒后继续，请耐心等待 …</div>`;
+  }
   bar.innerHTML=`<div class="card" style="padding:11px 16px;margin:12px 0 0"><div class="resbar">
     <span>模式：<b>${esc(modeTxt)}</b></span><span>近期：<b>近 ${M.recent} 场</b></span><span>时间：<b>${fmtDT(M.ts)}</b></span>
     <span class="spacer"></span><button class="sec" id="mReset" style="padding:6px 14px">重新搜索</button></div>
-    ${rateBanner}${swipe}
-    <div class="hint" style="margin:4px 0 0">${M.running?(`查询中 ${done}/${total} …`):(`查询完成 · 共 ${total} 人 · 对局明细仅保留近 14 天`)}</div></div>`;
+    ${banner}
+    <div class="hint" style="margin:4px 0 0">${M.running?(`查询中 ${done}/${total} …`):(stopped?(`已停止 · 已完成 ${okN}/${total} 人 · 重新查询将全部刷新`):(`查询完成 · 共 ${total} 人 · 对局明细仅保留近 14 天`))}</div></div>`;
   $('mReset').onclick=()=>{M.targets=[];M.players=[];M.matchOrder=[];M.matchTotal=0;M.matchFail=0;try{localStorage.removeItem(PK_MULTI);}catch(e){}$('cols').innerHTML='';$('mEmpty').innerHTML='';bar.innerHTML='';renderMulti();$('qInput').focus();window.scrollTo({top:0,behavior:'smooth'});};
 }
 /* ---------- 多人渲染 ---------- */
@@ -643,7 +680,8 @@ function mHeadCell(pl){
     </div>`;
   }
   if(pl.status==='notfound')return `<div class="cell head-cell"><div class="col-status err">未找到玩家<br>「${esc(pl.name)}」<br>检查昵称与平台</div></div>`;
-  if(pl.status==='error'&&pl.error==='RATE_LIMIT')return `<div class="cell head-cell"><div class="col-status warn">接口限流<br>每分钟约 10 次<br>请约 1 分钟后重试</div></div>`;
+  if(pl.status==='error'&&pl.error==='已停止')return `<div class="cell head-cell"><div class="col-status">已停止<br>重新查询即可</div></div>`;
+  if(pl.status==='error'&&pl.error==='RATE_LIMIT')return `<div class="cell head-cell"><div class="col-status warn">接口限流未完成<br>请重新查询</div></div>`;
   if(pl.status==='error')return `<div class="cell head-cell"><div class="col-status err">查询失败<br>${esc(pl.error||'')}</div></div>`;
   return `<div class="cell head-cell"><div class="col-status"><div class="spinner"></div>查询中<br>${esc(pl.name)}</div></div>`;
 }
@@ -727,7 +765,8 @@ function renderMulti(){
 }
 
 /* ================================================== 单人 */
-const S={name:'',data:null,weaponFilter:'all',openMatch:null};
+const S={name:'',data:null,weaponFilter:'all',openMatch:null,running:false};
+let sTimer=null;
 function persistMulti(){
   if(!M.players.length)return;
   saveJSON(PK_MULTI,{ts:M.ts,filter:M.filter,recent:M.recent,input:$('qInput').value,
@@ -738,8 +777,11 @@ async function runSingle(name){
   name=(name||$('sInput').value||'').trim();
   if(!name){toast('请输入昵称','e');return;}
   if(!getKey()){toast('请先在顶部填写 API Key','e');return;}
-  $('sInput').value=name;S.name=name;S.data=null;S.openMatch=null;rateReset();
+  if(S.running)return;
+  $('sInput').value=name;S.name=name;S.data=null;S.openMatch=null;resetWait();
+  S.running=true;$('sBtn').disabled=true;
   renderSingleLoading();
+  if(sTimer)clearInterval(sTimer);sTimer=setInterval(renderSingleWait,1000);
   try{
     const p=await fetchPlayerByName(name);
     if(!p){$('singleRes').innerHTML=`<div class="sg empty">未找到玩家「${esc(name)}」，请检查昵称与所选平台。</div>`;return;}
@@ -770,11 +812,13 @@ async function runSingle(name){
     S.data=p;renderSingle();persistSingle();
     toast(p.matchFail?(`查询完成，${p.matchFail}/${p.matchTotal} 场明细受 CDN 限制未取到`):'查询完成',p.matchFail?'w':'s');
   }catch(e){
-    if(e instanceof RateLimitError){$('singleRes').innerHTML=`<div class="sg"><div class="rate-banner">⚠️ 已触发官方接口限流（免费 Key 每分钟约 10 次），请 <b class="rate-cd">${e.resetSec}</b> 秒后（约 1 分钟）重新查询。</div></div>`;startRateCountdown();}
+    if(e instanceof CancelledError){/* 任务被停止，静默 */}
+    else if(e instanceof RateLimitError){$('singleRes').innerHTML=`<div class="sg"><div class="rate-banner">⚠️ 触发官方接口限流（免费 Key 每分钟约 10 次），已自动重试多次仍受限，请约 1 分钟后再点「查询」。</div></div>`;}
     else $('singleRes').innerHTML=`<div class="sg empty" style="color:var(--red)">查询失败：${esc(e.message)}</div>`;
-  }
+  }finally{if(sTimer){clearInterval(sTimer);sTimer=null;}S.running=false;$('sBtn').disabled=false;}
 }
-function renderSingleLoading(){$('singleRes').innerHTML='<div class="sg"><div class="col-status"><div class="spinner"></div>正在查询 '+esc(S.name)+' …</div></div>';}
+function renderSingleLoading(){$('singleRes').innerHTML='<div class="sg"><div class="col-status"><div class="spinner"></div>正在查询 '+esc(S.name)+' …</div><div id="sWait" style="margin-top:10px"></div></div>';}
+function renderSingleWait(){const el=$('sWait');if(!el)return;const ws=waitSec();el.innerHTML=ws>0?`<div class="rate-banner">${waiter.mode==='cool'?`官方接口限流，系统正在自动等待冷却，<b class="rate-cd">${ws}</b> 秒后自动续查，请耐心等待…`:`请求较多，正按官方限流（约 10 次/分钟）自动排队，<b class="rate-cd">${ws}</b> 秒后继续，请耐心等待…`}</div>`:'';}
 function renderSingle(){
   const p=S.data;if(!p){return;}
   const d=p.detail,sv=d.surv||{},life=aggModes(d.life),rl=rankedList(d.ranked),clan=p.clan;
