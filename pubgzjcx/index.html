@@ -208,12 +208,14 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
 .b-teal{background:#cffafe;color:#0e7490}
 .b-purple{background:#ede9fe;color:#5b2a86}
 .b-gray{background:#f1f3f5;color:#6b7280}
-.viz-band{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--line)}
+.viz-band{display:grid;grid-template-columns:1fr 1fr;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:12px 0;box-shadow:0 1px 3px rgba(60,40,120,.05)}
 .viz-card{padding:14px 16px;border-right:1px solid var(--line);min-width:0}
 .viz-card:last-child{border-right:0}
 .viz-card h4{margin:0 0 4px;font-size:13.5px;color:var(--ink)}
 .viz-legend{display:flex;flex-wrap:wrap;gap:5px 14px;margin-top:2px;font-size:12px;color:var(--sub)}
 .viz-legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.quad-legend{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:4px;font-size:11.5px;color:var(--sub)}
+.quad-legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px}
 .wpn-bubble{margin:8px 0 4px}
 @media(max-width:760px){.viz-band{grid-template-columns:1fr}.viz-card{border-right:0;border-bottom:1px solid var(--line)}.viz-card:last-child{border-bottom:0}}
 .spinner{width:26px;height:26px;border:3px solid #e3e7ee;border-top-color:var(--pri);border-radius:50%;margin:0 auto 10px;animation:spin .8s linear infinite}
@@ -328,7 +330,7 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
   <header class="top">
     <div class="title-row">
       <h1>PUBG 战绩查询（端游 · 官方 API）</h1>
-      <a class="cross-link" href="/lolzjcx/" title="前往 LOL 战绩查询">LOL 战绩查询 →</a>
+      <a class="cross-link" href="/lolzjcx/" target="_blank" rel="noopener" title="在新标签页打开 LOL 战绩查询">LOL 战绩查询 →</a>
     </div>
     <div class="keybar">
       <button class="kbtn pool-open" id="poolOpenBtn" type="button" title="管理 API Key 账号池">🔑 API Key 账号池<span class="pool-cnt" id="poolCnt">未配置</span></button>
@@ -393,7 +395,10 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
       <div class="hint">评级为娱乐口径（按近期 KD / 场均伤害 / 前十率 / 吃鸡率综合打分，T/A/B/C/D）；点列头名字或右上角图标可跳到该玩家单人详情。对局明细官方仅保留 14 天，且来自官方 /matches 接口（经 CDN 缓存，少数场次可能因跨域响应头缺失取不到，此时四宫格/评级自动回退生涯口径并以 * 标注）。</div>
     </div>
     <div id="mResBar"></div>
-    <div id="cols" class="cgrid"></div>
+    <div id="mShotWrap">
+      <div id="mViz"></div>
+      <div id="cols" class="cgrid"></div>
+    </div>
     <div id="mEmpty"></div>
   </div>
 
@@ -633,13 +638,31 @@ function quadSvg(players){
   s+=`<rect x="${cxm.toFixed(1)}" y="${cym.toFixed(1)}" width="${(W-R-cxm).toFixed(1)}" height="${(base-cym).toFixed(1)}" fill="#dc2626" opacity="0.04"/>`;
   s+=`<line x1="${cxm.toFixed(1)}" y1="${T}" x2="${cxm.toFixed(1)}" y2="${base}" stroke="#9ca3af" stroke-dasharray="4 3"/>`;
   s+=`<line x1="${L}" y1="${cym.toFixed(1)}" x2="${W-R}" y2="${cym.toFixed(1)}" stroke="#9ca3af" stroke-dasharray="4 3"/>`;
-  s+=`<text x="${W-R-4}" y="${T+14}" text-anchor="end" font-size="9.5" fill="#b45309">高伤·高前十 = 核心大腿</text>`;
-  s+=`<text x="${L+4}" y="${T+14}" font-size="9.5" fill="#0e7490">高前十·低伤 = 稳健苟分</text>`;
-  s+=`<text x="${W-R-4}" y="${base-6}" text-anchor="end" font-size="9.5" fill="#dc2626">高伤·低前十 = 刚枪猛冲</text>`;
-  players.forEach(pl=>{
-    const x=X(pl.dpg),y=Y(pl.top);
-    s+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="6" fill="${pl.color}" fill-opacity="0.88" stroke="#fff" stroke-width="1.6"><title>${pl.name}｜场均${Math.round(pl.dpg)}伤 · 前十${(pl.top*100).toFixed(0)}%</title></circle>`;
-    s+=`<text x="${(x+9).toFixed(1)}" y="${(y-8).toFixed(1)}" font-size="10.5" font-weight="700" fill="#374151">${esc(pl.name)}</text>`;
+  // 点位标签：估算文字宽，右侧放不下翻左侧、顶部放不下放下方，再做垂直防碰撞推移，推移较远时加引导线
+  const textW=t=>{let w=8;for(const ch of t)w+=ch.charCodeAt(0)>255?10.5:6.2;return w;};
+  const th=12;
+  const labs=players.map(pl=>({pl,x:X(pl.dpg),y:Y(pl.top)}));
+  const placed=[];
+  labs.slice().sort((a,b)=>a.y-b.y).forEach(o=>{
+    const w=textW(o.pl.name);
+    const right=(o.x+9+w)<=W-R;                 // 右侧空间足够才放右侧，否则翻到点左侧
+    const bx=right?o.x+9:o.x-9-w;
+    let by=o.y-8;
+    if(by-th+2<T)by=o.y+14;                      // 标签顶部溢出绘图区就改到点下方
+    const box=()=>({x0:bx,y0:by-th+2,x1:bx+w,y1:by+3});
+    const hit=b=>placed.some(q=>b.x0<q.x1&&b.x1>q.x0&&b.y0<q.y1&&b.y1>q.y0);
+    let guard=0;
+    while(hit(box())&&guard++<40){by+=th+2;      // 与已放标签重叠则逐行下移
+      if(by+3>base){by=o.y-8;let g2=0;while(hit(box())&&g2++<40){by-=th+2;if(by-th+2<T){by=T+th-2;break;}}break;} // 下移到底仍撞则改为上移排开
+    }
+    placed.push(box());
+    o.anchor=right?'start':'end';o.tx=right?bx:bx+w;o.by=by;
+  });
+  labs.forEach(o=>{
+    const ly=o.by-3;
+    if(Math.abs(ly-o.y)>11)s+=`<line x1="${o.x.toFixed(1)}" y1="${o.y.toFixed(1)}" x2="${o.tx.toFixed(1)}" y2="${ly.toFixed(1)}" stroke="${o.pl.color}" stroke-width="0.8" stroke-opacity="0.55"/>`;
+    s+=`<circle cx="${o.x.toFixed(1)}" cy="${o.y.toFixed(1)}" r="6" fill="${o.pl.color}" fill-opacity="0.88" stroke="#fff" stroke-width="1.6"><title>${o.pl.name}｜场均${Math.round(o.pl.dpg)}伤 · 前十${(o.pl.top*100).toFixed(0)}%</title></circle>`;
+    s+=`<text x="${o.tx.toFixed(1)}" y="${o.by.toFixed(1)}" text-anchor="${o.anchor}" font-size="10.5" font-weight="700" fill="#374151">${esc(o.pl.name)}</text>`;
   });
   s+=`<text x="${(L+iw/2).toFixed(1)}" y="${H-8}" text-anchor="middle" font-size="10" fill="#6b7280">场均伤害 →</text>`;
   s+=`<text transform="translate(12,${(T+ih/2).toFixed(1)}) rotate(-90)" text-anchor="middle" font-size="10" fill="#6b7280">前十率 →</text>`;
@@ -663,6 +686,15 @@ function mBadgeCell(pl){
 const KEY_STORE='pubg_api_key',PLAT_STORE='pubg_platform',
   PK_MULTI_IN='pubg_multi_input',PK_SINGLE_IN='pubg_single_input',PK_MODE='pubg_mode_filter',PK_RECENT='pubg_recent_n',
   PK_MULTI='pubg_multi_state',PK_SINGLE='pubg_single_state';
+// 内置默认 Key 池：首次打开（本地从未保存过 Key）时自动填入，开箱即用；用户一旦自行增删/清空，则完全以本地 localStorage 为准
+const DEFAULT_KEYS=[
+'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJlNzRjOGZmMC05MDNlLTAxM2YtYjM0ZC0xMmM4MmIzNmRhOGQiLCJpc3MiOiJnYW1lbG9ja2VyIiwiaWF0IjoxNzg5MTUyMzM3LCJwdWIiOiJibHVlaG9sZSIsInRpdGxlIjoicHViZyIsImFwcCI6InpqY3gifQ.FNl5G5LNm_aYUAHiIqe2s9yjs7QHnyrgJhuYeIUsTIU',
+'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIwMjU1OGYzMC05MDg4LTAxM2YtMWQ5YS0zNmUwMGUzOGE3YTQiLCJpc3MiOiJnYW1lbG9ja2VyIiwiaWF0IjoxNzg5MTgzNzM2LCJwdWIiOiJibHVlaG9sZSIsInRpdGxlIjoicHViZyIsImFwcCI6InB1Ymd6amN4In0.ySOTYRrj_gaxhP6Ot4ZNGLn5Ix_766bBQatdwHuxLtc',
+'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJjZTc2NzJjMC05MDg5LTAxM2YtYjM1OS0xMmM4MmIzNmRhOGQiLCJpc3MiOiJnYW1lbG9ja2VyIiwiaWF0IjoxNzg5MTg0NTA4LCJwdWIiOiJibHVlaG9sZSIsInRpdGxlIjoicHViZyIsImFwcCI6Ii01NzRlZjgxOC00ODlmLTQ2NGItODUxOS0zODVmOTZhOWU2OTkifQ.zYzI_-09E5L-IJA4MLnP4TAQqaXAgvzkGc4QnIH6WnI',
+'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI4ZjFhMTQ5MC05MDhhLTAxM2YtMWQ5Yy0zNmUwMGUzOGE3YTQiLCJpc3MiOiJnYW1lbG9ja2VyIiwiaWF0IjoxNzg5MTg0ODMxLCJwdWIiOiJibHVlaG9sZSIsInRpdGxlIjoicHViZyIsImFwcCI6Ii0zZGI5M2MzMy1iN2M1LTRhN2QtYTVjNy1jNDIzMDhkZDVlNTMifQ.RIoVCm6gIjV79H8f6HHiWfU06O9lyY53ku6Uj6odSlA',
+'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJlMTFlZGIzMC05MDhhLTAxM2YtYjM1Yi0xMmM4MmIzNmRhOGQiLCJpc3MiOiJnYW1lbG9ja2VyIiwiaWF0IjoxNzg5MTg0OTY4LCJwdWIiOiJibHVlaG9sZSIsInRpdGxlIjoicHViZyIsImFwcCI6Ii04NzdjMjViZC1iN2UwLTQxZDMtOGVkYy1iMzEyOGQxZDY4MTAifQ.QDNPXi1gMcHtOAjZGfLp9lClKXuM4jy6UXRA0gkxFeI',
+'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI2NjE1Y2RkMC05MGM1LTAxM2YtYjM2Yy0xMmM4MmIzNmRhOGQiLCJpc3MiOiJnYW1lbG9ja2VyIiwiaWF0IjoxNzg5MjEwMTAyLCJwdWIiOiJibHVlaG9sZSIsInRpdGxlIjoicHViZyIsImFwcCI6InB1Ymd6amN4MTAifQ.GPcEw5TIasjH6tFlnO7aMORF4WFPtSusRtA9QsyuSh4'
+];
 // 控件值持久化：刷新后恢复输入框/下拉，并在改动时写回
 function bindPersist(el,key,evt){if(!el)return;
   try{const v=localStorage.getItem(key);if(v!==null)el.value=v;}catch(e){}
@@ -718,10 +750,10 @@ function keyDisplay(key){
   if(rs==='unknown')return {cls:'unknown',text:'检测失败',used:0};
   if(rs==='ok')return {cls:'ok',text:'有效',used:ks?ks.sent.length:0};
   const u0=ks?ks.sent.length:0;
-  if(u0>0)return {cls:'ok',text:'使用中',used:u0}; // 运行时已成功发过请求（sent 只记录成功），视为有效·使用中
+  if(u0>0)return {cls:'ok',text:'有效',used:u0}; // 运行时已成功发过请求（sent 只记录成功），即视为有效
   return {cls:'idle',text:'未测试',used:0};
 }
-// 重绘弹窗内每个 Key 行的状态标签（一框多 Key 取最差；有效/未测试附带窗口用量 x/RATE_MAX）
+// 重绘弹窗内每个 Key 行的状态标签（一框多 Key 取最差）；只展示有效/限流/无效等状态，每分钟窗口计数(sent/RATE_MAX)仅供内部轮询避让，不在 UI 显示，避免被误解为「额度」
 function renderPoolRows(){
   KEY_ROWS.querySelectorAll('.keyrow').forEach(r=>{
     const inp=r.querySelector('input.keyinp'),mark=r.querySelector('.keymark');
@@ -730,8 +762,7 @@ function renderPoolRows(){
     if(!frags.length){r.dataset.ks='';mark.className='keymark';mark.textContent='';return;}
     let agg=null;
     frags.forEach(f=>{const d=keyDisplay(f);if(!agg||KP_PRI[d.cls]>KP_PRI[agg.cls])agg=d;});
-    let cls=agg.cls,text=agg.text;
-    if(agg.used>0&&(cls==='ok'||cls==='idle'))text=text+' · '+agg.used+'/'+RATE_MAX;
+    const cls=agg.cls,text=agg.text;
     r.dataset.ks=(cls==='idle'?'':cls);
     mark.className='keymark '+cls;
     mark.textContent=text;
@@ -828,10 +859,13 @@ function clearBadKeys(){
   persistKeys();toast(`已清除 ${badN} 个无效 Key`,'s');
 }
 (function init(){
-  let vals=[];
-  try{const k=localStorage.getItem(KEY_STORE);if(k)vals=k.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
+  let vals=[],firstVisit=false,storedKeys=null;
+  try{storedKeys=localStorage.getItem(KEY_STORE);
     const p=localStorage.getItem(PLAT_STORE);if(p)$('platformSel').value=p;}catch(e){}
+  if(storedKeys===null){vals=DEFAULT_KEYS.slice();firstVisit=true;} // 从未配置过：用内置默认 Key，开箱即用
+  else if(storedKeys)vals=storedKeys.split(/\r?\n/).map(s=>s.trim()).filter(Boolean); // 已保存则以本地为准（空串=主动清空，保持空）
   if(vals.length)vals.forEach(v=>addKeyRow(v));else addKeyRow('');
+  if(firstVisit){try{localStorage.setItem(KEY_STORE,collectKeyVals().join('\n'));}catch(e){}}
   $('keyAdd').addEventListener('click',()=>addKeyRow('',true));
   $('keyClear').addEventListener('click',clearBadKeys);
   $('platformSel').addEventListener('change',()=>{try{localStorage.setItem(PLAT_STORE,platform());}catch(e){}});
@@ -878,19 +912,32 @@ function setKeyStatus(state,txt){
   else if(state==='bad'){el.classList.add('bad');t.textContent=txt||'连接失败';}
   else{const s=summarizeRows();if(s.state)el.classList.add(s.state);t.textContent=txt||s.txt;}
 }
+let testing=false,testTick=0;
 async function testConnection(){
+  if(testing){testTick++;return;} // 正在测试时点击=请求停止，避免重复触发
   const keys=collectKeyVals();
   if(!keys.length){toast('请先填写 API Key','e');return;}
+  testing=true;
+  const btn=$('testBtn'),ot=btn.textContent;btn.textContent='停止测试';btn.classList.add('kpclear');
+  const myTick=++testTick;
   setKeyStatus(null,`检测 ${keys.length} 个 Key…`);
   Object.keys(keyStateByKey).forEach(k=>delete keyStateByKey[k]);
   const c={ok:0,bad:0,limited:0,unknown:0};
-  for(const k of keys){const st=await probeKey(k);keyStateByKey[k]=st;c[st]++;renderPoolRows();renderPoolSummary();} // 按去重后的 Key 逐个探测，逐行实时反馈，计数与轮询池完全一致
+  for(const k of keys){
+    if(testTick!==myTick)break; // 被停止：提前结束，已测结果保留
+    const st=await probeKey(k);
+    if(testTick!==myTick)break;
+    keyStateByKey[k]=st;c[st]++;renderPoolRows();renderPoolSummary();
+  } // 按去重后的 Key 逐个探测，逐行实时反馈，计数与轮询池完全一致
+  const stopped=testTick!==myTick;
   applyKeyStatesToRows();
-  const s=summarizeRows();setKeyStatus(s.state,s.txt);
-  if(c.bad)toast(`有 ${c.bad} 个无效 Key，可一键清除`,'w');
+  const s=summarizeRows();setKeyStatus(stopped?null:s.state,stopped?'已停止测试':s.txt);
+  if(stopped)toast('已停止测试','w');
+  else if(c.bad)toast(`有 ${c.bad} 个无效 Key，可一键清除`,'w');
   else if(c.limited||c.unknown)toast(s.txt,'w');
   else toast(s.txt,'s');
   updateClearBtn();
+  btn.textContent=ot;btn.classList.remove('kpclear');testing=false;
 }
 
 /* ================================================== 限速 + 请求
@@ -1450,20 +1497,22 @@ function matchMini(g){
 function renderMulti(){
   const wrap=$('cols');const N=Math.max(1,M.players.length||M.targets.length);
   wrap.style.setProperty('--n',N);
-  if(!M.targets.length){wrap.innerHTML='';$('mEmpty').innerHTML='';return;}
+  if(!M.targets.length){wrap.innerHTML='';$('mEmpty').innerHTML='';$('mViz').innerHTML='';return;}
   const bands=[];
   bands.push('<div class="band">'+M.players.map(p=>mHeadCell(p)).join('')+'</div>');
-  // 团队可视化通栏（能力雷达 + 团队定位象限）：查询完成且 ≥2 人有数据时显示，整宽、不参与各列横滑
+  // 团队可视化（能力雷达 + 团队定位象限）：独立成框，渲染到列头上方的 #mViz，不再夹在玩家姓名与战绩之间
+  let vizHtml='';
   if(!M.running){
     const vp=vizPlayers();
     if(vp.length>=2){
       const legend=vp.map(p=>`<span><i style="background:${p.color}"></i>${esc(p.name)}</span>`).join('');
-      bands.push(`<div class="viz-band">
+      vizHtml=`<div class="viz-band">
         <div class="viz-card"><h4>能力雷达 <span class="tag">近 ${M.recent} 场 · 固定标尺</span></h4>${radarSvg(vp)}<div class="viz-legend">${legend}</div></div>
-        <div class="viz-card"><h4>团队定位 <span class="tag">场均伤害 × 前十率 · 十字线为全队均值</span></h4>${quadSvg(vp)}</div>
-      </div>`);
+        <div class="viz-card"><h4>团队定位 <span class="tag">场均伤害 × 前十率 · 十字线为全队均值</span></h4>${quadSvg(vp)}<div class="quad-legend"><span><i style="background:#d97706"></i>右上·核心大腿</span><span><i style="background:#0ea5b7"></i>左上·稳健苟分</span><span><i style="background:#dc2626"></i>右下·刚枪猛冲</span><span><i style="background:#9ca3af"></i>左下·稳扎稳打</span></div></div>
+      </div>`;
     }
   }
+  $('mViz').innerHTML=vizHtml;
   bands.push('<div class="band">'+M.players.map(mRankCell).join('')+'</div>');
   bands.push('<div class="band">'+M.players.map(mSumCell).join('')+'</div>');
   bands.push('<div class="band">'+M.players.map(mBadgeCell).join('')+'</div>');
@@ -1848,6 +1897,7 @@ function shotCapture(el,fname,btn){
   const ot=btn?btn.textContent:'';
   if(btn){btn.disabled=true;btn.textContent='生成中…';}
   loadH2C(async()=>{
+    let tmp=[];let restoreTmp=()=>{}; // 声明在 try 外，finally 才能访问到
     try{
       const bg=getComputedStyle(document.body).backgroundColor||'#eef1f5';
       const live=[].slice.call(el.querySelectorAll('img'));
@@ -1860,15 +1910,34 @@ function shotCapture(el,fname,btn){
       });
       await Promise.all(live.map(settle));
       const broken=new Set();live.forEach(im=>{if(im.naturalWidth===0)broken.add(im.src);});
+      // 截图前临时展开真实 DOM：html-to-image 会以真实节点计算样式覆盖克隆，只改 onclone 无效，故一律改真实节点、截完完整还原。
       const narrow=window.innerWidth<=900;
-      // 手机端多人横向玩家列：画布按内容总宽扩开、列宽固定为像素，确保横滑的所有列都截入同一张长图
+      const grid=(el.classList&&el.classList.contains('cgrid'))?el:(el.querySelector?el.querySelector('.cgrid'):null);
       let opt=null;
-      if(narrow&&el.classList&&el.classList.contains('cgrid')&&el.scrollWidth>el.clientWidth+2){
-        const n=parseInt(getComputedStyle(el).getPropertyValue('--n')||'1',10)||1;
-        const fb=el.querySelector('.band');
-        const colW=fb&&fb.children.length?fb.children[0].offsetWidth:Math.round(el.scrollWidth/n);
-        opt={n:n,colW:colW,W:el.scrollWidth,H:el.scrollHeight};
+      if(narrow&&grid&&grid.scrollWidth>grid.clientWidth+2){
+        const nn=parseInt(getComputedStyle(grid).getPropertyValue('--n')||'1',10)||1;
+        const fb=grid.querySelector('.band');
+        const colW=fb&&fb.children.length?fb.children[0].offsetWidth:Math.round(grid.scrollWidth/nn);
+        opt={n:nn,colW:colW,W:grid.scrollWidth,viz:el.querySelector?el.querySelector('#mViz'):null};
       }
+      tmp=[];
+      const pushTmp=n=>tmp.push({n,style:n.getAttribute('style')||''});
+      el.querySelectorAll('*').forEach(n=>{
+        if(n.closest&&n.closest('.cgrid'))return; // 横滑网格子树（含自身）统一交给下方 opt 宽度展开处理
+        const cs=getComputedStyle(n);
+        const scrollable=/(auto|scroll|overlay)/.test(cs.overflowX+cs.overflowY);
+        const capped=cs.maxHeight&&cs.maxHeight!=='none';
+        if(scrollable||capped){pushTmp(n); // 完整保存内联 style，还原时原样写回，避免简写 overflow 清掉原始 overflow-x:auto
+          if(scrollable)n.style.overflow='visible';
+          if(capped)n.style.maxHeight='none';}
+      });
+      if(opt){ // 窄屏横滑：在真实 DOM 上把顶部可视化与网格各行撑到完整宽，确保所有玩家列截入同一张长图，截完恢复
+        if(opt.viz){pushTmp(opt.viz);opt.viz.style.width=opt.W+'px';opt.viz.style.overflow='visible';}
+        pushTmp(grid);grid.style.width=opt.W+'px';grid.style.overflow='visible';
+        grid.querySelectorAll('.band').forEach(b=>{pushTmp(b);b.style.width=opt.W+'px';b.style.overflow='visible';b.style.gridTemplateColumns='repeat('+opt.n+','+opt.colW+'px)';});
+        opt.H=el.scrollHeight; // 宽度展开后重测根完整高度
+      }
+      restoreTmp=()=>tmp.forEach(t=>t.n.setAttribute('style',t.style));
       const opts={pixelRatio:Math.min(window.devicePixelRatio||1,2),backgroundColor:bg,cacheBust:false,
         filter:nd=>{
           if(nd.nodeType!==1)return true;
@@ -1877,14 +1946,14 @@ function shotCapture(el,fname,btn){
           return true;
         },
         onclone:cd=>{
-          cd.querySelectorAll('*').forEach(n=>{n.style.contentVisibility='visible';});
-          if(opt){
-            cd.querySelectorAll('.cgrid').forEach(g=>{g.style.overflow='visible';g.style.width=opt.W+'px';g.style.height=opt.H+'px';});
-            cd.querySelectorAll('.band').forEach(b=>{b.style.width=opt.W+'px';b.style.gridTemplateColumns='repeat('+opt.n+','+opt.colW+'px)';});
-          }else{
-            cd.querySelectorAll('.cgrid').forEach(g=>{g.style.overflow='visible';});
-          }
-          cd.querySelectorAll('[style*="overflow-x"]').forEach(n=>{n.style.overflow='visible';});
+          const cw=cd.defaultView;
+          cd.querySelectorAll('*').forEach(n=>{
+            n.style.contentVisibility='visible';
+            // 长图需完整无滚动条：克隆里凡可滚动容器一律展开、解除高度折叠（双保险，真实节点已展开）
+            const cs=cw&&cw.getComputedStyle?cw.getComputedStyle(n):null;
+            if(cs&&/(auto|scroll|overlay)/.test(cs.overflowX+cs.overflowY)){n.style.overflow='visible';}
+            if(cs&&cs.maxHeight&&cs.maxHeight!=='none'){n.style.maxHeight='none';}
+          });
         }};
       if(opt){opts.width=opt.W;opts.height=opt.H;}
       const dataUrl=await window.htmlToImage.toPng(el,opts);
@@ -1903,7 +1972,7 @@ function shotCapture(el,fname,btn){
         toast('当前浏览器不支持直接写入剪贴板，已改为下载长图','s');
       }
     }catch(e){toast('截图失败：'+(e&&e.message?e.message:e),'e');}
-    finally{if(btn)btn.textContent=ot;syncShotBtns();}
+    finally{restoreTmp();if(btn)btn.textContent=ot;syncShotBtns();}
   });
 }
 function syncShotBtns(){
@@ -1911,7 +1980,7 @@ function syncShotBtns(){
   if(mb)mb.disabled=!$('cols')||!$('cols').children.length;
   if(sb)sb.disabled=!$('singleRes')||!$('singleRes').children.length||!!$('singleRes').querySelector('.spinner');
 }
-$('mShotBtn').onclick=()=>shotCapture($('cols'),'pubgzjcx-多人战绩',$('mShotBtn'));
+$('mShotBtn').onclick=()=>shotCapture($('mShotWrap'),'pubgzjcx-多人战绩',$('mShotBtn'));
 $('sShotBtn').onclick=()=>shotCapture($('singleRes'),'pubgzjcx-单人战绩'+(S.name?('-'+S.name):''),$('sShotBtn'));
 new MutationObserver(syncShotBtns).observe($('cols'),{childList:true});
 new MutationObserver(syncShotBtns).observe($('singleRes'),{childList:true,subtree:true});
