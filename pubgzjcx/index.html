@@ -59,14 +59,10 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
 .band:last-child{border-bottom:0}
 .cell{min-width:0;border-right:1px solid var(--line);padding:11px 12px;display:flex;flex-direction:column;justify-content:center}
 .cell:last-child{border-right:0}
-.link-band{height:22px;border-bottom:0}
-.link-cell{border-right:0;padding:0}
-.premade-lines{position:absolute;left:0;top:0;pointer-events:none;overflow:visible;z-index:3}
 /* 列头 */
 .head-cell{position:relative;justify-content:flex-start}
 .ch-top{display:flex;gap:10px;align-items:flex-start}
 .ch-avatar{width:52px;height:52px;border-radius:12px;background:linear-gradient(135deg,#6d4ce8,#9a6dd7);color:#fff;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800}
-.ch-avatar.pm{box-shadow:0 0 0 2px var(--pm,#6d4ce8)}
 .ch-info{flex:1;min-width:0;padding-right:30px}
 .ch-name{font-size:16px;font-weight:800;line-height:1.25;word-break:break-word;color:var(--ink);text-decoration:none;display:inline}
 .ch-name:hover{color:var(--pri)}
@@ -75,7 +71,6 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
 .ch-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;font-size:11.5px;color:var(--sub);align-items:center}
 .pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:10.5px;font-weight:700;background:#eef2ff;color:#3730a3}
 .pill.priv{background:#fdecec;color:var(--red)}
-.pill.pm{color:#fff;background:var(--pm,#6d4ce8)}
 .pill.ban{background:#fdecec;color:var(--red)}
 .ch-horse{display:flex;justify-content:center;margin-top:auto;padding-top:10px;min-height:20px}
 .chp{display:inline-block;font-size:14px;font-weight:800;letter-spacing:1px;border-radius:999px;padding:3px 15px;border:1px solid transparent;white-space:nowrap}
@@ -106,7 +101,6 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
 .mm.win{background:#ecfdf3;border-color:#c9ebd3}
 .mm.top{background:#f4fbf1;border-color:#d9efcf}
 .mm.lose{background:#fdecec;border-color:#f3c9c9}
-.mm.pm{box-shadow:inset 3px 0 0 var(--pm,#6d4ce8)}
 .mm .r1{display:flex;align-items:center;gap:7px}
 .mm .res{flex:0 0 30px;height:24px;border-radius:7px;color:#fff;font-weight:800;font-size:11px;display:flex;align-items:center;justify-content:center}
 .mm.win .res{background:var(--win)}.mm.top .res{background:#84b16b}.mm.lose .res{background:#e08a8a}
@@ -116,15 +110,32 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
 .mm .r2{font-size:10.8px;color:var(--sub);margin-top:3px;line-height:1.5;display:flex;justify-content:space-between;gap:6px}
 .mm .r2 .t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mm .r2 .tm{white-space:nowrap;flex:0 0 auto}
-.mm .comp{display:inline-block;background:#fdf1e2;color:#b45309;border-radius:4px;padding:0 4px;font-size:10px;font-weight:800;margin-left:3px}
+.mm .mh{flex:0 0 auto;font-size:9.5px;font-weight:800;border-radius:5px;padding:0 5px;line-height:17px;white-space:nowrap}
+.mm .mh.h-T{background:#f1ecfe;color:#7c3aed}.mm .mh.h-A{background:#e8f7ee;color:#16a34a}.mm .mh.h-B{background:#e8f0fe;color:#2563eb}.mm .mh.h-C{background:#fdf1e2;color:#ea8a16}.mm .mh.h-D{background:#fdecec;color:#dc2626}
+.mm .comp{flex:0 0 auto;border-radius:4px;padding:0 5px;font-size:10px;font-weight:800;white-space:nowrap;line-height:16px}
+.mm .comp.rank{background:#fdf1e2;color:#b45309}
+.mm .comp.norm{background:#eef0f3;color:#6b7280}
 /* 列状态 */
 .cell .col-status{text-align:center;color:var(--sub);font-size:12.5px;padding:18px 4px;word-break:break-word}
 .cell .col-status.err{color:var(--red)}
+.cell .col-status.warn{color:var(--org);font-weight:700}
+.rate-banner{background:#fef3e2;border:1px solid #f3cd9c;color:#92400e;border-radius:9px;padding:9px 12px;font-size:12.5px;line-height:1.6;margin:8px 0 2px}
+.rate-banner b{color:var(--org);font-size:14px}
+.swipe-hint{display:none;text-align:center;color:var(--sub);font-size:12px;padding:6px 0 0;letter-spacing:1px}
 .spinner{width:26px;height:26px;border:3px solid #e3e7ee;border-top-color:var(--pri);border-radius:50%;margin:0 auto 10px;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .empty{color:var(--sub);text-align:center;padding:18px 0;font-size:12.5px}
 .foot-cell{grid-column:1/-1;border-right:0;justify-content:center;align-items:center;gap:6px;padding:10px;background:#faf9fd;font-size:12px;color:var(--sub)}
-@media (max-width:900px){.cgrid{overflow-x:auto;-webkit-overflow-scrolling:touch}.band{grid-template-columns:repeat(var(--n),82vw)}}
+@media (max-width:900px){
+  .cgrid{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scroll-snap-type:x proximity}
+  .cgrid::-webkit-scrollbar{height:5px}
+  .cgrid::-webkit-scrollbar-track{background:transparent}
+  .cgrid::-webkit-scrollbar-thumb{background:#cfc8ea;border-radius:3px}
+  /* 每列保持可读宽度，整体左右滑动查看其余队友（首屏露出下一列作提示），人数再多也不挤压 */
+  .band{grid-template-columns:repeat(var(--n),74vw)}
+  .cell{scroll-snap-align:start}
+  .swipe-hint{display:block}
+}
 @media (max-width:640px){
   .wrap{max-width:100%;padding:10px 8px 46px}
   header.top{padding:12px 11px;border-radius:12px}
@@ -195,7 +206,7 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
       <button class="kbtn" id="testBtn" type="button">测试连接</button>
       <span class="kstatus" id="keyStatus"><i></i><span id="keyStatusText">未填写 Key</span></span>
     </div>
-    <div class="keytip">Key 仅存于本浏览器 localStorage，请求直接从浏览器发往 api.pubg.com（官方已开启 CORS），不经过任何后端；免费 Key 默认限流 10 次/分钟，页面已自动排队。<a href="https://developer.pubg.com/" target="_blank" rel="noopener">没有 Key？去 developer.pubg.com 免费注册 →</a></div>
+    <div class="keytip">Key 仅存于本浏览器 localStorage，请求直接从浏览器发往 api.pubg.com（官方已开启 CORS），不经过任何后端；免费 Key 默认限流约 10 次/分钟，触发上限后请约 1 分钟后再试。<a href="https://developer.pubg.com/" target="_blank" rel="noopener">没有 Key？去 developer.pubg.com 免费注册 →</a></div>
   </header>
 
   <nav class="viewtabs">
@@ -206,7 +217,7 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
   <!-- ============ 多人 ============ -->
   <div id="viewMulti">
     <div class="card">
-      <h2>多人对比查询（每人一列 · 近 14 天对局 · 自动识别开黑）</h2>
+      <h2>多人对比查询（每人一列 · 近 14 天对局 · 同场次自动对齐）</h2>
       <textarea id="qInput" placeholder="每行一个游戏昵称，可直接粘贴队伍聊天，例如：&#10;godweiyang&#10;TeammateOne&#10;xxx 加入了队伍聊天&#10;（最多 5 人）"></textarea>
       <div class="search-row" style="margin-top:9px">
         <label class="muted">模式</label>
@@ -226,7 +237,7 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
         <div class="spacer"></div>
         <button id="qBtn">开始查询</button>
       </div>
-      <div class="hint">评级为娱乐口径（按近期 KD / 场均伤害 / 前十率 / 吃鸡率综合打分，T/A/B/C/D）；同一场比赛且同一小队的玩家会用同色连线标记“几黑”；点列头名字或右上角图标可跳到该玩家单人详情。对局明细官方仅保留 14 天，且来自官方 /matches 接口（经 CDN 缓存，少数场次可能因跨域响应头缺失取不到，此时四宫格/评级自动回退生涯口径并以 * 标注）。</div>
+      <div class="hint">评级为娱乐口径（按近期 KD / 场均伤害 / 前十率 / 吃鸡率综合打分，T/A/B/C/D）；点列头名字或右上角图标可跳到该玩家单人详情。对局明细官方仅保留 14 天，且来自官方 /matches 接口（经 CDN 缓存，少数场次可能因跨域响应头缺失取不到，此时四宫格/评级自动回退生涯口径并以 * 标注）。</div>
     </div>
     <div id="mResBar"></div>
     <div id="cols" class="cgrid"></div>
@@ -342,20 +353,35 @@ async function testConnection(){
 }
 
 /* ================================================== 限速 + 请求
-   计限流端点（players/seasons/lifetime/ranked/mastery/clan）走令牌桶：突发 9，之后每 6.2s 一个（≈9.7rpm，守 10rpm）。
+   计限流端点（players/seasons/lifetime/ranked/mastery/clan）：小并发快速发出，不再匀速排队；
+   一旦命中官方 429（免费 Key 约 10 次/分钟）立即熔断并提示约 1 分钟后重试。
    /matches 与 telemetry 不计限流，走并发池。 */
-const RATE_INTERVAL=6200, BURST=9;
-let rateChain=Promise.resolve(), burstLeft=BURST, lastRateTs=0;
-function limited(path){
-  const run=async()=>{
-    if(burstLeft>0){burstLeft--;}
-    else{const now=Date.now();const wait=Math.max(0,RATE_INTERVAL-(now-lastRateTs));if(wait)await sleep(wait);}
-    lastRateTs=Date.now();
-    return apiGet(base()+path);
+class RateLimitError extends Error{constructor(resetSec){super('RATE_LIMIT');this.name='RateLimitError';this.resetSec=resetSec||60;}}
+const RATE_CONC=4;
+const rateLimit={hit:false,resetAt:0};
+let rateRunning=0;const rateQueue=[];
+function rateGate(){return new Promise(res=>{if(rateRunning<RATE_CONC){rateRunning++;res();}else rateQueue.push(res);});}
+function rateRelease(){rateRunning=Math.max(0,rateRunning-1);const nxt=rateQueue.shift();if(nxt){rateRunning++;nxt();}}
+function rateReset(){rateLimit.hit=false;rateLimit.resetAt=0;}
+function rateWaitSec(){return rateLimit.hit?Math.max(0,Math.ceil((rateLimit.resetAt-Date.now())/1000)):0;}
+let rateTimer=null;
+function startRateCountdown(){
+  const tick=()=>{
+    const w=rateWaitSec();
+    document.querySelectorAll('.rate-cd').forEach(el=>{el.textContent=w>0?w:0;});
+    if(w<=0){rateLimit.hit=false;if(rateTimer){clearInterval(rateTimer);rateTimer=null;}document.querySelectorAll('.rate-banner').forEach(b=>b.remove());}
   };
-  const p=rateChain.then(run,run);
-  rateChain=p.catch(()=>{});
-  return p;
+  if(rateTimer)clearInterval(rateTimer);
+  tick();rateTimer=setInterval(tick,1000);
+}
+async function limited(path){
+  const w0=rateWaitSec();if(w0>0)throw new RateLimitError(w0);
+  await rateGate();
+  try{return await apiGet(base()+path);}
+  catch(e){
+    if(e instanceof RateLimitError){rateLimit.hit=true;rateLimit.resetAt=Date.now()+e.resetSec*1000;startRateCountdown();}
+    throw e;
+  }finally{rateRelease();}
 }
 async function pool(items,limit,worker){
   const ret=new Array(items.length);let i=0;
@@ -373,7 +399,7 @@ async function apiGet(url){
     try{r=await fetch(url,{headers,cache:'no-store'});}
     catch(e){ // 网络错误或 CORS 失败（/matches 的 CloudFront 缓存副本可能缺 ACAO）：仅重试一次，随后交由上层容错
       if(attempt>=1)throw e; await sleep(700); continue;}
-    if(r.status===429){let w=30000;const rs=r.headers.get('X-RateLimit-Reset');if(rs){w=Math.max(3000,Number(rs)*1000-Date.now());}await sleep(Math.min(w,62000));continue;}
+    if(r.status===429){let sec=60;const rs=r.headers.get('X-RateLimit-Reset');if(rs&&/^\d{6,}$/.test(rs)){sec=Math.max(5,Math.min(60,Math.ceil(Number(rs)-Date.now()/1000)));}throw new RateLimitError(sec);}
     if(r.status===404)return {__notfound:true};
     if(r.status===401||r.status===403)throw new Error('Key 无效或无权限（'+r.status+'）');
     if(!r.ok){if(attempt<3){await sleep(1200*(attempt+1));continue;}throw new Error('HTTP '+r.status);}
@@ -504,7 +530,7 @@ function passMode(mtMode,mtType,custom,filter){
 }
 
 /* ================================================== 多人状态与流程 */
-const M={running:false,targets:[],players:[],matchOrder:[],groups:{},filter:'all',recent:20,ts:0};
+const M={running:false,targets:[],players:[],matchOrder:[],filter:'all',recent:20,ts:0};
 function parseNames(text){
   const noise=/加入了队伍聊天|加入队伍|队伍聊天|joined\s+the\s+team|joined\s+queue|已加入|进入队伍/i;
   const seen=new Set(),out=[];
@@ -524,7 +550,7 @@ async function runMulti(){
   const names=parseNames($('qInput').value);
   if(!names.length){toast('没有识别到昵称，请每行一个','e');return;}
   M.filter=$('modeFilter').value;M.recent=parseInt($('recentN').value)||20;
-  M.targets=names;M.players=names.map(n=>({name:n,status:'loading'}));M.matchOrder=[];M.groups={};M.ts=Date.now();M.running=true;
+  M.targets=names;M.players=names.map(n=>({name:n,status:'loading'}));M.matchOrder=[];M.ts=Date.now();M.running=true;rateReset();
   setMBtn();renderMulti();renderMBar();
   // 阶段A：逐人定位（容错，单个不存在不影响其他人）
   await pool(names,5,async(name)=>{
@@ -533,21 +559,21 @@ async function runMulti(){
       const idx=M.players.findIndex(x=>x.name===name);
       if(!p){M.players[idx]={name,status:'notfound'};}
       else{M.players[idx]=Object.assign(p,{status:'found',detail:null,clan:null,games:[],agg:null,horse:null});}
-    }catch(e){const idx=M.players.findIndex(x=>x.name===name);M.players[idx]={name,status:'error',error:e.message};}
+    }catch(e){const idx=M.players.findIndex(x=>x.name===name);M.players[idx]={name,status:'error',error:(e instanceof RateLimitError)?'RATE_LIMIT':e.message};}
     renderMulti();renderMBar();
   });
-  // 阶段B：逐人详情（令牌桶节奏，完成一个渲染一个）
-  for(const pl of M.players){
+  // 阶段B：并发拉详情（小并发快速发出；命中 429 立即熔断，该玩家标记为限流，其余已成功的不受影响）
+  const found0=M.players.filter(p=>p.status==='found');
+  await pool(found0,2,async pl=>{
     if(!M.running)return;
-    if(pl.status!=='found')continue;
     try{
       pl.detail=await fetchPlayerDetail(pl.id);
       if(pl.clanId)pl.clan=await fetchClan(pl.clanId);
       // 先用生涯口径占位（四宫格/马型带 *），对局明细到位后再替换为近期口径
       pl.agg=lifeAgg(pl.detail);pl.horse=horseOf(pl.agg);
-    }catch(e){pl.status='error';pl.error=e.message;}
-    renderMulti();
-  }
+    }catch(e){pl.status='error';pl.error=(e instanceof RateLimitError)?'RATE_LIMIT':e.message;}
+    renderMulti();renderMBar();
+  });
   // 阶段C：拉取近期对局（不计限流，并发池）
   const found=M.players.filter(p=>p.status==='found');
   const need=new Set();
@@ -555,7 +581,7 @@ async function runMulti(){
   const ids=[...need];
   await pool(ids,8,async id=>{await fetchMatch(id);});
   M.matchTotal=ids.length;M.matchFail=ids.filter(id=>!matchCache[id]).length;
-  // 装配：遍历并集场次，凡该玩家参与即纳入（保证共同对局跨列对齐、开黑不漏判，不受各自近 N 截断影响）
+  // 装配：遍历并集场次，凡该玩家参与即纳入（保证共同对局跨列对齐，不受各自近 N 截断影响）
   const order=[];const byTime={};
   found.forEach(p=>{p.games=[];});
   ids.forEach(id=>{
@@ -565,7 +591,7 @@ async function runMulti(){
       const s=mt.parts[p.id],tm=mt.accTeam[p.id];if(!s)return;
       if(!passMode(mt.mode,mt.type,mt.custom,M.filter))return;
       p.games.push({matchId:id,rank:tm?tm.rank:num(s.winPlace),won:tm?tm.won:s.winPlace===1,teamId:tm?tm.teamId:null,
-        kills:num(s.kills),dbno:num(s.DBNOs),dmg:num(s.damageDealt),hs:num(s.headshotKills),assists:num(s.assists),
+        kills:num(s.kills),dbno:num(s.DBNOs),dmg:num(s.damageDealt),hs:num(s.headshotKills),assists:num(s.assists),revives:num(s.revives),
         time:num(s.timeSurvived),longest:num(s.longestKill),death:s.deathType,mode:mt.mode,map:mt.map,type:mt.type,custom:mt.custom,
         duration:mt.duration,createdAt:mt.createdAt});
     });
@@ -576,7 +602,7 @@ async function runMulti(){
     p.horse=horseOf(p.agg);
   });
   order.sort((a,b)=>String(byTime[b]).localeCompare(String(byTime[a])));
-  M.matchOrder=order;M.groups=premadeGroups();
+  M.matchOrder=order;
   M.running=false;setMBtn();renderMulti();renderMBar();persistMulti();
   const fail=M.players.filter(p=>p.status==='notfound'||p.status==='error').length;
   toast(fail?(`完成，${M.players.length-fail} 人成功，${fail} 人失败`):'全部查询完成',fail?'w':'s');
@@ -587,78 +613,37 @@ function renderMBar(){
   if(!M.targets.length){bar.innerHTML='';return;}
   const done=M.players.filter(p=>p.status!=='loading').length,total=M.targets.length;
   const modeTxt=$('modeFilter').selectedOptions[0].textContent;
+  const rw=rateWaitSec();
+  const rateBanner=rw>0?`<div class="rate-banner">⚠️ 已触发官方限流（免费 Key 约 10 次/分钟），未完成的队友请 <b class="rate-cd">${rw}</b> 秒后点「开始查询」重试；已查到的数据不受影响。</div>`:'';
+  const swipe=M.targets.length>1?'<div class="swipe-hint">‹ 左右滑动查看其他队友 ›</div>':'';
   bar.innerHTML=`<div class="card" style="padding:11px 16px;margin:12px 0 0"><div class="resbar">
     <span>模式：<b>${esc(modeTxt)}</b></span><span>近期：<b>近 ${M.recent} 场</b></span><span>时间：<b>${fmtDT(M.ts)}</b></span>
     <span class="spacer"></span><button class="sec" id="mReset" style="padding:6px 14px">重新搜索</button></div>
-    <div class="hint" style="margin:4px 0 0">${M.running?(`逐人查询中 ${done}/${total}，计限流接口已自动排队（约每 6 秒 1 个）…`):(`查询完成 · 共 ${total} 人 · 对局明细仅保留近 14 天`)}</div></div>`;
-  $('mReset').onclick=()=>{M.targets=[];M.players=[];M.matchOrder=[];M.groups={};M.matchTotal=0;M.matchFail=0;try{localStorage.removeItem(PK_MULTI);}catch(e){}$('cols').innerHTML='';$('mEmpty').innerHTML='';bar.innerHTML='';renderMulti();$('qInput').focus();window.scrollTo({top:0,behavior:'smooth'});};
+    ${rateBanner}${swipe}
+    <div class="hint" style="margin:4px 0 0">${M.running?(`查询中 ${done}/${total} …`):(`查询完成 · 共 ${total} 人 · 对局明细仅保留近 14 天`)}</div></div>`;
+  $('mReset').onclick=()=>{M.targets=[];M.players=[];M.matchOrder=[];M.matchTotal=0;M.matchFail=0;try{localStorage.removeItem(PK_MULTI);}catch(e){}$('cols').innerHTML='';$('mEmpty').innerHTML='';bar.innerHTML='';renderMulti();$('qInput').focus();window.scrollTo({top:0,behavior:'smooth'});};
 }
-/* 开黑分组：同 matchId 且同 teamId 连边（并查集） */
-function premadeGroups(){
-  const list=M.players.filter(p=>p.status==='found'),N=list.length;
-  const idxOf={};list.forEach((p,i)=>idxOf[p.name]=i);
-  const parent=[...Array(N).keys()];
-  const find=x=>{while(parent[x]!==x){parent[x]=parent[parent[x]];x=parent[x];}return x;};
-  const union=(a,b)=>{parent[find(a)]=find(b);};
-  const keys=list.map(()=>new Set());
-  list.forEach((p,i)=>p.games.forEach(g=>{keys[i].add(g.matchId+'|'+g.teamId);}));
-  for(let i=0;i<N;i++)for(let j=i+1;j<N;j++){for(const k of keys[i]){if(keys[j].has(k)){union(i,j);break;}}}
-  const size={};list.forEach((p,i)=>{const g=find(i);size[g]=(size[g]||0)+1;});
-  const palette=['#2563eb','#9333ea','#d97706','#0891b2','#db2777','#4f46e5'];
-  const gc={},out={};let ci=0;
-  list.forEach((p,i)=>{const g=find(i);if(size[g]>=2){if(gc[g]===undefined)gc[g]=palette[ci++%palette.length];
-    const name=p.name;const oi=M.players.findIndex(x=>x.name===name);out[oi]={color:gc[g],size:size[g]};}});
-  return out;
-}
-const SVGNS='http://www.w3.org/2000/svg';
-const BLACK_CN={2:'二黑',3:'三黑',4:'四黑',5:'五黑'};
-function drawPremadeLines(groups){
-  const wrap=$('cols');const old=document.getElementById('premadeSvg');if(old)old.remove();
-  const idxs=Object.keys(groups);if(!wrap||!idxs.length)return;
-  const byColor={};
-  idxs.forEach(i=>{const g=groups[i];(byColor[g.color]=byColor[g.color]||{color:g.color,size:g.size,idx:[]}).idx.push(+i);});
-  const cells=[...wrap.querySelectorAll('.link-cell')];
-  const rect=i=>{const el=cells[i];if(!el)return null;return{cx:el.offsetLeft+el.offsetWidth/2,top:el.offsetTop,w:el.offsetWidth};};
-  const svg=document.createElementNS(SVGNS,'svg');svg.id='premadeSvg';svg.setAttribute('class','premade-lines');
-  const mk=(tag,at)=>{const e=document.createElementNS(SVGNS,tag);for(const k in at)e.setAttribute(k,at[k]);return e;};
-  Object.values(byColor).forEach(g=>{
-    const pts=g.idx.map(rect).filter(Boolean).sort((a,b)=>a.cx-b.cx);if(pts.length<2)return;
-    const rows=[];pts.forEach(p=>{let r=rows.find(x=>Math.abs(x.top-p.top)<24);if(!r){r={top:p.top,xs:[]};rows.push(r);}r.xs.push(p.cx);});
-    rows.sort((a,b)=>a.top-b.top);
-    const yOf=r=>r.top+14,tickEnd=r=>r.top+28,connX=Math.min(...rows.flatMap(r=>r.xs));let d='';
-    rows.forEach((r,ri)=>{const x0=Math.min(...r.xs),x1=Math.max(...r.xs),y=yOf(r);
-      d+=`M ${x0} ${y} L ${x1} ${y} `;r.xs.forEach(cx=>{d+=`M ${cx} ${y} L ${cx} ${tickEnd(r)} `;});
-      if(ri>0)d+=`M ${connX} ${tickEnd(rows[ri-1])} L ${connX} ${y} `;
-      const t=mk('text',{x:(x0+x1)/2,y:r.top+10,'text-anchor':'middle','font-size':10,'font-weight':800,fill:g.color,'paint-order':'stroke','stroke':'#fff','stroke-width':3,'stroke-linejoin':'round'});
-      t.textContent=BLACK_CN[g.size]||(g.size+'黑');svg.appendChild(t);});
-    svg.appendChild(mk('path',{d,stroke:g.color,'stroke-width':3,'stroke-linecap':'round','stroke-linejoin':'round',fill:'none'}));
-  });
-  const place=()=>{svg.setAttribute('width',Math.max(wrap.scrollWidth,wrap.clientWidth));svg.setAttribute('height',Math.max(wrap.scrollHeight,wrap.clientHeight));};
-  wrap.appendChild(svg);place();requestAnimationFrame(place);
-}
-
 /* ---------- 多人渲染 ---------- */
 function singleHref(name){return '#/single?name='+encodeURIComponent(name);}
-function mHeadCell(pl,i,grp){
+function mHeadCell(pl){
   if(pl.status==='found'&&pl.detail){
     const sv=pl.detail.surv||{},cl=pl.clan,horse=pl.horse||{tier:'N',label:HORSE_LABEL.N};
-    const pmStyle=grp?` style="--pm:${grp.color}"`:'';
-    const pmPill=grp?`<span class="pill pm" style="--pm:${grp.color}">${BLACK_CN[grp.size]||grp.size+'黑'}</span>`:'';
     const ban=pl.ban&&pl.ban!=='Innocent'?`<span class="pill ban">${esc(pl.ban)}</span>`:'';
     const clan=cl?`<span class="pill">${esc(cl.clanTag||cl.clanName||'')}</span>`:'';
-    return `<div class="cell head-cell"${pmStyle}>
+    return `<div class="cell head-cell">
       <a class="ch-go" href="${singleHref(pl.name)}" title="单人详情">⤢</a>
       <div class="ch-top">
-        <div class="ch-avatar${grp?' pm':''}"${grp?` style="--pm:${grp.color};background:linear-gradient(135deg,${grp.color},#9a6dd7)"`:''}>${esc((pl.name[0]||'?').toUpperCase())}</div>
+        <div class="ch-avatar">${esc((pl.name[0]||'?').toUpperCase())}</div>
         <div class="ch-info">
-          <a class="ch-name" href="${singleHref(pl.name)}"${grp?` style="color:${grp.color}"`:''}>${esc(pl.name)}</a>
-          <div class="ch-meta">${clan}${ban}<span>生存 Lv.${num(sv.level)||'—'}</span>${pmPill}</div>
+          <a class="ch-name" href="${singleHref(pl.name)}">${esc(pl.name)}</a>
+          <div class="ch-meta">${clan}${ban}<span>生存 Lv.${num(sv.level)||'—'}</span></div>
         </div>
       </div>
       <div class="ch-horse"><span class="chp h-${horse.tier}" title="综合分 ${(horse.score||0).toFixed(0)}">${esc(horse.label)}</span></div>
     </div>`;
   }
   if(pl.status==='notfound')return `<div class="cell head-cell"><div class="col-status err">未找到玩家<br>「${esc(pl.name)}」<br>检查昵称与平台</div></div>`;
+  if(pl.status==='error'&&pl.error==='RATE_LIMIT')return `<div class="cell head-cell"><div class="col-status warn">接口限流<br>每分钟约 10 次<br>请约 1 分钟后重试</div></div>`;
   if(pl.status==='error')return `<div class="cell head-cell"><div class="col-status err">查询失败<br>${esc(pl.error||'')}</div></div>`;
   return `<div class="cell head-cell"><div class="col-status"><div class="spinner"></div>查询中<br>${esc(pl.name)}</div></div>`;
 }
@@ -689,27 +674,35 @@ function mWeaponCell(pl){
   if(!top.length)return '<div class="cell"><div class="wpnrow"><span class="lab">主力</span><span class="muted">—</span></div></div>';
   return `<div class="cell"><div class="wpnrow"><span class="lab">主力</span>${top.map(w=>`<span class="wpn">${esc(w.name)} <b>${w.kills}</b></span>`).join('')}</div></div>`;
 }
-function matchMini(g,grp){
+// 单场娱乐评级（马型）：击杀 / 伤害 / 名次综合打分
+function matchHorse(g){
+  const c=(v,lo,hi)=>Math.max(0,Math.min(100,(v-lo)/(hi-lo)*100));
+  const ks=c(g.kills||0,0,8),ds=c(g.dmg||0,0,600),ps=Math.max(0,Math.min(100,(50-(g.rank||99))/49*100));
+  const score=0.35*ks+0.3*ds+0.35*ps;
+  const tier=(g.won&&(g.kills||0)>=5)?'T':score>=70?'A':score>=50?'B':score>=35?'C':'D';
+  return{tier,label:HORSE_LABEL[tier],score};
+}
+function matchMini(g){
   const cls=g.won?'win':(g.rank<=10?'top':'lose');
-  const pm=grp?' pm':'';
-  const style=grp?` style="--pm:${grp.color}"`:'';
-  return `<div class="mm ${cls}${pm}"${style}>
+  const h=matchHorse(g);
+  const comp=g.type==='competitive'?'<span class="comp rank">竞技</span>':'<span class="comp norm">匹配</span>';
+  return `<div class="mm ${cls}">
     <div class="r1">
       <span class="res">#${g.rank}</span>
       <span class="kd"><span class="kk">${g.kills}</span><span class="sep">/</span><span class="dd">${g.dbno}</span></span>
-      <span class="dmg">${Math.round(g.dmg)}</span>
+      <span class="mh h-${h.tier}" title="单场综合分 ${h.score.toFixed(0)}">${esc(h.label)}</span>
+      <span class="dmg">${Math.round(g.dmg)} 伤</span>
     </div>
-    <div class="r2"><span class="t">${esc(mapName(g.map))} · ${modeCn(g.mode)}${g.type==='competitive'?'<span class="comp">竞技</span>':''}</span></div>
-    <div class="r2"><span class="t">${deathCn(g.death)}</span><span class="tm">${fmtMin(g.time)}</span></div>
+    <div class="r2"><span class="t">${esc(mapName(g.map))} · ${modeCn(g.mode)}</span><span class="tm">${fmtMin(g.time)}</span></div>
+    <div class="r2"><span class="t">${esc(deathCn(g.death))} · 助${g.assists||0} 头${g.hs||0} 救${g.revives||0}</span>${comp}</div>
   </div>`;
 }
 function renderMulti(){
   const wrap=$('cols');const N=Math.max(1,M.players.length||M.targets.length);
   wrap.style.setProperty('--n',N);
   if(!M.targets.length){wrap.innerHTML='';$('mEmpty').innerHTML='';return;}
-  const hasGroups=Object.keys(M.groups).length>0;const bands=[];
-  if(hasGroups)bands.push('<div class="band link-band">'+M.players.map((p,i)=>`<div class="cell link-cell" data-col="${i}"></div>`).join('')+'</div>');
-  bands.push('<div class="band">'+M.players.map((p,i)=>mHeadCell(p,i,M.groups[i])).join('')+'</div>');
+  const bands=[];
+  bands.push('<div class="band">'+M.players.map(p=>mHeadCell(p)).join('')+'</div>');
   bands.push('<div class="band">'+M.players.map(mRankCell).join('')+'</div>');
   bands.push('<div class="band">'+M.players.map(mSumCell).join('')+'</div>');
   bands.push('<div class="band">'+M.players.map(mWeaponCell).join('')+'</div>');
@@ -720,8 +713,7 @@ function renderMulti(){
         if(p.status!=='found')return '<div class="cell mcell"></div>';
         const g=p.games.find(x=>x.matchId===mid);
         if(!g)return '<div class="cell mcell"></div>';
-        const grp=M.groups[M.players.indexOf(p)];
-        return `<div class="cell mcell">${matchMini(g,grp)}</div>`;
+        return `<div class="cell mcell">${matchMini(g)}</div>`;
       }).join('');
       bands.push(`<div class="band mb">${cells}</div>`);
     });
@@ -731,25 +723,22 @@ function renderMulti(){
     bands.push('<div class="band"><div class="cell mcell"><div class="empty">该筛选条件下没有查到对局</div></div></div>');
   }
   wrap.innerHTML=bands.join('');
-  if(hasGroups)requestAnimationFrame(()=>drawPremadeLines(M.groups));
   $('mEmpty').innerHTML='';
 }
-let __rzT=null;
-window.addEventListener('resize',()=>{clearTimeout(__rzT);__rzT=setTimeout(()=>{if(Object.keys(M.groups).length)drawPremadeLines(M.groups);},150);});
 
 /* ================================================== 单人 */
 const S={name:'',data:null,weaponFilter:'all',openMatch:null};
 function persistMulti(){
   if(!M.players.length)return;
   saveJSON(PK_MULTI,{ts:M.ts,filter:M.filter,recent:M.recent,input:$('qInput').value,
-    targets:M.targets,players:M.players,matchOrder:M.matchOrder,groups:M.groups,matchTotal:M.matchTotal||0,matchFail:M.matchFail||0});
+    targets:M.targets,players:M.players,matchOrder:M.matchOrder,matchTotal:M.matchTotal||0,matchFail:M.matchFail||0});
 }
 function persistSingle(){if(S.data)saveJSON(PK_SINGLE,{ts:Date.now(),name:S.name,weaponFilter:S.weaponFilter,data:S.data});}
 async function runSingle(name){
   name=(name||$('sInput').value||'').trim();
   if(!name){toast('请输入昵称','e');return;}
   if(!getKey()){toast('请先在顶部填写 API Key','e');return;}
-  $('sInput').value=name;S.name=name;S.data=null;S.openMatch=null;
+  $('sInput').value=name;S.name=name;S.data=null;S.openMatch=null;rateReset();
   renderSingleLoading();
   try{
     const p=await fetchPlayerByName(name);
@@ -780,7 +769,10 @@ async function runSingle(name){
     p.agg=p.recent.length?aggGames(p.recent):lifeAgg(p.detail);p.horse=horseOf(p.agg);
     S.data=p;renderSingle();persistSingle();
     toast(p.matchFail?(`查询完成，${p.matchFail}/${p.matchTotal} 场明细受 CDN 限制未取到`):'查询完成',p.matchFail?'w':'s');
-  }catch(e){$('singleRes').innerHTML=`<div class="sg empty" style="color:var(--red)">查询失败：${esc(e.message)}</div>`;}
+  }catch(e){
+    if(e instanceof RateLimitError){$('singleRes').innerHTML=`<div class="sg"><div class="rate-banner">⚠️ 已触发官方接口限流（免费 Key 每分钟约 10 次），请 <b class="rate-cd">${e.resetSec}</b> 秒后（约 1 分钟）重新查询。</div></div>`;startRateCountdown();}
+    else $('singleRes').innerHTML=`<div class="sg empty" style="color:var(--red)">查询失败：${esc(e.message)}</div>`;
+  }
 }
 function renderSingleLoading(){$('singleRes').innerHTML='<div class="sg"><div class="col-status"><div class="spinner"></div>正在查询 '+esc(S.name)+' …</div></div>';}
 function renderSingle(){
@@ -946,7 +938,7 @@ function restoreAll(){
   const sm=readJSON(PK_MULTI);
   if(sm&&Array.isArray(sm.players)&&sm.players.length){
     M.running=false;M.ts=sm.ts||Date.now();M.filter=sm.filter||'all';M.recent=sm.recent||20;
-    M.targets=sm.targets||[];M.players=sm.players;M.matchOrder=sm.matchOrder||[];M.groups=sm.groups||{};
+    M.targets=sm.targets||[];M.players=sm.players;M.matchOrder=sm.matchOrder||[];
     M.matchTotal=sm.matchTotal||0;M.matchFail=sm.matchFail||0;
     if(sm.input)$('qInput').value=sm.input;
     $('modeFilter').value=M.filter;$('recentN').value=String(M.recent);
