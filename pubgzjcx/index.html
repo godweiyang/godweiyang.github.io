@@ -93,6 +93,7 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
 .rankmini{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .rm{display:flex;align-items:center;gap:7px;background:#faf9fd;border:1px solid var(--line);border-radius:9px;padding:6px 8px;min-width:0}
 .rm .rm-badge{width:30px;height:30px;flex:0 0 auto;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;background:#8b5cf6}
+.rm .rm-badge.rm-badge-none{background:#c4ccda;box-shadow:none}
 .rm .rm-t{font-size:12px;font-weight:800;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rm .rm-q{font-size:10.5px;color:var(--sub)}
 .rm .rm-lp{font-size:10.5px;color:var(--org);font-weight:700}
@@ -194,17 +195,15 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
 .rankcard{border:1px solid var(--line);border-radius:11px;padding:12px 13px;background:linear-gradient(180deg,#fbfaff,#ffffff)}
 .rc-head{display:flex;gap:12px;align-items:center;margin-bottom:10px}
 .rc-badge{width:52px;height:52px;flex:0 0 auto;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:17px;font-weight:800;letter-spacing:1px;box-shadow:0 3px 8px rgba(60,40,120,.18)}
+.rc-badge.rc-badge-none{background:#c4ccda;box-shadow:none;font-size:20px}
 .rc-id{min-width:0}
 .rc-tier{font-size:17px;font-weight:800;line-height:1.2}
 .rc-sub{font-size:12px;color:var(--sub);margin-top:2px}
-.rc-best{font-size:11.5px;color:var(--sub);margin-top:3px}
+.rc-best{font-size:12px;color:var(--sub);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rc-best b{font-weight:800}
 .rc-stats{gap:7px;grid-template-columns:repeat(auto-fill,minmax(86px,1fr))}
 .rc-stats .stat{padding:7px 4px;background:#f6f4fc}
 .rc-stats .stat .v{font-size:15px}
-.rc-hist{margin-top:10px;background:#fff8ec;border:1px solid #f3d9a0;color:#92610a;border-radius:9px;padding:7px 12px;font-size:12.5px;line-height:1.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.rc-hist b{font-size:13.5px}
-.rc-hist.loading{background:#f6f4fc;border-color:var(--line);color:var(--sub)}
 /* 对局冷门事件标签 */
 .xtag{display:inline-block;font-size:10.5px;font-weight:700;color:#92400e;background:#fef3e2;border:1px solid #f3cd9c;border-radius:999px;padding:1px 8px;margin-right:6px;white-space:nowrap}
 /* 武器熟练度：主力序号 + 前几名高亮 */
@@ -213,11 +212,6 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
 .s-table tr.wtop td{font-weight:700}
 /* 多人列：最高段位小字 */
 .rm-best{font-size:10px;color:var(--sub);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.rm-hist-btn{margin-top:7px;width:100%;background:#f1ecfe;color:var(--pri);border:1px dashed #cbb8f8;border-radius:8px;font-size:10.5px;font-weight:700;padding:4px 6px;white-space:nowrap;cursor:pointer}
-.rm-hist-btn:hover{background:#e7defc}
-.rm-hist{margin-top:7px;font-size:10.5px;color:#92610a;text-align:center;background:#fff8ec;border:1px solid #f3d9a0;border-radius:8px;padding:4px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.rm-hist b{font-weight:800}
-.rm-hist.loading{background:#f6f4fc;border-color:var(--line);color:var(--sub)}
 .s-table{width:100%;border-collapse:collapse;font-size:12.5px}
 .s-table th{color:#8a86a6;font-weight:700;font-size:11.5px;text-align:right;padding:7px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
 .s-table th:first-child,.s-table td:first-child{text-align:left}
@@ -292,7 +286,7 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
   <!-- ============ 多人 ============ -->
   <div id="viewMulti">
     <div class="card">
-      <h2>多人对比查询（每人一列 · 近 14 天对局 · 同场次自动对齐）</h2>
+      <h2>多人对比查询（每人一列 · 各自最近对局 · 独立统计）</h2>
       <textarea id="qInput" placeholder="每行一个游戏昵称，可直接粘贴队伍聊天，例如：&#10;godweiyang&#10;TeammateOne&#10;xxx 加入了队伍聊天&#10;（最多 5 人）"></textarea>
       <div class="search-row" style="margin-top:9px">
         <label class="muted">模式</label>
@@ -686,55 +680,51 @@ async function fetchPlayersByNames(names){
   }
   return {found,missing:names.filter(n=>!found.has(n.toLowerCase()))};
 }
-// 核心战绩（首屏主体）：生涯汇总 + 竞技段位 + 武器熟练度。
-// 竞技段位优先取当前赛季；当前赛季未定级（如新赛季刚开始/没打）时自动回退到上一赛季（多 1 次计限流请求），
-// 并通过 rankSeason/rankIsCur 告知展示层这是哪个赛季的段位。
+// 核心战绩（首屏主体）：生涯汇总 + 竞技段位（仅当前赛季，未定级则展示层显示"未定级"）+ 武器熟练度。
+// 跨赛季历史最高由 fetchHistBest 单独负责（含当前赛季），二者各司其职、不再用上赛季顶替当前段位。
 async function fetchPlayerCore(id){
   const meta=await seasonMeta();
   const cur=meta.find(x=>x.cur)||null;
-  const prev=meta.find(x=>!x.cur)||null;
   const [lifeJ,wpnJ]=await Promise.all([
     limited(`/players/${id}/seasons/lifetime`),
     limited(`/players/${id}/weapon_mastery`)
   ]);
-  let ranked={},rankSeason=null,rankIsCur=true;
-  const readRanked=async sid=>{
-    if(!sid)return {};
-    const rj=await limited(`/players/${id}/seasons/${sid}/ranked`);
-    return (rj.data&&rj.data.attributes&&rj.data.attributes.rankedGameModeStats)||{};
-  };
+  let ranked={},rankSeason=cur?cur.id:null;
   if(cur){
-    ranked=await readRanked(cur.id);rankSeason=cur.id;rankIsCur=true;
-    if(!hasRanked(ranked)&&prev){ // 当前赛季未定级 → 回退最近一个已结束赛季
-      const r2=await readRanked(prev.id);
-      if(hasRanked(r2)){ranked=r2;rankSeason=prev.id;rankIsCur=false;}
-    }
+    try{const rj=await limited(`/players/${id}/seasons/${cur.id}/ranked`);ranked=(rj.data&&rj.data.attributes&&rj.data.attributes.rankedGameModeStats)||{};}
+    catch(e){if(e instanceof CancelledError)throw e;ranked={};}
   }
   return {
     life:(lifeJ.data&&lifeJ.data.attributes&&lifeJ.data.attributes.gameModeStats)||{},
-    ranked,rankSeason,rankIsCur,
+    ranked,rankSeason,
     weapon:(wpnJ.data&&wpnJ.data.attributes&&wpnJ.data.attributes.weaponSummaries)||{}
   };
 }
 // 按需遍历最近 n 个赛季的竞技段位，取历史最高（bestTier 优先、currentTier 兜底）。走 limited 限流队列，自动冷却续查。
-async function fetchHistBest(id,n=12){
+async function fetchHistBest(id,n=12,curRanked,curSid){
   const meta=await seasonMeta();
-  let best=null,empty=0;
+  const byMode={}; // 每个竞技模式各自的跨赛季最高 {mode:{tier,sub,rp,season}}
+  let empty=0;
   for(const s of meta.slice(0,n)){
-    let rg={};
-    try{const rj=await limited(`/players/${id}/seasons/${s.id}/ranked`);rg=(rj.data&&rj.data.attributes&&rj.data.attributes.rankedGameModeStats)||{};}
-    catch(e){if(e instanceof CancelledError)throw e;continue;} // 请求失败不计空，避免限流误停
+    let rg=null;
+    if(curSid&&s.id===curSid&&curRanked)rg=curRanked; // 当前赛季复用 core 已取结果，省一次请求
+    else{
+      try{const rj=await limited(`/players/${id}/seasons/${s.id}/ranked`);rg=(rj.data&&rj.data.attributes&&rj.data.attributes.rankedGameModeStats)||{};}
+      catch(e){if(e instanceof CancelledError)throw e;continue;} // 请求失败不计空，避免限流误停
+    }
+    if(!rg)rg={};
     if(hasRanked(rg))empty=0;else{empty++;if(empty>=4)break;} // 连续 4 个赛季都没打竞技即停止，减少请求
-    Object.values(rg).forEach(v=>{
+    Object.entries(rg).forEach(([mode,v])=>{
       if(!v)return;
       [v.bestTier,v.currentTier].forEach((t,ti)=>{
         if(!t||!t.tier)return;
-        const cand={tier:t.tier,sub:String(t.subTier||''),rp:num(ti===0?v.bestRankPoint:v.currentRankPoint),season:s.id,mode:''};
-        if(tierHigher(cand,best))best=cand;
+        const cand={tier:t.tier,sub:String(t.subTier||''),rp:num(ti===0?v.bestRankPoint:v.currentRankPoint),season:s.id};
+        if(tierHigher(cand,byMode[mode]))byMode[mode]=cand;
       });
     });
   }
-  return best;
+  let best=null;Object.values(byMode).forEach(c=>{if(tierHigher(c,best))best=c;});
+  return {best,byMode};
 }
 // 次要字段：生存熟练度（仅列头一个等级数字），额度紧张时在核心数据之后排队补全，不阻塞主体
 async function fetchPlayerSurvival(id){
@@ -902,11 +892,15 @@ async function runMulti(){
         pl.detail=await fetchPlayerCore(pl.id);
         // 先用生涯口径占位（四宫格/马型带 *），对局明细到位后再替换为近期口径
         pl.agg=lifeAgg(pl.detail);pl.horse=horseOf(pl.agg);
+        // 跨赛季历史最高：后台异步加载（多 Key 轮询、限流自动冷却），不阻塞主体/对局，完成后补到段位小字
+        pl.histLoading=true;
+        fetchHistBest(pl.id,12,pl.detail.ranked,pl.detail.rankSeason).then(res=>{pl.histBest=res.best;pl.histByMode=res.byMode;pl.histLoading=false;if(M.players.includes(pl)){renderMulti();persistMulti();}})
+          .catch(e=>{pl.histLoading=false;if(!(e instanceof CancelledError)&&M.players.includes(pl))renderMulti();});
       }catch(e){if(e instanceof CancelledError)return;pl.status='error';pl.error=(e instanceof RateLimitError)?'RATE_LIMIT':e.message;}
       renderMulti();renderMBar();
     });
     if(!M.running)return;
-    // 阶段C：拉取近期对局（/matches 不计限流；已缓存的场次不会重复请求）
+    // 阶段C：拉取近期对局（/matches 不计限流）。取所有人前 N 场的并集仅为对同一场去重、避免重复请求；下面装配时每列只保留本人最近 N 场，不做任何跨玩家同场对齐
     const found=M.players.filter(p=>p.status==='found');
     const need=new Set();
     found.forEach(p=>p.matchIds.slice(0,M.recent).forEach(id=>need.add(id)));
@@ -915,10 +909,11 @@ async function runMulti(){
     if(!M.running)return;
     M.matchTotal=ids.length;M.matchFail=ids.filter(id=>!matchCache[id]).length;
     // 装配：各玩家近期对局，每列独立按时间倒序排列，不做跨列同场对齐
-    found.forEach(p=>{p.games=[];});
+    found.forEach(p=>{p.games=[];p.recentSet=new Set(p.matchIds.slice(0,M.recent));});
     ids.forEach(id=>{
       const mt=matchCache[id];if(!mt)return;
       found.forEach(p=>{
+        if(!p.recentSet.has(id))return; // 严格只保留该玩家自己最近的 N 场，避免并集里他人的开黑对局导致本列越界
         const s=mt.parts[p.id],tm=mt.accTeam[p.id];if(!s)return;
         if(!passMode(mt.mode,mt.type,mt.custom,M.filter))return;
         p.games.push({matchId:id,rank:tm?tm.rank:num(s.winPlace),won:tm?tm.won:s.winPlace===1,teamId:tm?tm.teamId:null,
@@ -970,21 +965,11 @@ function renderMBar(){
       ?`<div class="rate-banner">⚠️ ${nk>1?`全部 ${nk} 个 Key 均`:'Key'}触发官方限流（每个约 10 次/分钟），正等待最早恢复的 Key，<b class="rate-cd">${ws}</b> 秒后自动切换续查，请耐心等待、无需操作；已查到的数据保留。</div>`
       :`<div class="rate-banner">请求较多，${nk>1?`全部 ${nk} 个 Key 的额度均已用满`:'Key 限流额度已用满'}（每个约 10 次/分钟），<b class="rate-cd">${ws}</b> 秒后自动切换续查，请耐心等待 …</div>`;
   }
-  // 历史最高段位：一键全查按钮（查询完成后出现；批量进行中显示进度）
-  const foundP=M.players.filter(p=>p.status==='found'&&p.detail);
-  const histDone=foundP.filter(p=>p.histBest).length,histLoading=foundP.filter(p=>p.histLoading).length;
-  let histBtn='';
-  if(!M.running&&foundP.length){
-    if(histLoading>0)histBtn=`<button class="sec" id="mHistAll" disabled style="padding:6px 12px">历史最高 ${histDone}/${foundP.length} …</button>`;
-    else if(histDone<foundP.length)histBtn=`<button class="sec" id="mHistAll" style="padding:6px 12px">查全部历史最高</button>`;
-    else histBtn=`<button class="sec" id="mHistAll" disabled style="padding:6px 12px">历史最高已查完</button>`;
-  }
   bar.innerHTML=`<div class="card" style="padding:11px 16px;margin:12px 0 0"><div class="resbar">
     <span>模式：<b>${esc(modeTxt)}</b></span><span>近期：<b>近 ${M.recent} 场</b></span><span>时间：<b>${fmtDT(M.ts)}</b></span>
-    <span class="spacer"></span>${histBtn}<button class="sec" id="mReset" style="padding:6px 14px">重新搜索</button></div>
+    <span class="spacer"></span><button class="sec" id="mReset" style="padding:6px 14px">重新搜索</button></div>
     ${banner}
     <div class="hint" style="margin:4px 0 0">${M.running?(`查询中 ${done}/${total} …`):(stopped?(`已停止 · 已完成 ${okN}/${total} 人 · 重新查询将全部刷新`):(`查询完成 · 共 ${total} 人 · 对局明细仅保留近 14 天`))}</div></div>`;
-  const hbAll=$('mHistAll');if(hbAll)hbAll.onclick=loadAllHist;
   $('mReset').onclick=()=>{M.targets=[];M.players=[];M.matchOrder=[];M.matchTotal=0;M.matchFail=0;try{localStorage.removeItem(PK_MULTI);}catch(e){}$('cols').innerHTML='';$('mEmpty').innerHTML='';bar.innerHTML='';renderMulti();$('qInput').focus();window.scrollTo({top:0,behavior:'smooth'});};
 }
 /* ---------- 多人渲染 ---------- */
@@ -1015,43 +1000,35 @@ function mHeadCell(pl){
 function mRankCell(pl){
   if(pl.status!=='found'||!pl.detail)return '<div class="cell"></div>';
   const rl=rankedList(pl.detail.ranked);
-  const pref=rl.filter(r=>r.mode.indexOf('squad')===0).concat(rl.filter(r=>r.mode.indexOf('squad')!==0)).slice(0,2);
+  const byMode=pl.histByMode||{};
+  // 模式集合 = 当前赛季已定级模式 ∪ 历史最高出现过的模式（四排优先，最多展示 2 个）
+  const modeSet=[];
+  rl.forEach(r=>{if(!modeSet.includes(r.mode))modeSet.push(r.mode);});
+  Object.keys(byMode).forEach(m=>{if(!modeSet.includes(m))modeSet.push(m);});
+  modeSet.sort((a,b)=>(b.indexOf('squad')===0?1:0)-(a.indexOf('squad')===0?1:0));
+  const modes=modeSet.slice(0,2);
   let body;
-  if(pref.length){
-    const sea=pl.detail.rankIsCur?'':'<span style="color:var(--sub)"> · 上赛季</span>';
-    body='<div class="rankmini">'+pref.map(r=>{
-      const best=(r.bestTier&&(r.bestTier!==r.tier||String(r.bestSub)!==String(r.sub)))?`<div class="rm-best">赛季最高 ${tierCn(r.bestTier)}${ROMAN[r.bestSub]||r.bestSub||''}</div>`:'';
+  if(modes.length){
+    body='<div class="rankmini">'+modes.map(mode=>{
+      const cur=rl.find(r=>r.mode===mode)||null,hm=byMode[mode]||null;
+      const hist=hm
+        ?`<div class="rm-best" title="${seasonLabel(hm.season)}">历史最高 ${tierCn(hm.tier)}${ROMAN[hm.sub]||hm.sub||''} ${seasonLabel(hm.season).replace('第 ','S').replace(' 赛季','')}</div>`
+        :(pl.histLoading?'<div class="rm-best">历史最高…</div>':'');
+      if(cur){
+        return `<div class="rm">
+    <div class="rm-badge" style="background:${tierColor(cur.tier)}">${esc((cur.tier||'').slice(0,2))}</div>
+    <div style="min-width:0"><div class="rm-t" style="color:${tierColor(cur.tier)}">${tierCn(cur.tier)} ${ROMAN[cur.sub]||cur.sub||''}</div>
+    <div class="rm-q">${modeCn(mode)}<span class="rm-lp"> · ${cur.rp} RP</span></div>${hist}</div></div>`;
+      }
       return `<div class="rm">
-    <div class="rm-badge" style="background:${tierColor(r.tier)}">${esc((r.tier||'').slice(0,2))}</div>
-    <div style="min-width:0"><div class="rm-t" style="color:${tierColor(r.tier)}">${tierCn(r.tier)} ${ROMAN[r.sub]||r.sub||''}</div>
-    <div class="rm-q">${modeCn(r.mode)}<span class="rm-lp"> · ${r.rp} RP</span>${sea}</div>${best}</div></div>`;
+    <div class="rm-badge rm-badge-none">—</div>
+    <div style="min-width:0"><div class="rm-t" style="color:var(--sub)">未定级</div>
+    <div class="rm-q">${modeCn(mode)} · 当前赛季</div>${hist}</div></div>`;
     }).join('')+'</div>';
   }else{
-    body='<div class="rankmini"><div class="rm none" style="grid-column:1/-1"><span>竞技暂未定级</span></div></div>';
+    body='<div class="rankmini"><div class="rm none" style="grid-column:1/-1"><span>当前赛季未定级</span></div></div>';
   }
-  // 跨赛季历史最高：按需逐列查询（遍历近 12 赛季，走限流队列），不默认请求、结果随列持久化
-  let hist;
-  if(pl.histLoading)hist='<div class="rm-hist loading">历史最高查询中…</div>';
-  else if(pl.histBest){const b=pl.histBest;
-    hist=`<div class="rm-hist" title="${seasonLabel(b.season)}">历史最高 <b style="color:${tierColor(b.tier)}">${tierCn(b.tier)}${ROMAN[b.sub]||b.sub||''}</b> ${seasonLabel(b.season).replace('第 ','S').replace(' 赛季','')}</div>`;}
-  else hist=`<button class="rm-hist-btn" data-hist="${esc(pl.name)}">查历史最高</button>`;
-  return `<div class="cell">${body}${hist}</div>`;
-}
-// 多人：按需查询单个玩家的跨赛季历史最高段位
-async function loadMultiHist(name,batch){
-  const pl=M.players.find(x=>x.name===name);
-  if(!pl||pl.histLoading||pl.histBest)return;
-  pl.histLoading=true;renderMulti();renderMBar();
-  try{pl.histBest=await fetchHistBest(pl.id,12);}
-  catch(e){if(e instanceof CancelledError)return;pl.histBest=null;if(!batch)toast('历史最高查询失败，请重试','e');}
-  pl.histLoading=false;renderMulti();renderMBar();persistMulti();
-}
-// 多人：一键并发查询所有人的历史最高（多 Key 轮询、限流自动冷却，逐列填充、显示进度）
-async function loadAllHist(){
-  const targets=M.players.filter(p=>p.status==='found'&&p.detail&&!p.histBest&&!p.histLoading);
-  if(!targets.length)return;
-  await Promise.all(targets.map(p=>loadMultiHist(p.name,true)));
-  renderMBar();
+  return `<div class="cell">${body}</div>`;
 }
 function mSumCell(pl){
   if(pl.status!=='found'||!pl.agg)return '<div class="cell"></div>';
@@ -1127,7 +1104,6 @@ function renderMulti(){
     }
   }
   wrap.innerHTML=bands.join('');
-  wrap.querySelectorAll('.rm-hist-btn').forEach(b=>{b.onclick=()=>loadMultiHist(b.dataset.hist);});
   $('mEmpty').innerHTML='';
 }
 
@@ -1155,7 +1131,7 @@ async function runSingle(name){
     p.detail=await fetchPlayerCore(p.id);
     // 跨赛季历史最高段位：core 一拿到就异步查（走限流队列、多 Key 轮询），不阻塞对局明细，完成后补渲染
     p.histLoading=true;
-    fetchHistBest(p.id,12).then(hb=>{p.histBest=hb;p.histLoading=false;if(S.data===p){renderSingle();persistSingle();}})
+    fetchHistBest(p.id,12,p.detail.ranked,p.detail.rankSeason).then(res=>{p.histBest=res.best;p.histByMode=res.byMode;p.histLoading=false;if(S.data===p){renderSingle();persistSingle();}})
       .catch(e=>{p.histLoading=false;if(S.data===p&&!(e instanceof CancelledError))renderSingle();});
     const [surv,clan]=await Promise.all([fetchPlayerSurvival(p.id),p.clanId?fetchClan(p.clanId):Promise.resolve(null)]);
     p.detail.surv=surv;p.clan=clan;
@@ -1200,26 +1176,37 @@ function ratioPct(n,d){return d?pct(n/d):'—';}
 function statCell(v,l,title){return `<div class="stat"${title?` title="${esc(title)}"`:''}><div class="v">${v}</div><div class="l">${l}</div></div>`;}
 function fg(label,cells){return `<div class="fgroup"><div class="fg-label">${label}</div><div class="statgrid">${cells}</div></div>`;}
 // 单个竞技模式：段位徽章 + 当前/最高 + 该模式赛季统计
-function rankCard(r){
-  const f2=v=>(v?Number(v).toFixed(2):'—');
-  const cells=
-    statCell(r.rounds,'场次')+statCell(r.wins,'吃鸡')+statCell(r.winRatio?pct(r.winRatio):'—','胜率')
-    +statCell(r.topRatio?pct(r.topRatio):'—','前十率')+statCell(f2(r.avgRank),'场均排名')+statCell(f2(r.avgKill),'场均击杀')
-    +statCell(f2(r.kda),'KDA')+statCell(r.rounds?Math.round(r.dmg/r.rounds):'—','场均伤害')+statCell(r.hsRatio?pct(r.hsRatio):'—','爆头率')
-    +statCell(r.rounds?(r.dbno/r.rounds).toFixed(2):'—','场均击倒')+statCell(r.reviveRatio?pct(r.reviveRatio):'—','救援率')+statCell(r.avgSurv?fmtMin(r.avgSurv):'—','场均存活');
-  const showBest=r.bestTier&&(r.bestTier!==r.tier||String(r.bestSub)!==String(r.sub));
-  const best=showBest?`<div class="rc-best">赛季最高 <b style="color:${tierColor(r.bestTier)}">${tierCn(r.bestTier)} ${ROMAN[r.bestSub]||r.bestSub||''}</b> · ${r.bestRp} RP</div>`:'';
-  return `<div class="rankcard">
-    <div class="rc-head">
-      <div class="rc-badge" style="background:${tierColor(r.tier)}">${esc((r.tier||'').slice(0,2))}</div>
+// 单人竞技卡：统一只显示两种段位——当前赛季段位（未定级给灰框）+ 跨赛季历史最高（含当前赛季）
+function rankCard(mode,cur,hist,histLoading){
+  const histLine=hist
+    ?`<div class="rc-best" title="跨赛季历史最高（含当前赛季）">历史最高 <b style="color:${tierColor(hist.tier)}">${tierCn(hist.tier)} ${ROMAN[hist.sub]||hist.sub||''}</b> · ${hist.rp} RP · ${seasonLabel(hist.season)}</div>`
+    :(histLoading?'<div class="rc-best" style="color:var(--sub)">历史最高查询中…</div>':'');
+  let head;
+  if(cur){
+    const f2=v=>(v?Number(v).toFixed(2):'—');
+    const cells=
+      statCell(cur.rounds,'场次')+statCell(cur.wins,'吃鸡')+statCell(cur.winRatio?pct(cur.winRatio):'—','胜率')
+      +statCell(cur.topRatio?pct(cur.topRatio):'—','前十率')+statCell(f2(cur.avgRank),'场均排名')+statCell(f2(cur.avgKill),'场均击杀')
+      +statCell(f2(cur.kda),'KDA')+statCell(cur.rounds?Math.round(cur.dmg/cur.rounds):'—','场均伤害')+statCell(cur.hsRatio?pct(cur.hsRatio):'—','爆头率')
+      +statCell(cur.rounds?(cur.dbno/cur.rounds).toFixed(2):'—','场均击倒')+statCell(cur.reviveRatio?pct(cur.reviveRatio):'—','救援率')+statCell(cur.avgSurv?fmtMin(cur.avgSurv):'—','场均存活');
+    head=`<div class="rc-head">
+      <div class="rc-badge" style="background:${tierColor(cur.tier)}">${esc((cur.tier||'').slice(0,2))}</div>
       <div class="rc-id">
-        <div class="rc-tier" style="color:${tierColor(r.tier)}">${tierCn(r.tier)} ${ROMAN[r.sub]||r.sub||''}</div>
-        <div class="rc-sub">${modeCn(r.mode)} · ${r.rp} RP</div>
-        ${best}
-      </div>
-    </div>
-    <div class="statgrid rc-stats">${cells}</div>
-  </div>`;
+        <div class="rc-tier" style="color:${tierColor(cur.tier)}">${tierCn(cur.tier)} ${ROMAN[cur.sub]||cur.sub||''}</div>
+        <div class="rc-sub">${modeCn(mode)} · 当前赛季 · ${cur.rp} RP</div>
+        ${histLine}
+      </div></div>
+    <div class="statgrid rc-stats">${cells}</div>`;
+  }else{
+    head=`<div class="rc-head">
+      <div class="rc-badge rc-badge-none">—</div>
+      <div class="rc-id">
+        <div class="rc-tier" style="color:var(--sub)">未定级</div>
+        <div class="rc-sub">${modeCn(mode)} · 当前赛季</div>
+        ${histLine}
+      </div></div>`;
+  }
+  return `<div class="rankcard">${head}</div>`;
 }
 function renderSingle(){
   const p=S.data;if(!p){return;}
@@ -1248,13 +1235,17 @@ function renderSingle(){
       <div class="muted" style="margin-top:5px">${p.agg.__life?'生涯口径':`近${p.recent.length}场`} · 综合分 ${p.horse.score.toFixed(0)}</div>
     </div>
   </div></div>`;
-  // 卡2：竞技段位（徽章 + 当前/赛季最高 + 赛季统计；当前赛季未定级自动回退上赛季；历史最高随查询自动带出）
-  const seasonTag=d.rankIsCur?'当前赛季':'上赛季（本赛季暂未定级）';
-  let histLine='';
-  if(p.histLoading)histLine='<div class="rc-hist loading">跨赛季历史最高段位查询中…</div>';
-  else if(p.histBest){const hb=p.histBest;histLine=`<div class="rc-hist" title="遍历近 12 个赛季取最高段位">历史最高 <b style="color:${tierColor(hb.tier)}">${tierCn(hb.tier)} ${ROMAN[hb.sub]||hb.sub||''}</b>${hb.rp?(' · '+hb.rp+' RP'):''} · ${seasonLabel(hb.season)}</div>`;}
-  h+=`<div class="sg"><h3>竞技段位 <span class="tag">${seasonTag}${d.rankSeason?(' · '+seasonLabel(d.rankSeason)):''}</span></h3>
-    <div class="rankcards">${rl.length?rl.map(rankCard).join(''):'<div class="empty" style="padding:8px 0">暂无竞技排位数据（竞技模式需在游戏内完成定级赛）</div>'}</div>${histLine}</div>`;
+  // 卡2：竞技段位——统一只显示两种：当前赛季段位（未定级给灰框）+ 跨赛季历史最高（含当前赛季）
+  const byMode=p.histByMode||{};
+  const rankModes=[];
+  rl.forEach(r=>{if(!rankModes.includes(r.mode))rankModes.push(r.mode);});
+  Object.keys(byMode).forEach(m=>{if(!rankModes.includes(m))rankModes.push(m);});
+  rankModes.sort((a,b)=>(b.indexOf('squad')===0?1:0)-(a.indexOf('squad')===0?1:0));
+  const rankCardsHtml=rankModes.length
+    ?rankModes.map(mode=>rankCard(mode,rl.find(r=>r.mode===mode)||null,byMode[mode]||null,p.histLoading)).join('')
+    :'<div class="empty" style="padding:8px 0">当前赛季未定级（完成竞技定级赛后显示段位）</div>';
+  h+=`<div class="sg"><h3>竞技段位 <span class="tag">当前赛季${d.rankSeason?(' · '+seasonLabel(d.rankSeason)):''}</span></h3>
+    <div class="rankcards">${rankCardsHtml}</div></div>`;
   // 卡3：生涯总览（生存熟练度并入，分组陈列，补全 lifetime 字段）
   h+=`<div class="sg"><h3>生涯总览 <span class="tag">Lifetime · 自生涯系统起累计</span></h3>`;
   h+=fg('生存熟练度',
@@ -1435,7 +1426,7 @@ function restoreAll(){
     // 旧缓存若没有历史最高，后台静默补查一次（查到即持久化，之后刷新不再请求）
     if(!ss.data.histBest&&ss.data.id&&getKey()){
       ss.data.histLoading=true;renderSingle();
-      fetchHistBest(ss.data.id,12).then(hb=>{ss.data.histBest=hb;ss.data.histLoading=false;if(S.data===ss.data){renderSingle();persistSingle();}})
+      fetchHistBest(ss.data.id,12,ss.data.detail.ranked,ss.data.detail.rankSeason).then(res=>{ss.data.histBest=res.best;ss.data.histByMode=res.byMode;ss.data.histLoading=false;if(S.data===ss.data){renderSingle();persistSingle();}})
         .catch(()=>{ss.data.histLoading=false;if(S.data===ss.data)renderSingle();});
     }
   }
