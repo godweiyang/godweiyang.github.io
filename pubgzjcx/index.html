@@ -373,6 +373,7 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
       <div class="kpsum" id="kpSum"></div>
       <div class="kptools">
         <button class="kpbtn" id="keyAdd" type="button" title="再添加一个 Key">＋ 添加 Key</button>
+        <button class="kpbtn" id="keyRestore" type="button" title="一键补回内置的 6 个默认 Key；已存在的自动跳过，不会重复添加">＋ 默认 Key</button>
         <button class="kpbtn" id="testBtn" type="button">测试全部</button>
         <button class="kpbtn" id="eyeBtn" type="button" title="显示/隐藏">显示</button>
         <button class="kpbtn kpclear" id="keyClear" type="button" title="删除所有检测为无效的 Key" hidden>清除无效 Key</button>
@@ -889,6 +890,12 @@ function addKeyRow(value,focus){
   inp.placeholder='粘贴 API Key（可添加多个，限流时自动轮询）';
   inp.value=value||'';
   inp.addEventListener('input',()=>{setRowState(row,'');persistKeys();});
+  // 失焦时统一去重：单框粘贴多个或跨框重复，都按去重结果重建为一框一个，并提示
+  inp.addEventListener('blur',()=>{
+    const frags=rawKeyFrags(),uniq=collectKeyVals();
+    if(frags.length===uniq.length)return;
+    rebuildKeyRows(uniq);persistKeys();toast('检测到重复的 API Key，已自动去重','s');
+  });
   const mark=document.createElement('span');mark.className='keymark';
   const del=document.createElement('button');
   del.type='button';del.className='keydel';del.title='删除该 Key';del.textContent='−';
@@ -901,6 +908,13 @@ function addKeyRow(value,focus){
   if(focus)inp.focus();
   return inp;
 }
+// 按给定 Key 列表重建输入行（一框一个；空列表给一个空框），并保持当前明文/密文显隐
+function rebuildKeyRows(vals){
+  [...KEY_ROWS.querySelectorAll('.keyrow')].forEach(r=>r.remove());
+  if(vals.length)vals.forEach(v=>addKeyRow(v));else addKeyRow('');
+  const showing=$('eyeBtn').textContent==='隐藏'; // 按钮文案为“隐藏”表示当前正明文显示
+  KEY_ROWS.querySelectorAll('input.keyinp').forEach(i=>i.type=showing?'text':'password');
+}
 // 查询途中某 Key 真返回 401/403：记入状态 map，并刷新行标记与「清除无效」按钮
 function markRowBadByKey(key){
   keyStateByKey[key]='bad';applyKeyStatesToRows();updateClearBtn();
@@ -911,10 +925,7 @@ function clearBadKeys(){
   const badN=all.length-keep.length;
   if(!badN)return;
   Object.keys(keyStateByKey).forEach(k=>{if(keyStateByKey[k]==='bad')delete keyStateByKey[k];});
-  [...KEY_ROWS.querySelectorAll('.keyrow')].forEach(r=>r.remove()); // 按片段重建：剔除无效、剩余一框一个（顺带规范化单框多 Key）
-  if(keep.length)keep.forEach(k=>addKeyRow(k));else addKeyRow('');
-  const showing=$('eyeBtn').textContent==='隐藏'; // 重建后按当前显隐状态同步新行（按钮文案为“隐藏”表示当前正明文显示）
-  KEY_ROWS.querySelectorAll('input.keyinp').forEach(i=>i.type=showing?'text':'password');
+  rebuildKeyRows(keep); // 按片段重建：剔除无效、剩余一框一个（顺带规范化单框多 Key 与重复）
   persistKeys();toast(`已清除 ${badN} 个无效 Key`,'s');
 }
 (function init(){
@@ -926,6 +937,14 @@ function clearBadKeys(){
   if(vals.length)vals.forEach(v=>addKeyRow(v));else addKeyRow('');
   if(firstVisit){try{localStorage.setItem(KEY_STORE,collectKeyVals().join('\n'));}catch(e){}}
   $('keyAdd').addEventListener('click',()=>addKeyRow('',true));
+  $('keyRestore').addEventListener('click',()=>{ // 一键补回内置默认 Key：已存在的跳过，缺失的追加，绝不重复
+    const cur=collectKeyVals(),have=new Set(cur);
+    const missing=DEFAULT_KEYS.filter(k=>!have.has(k));
+    if(!missing.length){toast('6 个默认 Key 均已存在，无需添加','s');return;}
+    rebuildKeyRows(cur.concat(missing));persistKeys();
+    const skip=DEFAULT_KEYS.length-missing.length;
+    toast(skip?`已补回 ${missing.length} 个默认 Key，跳过 ${skip} 个已存在`:`已添加全部 ${missing.length} 个默认 Key`,'s');
+  });
   $('keyClear').addEventListener('click',clearBadKeys);
   $('platformSel').addEventListener('change',()=>{try{localStorage.setItem(PLAT_STORE,platform());}catch(e){}});
   $('eyeBtn').onclick=()=>{const show=$('eyeBtn').textContent==='显示';
