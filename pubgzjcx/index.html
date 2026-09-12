@@ -124,8 +124,8 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
 .mm .r2{font-size:10.8px;color:var(--sub);margin-top:3px;line-height:1.5;display:flex;justify-content:space-between;gap:6px}
 .mm .r2 .t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mm .r2 .tm{white-space:nowrap;flex:0 0 auto}
-.mm .mh{flex:0 0 auto;font-size:9.5px;font-weight:800;border-radius:5px;padding:0 5px;line-height:17px;white-space:nowrap}
-.mm .mh.h-T{background:#f1ecfe;color:#7c3aed}.mm .mh.h-A{background:#e8f7ee;color:#16a34a}.mm .mh.h-B{background:#e8f0fe;color:#2563eb}.mm .mh.h-C{background:#fdf1e2;color:#ea8a16}.mm .mh.h-D{background:#fdecec;color:#dc2626}
+.mh{flex:0 0 auto;font-size:9.5px;font-weight:800;border-radius:5px;padding:0 6px;line-height:17px;white-space:nowrap;align-self:center}
+.mh.h-T{background:#f1ecfe;color:#7c3aed}.mh.h-A{background:#e8f7ee;color:#16a34a}.mh.h-B{background:#e8f0fe;color:#2563eb}.mh.h-C{background:#fdf1e2;color:#ea8a16}.mh.h-D{background:#fdecec;color:#dc2626}
 .mm .comp{flex:0 0 auto;border-radius:4px;padding:0 5px;font-size:10px;font-weight:800;white-space:nowrap;line-height:16px}
 .mm .comp.rank{background:#fdf1e2;color:#b45309}
 .mm .comp.norm{background:#eef0f3;color:#6b7280}
@@ -248,6 +248,7 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
         </select>
         <div class="spacer"></div>
         <button id="qBtn">开始查询</button>
+        <button id="mShotBtn" class="sec" type="button" disabled>截图分享</button>
       </div>
       <div class="hint">评级为娱乐口径（按近期 KD / 场均伤害 / 前十率 / 吃鸡率综合打分，T/A/B/C/D）；点列头名字或右上角图标可跳到该玩家单人详情。对局明细官方仅保留 14 天，且来自官方 /matches 接口（经 CDN 缓存，少数场次可能因跨域响应头缺失取不到，此时四宫格/评级自动回退生涯口径并以 * 标注）。</div>
     </div>
@@ -263,6 +264,7 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
       <div class="search-row">
         <input id="sInput" style="flex:1;min-width:220px" placeholder="输入游戏昵称，例如 godweiyang">
         <button id="sBtn">查询</button>
+        <button id="sShotBtn" class="sec" type="button" disabled>截图分享</button>
       </div>
       <div class="hint">展示生涯总览、当前赛季竞技段位、武器熟练度、生存熟练度，以及近 14 天对局；点开任意对局可查看全队战报。</div>
     </div>
@@ -1086,11 +1088,13 @@ function renderMatchList(){
   const p=S.data;const el=$('mList');if(!el)return;
   el.innerHTML=p.recent.map((g,i)=>{
     const cls=g.won?'w1':(g.rank<=10?'t10':'other');
+    const h=matchHorse(g);
     return `<div class="mrow" data-i="${i}">
       <div class="mhead">
         <span class="place ${cls}">#${g.rank}</span>
         <span class="mtitle">${esc(mapName(g.map))} · ${modeCn(g.mode)} · ${typeCn(g.type,g.custom)} · ${fmtDur(g.duration)}</span>
         <span class="mkd"><span class="k">${g.kills} 杀</span> / <span class="d">${g.dbno} 倒</span> · ${Math.round(g.dmg)} 伤</span>
+        <span class="mh h-${h.tier}" title="单场综合分 ${h.score.toFixed(0)}">${esc(h.label)}</span>
         <span class="mtime">${fmtDT(g.createdAt)} ▸</span>
       </div>
       <div class="mdetail"></div>
@@ -1177,6 +1181,91 @@ function restoreAll(){
 $('qBtn').onclick=runMulti;
 $('sBtn').onclick=()=>runSingle();
 $('sInput').addEventListener('keydown',e=>{if(e.key==='Enter')runSingle();});
+
+/* ================================================== 结果长图截图（html-to-image 懒加载同站组件；优先写剪贴板，失败则下载 PNG） */
+function loadH2C(cb){
+  if(window.htmlToImage){cb();return;}
+  if(window.__h2cQ){window.__h2cQ.push(cb);return;}
+  window.__h2cQ=[cb];
+  const sc=document.createElement('script');
+  sc.src='/lolzjcx/vendor/html-to-image.min.js';
+  sc.onload=()=>{const q=window.__h2cQ||[];window.__h2cQ=null;q.forEach(f=>{try{f();}catch(e){}});};
+  sc.onerror=()=>{window.__h2cQ=null;toast('截图组件加载失败，请检查网络','e');};
+  document.head.appendChild(sc);
+}
+function shotCapture(el,fname,btn){
+  if(!el||!el.children.length){toast('暂无结果可截图，请先查询','e');return;}
+  const ot=btn?btn.textContent:'';
+  if(btn){btn.disabled=true;btn.textContent='生成中…';}
+  loadH2C(async()=>{
+    try{
+      const bg=getComputedStyle(document.body).backgroundColor||'#eef1f5';
+      const live=[].slice.call(el.querySelectorAll('img'));
+      const settle=im=>new Promise(res=>{
+        if(im.naturalWidth>0){res();return;}
+        im.removeAttribute('loading');
+        const done=()=>res();
+        im.addEventListener('load',done);im.addEventListener('error',done);
+        const s=im.src;im.src=s;setTimeout(done,5000);
+      });
+      await Promise.all(live.map(settle));
+      const broken=new Set();live.forEach(im=>{if(im.naturalWidth===0)broken.add(im.src);});
+      const narrow=window.innerWidth<=900;
+      // 手机端多人横向玩家列：画布按内容总宽扩开、列宽固定为像素，确保横滑的所有列都截入同一张长图
+      let opt=null;
+      if(narrow&&el.classList&&el.classList.contains('cgrid')&&el.scrollWidth>el.clientWidth+2){
+        const n=parseInt(getComputedStyle(el).getPropertyValue('--n')||'1',10)||1;
+        const fb=el.querySelector('.band');
+        const colW=fb&&fb.children.length?fb.children[0].offsetWidth:Math.round(el.scrollWidth/n);
+        opt={n:n,colW:colW,W:el.scrollWidth,H:el.scrollHeight};
+      }
+      const opts={pixelRatio:Math.min(window.devicePixelRatio||1,2),backgroundColor:bg,cacheBust:false,
+        filter:nd=>{
+          if(nd.nodeType!==1)return true;
+          if(nd.classList&&nd.classList.contains('mdetail')){const m=nd.parentNode;if(m&&!m.classList.contains('open'))return false;}
+          if(nd.tagName==='IMG'&&broken.has(nd.src))return false;
+          return true;
+        },
+        onclone:cd=>{
+          cd.querySelectorAll('*').forEach(n=>{n.style.contentVisibility='visible';});
+          if(opt){
+            cd.querySelectorAll('.cgrid').forEach(g=>{g.style.overflow='visible';g.style.width=opt.W+'px';g.style.height=opt.H+'px';});
+            cd.querySelectorAll('.band').forEach(b=>{b.style.width=opt.W+'px';b.style.gridTemplateColumns='repeat('+opt.n+','+opt.colW+'px)';});
+          }else{
+            cd.querySelectorAll('.cgrid').forEach(g=>{g.style.overflow='visible';});
+          }
+          cd.querySelectorAll('[style*="overflow-x"]').forEach(n=>{n.style.overflow='visible';});
+        }};
+      if(opt){opts.width=opt.W;opts.height=opt.H;}
+      const dataUrl=await window.htmlToImage.toPng(el,opts);
+      const blob=await (await fetch(dataUrl)).blob();
+      let ok=false;
+      try{
+        if(navigator.clipboard&&window.ClipboardItem&&navigator.clipboard.write){
+          await navigator.clipboard.write([new ClipboardItem({'image/png':blob})]);ok=true;
+          toast('长图已复制，去聊天框或文档直接 Ctrl+V 粘贴即可','s');
+        }
+      }catch(err){ok=false;}
+      if(!ok){
+        const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fname+'.png';
+        document.body.appendChild(a);a.click();a.remove();
+        setTimeout(()=>URL.revokeObjectURL(a.href),5000);
+        toast('当前浏览器不支持直接写入剪贴板，已改为下载长图','s');
+      }
+    }catch(e){toast('截图失败：'+(e&&e.message?e.message:e),'e');}
+    finally{if(btn)btn.textContent=ot;syncShotBtns();}
+  });
+}
+function syncShotBtns(){
+  const mb=$('mShotBtn'),sb=$('sShotBtn');
+  if(mb)mb.disabled=!$('cols')||!$('cols').children.length;
+  if(sb)sb.disabled=!$('singleRes')||!$('singleRes').children.length||!!$('singleRes').querySelector('.spinner');
+}
+$('mShotBtn').onclick=()=>shotCapture($('cols'),'pubgzjcx-多人战绩',$('mShotBtn'));
+$('sShotBtn').onclick=()=>shotCapture($('singleRes'),'pubgzjcx-单人战绩'+(S.name?('-'+S.name):''),$('sShotBtn'));
+new MutationObserver(syncShotBtns).observe($('cols'),{childList:true});
+new MutationObserver(syncShotBtns).observe($('singleRes'),{childList:true,subtree:true});
+syncShotBtns();
 restoreAll();
 routeView();
 </script>
