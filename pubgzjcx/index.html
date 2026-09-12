@@ -87,6 +87,21 @@ header.top h1{font-size:19px;margin:0;letter-spacing:2px;text-align:center}
 @media(max-width:640px){#keyPoolRoot .kpcard{margin:2vh auto;width:calc(100% - 16px);max-height:96vh;padding:14px 12px}
 #keyPoolRoot .keyrow{gap:6px}#keyPoolRoot .keyrow::before{flex-basis:24px}
 #keyPoolRoot .keyrow .keymark{flex-basis:74px;font-size:10.5px;padding:3px 5px}}
+/* 个人海报弹窗 */
+#posterRoot{position:fixed;inset:0;z-index:9999;display:none}
+#posterRoot.show{display:block}
+#posterRoot .pomask{position:absolute;inset:0;background:rgba(12,8,24,.62)}
+#posterRoot .pocard{position:relative;margin:2.5vh auto;max-width:430px;width:calc(100% - 24px);max-height:95vh;overflow:auto;background:#17102e;border:1px solid #3a2c63;border-radius:18px;box-shadow:0 22px 70px rgba(20,10,50,.55);padding:14px 14px 16px;color:#eae6ff}
+#posterRoot .poph{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+#posterRoot .poph h3{font-size:16px;margin:0;flex:1;color:#fff;letter-spacing:1px}
+#posterRoot .pox{border:none;background:#2c2150;color:#cfc6f5;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:16px;line-height:1}
+#posterRoot .poimg{display:flex;justify-content:center}
+#posterRoot .poimg img{display:block;width:100%;max-height:73vh;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.45)}
+#posterRoot .pofoot{display:flex;gap:10px;margin-top:12px}
+#posterRoot .pofoot button{flex:1;border-radius:10px;padding:11px 0;font-size:14px;font-weight:800;cursor:pointer;border:1px solid transparent}
+#posterRoot .popri{background:linear-gradient(135deg,#7c3aed,#a06bff);color:#fff}
+#posterRoot .pobtn{background:#241a47;color:#cfc6f5;border-color:#3a2c63!important}
+@media(max-width:640px){#posterRoot .pocard{margin:1.5vh auto;width:calc(100% - 16px)}#posterRoot .poimg img{max-height:68vh}}
 /* 视图切换 */
 .viewtabs{display:flex;justify-content:center;gap:10px;margin:15px 0 3px}
 .viewtabs a{flex:1 1 0;max-width:230px;text-align:center;text-decoration:none;font-size:15px;font-weight:800;letter-spacing:2px;
@@ -367,6 +382,19 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
     </div>
   </div>
 
+  <!-- 个人海报弹窗 -->
+  <div id="posterRoot">
+    <div class="pomask"></div>
+    <div class="pocard">
+      <div class="poph"><h3>个人战绩海报</h3><button class="pox" id="poClose" type="button" aria-label="关闭">×</button></div>
+      <div class="poimg"><img id="posterImg" alt="个人战绩海报"></div>
+      <div class="pofoot">
+        <button class="popri" id="posterSave" type="button">保存海报 PNG</button>
+        <button class="pobtn" id="posterCopy" type="button">复制到剪贴板</button>
+      </div>
+    </div>
+  </div>
+
   <nav class="viewtabs">
     <a class="on" href="#/multi" data-v="multi">多人对比</a>
     <a href="#/single" data-v="single">单人查询</a>
@@ -393,8 +421,9 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
           <option value="40">近 40 场</option>
         </select>
         <div class="spacer"></div>
-        <button id="qBtn">开始查询</button>
+        <button id="qBtn">查询</button>
         <button id="mShotBtn" class="sec" type="button" disabled>截图分享</button>
+        <button id="mClearBtn" class="sec" type="button">清空</button>
       </div>
       <div class="hint">评级为娱乐口径（按近期 KD / 场均伤害 / 前十率 / 吃鸡率综合打分，T/A/B/C/D）；点列头名字或右上角图标可跳到该玩家单人详情。对局明细官方仅保留 14 天，且来自官方 /matches 接口（经 CDN 缓存，少数场次可能因跨域响应头缺失取不到，此时四宫格/评级自动回退生涯口径并以 * 标注）。</div>
     </div>
@@ -414,6 +443,8 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
         <input id="sInput" style="flex:1;min-width:220px" placeholder="输入游戏昵称，例如 godweiyang">
         <button id="sBtn">查询</button>
         <button id="sShotBtn" class="sec" type="button" disabled>截图分享</button>
+        <button id="sPosterBtn" class="sec" type="button" disabled>生成个人海报</button>
+        <button id="sReset" class="sec" type="button">清空</button>
       </div>
       <div class="hint">展示生涯总览、当前赛季竞技段位、武器熟练度、生存熟练度，以及近 14 天对局；点开任意对局可查看全队战报。</div>
     </div>
@@ -1393,14 +1424,13 @@ async function runMulti(){
     setMBtn();renderMulti();renderMBar();persistMulti();
   }
 }
-function setMBtn(){const b=$('qBtn');if(M.running){b.textContent='停止';b.style.background='var(--red)';}else{b.textContent='开始查询';b.style.background='';}}
+function setMBtn(){const b=$('qBtn');if(M.running){b.textContent='停止';b.style.background='var(--red)';}else{b.textContent='查询';b.style.background='';}}
 function renderMBar(){
   const bar=$('mResBar');
   if(!M.targets.length){bar.innerHTML='';return;}
   const done=M.players.filter(p=>p.status!=='loading').length,total=M.targets.length;
   const stopped=M.players.some(p=>p.status==='error'&&p.error==='已停止');
   const okN=M.players.filter(p=>p.status==='found').length;
-  const modeTxt=$('modeFilter').selectedOptions[0].textContent;
   const ws=waitSec();
   const ks=poolKeyStats();
   const who=ks.avail>1?`全部 ${ks.avail} 个有效 Key`:'有效 Key';
@@ -1411,12 +1441,17 @@ function renderMBar(){
       ?`<div class="rate-banner">⚠️ ${who}均触发官方限流（每个约 10 次/分钟）${badNote}，正等待最早恢复的 Key，<b class="rate-cd">${ws}</b> 秒后自动切换续查，请耐心等待、无需操作；已查到的数据保留。</div>`
       :`<div class="rate-banner">请求较多，${ks.avail>1?`全部 ${ks.avail} 个有效 Key 的额度均已用满`:'有效 Key 限流额度已用满'}（每个约 10 次/分钟）${badNote}，<b class="rate-cd">${ws}</b> 秒后自动切换续查，请耐心等待 …</div>`;
   }
-  bar.innerHTML=`<div class="card" style="padding:11px 16px;margin:12px 0 0"><div class="resbar">
-    <span>模式：<b>${esc(modeTxt)}</b></span><span>近期：<b>近 ${M.recent} 场</b></span><span>时间：<b>${fmtDT(M.ts)}</b></span>
-    <span class="spacer"></span><button class="sec" id="mReset" style="padding:6px 14px">重新搜索</button></div>
-    ${banner}
-    <div class="hint" style="margin:4px 0 0">${M.running?(`查询中 ${done}/${total} …`):(stopped?(`已停止 · 已完成 ${okN}/${total} 人 · 重新查询将全部刷新`):(`查询完成 · 共 ${total} 人 · 对局明细仅保留近 14 天`))}</div></div>`;
-  $('mReset').onclick=()=>{M.targets=[];M.players=[];M.matchOrder=[];M.matchTotal=0;M.matchFail=0;try{localStorage.removeItem(PK_MULTI);}catch(e){}$('cols').innerHTML='';$('mEmpty').innerHTML='';bar.innerHTML='';renderMulti();$('qInput').focus();window.scrollTo({top:0,behavior:'smooth'});};
+  // 稳态（查询完成且无限流）不再渲染顶部工具条卡片——模式/近期/时间与输入区重复；仅查询中 / 限流 / 已停止时提示
+  if(!M.running&&!stopped&&!banner){bar.innerHTML='';return;}
+  const hint=M.running?(`查询中 ${done}/${total} …`):(stopped?(`已停止 · 已完成 ${okN}/${total} 人 · 点「查询」将全部刷新`):'');
+  bar.innerHTML=`<div class="card" style="padding:11px 16px;margin:12px 0 0">${banner}${hint?`<div class="hint" style="margin:${banner?'4px 0 0':'0'}">${hint}</div>`:''}</div>`;
+}
+// 多人清空：重置状态、结果、输入框与本地缓存（不动 API Key 账号池），刷新后不再恢复
+function resetMulti(){
+  M.running=false;M.targets=[];M.players=[];M.matchOrder=[];M.matchTotal=0;M.matchFail=0;
+  try{localStorage.removeItem(PK_MULTI);localStorage.removeItem(PK_MULTI_IN);}catch(e){}
+  $('qInput').value='';$('cols').innerHTML='';$('mEmpty').innerHTML='';$('mResBar').innerHTML='';if($('mViz'))$('mViz').innerHTML='';
+  renderMulti();$('qInput').focus();window.scrollTo({top:0,behavior:'smooth'});
 }
 /* ---------- 多人渲染 ---------- */
 function singleHref(name){return '#/single?name='+encodeURIComponent(name);}
@@ -1918,8 +1953,16 @@ function restoreAll(){
 
 /* ================================================== 绑定 */
 $('qBtn').onclick=runMulti;
+$('mClearBtn').onclick=resetMulti;
 $('sBtn').onclick=()=>runSingle();
 $('sInput').addEventListener('keydown',e=>{if(e.key==='Enter')runSingle();});
+$('sReset').onclick=()=>{ // 清空单人结果与本地缓存（不动 API Key 账号池），刷新后也不再恢复
+  S.name='';S.data=null;S.openMatch=null;
+  try{localStorage.removeItem(PK_SINGLE);localStorage.removeItem(PK_SINGLE_IN);}catch(e){}
+  $('sInput').value='';$('singleRes').innerHTML='';
+  closePoster();syncShotBtns();$('sInput').focus();
+  window.scrollTo({top:0,behavior:'smooth'});
+};
 
 /* ================================================== 结果长图截图（html-to-image 懒加载同站组件；优先写剪贴板，失败则下载 PNG） */
 function loadH2C(cb){
@@ -2016,12 +2059,210 @@ function shotCapture(el,fname,btn){
   });
 }
 function syncShotBtns(){
-  const mb=$('mShotBtn'),sb=$('sShotBtn');
+  const mb=$('mShotBtn'),sb=$('sShotBtn'),pb=$('sPosterBtn');
+  const sBusy=!$('singleRes')||!$('singleRes').children.length||!!$('singleRes').querySelector('.spinner');
   if(mb)mb.disabled=!$('cols')||!$('cols').children.length;
-  if(sb)sb.disabled=!$('singleRes')||!$('singleRes').children.length||!!$('singleRes').querySelector('.spinner');
+  if(sb)sb.disabled=sBusy;
+  if(pb)pb.disabled=sBusy;
 }
 $('mShotBtn').onclick=()=>shotCapture($('mShotWrap'),'pubgzjcx-多人战绩',$('mShotBtn'));
 $('sShotBtn').onclick=()=>shotCapture($('singleRes'),'pubgzjcx-单人战绩'+(S.name?('-'+S.name):''),$('sShotBtn'));
+
+/* ================================================== 个人战绩海报（纯 Canvas 手绘，1080×1920 竖版 9:16，零依赖，导出 PNG） */
+const POSTER_W=1080, POSTER_H=1920, PAD=46, CW=POSTER_W-PAD*2;
+const HORSE_C={T:'#b79bff',A:'#34d399',B:'#60a5fa',C:'#fb923c',D:'#f87171',N:'#9aa0b4'};
+const PF_FONT='"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif';
+function shortSeason(sid){const m=String(sid||'').match(/(\d+)$/);return m?('S'+m[1]):'';}
+function posterData(p){
+  const d=p.detail||{},life=aggModes(d.life),rl=rankedList(d.ranked),sv=d.surv||{},a=p.agg||{};
+  const R=a.rounds||0;
+  const kpg=R?a.kills/R:0,dpg=R?a.dmg/R:0,kd=kdOf(a.kills,R,a.wins),win=R?a.wins/R:0,top=R?a.top10/R:0,
+        dbpg=R?a.dbno/R:0,apg=R?a.assists/R:0,surv=R?a.time/R:0,hsr=a.kills?a.hs/a.kills:0;
+  const lifeR=life.roundsPlayed||0,lifeKd=kdOf(life.kills,lifeR,life.wins);
+  const cur=rl[0]||null, hist=p.histBest||null;
+  const wr=weaponRows(d.weapon).filter(w=>w.kills>0).sort((x,y)=>y.kills-x.kills).slice(0,6);
+  const badges=badgeOf(singleBadgeMetrics(p)).map(b=>b.t);
+  const recent=(p.recent||[]).slice().sort((x,y)=>String(x.createdAt).localeCompare(String(y.createdAt)));
+  return {life,lifeR,lifeKd,sv,cur,hist,wr,badges,a,R,kpg,dpg,kd,win,top,dbpg,apg,surv,hsr,longest:a.longest||0,recent,lifeScope:!!a.__life};
+}
+function posterSlogan(m){
+  if(m.R<3)return '近期样本还少，再多打几场，海报就能读出你的真实水平，下一把见真章';
+  const sc=m.lifeScope?'生涯':`近${m.R}场`;
+  const kd=m.kd.toFixed(2),win=Math.round(m.win*100),top=Math.round(m.top*100),hsr=Math.round(m.hsr*100),
+        dpg=Math.round(m.dpg),kpg=m.kpg.toFixed(1),dbpg=m.dbpg.toFixed(1),apg=m.apg.toFixed(1),
+        surv=fmtMin(m.surv),lg=Math.round(m.longest||0);
+  // —— 按「稀有/最强 → 普通」优先级命中第一条，纯阈值规则、不随机；比率型标签加击杀量门槛，防低样本虚高 ——
+  if(m.kd>=2.2&&m.win>=0.15)return `${sc} KD ${kd}、吃鸡率 ${win}%，天选大腿本腿，全队的安全感都由你承包`;
+  if(m.win>=0.20)return `${sc}吃鸡率高达 ${win}%，把把挺进决赛圈，吃鸡在你这像日常任务`;
+  if(m.win>=0.12)return `${sc}吃鸡率 ${win}%，带队吃鸡是家常便饭，队友落地只想跟紧你`;
+  if(m.kpg>=1.8&&m.surv<1000)return `${sc}场均 ${kpg} 杀、落地就刚，不是在打架，就是在去打架的路上`;
+  if(m.dpg>=380)return `${sc}场均 ${dpg} 伤害，人形自走火力点，一穿四只差一个时机`;
+  if(m.dpg>=280)return `${sc}场均 ${dpg} 伤害稳定输出，队伍里最让人放心的那杆枪`;
+  if(m.dbpg>=1.6)return `${sc}场均击倒 ${dbpg}，先手破局专业户，人头被补也盖不住你的贡献`;
+  if(m.apg>=1.0&&m.kpg<1.0)return `${sc}场均 ${apg} 个助攻，甘当绿叶的最佳辅助，团战的隐形胜负手`;
+  if(m.top>=0.8&&m.kpg<0.9)return `${sc}前十率 ${top}%，稳如老狗的苟分大师，决赛圈永远有你的位置`;
+  if(m.top>=0.7&&m.kpg>=0.9)return `${sc}前十率 ${top}%、KD ${kd}，进可刚枪退可运营，标准的全能位`;
+  if(m.kd>=1.2)return `${sc} KD ${kd}、前十率 ${top}%，不声不响却把把有贡献的稳定主力`;
+  if(m.longest>=300&&m.kpg>=0.7)return `${sc}最远 ${lg} 米开外取人首级，狙击枪在你手里就是远程点名器`;
+  if(m.hsr>=0.40&&m.kpg>=0.8)return `${sc}爆头率 ${hsr}%，枪枪往头上招呼，对枪永远快人一步`;
+  if(m.surv>=1500&&m.kpg<0.7)return `${sc}场均存活 ${surv}，主打一个隐忍蛰伏，活到最后才是真赢家`;
+  if(m.kpg>=1.2&&m.surv<950)return `${sc}场均 ${kpg} 杀、活得热烈，冲锋陷阵从不回头，输赢都很壮烈`;
+  if(m.kd<0.5)return `${sc} KD ${kd} 有点冰凉，枪法正在路上，下一把必触底反弹`;
+  if(m.kd<0.8)return `${sc} KD ${kd} 还在热身，别急，状态这东西打两把就回来了`;
+  if(m.top>=0.5)return `${sc}前十率 ${top}%，运营功底在线，差的只是一点收尾的运气`;
+  return `${sc} KD ${kd}、前十率 ${top}%，中规中矩的潜力股，属于你的高光局正在路上`;
+}
+function pRR(c,x,y,w,h,r){r=Math.min(r,w/2,h/2);c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();}
+function pPanel(c,x,y,w,h,r=22){pRR(c,x,y,w,h,r);c.fillStyle='rgba(255,255,255,0.055)';c.fill();c.lineWidth=1.5;c.strokeStyle='rgba(167,139,250,0.22)';c.stroke();}
+function pText(c,t,x,y,size,col,weight=700,align='left',ls=0){c.font=`${weight} ${size}px ${PF_FONT}`;c.textAlign=align;c.textBaseline='alphabetic';if(ls)c.setLineDash([]);c.fillStyle=col;c.fillText(t,x,y);}
+function pWrap(c,t,x,y,maxW,lh,maxLines){const words=t.split('');let line='',lines=[];for(const ch of words){const test=line+ch;if(c.measureText(test).width>maxW&&line){lines.push(line);line=ch;}else line=test;}if(line)lines.push(line);if(lines.length>maxLines){lines=lines.slice(0,maxLines);lines[maxLines-1]=lines[maxLines-1].slice(0,-1)+'…';}lines.forEach((ln,i)=>c.fillText(ln,x,y+i*lh));return lines.length;}
+function fitSize(c,t,maxW,size,min){let s=size;while(s>min&&c.measureText(t).width>maxW){s-=2;c.font=c.font.replace(/\d+px/,s+'px');}return s;}
+function drawScoreRing(c,cx,cy,r,score,color){
+  const frac=Math.max(0,Math.min(1,(Number(score)||0)/100)),ringR=r-13,lw=12;
+  c.save();let og=c.createLinearGradient(cx-r,cy-r,cx+r,cy+r);og.addColorStop(0,'rgba(167,139,250,0.55)');og.addColorStop(1,'rgba(34,211,238,0.55)');c.strokeStyle=og;c.lineWidth=3;c.beginPath();c.arc(cx,cy,r,0,7);c.stroke();c.restore();
+  c.beginPath();c.arc(cx,cy,ringR-lw/2-2,0,7);c.fillStyle='rgba(255,255,255,0.045)';c.fill();
+  c.beginPath();c.arc(cx,cy,ringR,0,7);c.strokeStyle='rgba(255,255,255,0.10)';c.lineWidth=lw;c.stroke();
+  if(frac>0.01){c.save();c.shadowColor=color;c.shadowBlur=16;c.beginPath();c.arc(cx,cy,ringR,-Math.PI/2,-Math.PI/2+frac*2*Math.PI);c.strokeStyle=color;c.lineWidth=lw;c.lineCap='round';c.stroke();c.restore();}
+  c.font=`900 46px ${PF_FONT}`;c.fillStyle='#fff';c.textAlign='center';c.textBaseline='middle';c.fillText((Number(score)||0).toFixed(0),cx,cy-6);
+  c.font=`600 17px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.55)';c.fillText('综合分',cx,cy+22);
+  c.textBaseline='alphabetic';c.textAlign='left';
+}
+function drawPoster(p){
+  const m=posterData(p);
+  const cv=document.createElement('canvas');cv.width=POSTER_W;cv.height=POSTER_H;const c=cv.getContext('2d');
+  // ---- 背景 ----
+  let bg=c.createLinearGradient(0,0,0,POSTER_H);bg.addColorStop(0,'#241350');bg.addColorStop(0.45,'#1a0f38');bg.addColorStop(1,'#0f0a22');c.fillStyle=bg;c.fillRect(0,0,POSTER_W,POSTER_H);
+  let g1=c.createRadialGradient(540,-140,60,540,-140,780);g1.addColorStop(0,'rgba(124,58,237,0.42)');g1.addColorStop(1,'rgba(124,58,237,0)');c.fillStyle=g1;c.fillRect(0,0,POSTER_W,900);
+  let g2=c.createRadialGradient(560,2060,80,560,2060,760);g2.addColorStop(0,'rgba(34,211,238,0.14)');g2.addColorStop(1,'rgba(34,211,238,0)');c.fillStyle=g2;c.fillRect(0,1150,POSTER_W,770);
+  // 顶部/底部两条氛围光带（置于卡片下层，卡片半透明会透出淡淡紫调，不放散景圆点以免压住文字）
+  let g3=c.createRadialGradient(120,1180,40,120,1180,420);g3.addColorStop(0,'rgba(244,114,182,0.06)');g3.addColorStop(1,'rgba(244,114,182,0)');c.fillStyle=g3;c.fillRect(0,900,520,620);
+  // ---- 顶部标签 ----
+  c.font=`800 26px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.6)';c.textAlign='left';c.fillText('PUBG · 个人战绩海报',PAD,64);
+  c.textAlign='right';c.fillText(($('platformSel').selectedOptions[0].textContent||'STEAM'),POSTER_W-PAD,64);c.textAlign='left';
+  let dl=c.createLinearGradient(PAD,0,POSTER_W-PAD,0);dl.addColorStop(0,'rgba(167,139,250,0)');dl.addColorStop(0.5,'rgba(167,139,250,0.7)');dl.addColorStop(1,'rgba(167,139,250,0)');c.fillStyle=dl;c.fillRect(PAD,86,CW,2);
+  // ---- 头像 / 昵称 / 徽章 / 马型 ----
+  const acx=PAD+74,acy=200,ar=74;
+  const hc=HORSE_C[p.horse.tier]||HORSE_C.N;
+  drawScoreRing(c,acx,acy,ar,p.horse.score,hc);
+  const nx=acx+ar+30;
+  c.font=`900 58px ${PF_FONT}`;fitSize(c,p.name,POSTER_W-PAD-nx-210,58,38);c.fillStyle='#fff';c.fillText(p.name,nx,182);
+  // 信息小胶囊
+  const pills=[`生存 Lv.${num(m.sv.level)||'-'}`, m.lifeScope?'生涯口径':`近14天 ${m.recent.length} 场`, p.ban&&p.ban!=='Innocent'?p.ban:'状态正常'];
+  let px=nx;c.font=`700 21px ${PF_FONT}`;
+  pills.forEach(t=>{const tw=c.measureText(t).width+30;if(px+tw>POSTER_W-PAD-210)return;pRR(c,px,200,tw,34,17);c.fillStyle='rgba(255,255,255,0.08)';c.fill();c.strokeStyle='rgba(255,255,255,0.16)';c.lineWidth=1;c.stroke();c.fillStyle='rgba(255,255,255,0.82)';c.textBaseline='middle';c.fillText(t,px+15,218);c.textBaseline='alphabetic';px+=tw+10;});
+  // 徽章胶囊
+  px=nx;c.font=`800 21px ${PF_FONT}`;
+  m.badges.forEach(t=>{const tw=c.measureText(t).width+28;if(px+tw>POSTER_W-PAD-210)return;pRR(c,px,244,tw,32,16);c.fillStyle='rgba(139,92,246,0.22)';c.fill();c.strokeStyle='rgba(167,139,250,0.5)';c.lineWidth=1;c.stroke();c.fillStyle='#cbb6ff';c.textBaseline='middle';c.fillText(t,px+14,261);c.textBaseline='alphabetic';px+=tw+9;});
+  // 马型胶囊（右侧）
+  const hw=190,hx=POSTER_W-PAD-hw,hy=162;
+  c.save();c.shadowColor=hc;c.shadowBlur=18;pRR(c,hx,hy,hw,76,22);c.fillStyle=hexA(hc,0.16);c.fill();c.lineWidth=2;c.strokeStyle=hc;c.stroke();c.restore();
+  c.font=`900 34px ${PF_FONT}`;c.fillStyle=hc;c.textAlign='center';c.textBaseline='middle';c.fillText(p.horse.label,hx+hw/2,hy+38);c.textBaseline='alphabetic';c.textAlign='left';
+  // ---- 一句话总结 ----
+  const sy=318,sh=122;pPanel(c,PAD,sy,CW,sh,24);
+  c.fillStyle='#a78bfa';c.font=`900 56px ${PF_FONT}`;c.textAlign='left';c.fillText('“',PAD+24,sy+58);
+  c.font=`800 31px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.96)';
+  pWrap(c,posterSlogan(m),PAD+72,sy+52,CW-100,42,2);
+  c.font=`600 19px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.5)';c.textAlign='right';c.fillText(`${m.lifeScope?'生涯':'近 '+m.R+' 场'}口径 · ${shortSeason(p.detail.rankSeason)||''}`,POSTER_W-PAD-22,sy+sh-18);c.textAlign='left';
+  // ---- 核心指标 6 卡 ----
+  const metrics=[[m.kd.toFixed(2),'KD','#b79bff'],[Math.round(m.dpg)+'','场均伤害','#fb923c'],[Math.round(m.win*100)+'%','吃鸡率','#fbbf24'],
+    [Math.round(m.top*100)+'%','前十率','#34d399'],[m.dbpg.toFixed(2),'场均击倒','#f472b6'],[fmtMin(m.surv),'场均存活','#22d3ee']];
+  const gy=462,gh=146,gap=16,gw=(CW-gap*2)/3;
+  metrics.forEach((it,i)=>{const col=i%3,row=Math.floor(i/3),x=PAD+col*(gw+gap),y=gy+row*(gh+gap);
+    pPanel(c,x,y,gw,gh,18);c.fillStyle=it[2];pRR(c,x,y,gw,5,3);c.fill();
+    c.font=`900 52px ${PF_FONT}`;c.fillStyle=it[2];textCenter(c,it[0],x+gw/2,y+82);
+    c.font=`700 23px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.62)';textCenter(c,it[1],x+gw/2,y+120);});
+  // ---- 雷达 + 主力武器 ----
+  const vy=800,vh=408,hw2=(CW-gap)/2;
+  pPanel(c,PAD,vy,hw2,vh,22);drawCardTitle(c,PAD+24,vy+40,'能力雷达',m.lifeScope?'生涯':'近 '+m.R+' 场',PAD+hw2-24);
+  drawRadar(c,PAD+hw2/2,vy+226,128,m);
+  pPanel(c,PAD+hw2+gap,vy,hw2,vh,22);drawCardTitle(c,PAD+hw2+gap+24,vy+40,'主力武器','合计击杀 TOP6',POSTER_W-PAD-24);
+  drawWpns(c,PAD+hw2+gap+24,vy+72,hw2-48,m.wr);
+  // ---- 近期走势 ----
+  const ty=1232,th=276;pPanel(c,PAD,ty,CW,th,22);
+  drawCardTitle(c,PAD+24,ty+40,'近期走势','柱=击杀 · 线=伤害 · 金柱=吃鸡',POSTER_W-PAD-24);
+  drawTrend(c,PAD+20,ty+52,CW-40,th-78,m.recent);
+  // ---- 段位 ----
+  const ry=1532,rh=148;pPanel(c,PAD,ry,CW,rh,22);
+  const midX=POSTER_W/2;
+  c.strokeStyle='rgba(167,139,250,0.25)';c.lineWidth=1;c.beginPath();c.moveTo(midX,ry+26);c.lineTo(midX,ry+rh-26);c.stroke();
+  drawRankBlock(c,PAD+30,ry,'当前赛季',m.cur,m.cur?modeCn(m.cur.mode):'',false);
+  drawRankBlock(c,midX+30,ry,'历史最高（含本赛季）',m.hist,m.hist?shortSeason(m.hist.season):'',true);
+  // ---- 生涯数字条 ----
+  const ly=1696,lh2=116;pPanel(c,PAD,ly,CW,lh2,22);
+  const life=[[num(m.life.roundsPlayed),'总场次'],[num(m.life.wins),'总吃鸡'],[num(m.life.kills),'总击杀'],[m.lifeKd.toFixed(2),'生涯 KD'],[Math.round(m.life.longestKill)+'m','最远击杀']];
+  const seg=CW/life.length;
+  life.forEach((it,i)=>{const cx=PAD+seg*(i+0.5);
+    c.font=`900 40px ${PF_FONT}`;c.fillStyle=i===1?'#fbbf24':'#fff';textCenter(c,it[0],cx,ly+62);
+    c.font=`700 21px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.6)';textCenter(c,it[1],cx,ly+96);});
+  // ---- 页脚 ----
+  c.font=`800 23px ${PF_FONT}`;c.fillStyle='rgba(199,184,255,0.9)';c.textAlign='left';c.fillText('PUBG 战绩查询 · godweiyang.com/pubgzjcx',PAD,1858);
+  const now=new Date();const ds=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
+  c.font=`600 21px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.5)';c.textAlign='right';c.fillText(ds,POSTER_W-PAD,1858);c.textAlign='center';
+  c.font=`500 19px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.38)';c.fillText('数据来自 PUBG 官方 API · 近 14 天对局 + 生涯累计',POSTER_W/2,1896);c.textAlign='left';
+  return cv;
+}
+function hexA(hex,a){const h=hex.replace('#','');const r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);return `rgba(${r},${g},${b},${a})`;}
+function textCenter(c,t,x,y){c.textAlign='center';c.fillText(t,x,y);c.textAlign='left';}
+function drawCardTitle(c,x,y,title,tag,rightX){c.font=`800 26px ${PF_FONT}`;c.fillStyle='#fff';c.textAlign='left';c.fillText(title,x,y);if(tag){c.font=`600 19px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.45)';c.textAlign='right';c.fillText(tag,rightX,y+4);c.textAlign='left';}}
+function drawRadar(c,cx,cy,R,m){
+  const dims=[['突击',lerp1(m.kpg,0.2,2.2)],['火力',lerp1(m.dpg,60,400)],['精准',lerp1(m.hsr,0,0.45)],['生存',lerp1(m.top,0.2,0.9)],['支援',lerp1(m.apg+m.dbpg,0.1,2.2)],['韧性',lerp1(m.surv,700,1700)]];
+  const N=dims.length,pt=(i,v)=>{const ang=-Math.PI/2+i*2*Math.PI/N;return [cx+Math.cos(ang)*R*v,cy+Math.sin(ang)*R*v];};
+  for(let ring=1;ring<=4;ring++){c.beginPath();for(let i=0;i<=N;i++){const [x,y]=pt(i%N,ring/4);i?c.lineTo(x,y):c.moveTo(x,y);}c.strokeStyle='rgba(255,255,255,0.12)';c.lineWidth=1.2;c.stroke();}
+  for(let i=0;i<N;i++){const [x,y]=pt(i,1);c.beginPath();c.moveTo(cx,cy);c.lineTo(x,y);c.strokeStyle='rgba(255,255,255,0.10)';c.stroke();}
+  c.beginPath();dims.forEach((d,i)=>{const [x,y]=pt(i,clamp01(d[1]));i?c.lineTo(x,y):c.moveTo(x,y);});c.closePath();
+  c.fillStyle='rgba(167,139,250,0.32)';c.fill();c.strokeStyle='#b79bff';c.lineWidth=3;c.stroke();
+  dims.forEach((d,i)=>{const [x,y]=pt(i,clamp01(d[1]));c.beginPath();c.arc(x,y,4.5,0,7);c.fillStyle='#fff';c.fill();c.strokeStyle='#8b5cf6';c.lineWidth=2;c.stroke();});
+  dims.forEach((d,i)=>{const ang=-Math.PI/2+i*2*Math.PI/N,lx=cx+Math.cos(ang)*(R+26),ly=cy+Math.sin(ang)*(R+26);
+    c.font=`700 22px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.78)';c.textAlign=Math.abs(Math.cos(ang))<0.3?'center':(Math.cos(ang)>0?'left':'right');c.textBaseline='middle';c.fillText(d[0],lx,ly);c.textBaseline='alphabetic';});c.textAlign='left';
+}
+function drawWpns(c,x,y,w,wr){
+  if(!wr.length){c.font=`600 22px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.45)';c.fillText('暂无武器数据',x,y+120);return;}
+  const rh=52,maxK=wr[0].kills,nameW=118,tailW=64,bx=x+nameW,bw=w-nameW-tailW;
+  wr.forEach((wp,i)=>{const yy=y+i*rh,ty=yy+16,col=WTYP[weaponType(wp.code)][1];
+    c.font=`700 21px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.9)';c.textBaseline='middle';let nm=wp.name;c.font=`700 21px ${PF_FONT}`;while(c.measureText(nm).width>nameW-8&&nm.length>1)nm=nm.slice(0,-1);c.fillText(nm,x,ty+1);
+    pRR(c,bx,ty,bw,16,8);c.fillStyle='rgba(255,255,255,0.08)';c.fill();
+    const wv=Math.max(8,bw*(wp.kills/maxK));pRR(c,bx,ty,wv,16,8);c.fillStyle=col;c.fill();
+    c.font=`800 22px ${PF_FONT}`;c.fillStyle='#fff';c.textAlign='right';c.fillText(wp.kills,x+w,ty+1);c.textAlign='left';c.textBaseline='alphabetic';});
+}
+function drawTrend(c,x,y,w,h,recent){
+  const px=x+40,pw=w-40-16,py=y+16,ph=h-40,base=py+ph;
+  c.strokeStyle='rgba(255,255,255,0.18)';c.lineWidth=1.5;c.beginPath();c.moveTo(px,base);c.lineTo(px+pw,base);c.stroke();
+  if(recent.length<2){c.font=`600 22px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.45)';c.textAlign='center';c.fillText('近期对局不足，暂无走势',x+w/2,y+h/2);c.textAlign='left';return;}
+  const n=recent.length,maxK=Math.max(1,...recent.map(g=>g.kills)),maxD=Math.max(1,...recent.map(g=>g.dmg));
+  const slot=pw/n,bw=Math.min(36,slot*0.56);
+  const dpts=[];
+  recent.forEach((g,i)=>{const cxp=px+slot*(i+0.5),kh=(g.kills/maxK)*ph*0.7,bh=Math.max(g.kills?4:0,kh);
+    pRR(c,cxp-bw/2,base-bh,bw,bh,Math.min(7,bw/2));c.fillStyle=g.won?'#fbbf24':'#34d399';if(g.kills)c.fill();
+    if(n<=10&&g.kills){c.font=`700 17px ${PF_FONT}`;c.textAlign='center';c.lineWidth=3;c.strokeStyle='rgba(15,10,34,0.9)';c.strokeText(g.kills,cxp,base-bh-6);c.fillStyle='rgba(255,255,255,0.92)';c.fillText(g.kills,cxp,base-bh-6);c.textAlign='left';}
+    dpts.push([cxp,base-(g.dmg/maxD)*ph]);});
+  c.beginPath();dpts.forEach((pt2,i)=>i?c.lineTo(pt2[0],pt2[1]):c.moveTo(pt2[0],pt2[1]));c.strokeStyle='#fb923c';c.lineWidth=3;c.lineJoin='round';c.stroke();
+  dpts.forEach(pt2=>{c.beginPath();c.arc(pt2[0],pt2[1],3.5,0,7);c.fillStyle='#fb923c';c.fill();c.strokeStyle='#1a0f38';c.lineWidth=1.5;c.stroke();});
+}
+function drawRankBlock(c,x,y,label,rk,sub,isHist){
+  c.font=`700 22px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.55)';c.textAlign='left';c.fillText(label,x,y+40);
+  if(rk&&rk.tier){const col=tierColor(rk.tier);
+    c.font=`900 46px ${PF_FONT}`;c.fillStyle=col;c.fillText(tierCn(rk.tier)+' '+(ROMAN[rk.sub]||rk.sub||''),x,y+92);
+    c.font=`700 22px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.66)';c.fillText((isHist?'':'模式 '+sub+' · ')+(rk.rp||0)+' RP'+(isHist&&sub?' · '+sub:''),x,y+124);
+  }else{
+    c.font=`900 42px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.4)';c.fillText(isHist?'暂无记录':'未定级',x,y+92);
+    c.font=`600 21px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.4)';c.fillText(isHist?'还没有竞技赛季记录':'完成竞技定级赛后显示',x,y+124);}
+}
+let __posterCanvas=null;
+function openPoster(){
+  const p=S.data;if(!p){toast('请先查询玩家','e');return;}
+  const btn=$('sPosterBtn'),ot=btn.textContent;btn.disabled=true;btn.textContent='生成中…';
+  setTimeout(()=>{try{__posterCanvas=drawPoster(p);$('posterImg').src=__posterCanvas.toDataURL('image/png');$('posterRoot').classList.add('show');}
+    catch(e){toast('海报生成失败：'+(e&&e.message?e.message:e),'e');}btn.textContent=ot;syncShotBtns();},30);
+}
+function closePoster(){$('posterRoot').classList.remove('show');}
+function posterBlob(cb){if(!__posterCanvas)return;__posterCanvas.toBlob(b=>cb(b),'image/png');}
+function savePoster(){posterBlob(b=>{if(!b)return toast('海报生成失败','e');const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='pubgzjcx-海报-'+(S.name||'player')+'.png';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),5000);toast('海报已开始保存','s');});}
+async function copyPoster(){posterBlob(async b=>{if(!b)return;try{await navigator.clipboard.write([new ClipboardItem({'image/png':b})]);toast('海报已复制，去聊天框 Ctrl+V 粘贴即可','s');}catch(e){savePoster();}});}
+$('sPosterBtn').onclick=openPoster;
+$('poClose').onclick=closePoster;
+$('posterRoot').querySelector('.pomask').addEventListener('click',closePoster);
+$('posterSave').onclick=savePoster;
+$('posterCopy').onclick=copyPoster;
 new MutationObserver(syncShotBtns).observe($('cols'),{childList:true});
 new MutationObserver(syncShotBtns).observe($('singleRes'),{childList:true,subtree:true});
 syncShotBtns();
