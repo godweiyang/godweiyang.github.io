@@ -301,8 +301,16 @@ const WEAPON={
 function wName(code){return WEAPON[code]||String(code||'').replace('Item_Weapon_','').replace('_C','');}
 const HORSE_LABEL={T:'天选马',A:'上等马',B:'中等马',C:'下等马',D:'牛马',N:'暂无评级'};
 
-/* ================================================== Key / 平台 */
-const KEY_STORE='pubg_api_key',PLAT_STORE='pubg_platform';
+/* ================================================== Key / 平台 / 持久化 */
+const KEY_STORE='pubg_api_key',PLAT_STORE='pubg_platform',
+  PK_MULTI_IN='pubg_multi_input',PK_SINGLE_IN='pubg_single_input',PK_MODE='pubg_mode_filter',PK_RECENT='pubg_recent_n',
+  PK_MULTI='pubg_multi_state',PK_SINGLE='pubg_single_state';
+// 控件值持久化：刷新后恢复输入框/下拉，并在改动时写回
+function bindPersist(el,key,evt){if(!el)return;
+  try{const v=localStorage.getItem(key);if(v!==null)el.value=v;}catch(e){}
+  el.addEventListener(evt||'input',()=>{try{localStorage.setItem(key,el.value||'');}catch(e){}});}
+function saveJSON(k,o){try{localStorage.setItem(k,JSON.stringify(o));}catch(e){}}
+function readJSON(k){try{return JSON.parse(localStorage.getItem(k)||'null');}catch(e){return null;}}
 function getKey(){return ($('keyInput').value||'').trim();}
 function platform(){return $('platformSel').value;}
 function base(){return 'https://api.pubg.com/shards/'+platform();}
@@ -569,7 +577,7 @@ async function runMulti(){
   });
   order.sort((a,b)=>String(byTime[b]).localeCompare(String(byTime[a])));
   M.matchOrder=order;M.groups=premadeGroups();
-  M.running=false;setMBtn();renderMulti();renderMBar();
+  M.running=false;setMBtn();renderMulti();renderMBar();persistMulti();
   const fail=M.players.filter(p=>p.status==='notfound'||p.status==='error').length;
   toast(fail?(`完成，${M.players.length-fail} 人成功，${fail} 人失败`):'全部查询完成',fail?'w':'s');
 }
@@ -583,7 +591,7 @@ function renderMBar(){
     <span>模式：<b>${esc(modeTxt)}</b></span><span>近期：<b>近 ${M.recent} 场</b></span><span>时间：<b>${fmtDT(M.ts)}</b></span>
     <span class="spacer"></span><button class="sec" id="mReset" style="padding:6px 14px">重新搜索</button></div>
     <div class="hint" style="margin:4px 0 0">${M.running?(`逐人查询中 ${done}/${total}，计限流接口已自动排队（约每 6 秒 1 个）…`):(`查询完成 · 共 ${total} 人 · 对局明细仅保留近 14 天`)}</div></div>`;
-  $('mReset').onclick=()=>{M.targets=[];M.players=[];M.matchOrder=[];M.groups={};$('cols').innerHTML='';$('mEmpty').innerHTML='';bar.innerHTML='';renderMulti();$('qInput').focus();window.scrollTo({top:0,behavior:'smooth'});};
+  $('mReset').onclick=()=>{M.targets=[];M.players=[];M.matchOrder=[];M.groups={};M.matchTotal=0;M.matchFail=0;try{localStorage.removeItem(PK_MULTI);}catch(e){}$('cols').innerHTML='';$('mEmpty').innerHTML='';bar.innerHTML='';renderMulti();$('qInput').focus();window.scrollTo({top:0,behavior:'smooth'});};
 }
 /* 开黑分组：同 matchId 且同 teamId 连边（并查集） */
 function premadeGroups(){
@@ -731,6 +739,12 @@ window.addEventListener('resize',()=>{clearTimeout(__rzT);__rzT=setTimeout(()=>{
 
 /* ================================================== 单人 */
 const S={name:'',data:null,weaponFilter:'all',openMatch:null};
+function persistMulti(){
+  if(!M.players.length)return;
+  saveJSON(PK_MULTI,{ts:M.ts,filter:M.filter,recent:M.recent,input:$('qInput').value,
+    targets:M.targets,players:M.players,matchOrder:M.matchOrder,groups:M.groups,matchTotal:M.matchTotal||0,matchFail:M.matchFail||0});
+}
+function persistSingle(){if(S.data)saveJSON(PK_SINGLE,{ts:Date.now(),name:S.name,weaponFilter:S.weaponFilter,data:S.data});}
 async function runSingle(name){
   name=(name||$('sInput').value||'').trim();
   if(!name){toast('请输入昵称','e');return;}
@@ -747,15 +761,24 @@ async function runSingle(name){
     await pool(ids,8,async id=>{await fetchMatch(id);});
     p.recent=[];
     ids.forEach(id=>{const mt=matchCache[id];if(!mt)return;const s=mt.parts[p.id],tm=mt.accTeam[p.id];if(!s)return;
+      // 本队精简战报（随结果一起缓存，刷新后可离线展开）
+      const roster=mt.rosters.find(r=>r.members.includes(p.id))||null;
+      const members=roster?roster.members:[p.id];
+      const report={rank:roster?roster.rank:(tm?tm.rank:num(s.winPlace)),won:roster?roster.won:s.winPlace===1,size:members.length,
+        map:mt.map,mode:mt.mode,type:mt.type,custom:mt.custom,duration:mt.duration,createdAt:mt.createdAt,
+        members:members.map(acc=>{const x=mt.parts[acc]||{};return {name:x.name||acc,me:acc===p.id,
+          kills:num(x.kills),dbno:num(x.DBNOs),assists:num(x.assists),dmg:num(x.damageDealt),hs:num(x.headshotKills),
+          revives:num(x.revives),heals:num(x.heals),time:num(x.timeSurvived),
+          dist:num(x.walkDistance)+num(x.rideDistance)+num(x.swimDistance),death:x.deathType};})};
       p.recent.push({matchId:id,rank:tm?tm.rank:num(s.winPlace),won:tm?tm.won:s.winPlace===1,teamId:tm?tm.teamId:null,
         kills:num(s.kills),dbno:num(s.DBNOs),dmg:num(s.damageDealt),hs:num(s.headshotKills),assists:num(s.assists),
         revives:num(s.revives),heals:num(s.heals),boosts:num(s.boosts),time:num(s.timeSurvived),death:s.deathType,
         walk:num(s.walkDistance),ride:num(s.rideDistance),swim:num(s.swimDistance),longest:num(s.longestKill),
-        mode:mt.mode,map:mt.map,type:mt.type,custom:mt.custom,duration:mt.duration,createdAt:mt.createdAt});});
+        mode:mt.mode,map:mt.map,type:mt.type,custom:mt.custom,duration:mt.duration,createdAt:mt.createdAt,report});});
     p.recent.sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)));
     p.matchTotal=ids.length;p.matchFail=ids.filter(id=>!matchCache[id]).length;
     p.agg=p.recent.length?aggGames(p.recent):lifeAgg(p.detail);p.horse=horseOf(p.agg);
-    S.data=p;renderSingle();
+    S.data=p;renderSingle();persistSingle();
     toast(p.matchFail?(`查询完成，${p.matchFail}/${p.matchTotal} 场明细受 CDN 限制未取到`):'查询完成',p.matchFail?'w':'s');
   }catch(e){$('singleRes').innerHTML=`<div class="sg empty" style="color:var(--red)">查询失败：${esc(e.message)}</div>`;}
 }
@@ -830,7 +853,7 @@ function renderSingle(){
   h+=`<div class="sg"><h3>最近对局（近 14 天 · ${p.recent.length} 场，点击查看全队战报）</h3>${mlistNote}<div class="mlist" id="mList"></div></div>`;
   $('singleRes').innerHTML=h;
   // 绑定武器切换
-  $('wpnSeg').querySelectorAll('button').forEach(b=>b.onclick=()=>{S.weaponFilter=b.dataset.f;$('wpnSeg').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));renderWpnTable();});
+  $('wpnSeg').querySelectorAll('button').forEach(b=>b.onclick=()=>{S.weaponFilter=b.dataset.f;$('wpnSeg').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));renderWpnTable();persistSingle();});
   renderWpnTable();renderMatchList();
 }
 function statCell(v,l){return `<div class="stat"><div class="v">${v}</div><div class="l">${l}</div></div>`;}
@@ -866,8 +889,21 @@ function renderMatchList(){
   });
 }
 function matchReport(p,g){
+  // 优先使用随结果缓存的本队精简战报（刷新后离线可用）
+  if(g.report){
+    const r=g.report;
+    const rows=r.members.map(m=>`<tr class="${m.me?'me':''}">
+      <td class="wrapcell">${esc(m.name)}${m.me?'（我）':''}</td>
+      <td>${num(r.rank)}</td><td>${m.kills}</td><td>${m.dbno}</td><td>${m.assists}</td>
+      <td>${Math.round(m.dmg)}</td><td>${m.hs}</td><td>${m.revives}</td>
+      <td>${m.heals}</td><td>${fmtMin(m.time)}</td>
+      <td>${fmtDist(m.dist)}</td><td class="wrapcell">${esc(deathCn(m.death))}</td></tr>`).join('');
+    return `<div style="margin:6px 0 8px" class="muted">队伍名次 #${r.rank} · ${r.size} 人小队 · 地图 ${esc(mapName(r.map))} · ${esc(modeCn(r.mode))} · ${esc(typeCn(r.type,r.custom))} · 时长 ${fmtDur(r.duration)} · 开始 ${fmtDT(r.createdAt)}</div>
+  <table class="s-table"><thead><tr><th>队员</th><th>名次</th><th>击杀</th><th>击倒</th><th>助攻</th><th>伤害</th><th>爆头</th><th>救援</th><th>治疗</th><th>存活</th><th>移动</th><th>结局</th></tr></thead>
+  <tbody>${rows}</tbody></table>`;
+  }
   const mt=matchCache[g.matchId];
-  if(!mt)return '<div class="empty">该场数据已过期或不可用</div>';
+  if(!mt)return '<div class="empty">该场明细当前不可用（官方 CDN 缓存限制），可重新查询刷新</div>';
   // 找本队 roster
   const roster=mt.rosters.find(r=>r.members.includes(p.id));
   const members=roster?roster.members:[p.id];
@@ -901,10 +937,30 @@ function routeView(){
 window.addEventListener('hashchange',routeView);
 if(!location.hash)history.replaceState(null,'','#/multi');
 
+/* ================================================== 恢复持久化状态（刷新后保留输入与战绩） */
+function restoreAll(){
+  bindPersist($('qInput'),PK_MULTI_IN);
+  bindPersist($('sInput'),PK_SINGLE_IN);
+  bindPersist($('modeFilter'),PK_MODE,'change');
+  bindPersist($('recentN'),PK_RECENT,'change');
+  const sm=readJSON(PK_MULTI);
+  if(sm&&Array.isArray(sm.players)&&sm.players.length){
+    M.running=false;M.ts=sm.ts||Date.now();M.filter=sm.filter||'all';M.recent=sm.recent||20;
+    M.targets=sm.targets||[];M.players=sm.players;M.matchOrder=sm.matchOrder||[];M.groups=sm.groups||{};
+    M.matchTotal=sm.matchTotal||0;M.matchFail=sm.matchFail||0;
+    if(sm.input)$('qInput').value=sm.input;
+    $('modeFilter').value=M.filter;$('recentN').value=String(M.recent);
+    renderMulti();renderMBar();
+  }
+  const ss=readJSON(PK_SINGLE);
+  if(ss&&ss.data){S.name=ss.name||'';S.data=ss.data;S.weaponFilter=ss.weaponFilter||'all';if(ss.name)$('sInput').value=ss.name;renderSingle();}
+}
+
 /* ================================================== 绑定 */
 $('qBtn').onclick=runMulti;
 $('sBtn').onclick=()=>runSingle();
 $('sInput').addEventListener('keydown',e=>{if(e.key==='Enter')runSingle();});
+restoreAll();
 routeView();
 </script>
 </body>
