@@ -135,7 +135,7 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
 .mm .fdeath{font-size:10.8px}
 .mm .r2{font-size:10.8px;color:var(--sub);margin-top:3px;line-height:1.5;display:flex;justify-content:space-between;gap:6px}
 .mm .r2 .t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mm .r2 .tm{white-space:nowrap;flex:0 0 auto}
+.mm .r2 .tm{white-space:nowrap;flex:0 0 auto;display:inline-flex;align-items:center;gap:5px}
 .mh{flex:0 0 auto;font-size:9.5px;font-weight:800;border-radius:5px;padding:0 6px;line-height:17px;white-space:nowrap;align-self:center}
 .mh.h-T{background:#f1ecfe;color:#7c3aed}.mh.h-A{background:#e8f7ee;color:#16a34a}.mh.h-B{background:#e8f0fe;color:#2563eb}.mh.h-C{background:#fdf1e2;color:#ea8a16}.mh.h-D{background:#fdecec;color:#dc2626}
 .mm .comp{flex:0 0 auto;border-radius:4px;padding:0 5px;font-size:10px;font-weight:800;white-space:nowrap;line-height:16px}
@@ -212,6 +212,7 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
 .s-table tr.wtop td{font-weight:700}
 /* 多人列：最高段位小字 */
 .rm-best{font-size:10px;color:var(--sub);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rm-best b{font-weight:800}
 .s-table{width:100%;border-collapse:collapse;font-size:12.5px}
 .s-table th{color:#8a86a6;font-weight:700;font-size:11.5px;text-align:right;padding:7px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
 .s-table th:first-child,.s-table td:first-child{text-align:left}
@@ -410,11 +411,26 @@ function bindPersist(el,key,evt){if(!el)return;
   el.addEventListener(evt||'input',()=>{try{localStorage.setItem(key,el.value||'');}catch(e){}});}
 function saveJSON(k,o){try{localStorage.setItem(k,JSON.stringify(o));}catch(e){}}
 function readJSON(k){try{return JSON.parse(localStorage.getItem(k)||'null');}catch(e){return null;}}
-// 多个 Key 输入框（动态增删）；getKeys 收集非空并去重，getKey 返回第一个（兼容旧调用）
+// 多个 Key 输入框（动态增删）；兼容单框粘贴多个 Key（按空白/逗号/分号拆分，JWT 本身不含空白）；收集后去重
 const KEY_ROWS=$('keyRows');
-function collectKeyVals(){return [...KEY_ROWS.querySelectorAll('input.keyinp')].map(i=>i.value.trim()).filter(Boolean);}
-function getKeys(){return [...new Set(collectKeyVals())];}
+function rawKeyFrags(){
+  const frags=[];
+  KEY_ROWS.querySelectorAll('input.keyinp').forEach(i=>{
+    i.value.split(/[\s,;；，]+/).map(s=>s.trim()).filter(Boolean).forEach(s=>frags.push(s));
+  });
+  return frags;
+}
+function collectKeyVals(){return [...new Set(rawKeyFrags())];}
+function getKeys(){return collectKeyVals();}
 function getKey(){return getKeys()[0]||'';}
+// 透明计数：输入行数 / Key 片段总数（含重复）/ 去重后实际参与轮询数 / 重复数 / 空框数
+function keyCounts(){
+  const rows=[...KEY_ROWS.querySelectorAll('input.keyinp')];
+  const frags=rawKeyFrags(),uniq=[...new Set(frags)];
+  return {rows:rows.length,frags:frags.length,uniq:uniq.length,dup:frags.length-uniq.length,emptyRows:rows.filter(i=>!i.value.trim()).length};
+}
+// 每个 Key 的探测/运行状态（不持久化，刷新重置）：'ok'|'bad'|'limited'|'unknown'；输入行只是视图，以此 map 为单一事实源
+const keyStateByKey={};
 function platform(){return $('platformSel').value;}
 function base(){return 'https://api.pubg.com/shards/'+platform();}
 function persistKeys(){
@@ -429,8 +445,18 @@ function setRowState(row,st){
   updateClearBtn();
 }
 function updateClearBtn(){
-  const n=KEY_ROWS.querySelectorAll('.keyrow[data-ks="bad"]').length;
+  const n=collectKeyVals().filter(k=>keyStateByKey[k]==='bad').length;
   const b=$('keyClear');if(b){b.hidden=n===0;b.textContent=n?`清除无效 Key（${n}）`:'清除无效 Key';}
+}
+// 把逐 Key 状态映射回输入行（一框一 Key 直接对应；单框多 Key 取最差状态 bad>unknown>limited>ok）
+function applyKeyStatesToRows(){
+  const pri={bad:3,unknown:2,limited:1,ok:0};
+  KEY_ROWS.querySelectorAll('.keyrow').forEach(r=>{
+    const inp=r.querySelector('input.keyinp');
+    const frags=inp.value.split(/[\s,;；，]+/).map(s=>s.trim()).filter(Boolean);
+    let st=null;frags.forEach(f=>{const s=keyStateByKey[f];if(s&&(!st||pri[s]>pri[st]))st=s;});
+    setRowState(r,st||'');
+  });
 }
 // 单 Key 探测：200=有效 / 401·403=无效 / 429=限流中（Key 本身有效，不是无效）/ 其余或网络异常=检测失败（不下无效结论）
 async function probeKey(key){
@@ -461,19 +487,19 @@ function addKeyRow(value,focus){
   if(focus)inp.focus();
   return inp;
 }
-// 查询途中某 Key 真返回 401/403 时把对应输入行标红（不覆盖已判定的有效/限流）
+// 查询途中某 Key 真返回 401/403：记入状态 map，并刷新行标记与「清除无效」按钮
 function markRowBadByKey(key){
-  KEY_ROWS.querySelectorAll('.keyrow').forEach(r=>{
-    const inp=r.querySelector('input.keyinp');
-    if(inp.value.trim()===key&&(!r.dataset.ks||r.dataset.ks==='unknown'))setRowState(r,'bad');
-  });
+  keyStateByKey[key]='bad';applyKeyStatesToRows();updateClearBtn();
 }
 function clearBadKeys(){
-  const bads=[...KEY_ROWS.querySelectorAll('.keyrow[data-ks="bad"]')];
-  if(!bads.length)return;
-  bads.forEach(r=>r.remove());
-  if(!KEY_ROWS.querySelectorAll('.keyrow').length)addKeyRow('');
-  persistKeys();toast(`已清除 ${bads.length} 个无效 Key`,'s');
+  const all=collectKeyVals();
+  const keep=all.filter(k=>keyStateByKey[k]!=='bad');
+  const badN=all.length-keep.length;
+  if(!badN)return;
+  Object.keys(keyStateByKey).forEach(k=>{if(keyStateByKey[k]==='bad')delete keyStateByKey[k];});
+  [...KEY_ROWS.querySelectorAll('.keyrow')].forEach(r=>r.remove()); // 按片段重建：剔除无效、剩余一框一个（顺带规范化单框多 Key）
+  if(keep.length)keep.forEach(k=>addKeyRow(k));else addKeyRow('');
+  persistKeys();toast(`已清除 ${badN} 个无效 Key`,'s');
 }
 (function init(){
   let vals=[];
@@ -489,14 +515,20 @@ function clearBadKeys(){
   $('testBtn').onclick=testConnection;
   updateClearBtn();setKeyStatus();
 })();
-// 按各输入行的检测标记汇总顶部状态；没有任何标记时回落到“未测试”
+// 以去重后的 Key 片段为单一事实源汇总顶部状态（输入行只是视图）；未探测时回落“未测试”，并提示重复/空框
 function summarizeRows(){
-  const rows=[...KEY_ROWS.querySelectorAll('.keyrow')].filter(r=>r.querySelector('input.keyinp').value.trim());
+  const kc=keyCounts();
+  if(!kc.uniq)return {state:null,txt:'未填写 Key'};
   const c={ok:0,bad:0,limited:0,unknown:0};
-  rows.forEach(r=>{const st=r.dataset.ks;if(st in c)c[st]++;});
-  if(!rows.length)return {state:null,txt:'未填写 Key'};
-  const tested=rows.filter(r=>r.dataset.ks).length;
-  if(!tested)return {state:null,txt:`已识别 ${rows.length} 个 Key${rows.length>1?'，限流时自动轮询':''}，未测试`};
+  collectKeyVals().forEach(k=>{const st=keyStateByKey[k];if(st in c)c[st]++;});
+  const tested=c.ok+c.bad+c.limited+c.unknown;
+  if(!tested){
+    const note=[];
+    if(kc.dup)note.push(`${kc.dup} 个重复已忽略`);
+    if(kc.emptyRows)note.push(`${kc.emptyRows} 个空框已忽略`);
+    const tail=note.length?`（${note.join('，')}）`:'';
+    return {state:null,txt:`已识别 ${kc.uniq} 个 Key${tail}${kc.uniq>1?'，限流时自动轮询':''}，未测试`};
+  }
   const parts=[];
   if(c.ok)parts.push(`${c.ok} 个有效`);
   if(c.limited)parts.push(`${c.limited} 个限流中（稍后自动恢复，并非无效）`);
@@ -515,12 +547,13 @@ function setKeyStatus(state,txt){
   else{const s=summarizeRows();if(s.state)el.classList.add(s.state);t.textContent=txt||s.txt;}
 }
 async function testConnection(){
-  const rows=[...KEY_ROWS.querySelectorAll('.keyrow')].filter(r=>r.querySelector('input.keyinp').value.trim());
-  if(!rows.length){toast('请先填写 API Key','e');return;}
-  setKeyStatus(null,'检测 '+rows.length+' 个 Key…');
-  rows.forEach(r=>setRowState(r,''));
+  const keys=collectKeyVals();
+  if(!keys.length){toast('请先填写 API Key','e');return;}
+  setKeyStatus(null,`检测 ${keys.length} 个 Key…`);
+  Object.keys(keyStateByKey).forEach(k=>delete keyStateByKey[k]);
   const c={ok:0,bad:0,limited:0,unknown:0};
-  for(const r of rows){const st=await probeKey(r.querySelector('input.keyinp').value.trim());setRowState(r,st);c[st]++;}
+  for(const k of keys){const st=await probeKey(k);keyStateByKey[k]=st;c[st]++;} // 按去重后的 Key 逐个探测，计数与轮询池完全一致
+  applyKeyStatesToRows();
   const s=summarizeRows();setKeyStatus(s.state,s.txt);
   if(c.bad)toast(`有 ${c.bad} 个无效 Key，可一键清除`,'w');
   else if(c.limited||c.unknown)toast(s.txt,'w');
@@ -578,6 +611,8 @@ function nextAvailableAt(now){
 }
 // 不计限流的请求（/matches、telemetry）取第一个未作废的 Key
 function activeKey(){syncKeyPool();const ks=keyPool.find(k=>!k.bad)||keyPool[0];return ks?ks.key:getKey();}
+// 供限流提示用：去重后总 Key 数 / 已判无效数 / 当前实际参与轮询的可用数（排除无效）
+function poolKeyStats(){syncKeyPool();const total=keyPool.length,bad=keyPool.filter(k=>k.bad).length;return {total,bad,avail:total-bad};}
 /* 自动等待提示：排队等额度(queue)或 429 冷却(cool)时，进度条显示倒计时，全程自动续查、无需重复点击 */
 const waiter={until:0,mode:''};
 function waitSec(){return waiter.until?Math.max(0,Math.ceil((waiter.until-Date.now())/1000)):0;}
@@ -958,12 +993,14 @@ function renderMBar(){
   const okN=M.players.filter(p=>p.status==='found').length;
   const modeTxt=$('modeFilter').selectedOptions[0].textContent;
   const ws=waitSec();
-  const nk=getKeys().length;
+  const ks=poolKeyStats();
+  const who=ks.avail>1?`全部 ${ks.avail} 个有效 Key`:'有效 Key';
+  const badNote=ks.bad?`（另有 ${ks.bad} 个无效 Key 已跳过，建议删除或更换）`:'';
   let banner='';
   if(M.running&&ws>0){
     banner=waiter.mode==='cool'
-      ?`<div class="rate-banner">⚠️ ${nk>1?`全部 ${nk} 个 Key 均`:'Key'}触发官方限流（每个约 10 次/分钟），正等待最早恢复的 Key，<b class="rate-cd">${ws}</b> 秒后自动切换续查，请耐心等待、无需操作；已查到的数据保留。</div>`
-      :`<div class="rate-banner">请求较多，${nk>1?`全部 ${nk} 个 Key 的额度均已用满`:'Key 限流额度已用满'}（每个约 10 次/分钟），<b class="rate-cd">${ws}</b> 秒后自动切换续查，请耐心等待 …</div>`;
+      ?`<div class="rate-banner">⚠️ ${who}均触发官方限流（每个约 10 次/分钟）${badNote}，正等待最早恢复的 Key，<b class="rate-cd">${ws}</b> 秒后自动切换续查，请耐心等待、无需操作；已查到的数据保留。</div>`
+      :`<div class="rate-banner">请求较多，${ks.avail>1?`全部 ${ks.avail} 个有效 Key 的额度均已用满`:'有效 Key 限流额度已用满'}（每个约 10 次/分钟）${badNote}，<b class="rate-cd">${ws}</b> 秒后自动切换续查，请耐心等待 …</div>`;
   }
   bar.innerHTML=`<div class="card" style="padding:11px 16px;margin:12px 0 0"><div class="resbar">
     <span>模式：<b>${esc(modeTxt)}</b></span><span>近期：<b>近 ${M.recent} 场</b></span><span>时间：<b>${fmtDT(M.ts)}</b></span>
@@ -1012,7 +1049,7 @@ function mRankCell(pl){
     body='<div class="rankmini">'+modes.map(mode=>{
       const cur=rl.find(r=>r.mode===mode)||null,hm=byMode[mode]||null;
       const hist=hm
-        ?`<div class="rm-best" title="${seasonLabel(hm.season)}">历史最高 ${tierCn(hm.tier)}${ROMAN[hm.sub]||hm.sub||''} ${seasonLabel(hm.season).replace('第 ','S').replace(' 赛季','')}</div>`
+        ?`<div class="rm-best" title="${seasonLabel(hm.season)}">历史最高 <b style="color:${tierColor(hm.tier)}">${tierCn(hm.tier)}${ROMAN[hm.sub]||hm.sub||''}</b> ${seasonLabel(hm.season).replace('第 ','S').replace(' 赛季','')}</div>`
         :(pl.histLoading?'<div class="rm-best">历史最高…</div>':'');
       if(cur){
         return `<div class="rm">
@@ -1060,9 +1097,9 @@ function matchMini(g){
   const h=matchHorse(g);
   const tb=typeInfo(g.type,g.custom);
   const comp=`<span class="comp ${tb.c}">${tb.t}</span>`;
-  const out=`<span class="fstat"><b class="k">${g.kills}</b><i>杀</i></span>`
-    +`<span class="fstat"><b class="d">${g.dbno}</b><i>倒</i></span>`
-    +`<span class="fstat"><b>${Math.round(g.dmg)}</b><i>伤</i></span>`;
+  const out=`<span class="fstat"><b class="k">${g.kills}</b><i>击杀</i></span>`
+    +`<span class="fstat"><b class="d">${g.dbno}</b><i>击倒</i></span>`
+    +`<span class="fstat"><b>${Math.round(g.dmg)}</b><i>伤害</i></span>`;
   const aux=`<span class="fstat"><b>${g.assists||0}</b><i>助攻</i></span>`
     +`<span class="fstat"><b>${g.revives||0}</b><i>救援</i></span>`
     +`<span class="fstat"><b class="h">${g.hs||0}</b><i>爆头</i></span>`
@@ -1070,7 +1107,7 @@ function matchMini(g){
     +(g.won?'':`<span class="fdeath">${esc(deathCn(g.death))}</span>`);
   return `<div class="mm ${cls}">
     <div class="r1">
-      <span class="res">#${g.rank}</span>${g.won?'<span class="wintag">吃鸡</span>':''}
+      <span class="res">#${g.rank}</span>
       <span class="fgrp">${out}</span>
       <span class="mh h-${h.tier}" title="单场综合分 ${h.score.toFixed(0)}">${esc(h.label)}</span>
     </div>
@@ -1170,7 +1207,7 @@ async function runSingle(name){
   }finally{if(sTimer){clearInterval(sTimer);sTimer=null;}S.running=false;$('sBtn').disabled=false;}
 }
 function renderSingleLoading(){$('singleRes').innerHTML='<div class="sg"><div class="col-status"><div class="spinner"></div>正在查询 '+esc(S.name)+' …</div><div id="sWait" style="margin-top:10px"></div></div>';}
-function renderSingleWait(){const el=$('sWait');if(!el)return;const ws=waitSec();const nk=getKeys().length;el.innerHTML=ws>0?`<div class="rate-banner">${waiter.mode==='cool'?`${nk>1?`全部 ${nk} 个 Key 均`:'Key'}触发限流，正等待最早恢复的 Key，<b class="rate-cd">${ws}</b> 秒后自动切换续查，请耐心等待…`:`请求较多，${nk>1?`全部 ${nk} 个 Key 额度均已用满`:'Key 额度已用满'}，<b class="rate-cd">${ws}</b> 秒后自动切换续查，请耐心等待…`}</div>`:'';}
+function renderSingleWait(){const el=$('sWait');if(!el)return;const ws=waitSec();const ks=poolKeyStats();const who=ks.avail>1?`全部 ${ks.avail} 个有效 Key`:'有效 Key';const badNote=ks.bad?`（另有 ${ks.bad} 个无效 Key 已跳过）`:'';el.innerHTML=ws>0?`<div class="rate-banner">${waiter.mode==='cool'?`${who}均触发限流，正等待最早恢复的 Key${badNote}，<b class="rate-cd">${ws}</b> 秒后自动切换续查，请耐心等待…`:`请求较多，${ks.avail>1?`全部 ${ks.avail} 个有效 Key 额度均已用满`:'有效 Key 额度已用满'}${badNote}，<b class="rate-cd">${ws}</b> 秒后自动切换续查，请耐心等待…`}</div>`:'';}
 function seasonLabel(sid){const m=String(sid||'').match(/(\d+)$/);return m?('第 '+m[1]+' 赛季'):'';}
 function ratioPct(n,d){return d?pct(n/d):'—';}
 function statCell(v,l,title){return `<div class="stat"${title?` title="${esc(title)}"`:''}><div class="v">${v}</div><div class="l">${l}</div></div>`;}
