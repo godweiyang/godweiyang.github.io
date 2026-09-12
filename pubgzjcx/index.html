@@ -149,6 +149,26 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
 .cell .col-status.warn{color:var(--org);font-weight:700}
 .rate-banner{background:#fef3e2;border:1px solid #f3cd9c;color:#92400e;border-radius:9px;padding:9px 12px;font-size:12.5px;line-height:1.6;margin:8px 0 2px}
 .rate-banner b{color:var(--org);font-size:14px}
+.viz-svg{width:100%;height:auto;display:block}
+.viz-badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.cell .viz-badges{margin-top:0}
+.viz-badge{display:inline-flex;align-items:center;font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;line-height:1.5;white-space:nowrap}
+.b-gold{background:#fef3c7;color:#b45309;border:1px solid #fcd34d}
+.b-red{background:#fee2e2;color:#dc2626}
+.b-org{background:#ffedd5;color:#c2610a}
+.b-blue{background:#dbeafe;color:#2563eb}
+.b-green{background:#dcfce7;color:#15803d}
+.b-teal{background:#cffafe;color:#0e7490}
+.b-purple{background:#ede9fe;color:#5b2a86}
+.b-gray{background:#f1f3f5;color:#6b7280}
+.viz-band{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--line)}
+.viz-card{padding:14px 16px;border-right:1px solid var(--line);min-width:0}
+.viz-card:last-child{border-right:0}
+.viz-card h4{margin:0 0 4px;font-size:13.5px;color:var(--ink)}
+.viz-legend{display:flex;flex-wrap:wrap;gap:5px 14px;margin-top:2px;font-size:12px;color:var(--sub)}
+.viz-legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.wpn-bubble{margin:8px 0 4px}
+@media(max-width:760px){.viz-band{grid-template-columns:1fr}.viz-card{border-right:0;border-bottom:1px solid var(--line)}.viz-card:last-child{border-bottom:0}}
 .spinner{width:26px;height:26px;border:3px solid #e3e7ee;border-top-color:var(--pri);border-radius:50%;margin:0 auto 10px;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .empty{color:var(--sub);text-align:center;padding:18px 0;font-size:12.5px}
@@ -399,6 +419,182 @@ const WEAPON={
  "Item_Weapon_BluezoneGrenade_C":"蓝圈手雷","Item_Weapon_C4_C":"C4","Item_Weapon_StunGun_C":"电击枪"};
 function wName(code){return WEAPON[code]||String(code||'').replace('Item_Weapon_','').replace('_C','');}
 const HORSE_LABEL={T:'天选马',A:'上等马',B:'中等马',C:'下等马',D:'牛马',N:'暂无评级'};
+
+/* ================================================== 可视化（纯 SVG，零依赖）与风格徽章 */
+const VIZ_COLORS=['#5b2a86','#2563eb','#d97706','#16a34a','#dc2626','#0ea5b7'];
+function clamp01(v){return Math.max(0,Math.min(1,v));}
+function lerp1(v,lo,hi){return hi>lo?clamp01((v-lo)/(hi-lo)):0;}
+// 枪械类型分类（用于武器气泡图配色）
+function weaponType(code){
+  const c=String(code||'');
+  if(/Crossbow/.test(c))return 'oth';
+  if(/Kar98|M24_C|AWM|Mosin|Win1894|Lynx|L6_C/.test(c))return 'SR';
+  if(/SKS|Mini14|Mk12|Mk14|VSS|QBU|FNFal|Dragunov/.test(c))return 'DMR';
+  if(/DP28|M249|MG3|RPD|M2HB/.test(c))return 'LMG';
+  if(/UMP|Vector|Bizon|MP5K|Thompson|UZI|JS9|P90/.test(c))return 'SMG';
+  if(/Winchester|S1897|S686|Berreta|S12K|DBS|Saiga|OriginS12|DP12/.test(c))return 'SG';
+  if(/P92|M9_C|M1911|P18C|DesertEagle|Skorpion|vz61|Nagant|G18/.test(c))return 'PST';
+  if(/Pan|Machete|Sickle|Crowbar|Grenade|Molotov|Bluezone|C4|StunGun|M79|Panzer|Mortar|Flare|BreakDoor/.test(c))return 'oth';
+  return 'AR';
+}
+const WTYP={AR:['突击步枪','#5b2a86'],SMG:['冲锋枪','#2563eb'],DMR:['射手步枪','#0ea5b7'],SR:['栓动狙击','#dc2626'],LMG:['轻机枪','#d97706'],SG:['霰弹枪','#16a34a'],PST:['手枪','#9ca3af'],oth:['其他','#a78bfa']};
+// 统一风格指标 → 徽章（单人用生涯口径字段全，多人用近期 agg 字段子集）
+function badgeOf(m){
+  const b=[];const add=(t,c)=>b.push({t,c});
+  if(m.horse==='T')add('天选马','gold');
+  if(m.rounds>=10&&m.win>=0.12)add('吃鸡机器','red');
+  if(m.kpg>=1.5)add('刚枪王','red');else if(m.kpg>=1.0)add('主力输出','org');
+  if(m.dpg>=300)add('火力压制','org');
+  if(m.hsr>=0.28)add('爆头机器','blue');
+  if(m.longest>=300)add('狙击手','blue');
+  if(m.rpg!=null&&m.rpg>=0.35)add('医疗兵','green');
+  if(m.dbpg>=1.4)add('击倒王','green');else if(m.apg>=0.8)add('最佳辅助','green');
+  if(m.surv>=1500&&m.kpg<0.9&&m.top>=0.5)add('苟分大师','teal');
+  if(m.kpg>=1.2&&m.surv<950)add('冲锋陷阵','red');
+  if(m.road!=null&&m.road>=5)add('车神','teal');
+  if(m.movepg!=null&&m.movepg>=3200)add('长跑健将','teal');
+  if(m.rounds>=1500)add('战场劳模','purple');
+  if(m.horse==='A'&&!b.some(x=>x.t==='天选马'))add('大腿','purple');
+  if(!b.length){
+    if(m.top>=0.5)add('稳健选手','teal');
+    else if(m.kpg>=0.7)add('稳定输出','org');
+    else add('新锐玩家','gray');
+  }
+  return b.slice(0,4);
+}
+function badgesHtml(mets){
+  if(!mets)return '';
+  return badgeOf(mets).map(b=>`<span class="viz-badge b-${b.c}">${esc(b.t)}</span>`).join('');
+}
+// 单人：生涯口径（字段最全）
+function singleBadgeMetrics(p){
+  const L=aggModes(p.detail.life),rounds=L.roundsPlayed||0,move=L.walkDistance+L.rideDistance+L.swimDistance;
+  return {rounds,kpg:rounds?L.kills/rounds:0,dpg:rounds?L.damageDealt/rounds:0,hsr:L.kills?L.headshotKills/L.kills:0,
+    top:rounds?L.top10s/rounds:0,win:rounds?L.wins/rounds:0,apg:rounds?L.assists/rounds:0,dbpg:rounds?L.dBNOs/rounds:0,
+    surv:rounds?L.timeSurvived/rounds:0,rpg:rounds?L.revives/rounds:0,longest:L.longestKill,
+    movepg:rounds?move/rounds:0,road:L.roadKills,horse:(p.horse||{}).tier};
+}
+// 多人：近期对局 agg（aggGames 字段子集，无救援/载具）
+function multiBadgeMetrics(pl){
+  const t=pl.agg;if(!t||!t.rounds)return null;const r=t.rounds;
+  return {rounds:r,kpg:t.kills/r,dpg:t.dmg/r,hsr:t.kills?t.hs/t.kills:0,top:t.top10/r,win:t.wins/r,
+    apg:t.assists/r,dbpg:t.dbno/r,surv:t.time/r,rpg:null,longest:t.longest,movepg:null,road:null,horse:(pl.horse||{}).tier};
+}
+// 单人：近 N 场走势（击杀柱[吃鸡金色★] + 伤害折线，左旧右新）
+function trendSvg(games){
+  if(!games||games.length<2)return '';
+  const g2=games.slice().reverse();
+  const W=760,H=250,L=40,R=46,T=22,B=38,iw=W-L-R,ih=H-T-B,base=T+ih,n=g2.length;
+  const maxK=Math.max(3,...g2.map(g=>g.kills)),maxD=Math.max(120,...g2.map(g=>g.dmg))*1.08;
+  const slot=iw/n,bw=Math.max(3,Math.min(20,slot*0.55));
+  const X=i=>L+slot*i+slot/2,yK=k=>base-(k/maxK)*ih,yD=d=>base-(d/maxD)*ih;
+  let s='';
+  for(let g=0;g<=2;g++){const yy=T+ih*g/2;s+=`<line x1="${L}" y1="${yy.toFixed(1)}" x2="${W-R}" y2="${yy.toFixed(1)}" stroke="#eef0f4"/>`;}
+  s+=`<text x="${L-6}" y="${base+3}" text-anchor="end" font-size="9" fill="#9ca3af">0</text>`;
+  s+=`<text x="${L-6}" y="${T+ih/2+3}" text-anchor="end" font-size="9" fill="#16a34a">${(maxK/2).toFixed(0)}</text>`;
+  s+=`<text x="${L-6}" y="${T+4}" text-anchor="end" font-size="9" fill="#16a34a">${maxK.toFixed(0)}</text>`;
+  s+=`<text x="${W-R+6}" y="${base+3}" font-size="9" fill="#9ca3af">0</text>`;
+  s+=`<text x="${W-R+6}" y="${T+ih/2+3}" font-size="9" fill="#d97706">${Math.round(maxD/2)}</text>`;
+  s+=`<text x="${W-R+6}" y="${T+4}" font-size="9" fill="#d97706">${Math.round(maxD)}</text>`;
+  let line='',area=`M${X(0).toFixed(1)},${yD(g2[0].dmg).toFixed(1)}`;
+  g2.forEach((g,i)=>{const x=X(i),y=yD(g.dmg);line+=(i?'L':'M')+x.toFixed(1)+','+y.toFixed(1);area+='L'+x.toFixed(1)+','+y.toFixed(1);});
+  area+=`L${X(n-1).toFixed(1)},${base}L${X(0).toFixed(1)},${base}Z`;
+  s+=`<path d="${area}" fill="#d97706" opacity="0.08"/><path d="${line}" fill="none" stroke="#d97706" stroke-width="1.8"/>`;
+  g2.forEach((g,i)=>{s+=`<circle cx="${X(i).toFixed(1)}" cy="${yD(g.dmg).toFixed(1)}" r="2.3" fill="#d97706"/>`;});
+  g2.forEach((g,i)=>{
+    const x=X(i),y=yK(g.kills),h=Math.max(1,base-y),col=g.won?'#f59e0b':'#16a34a';
+    s+=`<rect x="${(x-bw/2).toFixed(1)}" y="${y.toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" rx="2" fill="${col}"><title>${fmtDT(g.createdAt)}｜#${g.rank}｜${g.kills}杀 ${Math.round(g.dmg)}伤</title></rect>`;
+    if(g.won)s+=`<text x="${x.toFixed(1)}" y="${(y-4).toFixed(1)}" text-anchor="middle" font-size="10" fill="#b45309">★</text>`;
+    if(n<=15||i%2===0)s+=`<text x="${x.toFixed(1)}" y="${base+15}" text-anchor="middle" font-size="8.5" font-weight="${g.won?'700':'400'}" fill="${g.won?'#b45309':'#9ca3af'}">#${g.rank}</text>`;
+  });
+  s+=`<text x="${L}" y="${T-9}" font-size="10" fill="#16a34a">击杀（柱）</text><text x="${W-R}" y="${T-9}" text-anchor="end" font-size="10" fill="#d97706">伤害（线）</text>`;
+  s+=`<text x="${(L+iw/2).toFixed(1)}" y="${H-5}" text-anchor="middle" font-size="9.5" fill="#9ca3af">${n} 场走势 · 左旧 → 右新 · 柱顶 ★ 为吃鸡</text>`;
+  return `<svg viewBox="0 0 ${W} ${H}" class="viz-svg" preserveAspectRatio="xMidYMid meet">${s}</svg>`;
+}
+// 单人：武器气泡图（X 击杀 / Y 伤害 / 气泡大小=爆头击倒 / 颜色=枪械类型，取前 12 主力）
+function weaponBubbleSvg(rows){
+  const data=(rows||[]).filter(w=>w.kills>0).sort((a,b)=>b.kills-a.kills).slice(0,12);
+  if(data.length<2)return '';
+  const W=760,H=300,L=46,R=18,T=24,B=44,iw=W-L-R,ih=H-T-B,base=T+ih;
+  const maxX=Math.max(3,...data.map(w=>w.kills))*1.12,maxY=Math.max(60,...data.map(w=>w.dmg))*1.1;
+  const X=v=>L+(v/maxX)*iw,Y=v=>base-(v/maxY)*ih;
+  let s='';
+  for(let g=0;g<=3;g++){const yy=T+ih*g/3;s+=`<line x1="${L}" y1="${yy.toFixed(1)}" x2="${W-R}" y2="${yy.toFixed(1)}" stroke="#eef0f4"/>`;
+    s+=`<text x="${L-6}" y="${(yy+3).toFixed(1)}" text-anchor="end" font-size="8.5" fill="#9ca3af">${Math.round(maxY*(1-g/3))}</text>`;}
+  for(let g=0;g<=4;g++){const xx=L+iw*g/4;s+=`<line x1="${xx.toFixed(1)}" y1="${T}" x2="${xx.toFixed(1)}" y2="${base}" stroke="#f4f5f8"/>`;
+    s+=`<text x="${xx.toFixed(1)}" y="${base+14}" text-anchor="middle" font-size="8.5" fill="#9ca3af">${Math.round(maxX*g/4)}</text>`;}
+  const rowRight=[];
+  data.forEach((w,idx)=>{
+    const t=weaponType(w.code),col=WTYP[t][1],r=Math.max(5,Math.min(22,5+1.7*Math.sqrt(Math.max(w.hs,w.grog))));
+    const cx=X(w.kills),cy=Y(w.dmg);
+    s+=`<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${r.toFixed(1)}" fill="${col}" fill-opacity="0.2" stroke="${col}" stroke-width="1.6"><title>${w.name}（${WTYP[t][0]}）｜${w.kills}杀 ${Math.round(w.dmg)}伤 ${w.hs}爆头 ${w.grog}击倒 最远${Math.round(w.longest)}m</title></circle>`;
+    if(idx<10){ // 前 10 把标名，按行纵向避让防重叠；其余仅悬浮可见
+      const name=esc(w.name),tx=cx+r+3,tw=w.name.length*6+9;let row=0;
+      while(rowRight[row]!==undefined&&rowRight[row]>tx)row++;if(row>2)row=2;
+      rowRight[row]=tx+tw;
+      s+=`<text x="${tx.toFixed(1)}" y="${(cy+3+row*11).toFixed(1)}" font-size="9.5" fill="#374151">${name}</text>`;
+    }
+  });
+  s+=`<text x="${(L+iw/2).toFixed(1)}" y="${H-8}" text-anchor="middle" font-size="10" fill="#6b7280">击杀数 →（气泡越大，爆头/击倒越多）</text>`;
+  s+=`<text transform="translate(12,${(T+ih/2).toFixed(1)}) rotate(-90)" text-anchor="middle" font-size="10" fill="#6b7280">总伤害 →</text>`;
+  const types=[...new Set(data.map(w=>weaponType(w.code)))];
+  let lx=W-R-4;
+  types.slice().reverse().forEach(t=>{const wd=14+WTYP[t][0].length*11+10;lx-=wd;
+    s+=`<rect x="${lx.toFixed(1)}" y="${T-13}" width="9" height="9" rx="2" fill="${WTYP[t][1]}"/><text x="${(lx+13).toFixed(1)}" y="${T-5}" font-size="9" fill="#6b7280">${WTYP[t][0]}</text>`;});
+  return `<svg viewBox="0 0 ${W} ${H}" class="viz-svg" preserveAspectRatio="xMidYMid meet">${s}</svg>`;
+}
+// 多人：能力雷达（6 维固定标尺，反映绝对实力）。players=[{name,color,vals:[6]}]
+function radarSvg(players){
+  const W=380,H=312,cx=150,cy=160,R=104,dims=['突击','火力','精准','生存','支援','韧性'];
+  const ang=k=>(-90+k*60)*Math.PI/180,pt=(k,r)=>[cx+r*R*Math.cos(ang(k)),cy+r*R*Math.sin(ang(k))];
+  let s='';
+  [0.33,0.66,1].forEach(lv=>{s+=`<polygon points="${dims.map((_,k)=>pt(k,lv).map(v=>v.toFixed(1)).join(',')).join(' ')}" fill="none" stroke="#e7e9f0"/>`;});
+  dims.forEach((d,k)=>{const [x,y]=pt(k,1);s+=`<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="#e7e9f0"/>`;
+    const [lx,ly]=pt(k,1.18);s+=`<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="600" fill="#4b5563">${d}</text>`;});
+  players.forEach(pl=>{
+    s+=`<polygon points="${pl.vals.map((v,k)=>pt(k,Math.max(0.03,v)).map(q=>q.toFixed(1)).join(',')).join(' ')}" fill="${pl.color}" fill-opacity="0.12" stroke="${pl.color}" stroke-width="2"><title>${pl.name}</title></polygon>`;
+    pl.vals.forEach((v,k)=>{const [x,y]=pt(k,Math.max(0.03,v));s+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="2.6" fill="${pl.color}"/>`;});
+  });
+  return `<svg viewBox="0 0 ${W} ${H}" class="viz-svg">${s}</svg>`;
+}
+// 多人：团队角色象限（X 场均伤害 / Y 前十率，十字线取全队均值）。players=[{name,color,dpg,top}]
+function quadSvg(players){
+  const W=380,H=312,L=42,R=18,T=24,B=42,iw=W-L-R,ih=H-T-B,base=T+ih;
+  const maxX=Math.max(150,...players.map(p=>p.dpg))*1.12;
+  const mx=players.reduce((a,p)=>a+p.dpg,0)/players.length,my=players.reduce((a,p)=>a+p.top,0)/players.length;
+  const X=v=>L+(v/maxX)*iw,Y=v=>base-clamp01(v)*ih,cxm=X(mx),cym=Y(my);
+  let s='';
+  for(let g=0;g<=4;g++){const yy=T+ih*g/4;s+=`<line x1="${L}" y1="${yy.toFixed(1)}" x2="${W-R}" y2="${yy.toFixed(1)}" stroke="#f2f3f7"/>`;}
+  s+=`<rect x="${cxm.toFixed(1)}" y="${T}" width="${(W-R-cxm).toFixed(1)}" height="${(cym-T).toFixed(1)}" fill="#d97706" opacity="0.05"/>`;
+  s+=`<rect x="${L}" y="${T}" width="${(cxm-L).toFixed(1)}" height="${(cym-T).toFixed(1)}" fill="#0ea5b7" opacity="0.05"/>`;
+  s+=`<rect x="${cxm.toFixed(1)}" y="${cym.toFixed(1)}" width="${(W-R-cxm).toFixed(1)}" height="${(base-cym).toFixed(1)}" fill="#dc2626" opacity="0.04"/>`;
+  s+=`<line x1="${cxm.toFixed(1)}" y1="${T}" x2="${cxm.toFixed(1)}" y2="${base}" stroke="#9ca3af" stroke-dasharray="4 3"/>`;
+  s+=`<line x1="${L}" y1="${cym.toFixed(1)}" x2="${W-R}" y2="${cym.toFixed(1)}" stroke="#9ca3af" stroke-dasharray="4 3"/>`;
+  s+=`<text x="${W-R-4}" y="${T+14}" text-anchor="end" font-size="9.5" fill="#b45309">高伤·高前十 = 核心大腿</text>`;
+  s+=`<text x="${L+4}" y="${T+14}" font-size="9.5" fill="#0e7490">高前十·低伤 = 稳健苟分</text>`;
+  s+=`<text x="${W-R-4}" y="${base-6}" text-anchor="end" font-size="9.5" fill="#dc2626">高伤·低前十 = 刚枪猛冲</text>`;
+  players.forEach(pl=>{
+    const x=X(pl.dpg),y=Y(pl.top);
+    s+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="6" fill="${pl.color}" fill-opacity="0.88" stroke="#fff" stroke-width="1.6"><title>${pl.name}｜场均${Math.round(pl.dpg)}伤 · 前十${(pl.top*100).toFixed(0)}%</title></circle>`;
+    s+=`<text x="${(x+9).toFixed(1)}" y="${(y-8).toFixed(1)}" font-size="10.5" font-weight="700" fill="#374151">${esc(pl.name)}</text>`;
+  });
+  s+=`<text x="${(L+iw/2).toFixed(1)}" y="${H-8}" text-anchor="middle" font-size="10" fill="#6b7280">场均伤害 →</text>`;
+  s+=`<text transform="translate(12,${(T+ih/2).toFixed(1)}) rotate(-90)" text-anchor="middle" font-size="10" fill="#6b7280">前十率 →</text>`;
+  s+=`<text x="${L-4}" y="${base+14}" text-anchor="end" font-size="8.5" fill="#9ca3af">0%</text><text x="${L-4}" y="${T+4}" text-anchor="end" font-size="8.5" fill="#9ca3af">100%</text>`;
+  return `<svg viewBox="0 0 ${W} ${H}" class="viz-svg">${s}</svg>`;
+}
+// 多人：组装可视化玩家（颜色按列的原始下标，保证与列顺序一致）
+function vizPlayers(){
+  return M.players.map((p,i)=>({p,i})).filter(x=>x.p.status==='found'&&x.p.agg&&x.p.agg.rounds>0).map(({p,i})=>{
+    const m=multiBadgeMetrics(p);
+    return {name:p.name,color:VIZ_COLORS[i%VIZ_COLORS.length],dpg:m.dpg,top:m.top,
+      vals:[lerp1(m.kpg,0.2,2.2),lerp1(m.dpg,60,400),lerp1(m.hsr,0,0.45),lerp1(m.top,0.2,0.9),lerp1(m.apg+m.dbpg,0.1,2.2),lerp1(m.surv,700,1700)]};
+  });
+}
+function mBadgeCell(pl){
+  if(pl.status!=='found'||!pl.agg)return '<div class="cell"></div>';
+  return `<div class="cell"><div class="viz-badges">${badgesHtml(multiBadgeMetrics(pl))}</div></div>`;
+}
 
 /* ================================================== Key / 平台 / 持久化 */
 const KEY_STORE='pubg_api_key',PLAT_STORE='pubg_platform',
@@ -1120,8 +1316,20 @@ function renderMulti(){
   if(!M.targets.length){wrap.innerHTML='';$('mEmpty').innerHTML='';return;}
   const bands=[];
   bands.push('<div class="band">'+M.players.map(p=>mHeadCell(p)).join('')+'</div>');
+  // 团队可视化通栏（能力雷达 + 团队定位象限）：查询完成且 ≥2 人有数据时显示，整宽、不参与各列横滑
+  if(!M.running){
+    const vp=vizPlayers();
+    if(vp.length>=2){
+      const legend=vp.map(p=>`<span><i style="background:${p.color}"></i>${esc(p.name)}</span>`).join('');
+      bands.push(`<div class="viz-band">
+        <div class="viz-card"><h4>能力雷达 <span class="tag">近 ${M.recent} 场 · 固定标尺</span></h4>${radarSvg(vp)}<div class="viz-legend">${legend}</div></div>
+        <div class="viz-card"><h4>团队定位 <span class="tag">场均伤害 × 前十率 · 十字线为全队均值</span></h4>${quadSvg(vp)}</div>
+      </div>`);
+    }
+  }
   bands.push('<div class="band">'+M.players.map(mRankCell).join('')+'</div>');
   bands.push('<div class="band">'+M.players.map(mSumCell).join('')+'</div>');
+  bands.push('<div class="band">'+M.players.map(mBadgeCell).join('')+'</div>');
   bands.push('<div class="band">'+M.players.map(mWeaponCell).join('')+'</div>');
   // 对局区：每个玩家一列，列内独立按时间排列自己的对局，不做跨列对齐、不留空行
   if(!M.running&&M.players.some(p=>p.status==='found')){
@@ -1266,6 +1474,7 @@ function renderSingle(){
         <span class="pill">生存熟练度 Lv.${num(sv.level)}</span>
         <span class="pill">近14天 ${p.recent.length} 场</span>
       </div>
+      <div class="viz-badges">${badgesHtml(singleBadgeMetrics(p))}</div>
     </div>
     <div style="text-align:center">
       <div class="chp h-${p.horse.tier}" style="font-size:16px">${esc(p.horse.label)}</div>
@@ -1322,8 +1531,15 @@ function renderSingle(){
       <button data-f="all" class="${S.weaponFilter==='all'?'on':''}">合计</button>
       <button data-f="normal" class="${S.weaponFilter==='normal'?'on':''}">普通匹配</button>
       <button data-f="ranked" class="${S.weaponFilter==='ranked'?'on':''}">竞技</button>
-    </div><div style="overflow-x:auto"><table class="s-table" id="wpnTable"></table></div>
+    </div>
+    <div style="overflow-x:auto"><div id="wpnBubble" class="wpn-bubble" style="min-width:560px"></div></div>
+    <div style="overflow-x:auto"><table class="s-table" id="wpnTable"></table></div>
     <div style="text-align:center;margin-top:8px"><button class="sec" id="wpnMore" style="padding:5px 14px;font-size:12px"></button></div></div>`;
+  // 卡4.6：近期走势（击杀柱 + 伤害折线，吃鸡局金色 ★）
+  if(p.recent.length>=2){
+    h+=`<div class="sg"><h3>近期走势 <span class="tag">近 ${p.recent.length} 场 · 柱=击杀 / 线=伤害</span></h3>
+      <div style="overflow-x:auto"><div style="min-width:520px">${trendSvg(p.recent)}</div></div></div>`;
+  }
   // 卡5：最近对局
   let mlistNote='';
   if(!p.recent.length){mlistNote='<div class="empty">近期对局明细未能获取：官方 /matches 接口经 CDN 缓存，部分对局的跨域响应头缺失，浏览器直连会被拦截（生涯 / 段位 / 武器 / 生存数据不受影响）。可稍后或换网络环境重试。</div>';}
@@ -1336,6 +1552,7 @@ function renderSingle(){
 }
 function renderWpnTable(){
   const p=S.data;if(!p)return;
+  const bub=$('wpnBubble');if(bub)bub.innerHTML=weaponBubbleSvg(weaponRows(p.detail.weapon));
   let rows=weaponRows(p.detail.weapon);
   rows.forEach(w=>{w.show=S.weaponFilter==='all'?w.kills:(S.weaponFilter==='normal'?w.normal:w.ranked);});
   rows=rows.filter(w=>w.show>0||w.dmg>0).sort((a,b)=>b.show-a.show||b.dmg-a.dmg);
