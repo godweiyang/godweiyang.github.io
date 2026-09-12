@@ -571,7 +571,7 @@ class CancelledError extends Error{constructor(){super('cancelled');this.name='C
 let cancelTick=0;
 /* 多 Key 轮询：每个 Key 各自维护约 RATE_MAX 次/分钟的滑动窗口；某 Key 429 或窗口用尽立即换下一个 Key，
    只有全部 Key 都不可用才等待最早恢复者，从而把 N 个 Key 的配额叠加（N 个 Key ≈ N×10 次/分钟）。在途并发不超过 RATE_CONC。 */
-const RATE_WIN=60000,RATE_MAX=9,RATE_CONC=3;
+const RATE_WIN=60000,RATE_MAX=9,RATE_CONC=5;
 let concRun=0;const concQ=[];
 function concAcquire(){return new Promise(res=>{if(concRun<RATE_CONC){concRun++;res();}else concQ.push(res);});}
 function concRelease(){concRun=Math.max(0,concRun-1);const nxt=concQ.shift();if(nxt){concRun++;nxt();}}
@@ -719,15 +719,15 @@ async function fetchPlayersByNames(names){
 async function fetchPlayerCore(id){
   const meta=await seasonMeta();
   const cur=meta.find(x=>x.cur)||null;
-  const [lifeJ,wpnJ]=await Promise.all([
+  // 生涯/武器/竞技三类请求并行发出（当前赛季 id 已由 seasonMeta 缓存、阶段0预取），省掉竞技请求的串行往返
+  const tasks=[
     limited(`/players/${id}/seasons/lifetime`),
     limited(`/players/${id}/weapon_mastery`)
-  ]);
+  ];
+  if(cur)tasks.push(limited(`/players/${id}/seasons/${cur.id}/ranked`).catch(e=>{if(e instanceof CancelledError)throw e;return null;}));
+  const [lifeJ,wpnJ,rkJ]=await Promise.all(tasks);
   let ranked={},rankSeason=cur?cur.id:null;
-  if(cur){
-    try{const rj=await limited(`/players/${id}/seasons/${cur.id}/ranked`);ranked=(rj.data&&rj.data.attributes&&rj.data.attributes.rankedGameModeStats)||{};}
-    catch(e){if(e instanceof CancelledError)throw e;ranked={};}
-  }
+  if(cur&&rkJ)ranked=(rkJ.data&&rkJ.data.attributes&&rkJ.data.attributes.rankedGameModeStats)||{};
   return {
     life:(lifeJ.data&&lifeJ.data.attributes&&lifeJ.data.attributes.gameModeStats)||{},
     ranked,rankSeason,
@@ -807,7 +807,7 @@ function parseMatch(j){
 }
 
 /* ================================================== 聚合 / 评级 */
-const LIFE_KEYS=['wins','losses','roundsPlayed','kills','assists','dBNOs','headshotKills','damageDealt','top10s','timeSurvived','longestKill','revives','heals','boosts','weaponsAcquired','vehicleDestroys','roadKills','teamKills','suicides','maxKillStreaks','walkDistance','rideDistance','swimDistance'];
+const LIFE_KEYS=['wins','losses','roundsPlayed','kills','assists','dBNOs','headshotKills','damageDealt','top10s','timeSurvived','longestKill','revives','heals','boosts','weaponsAcquired','vehicleDestroys','roadKills','teamKills','suicides','maxKillStreaks','walkDistance','rideDistance','swimDistance','days','dailyKills','dailyWins','weeklyKills','weeklyWins'];
 function aggModes(modes){const t={};LIFE_KEYS.forEach(k=>t[k]=0);Object.values(modes||{}).forEach(s=>LIFE_KEYS.forEach(k=>t[k]+=num(s&&s[k])));return t;}
 function kdOf(kills,rounds,wins){const losses=Math.max(0,(rounds||0)-(wins||0));return losses>0?kills/losses:(kills>0?kills:0);}
 function weaponRows(summaries){
@@ -920,7 +920,7 @@ async function runMulti(){
     if(!M.running)return;
     // 阶段B1：核心战绩（生涯/竞技段位/武器熟练度，每人 3 次）优先用掉额度，首屏主体尽快出齐；节流自动排队，万一 429 在 limited 内自动冷却续查
     const needDetail=M.players.filter(p=>p.status==='found'&&!p.detail);
-    await pool(needDetail,2,async pl=>{
+    await pool(needDetail,3,async pl=>{
       if(!M.running)return;
       try{
         pl.detail=await fetchPlayerCore(pl.id);
@@ -966,7 +966,7 @@ async function runMulti(){
     if(!M.running)return;
     // 阶段D：次要字段（生存熟练度等级、战队标签，每人 1~2 次）最后补全；额度紧张就排队渐进补齐，不阻塞任何主要内容，失败仅保留占位
     const needExtra=M.players.filter(p=>p.status==='found'&&p.detail&&!p.detail.surv);
-    await pool(needExtra,2,async pl=>{
+    await pool(needExtra,3,async pl=>{
       if(!M.running)return;
       try{
         pl.detail.surv=await fetchPlayerSurvival(pl.id);
@@ -1224,7 +1224,8 @@ function rankCard(mode,cur,hist,histLoading){
       statCell(cur.rounds,'场次')+statCell(cur.wins,'吃鸡')+statCell(cur.winRatio?pct(cur.winRatio):'—','胜率')
       +statCell(cur.topRatio?pct(cur.topRatio):'—','前十率')+statCell(f2(cur.avgRank),'场均排名')+statCell(f2(cur.avgKill),'场均击杀')
       +statCell(f2(cur.kda),'KDA')+statCell(cur.rounds?Math.round(cur.dmg/cur.rounds):'—','场均伤害')+statCell(cur.hsRatio?pct(cur.hsRatio):'—','爆头率')
-      +statCell(cur.rounds?(cur.dbno/cur.rounds).toFixed(2):'—','场均击倒')+statCell(cur.reviveRatio?pct(cur.reviveRatio):'—','救援率')+statCell(cur.avgSurv?fmtMin(cur.avgSurv):'—','场均存活');
+      +statCell(cur.rounds?(cur.dbno/cur.rounds).toFixed(2):'—','场均击倒')+statCell(cur.reviveRatio?pct(cur.reviveRatio):'—','救援率')+statCell(cur.avgSurv?fmtMin(cur.avgSurv):'—','场均存活')
+      +statCell(num(cur.roundMostKills)||'—','单局最高击杀')+statCell(num(cur.killStreak)||'—','最高连杀')+statCell(cur.longest?Math.round(cur.longest)+'m':'—','最远击杀');
     head=`<div class="rc-head">
       <div class="rc-badge" style="background:${tierColor(cur.tier)}">${esc((cur.tier||'').slice(0,2))}</div>
       <div class="rc-id">
@@ -1285,13 +1286,17 @@ function renderSingle(){
   // 卡3：生涯总览（生存熟练度并入，分组陈列，补全 lifetime 字段）
   h+=`<div class="sg"><h3>生涯总览 <span class="tag">Lifetime · 自生涯系统起累计</span></h3>`;
   h+=fg('生存熟练度',
-    statCell('Lv.'+num(sv.level),'生存等级')+statCell(num(sv.tier),'生存 Tier')+statCell((num(sv.xp)/10000).toFixed(1)+'万','总 XP')+statCell(num(sv.totalMatchesPlayed),'熟练度场次'));
+    statCell('Lv.'+num(sv.level),'生存等级')+statCell(num(sv.tier),'生存 Tier')+statCell((num(sv.xp)/10000).toFixed(1)+'万','总 XP')+statCell(num(sv.totalMatchesPlayed),'熟练度场次')
+    +statCell(num(life.days),'活跃天数','各模式活跃天数累加；同一天玩多个模式会分别计一次'));
   h+=fg('战斗',
     statCell(life.roundsPlayed,'总场次')+statCell(life.wins,'吃鸡')+statCell(ratioPct(life.wins,life.roundsPlayed),'胜率')
     +statCell(life.kills,'总击杀')+statCell(lifeKd.toFixed(2),'KD')+statCell(life.roundsPlayed?(life.kills/life.roundsPlayed).toFixed(2):'—','场均击杀')
     +statCell(Math.round(life.roundsPlayed?life.damageDealt/life.roundsPlayed:0),'场均伤害')+statCell(life.headshotKills,'爆头数')+statCell(ratioPct(life.headshotKills,life.kills),'爆头率')
     +statCell(life.dBNOs,'总击倒')+statCell(life.assists,'总助攻')+statCell(roundMost,'单局最高击杀')+statCell(life.maxKillStreaks,'单场最高连杀')
     +statCell(Math.round(life.longestKill)+'m','最远击杀'));
+  h+=fg('今日 / 本周（滚动窗口）',
+    statCell(num(life.dailyKills),'今日击杀')+statCell(num(life.dailyWins),'今日吃鸡')
+    +statCell(num(life.weeklyKills),'本周击杀')+statCell(num(life.weeklyWins),'本周吃鸡'));
   h+=fg('生存',
     statCell(ratioPct(life.top10s,life.roundsPlayed),'前十率')+statCell(fmtDur(life.roundsPlayed?life.timeSurvived/life.roundsPlayed:0),'场均存活')
     +statCell(fmtDur(longestSurv),'最长单局存活')+statCell(life.revives,'总救援')+statCell(life.heals,'医疗用品')+statCell(life.boosts,'能量用品'));
