@@ -140,6 +140,9 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
 .mm .comp{flex:0 0 auto;border-radius:4px;padding:0 5px;font-size:10px;font-weight:800;white-space:nowrap;line-height:16px}
 .mm .comp.rank{background:#fdf1e2;color:#b45309}
 .mm .comp.norm{background:#eef0f3;color:#6b7280}
+.mm .comp.ai{background:#e7f0fd;color:#1d4ed8}
+.mm .comp.event{background:#f1ecfd;color:#7c3aed}
+.mm .comp.custom{background:#eef0f3;color:#6b7280}
 /* 列状态 */
 .cell .col-status{text-align:center;color:var(--sub);font-size:12.5px;padding:18px 4px;word-break:break-word}
 .cell .col-status.err{color:var(--red)}
@@ -317,8 +320,16 @@ function mapName(m){return MAP[m]||String(m||'').replace('_Main','')||'—';}
 const MODE_CN={'solo':'单排(TPP)','solo-fpp':'单排(FPP)','duo':'双排(TPP)','duo-fpp':'双排(FPP)','squad':'四排(TPP)','squad-fpp':'四排(FPP)'};
 function modeCn(m){return MODE_CN[m]||m||'—';}
 function modeGroup(m){return String(m||'').split('-')[0];}
-const MATCHTYPE={competitive:'竞技',official:'普通',custom:'自定义',airoyale:'AI',seasonal:'活动'};
-function typeCn(mt,custom){if(custom)return'自定义';return MATCHTYPE[mt]||mt||'普通';}
+const MATCHTYPE={competitive:'竞技',official:'匹配',custom:'自定义',airoyale:'AI',seasonal:'活动'};
+// 统一的对局类型判定：同时返回中文文案与徽章样式类，单人标题/战报与多人卡片共用，保证一致
+function typeInfo(mt,custom){
+  if(custom||mt==='custom')return{t:'自定义',c:'custom'};
+  if(mt==='competitive')return{t:'竞技',c:'rank'};
+  if(mt==='airoyale')return{t:'AI',c:'ai'};
+  if(mt==='seasonal')return{t:'活动',c:'event'};
+  return{t:'匹配',c:'norm'};
+}
+function typeCn(mt,custom){return typeInfo(mt,custom).t;}
 const DEATH={alive:'存活',byplayer:'被玩家淘汰',byzone:'毒圈淘汰',suicide:'自杀',logout:'掉线退出',byPlayerUseThrowable:'投掷物淘汰',byVehicle:'载具淘汰'};
 function deathCn(d){return DEATH[d]||(d?d:'—');}
 const TIER_CN={Bronze:'青铜',Silver:'白银',Gold:'黄金',Platinum:'铂金',Diamond:'钻石',Master:'大师',Grandmaster:'宗师'};
@@ -926,7 +937,8 @@ function matchHorse(g){
 function matchMini(g){
   const cls=g.won?'win':(g.rank<=10?'top':'lose');
   const h=matchHorse(g);
-  const comp=g.type==='competitive'?'<span class="comp rank">竞技</span>':'<span class="comp norm">匹配</span>';
+  const tb=typeInfo(g.type,g.custom);
+  const comp=`<span class="comp ${tb.c}">${tb.t}</span>`;
   const out=`<span class="fstat"><b class="k">${g.kills}</b><i>杀</i></span>`
     +`<span class="fstat"><b class="d">${g.dbno}</b><i>倒</i></span>`
     +`<span class="fstat"><b>${Math.round(g.dmg)}</b><i>伤</i></span>`;
