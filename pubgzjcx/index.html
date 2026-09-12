@@ -16,7 +16,21 @@ header.top{background:linear-gradient(135deg,#3a1d5e,#5b2a86);color:#fff;border-
 header.top h1{font-size:19px;margin:0;letter-spacing:2px;text-align:center}
 .keybar{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;width:100%}
 .keybar input[type=password],.keybar input[type=text],.keybar select{border:0;border-radius:9px;padding:8px 11px;font-size:13px;background:rgba(255,255,255,.95);color:var(--ink);font-family:inherit;min-width:0}
-.keybar .keyinp{flex:1 1 320px;max-width:520px;font-family:ui-monospace,Menlo,Consolas,monospace}
+.keybar .keyrows{flex:1 1 340px;max-width:580px;display:flex;flex-direction:column;gap:6px}
+.keybar .keyrow{display:flex;gap:6px;align-items:center}
+.keybar .keyrow .keyinp{flex:1;min-width:0;width:100%;font-family:ui-monospace,Menlo,Consolas,monospace}
+.keybar .keyrow[data-ks="ok"] .keyinp{box-shadow:inset 0 0 0 1.5px #4ade80}
+.keybar .keyrow[data-ks="bad"] .keyinp{box-shadow:inset 0 0 0 1.5px #f87171}
+.keybar .keyrow[data-ks="limited"] .keyinp{box-shadow:inset 0 0 0 1.5px #fbbf24}
+.keybar .keyrow[data-ks="unknown"] .keyinp{box-shadow:inset 0 0 0 1.5px #cbd5e1}
+.keybar .keymark{display:none;flex:0 0 auto;width:54px;overflow:hidden;text-align:center;font-size:11px;font-weight:700;white-space:nowrap}
+.keybar .keymark.ok,.keybar .keymark.bad,.keybar .keymark.limited,.keybar .keymark.unknown{display:inline-block}
+.keybar .keymark.ok{color:#4ade80}.keybar .keymark.bad{color:#fca5a5}.keybar .keymark.limited{color:#fcd34d}.keybar .keymark.unknown{color:#e2e8f0}
+.keybar .keydel{flex:0 0 auto;min-width:36px;padding:7px 0}
+.keybar .keyactions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.keybar .keyadd{border:1px dashed rgba(255,255,255,.55);background:transparent;padding:6px 14px}
+.keybar .keyclear{border:1px solid rgba(248,113,113,.7);background:rgba(248,113,113,.18);padding:6px 14px}
+.keybar .keyclear[hidden]{display:none}
 .keybar label{font-size:12px;color:rgba(255,255,255,.85);white-space:nowrap}
 .kbtn{font-size:12px;font-weight:700;border:0;border-radius:999px;padding:7px 15px;cursor:pointer;background:rgba(255,255,255,.18);color:#fff;white-space:nowrap}
 .kbtn:hover{background:rgba(255,255,255,.3)}
@@ -191,7 +205,7 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
     <h1>PUBG 战绩查询（端游 · 官方 API）</h1>
     <div class="keybar">
       <label>API Key</label>
-      <input class="keyinp" id="keyInput" type="password" placeholder="粘贴 developer.pubg.com 申请的 API Key（仅保存在你浏览器本地）" autocomplete="off">
+      <div class="keyrows" id="keyRows"><div class="keyactions"><button class="kbtn keyadd" id="keyAdd" type="button" title="再添加一个 Key">＋ 添加 Key</button><button class="kbtn keyclear" id="keyClear" type="button" title="删除所有检测为无效的 Key" hidden>清除无效 Key</button></div></div>
       <button class="kbtn" id="eyeBtn" type="button" title="显示/隐藏">显示</button>
       <label>平台</label>
       <select id="platformSel">
@@ -204,7 +218,7 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
       <button class="kbtn" id="testBtn" type="button">测试连接</button>
       <span class="kstatus" id="keyStatus"><i></i><span id="keyStatusText">未填写 Key</span></span>
     </div>
-    <div class="keytip">Key 仅存于本浏览器 localStorage，请求直接从浏览器发往 api.pubg.com（官方已开启 CORS），不经过任何后端；免费 Key 默认限流约 10 次/分钟，触发后页面会自动排队、等待冷却并继续查询，无需重复点击，期间可随时点「停止」。<a href="https://developer.pubg.com/" target="_blank" rel="noopener">没有 Key？去 developer.pubg.com 免费注册 →</a></div>
+    <div class="keytip">Key 只保存在本地浏览器；点「＋ 添加 Key」可填多个，限流时自动轮询切换；免费 Key 约 10 次/分钟。<a href="https://developer.pubg.com/" target="_blank" rel="noopener">没有 Key？去 developer.pubg.com 免费注册 →</a></div>
   </header>
 
   <nav class="viewtabs">
@@ -320,34 +334,122 @@ function bindPersist(el,key,evt){if(!el)return;
   el.addEventListener(evt||'input',()=>{try{localStorage.setItem(key,el.value||'');}catch(e){}});}
 function saveJSON(k,o){try{localStorage.setItem(k,JSON.stringify(o));}catch(e){}}
 function readJSON(k){try{return JSON.parse(localStorage.getItem(k)||'null');}catch(e){return null;}}
-function getKey(){return ($('keyInput').value||'').trim();}
+// 多个 Key 输入框（动态增删）；getKeys 收集非空并去重，getKey 返回第一个（兼容旧调用）
+const KEY_ROWS=$('keyRows');
+function collectKeyVals(){return [...KEY_ROWS.querySelectorAll('input.keyinp')].map(i=>i.value.trim()).filter(Boolean);}
+function getKeys(){return [...new Set(collectKeyVals())];}
+function getKey(){return getKeys()[0]||'';}
 function platform(){return $('platformSel').value;}
 function base(){return 'https://api.pubg.com/shards/'+platform();}
+function persistKeys(){
+  try{localStorage.setItem(KEY_STORE,collectKeyVals().join('\n'));}catch(e){}
+  resetKeyPool();setKeyStatus();updateClearBtn();
+}
+const MARK_TXT={ok:'有效',bad:'无效',limited:'限流中',unknown:'检测失败'};
+function setRowState(row,st){
+  row.dataset.ks=st||'';
+  const m=row.querySelector('.keymark');
+  if(m){m.className='keymark'+(st?' '+st:'');m.textContent=st?MARK_TXT[st]:'';}
+  updateClearBtn();
+}
+function updateClearBtn(){
+  const n=KEY_ROWS.querySelectorAll('.keyrow[data-ks="bad"]').length;
+  const b=$('keyClear');if(b){b.hidden=n===0;b.textContent=n?`清除无效 Key（${n}）`:'清除无效 Key';}
+}
+// 单 Key 探测：200=有效 / 401·403=无效 / 429=限流中（Key 本身有效，不是无效）/ 其余或网络异常=检测失败（不下无效结论）
+async function probeKey(key){
+  try{
+    const r=await fetch(base()+'/seasons',{headers:{'Authorization':'Bearer '+key,'Accept':'application/vnd.api+json'},cache:'no-store'});
+    if(r.ok)return 'ok';
+    if(r.status===401||r.status===403)return 'bad';
+    if(r.status===429)return 'limited';
+    return 'unknown';
+  }catch(e){return 'unknown';}
+}
+function addKeyRow(value,focus){
+  const row=document.createElement('div');row.className='keyrow';
+  const inp=document.createElement('input');
+  inp.className='keyinp';inp.type='password';inp.autocomplete='off';inp.spellcheck=false;
+  inp.placeholder='粘贴 API Key（可添加多个，限流时自动轮询）';
+  inp.value=value||'';
+  inp.addEventListener('input',()=>{setRowState(row,'');persistKeys();});
+  const mark=document.createElement('span');mark.className='keymark';
+  const del=document.createElement('button');
+  del.type='button';del.className='kbtn keydel';del.title='删除该 Key';del.textContent='−';
+  del.addEventListener('click',()=>{
+    if(KEY_ROWS.querySelectorAll('input.keyinp').length<=1){inp.value='';setRowState(row,'');persistKeys();} // 只剩一行时清空而非删除
+    else{row.remove();persistKeys();}
+  });
+  row.appendChild(inp);row.appendChild(mark);row.appendChild(del);
+  KEY_ROWS.insertBefore(row,$('keyAdd').parentNode); // 输入行插到按钮行（keyactions）之前
+  if(focus)inp.focus();
+  return inp;
+}
+// 查询途中某 Key 真返回 401/403 时把对应输入行标红（不覆盖已判定的有效/限流）
+function markRowBadByKey(key){
+  KEY_ROWS.querySelectorAll('.keyrow').forEach(r=>{
+    const inp=r.querySelector('input.keyinp');
+    if(inp.value.trim()===key&&(!r.dataset.ks||r.dataset.ks==='unknown'))setRowState(r,'bad');
+  });
+}
+function clearBadKeys(){
+  const bads=[...KEY_ROWS.querySelectorAll('.keyrow[data-ks="bad"]')];
+  if(!bads.length)return;
+  bads.forEach(r=>r.remove());
+  if(!KEY_ROWS.querySelectorAll('.keyrow').length)addKeyRow('');
+  persistKeys();toast(`已清除 ${bads.length} 个无效 Key`,'s');
+}
 (function init(){
-  try{const k=localStorage.getItem(KEY_STORE);if(k)$('keyInput').value=k;
+  let vals=[];
+  try{const k=localStorage.getItem(KEY_STORE);if(k)vals=k.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
     const p=localStorage.getItem(PLAT_STORE);if(p)$('platformSel').value=p;}catch(e){}
-  $('keyInput').addEventListener('input',()=>{try{localStorage.setItem(KEY_STORE,getKey());}catch(e){}setKeyStatus();});
+  if(vals.length)vals.forEach(v=>addKeyRow(v));else addKeyRow('');
+  $('keyAdd').addEventListener('click',()=>addKeyRow('',true));
+  $('keyClear').addEventListener('click',clearBadKeys);
   $('platformSel').addEventListener('change',()=>{try{localStorage.setItem(PLAT_STORE,platform());}catch(e){}});
-  $('eyeBtn').onclick=()=>{const i=$('keyInput');const hide=i.type==='password';i.type=hide?'text':'password';$('eyeBtn').textContent=hide?'隐藏':'显示';};
+  $('eyeBtn').onclick=()=>{const show=$('eyeBtn').textContent==='显示';
+    KEY_ROWS.querySelectorAll('input.keyinp').forEach(i=>i.type=show?'text':'password');
+    $('eyeBtn').textContent=show?'隐藏':'显示';};
   $('testBtn').onclick=testConnection;
-  setKeyStatus();
+  updateClearBtn();setKeyStatus();
 })();
+// 按各输入行的检测标记汇总顶部状态；没有任何标记时回落到“未测试”
+function summarizeRows(){
+  const rows=[...KEY_ROWS.querySelectorAll('.keyrow')].filter(r=>r.querySelector('input.keyinp').value.trim());
+  const c={ok:0,bad:0,limited:0,unknown:0};
+  rows.forEach(r=>{const st=r.dataset.ks;if(st in c)c[st]++;});
+  if(!rows.length)return {state:null,txt:'未填写 Key'};
+  const tested=rows.filter(r=>r.dataset.ks).length;
+  if(!tested)return {state:null,txt:`已识别 ${rows.length} 个 Key${rows.length>1?'，限流时自动轮询':''}，未测试`};
+  const parts=[];
+  if(c.ok)parts.push(`${c.ok} 个有效`);
+  if(c.limited)parts.push(`${c.limited} 个限流中（稍后自动恢复，并非无效）`);
+  if(c.bad)parts.push(`${c.bad} 个无效`);
+  if(c.unknown)parts.push(`${c.unknown} 个检测失败`);
+  let state=null;
+  if(c.ok>0&&c.bad===0&&c.unknown===0&&c.limited===0)state='ok';
+  else if(c.ok===0&&c.limited===0&&c.unknown===0&&c.bad>0)state='bad';
+  return {state,txt:parts.join(' · ')};
+}
 function setKeyStatus(state,txt){
   const el=$('keyStatus'),t=$('keyStatusText');
   el.classList.remove('ok','bad');
   if(state==='ok'){el.classList.add('ok');t.textContent=txt||'连接正常 · Key 有效';}
   else if(state==='bad'){el.classList.add('bad');t.textContent=txt||'连接失败';}
-  else{t.textContent=txt||(getKey()?'已填写，未测试':'未填写 Key');}
+  else{const s=summarizeRows();if(s.state)el.classList.add(s.state);t.textContent=txt||s.txt;}
 }
 async function testConnection(){
-  if(!getKey()){toast('请先填写 API Key','e');return;}
-  setKeyStatus(null,'检测中…');
-  try{
-    const r=await fetch(base()+'/seasons',{headers:{'Authorization':'Bearer '+getKey(),'Accept':'application/vnd.api+json'}});
-    if(r.status===401||r.status===403){setKeyStatus('bad','Key 无效（'+r.status+'）');toast('Key 无效，请检查','e');return;}
-    if(!r.ok){setKeyStatus('bad','HTTP '+r.status);toast('连接失败 HTTP '+r.status,'e');return;}
-    setKeyStatus('ok','连接正常 · Key 有效');toast('连接正常，Key 有效','s');
-  }catch(e){setKeyStatus('bad','网络/CORS 失败');toast('请求失败：'+e.message,'e');}
+  const rows=[...KEY_ROWS.querySelectorAll('.keyrow')].filter(r=>r.querySelector('input.keyinp').value.trim());
+  if(!rows.length){toast('请先填写 API Key','e');return;}
+  setKeyStatus(null,'检测 '+rows.length+' 个 Key…');
+  rows.forEach(r=>setRowState(r,''));
+  const c={ok:0,bad:0,limited:0,unknown:0};
+  for(const r of rows){const st=await probeKey(r.querySelector('input.keyinp').value.trim());setRowState(r,st);c[st]++;}
+  const s=summarizeRows();setKeyStatus(s.state,s.txt);
+  if(c.bad)toast(`有 ${c.bad} 个无效 Key，可一键清除`,'w');
+  else if(c.limited||c.unknown)toast(s.txt,'w');
+  else toast(s.txt,'s');
+  updateClearBtn();
 }
 
 /* ================================================== 限速 + 请求
@@ -355,50 +457,79 @@ async function testConnection(){
    一旦命中官方 429（免费 Key 约 10 次/分钟）立即熔断并提示约 1 分钟后重试。
    /matches 与 telemetry 不计限流，走并发池。 */
 class RateLimitError extends Error{constructor(resetSec){super('RATE_LIMIT');this.name='RateLimitError';this.resetSec=resetSec||60;}}
+class KeyInvalidError extends Error{constructor(st){super('KEY_INVALID');this.name='KeyInvalidError';this.status=st;}}
 class CancelledError extends Error{constructor(){super('cancelled');this.name='CancelledError';}}
 /* 任务取消令牌：点「停止」时递增，令所有在途排队/冷却等待在 1 秒内快速中止（停止后再查即全部重查） */
 let cancelTick=0;
-/* 自适应节流：把计限流请求平滑控制在约 RATE_MAX 次/分钟，主动避开官方 429；在途并发不超过 RATE_CONC */
+/* 多 Key 轮询：每个 Key 各自维护约 RATE_MAX 次/分钟的滑动窗口；某 Key 429 或窗口用尽立即换下一个 Key，
+   只有全部 Key 都不可用才等待最早恢复者，从而把 N 个 Key 的配额叠加（N 个 Key ≈ N×10 次/分钟）。在途并发不超过 RATE_CONC。 */
 const RATE_WIN=60000,RATE_MAX=9,RATE_CONC=3;
-const sent=[];let concRun=0;const concQ=[];
+let concRun=0;const concQ=[];
 function concAcquire(){return new Promise(res=>{if(concRun<RATE_CONC){concRun++;res();}else concQ.push(res);});}
 function concRelease(){concRun=Math.max(0,concRun-1);const nxt=concQ.shift();if(nxt){concRun++;nxt();}}
-/* 自动等待提示：节流排队(queue)或 429 冷却(cool)时，进度条显示倒计时，全程自动续查、无需重复点击 */
+/* Key 运行时状态（不持久化，刷新重置）：{key,sent:[窗口内请求时间戳],coolUntil:429冷却至,bad:是否无效} */
+let keyPool=[];
+function resetKeyPool(){keyPool=[];}
+// 新任务开始：解除上一轮的无效/冷却标记（给 Key 重新机会），但保留滑动窗口计数以避免瞬时超发
+function softResetKeyPool(){keyPool.forEach(ks=>{ks.bad=false;ks.coolUntil=0;});}
+function syncKeyPool(){ // 按输入框的 Key 列表同步池，保留仍存在 Key 的运行时状态
+  const map=new Map(keyPool.map(s=>[s.key,s]));
+  keyPool=getKeys().map(k=>map.get(k)||{key:k,sent:[],coolUntil:0,bad:false});
+  return keyPool;
+}
+function pruneSent(ks,now){while(ks.sent.length&&now-ks.sent[0]>=RATE_WIN)ks.sent.shift();}
+// 立即挑一个现在可发请求的 Key：跳过冷却/作废/窗口已满者，优先选窗口内用得最少的（负载均衡）；都不可用返回 null
+function pickKey(now){
+  let best=null;
+  for(const ks of keyPool){
+    if(ks.bad||ks.coolUntil>now)continue;
+    pruneSent(ks,now);
+    if(ks.sent.length>=RATE_MAX)continue;
+    if(!best||ks.sent.length<best.sent.length)best=ks;
+  }
+  return best;
+}
+// 全部暂不可用时，返回最早恢复的时间戳；全部作废返回 Infinity
+function nextAvailableAt(now){
+  let at=Infinity;
+  for(const ks of keyPool){
+    if(ks.bad)continue;
+    if(ks.coolUntil>now){at=Math.min(at,ks.coolUntil);continue;}
+    pruneSent(ks,now);
+    if(ks.sent.length>=RATE_MAX&&ks.sent.length)at=Math.min(at,ks.sent[0]+RATE_WIN+250);
+  }
+  return at;
+}
+// 不计限流的请求（/matches、telemetry）取第一个未作废的 Key
+function activeKey(){syncKeyPool();const ks=keyPool.find(k=>!k.bad)||keyPool[0];return ks?ks.key:getKey();}
+/* 自动等待提示：排队等额度(queue)或 429 冷却(cool)时，进度条显示倒计时，全程自动续查、无需重复点击 */
 const waiter={until:0,mode:''};
 function waitSec(){return waiter.until?Math.max(0,Math.ceil((waiter.until-Date.now())/1000)):0;}
 function setWait(ms,mode){const u=Date.now()+ms;if(u>waiter.until)waiter.until=u;if(mode==='cool'||!waiter.mode)waiter.mode=mode;}
 function resetWait(){waiter.until=0;waiter.mode='';}
-async function acquire(){
-  const tick=cancelTick;
-  for(;;){ // 滑动窗口：额度不足就分段睡到有额度为止（分段睡以便刷新倒计时/响应停止）
-    if(cancelTick!==tick)throw new CancelledError();
-    const now=Date.now();
-    while(sent.length&&now-sent[0]>=RATE_WIN)sent.shift();
-    if(sent.length<RATE_MAX){sent.push(Date.now());break;}
-    const w=RATE_WIN-(now-sent[0])+250;
-    setWait(w,'queue');await sleep(Math.min(w,1000));
-  }
-  await concAcquire();
-}
 async function limited(path){
   const tick=cancelTick;
-  let lastErr=null;
-  for(let attempt=0;attempt<3;attempt++){
+  for(;;){ // 多 Key 轮询：拿到可用 Key 就发；429/无效就换下一个；全部不可用才分段睡到最早恢复（分段睡以刷新倒计时/响应停止）
     if(cancelTick!==tick)throw new CancelledError();
-    await acquire();
-    let res,err=null;
-    try{res=await apiGet(base()+path);}catch(e){err=e;}finally{concRelease();}
-    if(!err)return res;
-    if(err instanceof RateLimitError){ // 兜底 429：自动冷却后原地重试，冷却可被「停止」打断，不把失败抛给用户
-      lastErr=err;setWait(err.resetSec*1000+500,'cool');
-      let left=err.resetSec*1000+500;
-      while(left>0){if(cancelTick!==tick)throw new CancelledError();const s=Math.min(1000,left);await sleep(s);left-=s;}
-      continue;
+    syncKeyPool();
+    if(!keyPool.length)throw new Error('请先填写 API Key');
+    const ks=pickKey(Date.now());
+    if(ks){
+      await concAcquire();
+      let res,err=null;
+      try{res=await apiGet(base()+path,ks.key);}catch(e){err=e;}finally{concRelease();}
+      if(!err){ks.sent.push(Date.now());return res;}
+      if(err instanceof RateLimitError){ks.coolUntil=Date.now()+err.resetSec*1000;setWait(err.resetSec*1000+500,'cool');continue;} // 该 Key 429：标记冷却，立刻轮询下一个 Key
+      if(err instanceof KeyInvalidError){ks.bad=true;markRowBadByKey(ks.key);continue;} // 该 Key 401/403：作废、输入行标红并换下一个 Key
+      throw err; // 404 已在 apiGet 内转为 __notfound；网络/其他错误交上层容错
     }
-    throw err;
+    const at=nextAvailableAt(Date.now());
+    if(!isFinite(at))throw new Error('填写的 API Key 均无效，请检查');
+    const w=Math.max(250,at-Date.now());
+    setWait(w,'queue');
+    let left=w;
+    while(left>0){if(cancelTick!==tick)throw new CancelledError();const s=Math.min(1000,left);await sleep(s);left-=s;}
   }
-  if(cancelTick!==tick)throw new CancelledError();
-  throw lastErr||new RateLimitError(60); // 连续多次仍受限，才作为该玩家失败交给上层
 }
 async function pool(items,limit,worker){
   const ret=new Array(items.length);let i=0;
@@ -407,10 +538,10 @@ async function pool(items,limit,worker){
   });
   await Promise.all(runners);return ret;
 }
-async function apiGet(url){
+async function apiGet(url,key){
   const isTele=/telemetry-cdn/.test(url);
   const headers={'Accept':'application/vnd.api+json'};
-  if(!isTele)headers['Authorization']='Bearer '+getKey();
+  if(!isTele)headers['Authorization']='Bearer '+(key||activeKey());
   for(let attempt=0;attempt<4;attempt++){
     let r;
     try{r=await fetch(url,{headers,cache:'no-store'});}
@@ -418,7 +549,7 @@ async function apiGet(url){
       if(attempt>=1)throw e; await sleep(700); continue;}
     if(r.status===429){let sec=60;const rs=r.headers.get('X-RateLimit-Reset');if(rs&&/^\d{6,}$/.test(rs)){sec=Math.max(5,Math.min(60,Math.ceil(Number(rs)-Date.now()/1000)));}throw new RateLimitError(sec);}
     if(r.status===404)return {__notfound:true};
-    if(r.status===401||r.status===403)throw new Error('Key 无效或无权限（'+r.status+'）');
+    if(r.status===401||r.status===403)throw new KeyInvalidError(r.status);
     if(!r.ok){if(attempt<3){await sleep(1200*(attempt+1));continue;}throw new Error('HTTP '+r.status);}
     return await r.json();
   }
@@ -596,7 +727,7 @@ async function runMulti(){
   M.filter=$('modeFilter').value;M.recent=parseInt($('recentN').value)||20;
   // 每次开始都作为全新任务全量查询；中途限流自动等待冷却续查到底，只有点「停止」才中断（停止后再查即全部重查）
   M.targets=names;M.players=names.map(n=>({name:n,status:'loading'}));
-  M.matchOrder=[];M.ts=Date.now();M.running=true;resetWait();
+  M.matchOrder=[];M.ts=Date.now();M.running=true;resetWait();softResetKeyPool();
   setMBtn();renderMulti();renderMBar();
   if(M.barTimer)clearInterval(M.barTimer);
   M.barTimer=setInterval(renderMBar,1000);
@@ -695,11 +826,12 @@ function renderMBar(){
   const okN=M.players.filter(p=>p.status==='found').length;
   const modeTxt=$('modeFilter').selectedOptions[0].textContent;
   const ws=waitSec();
+  const nk=getKeys().length;
   let banner='';
   if(M.running&&ws>0){
     banner=waiter.mode==='cool'
-      ?`<div class="rate-banner">⚠️ 官方接口限流（免费 Key 约 10 次/分钟），系统正在自动等待冷却，<b class="rate-cd">${ws}</b> 秒后自动续查，请耐心等待、无需任何操作；已查到的数据保留。</div>`
-      :`<div class="rate-banner">请求较多，正按官方限流（约 10 次/分钟）自动排队，<b class="rate-cd">${ws}</b> 秒后继续，请耐心等待 …</div>`;
+      ?`<div class="rate-banner">⚠️ ${nk>1?`全部 ${nk} 个 Key 均`:'Key'}触发官方限流（每个约 10 次/分钟），正等待最早恢复的 Key，<b class="rate-cd">${ws}</b> 秒后自动切换续查，请耐心等待、无需操作；已查到的数据保留。</div>`
+      :`<div class="rate-banner">请求较多，${nk>1?`全部 ${nk} 个 Key 的额度均已用满`:'Key 限流额度已用满'}（每个约 10 次/分钟），<b class="rate-cd">${ws}</b> 秒后自动切换续查，请耐心等待 …</div>`;
   }
   bar.innerHTML=`<div class="card" style="padding:11px 16px;margin:12px 0 0"><div class="resbar">
     <span>模式：<b>${esc(modeTxt)}</b></span><span>近期：<b>近 ${M.recent} 场</b></span><span>时间：<b>${fmtDT(M.ts)}</b></span>
@@ -826,7 +958,7 @@ async function runSingle(name){
   if(!name){toast('请输入昵称','e');return;}
   if(!getKey()){toast('请先在顶部填写 API Key','e');return;}
   if(S.running)return;
-  $('sInput').value=name;S.name=name;S.data=null;S.openMatch=null;resetWait();
+  $('sInput').value=name;S.name=name;S.data=null;S.openMatch=null;resetWait();softResetKeyPool();
   S.running=true;$('sBtn').disabled=true;
   renderSingleLoading();
   if(sTimer)clearInterval(sTimer);sTimer=setInterval(renderSingleWait,1000);
@@ -862,12 +994,12 @@ async function runSingle(name){
     toast(p.matchFail?(`查询完成，${p.matchFail}/${p.matchTotal} 场明细受 CDN 限制未取到`):'查询完成',p.matchFail?'w':'s');
   }catch(e){
     if(e instanceof CancelledError){/* 任务被停止，静默 */}
-    else if(e instanceof RateLimitError){$('singleRes').innerHTML=`<div class="sg"><div class="rate-banner">⚠️ 触发官方接口限流（免费 Key 每分钟约 10 次），已自动重试多次仍受限，请约 1 分钟后再点「查询」。</div></div>`;}
+    else if(e instanceof RateLimitError){$('singleRes').innerHTML=`<div class="sg"><div class="rate-banner">⚠️ 所有 Key 均触发限流、自动重试仍未恢复，请稍后再点「查询」；多填几个 Key 可显著减少等待。</div></div>`;}
     else $('singleRes').innerHTML=`<div class="sg empty" style="color:var(--red)">查询失败：${esc(e.message)}</div>`;
   }finally{if(sTimer){clearInterval(sTimer);sTimer=null;}S.running=false;$('sBtn').disabled=false;}
 }
 function renderSingleLoading(){$('singleRes').innerHTML='<div class="sg"><div class="col-status"><div class="spinner"></div>正在查询 '+esc(S.name)+' …</div><div id="sWait" style="margin-top:10px"></div></div>';}
-function renderSingleWait(){const el=$('sWait');if(!el)return;const ws=waitSec();el.innerHTML=ws>0?`<div class="rate-banner">${waiter.mode==='cool'?`官方接口限流，系统正在自动等待冷却，<b class="rate-cd">${ws}</b> 秒后自动续查，请耐心等待…`:`请求较多，正按官方限流（约 10 次/分钟）自动排队，<b class="rate-cd">${ws}</b> 秒后继续，请耐心等待…`}</div>`:'';}
+function renderSingleWait(){const el=$('sWait');if(!el)return;const ws=waitSec();const nk=getKeys().length;el.innerHTML=ws>0?`<div class="rate-banner">${waiter.mode==='cool'?`${nk>1?`全部 ${nk} 个 Key 均`:'Key'}触发限流，正等待最早恢复的 Key，<b class="rate-cd">${ws}</b> 秒后自动切换续查，请耐心等待…`:`请求较多，${nk>1?`全部 ${nk} 个 Key 额度均已用满`:'Key 额度已用满'}，<b class="rate-cd">${ws}</b> 秒后自动切换续查，请耐心等待…`}</div>`:'';}
 function renderSingle(){
   const p=S.data;if(!p){return;}
   const d=p.detail,sv=d.surv||{},life=aggModes(d.life),rl=rankedList(d.ranked),clan=p.clan;
