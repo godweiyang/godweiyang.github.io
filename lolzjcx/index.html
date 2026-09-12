@@ -16,6 +16,10 @@ img{display:block}
 /* 顶部服务栏（多人/单人视图共用） */
 header.top{background:linear-gradient(135deg,#3a1d5e,#5b2a86);color:#fff;border-radius:14px;padding:14px 20px;display:flex;flex-direction:column;align-items:center;gap:9px}
 header.top h1{font-size:19px;margin:0;letter-spacing:2px;text-align:center}
+.title-row{position:relative;width:100%;display:flex;align-items:center;justify-content:center}
+.cross-link{position:absolute;right:0;top:50%;transform:translateY(-50%);display:inline-flex;align-items:center;gap:4px;font-size:12.5px;font-weight:800;padding:6px 13px;border-radius:999px;text-decoration:none;white-space:nowrap;background:linear-gradient(135deg,#f6a81c,#ea7a0c);color:#3a2104;box-shadow:0 2px 9px rgba(0,0,0,.22);transition:filter .15s}
+.cross-link:hover{filter:brightness(1.08)}
+@media(max-width:640px){.title-row{flex-direction:column;gap:7px}.cross-link{position:static;transform:none}}
 .svcbar{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;width:100%}
 .svc{font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,.16);display:inline-flex;align-items:center;gap:6px}
 .svc i{width:8px;height:8px;border-radius:50%;background:#cbd5e1;display:inline-block}
@@ -166,7 +170,10 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:16
 <body>
 <div class="wrap" id="viewMulti">
   <header class="top">
-    <h1>LOL 战绩查询</h1>
+    <div class="title-row">
+      <h1>LOL 战绩查询</h1>
+      <a class="cross-link" href="/pubgzjcx/" title="前往 PUBG 战绩查询">PUBG 战绩查询 →</a>
+    </div>
     <div class="svcbar">
       <span class="svc" id="svcPill"><i></i><span id="svcText">检测中…</span></span>
       <a class="svc-dl" id="launchBtn" href="lolzjcx://start" style="display:none" title="浏览器若询问是否打开，选允许">启动服务</a>

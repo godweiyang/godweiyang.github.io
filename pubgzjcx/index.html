@@ -14,6 +14,10 @@ img{display:block}
 /* 顶部 */
 header.top{background:linear-gradient(135deg,#3a1d5e,#5b2a86);color:#fff;border-radius:14px;padding:14px 20px;display:flex;flex-direction:column;align-items:center;gap:10px}
 header.top h1{font-size:19px;margin:0;letter-spacing:2px;text-align:center}
+.title-row{position:relative;width:100%;display:flex;align-items:center;justify-content:center}
+.cross-link{position:absolute;right:0;top:50%;transform:translateY(-50%);display:inline-flex;align-items:center;gap:4px;font-size:12.5px;font-weight:800;padding:6px 13px;border-radius:999px;text-decoration:none;white-space:nowrap;background:linear-gradient(135deg,#12d2c4,#0a9d92);color:#042626;box-shadow:0 2px 9px rgba(0,0,0,.22);transition:filter .15s}
+.cross-link:hover{filter:brightness(1.1)}
+@media(max-width:640px){.title-row{flex-direction:column;gap:7px}.cross-link{position:static;transform:none}}
 .keybar{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;width:100%}
 .keybar input[type=password],.keybar input[type=text],.keybar select{border:0;border-radius:9px;padding:8px 11px;font-size:13px;background:rgba(255,255,255,.95);color:var(--ink);font-family:inherit;min-width:0}
 .keybar .keyrows{flex:1 1 340px;max-width:580px;display:flex;flex-direction:column;gap:6px}
@@ -279,7 +283,10 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
 <body>
 <div class="wrap">
   <header class="top">
-    <h1>PUBG 战绩查询（端游 · 官方 API）</h1>
+    <div class="title-row">
+      <h1>PUBG 战绩查询（端游 · 官方 API）</h1>
+      <a class="cross-link" href="/lolzjcx/" title="前往 LOL 战绩查询">LOL 战绩查询 →</a>
+    </div>
     <div class="keybar">
       <label>API Key</label>
       <div class="keyrows" id="keyRows"><div class="keyactions"><button class="kbtn keyadd" id="keyAdd" type="button" title="再添加一个 Key">＋ 添加 Key</button><button class="kbtn keyclear" id="keyClear" type="button" title="删除所有检测为无效的 Key" hidden>清除无效 Key</button></div></div>
