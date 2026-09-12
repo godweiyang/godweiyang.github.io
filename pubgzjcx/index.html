@@ -120,9 +120,18 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
 .mm.win{background:linear-gradient(135deg,#fff9e8,#fdeec3);border:1.5px solid #f0b247;box-shadow:0 2px 8px rgba(240,178,71,.38)}
 .mm.win .res{background:#f59e0b;box-shadow:0 1px 4px rgba(245,158,11,.5)}.mm.top .res{background:#84b16b}.mm.lose .res{background:#e08a8a}
 .wintag{flex:0 0 auto;border-radius:5px;padding:0 6px;font-size:10px;font-weight:800;white-space:nowrap;line-height:16px;background:#f59e0b;color:#fff;letter-spacing:.5px}
-.mm .kd{font-weight:800;font-size:13px;white-space:nowrap;flex:0 0 auto}
-.mm .kd .kk{color:var(--green)}.mm .kd .dd{color:var(--org)}.mm .kd .sep{color:var(--sub);font-weight:400}
-.mm .dmg{margin-left:auto;font-size:11.5px;font-weight:700;color:#374151;white-space:nowrap;flex:0 0 auto}
+.fstat{display:inline-flex;align-items:baseline;gap:2px;white-space:nowrap}
+.fstat b{font-style:normal;font-weight:800;font-size:12.5px;color:#1f2329;line-height:1}
+.fstat i{font-style:normal;font-size:10.5px;color:var(--sub)}
+.fstat b.k{color:var(--green)}.fstat b.d{color:var(--org)}.fstat b.h{color:#2563eb}
+.fgrp{display:inline-flex;align-items:center;gap:9px;flex-wrap:wrap;min-width:0}
+.fsep{width:1px;align-self:stretch;background:var(--line);margin:0 2px}
+.fdeath{white-space:nowrap;color:var(--sub)}
+.mm .r1 .mh{margin-left:auto}
+.mm .fstat b{font-size:12px}.mm .fstat i{font-size:10px}
+.mm .fgrp{gap:7px}
+.mm .r2 .fgrp{flex:1 1 auto;row-gap:2px}
+.mm .fdeath{font-size:10.8px}
 .mm .r2{font-size:10.8px;color:var(--sub);margin-top:3px;line-height:1.5;display:flex;justify-content:space-between;gap:6px}
 .mm .r2 .t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mm .r2 .tm{white-space:nowrap;flex:0 0 auto}
@@ -199,8 +208,9 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
 .mrow .place{width:42px;height:26px;border-radius:7px;color:#fff;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
 .place.w1{background:#f59e0b;box-shadow:0 1px 4px rgba(245,158,11,.45)}.place.t10{background:#84b16b}.place.other{background:#e08a8a}
 .mrow .mtitle{font-weight:700;font-size:13px;flex:1 1 auto;min-width:140px}
-.mrow .mkd{font-size:12.5px;font-weight:700;white-space:nowrap}
-.mrow .mkd .k{color:var(--green)}.mrow .mkd .d{color:var(--org)}
+.mrow .mstats{flex:1 1 100%;display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;padding-top:8px;margin-top:6px;border-top:1px dashed var(--line)}
+.mrow .mstats .fgrp{gap:14px}
+.mrow .mstats .fdeath{font-size:12px}
 .mrow .mtime{font-size:11.5px;color:var(--sub);white-space:nowrap}
 .mrow .caret{color:var(--sub);transition:transform .15s}
 .mrow.open .caret{transform:rotate(90deg)}
@@ -917,15 +927,22 @@ function matchMini(g){
   const cls=g.won?'win':(g.rank<=10?'top':'lose');
   const h=matchHorse(g);
   const comp=g.type==='competitive'?'<span class="comp rank">竞技</span>':'<span class="comp norm">匹配</span>';
+  const out=`<span class="fstat"><b class="k">${g.kills}</b><i>杀</i></span>`
+    +`<span class="fstat"><b class="d">${g.dbno}</b><i>倒</i></span>`
+    +`<span class="fstat"><b>${Math.round(g.dmg)}</b><i>伤</i></span>`;
+  const aux=`<span class="fstat"><b>${g.assists||0}</b><i>助攻</i></span>`
+    +`<span class="fstat"><b>${g.revives||0}</b><i>救援</i></span>`
+    +`<span class="fstat"><b class="h">${g.hs||0}</b><i>爆头</i></span>`
+    +(g.longest?`<span class="fstat"><b>${Math.round(g.longest)}</b><i>最远</i></span>`:'')
+    +(g.won?'':`<span class="fdeath">${esc(deathCn(g.death))}</span>`);
   return `<div class="mm ${cls}">
     <div class="r1">
       <span class="res">#${g.rank}</span>${g.won?'<span class="wintag">吃鸡</span>':''}
-      <span class="kd"><span class="kk">${g.kills}</span><span class="sep">/</span><span class="dd">${g.dbno}</span></span>
+      <span class="fgrp">${out}</span>
       <span class="mh h-${h.tier}" title="单场综合分 ${h.score.toFixed(0)}">${esc(h.label)}</span>
-      <span class="dmg">${Math.round(g.dmg)} 伤</span>
     </div>
-    <div class="r2"><span class="t">${esc(mapName(g.map))} · ${modeCn(g.mode)}</span><span class="tm">${fmtMin(g.time)}</span></div>
-    <div class="r2"><span class="t">${esc(deathCn(g.death))} · 助${g.assists||0} 头${g.hs||0} 救${g.revives||0}</span>${comp}</div>
+    <div class="r2"><span class="t">${esc(mapName(g.map))} · ${modeCn(g.mode)}</span><span class="tm">${fmtDT(g.createdAt)}</span></div>
+    <div class="r2"><span class="fgrp">${aux}</span><span class="tm">${fmtMin(g.time)} ${comp}</span></div>
   </div>`;
 }
 function renderMulti(){
@@ -1104,9 +1121,24 @@ function renderMatchList(){
       <div class="mhead">
         <span class="place ${cls}">#${g.rank}</span>${g.won?'<span class="wintag">吃鸡</span>':''}
         <span class="mtitle">${esc(mapName(g.map))} · ${modeCn(g.mode)} · ${typeCn(g.type,g.custom)} · ${fmtDur(g.duration)}</span>
-        <span class="mkd"><span class="k">${g.kills} 杀</span> / <span class="d">${g.dbno} 倒</span> · ${Math.round(g.dmg)} 伤</span>
         <span class="mh h-${h.tier}" title="单场综合分 ${h.score.toFixed(0)}">${esc(h.label)}</span>
-        <span class="mtime">${fmtDT(g.createdAt)} ▸</span>
+        <span class="mtime">${fmtDT(g.createdAt)} <span class="caret">▸</span></span>
+        <div class="mstats">
+          <span class="fgrp">
+            <span class="fstat"><b class="k">${g.kills}</b><i>击杀</i></span>
+            <span class="fstat"><b class="d">${g.dbno}</b><i>击倒</i></span>
+            <span class="fstat"><b>${Math.round(g.dmg)}</b><i>伤害</i></span>
+            <span class="fstat"><b class="h">${g.hs||0}</b><i>爆头</i></span>
+            <span class="fstat"><b>${g.assists||0}</b><i>助攻</i></span>
+            <span class="fstat"><b>${g.revives||0}</b><i>救援</i></span>
+            ${g.longest?`<span class="fstat"><b>${Math.round(g.longest)}m</b><i>最远</i></span>`:''}
+          </span>
+          <span class="fsep"></span>
+          <span class="fgrp">
+            <span class="fstat"><b>${fmtMin(g.time)}</b><i>存活</i></span>
+            ${g.won?'':`<span class="fdeath">${esc(deathCn(g.death))}</span>`}
+          </span>
+        </div>
       </div>
       <div class="mdetail"></div>
     </div>`;
