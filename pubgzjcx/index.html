@@ -202,8 +202,9 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
 .rc-stats{gap:7px;grid-template-columns:repeat(auto-fill,minmax(86px,1fr))}
 .rc-stats .stat{padding:7px 4px;background:#f6f4fc}
 .rc-stats .stat .v{font-size:15px}
-.hist-best{background:#f1ecfe;border:1px solid #d8cbf7;color:#5b34c9;border-radius:9px;padding:8px 12px;font-size:12.5px;margin-bottom:10px;line-height:1.6}
-.hist-best b{font-size:14px}
+.rc-hist{margin-top:10px;background:#fff8ec;border:1px solid #f3d9a0;color:#92610a;border-radius:9px;padding:7px 12px;font-size:12.5px;line-height:1.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rc-hist b{font-size:13.5px}
+.rc-hist.loading{background:#f6f4fc;border-color:var(--line);color:var(--sub)}
 /* 对局冷门事件标签 */
 .xtag{display:inline-block;font-size:10.5px;font-weight:700;color:#92400e;background:#fef3e2;border:1px solid #f3cd9c;border-radius:999px;padding:1px 8px;margin-right:6px;white-space:nowrap}
 /* 武器熟练度：主力序号 + 前几名高亮 */
@@ -212,6 +213,11 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
 .s-table tr.wtop td{font-weight:700}
 /* 多人列：最高段位小字 */
 .rm-best{font-size:10px;color:var(--sub);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rm-hist-btn{margin-top:7px;width:100%;background:#f1ecfe;color:var(--pri);border:1px dashed #cbb8f8;border-radius:8px;font-size:10.5px;font-weight:700;padding:4px 6px;white-space:nowrap;cursor:pointer}
+.rm-hist-btn:hover{background:#e7defc}
+.rm-hist{margin-top:7px;font-size:10.5px;color:#92610a;text-align:center;background:#fff8ec;border:1px solid #f3d9a0;border-radius:8px;padding:4px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rm-hist b{font-weight:800}
+.rm-hist.loading{background:#f6f4fc;border-color:var(--line);color:var(--sub)}
 .s-table{width:100%;border-collapse:collapse;font-size:12.5px}
 .s-table th{color:#8a86a6;font-weight:700;font-size:11.5px;text-align:right;padding:7px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
 .s-table th:first-child,.s-table td:first-child{text-align:left}
@@ -713,11 +719,12 @@ async function fetchPlayerCore(id){
 // 按需遍历最近 n 个赛季的竞技段位，取历史最高（bestTier 优先、currentTier 兜底）。走 limited 限流队列，自动冷却续查。
 async function fetchHistBest(id,n=12){
   const meta=await seasonMeta();
-  let best=null;
+  let best=null,empty=0;
   for(const s of meta.slice(0,n)){
     let rg={};
     try{const rj=await limited(`/players/${id}/seasons/${s.id}/ranked`);rg=(rj.data&&rj.data.attributes&&rj.data.attributes.rankedGameModeStats)||{};}
-    catch(e){if(e instanceof CancelledError)throw e;continue;}
+    catch(e){if(e instanceof CancelledError)throw e;continue;} // 请求失败不计空，避免限流误停
+    if(hasRanked(rg))empty=0;else{empty++;if(empty>=4)break;} // 连续 4 个赛季都没打竞技即停止，减少请求
     Object.values(rg).forEach(v=>{
       if(!v)return;
       [v.bestTier,v.currentTier].forEach((t,ti)=>{
@@ -963,11 +970,21 @@ function renderMBar(){
       ?`<div class="rate-banner">⚠️ ${nk>1?`全部 ${nk} 个 Key 均`:'Key'}触发官方限流（每个约 10 次/分钟），正等待最早恢复的 Key，<b class="rate-cd">${ws}</b> 秒后自动切换续查，请耐心等待、无需操作；已查到的数据保留。</div>`
       :`<div class="rate-banner">请求较多，${nk>1?`全部 ${nk} 个 Key 的额度均已用满`:'Key 限流额度已用满'}（每个约 10 次/分钟），<b class="rate-cd">${ws}</b> 秒后自动切换续查，请耐心等待 …</div>`;
   }
+  // 历史最高段位：一键全查按钮（查询完成后出现；批量进行中显示进度）
+  const foundP=M.players.filter(p=>p.status==='found'&&p.detail);
+  const histDone=foundP.filter(p=>p.histBest).length,histLoading=foundP.filter(p=>p.histLoading).length;
+  let histBtn='';
+  if(!M.running&&foundP.length){
+    if(histLoading>0)histBtn=`<button class="sec" id="mHistAll" disabled style="padding:6px 12px">历史最高 ${histDone}/${foundP.length} …</button>`;
+    else if(histDone<foundP.length)histBtn=`<button class="sec" id="mHistAll" style="padding:6px 12px">查全部历史最高</button>`;
+    else histBtn=`<button class="sec" id="mHistAll" disabled style="padding:6px 12px">历史最高已查完</button>`;
+  }
   bar.innerHTML=`<div class="card" style="padding:11px 16px;margin:12px 0 0"><div class="resbar">
     <span>模式：<b>${esc(modeTxt)}</b></span><span>近期：<b>近 ${M.recent} 场</b></span><span>时间：<b>${fmtDT(M.ts)}</b></span>
-    <span class="spacer"></span><button class="sec" id="mReset" style="padding:6px 14px">重新搜索</button></div>
+    <span class="spacer"></span>${histBtn}<button class="sec" id="mReset" style="padding:6px 14px">重新搜索</button></div>
     ${banner}
     <div class="hint" style="margin:4px 0 0">${M.running?(`查询中 ${done}/${total} …`):(stopped?(`已停止 · 已完成 ${okN}/${total} 人 · 重新查询将全部刷新`):(`查询完成 · 共 ${total} 人 · 对局明细仅保留近 14 天`))}</div></div>`;
+  const hbAll=$('mHistAll');if(hbAll)hbAll.onclick=loadAllHist;
   $('mReset').onclick=()=>{M.targets=[];M.players=[];M.matchOrder=[];M.matchTotal=0;M.matchFail=0;try{localStorage.removeItem(PK_MULTI);}catch(e){}$('cols').innerHTML='';$('mEmpty').innerHTML='';bar.innerHTML='';renderMulti();$('qInput').focus();window.scrollTo({top:0,behavior:'smooth'});};
 }
 /* ---------- 多人渲染 ---------- */
@@ -999,15 +1016,42 @@ function mRankCell(pl){
   if(pl.status!=='found'||!pl.detail)return '<div class="cell"></div>';
   const rl=rankedList(pl.detail.ranked);
   const pref=rl.filter(r=>r.mode.indexOf('squad')===0).concat(rl.filter(r=>r.mode.indexOf('squad')!==0)).slice(0,2);
-  if(!pref.length)return '<div class="cell"><div class="rankmini"><div class="rm none" style="grid-column:1/-1"><span>竞技暂未定级</span></div></div></div>';
-  const sea=pl.detail.rankIsCur?'':'<span style="color:var(--sub)"> · 上赛季</span>';
-  return '<div class="cell"><div class="rankmini">'+pref.map(r=>{
-    const best=(r.bestTier&&(r.bestTier!==r.tier||String(r.bestSub)!==String(r.sub)))?`<div class="rm-best">最高 ${tierCn(r.bestTier)}${ROMAN[r.bestSub]||r.bestSub||''}</div>`:'';
-    return `<div class="rm">
+  let body;
+  if(pref.length){
+    const sea=pl.detail.rankIsCur?'':'<span style="color:var(--sub)"> · 上赛季</span>';
+    body='<div class="rankmini">'+pref.map(r=>{
+      const best=(r.bestTier&&(r.bestTier!==r.tier||String(r.bestSub)!==String(r.sub)))?`<div class="rm-best">赛季最高 ${tierCn(r.bestTier)}${ROMAN[r.bestSub]||r.bestSub||''}</div>`:'';
+      return `<div class="rm">
     <div class="rm-badge" style="background:${tierColor(r.tier)}">${esc((r.tier||'').slice(0,2))}</div>
     <div style="min-width:0"><div class="rm-t" style="color:${tierColor(r.tier)}">${tierCn(r.tier)} ${ROMAN[r.sub]||r.sub||''}</div>
     <div class="rm-q">${modeCn(r.mode)}<span class="rm-lp"> · ${r.rp} RP</span>${sea}</div>${best}</div></div>`;
-  }).join('')+'</div></div>';
+    }).join('')+'</div>';
+  }else{
+    body='<div class="rankmini"><div class="rm none" style="grid-column:1/-1"><span>竞技暂未定级</span></div></div>';
+  }
+  // 跨赛季历史最高：按需逐列查询（遍历近 12 赛季，走限流队列），不默认请求、结果随列持久化
+  let hist;
+  if(pl.histLoading)hist='<div class="rm-hist loading">历史最高查询中…</div>';
+  else if(pl.histBest){const b=pl.histBest;
+    hist=`<div class="rm-hist" title="${seasonLabel(b.season)}">历史最高 <b style="color:${tierColor(b.tier)}">${tierCn(b.tier)}${ROMAN[b.sub]||b.sub||''}</b> ${seasonLabel(b.season).replace('第 ','S').replace(' 赛季','')}</div>`;}
+  else hist=`<button class="rm-hist-btn" data-hist="${esc(pl.name)}">查历史最高</button>`;
+  return `<div class="cell">${body}${hist}</div>`;
+}
+// 多人：按需查询单个玩家的跨赛季历史最高段位
+async function loadMultiHist(name,batch){
+  const pl=M.players.find(x=>x.name===name);
+  if(!pl||pl.histLoading||pl.histBest)return;
+  pl.histLoading=true;renderMulti();renderMBar();
+  try{pl.histBest=await fetchHistBest(pl.id,12);}
+  catch(e){if(e instanceof CancelledError)return;pl.histBest=null;if(!batch)toast('历史最高查询失败，请重试','e');}
+  pl.histLoading=false;renderMulti();renderMBar();persistMulti();
+}
+// 多人：一键并发查询所有人的历史最高（多 Key 轮询、限流自动冷却，逐列填充、显示进度）
+async function loadAllHist(){
+  const targets=M.players.filter(p=>p.status==='found'&&p.detail&&!p.histBest&&!p.histLoading);
+  if(!targets.length)return;
+  await Promise.all(targets.map(p=>loadMultiHist(p.name,true)));
+  renderMBar();
 }
 function mSumCell(pl){
   if(pl.status!=='found'||!pl.agg)return '<div class="cell"></div>';
@@ -1083,6 +1127,7 @@ function renderMulti(){
     }
   }
   wrap.innerHTML=bands.join('');
+  wrap.querySelectorAll('.rm-hist-btn').forEach(b=>{b.onclick=()=>loadMultiHist(b.dataset.hist);});
   $('mEmpty').innerHTML='';
 }
 
@@ -1108,6 +1153,10 @@ async function runSingle(name){
     const p=await fetchPlayerByName(name);
     if(!p){$('singleRes').innerHTML=`<div class="sg empty">未找到玩家「${esc(name)}」，请检查昵称与所选平台。</div>`;return;}
     p.detail=await fetchPlayerCore(p.id);
+    // 跨赛季历史最高段位：core 一拿到就异步查（走限流队列、多 Key 轮询），不阻塞对局明细，完成后补渲染
+    p.histLoading=true;
+    fetchHistBest(p.id,12).then(hb=>{p.histBest=hb;p.histLoading=false;if(S.data===p){renderSingle();persistSingle();}})
+      .catch(e=>{p.histLoading=false;if(S.data===p&&!(e instanceof CancelledError))renderSingle();});
     const [surv,clan]=await Promise.all([fetchPlayerSurvival(p.id),p.clanId?fetchClan(p.clanId):Promise.resolve(null)]);
     p.detail.surv=surv;p.clan=clan;
     // 近期 25 场
@@ -1199,12 +1248,13 @@ function renderSingle(){
       <div class="muted" style="margin-top:5px">${p.agg.__life?'生涯口径':`近${p.recent.length}场`} · 综合分 ${p.horse.score.toFixed(0)}</div>
     </div>
   </div></div>`;
-  // 卡2：竞技段位（徽章 + 当前/最高 + 赛季统计；当前赛季未定级自动回退上赛季；可按需查历史最高）
+  // 卡2：竞技段位（徽章 + 当前/赛季最高 + 赛季统计；当前赛季未定级自动回退上赛季；历史最高随查询自动带出）
   const seasonTag=d.rankIsCur?'当前赛季':'上赛季（本赛季暂未定级）';
-  h+=`<div class="sg"><h3>竞技段位 <span class="tag">${seasonTag}${d.rankSeason?(' · '+seasonLabel(d.rankSeason)):''}</span>
-    <span class="spacer"></span><button class="sec" id="histBtn" style="padding:5px 12px;font-size:12px">查历史最高</button></h3>
-    <div id="histOut"></div>
-    <div class="rankcards">${rl.length?rl.map(rankCard).join(''):'<div class="empty" style="padding:8px 0">暂无竞技排位数据（竞技模式需在游戏内完成定级赛）</div>'}</div></div>`;
+  let histLine='';
+  if(p.histLoading)histLine='<div class="rc-hist loading">跨赛季历史最高段位查询中…</div>';
+  else if(p.histBest){const hb=p.histBest;histLine=`<div class="rc-hist" title="遍历近 12 个赛季取最高段位">历史最高 <b style="color:${tierColor(hb.tier)}">${tierCn(hb.tier)} ${ROMAN[hb.sub]||hb.sub||''}</b>${hb.rp?(' · '+hb.rp+' RP'):''} · ${seasonLabel(hb.season)}</div>`;}
+  h+=`<div class="sg"><h3>竞技段位 <span class="tag">${seasonTag}${d.rankSeason?(' · '+seasonLabel(d.rankSeason)):''}</span></h3>
+    <div class="rankcards">${rl.length?rl.map(rankCard).join(''):'<div class="empty" style="padding:8px 0">暂无竞技排位数据（竞技模式需在游戏内完成定级赛）</div>'}</div>${histLine}</div>`;
   // 卡3：生涯总览（生存熟练度并入，分组陈列，补全 lifetime 字段）
   h+=`<div class="sg"><h3>生涯总览 <span class="tag">Lifetime · 自生涯系统起累计</span></h3>`;
   h+=fg('生存熟练度',
@@ -1250,16 +1300,6 @@ function renderSingle(){
   $('singleRes').innerHTML=h;
   // 武器口径切换
   $('wpnSeg').querySelectorAll('button').forEach(b=>b.onclick=()=>{S.weaponFilter=b.dataset.f;S.wpnOpen=false;$('wpnSeg').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));renderWpnTable();persistSingle();});
-  // 历史最高段位（按需遍历最近 12 个赛季，走限流队列自动等待）
-  const hb=$('histBtn');
-  if(hb)hb.onclick=async()=>{
-    if(hb.dataset.busy)return;hb.dataset.busy='1';hb.disabled=true;const old=hb.textContent;hb.textContent='查询中…';
-    try{
-      const best=await fetchHistBest(p.id,12);
-      $('histOut').innerHTML=best?`<div class="hist-best">近 12 个赛季历史最高段位：<b style="color:${tierColor(best.tier)}">${tierCn(best.tier)} ${ROMAN[best.sub]||best.sub||''}</b>${best.rp?(' · '+best.rp+' RP'):''}（${seasonLabel(best.season)}）</div>`:'<div class="hint">近 12 个赛季未查到竞技段位记录</div>';
-    }catch(e){$('histOut').innerHTML=`<div class="hint" style="color:var(--red)">历史段位查询失败：${esc(e.message||'')}</div>`;}
-    hb.textContent=old;hb.disabled=false;hb.dataset.busy='';
-  };
   renderWpnTable();renderMatchList();
 }
 function renderWpnTable(){
@@ -1388,7 +1428,17 @@ function restoreAll(){
     renderMulti();renderMBar();
   }
   const ss=readJSON(PK_SINGLE);
-  if(ss&&ss.data){S.name=ss.name||'';S.data=ss.data;S.weaponFilter=ss.weaponFilter||'all';if(ss.name)$('sInput').value=ss.name;renderSingle();}
+  if(ss&&ss.data){
+    S.name=ss.name||'';S.data=ss.data;S.weaponFilter=ss.weaponFilter||'all';ss.data.histLoading=false;
+    if(ss.name)$('sInput').value=ss.name;
+    renderSingle();
+    // 旧缓存若没有历史最高，后台静默补查一次（查到即持久化，之后刷新不再请求）
+    if(!ss.data.histBest&&ss.data.id&&getKey()){
+      ss.data.histLoading=true;renderSingle();
+      fetchHistBest(ss.data.id,12).then(hb=>{ss.data.histBest=hb;ss.data.histLoading=false;if(S.data===ss.data){renderSingle();persistSingle();}})
+        .catch(()=>{ss.data.histLoading=false;if(S.data===ss.data)renderSingle();});
+    }
+  }
 }
 
 /* ================================================== 绑定 */
