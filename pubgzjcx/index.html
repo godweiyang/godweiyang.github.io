@@ -109,9 +109,10 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
 .wpn b{color:var(--pri)}
 .wpnrow .lab{font-size:11px;color:var(--sub);margin-right:2px;white-space:nowrap}
 /* 对局 mini 卡 */
-.band.mb{border-bottom:0;content-visibility:auto;contain-intrinsic-size:auto 96px}
-.cell.mcell{border-right:0;padding:5px 6px;display:flex}
-.mm{flex:1;border-radius:9px;padding:7px 9px;border:1px solid #eee;background:#fff;min-width:0}
+.band.mb{border-bottom:0}
+.cell.mcell{border-right:0;padding:6px;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start}
+.mgames{display:flex;flex-direction:column;gap:6px;min-width:0;width:100%}
+.mm{width:100%;border-radius:9px;padding:7px 9px;border:1px solid #eee;background:#fff;min-width:0}
 .mm.win{background:#ecfdf3;border-color:#c9ebd3}
 .mm.top{background:#f4fbf1;border-color:#d9efcf}
 .mm.lose{background:#fdecec;border-color:#f3c9c9}
@@ -776,12 +777,10 @@ async function runMulti(){
     await pool(ids,8,async id=>{if(!M.running)return;await fetchMatch(id);});
     if(!M.running)return;
     M.matchTotal=ids.length;M.matchFail=ids.filter(id=>!matchCache[id]).length;
-    // 装配：遍历并集场次，凡该玩家参与即纳入（保证共同对局跨列对齐，不受各自近 N 截断影响）
-    const order=[];const byTime={};
+    // 装配：各玩家近期对局，每列独立按时间倒序排列，不做跨列同场对齐
     found.forEach(p=>{p.games=[];});
     ids.forEach(id=>{
       const mt=matchCache[id];if(!mt)return;
-      byTime[id]=mt.createdAt;order.push(id);
       found.forEach(p=>{
         const s=mt.parts[p.id],tm=mt.accTeam[p.id];if(!s)return;
         if(!passMode(mt.mode,mt.type,mt.custom,M.filter))return;
@@ -796,8 +795,7 @@ async function runMulti(){
       p.agg=(p.games.length===0&&p.detail)?lifeAgg(p.detail):aggGames(p.games);
       p.horse=horseOf(p.agg);
     });
-    order.sort((a,b)=>String(byTime[b]).localeCompare(String(byTime[a])));
-    M.matchOrder=order;
+    M.matchOrder=[];
     renderMulti();renderMBar(); // 主体 + 对局明细先上屏（不计限流的对局已拉完）
     if(!M.running)return;
     // 阶段D：次要字段（生存熟练度等级、战队标签，每人 1~2 次）最后补全；额度紧张就排队渐进补齐，不阻塞任何主要内容，失败仅保留占位
@@ -926,21 +924,21 @@ function renderMulti(){
   bands.push('<div class="band">'+M.players.map(mRankCell).join('')+'</div>');
   bands.push('<div class="band">'+M.players.map(mSumCell).join('')+'</div>');
   bands.push('<div class="band">'+M.players.map(mWeaponCell).join('')+'</div>');
-  // 对局行（按 matchOrder 对齐）
-  if(M.matchOrder.length){
-    M.matchOrder.forEach(mid=>{
+  // 对局区：每个玩家一列，列内独立按时间排列自己的对局，不做跨列对齐、不留空行
+  if(!M.running&&M.players.some(p=>p.status==='found')){
+    const hasAny=M.players.some(p=>p.status==='found'&&p.games&&p.games.length);
+    if(hasAny){
       const cells=M.players.map(p=>{
         if(p.status!=='found')return '<div class="cell mcell"></div>';
-        const g=p.games.find(x=>x.matchId===mid);
-        if(!g)return '<div class="cell mcell"></div>';
-        return `<div class="cell mcell">${matchMini(g)}</div>`;
+        const list=(p.games||[]).map(g=>matchMini(g)).join('');
+        return `<div class="cell mcell"><div class="mgames">${list||'<div class="empty" style="padding:8px 2px">该筛选条件下无对局</div>'}</div></div>`;
       }).join('');
       bands.push(`<div class="band mb">${cells}</div>`);
-    });
-    const failNote=M.matchFail?` · <span style="color:var(--org)">${M.matchFail}/${M.matchTotal} 场明细受官方 CDN 缓存限制暂不可用（不影响生涯/武器数据）</span>`:'';
-    bands.push(`<div class="band"><div class="cell foot-cell">近 14 天 · 已按同一场次对齐 · 各列场次：${M.players.map(p=>p.status==='found'?p.games.length:0).join(' / ')}${failNote}</div></div>`);
-  }else if(!M.running&&M.players.some(p=>p.status==='found')){
-    bands.push('<div class="band"><div class="cell mcell"><div class="empty">该筛选条件下没有查到对局</div></div></div>');
+      const failNote=M.matchFail?` · <span style="color:var(--org)">${M.matchFail}/${M.matchTotal} 场明细受官方 CDN 缓存限制暂不可用（不影响生涯/武器数据）</span>`:'';
+      bands.push(`<div class="band"><div class="cell foot-cell">近 14 天 · 各列独立按时间排列 · 各列场次：${M.players.map(p=>p.status==='found'?p.games.length:0).join(' / ')}${failNote}</div></div>`);
+    }else{
+      bands.push('<div class="band"><div class="cell mcell"><div class="empty">该筛选条件下没有查到对局</div></div></div>');
+    }
   }
   wrap.innerHTML=bands.join('');
   $('mEmpty').innerHTML='';
@@ -1167,7 +1165,7 @@ function restoreAll(){
   const sm=readJSON(PK_MULTI);
   if(sm&&Array.isArray(sm.players)&&sm.players.length){
     M.running=false;M.ts=sm.ts||Date.now();M.filter=sm.filter||'all';M.recent=sm.recent||20;
-    M.targets=sm.targets||[];M.players=sm.players;M.matchOrder=sm.matchOrder||[];
+    M.targets=sm.targets||[];M.players=sm.players;M.matchOrder=sm.matchOrder||[];M.rowCount=sm.rowCount||{};
     M.matchTotal=sm.matchTotal||0;M.matchFail=sm.matchFail||0;
     if(sm.input)$('qInput').value=sm.input;
     $('modeFilter').value=M.filter;$('recentN').value=String(M.recent);
