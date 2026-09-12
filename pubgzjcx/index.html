@@ -137,9 +137,11 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
 .chp{display:inline-block;font-size:14px;font-weight:800;letter-spacing:1px;border-radius:999px;padding:3px 15px;border:1px solid transparent;white-space:nowrap}
 .chp.h-T{background:#f1ecfe;color:#7c3aed;border-color:#cbb8f8}.chp.h-A{background:#e8f7ee;color:#16a34a;border-color:#9fdcba}.chp.h-B{background:#e8f0fe;color:#2563eb;border-color:#a9c5f5}.chp.h-C{background:#fdf1e2;color:#ea8a16;border-color:#f3cd9c}.chp.h-D{background:#fdecec;color:#dc2626;border-color:#f3b4b4}.chp.h-N{background:#f3f4f6;color:var(--sub);border-color:#e5e7eb;font-size:12px;font-weight:700;letter-spacing:0}
 /* 迷你段位 */
-.rankmini{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rankmini{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:1;align-content:stretch}
 .rankmini.one{grid-template-columns:1fr}
-.rm{display:flex;align-items:center;gap:7px;background:#faf9fd;border:1px solid var(--line);border-radius:9px;padding:6px 8px;min-width:0}
+.rm{display:flex;align-items:stretch;gap:7px;background:#faf9fd;border:1px solid var(--line);border-radius:9px;padding:6px 8px;min-width:0}
+.rm .rm-badge{align-self:center}
+.rm-body{min-width:0;flex:1;display:flex;flex-direction:column;justify-content:center;gap:2px}
 .rm .rm-badge{width:30px;height:30px;flex:0 0 auto;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;background:#8b5cf6}
 .rm .rm-badge.rm-badge-none{background:#c4ccda;box-shadow:none}
 .rm .rm-t{font-size:12px;font-weight:800;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -282,6 +284,7 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
 /* 多人列：最高段位小字 */
 .rm-best{font-size:10px;color:var(--sub);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rm-best b{font-weight:800}
+.rm-best.rm-best-empty{opacity:.55}
 .s-table{width:100%;border-collapse:collapse;font-size:12.5px}
 .s-table th{color:#8a86a6;font-weight:700;font-size:11.5px;text-align:right;padding:7px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
 .s-table th:first-child,.s-table td:first-child{text-align:left}
@@ -1431,19 +1434,21 @@ function mRankCell(pl){
   if(modes.length){
     body='<div class="rankmini'+(modes.length===1?' one':'')+'">'+modes.map(mode=>{
       const cur=rl.find(r=>r.mode===mode)||null,hm=byMode[mode]||null;
-      const hist=hm
+      // 副位固定一行“历史最高”（含当前赛季）；缺失时给占位，保证每个块都是三行、跨玩家等高
+      const best=hm
         ?`<div class="rm-best" title="${seasonLabel(hm.season)}">历史最高 <b style="color:${tierColor(hm.tier)}">${tierCn(hm.tier)}${ROMAN[hm.sub]||hm.sub||''}</b> ${seasonLabel(hm.season).replace('第 ','S').replace(' 赛季','')}</div>`
-        :(pl.histLoading?'<div class="rm-best">历史最高…</div>':'');
-      if(cur){
+        :`<div class="rm-best rm-best-empty">${pl.histLoading?'历史最高…':'历史最高 —'}</div>`;
+      if(cur){ // 主位永远是当前赛季段位
         return `<div class="rm">
     <div class="rm-badge" style="background:${tierColor(cur.tier)}">${esc((cur.tier||'').slice(0,2))}</div>
-    <div style="min-width:0"><div class="rm-t" style="color:${tierColor(cur.tier)}">${tierCn(cur.tier)} ${ROMAN[cur.sub]||cur.sub||''}</div>
-    <div class="rm-q">${modeCn(mode)}<span class="rm-lp"> · ${cur.rp} RP</span></div>${hist}</div></div>`;
+    <div class="rm-body"><div class="rm-t" style="color:${tierColor(cur.tier)}">${tierCn(cur.tier)} ${ROMAN[cur.sub]||cur.sub||''}</div>
+    <div class="rm-q">${modeCn(mode)}<span class="rm-lp"> · ${cur.rp} RP</span></div>${best}</div></div>`;
       }
+      // 当前赛季该模式未定级：主位灰框“未定级”，历史最高仍作为副位小字
       return `<div class="rm">
     <div class="rm-badge rm-badge-none">—</div>
-    <div style="min-width:0"><div class="rm-t" style="color:var(--sub)">未定级</div>
-    <div class="rm-q">${modeCn(mode)} · 当前赛季</div>${hist}</div></div>`;
+    <div class="rm-body"><div class="rm-t" style="color:var(--sub)">未定级</div>
+    <div class="rm-q">${modeCn(mode)} · 当前赛季</div>${best}</div></div>`;
     }).join('')+'</div>';
   }else{
     body='<div class="rankmini"><div class="rm none" style="grid-column:1/-1"><span>当前赛季未定级</span></div></div>';
