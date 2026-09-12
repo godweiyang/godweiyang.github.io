@@ -55,7 +55,7 @@ header.top h1{font-size:19px;margin:0;letter-spacing:2px;text-align:center}
 #keyPoolRoot .kpcard{position:relative;margin:4vh auto;max-width:760px;width:calc(100% - 28px);max-height:92vh;overflow:auto;background:#fff;border-radius:16px;box-shadow:0 18px 60px rgba(40,30,90,.3);padding:16px 16px 18px;color:var(--ink)}
 #keyPoolRoot .kpph{display:flex;align-items:center;gap:10px;margin-bottom:10px}
 #keyPoolRoot .kpph h3{font-size:16px;margin:0;flex:1;color:#2b2350}
-#keyPoolRoot .kpx{border:none;background:#f1f0f8;color:#555;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:16px;line-height:1}
+#keyPoolRoot .kpx{border:none;background:#f1f0f8;color:#555;width:30px;height:30px;min-width:30px;border-radius:50%;cursor:pointer;font-size:18px;line-height:1;padding:0;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto}
 #keyPoolRoot .kpsum{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
 #keyPoolRoot .kptag{display:inline-flex;align-items:center;padding:4px 10px;border-radius:999px;font-size:12.5px;font-weight:700;background:#f1f0f5;color:#6b7280}
 #keyPoolRoot .kptag.t-ok{background:#e8f7ee;color:#16a34a}
@@ -94,7 +94,7 @@ header.top h1{font-size:19px;margin:0;letter-spacing:2px;text-align:center}
 #posterRoot .pocard{position:relative;margin:2.5vh auto;max-width:430px;width:calc(100% - 24px);max-height:95vh;overflow:auto;background:#17102e;border:1px solid #3a2c63;border-radius:18px;box-shadow:0 22px 70px rgba(20,10,50,.55);padding:14px 14px 16px;color:#eae6ff}
 #posterRoot .poph{display:flex;align-items:center;gap:10px;margin-bottom:10px}
 #posterRoot .poph h3{font-size:16px;margin:0;flex:1;color:#fff;letter-spacing:1px}
-#posterRoot .pox{border:none;background:#2c2150;color:#cfc6f5;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:16px;line-height:1}
+#posterRoot .pox{border:none;background:#2c2150;color:#cfc6f5;width:30px;height:30px;min-width:30px;border-radius:50%;cursor:pointer;font-size:18px;line-height:1;padding:0;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto}
 #posterRoot .poimg{display:flex;justify-content:center}
 #posterRoot .poimg img{display:block;width:100%;max-height:73vh;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.45)}
 #posterRoot .pofoot{display:flex;gap:10px;margin-top:12px}
@@ -586,7 +586,7 @@ function multiBadgeMetrics(pl){
   return {rounds:r,kpg:t.kills/r,dpg:t.dmg/r,hsr:t.kills?t.hs/t.kills:0,top:t.top10/r,win:t.wins/r,
     apg:t.assists/r,dbpg:t.dbno/r,surv:t.time/r,rpg:null,longest:t.longest,movepg:null,road:null,horse:(pl.horse||{}).tier};
 }
-// 单人：近 N 场走势（击杀柱[柱顶标数/吃鸡金色★] + 伤害折线[最高点标值]，左旧右新；紧凑版）
+// 单人：近 N 场走势（击杀柱[柱顶标数/吃鸡橙色柱] + 伤害折线[最高点标值]，左旧右新；紧凑版）
 function trendSvg(games){
   if(!games||games.length<2)return '';
   const g2=games.slice().reverse();
@@ -616,11 +616,10 @@ function trendSvg(games){
     const x=X(i),y=yK(g.kills),h=Math.max(1,base-y),col=g.won?'#f59e0b':'#16a34a';
     s+=`<rect x="${(x-bw/2).toFixed(1)}" y="${y.toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" rx="2" fill="${col}"><title>${fmtDT(g.createdAt)}｜#${g.rank}｜${g.kills}杀 ${Math.round(g.dmg)}伤</title></rect>`;
     if(g.kills>0)s+=`<text x="${x.toFixed(1)}" y="${(y-4).toFixed(1)}" text-anchor="middle" font-size="9" font-weight="700" fill="${g.won?'#b45309':'#15803d'}">${g.kills}</text>`;
-    if(g.won)s+=`<text x="${(x+bw/2+3).toFixed(1)}" y="${(y-1).toFixed(1)}" font-size="9" fill="#b45309">★</text>`;
     s+=`<text x="${x.toFixed(1)}" y="${base+15}" text-anchor="middle" font-size="8.5" font-weight="${g.won?'700':'400'}" fill="${g.won?'#b45309':'#9ca3af'}">#${g.rank}</text>`;
   });
   s+=`<text x="${L}" y="${T-10}" font-size="10" fill="#16a34a">击杀（柱）</text><text x="${W-R}" y="${T-10}" text-anchor="end" font-size="10" fill="#d97706">伤害（线）</text>`;
-  s+=`<text x="${(L+iw/2).toFixed(1)}" y="${H-4}" text-anchor="middle" font-size="9" fill="#9ca3af">${n} 场 · 左旧 → 右新 · ★ 为吃鸡</text>`;
+  s+=`<text x="${(L+iw/2).toFixed(1)}" y="${H-4}" text-anchor="middle" font-size="9" fill="#9ca3af">${n} 场 · 左旧 → 右新</text>`;
   return `<svg viewBox="0 0 ${W} ${H}" class="viz-svg" preserveAspectRatio="xMidYMid meet">${s}</svg>`;
 }
 // 单人：主力武器横向条形榜（条长=合计击杀[legacy+普通+竞技]，单轴表达产量；条尾标最远击杀/爆头命中次数等绝对值，颜色=枪械类型），取击杀前 8
