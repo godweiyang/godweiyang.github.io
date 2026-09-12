@@ -443,20 +443,47 @@ async function fetchPlayerByName(name){
   return {id:d.id,name:a.name,ban:a.banType,clanId:a.clanId||null,
     matchIds:(d.relationships&&d.relationships.matches?d.relationships.matches.data:[]).map(x=>x.id)};
 }
-async function fetchPlayerDetail(id){
+// 批量按昵称定位：官方 filter[playerNames] 支持逗号分隔（≤10 人/次），一整批只计 1 次限流；
+// 夹不存在的昵称时仅返回存在者（全部不存在才 404）。批量请求异常则回退逐个定位，保留单人容错。
+async function fetchPlayersByNames(names){
+  const found=new Map();
+  for(let i=0;i<names.length;i+=10){
+    const batch=names.slice(i,i+10);
+    let j=null,ok=false;
+    try{ j=await limited('/players?filter%5BplayerNames%5D='+encodeURIComponent(batch.join(',')));ok=true; }
+    catch(e){ if(e instanceof CancelledError)throw e; ok=false; }
+    if(ok&&j&&!j.__notfound&&Array.isArray(j.data)){
+      j.data.forEach(d=>{const a=d.attributes||{};
+        found.set((a.name||'').toLowerCase(),{id:d.id,name:a.name,ban:a.banType,clanId:a.clanId||null,
+          matchIds:(d.relationships&&d.relationships.matches?d.relationships.matches.data:[]).map(x=>x.id)});});
+    }else if(!ok){
+      for(const nm of batch){
+        try{const o=await fetchPlayerByName(nm);if(o)found.set(nm.toLowerCase(),o);}
+        catch(e){if(e instanceof CancelledError)throw e;/* 单个失败留给 missing/上层处理 */}
+      }
+    }
+    // ok && j.__notfound（整批都不存在）：found 不添加，这批名字自然落入 missing
+  }
+  return {found,missing:names.filter(n=>!found.has(n.toLowerCase()))};
+}
+// 核心战绩（首屏主体）：生涯汇总 + 当前赛季竞技段位 + 武器熟练度，每人 3 个计限流请求
+async function fetchPlayerCore(id){
   const season=await currentSeason();
-  const [lifeJ,rankJ,wpnJ,survJ]=await Promise.all([
+  const [lifeJ,rankJ,wpnJ]=await Promise.all([
     limited(`/players/${id}/seasons/lifetime`),
     season?limited(`/players/${id}/seasons/${season}/ranked`):Promise.resolve({data:{attributes:{rankedGameModeStats:{}}}}),
-    limited(`/players/${id}/weapon_mastery`),
-    limited(`/players/${id}/survival_mastery`)
+    limited(`/players/${id}/weapon_mastery`)
   ]);
   return {
     life:(lifeJ.data&&lifeJ.data.attributes&&lifeJ.data.attributes.gameModeStats)||{},
     ranked:(rankJ.data&&rankJ.data.attributes&&rankJ.data.attributes.rankedGameModeStats)||{},
-    weapon:(wpnJ.data&&wpnJ.data.attributes&&wpnJ.data.attributes.weaponSummaries)||{},
-    surv:(survJ.data&&survJ.data.attributes)||{}
+    weapon:(wpnJ.data&&wpnJ.data.attributes&&wpnJ.data.attributes.weaponSummaries)||{}
   };
+}
+// 次要字段：生存熟练度（仅列头一个等级数字），额度紧张时在核心数据之后排队补全，不阻塞主体
+async function fetchPlayerSurvival(id){
+  const j=await limited(`/players/${id}/survival_mastery`);
+  return (j.data&&j.data.attributes)||{};
 }
 const clanCache={};
 async function fetchClan(clanId){
@@ -574,26 +601,34 @@ async function runMulti(){
   if(M.barTimer)clearInterval(M.barTimer);
   M.barTimer=setInterval(renderMBar,1000);
   try{
-    // 阶段A：仅定位还没有 id 的玩家（容错，单个不存在不影响其他人）
-    const needLookup=M.players.filter(p=>p.status==='loading');
-    await pool(needLookup,3,async(pl)=>{
-      if(!M.running)return;
-      try{
-        const p=await fetchPlayerByName(pl.name);
-        const idx=M.players.findIndex(x=>x.name===pl.name);
-        if(!p){M.players[idx]={name:pl.name,status:'notfound'};}
-        else{M.players[idx]=Object.assign(p,{status:'found',detail:null,clan:null,games:[],agg:null,horse:null});}
-      }catch(e){if(e instanceof CancelledError)return;const idx=M.players.findIndex(x=>x.name===pl.name);M.players[idx]={name:pl.name,status:'error',error:(e instanceof RateLimitError)?'RATE_LIMIT':e.message};}
-      renderMulti();renderMBar();
-    });
+    // 阶段0：预取当前赛季（同会话缓存，仅 1 次计限流请求，避免并发时 /seasons 重复计数）
+    await currentSeason();
     if(!M.running)return;
-    // 阶段B：仅给已定位但还没详情的玩家拉详情（节流自动排队；万一 429 会在 limited 内自动冷却续查，无需重点）
+    // 阶段A：批量定位玩家（10 人/次合并为 1 个计限流请求；夹不存在昵称只返回存在者，缺失的标 notfound）
+    const needLookup=M.players.filter(p=>p.status==='loading');
+    if(needLookup.length){
+      try{
+        const {found,missing}=await fetchPlayersByNames(needLookup.map(p=>p.name));
+        if(!M.running)return;
+        needLookup.forEach(pl=>{
+          const idx=M.players.findIndex(x=>x.name===pl.name);
+          const obj=found.get(pl.name.toLowerCase());
+          if(obj)M.players[idx]=Object.assign(obj,{status:'found',detail:null,clan:null,games:[],agg:null,horse:null});
+          else M.players[idx]={name:pl.name,status:'notfound'};
+        });
+      }catch(e){
+        if(e instanceof CancelledError)return;
+        needLookup.forEach(pl=>{const idx=M.players.findIndex(x=>x.name===pl.name);if(M.players[idx].status==='loading')M.players[idx]={name:pl.name,status:'error',error:(e instanceof RateLimitError)?'RATE_LIMIT':e.message};});
+      }
+      renderMulti();renderMBar();
+    }
+    if(!M.running)return;
+    // 阶段B1：核心战绩（生涯/竞技段位/武器熟练度，每人 3 次）优先用掉额度，首屏主体尽快出齐；节流自动排队，万一 429 在 limited 内自动冷却续查
     const needDetail=M.players.filter(p=>p.status==='found'&&!p.detail);
     await pool(needDetail,2,async pl=>{
       if(!M.running)return;
       try{
-        pl.detail=await fetchPlayerDetail(pl.id);
-        if(pl.clanId)pl.clan=await fetchClan(pl.clanId);
+        pl.detail=await fetchPlayerCore(pl.id);
         // 先用生涯口径占位（四宫格/马型带 *），对局明细到位后再替换为近期口径
         pl.agg=lifeAgg(pl.detail);pl.horse=horseOf(pl.agg);
       }catch(e){if(e instanceof CancelledError)return;pl.status='error';pl.error=(e instanceof RateLimitError)?'RATE_LIMIT':e.message;}
@@ -630,6 +665,19 @@ async function runMulti(){
     });
     order.sort((a,b)=>String(byTime[b]).localeCompare(String(byTime[a])));
     M.matchOrder=order;
+    renderMulti();renderMBar(); // 主体 + 对局明细先上屏（不计限流的对局已拉完）
+    if(!M.running)return;
+    // 阶段D：次要字段（生存熟练度等级、战队标签，每人 1~2 次）最后补全；额度紧张就排队渐进补齐，不阻塞任何主要内容，失败仅保留占位
+    const needExtra=M.players.filter(p=>p.status==='found'&&p.detail&&!p.detail.surv);
+    await pool(needExtra,2,async pl=>{
+      if(!M.running)return;
+      try{
+        pl.detail.surv=await fetchPlayerSurvival(pl.id);
+        if(pl.clanId)pl.clan=await fetchClan(pl.clanId);
+      }catch(e){if(e instanceof CancelledError)return;/* 次要字段失败保持占位，不影响主体 */}
+      renderMulti();renderMBar();
+    });
+    if(!M.running)return;
     const fail=M.players.filter(p=>p.status==='notfound'||p.status==='error').length;
     toast(fail?(`完成，${M.players.length-fail} 人成功，${fail} 人失败`):'全部查询完成',fail?'w':'s');
   }finally{
@@ -785,8 +833,9 @@ async function runSingle(name){
   try{
     const p=await fetchPlayerByName(name);
     if(!p){$('singleRes').innerHTML=`<div class="sg empty">未找到玩家「${esc(name)}」，请检查昵称与所选平台。</div>`;return;}
-    p.detail=await fetchPlayerDetail(p.id);
-    p.clan=p.clanId?await fetchClan(p.clanId):null;
+    p.detail=await fetchPlayerCore(p.id);
+    const [surv,clan]=await Promise.all([fetchPlayerSurvival(p.id),p.clanId?fetchClan(p.clanId):Promise.resolve(null)]);
+    p.detail.surv=surv;p.clan=clan;
     // 近期 25 场
     const ids=p.matchIds.slice(0,25);
     await pool(ids,8,async id=>{await fetchMatch(id);});
