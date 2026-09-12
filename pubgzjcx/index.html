@@ -44,6 +44,49 @@ header.top h1{font-size:19px;margin:0;letter-spacing:2px;text-align:center}
 .kstatus.bad i{background:#f87171;box-shadow:0 0 6px #f87171}
 .keytip{flex-basis:100%;text-align:center;font-size:11.5px;color:rgba(255,255,255,.75)}
 .keytip a{color:#fde68a}
+/* 顶部入口按钮：API Key 账号池 */
+.keybar .pool-open{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#6d4ce8,#8b5cf6);color:#fff;border:0;box-shadow:0 3px 10px rgba(90,50,180,.35)}
+.keybar .pool-open:hover{filter:brightness(1.06)}
+.keybar .pool-open .pool-cnt{background:rgba(255,255,255,.22);border-radius:999px;padding:2px 10px;font-size:11.5px;font-weight:800;white-space:nowrap}
+/* Key 账号池弹窗 */
+#keyPoolRoot{position:fixed;inset:0;z-index:9999;display:none}
+#keyPoolRoot.show{display:block}
+#keyPoolRoot .kpmask{position:absolute;inset:0;background:rgba(24,16,40,.45)}
+#keyPoolRoot .kpcard{position:relative;margin:4vh auto;max-width:760px;width:calc(100% - 28px);max-height:92vh;overflow:auto;background:#fff;border-radius:16px;box-shadow:0 18px 60px rgba(40,30,90,.3);padding:16px 16px 18px;color:var(--ink)}
+#keyPoolRoot .kpph{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+#keyPoolRoot .kpph h3{font-size:16px;margin:0;flex:1;color:#2b2350}
+#keyPoolRoot .kpx{border:none;background:#f1f0f8;color:#555;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:16px;line-height:1}
+#keyPoolRoot .kpsum{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+#keyPoolRoot .kptag{display:inline-flex;align-items:center;padding:4px 10px;border-radius:999px;font-size:12.5px;font-weight:700;background:#f1f0f5;color:#6b7280}
+#keyPoolRoot .kptag.t-ok{background:#e8f7ee;color:#16a34a}
+#keyPoolRoot .kptag.t-use{background:#f0ecfd;color:#6d4ce8}
+#keyPoolRoot .kptag.t-lim{background:#fef5e0;color:#b45309}
+#keyPoolRoot .kptag.t-no{background:#fdeeee;color:#dc2626}
+#keyPoolRoot .kptools{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+#keyPoolRoot .kpbtn{border:1px solid #d8d2f5;background:#fff;color:#6d4ce8;border-radius:9px;padding:7px 13px;font-size:12.5px;font-weight:700;cursor:pointer;white-space:nowrap}
+#keyPoolRoot .kpbtn:hover{background:#f6f3ff}
+#keyPoolRoot .kpbtn.kpclear{border-color:#f3c2c2;color:#dc2626}
+#keyPoolRoot .kpbtn[hidden]{display:none}
+#keyPoolRoot .kprows{display:flex;flex-direction:column;gap:7px;counter-reset:kpn}
+#keyPoolRoot .keyrow{display:flex;gap:8px;align-items:center;counter-increment:kpn}
+#keyPoolRoot .keyrow::before{content:'#'counter(kpn);flex:0 0 30px;text-align:center;font-size:11.5px;font-weight:800;color:#9a96b5;font-family:ui-monospace,Menlo,Consolas,monospace}
+#keyPoolRoot .keyrow .keyinp{flex:1;min-width:0;width:100%;border:1px solid var(--line);border-radius:9px;padding:8px 11px;font-size:12.5px;background:#fff;color:var(--ink);font-family:ui-monospace,Menlo,Consolas,monospace}
+#keyPoolRoot .keyrow[data-ks="ok"] .keyinp{box-shadow:inset 0 0 0 1.5px #4ade80}
+#keyPoolRoot .keyrow[data-ks="bad"] .keyinp{box-shadow:inset 0 0 0 1.5px #f87171}
+#keyPoolRoot .keyrow[data-ks="limited"] .keyinp{box-shadow:inset 0 0 0 1.5px #fbbf24}
+#keyPoolRoot .keyrow .keymark{flex:0 0 92px;text-align:center;font-size:11px;font-weight:800;white-space:nowrap;padding:4px 8px;border-radius:999px;background:#f1f0f5;color:#9aa0b0}
+#keyPoolRoot .keyrow .keymark.ok{background:#e8f7ee;color:#16a34a}
+#keyPoolRoot .keyrow .keymark.limited{background:#fef5e0;color:#b45309}
+#keyPoolRoot .keyrow .keymark.bad{background:#fdeeee;color:#dc2626}
+#keyPoolRoot .keyrow .keymark.unknown{background:#f1f0f5;color:#6b7280}
+#keyPoolRoot .keyrow .keymark.idle{background:#f1f0f5;color:#9aa0b0}
+#keyPoolRoot .keydel{flex:0 0 auto;min-width:38px;border:1px solid #f3c2c2;background:#fff;color:#dc2626;border-radius:8px;padding:7px 0;font-weight:800;cursor:pointer}
+#keyPoolRoot .kpfoot{margin-top:13px;color:#9a96b5;font-size:11.5px;line-height:1.7}
+#keyPoolRoot .kpfoot a{color:#6d4ce8;font-weight:700;text-decoration:none}
+#keyPoolRoot .kpempty{padding:24px;text-align:center;color:#9a96b5;font-size:13px}
+@media(max-width:640px){#keyPoolRoot .kpcard{margin:2vh auto;width:calc(100% - 16px);max-height:96vh;padding:14px 12px}
+#keyPoolRoot .keyrow{gap:6px}#keyPoolRoot .keyrow::before{flex-basis:24px}
+#keyPoolRoot .keyrow .keymark{flex-basis:74px;font-size:10.5px;padding:3px 5px}}
 /* 视图切换 */
 .viewtabs{display:flex;justify-content:center;gap:10px;margin:15px 0 3px}
 .viewtabs a{flex:1 1 0;max-width:230px;text-align:center;text-decoration:none;font-size:15px;font-weight:800;letter-spacing:2px;
@@ -288,9 +331,8 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
       <a class="cross-link" href="/lolzjcx/" title="前往 LOL 战绩查询">LOL 战绩查询 →</a>
     </div>
     <div class="keybar">
-      <label>API Key</label>
-      <div class="keyrows" id="keyRows"><div class="keyactions"><button class="kbtn keyadd" id="keyAdd" type="button" title="再添加一个 Key">＋ 添加 Key</button><button class="kbtn keyclear" id="keyClear" type="button" title="删除所有检测为无效的 Key" hidden>清除无效 Key</button></div></div>
-      <button class="kbtn" id="eyeBtn" type="button" title="显示/隐藏">显示</button>
+      <button class="kbtn pool-open" id="poolOpenBtn" type="button" title="管理 API Key 账号池">🔑 API Key 账号池<span class="pool-cnt" id="poolCnt">未配置</span></button>
+      <span class="kstatus" id="keyStatus"><i></i><span id="keyStatusText">未填写 Key</span></span>
       <label>平台</label>
       <select id="platformSel">
         <option value="steam">Steam</option>
@@ -299,11 +341,25 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
         <option value="xbox">Xbox</option>
         <option value="stadia">Stadia</option>
       </select>
-      <button class="kbtn" id="testBtn" type="button">测试连接</button>
-      <span class="kstatus" id="keyStatus"><i></i><span id="keyStatusText">未填写 Key</span></span>
     </div>
-    <div class="keytip">Key 只保存在本地浏览器；点「＋ 添加 Key」可填多个，限流时自动轮询切换；免费 Key 约 10 次/分钟。<br><a href="https://developer.pubg.com/" target="_blank" rel="noopener">没有 Key？去 developer.pubg.com 免费注册 →</a><span> 小提示：用 Outlook 邮箱加号别名（如 name+1、name+2@outlook.com）即可注册多个账号，多填几个 Key 能叠加配额、减少限流等待</span></div>
   </header>
+
+  <!-- API Key 账号池弹窗 -->
+  <div id="keyPoolRoot">
+    <div class="kpmask"></div>
+    <div class="kpcard">
+      <div class="kpph"><h3>API Key 账号池</h3><button class="kpx" id="kpClose" type="button" aria-label="关闭">×</button></div>
+      <div class="kpsum" id="kpSum"></div>
+      <div class="kptools">
+        <button class="kpbtn" id="keyAdd" type="button" title="再添加一个 Key">＋ 添加 Key</button>
+        <button class="kpbtn" id="testBtn" type="button">测试全部</button>
+        <button class="kpbtn" id="eyeBtn" type="button" title="显示/隐藏">显示</button>
+        <button class="kpbtn kpclear" id="keyClear" type="button" title="删除所有检测为无效的 Key" hidden>清除无效 Key</button>
+      </div>
+      <div class="kprows" id="keyRows"></div>
+      <div class="kpfoot">Key 仅保存在本浏览器（localStorage），不上传任何服务器；免费 Key 约 10 次/分钟，添加多个后查询时自动轮询、叠加配额；显示「限流中」会在约 1 分钟内自动恢复，并非无效。<br><a href="https://developer.pubg.com/" target="_blank" rel="noopener">没有 Key？去 developer.pubg.com 免费注册 →</a><span> 小提示：用 Outlook 邮箱加号别名（如 name+1、name+2@outlook.com）即可注册多个账号。</span></div>
+    </div>
+  </div>
 
   <nav class="viewtabs">
     <a class="on" href="#/multi" data-v="multi">多人对比</a>
@@ -637,7 +693,7 @@ function platform(){return $('platformSel').value;}
 function base(){return 'https://api.pubg.com/shards/'+platform();}
 function persistKeys(){
   try{localStorage.setItem(KEY_STORE,collectKeyVals().join('\n'));}catch(e){}
-  resetKeyPool();setKeyStatus();updateClearBtn();
+  resetKeyPool();setKeyStatus();updateClearBtn();renderPoolRows();renderPoolSummary();
 }
 const MARK_TXT={ok:'有效',bad:'无效',limited:'限流中',unknown:'检测失败'};
 function setRowState(row,st){
@@ -650,16 +706,82 @@ function updateClearBtn(){
   const n=collectKeyVals().filter(k=>keyStateByKey[k]==='bad').length;
   const b=$('keyClear');if(b){b.hidden=n===0;b.textContent=n?`清除无效 Key（${n}）`:'清除无效 Key';}
 }
-// 把逐 Key 状态映射回输入行（一框一 Key 直接对应；单框多 Key 取最差状态 bad>unknown>limited>ok）
-function applyKeyStatesToRows(){
-  const pri={bad:3,unknown:2,limited:1,ok:0};
+// ===== 账号池弹窗：综合「探测状态 keyStateByKey」与「运行时轮询状态 keyPool(coolUntil/sent/bad)」统一渲染 =====
+const KP_PRI={bad:5,limited:4,unknown:3,idle:2,ok:1};
+function keyRuntime(key){try{syncKeyPool();return (keyPool||[]).find(s=>s.key===key)||null;}catch(e){return null;}} // init 早期 keyPool 尚未初始化(TDZ)时容错返回 null
+// 单个 Key 展示状态：bad 无效 / limited 限流(带倒计时) / unknown 检测失败 / ok 有效 / idle 未测试
+function keyDisplay(key){
+  const now=Date.now(),rs=keyStateByKey[key],ks=keyRuntime(key);
+  if((ks&&ks.bad)||rs==='bad')return {cls:'bad',text:'无效',used:0};
+  if(ks&&ks.coolUntil>now)return {cls:'limited',text:'限流 '+Math.ceil((ks.coolUntil-now)/1000)+'s',used:ks.sent.length};
+  if(rs==='limited')return {cls:'limited',text:'限流中',used:ks?ks.sent.length:0};
+  if(rs==='unknown')return {cls:'unknown',text:'检测失败',used:0};
+  if(rs==='ok')return {cls:'ok',text:'有效',used:ks?ks.sent.length:0};
+  const u0=ks?ks.sent.length:0;
+  if(u0>0)return {cls:'ok',text:'使用中',used:u0}; // 运行时已成功发过请求（sent 只记录成功），视为有效·使用中
+  return {cls:'idle',text:'未测试',used:0};
+}
+// 重绘弹窗内每个 Key 行的状态标签（一框多 Key 取最差；有效/未测试附带窗口用量 x/RATE_MAX）
+function renderPoolRows(){
   KEY_ROWS.querySelectorAll('.keyrow').forEach(r=>{
-    const inp=r.querySelector('input.keyinp');
+    const inp=r.querySelector('input.keyinp'),mark=r.querySelector('.keymark');
+    if(!inp||!mark)return;
     const frags=inp.value.split(/[\s,;；，]+/).map(s=>s.trim()).filter(Boolean);
-    let st=null;frags.forEach(f=>{const s=keyStateByKey[f];if(s&&(!st||pri[s]>pri[st]))st=s;});
-    setRowState(r,st||'');
+    if(!frags.length){r.dataset.ks='';mark.className='keymark';mark.textContent='';return;}
+    let agg=null;
+    frags.forEach(f=>{const d=keyDisplay(f);if(!agg||KP_PRI[d.cls]>KP_PRI[agg.cls])agg=d;});
+    let cls=agg.cls,text=agg.text;
+    if(agg.used>0&&(cls==='ok'||cls==='idle'))text=text+' · '+agg.used+'/'+RATE_MAX;
+    r.dataset.ks=(cls==='idle'?'':cls);
+    mark.className='keymark '+cls;
+    mark.textContent=text;
   });
 }
+// 兼容旧调用名：探测/作废后刷新行状态
+function applyKeyStatesToRows(){renderPoolRows();renderPoolSummary();}
+// 汇总：去重后每个 Key 的展示分类计数
+function poolTally(){
+  const c={total:0,ok:0,limited:0,bad:0,unknown:0,idle:0};
+  collectKeyVals().forEach(k=>{const d=keyDisplay(k);c.total++;c[d.cls]++;});
+  return c;
+}
+function kptag(cls,txt){return '<span class="kptag '+cls+'">'+txt+'</span>';}
+// 顶部入口按钮 + 状态 pill + 弹窗摘要标签，统一刷新
+function renderPoolSummary(){
+  const c=poolTally();
+  const cnt=$('poolCnt'),pill=$('keyStatus'),pt=$('keyStatusText'),sum=$('kpSum');
+  if(cnt)cnt.textContent=c.total?c.total+' 个':'未配置';
+  pill.classList.remove('ok','bad');
+  let txt,cls='';
+  if(!c.total){txt='未填写 Key';}
+  else if(c.total===c.idle){txt=c.total+' 个 Key · 未测试（点账号池内「测试全部」）';}
+  else{
+    const p=[];
+    if(c.ok)p.push(c.ok+' 有效');
+    if(c.limited)p.push(c.limited+' 限流中');
+    if(c.bad)p.push(c.bad+' 无效');
+    if(c.unknown)p.push(c.unknown+' 检测失败');
+    if(c.idle)p.push(c.idle+' 未测试');
+    txt='共 '+c.total+' 个 Key · '+p.join(' · ');
+    if(c.ok>0&&c.bad===0)cls='ok';else if(c.ok===0&&c.bad>0&&c.limited===0)cls='bad';
+  }
+  if(cls==='ok')pill.classList.add('ok');else if(cls==='bad')pill.classList.add('bad');
+  pt.textContent=txt;
+  if(sum){
+    if(!c.total)sum.innerHTML=kptag('','尚未添加 Key');
+    else{
+      let h=kptag('t-use','总数 '+c.total);
+      if(c.ok)h+=kptag('t-ok','有效 '+c.ok);
+      if(c.limited)h+=kptag('t-lim','限流中 '+c.limited);
+      if(c.bad)h+=kptag('t-no','无效 '+c.bad);
+      if(c.unknown)h+=kptag('','检测失败 '+c.unknown);
+      if(c.idle)h+=kptag('','未测试 '+c.idle);
+      sum.innerHTML=h;
+    }
+  }
+}
+function openKeyPool(){$('keyPoolRoot').classList.add('show');renderPoolRows();renderPoolSummary();}
+function closeKeyPool(){$('keyPoolRoot').classList.remove('show');}
 // 单 Key 探测：200=有效 / 401·403=无效 / 429=限流中（Key 本身有效，不是无效）/ 其余或网络异常=检测失败（不下无效结论）
 async function probeKey(key){
   try{
@@ -679,13 +801,13 @@ function addKeyRow(value,focus){
   inp.addEventListener('input',()=>{setRowState(row,'');persistKeys();});
   const mark=document.createElement('span');mark.className='keymark';
   const del=document.createElement('button');
-  del.type='button';del.className='kbtn keydel';del.title='删除该 Key';del.textContent='−';
+  del.type='button';del.className='keydel';del.title='删除该 Key';del.textContent='−';
   del.addEventListener('click',()=>{
     if(KEY_ROWS.querySelectorAll('input.keyinp').length<=1){inp.value='';setRowState(row,'');persistKeys();} // 只剩一行时清空而非删除
     else{row.remove();persistKeys();}
   });
   row.appendChild(inp);row.appendChild(mark);row.appendChild(del);
-  KEY_ROWS.insertBefore(row,$('keyAdd').parentNode); // 输入行插到按钮行（keyactions）之前
+  KEY_ROWS.appendChild(row); // keyRows 已移入账号池弹窗（工具按钮在弹窗外工具行），直接追加
   if(focus)inp.focus();
   return inp;
 }
@@ -701,6 +823,8 @@ function clearBadKeys(){
   Object.keys(keyStateByKey).forEach(k=>{if(keyStateByKey[k]==='bad')delete keyStateByKey[k];});
   [...KEY_ROWS.querySelectorAll('.keyrow')].forEach(r=>r.remove()); // 按片段重建：剔除无效、剩余一框一个（顺带规范化单框多 Key）
   if(keep.length)keep.forEach(k=>addKeyRow(k));else addKeyRow('');
+  const showing=$('eyeBtn').textContent==='隐藏'; // 重建后按当前显隐状态同步新行（按钮文案为“隐藏”表示当前正明文显示）
+  KEY_ROWS.querySelectorAll('input.keyinp').forEach(i=>i.type=showing?'text':'password');
   persistKeys();toast(`已清除 ${badN} 个无效 Key`,'s');
 }
 (function init(){
@@ -715,7 +839,13 @@ function clearBadKeys(){
     KEY_ROWS.querySelectorAll('input.keyinp').forEach(i=>i.type=show?'text':'password');
     $('eyeBtn').textContent=show?'隐藏':'显示';};
   $('testBtn').onclick=testConnection;
+  $('poolOpenBtn').addEventListener('click',openKeyPool);
+  $('kpClose').addEventListener('click',closeKeyPool);
+  $('keyPoolRoot').querySelector('.kpmask').addEventListener('click',closeKeyPool);
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeKeyPool();});
   updateClearBtn();setKeyStatus();
+  try{renderPoolRows();renderPoolSummary();}catch(e){}
+  setInterval(()=>{try{renderPoolRows();renderPoolSummary();}catch(e){}},1000); // 限流倒计时/窗口用量/摘要实时刷新
 })();
 // 以去重后的 Key 片段为单一事实源汇总顶部状态（输入行只是视图）；未探测时回落“未测试”，并提示重复/空框
 function summarizeRows(){
@@ -754,7 +884,7 @@ async function testConnection(){
   setKeyStatus(null,`检测 ${keys.length} 个 Key…`);
   Object.keys(keyStateByKey).forEach(k=>delete keyStateByKey[k]);
   const c={ok:0,bad:0,limited:0,unknown:0};
-  for(const k of keys){const st=await probeKey(k);keyStateByKey[k]=st;c[st]++;} // 按去重后的 Key 逐个探测，计数与轮询池完全一致
+  for(const k of keys){const st=await probeKey(k);keyStateByKey[k]=st;c[st]++;renderPoolRows();renderPoolSummary();} // 按去重后的 Key 逐个探测，逐行实时反馈，计数与轮询池完全一致
   applyKeyStatesToRows();
   const s=summarizeRows();setKeyStatus(s.state,s.txt);
   if(c.bad)toast(`有 ${c.bad} 个无效 Key，可一键清除`,'w');
