@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>LOL 战绩多人对比</title>
+<title>LOL 战绩查询</title>
 <style>
 :root{--bg:#eef1f5;--card:#fff;--ink:#1f2329;--sub:#6b7280;--line:#e3e7ee;--blue:#2563eb;--pri:#5b2a86;--red:#dc2626;--org:#d97706;--green:#16a34a;--win:#16a34a;--lose:#dc2626}
 *{box-sizing:border-box}
@@ -1205,7 +1205,7 @@ function decodeSingleDoc(){const bin=atob(SINGLE_DOC_B64),buf=Uint8Array.from(bi
 function routeView(){
   const single=location.hash.startsWith('#/single');
   $('viewMulti').style.display=single?'none':'';$('viewSingle').style.display=single?'':'none';
-  document.title=single?'LOL 战绩详情':'LOL 战绩多人对比';
+  document.title='LOL 战绩查询';
   if(single){const f=$('singleFrame');if(loadedSingleHash!==location.hash){loadedSingleHash=location.hash;f.srcdoc=decodeSingleDoc();}
     setTimeout(()=>{try{const w=f.contentDocument.querySelector('.wrap');const sh=w?w.getBoundingClientRect().bottom:f.contentDocument.documentElement.scrollHeight;f.style.height=Math.max(innerHeight,Math.ceil(sh))+'px';}catch(e){}},800);}
 }
