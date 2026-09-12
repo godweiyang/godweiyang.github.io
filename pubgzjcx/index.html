@@ -209,7 +209,7 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
 .b-teal{background:#cffafe;color:#0e7490}
 .b-purple{background:#ede9fe;color:#5b2a86}
 .b-gray{background:#f1f3f5;color:#6b7280}
-.viz-band{display:grid;grid-template-columns:1fr 1fr;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:12px 0;box-shadow:0 1px 3px rgba(60,40,120,.05)}
+.viz-band{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:12px 0;box-shadow:0 1px 3px rgba(60,40,120,.05)}
 .viz-card{padding:14px 16px;border-right:1px solid var(--line);min-width:0}
 .viz-card:last-child{border-right:0}
 .viz-card h4{margin:0 0 4px;font-size:13.5px;color:var(--ink)}
@@ -674,11 +674,40 @@ function quadSvg(players){
   s+=`<text x="${L-4}" y="${base+14}" text-anchor="end" font-size="8.5" fill="#9ca3af">0%</text><text x="${L-4}" y="${T+4}" text-anchor="end" font-size="8.5" fill="#9ca3af">100%</text>`;
   return `<svg viewBox="0 0 ${W} ${H}" class="viz-svg">${s}</svg>`;
 }
+// 多人：核心数据 PK 横向条形榜。每个指标在队内各自归一化（条长=相对队内最高），条尾标绝对值；队内最高实心高亮、其余淡色，颜色对应玩家
+function barSvg(players){
+  const W=380,n=players.length;
+  const groups=[
+    {name:'KD',      fmt:v=>v.toFixed(2)},
+    {name:'场均伤害', fmt:v=>String(Math.round(v))},
+    {name:'吃鸡率',   fmt:v=>pct(v,0)},
+    {name:'前十率',   fmt:v=>pct(v,0)},
+    {name:'场均存活', fmt:v=>fmtMin(v)}
+  ];
+  const keys=['kd','dpg','win','top','surv'];
+  const barL=10,barR=W-46,bw=barR-barL,bh=8,step=11,gh=15,gg=6,padT=8,padB=6;
+  const H=padT+groups.length*(gh+n*step+gg)+padB;
+  let s='';
+  groups.forEach((g,gi)=>{
+    const y0=padT+gi*(gh+n*step+gg);
+    s+=`<text x="${barL}" y="${(y0+11).toFixed(1)}" font-size="11.5" font-weight="700" fill="#374151">${g.name}</text>`;
+    const vals=players.map(p=>Number(p[keys[gi]])||0);
+    const max=Math.max(...vals,1e-9);
+    players.forEach((p,i)=>{
+      const v=vals[i],ry=y0+gh+i*step,isMax=v>0&&max-v<1e-9;
+      const w=v>0?Math.max(2,(v/max)*bw):0;
+      if(w>0)s+=`<rect x="${barL}" y="${ry.toFixed(1)}" width="${w.toFixed(1)}" height="${bh}" rx="4" fill="${p.color}" fill-opacity="${isMax?1:0.85}"><title>${p.name}｜${g.name} ${g.fmt(v)}</title></rect>`;
+      s+=`<text x="${W-8}" y="${(ry+7).toFixed(1)}" text-anchor="end" font-size="9.5" font-weight="${isMax?700:500}" fill="${isMax?p.color:'#8a909c'}">${isMax?'★ ':''}${g.fmt(v)}</text>`;
+    });
+  });
+  return `<svg viewBox="0 0 ${W} ${H.toFixed(0)}" class="viz-svg">${s}</svg>`;
+}
 // 多人：组装可视化玩家（颜色按列的原始下标，保证与列顺序一致）
 function vizPlayers(){
   return M.players.map((p,i)=>({p,i})).filter(x=>x.p.status==='found'&&x.p.agg&&x.p.agg.rounds>0).map(({p,i})=>{
-    const m=multiBadgeMetrics(p);
+    const m=multiBadgeMetrics(p),t=p.agg;
     return {name:p.name,color:VIZ_COLORS[i%VIZ_COLORS.length],dpg:m.dpg,top:m.top,
+      kd:kdOf(t.kills,t.rounds,t.wins),kpg:m.kpg,win:m.win,surv:m.surv,hsr:m.hsr,
       vals:[lerp1(m.kpg,0.2,2.2),lerp1(m.dpg,60,400),lerp1(m.hsr,0,0.45),lerp1(m.top,0.2,0.9),lerp1(m.apg+m.dbpg,0.1,2.2),lerp1(m.surv,700,1700)]};
   });
 }
@@ -1520,6 +1549,7 @@ function renderMulti(){
       vizHtml=`<div class="viz-band">
         <div class="viz-card"><h4>能力雷达 <span class="tag">近 ${M.recent} 场 · 固定标尺</span></h4>${radarSvg(vp)}<div class="viz-legend">${legend}</div></div>
         <div class="viz-card"><h4>团队定位 <span class="tag">场均伤害 × 前十率 · 十字线为全队均值</span></h4>${quadSvg(vp)}<div class="quad-legend"><span><i style="background:#d97706"></i>右上·核心大腿</span><span><i style="background:#0ea5b7"></i>左上·稳健苟分</span><span><i style="background:#dc2626"></i>右下·刚枪猛冲</span><span><i style="background:#9ca3af"></i>左下·稳扎稳打</span></div></div>
+        <div class="viz-card viz-card-bar"><h4>核心数据 PK <span class="tag">近 ${M.recent} 场 · 条长为队内相对高低</span></h4>${barSvg(vp)}<div class="viz-legend">${legend}</div></div>
       </div>`;
     }
   }
