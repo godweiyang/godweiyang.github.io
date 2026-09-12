@@ -217,7 +217,6 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
 .viz-legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
 .quad-legend{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:4px;font-size:11.5px;color:var(--sub)}
 .quad-legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px}
-.wpn-bubble{margin:8px 0 4px}
 @media(max-width:760px){.viz-band{grid-template-columns:1fr}.viz-card{border-right:0;border-bottom:1px solid var(--line)}.viz-card:last-child{border-bottom:0}}
 .spinner{width:26px;height:26px;border:3px solid #e3e7ee;border-top-color:var(--pri);border-radius:50%;margin:0 auto 10px;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -246,6 +245,9 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
 .sg h3 .tag{min-width:0}
 .sg h3 button{flex:0 0 auto;white-space:nowrap}
 .sg h3 .tag{font-size:11px;color:var(--sub);font-weight:600}
+.s-viz{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;align-items:stretch}
+.s-viz .sg{margin:0;min-width:0}
+@media(max-width:760px){.s-viz{grid-template-columns:1fr}}
 .profile{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
 .profile .pavatar{width:64px;height:64px;border-radius:14px;background:linear-gradient(135deg,#6d4ce8,#9a6dd7);color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800}
 .profile .pname{font-size:20px;font-weight:800}
@@ -553,16 +555,20 @@ function multiBadgeMetrics(pl){
   return {rounds:r,kpg:t.kills/r,dpg:t.dmg/r,hsr:t.kills?t.hs/t.kills:0,top:t.top10/r,win:t.wins/r,
     apg:t.assists/r,dbpg:t.dbno/r,surv:t.time/r,rpg:null,longest:t.longest,movepg:null,road:null,horse:(pl.horse||{}).tier};
 }
-// 单人：近 N 场走势（击杀柱[吃鸡金色★] + 伤害折线，左旧右新）
+// 单人：近 N 场走势（击杀柱[柱顶标数/吃鸡金色★] + 伤害折线[最高点标值]，左旧右新；紧凑版）
 function trendSvg(games){
   if(!games||games.length<2)return '';
   const g2=games.slice().reverse();
-  const W=760,H=250,L=40,R=46,T=22,B=38,iw=W-L-R,ih=H-T-B,base=T+ih,n=g2.length;
+  const W=460,H=246,L=34,R=42,T=26,B=34,iw=W-L-R,ih=H-T-B,base=T+ih,n=g2.length;
   const maxK=Math.max(3,...g2.map(g=>g.kills)),maxD=Math.max(120,...g2.map(g=>g.dmg))*1.08;
-  const slot=iw/n,bw=Math.max(3,Math.min(20,slot*0.55));
+  const slot=iw/n,bw=Math.max(5,Math.min(30,slot*0.6));
   const X=i=>L+slot*i+slot/2,yK=k=>base-(k/maxK)*ih,yD=d=>base-(d/maxD)*ih;
+  const avgK=g2.reduce((a,g)=>a+g.kills,0)/n,maxDi=g2.reduce((mi,g,i)=>g.dmg>g2[mi].dmg?i:mi,0);
   let s='';
   for(let g=0;g<=2;g++){const yy=T+ih*g/2;s+=`<line x1="${L}" y1="${yy.toFixed(1)}" x2="${W-R}" y2="${yy.toFixed(1)}" stroke="#eef0f4"/>`;}
+  const ya=yK(avgK);
+  s+=`<line x1="${L}" y1="${ya.toFixed(1)}" x2="${W-R}" y2="${ya.toFixed(1)}" stroke="#16a34a" stroke-dasharray="4 3" stroke-opacity="0.45"/>`;
+  s+=`<text x="${W-R}" y="${(ya-4).toFixed(1)}" text-anchor="end" font-size="8.5" fill="#16a34a">场均击杀 ${avgK.toFixed(1)}</text>`;
   s+=`<text x="${L-6}" y="${base+3}" text-anchor="end" font-size="9" fill="#9ca3af">0</text>`;
   s+=`<text x="${L-6}" y="${T+ih/2+3}" text-anchor="end" font-size="9" fill="#16a34a">${(maxK/2).toFixed(0)}</text>`;
   s+=`<text x="${L-6}" y="${T+4}" text-anchor="end" font-size="9" fill="#16a34a">${maxK.toFixed(0)}</text>`;
@@ -573,47 +579,36 @@ function trendSvg(games){
   g2.forEach((g,i)=>{const x=X(i),y=yD(g.dmg);line+=(i?'L':'M')+x.toFixed(1)+','+y.toFixed(1);area+='L'+x.toFixed(1)+','+y.toFixed(1);});
   area+=`L${X(n-1).toFixed(1)},${base}L${X(0).toFixed(1)},${base}Z`;
   s+=`<path d="${area}" fill="#d97706" opacity="0.08"/><path d="${line}" fill="none" stroke="#d97706" stroke-width="1.8"/>`;
-  g2.forEach((g,i)=>{s+=`<circle cx="${X(i).toFixed(1)}" cy="${yD(g.dmg).toFixed(1)}" r="2.3" fill="#d97706"/>`;});
+  g2.forEach((g,i)=>{const hi=i===maxDi;s+=`<circle cx="${X(i).toFixed(1)}" cy="${yD(g.dmg).toFixed(1)}" r="${hi?3:2.2}" fill="#d97706"/>`;
+    if(hi)s+=`<text x="${X(i).toFixed(1)}" y="${(yD(g.dmg)-6).toFixed(1)}" text-anchor="middle" font-size="8.5" font-weight="700" fill="#b45309">${Math.round(g.dmg)}</text>`;});
   g2.forEach((g,i)=>{
     const x=X(i),y=yK(g.kills),h=Math.max(1,base-y),col=g.won?'#f59e0b':'#16a34a';
     s+=`<rect x="${(x-bw/2).toFixed(1)}" y="${y.toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" rx="2" fill="${col}"><title>${fmtDT(g.createdAt)}｜#${g.rank}｜${g.kills}杀 ${Math.round(g.dmg)}伤</title></rect>`;
-    if(g.won)s+=`<text x="${x.toFixed(1)}" y="${(y-4).toFixed(1)}" text-anchor="middle" font-size="10" fill="#b45309">★</text>`;
-    if(n<=15||i%2===0)s+=`<text x="${x.toFixed(1)}" y="${base+15}" text-anchor="middle" font-size="8.5" font-weight="${g.won?'700':'400'}" fill="${g.won?'#b45309':'#9ca3af'}">#${g.rank}</text>`;
+    if(g.kills>0)s+=`<text x="${x.toFixed(1)}" y="${(y-4).toFixed(1)}" text-anchor="middle" font-size="9" font-weight="700" fill="${g.won?'#b45309':'#15803d'}">${g.kills}</text>`;
+    if(g.won)s+=`<text x="${(x+bw/2+3).toFixed(1)}" y="${(y-1).toFixed(1)}" font-size="9" fill="#b45309">★</text>`;
+    s+=`<text x="${x.toFixed(1)}" y="${base+15}" text-anchor="middle" font-size="8.5" font-weight="${g.won?'700':'400'}" fill="${g.won?'#b45309':'#9ca3af'}">#${g.rank}</text>`;
   });
-  s+=`<text x="${L}" y="${T-9}" font-size="10" fill="#16a34a">击杀（柱）</text><text x="${W-R}" y="${T-9}" text-anchor="end" font-size="10" fill="#d97706">伤害（线）</text>`;
-  s+=`<text x="${(L+iw/2).toFixed(1)}" y="${H-5}" text-anchor="middle" font-size="9.5" fill="#9ca3af">${n} 场走势 · 左旧 → 右新 · 柱顶 ★ 为吃鸡</text>`;
+  s+=`<text x="${L}" y="${T-10}" font-size="10" fill="#16a34a">击杀（柱）</text><text x="${W-R}" y="${T-10}" text-anchor="end" font-size="10" fill="#d97706">伤害（线）</text>`;
+  s+=`<text x="${(L+iw/2).toFixed(1)}" y="${H-4}" text-anchor="middle" font-size="9" fill="#9ca3af">${n} 场 · 左旧 → 右新 · ★ 为吃鸡</text>`;
   return `<svg viewBox="0 0 ${W} ${H}" class="viz-svg" preserveAspectRatio="xMidYMid meet">${s}</svg>`;
 }
-// 单人：武器气泡图（X 击杀 / Y 伤害 / 气泡大小=爆头击倒 / 颜色=枪械类型，取前 12 主力）
-function weaponBubbleSvg(rows){
-  const data=(rows||[]).filter(w=>w.kills>0).sort((a,b)=>b.kills-a.kills).slice(0,12);
-  if(data.length<2)return '';
-  const W=760,H=300,L=46,R=18,T=24,B=44,iw=W-L-R,ih=H-T-B,base=T+ih;
-  const maxX=Math.max(3,...data.map(w=>w.kills))*1.12,maxY=Math.max(60,...data.map(w=>w.dmg))*1.1;
-  const X=v=>L+(v/maxX)*iw,Y=v=>base-(v/maxY)*ih;
+// 单人：主力武器横向条形榜（条长=合计击杀[legacy+普通+竞技]，单轴表达产量；条尾标最远击杀/爆头命中次数等绝对值，颜色=枪械类型），取击杀前 8
+// 口径说明：HeadShots 是爆头命中次数（四排爆头击倒后人头常被补，可大于击杀），接口不提供总命中数，无法计算爆头率，故不做百分比/爆头占比段
+function weaponBarSvg(rows){
+  const data=(rows||[]).filter(w=>w.kills>0).sort((a,b)=>b.kills-a.kills).slice(0,8);
+  if(!data.length)return '';
+  const W=460,nameW=84,barL=nameW+10,barR=W-84,bw=barR-barL,bh=13,rh=27,padT=6,padB=4;
+  const H=padT+data.length*rh+padB,maxK=Math.max(...data.map(w=>w.kills));
   let s='';
-  for(let g=0;g<=3;g++){const yy=T+ih*g/3;s+=`<line x1="${L}" y1="${yy.toFixed(1)}" x2="${W-R}" y2="${yy.toFixed(1)}" stroke="#eef0f4"/>`;
-    s+=`<text x="${L-6}" y="${(yy+3).toFixed(1)}" text-anchor="end" font-size="8.5" fill="#9ca3af">${Math.round(maxY*(1-g/3))}</text>`;}
-  for(let g=0;g<=4;g++){const xx=L+iw*g/4;s+=`<line x1="${xx.toFixed(1)}" y1="${T}" x2="${xx.toFixed(1)}" y2="${base}" stroke="#f4f5f8"/>`;
-    s+=`<text x="${xx.toFixed(1)}" y="${base+14}" text-anchor="middle" font-size="8.5" fill="#9ca3af">${Math.round(maxX*g/4)}</text>`;}
-  const rowRight=[];
-  data.forEach((w,idx)=>{
-    const t=weaponType(w.code),col=WTYP[t][1],r=Math.max(5,Math.min(22,5+1.7*Math.sqrt(Math.max(w.hs,w.grog))));
-    const cx=X(w.kills),cy=Y(w.dmg);
-    s+=`<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${r.toFixed(1)}" fill="${col}" fill-opacity="0.2" stroke="${col}" stroke-width="1.6"><title>${w.name}（${WTYP[t][0]}）｜${w.kills}杀 ${Math.round(w.dmg)}伤 ${w.hs}爆头 ${w.grog}击倒 最远${Math.round(w.longest)}m</title></circle>`;
-    if(idx<10){ // 前 10 把标名，按行纵向避让防重叠；其余仅悬浮可见
-      const name=esc(w.name),tx=cx+r+3,tw=w.name.length*6+9;let row=0;
-      while(rowRight[row]!==undefined&&rowRight[row]>tx)row++;if(row>2)row=2;
-      rowRight[row]=tx+tw;
-      s+=`<text x="${tx.toFixed(1)}" y="${(cy+3+row*11).toFixed(1)}" font-size="9.5" fill="#374151">${name}</text>`;
-    }
+  data.forEach((w,i)=>{
+    const t=weaponType(w.code),col=WTYP[t][1];
+    const y0=padT+i*rh,cy=y0+rh/2,ny=cy-bh/2,len=Math.max(2,(w.kills/maxK)*bw);
+    s+=`<text x="${nameW}" y="${(cy+3.5).toFixed(1)}" text-anchor="end" font-size="10.5" font-weight="600" fill="#374151">${esc(w.name)}</text>`;
+    s+=`<rect x="${barL}" y="${ny.toFixed(1)}" width="${bw}" height="${bh}" rx="6.5" fill="#eef0f5"/>`;
+    s+=`<rect x="${barL}" y="${ny.toFixed(1)}" width="${len.toFixed(1)}" height="${bh}" rx="6.5" fill="${col}"><title>${w.name}（${WTYP[t][0]}）｜合计 ${w.kills} 杀（普通 ${w.normal} · 竞技 ${w.ranked}）${Math.round(w.dmg)} 伤 爆头命中 ${w.hs} 次 击倒 ${w.grog} 最远 ${Math.round(w.longest)}m 单场最高 ${w.best} 熟练度 Lv${w.level}</title></rect>`;
+    s+=`<text x="${barR+7}" y="${(cy-0.5).toFixed(1)}" font-size="11.5" font-weight="800" fill="#1f2937">${w.kills}</text>`;
+    s+=`<text x="${barR+7}" y="${(cy+10.5).toFixed(1)}" font-size="8.5" fill="#9ca3af">${Math.round(w.longest)}m · 爆头${w.hs}</text>`;
   });
-  s+=`<text x="${(L+iw/2).toFixed(1)}" y="${H-8}" text-anchor="middle" font-size="10" fill="#6b7280">击杀数 →（气泡越大，爆头/击倒越多）</text>`;
-  s+=`<text transform="translate(12,${(T+ih/2).toFixed(1)}) rotate(-90)" text-anchor="middle" font-size="10" fill="#6b7280">总伤害 →</text>`;
-  const types=[...new Set(data.map(w=>weaponType(w.code)))];
-  let lx=W-R-4;
-  types.slice().reverse().forEach(t=>{const wd=14+WTYP[t][0].length*11+10;lx-=wd;
-    s+=`<rect x="${lx.toFixed(1)}" y="${T-13}" width="9" height="9" rx="2" fill="${WTYP[t][1]}"/><text x="${(lx+13).toFixed(1)}" y="${T-5}" font-size="9" fill="#6b7280">${WTYP[t][0]}</text>`;});
   return `<svg viewBox="0 0 ${W} ${H}" class="viz-svg" preserveAspectRatio="xMidYMid meet">${s}</svg>`;
 }
 // 多人：能力雷达（6 维固定标尺，反映绝对实力）。players=[{name,color,vals:[6]}]
@@ -1226,13 +1221,14 @@ function aggModes(modes){const t={};LIFE_KEYS.forEach(k=>t[k]=0);Object.values(m
 function kdOf(kills,rounds,wins){const losses=Math.max(0,(rounds||0)-(wins||0));return losses>0?kills/losses:(kills>0?kills:0);}
 function weaponRows(summaries){
   return Object.entries(summaries||{}).map(([code,v])=>{
+    // b[0]=StatsTotal(18.2 之前 legacy 旧数据) · b[1]=OfficialStatsTotal(普通匹配,18.2 起) · b[2]=CompetitiveStatsTotal(竞技,18.2 起)
     const b=[v.StatsTotal||{},v.OfficialStatsTotal||{},v.CompetitiveStatsTotal||{}];
     const s=k=>b.reduce((sum,x)=>sum+num(x[k]),0);
     return {code,name:wName(code),level:num(v.LevelCurrent),xp:num(v.XPTotal),
       kills:s('Kills'),hs:s('HeadShots'),grog:s('Groggies'),dmg:s('DamagePlayer'),
       longest:Math.max(0,...b.map(x=>num(x.LongestKill||x.LongestDefeat))),
       best:Math.max(0,...b.map(x=>num(x.MostKillsInAGame))),
-      normal:num(b[0].Kills),ranked:num(b[1].Kills)+num(b[2].Kills)};
+      normal:num(b[1].Kills),ranked:num(b[2].Kills)};
   });
 }
 // 解析竞技段位：真实结构为扁平的 currentTier/currentRankPoint/bestTier/bestRankPoint + 一组赛季统计
@@ -1759,13 +1755,17 @@ function renderSingle(){
       <button data-f="normal" class="${S.weaponFilter==='normal'?'on':''}">普通匹配</button>
       <button data-f="ranked" class="${S.weaponFilter==='ranked'?'on':''}">竞技</button>
     </div>
-    <div style="overflow-x:auto"><div id="wpnBubble" class="wpn-bubble" style="min-width:560px"></div></div>
     <div style="overflow-x:auto"><table class="s-table" id="wpnTable"></table></div>
     <div style="text-align:center;margin-top:8px"><button class="sec" id="wpnMore" style="padding:5px 14px;font-size:12px"></button></div></div>`;
-  // 卡4.6：近期走势（击杀柱 + 伤害折线，吃鸡局金色 ★）
-  if(p.recent.length>=2){
-    h+=`<div class="sg"><h3>近期走势 <span class="tag">近 ${p.recent.length} 场 · 柱=击杀 / 线=伤害</span></h3>
-      <div style="overflow-x:auto"><div style="min-width:520px">${trendSvg(p.recent)}</div></div></div>`;
+  // 卡4.6：图表面板（近期走势 + 主力武器条形榜），宽屏两列并排、窄屏堆叠
+  {
+    const wbr=weaponRows(p.detail.weapon);
+    const wtypes=[...new Set(wbr.filter(w=>w.kills>0).sort((a,b)=>b.kills-a.kills).slice(0,8).map(w=>weaponType(w.code)))];
+    const wlegend=wtypes.map(t=>`<span><i style="background:${WTYP[t][1]}"></i>${WTYP[t][0]}</span>`).join('');
+    h+=`<div class="s-viz">
+      <div class="sg"><h3>近期走势 <span class="tag">近 ${p.recent.length} 场 · 柱=击杀 / 线=伤害</span></h3>${p.recent.length>=2?trendSvg(p.recent):'<div class="empty">近期对局不足，暂无走势</div>'}</div>
+      <div class="sg"><h3>主力武器 <span class="tag">合计击杀前 8 · 条长=击杀数 · 悬停看详情</span></h3>${weaponBarSvg(wbr)||'<div class="empty">暂无武器数据</div>'}<div class="viz-legend" style="margin-top:6px">${wlegend}</div></div>
+    </div>`;
   }
   // 卡5：最近对局
   let mlistNote='';
@@ -1779,7 +1779,6 @@ function renderSingle(){
 }
 function renderWpnTable(){
   const p=S.data;if(!p)return;
-  const bub=$('wpnBubble');if(bub)bub.innerHTML=weaponBubbleSvg(weaponRows(p.detail.weapon));
   let rows=weaponRows(p.detail.weapon);
   rows.forEach(w=>{w.show=S.weaponFilter==='all'?w.kills:(S.weaponFilter==='normal'?w.normal:w.ranked);});
   rows=rows.filter(w=>w.show>0||w.dmg>0).sort((a,b)=>b.show-a.show||b.dmg-a.dmg);
