@@ -138,6 +138,7 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
 .chp.h-T{background:#f1ecfe;color:#7c3aed;border-color:#cbb8f8}.chp.h-A{background:#e8f7ee;color:#16a34a;border-color:#9fdcba}.chp.h-B{background:#e8f0fe;color:#2563eb;border-color:#a9c5f5}.chp.h-C{background:#fdf1e2;color:#ea8a16;border-color:#f3cd9c}.chp.h-D{background:#fdecec;color:#dc2626;border-color:#f3b4b4}.chp.h-N{background:#f3f4f6;color:var(--sub);border-color:#e5e7eb;font-size:12px;font-weight:700;letter-spacing:0}
 /* 迷你段位 */
 .rankmini{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rankmini.one{grid-template-columns:1fr}
 .rm{display:flex;align-items:center;gap:7px;background:#faf9fd;border:1px solid var(--line);border-radius:9px;padding:6px 8px;min-width:0}
 .rm .rm-badge{width:30px;height:30px;flex:0 0 auto;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;background:#8b5cf6}
 .rm .rm-badge.rm-badge-none{background:#c4ccda;box-shadow:none}
@@ -437,6 +438,9 @@ const MAP={Erangel_Main:'艾伦格',Desert_Main:'米拉玛',Savage_Main:'萨诺'
 function mapName(m){return MAP[m]||String(m||'').replace('_Main','')||'—';}
 const MODE_CN={'solo':'单排(TPP)','solo-fpp':'单排(FPP)','duo':'双排(TPP)','duo-fpp':'双排(FPP)','squad':'四排(TPP)','squad-fpp':'四排(FPP)'};
 function modeCn(m){return MODE_CN[m]||m||'—';}
+// 竞技模式展示优先级：组队人数优先（四>双>单，开黑核心场景），同人数 FPP 优先于 TPP；多人卡取前 2、单人卡全展示
+const MODE_PRI={'squad-fpp':0,'squad':1,'duo-fpp':2,'duo':3,'solo-fpp':4,'solo':5};
+function modeCmp(a,b){const pa=MODE_PRI[a]===undefined?99:MODE_PRI[a],pb=MODE_PRI[b]===undefined?99:MODE_PRI[b];return pa-pb;}
 function modeGroup(m){return String(m||'').split('-')[0];}
 const MATCHTYPE={competitive:'竞技',official:'匹配',custom:'自定义',airoyale:'AI',seasonal:'活动'};
 // 统一的对局类型判定：同时返回中文文案与徽章样式类，单人标题/战报与多人卡片共用，保证一致
@@ -1217,8 +1221,8 @@ function rankedList(ranked){
       avgSurv:num(v.avgSurvivalTime),roundMostKills:num(v.roundMostKills),killStreak:num(v.killStreak)
     });
   });
-  // 四排（FPP 优先其次 TPP）排前
-  out.sort((a,b)=>(b.mode.indexOf('squad')===0?1:0)-(a.mode.indexOf('squad')===0?1:0));
+  // 四排 FPP/TPP 优先，其次双排、单排（统一走 modeCmp）
+  out.sort((a,b)=>modeCmp(a.mode,b.mode));
   return out;
 }
 // 近期（matches）聚合：games 为该玩家参与且通过模式筛选的场次（已按时间倒序）
@@ -1421,11 +1425,11 @@ function mRankCell(pl){
   const modeSet=[];
   rl.forEach(r=>{if(!modeSet.includes(r.mode))modeSet.push(r.mode);});
   Object.keys(byMode).forEach(m=>{if(!modeSet.includes(m))modeSet.push(m);});
-  modeSet.sort((a,b)=>(b.indexOf('squad')===0?1:0)-(a.indexOf('squad')===0?1:0));
+  modeSet.sort(modeCmp);
   const modes=modeSet.slice(0,2);
   let body;
   if(modes.length){
-    body='<div class="rankmini">'+modes.map(mode=>{
+    body='<div class="rankmini'+(modes.length===1?' one':'')+'">'+modes.map(mode=>{
       const cur=rl.find(r=>r.mode===mode)||null,hm=byMode[mode]||null;
       const hist=hm
         ?`<div class="rm-best" title="${seasonLabel(hm.season)}">历史最高 <b style="color:${tierColor(hm.tier)}">${tierCn(hm.tier)}${ROMAN[hm.sub]||hm.sub||''}</b> ${seasonLabel(hm.season).replace('第 ','S').replace(' 赛季','')}</div>`
@@ -1672,7 +1676,7 @@ function renderSingle(){
   const rankModes=[];
   rl.forEach(r=>{if(!rankModes.includes(r.mode))rankModes.push(r.mode);});
   Object.keys(byMode).forEach(m=>{if(!rankModes.includes(m))rankModes.push(m);});
-  rankModes.sort((a,b)=>(b.indexOf('squad')===0?1:0)-(a.indexOf('squad')===0?1:0));
+  rankModes.sort(modeCmp);
   const rankCardsHtml=rankModes.length
     ?rankModes.map(mode=>rankCard(mode,rl.find(r=>r.mode===mode)||null,byMode[mode]||null,p.histLoading)).join('')
     :'<div class="empty" style="padding:8px 0">当前赛季未定级（完成竞技定级赛后显示段位）</div>';
