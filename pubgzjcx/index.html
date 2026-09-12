@@ -147,8 +147,6 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
 .rm .rm-t{font-size:12px;font-weight:800;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rm .rm-q{font-size:10.5px;color:var(--sub)}
 .rm .rm-lp{font-size:10.5px;color:var(--org);font-weight:700}
-.rm.none{justify-content:center;color:var(--sub);font-size:11.5px}
-.rm.none span{white-space:nowrap}
 /* 四宫格 */
 .sumrow{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 .sm{text-align:center;background:#f8f6fc;border-radius:8px;padding:6px 2px}
@@ -1451,7 +1449,11 @@ function mRankCell(pl){
     <div class="rm-q">${modeCn(mode)} · 当前赛季</div>${best}</div></div>`;
     }).join('')+'</div>';
   }else{
-    body='<div class="rankmini"><div class="rm none" style="grid-column:1/-1"><span>当前赛季未定级</span></div></div>';
+    body=`<div class="rankmini one"><div class="rm">
+    <div class="rm-badge rm-badge-none">—</div>
+    <div class="rm-body"><div class="rm-t" style="color:var(--sub)">未定级</div>
+    <div class="rm-q">竞技段位 · 当前赛季</div>
+    <div class="rm-best rm-best-empty">历史最高 —</div></div></div></div>`;
   }
   return `<div class="cell">${body}</div>`;
 }
