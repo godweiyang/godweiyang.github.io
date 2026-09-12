@@ -120,7 +120,6 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
 .mm .res{flex:0 0 30px;height:24px;border-radius:7px;color:#fff;font-weight:800;font-size:11px;display:flex;align-items:center;justify-content:center}
 .mm.win{background:linear-gradient(135deg,#fff9e8,#fdeec3);border:1.5px solid #f0b247;box-shadow:0 2px 8px rgba(240,178,71,.38)}
 .mm.win .res{background:#f59e0b;box-shadow:0 1px 4px rgba(245,158,11,.5)}.mm.top .res{background:#84b16b}.mm.lose .res{background:#e08a8a}
-.wintag{flex:0 0 auto;border-radius:5px;padding:0 6px;font-size:10px;font-weight:800;white-space:nowrap;line-height:16px;background:#f59e0b;color:#fff;letter-spacing:.5px}
 .fstat{display:inline-flex;align-items:baseline;gap:2px;white-space:nowrap}
 .fstat b{font-style:normal;font-weight:800;font-size:12.5px;color:#1f2329;line-height:1}
 .fstat i{font-style:normal;font-size:10.5px;color:var(--sub)}
@@ -1353,7 +1352,7 @@ function renderMatchList(){
       .filter(Boolean).map(t=>`<span class="xtag">${t}</span>`).join('');
     return `<div class="mrow ${g.won?'win':cls}" data-i="${i}">
       <div class="mhead">
-        <span class="place ${cls}">#${g.rank}</span>${g.won?'<span class="wintag">吃鸡</span>':''}
+        <span class="place ${cls}">#${g.rank}</span>
         <span class="mtitle">${esc(mapName(g.map))} · ${modeCn(g.mode)} · ${typeCn(g.type,g.custom)} · ${fmtDur(g.duration)}</span>
         <span class="mh h-${h.tier}" title="单场综合分 ${h.score.toFixed(0)}">${esc(h.label)}</span>
         <span class="mtime">${fmtDT(g.createdAt)} <span class="caret">▸</span></span>
