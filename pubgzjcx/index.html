@@ -113,12 +113,13 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
 .cell.mcell{border-right:0;padding:6px;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start}
 .mgames{display:flex;flex-direction:column;gap:6px;min-width:0;width:100%}
 .mm{width:100%;border-radius:9px;padding:7px 9px;border:1px solid #eee;background:#fff;min-width:0}
-.mm.win{background:#ecfdf3;border-color:#c9ebd3}
 .mm.top{background:#f4fbf1;border-color:#d9efcf}
 .mm.lose{background:#fdecec;border-color:#f3c9c9}
 .mm .r1{display:flex;align-items:center;gap:7px}
 .mm .res{flex:0 0 30px;height:24px;border-radius:7px;color:#fff;font-weight:800;font-size:11px;display:flex;align-items:center;justify-content:center}
-.mm.win .res{background:var(--win)}.mm.top .res{background:#84b16b}.mm.lose .res{background:#e08a8a}
+.mm.win{background:linear-gradient(135deg,#fff9e8,#fdeec3);border:1.5px solid #f0b247;box-shadow:0 2px 8px rgba(240,178,71,.38)}
+.mm.win .res{background:#f59e0b;box-shadow:0 1px 4px rgba(245,158,11,.5)}.mm.top .res{background:#84b16b}.mm.lose .res{background:#e08a8a}
+.wintag{flex:0 0 auto;border-radius:5px;padding:0 6px;font-size:10px;font-weight:800;white-space:nowrap;line-height:16px;background:#f59e0b;color:#fff;letter-spacing:.5px}
 .mm .kd{font-weight:800;font-size:13px;white-space:nowrap;flex:0 0 auto}
 .mm .kd .kk{color:var(--green)}.mm .kd .dd{color:var(--org)}.mm .kd .sep{color:var(--sub);font-weight:400}
 .mm .dmg{margin-left:auto;font-size:11.5px;font-weight:700;color:#374151;white-space:nowrap;flex:0 0 auto}
@@ -183,8 +184,20 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
 .mrow .mhead{display:flex;align-items:center;gap:10px;padding:9px 12px;cursor:pointer;flex-wrap:wrap;background:#faf9fd}
 .mrow .mhead:hover{background:#f3effa}
 .mrow.open .mhead{background:#f1ecfe}
+.mrow.win{border:1.5px solid #f0b247;box-shadow:0 2px 8px rgba(240,178,71,.3)}
+.mrow.win .mhead{background:linear-gradient(135deg,#fff9e8,#fdeec3)}
+.mrow.win .mhead:hover{background:linear-gradient(135deg,#fef3c7,#fce3a0)}
+.mrow.win.open .mhead{background:linear-gradient(135deg,#fdeec3,#fbd38d)}
+.mrow.t10{border-color:#d9efcf}
+.mrow.t10 .mhead{background:#f4fbf1}
+.mrow.t10 .mhead:hover{background:#e9f7e2}
+.mrow.t10.open .mhead{background:#e3f4da}
+.mrow.other{border-color:#f3c9c9}
+.mrow.other .mhead{background:#fdecec}
+.mrow.other .mhead:hover{background:#fbe0e0}
+.mrow.other.open .mhead{background:#f9d9d9}
 .mrow .place{width:42px;height:26px;border-radius:7px;color:#fff;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
-.place.w1{background:var(--win)}.place.t10{background:#84b16b}.place.other{background:#c08492}
+.place.w1{background:#f59e0b;box-shadow:0 1px 4px rgba(245,158,11,.45)}.place.t10{background:#84b16b}.place.other{background:#e08a8a}
 .mrow .mtitle{font-weight:700;font-size:13px;flex:1 1 auto;min-width:140px}
 .mrow .mkd{font-size:12.5px;font-weight:700;white-space:nowrap}
 .mrow .mkd .k{color:var(--green)}.mrow .mkd .d{color:var(--org)}
@@ -906,7 +919,7 @@ function matchMini(g){
   const comp=g.type==='competitive'?'<span class="comp rank">竞技</span>':'<span class="comp norm">匹配</span>';
   return `<div class="mm ${cls}">
     <div class="r1">
-      <span class="res">#${g.rank}</span>
+      <span class="res">#${g.rank}</span>${g.won?'<span class="wintag">吃鸡</span>':''}
       <span class="kd"><span class="kk">${g.kills}</span><span class="sep">/</span><span class="dd">${g.dbno}</span></span>
       <span class="mh h-${h.tier}" title="单场综合分 ${h.score.toFixed(0)}">${esc(h.label)}</span>
       <span class="dmg">${Math.round(g.dmg)} 伤</span>
@@ -1087,9 +1100,9 @@ function renderMatchList(){
   el.innerHTML=p.recent.map((g,i)=>{
     const cls=g.won?'w1':(g.rank<=10?'t10':'other');
     const h=matchHorse(g);
-    return `<div class="mrow" data-i="${i}">
+    return `<div class="mrow ${g.won?'win':cls}" data-i="${i}">
       <div class="mhead">
-        <span class="place ${cls}">#${g.rank}</span>
+        <span class="place ${cls}">#${g.rank}</span>${g.won?'<span class="wintag">吃鸡</span>':''}
         <span class="mtitle">${esc(mapName(g.map))} · ${modeCn(g.mode)} · ${typeCn(g.type,g.custom)} · ${fmtDur(g.duration)}</span>
         <span class="mkd"><span class="k">${g.kills} 杀</span> / <span class="d">${g.dbno} 倒</span> · ${Math.round(g.dmg)} 伤</span>
         <span class="mh h-${h.tier}" title="单场综合分 ${h.score.toFixed(0)}">${esc(h.label)}</span>
