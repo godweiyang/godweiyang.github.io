@@ -635,7 +635,7 @@ function scatterSvg(games){
   const X=t=>L+(Math.min(t,maxX)/maxX)*iw,Y=k=>base-(Math.min(k,maxY)/maxY)*ih,Rad=d=>3+(Math.min(d,maxD)/maxD)*6;
   const avgT=g0.reduce((a,g)=>a+mins(g),0)/g0.length,avgK=g0.reduce((a,g)=>a+g.kills,0)/g0.length;
   let s='';
-  for(let g=0;g<=2;g++){const yy=T+ih*g/2,kv=maxY*g/2;s+=`<line x1="${L}" y1="${yy.toFixed(1)}" x2="${W-R}" y2="${yy.toFixed(1)}" stroke="#eef0f4"/>`;
+  for(let g=0;g<=2;g++){const yy=T+ih*g/2,kv=maxY*(1-g/2);s+=`<line x1="${L}" y1="${yy.toFixed(1)}" x2="${W-R}" y2="${yy.toFixed(1)}" stroke="#eef0f4"/>`;
     s+=`<text x="${L-6}" y="${(yy+3).toFixed(1)}" text-anchor="end" font-size="9" fill="#9ca3af">${Number.isInteger(kv)?kv:kv.toFixed(1)}</text>`;}
   s+=`<line x1="${L}" y1="${base}" x2="${W-R}" y2="${base}" stroke="#d9dce3"/>`;
   [0,.5,1].forEach(t=>s+=`<text x="${(L+iw*t).toFixed(1)}" y="${base+15}" text-anchor="middle" font-size="9" fill="#9ca3af">${Math.round(maxX*t)}′</text>`);
