@@ -318,6 +318,22 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
 .mmore-bar .spinner{width:14px;height:14px;border-width:2px;margin:0;flex:0 0 auto}
 .mmore-bar button{padding:6px 16px;font-size:12.5px;font-weight:700;border-radius:8px;cursor:pointer;border:1px solid rgba(248,113,113,.7);background:rgba(248,113,113,.12);color:#dc2626}
 .mmore-tip{margin-top:9px;text-align:center;font-size:12px;color:var(--sub);line-height:1.6}
+.mmore-tip button{margin-left:8px;padding:5px 14px;font-size:12px;font-weight:700;border-radius:8px;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--pri)}
+/* 对局分页 */
+.pager{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:10px}
+.pg{min-width:32px;height:32px;padding:0 8px;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--pri);font-size:13px;font-weight:700;cursor:pointer}
+.pg:hover:not(.dis):not(.cur){background:#f3effa}
+.pg.cur{background:var(--pri);color:#fff;border-color:var(--pri);cursor:default}
+.pg.dis{opacity:.4;cursor:not-allowed}
+.pg-gap{min-width:24px;text-align:center;line-height:32px;color:var(--sub);font-size:13px}
+/* 未拉到详情的骨架行 */
+.mrow.pending{border-style:dashed;background:#faf9fd}
+.mrow.pending .mhead{cursor:default}
+.mrow.failed{border-style:dashed;border-color:#e7e2f0;background:#faf9fd}
+.mrow.failed .mhead{cursor:default}
+.mrow.failed .mhead:hover{background:transparent}
+.skel{display:inline-block;width:150px;height:12px;border-radius:6px;background:linear-gradient(90deg,#ececf3 25%,#f6f5fb 37%,#ececf3 63%);background-size:400% 100%;animation:skel 1.3s ease infinite;vertical-align:middle}
+@keyframes skel{0%{background-position:100% 0}100%{background-position:0 0}}
 .mrow{border:1px solid var(--line);border-radius:10px;overflow:hidden}
 .mrow .mhead{display:flex;align-items:center;gap:10px;padding:9px 12px;cursor:pointer;flex-wrap:wrap;background:#faf9fd}
 .mrow .mhead:hover{background:#f3effa}
@@ -595,40 +611,76 @@ function multiBadgeMetrics(pl){
   return {rounds:r,kpg:t.kills/r,dpg:t.dmg/r,hsr:t.kills?t.hs/t.kills:0,top:t.top10/r,win:t.wins/r,
     apg:t.assists/r,dbpg:t.dbno/r,surv:t.time/r,rpg:null,longest:t.longest,movepg:null,road:null,horse:(pl.horse||{}).tier};
 }
-// 单人：近 N 场走势（击杀柱[柱顶标数/吃鸡橙色柱] + 伤害折线[最高点标值]，左旧右新；紧凑版）
-function trendSvg(games){
-  if(!games||games.length<2)return '';
-  const g2=games.slice().reverse();
-  const W=460,H=246,L=34,R=42,T=26,B=34,iw=W-L-R,ih=H-T-B,base=T+ih,n=g2.length;
-  const maxK=Math.max(3,...g2.map(g=>g.kills)),maxD=Math.max(120,...g2.map(g=>g.dmg))*1.08;
-  const slot=iw/n,bw=Math.max(5,Math.min(30,slot*0.6));
-  const X=i=>L+slot*i+slot/2,yK=k=>base-(k/maxK)*ih,yD=d=>base-(d/maxD)*ih;
-  const avgK=g2.reduce((a,g)=>a+g.kills,0)/n,maxDi=g2.reduce((mi,g,i)=>g.dmg>g2[mi].dmg?i:mi,0);
+// 单人：按天聚合走势（固定 ≤14 个点，不随对局数变挤）。柱=当天场均击杀（吃过鸡为金柱）、线=当天场均伤害，轴下标 日期/场次
+function dailyBuckets(games){
+  const m=new Map();
+  (games||[]).forEach(g=>{
+    if(!g.createdAt)return;
+    const d=new Date(g.createdAt),k=d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate();
+    if(!m.has(k))m.set(k,{date:d,n:0,kills:0,dmg:0,wins:0});
+    const b=m.get(k);b.n++;b.kills+=g.kills;b.dmg+=g.dmg;if(g.won)b.wins++;
+  });
+  return [...m.values()].sort((a,b)=>a.date-b.date);
+}
+function dailyTrendSvg(games){
+  const b=dailyBuckets(games);
+  if(b.length<2)return '';
+  const W=460,H=250,L=34,R=42,T=26,B=42,iw=W-L-R,ih=H-T-B,base=T+ih,n=b.length;
+  const ak=b.map(d=>d.kills/d.n),ad=b.map(d=>d.dmg/d.n);
+  const maxK=Math.max(2,...ak)*1.18,maxD=Math.max(120,...ad)*1.1;
+  const slot=iw/n,bw=Math.max(7,Math.min(32,slot*0.56));
+  const X=i=>L+slot*i+slot/2,yK=v=>base-(v/maxK)*ih,yD=v=>base-(v/maxD)*ih;
   let s='';
   for(let g=0;g<=2;g++){const yy=T+ih*g/2;s+=`<line x1="${L}" y1="${yy.toFixed(1)}" x2="${W-R}" y2="${yy.toFixed(1)}" stroke="#eef0f4"/>`;}
-  const ya=yK(avgK);
-  s+=`<line x1="${L}" y1="${ya.toFixed(1)}" x2="${W-R}" y2="${ya.toFixed(1)}" stroke="#16a34a" stroke-dasharray="4 3" stroke-opacity="0.45"/>`;
-  s+=`<text x="${W-R}" y="${(ya-4).toFixed(1)}" text-anchor="end" font-size="8.5" fill="#16a34a">场均击杀 ${avgK.toFixed(1)}</text>`;
   s+=`<text x="${L-6}" y="${base+3}" text-anchor="end" font-size="9" fill="#9ca3af">0</text>`;
-  s+=`<text x="${L-6}" y="${T+ih/2+3}" text-anchor="end" font-size="9" fill="#16a34a">${(maxK/2).toFixed(0)}</text>`;
-  s+=`<text x="${L-6}" y="${T+4}" text-anchor="end" font-size="9" fill="#16a34a">${maxK.toFixed(0)}</text>`;
+  s+=`<text x="${L-6}" y="${T+ih/2+3}" text-anchor="end" font-size="9" fill="#16a34a">${(maxK/2).toFixed(1)}</text>`;
+  s+=`<text x="${L-6}" y="${T+4}" text-anchor="end" font-size="9" fill="#16a34a">${maxK.toFixed(1)}</text>`;
   s+=`<text x="${W-R+6}" y="${base+3}" font-size="9" fill="#9ca3af">0</text>`;
   s+=`<text x="${W-R+6}" y="${T+ih/2+3}" font-size="9" fill="#d97706">${Math.round(maxD/2)}</text>`;
   s+=`<text x="${W-R+6}" y="${T+4}" font-size="9" fill="#d97706">${Math.round(maxD)}</text>`;
-  let line='',area=`M${X(0).toFixed(1)},${yD(g2[0].dmg).toFixed(1)}`;
-  g2.forEach((g,i)=>{const x=X(i),y=yD(g.dmg);line+=(i?'L':'M')+x.toFixed(1)+','+y.toFixed(1);area+='L'+x.toFixed(1)+','+y.toFixed(1);});
+  let line='',area=`M${X(0).toFixed(1)},${yD(ad[0]).toFixed(1)}`;
+  ad.forEach((v,i)=>{const px=X(i).toFixed(1),py=yD(v).toFixed(1);line+=(i?'L':'M')+px+','+py;area+='L'+px+','+py;});
   area+=`L${X(n-1).toFixed(1)},${base}L${X(0).toFixed(1)},${base}Z`;
   s+=`<path d="${area}" fill="#d97706" opacity="0.08"/><path d="${line}" fill="none" stroke="#d97706" stroke-width="1.8"/>`;
-  g2.forEach((g,i)=>{const hi=i===maxDi;s+=`<circle cx="${X(i).toFixed(1)}" cy="${yD(g.dmg).toFixed(1)}" r="${hi?3:2.2}" fill="#d97706"/>`;
-    if(hi)s+=`<text x="${X(i).toFixed(1)}" y="${(yD(g.dmg)-6).toFixed(1)}" text-anchor="middle" font-size="8.5" font-weight="700" fill="#b45309">${Math.round(g.dmg)}</text>`;});
-  g2.forEach((g,i)=>{
-    const x=X(i),y=yK(g.kills),h=Math.max(1,base-y),col=g.won?'#f59e0b':'#16a34a';
-    s+=`<rect x="${(x-bw/2).toFixed(1)}" y="${y.toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" rx="2" fill="${col}"><title>${fmtDT(g.createdAt)}｜#${g.rank}｜${g.kills}杀 ${Math.round(g.dmg)}伤</title></rect>`;
-    if(g.kills>0)s+=`<text x="${x.toFixed(1)}" y="${(y-4).toFixed(1)}" text-anchor="middle" font-size="9" font-weight="700" fill="${g.won?'#b45309':'#15803d'}">${g.kills}</text>`;
-    s+=`<text x="${x.toFixed(1)}" y="${base+15}" text-anchor="middle" font-size="8.5" font-weight="${g.won?'700':'400'}" fill="${g.won?'#b45309':'#9ca3af'}">#${g.rank}</text>`;
+  ad.forEach((v,i)=>{s+=`<circle cx="${X(i).toFixed(1)}" cy="${yD(v).toFixed(1)}" r="2.2" fill="#d97706"><title>${b[i].date.getMonth()+1}/${b[i].date.getDate()} 场均伤害 ${Math.round(v)}（${b[i].n} 场）</title></circle>`;});
+  b.forEach((d,i)=>{
+    const x=X(i),v=ak[i],h=Math.max(v?2:0,(v/maxK)*ih),col=d.wins>0?'#f59e0b':'#16a34a';
+    if(h>0)s+=`<rect x="${(x-bw/2).toFixed(1)}" y="${(base-h).toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" rx="2" fill="${col}"><title>${d.date.getMonth()+1}/${d.date.getDate()}｜${d.n} 场｜场均击杀 ${v.toFixed(2)}（共 ${d.kills} 杀）${d.wins?`｜吃鸡 ${d.wins} 次`:''}</title></rect>`;
+    if(v>0)s+=`<text x="${x.toFixed(1)}" y="${(base-h-3).toFixed(1)}" text-anchor="middle" font-size="8.5" font-weight="700" fill="${d.wins?'#b45309':'#15803d'}">${v.toFixed(1)}</text>`;
+    s+=`<text x="${x.toFixed(1)}" y="${base+14}" text-anchor="middle" font-size="8.5" fill="${d.wins?'#b45309':'#9ca3af'}" font-weight="${d.wins?'700':'400'}">${d.date.getMonth()+1}/${d.date.getDate()}</text>`;
+    s+=`<text x="${x.toFixed(1)}" y="${base+27}" text-anchor="middle" font-size="8" fill="#b6bcc9">${d.n}场${d.wins?'·'+d.wins+'鸡':''}</text>`;
   });
-  s+=`<text x="${L}" y="${T-10}" font-size="10" fill="#16a34a">击杀（柱）</text><text x="${W-R}" y="${T-10}" text-anchor="end" font-size="10" fill="#d97706">伤害（线）</text>`;
-  s+=`<text x="${(L+iw/2).toFixed(1)}" y="${H-4}" text-anchor="middle" font-size="9" fill="#9ca3af">${n} 场 · 左旧 → 右新</text>`;
+  s+=`<text x="${L}" y="${T-10}" font-size="10" fill="#16a34a">场均击杀（柱）</text><text x="${W-R}" y="${T-10}" text-anchor="end" font-size="10" fill="#d97706">场均伤害（线）</text>`;
+  s+=`<text x="${(L+iw/2).toFixed(1)}" y="${H-3}" text-anchor="middle" font-size="9" fill="#9ca3af">${n} 天 · 左旧 → 右新 · 金柱=当天吃过鸡</text>`;
+  return `<svg viewBox="0 0 ${W} ${H}" class="viz-svg" preserveAspectRatio="xMidYMid meet">${s}</svg>`;
+}
+// 单人：伤害 × 击杀气泡散点（每场一个点，不随场数变挤，重叠用透明度）。颜色=名次（金=吃鸡/绿=前十/灰=其他），十字虚线=场均
+function scatterSvg(games){
+  const g0=(games||[]).filter(g=>typeof g.dmg==='number'&&g.createdAt);
+  if(g0.length<2)return '';
+  const W=460,H=250,L=42,R=20,T=24,B=40,iw=W-L-R,ih=H-T-B,base=T+ih;
+  const maxX=Math.max(150,...g0.map(g=>g.dmg))*1.06;
+  const maxY=Math.max(2,...g0.map(g=>g.kills))+1;
+  const X=d=>L+(Math.min(d,maxX)/maxX)*iw,Y=k=>base-(Math.min(k,maxY)/maxY)*ih;
+  const avgD=g0.reduce((a,g)=>a+g.dmg,0)/g0.length,avgK=g0.reduce((a,g)=>a+g.kills,0)/g0.length;
+  let s='';
+  for(let g=0;g<=2;g++){const yy=T+ih*g/2,kv=maxY*g/2;s+=`<line x1="${L}" y1="${yy.toFixed(1)}" x2="${W-R}" y2="${yy.toFixed(1)}" stroke="#eef0f4"/>`;
+    s+=`<text x="${L-6}" y="${(yy+3).toFixed(1)}" text-anchor="end" font-size="9" fill="#9ca3af">${Number.isInteger(kv)?kv:kv.toFixed(1)}</text>`;}
+  s+=`<line x1="${L}" y1="${base}" x2="${W-R}" y2="${base}" stroke="#d9dce3"/>`;
+  [0,.5,1].forEach(t=>{s+=`<text x="${(L+iw*t).toFixed(1)}" y="${base+15}" text-anchor="middle" font-size="9" fill="#9ca3af">${Math.round(maxX*t)}</text>`;});
+  s+=`<line x1="${X(avgD).toFixed(1)}" y1="${T}" x2="${X(avgD).toFixed(1)}" y2="${base}" stroke="#d97706" stroke-dasharray="4 3" stroke-opacity="0.5"/>`;
+  s+=`<line x1="${L}" y1="${Y(avgK).toFixed(1)}" x2="${W-R}" y2="${Y(avgK).toFixed(1)}" stroke="#16a34a" stroke-dasharray="4 3" stroke-opacity="0.5"/>`;
+  s+=`<text x="${Math.min(X(avgD)+4,W-R-70).toFixed(1)}" y="${T+9}" font-size="8.5" fill="#b45309">场均伤 ${Math.round(avgD)}</text>`;
+  s+=`<text x="${W-R}" y="${(Y(avgK)-3).toFixed(1)}" text-anchor="end" font-size="8.5" fill="#15803d">场均击杀 ${avgK.toFixed(1)}</text>`;
+  const layer=g=>g.won?2:(g.rank<=10?1:0);
+  g0.slice().sort((a,b)=>layer(a)-layer(b)).forEach(g=>{
+    const win=g.won,top=g.rank<=10;
+    const col=win?'#f59e0b':(top?'#16a34a':'#c3c9d6'),r=win?6:(top?4.6:4),op=win?0.95:(top?0.75:0.6);
+    s+=`<circle cx="${X(g.dmg).toFixed(1)}" cy="${Y(g.kills).toFixed(1)}" r="${r}" fill="${col}" fill-opacity="${op}" stroke="${win?'#b45309':'#ffffff'}" stroke-width="${win?1:0.6}"><title>${fmtDT(g.createdAt)}｜#${g.rank}｜${g.kills}杀 ${Math.round(g.dmg)}伤${win?'｜吃鸡':''}</title></circle>`;
+  });
+  s+=`<text x="${L}" y="${T-8}" font-size="10" fill="#374151">击杀 ↑</text>`;
+  s+=`<text x="${W-R}" y="${H-22}" text-anchor="end" font-size="10" fill="#374151">伤害 →</text>`;
+  s+=`<g font-size="9" fill="#6b7280"><circle cx="${L+8}" cy="${H-12}" r="4.5" fill="#f59e0b"/><text x="${L+17}" y="${H-9}">吃鸡</text><circle cx="${L+58}" cy="${H-12}" r="4.5" fill="#16a34a" fill-opacity=".75"/><text x="${L+67}" y="${H-9}">前十</text><circle cx="${L+110}" cy="${H-12}" r="4" fill="#c3c9d6"/><text x="${L+118}" y="${H-9}">其他 · 共 ${g0.length} 场</text></g>`;
   return `<svg viewBox="0 0 ${W} ${H}" class="viz-svg" preserveAspectRatio="xMidYMid meet">${s}</svg>`;
 }
 // 单人：主力武器横向条形榜（条长=合计击杀[legacy+普通+竞技]，单轴表达产量；条尾标最远击杀/爆头命中次数等绝对值，颜色=枪械类型），取击杀前 8
@@ -1636,8 +1688,13 @@ function renderMulti(){
 }
 
 /* ================================================== 单人 */
-const S={name:'',data:null,weaponFilter:'all',wpnOpen:false,openMatch:null,running:false,moreBusy:false,moreTick:0,moreDone:0,moreTotal:0};
-const SINGLE_PAGE=25;    // 单人对局：首屏及每次「加载更多」拉取的场次（/matches 详情）
+const S={name:'',data:null,weaponFilter:'all',wpnOpen:false,openMatch:null,running:false,
+  page:1,            // 对局列表当前页码（每页 SINGLE_PAGE 场）
+  autoBusy:false,    // 后台是否正在预取剩余对局详情
+  autoRun:false,     // 后台预取是否应继续（false=暂停 / 被新查询取代）
+  autoTick:0,        // 预取代次，++ 即让正在跑的后台循环作废
+  autoDone:0,autoTotal:0}; // 预取进度（已完成 / 总数）
+const SINGLE_PAGE=25;    // 单人对局：每页场次，也是后台预取每批大小（/matches 详情不计限流）
 const SINGLE_KEEP=60;    // 刷新持久化时最多保留最新多少场明细（含全队战报，控制 localStorage 体积）；全部 matchId 仍完整保存
 let sTimer=null;
 function persistMulti(){
@@ -1660,6 +1717,7 @@ async function runSingle(name){
   if(!getKey()){toast('请先在顶部填写 API Key','e');return;}
   if(S.running)return;
   $('sInput').value=name;S.name=name;S.data=null;S.openMatch=null;resetWait();softResetKeyPool();
+  S.autoTick++;S.autoRun=false;S.autoBusy=false;S.page=1;S.autoDone=0;S.autoTotal=0; // 终止上一个玩家的后台预取
   S.running=true;$('sBtn').disabled=true;
   renderSingleLoading();
   if(sTimer)clearInterval(sTimer);sTimer=setInterval(renderSingleWait,1000);
@@ -1673,7 +1731,8 @@ async function runSingle(name){
       .catch(e=>{p.histLoading=false;if(S.data===p&&!(e instanceof CancelledError))renderSingle();});
     const [surv,clan]=await Promise.all([fetchPlayerSurvival(p.id),p.clanId?fetchClan(p.clanId):Promise.resolve(null)]);
     p.detail.surv=surv;p.clan=clan;
-    // 近期对局：官方 /players 一次返回近 14 天全部 matchId，首屏只拉最新 SINGLE_PAGE 场详情，其余由列表底部「加载更多」按需翻页（/matches 不计限流，详情按 id 缓存）
+    // 近期对局：官方 /players 一次返回近 14 天全部 matchId。首屏只拉最新 SINGLE_PAGE 场详情立即出第 1 页，
+    // 其余场次由 startAutoFetch 在后台按页自动预取（/matches 不计限流、按 id 缓存），拉完后统计升级为完整 14 天口径
     p.allIds=p.matchIds.slice();
     const ids=p.allIds.slice(0,SINGLE_PAGE);
     p.loadedN=ids.length;
@@ -1682,8 +1741,10 @@ async function runSingle(name){
     mergeRecent(p,ids);
     p.matchTotal=ids.length;p.matchFail=countFail(p);
     p.agg=p.recent.length?aggGames(p.recent):lifeAgg(p.detail);p.horse=horseOf(p.agg);
-    S.data=p;renderSingle();persistSingle();
-    toast(p.matchFail?(`查询完成，${p.matchFail}/${p.matchTotal} 场明细受 CDN 限制未取到`):'查询完成',p.matchFail?'w':'s');
+    S.data=p;S.page=1;S.autoDone=p.loadedN;S.autoTotal=p.allIds.length;
+    renderSingle();persistSingle();
+    toast(p.matchFail?`首屏已加载，${p.matchFail} 场受 CDN 限制，其余对局后台加载中`:'已出最近对局，正在后台加载完整 14 天',p.matchFail?'w':'s');
+    startAutoFetch(p);
   }catch(e){
     if(e instanceof CancelledError){/* 任务被停止，静默 */}
     else if(e instanceof RateLimitError){$('singleRes').innerHTML=`<div class="sg"><div class="rate-banner">⚠️ 所有 Key 均触发限流、自动重试仍未恢复，请稍后再点「查询」；多填几个 Key 可显著减少等待。</div></div>`;}
@@ -1720,69 +1781,81 @@ function mergeRecent(p,ids){
 }
 // 已加载范围内确认拉取失败（CDN 缺跨域头、缓存为 null）的场次数；尚未拉取（undefined）不计
 function countFail(p){return (p.allIds||[]).slice(0,p.loadedN||0).filter(id=>matchCache[id]===null).length;}
-// 单人对局翻页：all=true 一次拉完近 14 天剩余全部，否则拉下一批 SINGLE_PAGE 场（/matches 详情不计限流、按 id 缓存）
-async function loadMoreMatches(all){
-  const p=S.data;
-  if(!p||S.moreBusy)return;
-  const total=p.allIds.length;
-  if((p.loadedN||0)>=total){toast('已覆盖近 14 天全部场次','s');renderMoreBar();return;}
-  const tick=++S.moreTick;
-  const end=all?total:Math.min(total,p.loadedN+SINGLE_PAGE);
-  const newIds=p.allIds.slice(p.loadedN,end);
-  S.moreBusy=true;S.moreDone=0;S.moreTotal=newIds.length;renderMoreBar();
+// 单人对局：后台自动预取剩余详情。首屏出第 1 页后调用，按页顺序静默拉完近 14 天全部场次；
+// /matches 详情不计限流、按 id 缓存。过程中只刷新分页栏/当前页骨架（不打断展开），全部拉完后整页刷新一次，让马型/雷达/走势/海报升级为完整 14 天口径
+async function startAutoFetch(p){
+  const tick=++S.autoTick;S.autoMode='fetch';
+  S.autoBusy=true;S.autoRun=true;S.autoTotal=p.allIds.length;
+  const alive=()=>tick===S.autoTick&&S.autoRun&&S.data===p;
+  const onTick=()=>{renderPagination();if(!S.openMatch&&currentPageHasPending(S.data))renderMatchList();};
   try{
-    await pool(newIds,8,async id=>{if(tick!==S.moreTick)return;await fetchMatch(id);S.moreDone++;renderMoreBar();});
-    if(tick!==S.moreTick){S.moreBusy=false;renderMoreBar();return;} // 被停止：不推进 loadedN，已在途拉到的详情进缓存、下次续拉不浪费
-    p.loadedN=end;
-    mergeRecent(p,newIds);
-    p.matchTotal=p.loadedN;p.matchFail=countFail(p);
-    p.agg=p.recent.length?aggGames(p.recent):lifeAgg(p.detail);p.horse=horseOf(p.agg);
-    S.openMatch=null;S.moreBusy=false;
-    renderSingle();persistSingle();
-    if(p.loadedN>=total)toast(`已加载近 14 天全部 ${p.recent.length} 场`,'s');
-    else toast(`已加载 ${p.recent.length}/${total} 场，统计已更新`,'s');
-  }catch(e){S.moreBusy=false;renderMoreBar();toast('加载更多失败：'+((e&&e.message)||e),'e');}
+    while(p.loadedN<p.allIds.length){
+      if(!alive())break;
+      const end=Math.min(p.allIds.length,p.loadedN+SINGLE_PAGE);
+      const batch=p.allIds.slice(p.loadedN,end);let done=0;
+      await pool(batch,8,async id=>{if(!alive())return;await fetchMatch(id);done++;S.autoDone=p.loadedN+done;onTick();});
+      if(!alive())break;
+      p.loadedN=end;mergeRecent(p,batch);
+      p.matchTotal=p.loadedN;p.matchFail=countFail(p);S.autoDone=p.loadedN;
+      renderPagination();persistSingle();
+    }
+    if(alive()&&p.loadedN>=p.allIds.length){
+      p.agg=p.recent.length?aggGames(p.recent):lifeAgg(p.detail);p.horse=horseOf(p.agg);
+      p.matchFail=countFail(p);S.autoDone=p.allIds.length;S.openMatch=null;
+      renderSingle();persistSingle();
+      if(p.matchFail)toast(`已加载近 14 天全部场次，${p.matchFail} 场受 CDN 限制未取到`,'w');
+    }
+  }finally{ if(tick===S.autoTick){S.autoBusy=false;renderPagination();} }
 }
-function stopMore(){S.moreTick++;S.moreBusy=false;renderMoreBar();toast('已停止加载，可随时继续','w');}
+// 当前页是否存在尚未拉到详情的场次（matchCache 里还没有该 id）
+function currentPageHasPending(p){
+  if(!p)return false;
+  const st=(S.page-1)*SINGLE_PAGE;
+  return p.allIds.slice(st,st+SINGLE_PAGE).some(id=>matchCache[id]===undefined);
+}
+// 取某场已装配好的对局对象（优先 recent，其次现场从缓存构造），未拉到详情返回 null
+function gameFor(p,id){return (p.recent||[]).find(g=>g.matchId===id)||buildGame(p,id);}
 // 重试已加载范围内因官方 CDN 缓存缺跨域头而失败的场次
 async function retryFailed(){
-  const p=S.data;if(!p||S.moreBusy)return;
+  const p=S.data;if(!p||S.autoBusy)return;
   const ids=(p.allIds||[]).slice(0,p.loadedN||0).filter(id=>matchCache[id]===null);
   if(!ids.length){toast('当前没有需要重试的场次','s');return;}
-  const tick=++S.moreTick;
+  const tick=++S.autoTick;S.autoMode='retry';
+  S.autoBusy=true;S.autoRun=true;S.autoTotal=ids.length;S.autoDone=0;
   ids.forEach(id=>{delete matchCache[id];});
-  S.moreBusy=true;S.moreDone=0;S.moreTotal=ids.length;renderMoreBar();
-  await pool(ids,8,async id=>{if(tick!==S.moreTick)return;await fetchMatch(id);S.moreDone++;renderMoreBar();});
-  if(tick!==S.moreTick){S.moreBusy=false;renderMoreBar();return;}
-  S.moreBusy=false;mergeRecent(p,ids);p.matchFail=countFail(p);
+  renderPagination();
+  await pool(ids,8,async id=>{if(tick!==S.autoTick)return;await fetchMatch(id);S.autoDone++;renderPagination();});
+  if(tick!==S.autoTick){S.autoBusy=false;renderPagination();return;}
+  S.autoBusy=false;mergeRecent(p,ids);p.matchFail=countFail(p);
   p.agg=p.recent.length?aggGames(p.recent):lifeAgg(p.detail);p.horse=horseOf(p.agg);
   S.openMatch=null;renderSingle();persistSingle();
   toast(p.matchFail?`仍有 ${p.matchFail} 场受 CDN 限制未取到`:'失败场次已重试完成',p.matchFail?'w':'s');
 }
-// 对局列表底部翻页控件（加载更多 / 加载全部 / 重试失败 / 进度与停止）
-function renderMoreBar(){
+// 对局列表底部分页栏（页码导航 + 后台预取进度/暂停继续 + 重试失败）
+function renderPagination(){
   const p=S.data,el=document.getElementById('mMore');if(!el||!p)return;
-  const total=(p.allIds||[]).length,loaded=p.loadedN||0;
-  if(S.moreBusy){
-    el.innerHTML=`<div class="mmore-bar"><span class="spinner"></span>正在加载对局详情 ${S.moreDone}/${S.moreTotal} …<button type="button" id="mMoreStop">停止</button></div>`;
-    const b=document.getElementById('mMoreStop');if(b)b.onclick=stopMore;
-    return;
-  }
-  const fail=p.matchFail||0;
-  if(loaded<total){
-    el.innerHTML=`<div class="mmore-btns">
-        <button type="button" id="mMoreNext">加载更多（还剩 ${total-loaded} 场）</button>
-        <button type="button" id="mMoreAll">加载全部近 14 天（共 ${total} 场）</button>
-        ${fail?`<button type="button" id="mMoreRetry">重试失败 ${fail} 场</button>`:''}
-      </div>
-      <div class="mmore-tip">官方仅保留近 14 天对局，共 ${total} 场；当前已加载最新 ${p.recent.length} 场。马型 / 雷达 / 走势 / 海报均按已加载场次统计，加载更多后自动更新。</div>`;
-    document.getElementById('mMoreNext').onclick=()=>loadMoreMatches(false);
-    document.getElementById('mMoreAll').onclick=()=>loadMoreMatches(true);
-    const r=document.getElementById('mMoreRetry');if(r)r.onclick=retryFailed;
+  const total=(p.allIds||[]).length,pages=Math.max(1,Math.ceil(total/SINGLE_PAGE)),loaded=p.loadedN||0,fail=p.matchFail||0;
+  if(S.page>pages)S.page=pages;if(S.page<1)S.page=1;
+  let pg=`<button type="button" class="pg ${S.page<=1?'dis':''}" ${S.page<=1?'disabled':''} data-pg="${S.page-1}">‹</button>`;
+  for(let i=1;i<=pages;i++)pg+=`<button type="button" class="pg ${i===S.page?'cur':''}" data-pg="${i}">${i}</button>`;
+  pg+=`<button type="button" class="pg ${S.page>=pages?'dis':''}" ${S.page>=pages?'disabled':''} data-pg="${S.page+1}">›</button>`;
+  let status;
+  if(S.autoBusy&&S.autoRun){
+    const lbl=S.autoMode==='retry'?'重试失败场次':'后台加载对局详情';
+    status=`<div class="mmore-bar"><span class="spinner"></span>${lbl} ${Math.min(S.autoDone,S.autoTotal||total)}/${S.autoMode==='retry'?(S.autoTotal||total):total} 场…${S.autoMode==='retry'?'':'<button type="button" id="mAutoPause">暂停</button>'}</div>`;
+  }else if(loaded<total){
+    status=`<div class="mmore-bar">已暂停 · 已加载 ${loaded}/${total} 场，可先翻已加载的页<button type="button" id="mAutoResume" style="padding:6px 16px;font-size:12.5px;font-weight:700;border-radius:8px;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--pri)">继续加载</button></div>`;
   }else{
-    el.innerHTML=`<div class="mmore-tip">已覆盖近 14 天全部 ${total} 场${fail?`（其中 ${fail} 场因官方 CDN 缓存限制取不到明细）`:' · 统计为完整 14 天口径'}</div>${fail?`<div class="mmore-btns" style="margin-top:9px"><button type="button" id="mMoreRetry">重试失败 ${fail} 场</button></div>`:''}`;
-    const r2=document.getElementById('mMoreRetry');if(r2)r2.onclick=retryFailed;
+    status=`<div class="mmore-tip">已覆盖近 14 天全部 ${total} 场${fail?` · ${fail} 场因官方 CDN 缓存限制取不到明细`:''}，统计为完整 14 天口径${fail?` <button type="button" id="mMoreRetry">重试失败 ${fail} 场</button>`:''}</div>`;
   }
+  el.innerHTML=`<div class="pager">${pg}</div>${status}`;
+  el.querySelectorAll('button.pg:not(.dis)').forEach(b=>b.onclick=()=>{
+    S.page=+b.dataset.pg;S.openMatch=null;renderMatchList();renderPagination();
+    const ml=document.getElementById('mList');if(ml)ml.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+  const pa=document.getElementById('mAutoPause');if(pa)pa.onclick=()=>{S.autoRun=false;S.autoTick++;S.autoBusy=false;renderPagination();toast('已暂停后台加载，可点「继续加载」','w');};
+  const rs=document.getElementById('mAutoResume');if(rs)rs.onclick=()=>startAutoFetch(p);
+  const rt=document.getElementById('mMoreRetry');if(rt)rt.onclick=retryFailed;
 }
 function renderSingleLoading(){$('singleRes').innerHTML='<div class="sg"><div class="col-status"><div class="spinner"></div>正在查询 '+esc(S.name)+' …</div><div id="sWait" style="margin-top:10px"></div></div>';}
 function renderSingleWait(){const el=$('sWait');if(!el)return;const ws=waitSec();const ks=poolKeyStats();const who=ks.avail>1?`全部 ${ks.avail} 个有效 Key`:'有效 Key';const badNote=ks.bad?`（另有 ${ks.bad} 个无效 Key 已跳过）`:'';el.innerHTML=ws>0?`<div class="rate-banner">${waiter.mode==='cool'?`${who}均触发限流，正等待最早恢复的 Key${badNote}，<b class="rate-cd">${ws}</b> 秒后自动切换续查，请耐心等待…`:`请求较多，${ks.avail>1?`全部 ${ks.avail} 个有效 Key 额度均已用满`:'有效 Key 额度已用满'}${badNote}，<b class="rate-cd">${ws}</b> 秒后自动切换续查，请耐心等待…`}</div>`:'';}
@@ -1843,13 +1916,13 @@ function renderSingle(){
         ${clan?`<span class="pill">战队 ${esc(clan.clanTag||'')} · ${esc(clan.clanName||'')} Lv.${num(clan.clanLevel)} · ${num(clan.clanMemberCount)}人</span>`:''}
         ${p.ban&&p.ban!=='Innocent'?`<span class="pill ban">${esc(p.ban)}</span>`:'<span class="pill">状态正常</span>'}
         <span class="pill">生存熟练度 Lv.${num(sv.level)}</span>
-        <span class="pill">近14天 ${p.recent.length}${p.allIds&&p.recent.length<p.allIds.length?'/'+p.allIds.length:''} 场</span>
+        <span class="pill">近14天 ${p.recent.length}${(p.loadedN||0)<(p.allIds||[]).length?'/'+p.allIds.length:''} 场</span>
       </div>
       <div class="viz-badges">${badgesHtml(singleBadgeMetrics(p))}</div>
     </div>
     <div style="text-align:center">
       <div class="chp h-${p.horse.tier}" style="font-size:16px">${esc(p.horse.label)}</div>
-      <div class="muted" style="margin-top:5px">${p.agg.__life?'生涯口径':(p.allIds&&p.recent.length<p.allIds.length?`最近${p.recent.length}场`:`近${p.recent.length}场`)} · 综合分 ${p.horse.score.toFixed(0)}</div>
+      <div class="muted" style="margin-top:5px">${p.agg.__life?'生涯口径':((p.loadedN||0)<(p.allIds||[]).length?`最近${p.recent.length}场`:`近${p.recent.length}场`)} · 综合分 ${p.horse.score.toFixed(0)}</div>
     </div>
   </div></div>`;
   // 卡2：竞技段位——统一只显示两种：当前赛季段位（未定级给灰框）+ 跨赛季历史最高（含当前赛季）
@@ -1905,25 +1978,28 @@ function renderSingle(){
     </div>
     <div style="overflow-x:auto"><table class="s-table" id="wpnTable"></table></div>
     <div style="text-align:center;margin-top:8px"><button class="sec" id="wpnMore" style="padding:5px 14px;font-size:12px"></button></div></div>`;
-  // 卡4.6：图表面板（近期走势 + 主力武器条形榜），宽屏两列并排、窄屏堆叠
+  // 卡4.6：图表面板（每日走势 + 伤害×击杀气泡，第二行主力武器跨两列），宽屏两列、窄屏堆叠；均不随对局数变挤
   {
     const wbr=weaponRows(p.detail.weapon);
     const wtypes=[...new Set(wbr.filter(w=>w.kills>0).sort((a,b)=>b.kills-a.kills).slice(0,8).map(w=>weaponType(w.code)))];
     const wlegend=wtypes.map(t=>`<span><i style="background:${WTYP[t][1]}"></i>${WTYP[t][0]}</span>`).join('');
+    const scopeTxt=(p.loadedN||0)<(p.allIds||[]).length?`最近 ${p.recent.length} 场`:`近 14 天 ${p.recent.length} 场`;
     h+=`<div class="s-viz">
-      <div class="sg"><h3>近期走势 <span class="tag">近 ${p.recent.length} 场 · 柱=击杀 / 线=伤害</span></h3>${p.recent.length>=2?trendSvg(p.recent):'<div class="empty">近期对局不足，暂无走势</div>'}</div>
-      <div class="sg"><h3>主力武器 <span class="tag">合计击杀前 8 · 条长=击杀数 · 悬停看详情</span></h3>${weaponBarSvg(wbr)||'<div class="empty">暂无武器数据</div>'}<div class="viz-legend" style="margin-top:6px">${wlegend}</div></div>
+      <div class="sg"><h3>每日走势 <span class="tag">${scopeTxt} · 按天聚合 · 柱=场均击杀 / 线=场均伤害</span></h3>${dailyTrendSvg(p.recent)||'<div class="empty">近期对局不足，暂无走势</div>'}</div>
+      <div class="sg"><h3>伤害 × 击杀分布 <span class="tag">${scopeTxt} · 每场一个气泡 · 颜色=名次</span></h3>${scatterSvg(p.recent)||'<div class="empty">近期对局不足，暂无分布图</div>'}</div>
+      <div class="sg" style="grid-column:1/-1"><h3>主力武器 <span class="tag">合计击杀前 8 · 条长=击杀数 · 悬停看详情</span></h3>${weaponBarSvg(wbr)||'<div class="empty">暂无武器数据</div>'}<div class="viz-legend" style="margin-top:6px">${wlegend}</div></div>
     </div>`;
   }
   // 卡5：最近对局
   let mlistNote='';
   if(!p.recent.length){mlistNote='<div class="empty">近期对局明细未能获取：官方 /matches 接口经 CDN 缓存，部分对局的跨域响应头缺失，浏览器直连会被拦截（生涯 / 段位 / 武器 / 生存数据不受影响）。可稍后或换网络环境重试。</div>';}
   else if(p.matchFail){mlistNote=`<div class="hint" style="color:var(--org);margin-bottom:8px">${p.matchFail}/${p.matchTotal} 场明细因官方 CDN 缓存限制暂不可用，已显示其余 ${p.recent.length} 场；稍后或换网络环境重试可能恢复。</div>`;}
-  h+=`<div class="sg"><h3>最近对局（近 14 天 · ${p.recent.length}${p.allIds&&p.recent.length<p.allIds.length?' / '+p.allIds.length:''} 场，点击查看全队战报）</h3>${mlistNote}<div class="mlist" id="mList"></div><div class="mmore" id="mMore"></div></div>`;
+  const totalIds=(p.allIds||[]).length,loadedAll=(p.loadedN||0)>=totalIds;
+  h+=`<div class="sg"><h3>最近对局（近 14 天 · 共 ${totalIds} 场${loadedAll?'':` · 已加载 ${p.recent.length} 场`} · 每页 ${SINGLE_PAGE} 场 · 点击展开全队战报）</h3>${mlistNote}<div class="mlist" id="mList"></div><div class="mmore" id="mMore"></div></div>`;
   $('singleRes').innerHTML=h;
   // 武器口径切换
   $('wpnSeg').querySelectorAll('button').forEach(b=>b.onclick=()=>{S.weaponFilter=b.dataset.f;S.wpnOpen=false;$('wpnSeg').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));renderWpnTable();persistSingle();});
-  renderWpnTable();renderMatchList();renderMoreBar();
+  renderWpnTable();renderMatchList();renderPagination();
 }
 function renderWpnTable(){
   const p=S.data;if(!p)return;
@@ -1940,13 +2016,22 @@ function renderWpnTable(){
   }
 }
 function renderMatchList(){
-  const p=S.data;const el=$('mList');if(!el)return;
-  el.innerHTML=p.recent.map((g,i)=>{
+  const p=S.data;const el=$('mList');if(!el||!p)return;
+  const total=(p.allIds||[]).length,pages=Math.max(1,Math.ceil(total/SINGLE_PAGE));
+  if(S.page>pages)S.page=pages;if(S.page<1)S.page=1;
+  const st=(S.page-1)*SINGLE_PAGE,ids=p.allIds.slice(st,st+SINGLE_PAGE);
+  el.innerHTML=ids.map(id=>{
+    const g=gameFor(p,id);
+    if(!g){
+      // matchCache 里还没有该 id（后台尚未拉到）→ 加载中骨架；已判定失败(null)/有数据但无本人 stats → 静态不可用行
+      if(matchCache[id]===undefined)return `<div class="mrow pending"><div class="mhead"><span class="mtitle"><span class="skel"></span> 对局详情加载中…</span></div></div>`;
+      return `<div class="mrow failed"><div class="mhead"><span class="mtitle" style="color:var(--sub)">该场明细暂不可用（官方 CDN 缓存限制）</span></div></div>`;
+    }
     const cls=g.won?'w1':(g.rank<=10?'t10':'other');
     const h=matchHorse(g);
     const xtags=[g.roadKills?`碾杀×${g.roadKills}`:'',g.vehDestroy?`炸车×${g.vehDestroy}`:'',g.teamKills?`误伤×${g.teamKills}`:'']
       .filter(Boolean).map(t=>`<span class="xtag">${t}</span>`).join('');
-    return `<div class="mrow ${g.won?'win':cls}" data-i="${i}">
+    return `<div class="mrow ${g.won?'win':cls}" data-id="${id}">
       <div class="mhead">
         <span class="place ${cls}">#${g.rank}</span>
         <span class="mtitle">${esc(mapName(g.map))} · ${modeCn(g.mode)} · ${typeCn(g.type,g.custom)} · ${fmtDur(g.duration)}</span>
@@ -1977,12 +2062,12 @@ function renderMatchList(){
       <div class="mdetail"></div>
     </div>`;
   }).join('');
-  el.querySelectorAll('.mrow').forEach(row=>{
+  el.querySelectorAll('.mrow:not(.pending)').forEach(row=>{
     row.querySelector('.mhead').onclick=()=>{
-      const i=+row.dataset.i,g=p.recent[i],detail=row.querySelector('.mdetail');
+      const id=row.dataset.id,g=gameFor(p,id),detail=row.querySelector('.mdetail');
       if(row.classList.contains('open')){row.classList.remove('open');detail.innerHTML='';S.openMatch=null;return;}
       el.querySelectorAll('.mrow.open').forEach(r=>{r.classList.remove('open');r.querySelector('.mdetail').innerHTML='';});
-      row.classList.add('open');S.openMatch=g.matchId;detail.innerHTML=matchReport(p,g);
+      row.classList.add('open');S.openMatch=id;detail.innerHTML=matchReport(p,g);
     };
   });
 }
@@ -2055,8 +2140,11 @@ function restoreAll(){
     S.name=ss.name||'';S.data=ss.data;S.weaponFilter=ss.weaponFilter||'all';ss.data.histLoading=false;
     // 刷新后内存 matchCache 已清空，持久化的 CDN 失败计数失效（失败场次回到「未拉取」状态），重置以免出现点不动的陈旧「重试失败」
     ss.data.matchFail=0;ss.data.matchTotal=ss.data.loadedN||(ss.data.recent||[]).length;
+    S.page=1;S.autoBusy=false;S.autoRun=false;S.autoDone=ss.data.loadedN||0;S.autoTotal=(ss.data.allIds||[]).length;
     if(ss.name)$('sInput').value=ss.name;
     renderSingle();
+    // 近 14 天对局上次没拉全时，刷新后自动续上后台预取（/matches 不计限流）；已持久化的最新 SINGLE_KEEP 场可离线浏览
+    if(getKey()&&(ss.data.allIds||[]).length>(ss.data.loadedN||0)){startAutoFetch(ss.data);}
     // 旧缓存若没有历史最高，后台静默补查一次（查到即持久化，之后刷新不再请求）
     if(!ss.data.histBest&&ss.data.id&&getKey()){
       ss.data.histLoading=true;renderSingle();
@@ -2073,6 +2161,7 @@ $('sBtn').onclick=()=>runSingle();
 $('sInput').addEventListener('keydown',e=>{if(e.key==='Enter')runSingle();});
 $('sReset').onclick=()=>{ // 清空单人结果与本地缓存（不动 API Key 账号池），刷新后也不再恢复
   S.name='';S.data=null;S.openMatch=null;
+  S.autoTick++;S.autoRun=false;S.autoBusy=false;S.page=1;S.autoDone=0;S.autoTotal=0;
   try{localStorage.removeItem(PK_SINGLE);localStorage.removeItem(PK_SINGLE_IN);}catch(e){}
   $('sInput').value='';$('singleRes').innerHTML='';
   closePoster();syncShotBtns();$('sInput').focus();
@@ -2294,7 +2383,7 @@ function drawPoster(p){
   drawWpns(c,PAD+hw2+gap+24,vy+72,hw2-48,m.wr);
   // ---- 近期走势 ----
   const ty=1232,th=276;pPanel(c,PAD,ty,CW,th,22);
-  drawCardTitle(c,PAD+24,ty+40,'近期走势','柱=击杀 · 线=伤害 · 金柱=吃鸡',POSTER_W-PAD-24);
+  drawCardTitle(c,PAD+24,ty+40,'每日走势','按天聚合 · 柱=场均击杀 · 线=场均伤害 · 金=吃鸡',POSTER_W-PAD-24);
   drawTrend(c,PAD+20,ty+52,CW-40,th-78,m.recent);
   // ---- 段位 ----
   const ry=1532,rh=148;pPanel(c,PAD,ry,CW,rh,22);
@@ -2340,16 +2429,21 @@ function drawWpns(c,x,y,w,wr){
     c.font=`800 22px ${PF_FONT}`;c.fillStyle='#fff';c.textAlign='right';c.fillText(wp.kills,x+w,ty+1);c.textAlign='left';c.textBaseline='alphabetic';});
 }
 function drawTrend(c,x,y,w,h,recent){
-  const px=x+40,pw=w-40-16,py=y+16,ph=h-40,base=py+ph;
+  const px=x+40,pw=w-40-16,py=y+16,ph=h-58,base=py+ph;
   c.strokeStyle='rgba(255,255,255,0.18)';c.lineWidth=1.5;c.beginPath();c.moveTo(px,base);c.lineTo(px+pw,base);c.stroke();
-  if(recent.length<2){c.font=`600 22px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.45)';c.textAlign='center';c.fillText('近期对局不足，暂无走势',x+w/2,y+h/2);c.textAlign='left';return;}
-  const n=recent.length,maxK=Math.max(1,...recent.map(g=>g.kills)),maxD=Math.max(1,...recent.map(g=>g.dmg));
-  const slot=pw/n,bw=Math.min(36,slot*0.56);
+  const b=dailyBuckets(recent);
+  if(b.length<2){c.font=`600 22px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.45)';c.textAlign='center';c.fillText('近期对局不足，暂无走势',x+w/2,y+h/2);c.textAlign='left';return;}
+  const n=b.length,ak=b.map(d=>d.kills/d.n),ad=b.map(d=>d.dmg/d.n);
+  const maxK=Math.max(1,...ak),maxD=Math.max(1,...ad);
+  const slot=pw/n,bw=Math.min(42,slot*0.56);
   const dpts=[];
-  recent.forEach((g,i)=>{const cxp=px+slot*(i+0.5),kh=(g.kills/maxK)*ph*0.7,bh=Math.max(g.kills?4:0,kh);
-    pRR(c,cxp-bw/2,base-bh,bw,bh,Math.min(7,bw/2));c.fillStyle=g.won?'#fbbf24':'#34d399';if(g.kills)c.fill();
-    if(n<=10&&g.kills){c.font=`700 17px ${PF_FONT}`;c.textAlign='center';c.lineWidth=3;c.strokeStyle='rgba(15,10,34,0.9)';c.strokeText(g.kills,cxp,base-bh-6);c.fillStyle='rgba(255,255,255,0.92)';c.fillText(g.kills,cxp,base-bh-6);c.textAlign='left';}
-    dpts.push([cxp,base-(g.dmg/maxD)*ph]);});
+  b.forEach((d,i)=>{
+    const cxp=px+slot*(i+0.5),kh=(ak[i]/maxK)*ph*0.72,bh=Math.max(ak[i]?4:0,kh);
+    pRR(c,cxp-bw/2,base-bh,bw,bh,Math.min(7,bw/2));c.fillStyle=d.wins>0?'#fbbf24':'#34d399';if(ak[i]>0)c.fill();
+    if(ak[i]>0){c.font=`700 16px ${PF_FONT}`;c.textAlign='center';c.lineWidth=3;c.strokeStyle='rgba(15,10,34,0.9)';c.strokeText(ak[i].toFixed(1),cxp,base-bh-6);c.fillStyle='rgba(255,255,255,0.92)';c.fillText(ak[i].toFixed(1),cxp,base-bh-6);}
+    c.font=`500 15px ${PF_FONT}`;c.textAlign='center';c.fillStyle=d.wins>0?'#fbbf24':'rgba(255,255,255,0.52)';
+    c.fillText((d.date.getMonth()+1)+'/'+d.date.getDate(),cxp,base+21);c.textAlign='left';
+    dpts.push([cxp,base-(ad[i]/maxD)*ph]);});
   c.beginPath();dpts.forEach((pt2,i)=>i?c.lineTo(pt2[0],pt2[1]):c.moveTo(pt2[0],pt2[1]));c.strokeStyle='#fb923c';c.lineWidth=3;c.lineJoin='round';c.stroke();
   dpts.forEach(pt2=>{c.beginPath();c.arc(pt2[0],pt2[1],3.5,0,7);c.fillStyle='#fb923c';c.fill();c.strokeStyle='#1a0f38';c.lineWidth=1.5;c.stroke();});
 }
