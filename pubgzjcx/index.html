@@ -622,65 +622,43 @@ function dailyBuckets(games){
   });
   return [...m.values()].sort((a,b)=>a.date-b.date);
 }
-function dailyTrendSvg(games){
-  const b=dailyBuckets(games);
-  if(b.length<2)return '';
-  const W=460,H=250,L=34,R=42,T=26,B=42,iw=W-L-R,ih=H-T-B,base=T+ih,n=b.length;
-  const ak=b.map(d=>d.kills/d.n),ad=b.map(d=>d.dmg/d.n);
-  const maxK=Math.max(2,...ak)*1.18,maxD=Math.max(120,...ad)*1.1;
-  const slot=iw/n,bw=Math.max(7,Math.min(32,slot*0.56));
-  const X=i=>L+slot*i+slot/2,yK=v=>base-(v/maxK)*ih,yD=v=>base-(v/maxD)*ih;
-  let s='';
-  for(let g=0;g<=2;g++){const yy=T+ih*g/2;s+=`<line x1="${L}" y1="${yy.toFixed(1)}" x2="${W-R}" y2="${yy.toFixed(1)}" stroke="#eef0f4"/>`;}
-  s+=`<text x="${L-6}" y="${base+3}" text-anchor="end" font-size="9" fill="#9ca3af">0</text>`;
-  s+=`<text x="${L-6}" y="${T+ih/2+3}" text-anchor="end" font-size="9" fill="#16a34a">${(maxK/2).toFixed(1)}</text>`;
-  s+=`<text x="${L-6}" y="${T+4}" text-anchor="end" font-size="9" fill="#16a34a">${maxK.toFixed(1)}</text>`;
-  s+=`<text x="${W-R+6}" y="${base+3}" font-size="9" fill="#9ca3af">0</text>`;
-  s+=`<text x="${W-R+6}" y="${T+ih/2+3}" font-size="9" fill="#d97706">${Math.round(maxD/2)}</text>`;
-  s+=`<text x="${W-R+6}" y="${T+4}" font-size="9" fill="#d97706">${Math.round(maxD)}</text>`;
-  let line='',area=`M${X(0).toFixed(1)},${yD(ad[0]).toFixed(1)}`;
-  ad.forEach((v,i)=>{const px=X(i).toFixed(1),py=yD(v).toFixed(1);line+=(i?'L':'M')+px+','+py;area+='L'+px+','+py;});
-  area+=`L${X(n-1).toFixed(1)},${base}L${X(0).toFixed(1)},${base}Z`;
-  s+=`<path d="${area}" fill="#d97706" opacity="0.08"/><path d="${line}" fill="none" stroke="#d97706" stroke-width="1.8"/>`;
-  ad.forEach((v,i)=>{s+=`<circle cx="${X(i).toFixed(1)}" cy="${yD(v).toFixed(1)}" r="2.2" fill="#d97706"><title>${b[i].date.getMonth()+1}/${b[i].date.getDate()} 场均伤害 ${Math.round(v)}（${b[i].n} 场）</title></circle>`;});
-  b.forEach((d,i)=>{
-    const x=X(i),v=ak[i],h=Math.max(v?2:0,(v/maxK)*ih),col=d.wins>0?'#f59e0b':'#16a34a';
-    if(h>0)s+=`<rect x="${(x-bw/2).toFixed(1)}" y="${(base-h).toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" rx="2" fill="${col}"><title>${d.date.getMonth()+1}/${d.date.getDate()}｜${d.n} 场｜场均击杀 ${v.toFixed(2)}（共 ${d.kills} 杀）${d.wins?`｜吃鸡 ${d.wins} 次`:''}</title></rect>`;
-    if(v>0)s+=`<text x="${x.toFixed(1)}" y="${(base-h-3).toFixed(1)}" text-anchor="middle" font-size="8.5" font-weight="700" fill="${d.wins?'#b45309':'#15803d'}">${v.toFixed(1)}</text>`;
-    s+=`<text x="${x.toFixed(1)}" y="${base+14}" text-anchor="middle" font-size="8.5" fill="${d.wins?'#b45309':'#9ca3af'}" font-weight="${d.wins?'700':'400'}">${d.date.getMonth()+1}/${d.date.getDate()}</text>`;
-    s+=`<text x="${x.toFixed(1)}" y="${base+27}" text-anchor="middle" font-size="8" fill="#b6bcc9">${d.n}场${d.wins?'·'+d.wins+'鸡':''}</text>`;
-  });
-  s+=`<text x="${L}" y="${T-10}" font-size="10" fill="#16a34a">场均击杀（柱）</text><text x="${W-R}" y="${T-10}" text-anchor="end" font-size="10" fill="#d97706">场均伤害（线）</text>`;
-  s+=`<text x="${(L+iw/2).toFixed(1)}" y="${H-3}" text-anchor="middle" font-size="9" fill="#9ca3af">${n} 天 · 左旧 → 右新 · 金柱=当天吃过鸡</text>`;
-  return `<svg viewBox="0 0 ${W} ${H}" class="viz-svg" preserveAspectRatio="xMidYMid meet">${s}</svg>`;
-}
-// 单人：伤害 × 击杀气泡散点（每场一个点，不随场数变挤，重叠用透明度）。颜色=名次（金=吃鸡/绿=前十/灰=其他），十字虚线=场均
+// 单人：打法风格气泡散点（每场一个点，一图四维高密度）。横轴=存活时间、纵轴=击杀（两者不同源、可分出打法类型），
+// 气泡大小=伤害、颜色=名次档（金=吃鸡/绿=前十/灰=其他）；均值十字虚线切出四象限并标注风格，点多重叠用透明度，不随场数变挤
 function scatterSvg(games){
-  const g0=(games||[]).filter(g=>typeof g.dmg==='number'&&g.createdAt);
+  const g0=(games||[]).filter(g=>typeof g.kills==='number'&&typeof g.time==='number'&&g.createdAt);
   if(g0.length<2)return '';
-  const W=460,H=250,L=42,R=20,T=24,B=40,iw=W-L-R,ih=H-T-B,base=T+ih;
-  const maxX=Math.max(150,...g0.map(g=>g.dmg))*1.06;
+  const W=460,H=250,L=40,R=18,T=26,B=42,iw=W-L-R,ih=H-T-B,base=T+ih;
+  const mins=g=>(g.time||0)/60;
+  const maxX=Math.max(10,...g0.map(mins))*1.06;
   const maxY=Math.max(2,...g0.map(g=>g.kills))+1;
-  const X=d=>L+(Math.min(d,maxX)/maxX)*iw,Y=k=>base-(Math.min(k,maxY)/maxY)*ih;
-  const avgD=g0.reduce((a,g)=>a+g.dmg,0)/g0.length,avgK=g0.reduce((a,g)=>a+g.kills,0)/g0.length;
+  const maxD=Math.max(1,...g0.map(g=>g.dmg||0));
+  const X=t=>L+(Math.min(t,maxX)/maxX)*iw,Y=k=>base-(Math.min(k,maxY)/maxY)*ih,Rad=d=>3+(Math.min(d,maxD)/maxD)*6;
+  const avgT=g0.reduce((a,g)=>a+mins(g),0)/g0.length,avgK=g0.reduce((a,g)=>a+g.kills,0)/g0.length;
   let s='';
   for(let g=0;g<=2;g++){const yy=T+ih*g/2,kv=maxY*g/2;s+=`<line x1="${L}" y1="${yy.toFixed(1)}" x2="${W-R}" y2="${yy.toFixed(1)}" stroke="#eef0f4"/>`;
     s+=`<text x="${L-6}" y="${(yy+3).toFixed(1)}" text-anchor="end" font-size="9" fill="#9ca3af">${Number.isInteger(kv)?kv:kv.toFixed(1)}</text>`;}
   s+=`<line x1="${L}" y1="${base}" x2="${W-R}" y2="${base}" stroke="#d9dce3"/>`;
-  [0,.5,1].forEach(t=>{s+=`<text x="${(L+iw*t).toFixed(1)}" y="${base+15}" text-anchor="middle" font-size="9" fill="#9ca3af">${Math.round(maxX*t)}</text>`;});
-  s+=`<line x1="${X(avgD).toFixed(1)}" y1="${T}" x2="${X(avgD).toFixed(1)}" y2="${base}" stroke="#d97706" stroke-dasharray="4 3" stroke-opacity="0.5"/>`;
+  [0,.5,1].forEach(t=>s+=`<text x="${(L+iw*t).toFixed(1)}" y="${base+15}" text-anchor="middle" font-size="9" fill="#9ca3af">${Math.round(maxX*t)}′</text>`);
+  // 四象限风格标签（淡色，落在四角）
+  s+=`<text x="${L+6}" y="${T+13}" font-size="9" fill="#b9c0cd" paint-order="stroke" stroke="#ffffff" stroke-width="2.5" stroke-opacity="0.9">落地刚枪</text>`;
+  s+=`<text x="${W-R-6}" y="${T+13}" text-anchor="end" font-size="9" fill="#b9c0cd" paint-order="stroke" stroke="#ffffff" stroke-width="2.5" stroke-opacity="0.9">长寿枪神</text>`;
+  s+=`<text x="${L+6}" y="${base-6}" font-size="9" fill="#b9c0cd" paint-order="stroke" stroke="#ffffff" stroke-width="2.5" stroke-opacity="0.9">速溶白给</text>`;
+  s+=`<text x="${W-R-6}" y="${base-6}" text-anchor="end" font-size="9" fill="#b9c0cd" paint-order="stroke" stroke="#ffffff" stroke-width="2.5" stroke-opacity="0.9">稳健苟分</text>`;
+  // 均值十字虚线
+  s+=`<line x1="${X(avgT).toFixed(1)}" y1="${T}" x2="${X(avgT).toFixed(1)}" y2="${base}" stroke="#d97706" stroke-dasharray="4 3" stroke-opacity="0.5"/>`;
   s+=`<line x1="${L}" y1="${Y(avgK).toFixed(1)}" x2="${W-R}" y2="${Y(avgK).toFixed(1)}" stroke="#16a34a" stroke-dasharray="4 3" stroke-opacity="0.5"/>`;
-  s+=`<text x="${Math.min(X(avgD)+4,W-R-70).toFixed(1)}" y="${T+9}" font-size="8.5" fill="#b45309">场均伤 ${Math.round(avgD)}</text>`;
-  s+=`<text x="${W-R}" y="${(Y(avgK)-3).toFixed(1)}" text-anchor="end" font-size="8.5" fill="#15803d">场均击杀 ${avgK.toFixed(1)}</text>`;
+  s+=`<text x="${X(avgT).toFixed(1)}" y="${T+18}" text-anchor="middle" font-size="8.5" font-weight="700" fill="#b45309" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-opacity="0.9">场均存活 ${avgT.toFixed(1)}′</text>`;
+  s+=`<text x="${(X(avgT)+6).toFixed(1)}" y="${(Y(avgK)-5).toFixed(1)}" font-size="8.5" font-weight="700" fill="#15803d" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-opacity="0.9">场均击杀 ${avgK.toFixed(1)}</text>`;
+  // 点：其他→前十→吃鸡 顺序画，重要的盖在上层
   const layer=g=>g.won?2:(g.rank<=10?1:0);
   g0.slice().sort((a,b)=>layer(a)-layer(b)).forEach(g=>{
     const win=g.won,top=g.rank<=10;
-    const col=win?'#f59e0b':(top?'#16a34a':'#c3c9d6'),r=win?6:(top?4.6:4),op=win?0.95:(top?0.75:0.6);
-    s+=`<circle cx="${X(g.dmg).toFixed(1)}" cy="${Y(g.kills).toFixed(1)}" r="${r}" fill="${col}" fill-opacity="${op}" stroke="${win?'#b45309':'#ffffff'}" stroke-width="${win?1:0.6}"><title>${fmtDT(g.createdAt)}｜#${g.rank}｜${g.kills}杀 ${Math.round(g.dmg)}伤${win?'｜吃鸡':''}</title></circle>`;
+    const col=win?'#f59e0b':(top?'#16a34a':'#c3c9d6'),rr=Rad(g.dmg||0)+(win?1:0),op=win?0.95:(top?0.75:0.6);
+    s+=`<circle cx="${X(mins(g)).toFixed(1)}" cy="${Y(g.kills).toFixed(1)}" r="${rr.toFixed(1)}" fill="${col}" fill-opacity="${op}" stroke="${win?'#b45309':'#ffffff'}" stroke-width="${win?1:0.6}"><title>${fmtDT(g.createdAt)}｜存活 ${mins(g).toFixed(1)} 分｜#${g.rank}｜${g.kills}杀 ${g.dbno||0}倒 ${Math.round(g.dmg)}伤${win?'｜吃鸡':''}</title></circle>`;
   });
-  s+=`<text x="${L}" y="${T-8}" font-size="10" fill="#374151">击杀 ↑</text>`;
-  s+=`<text x="${W-R}" y="${H-22}" text-anchor="end" font-size="10" fill="#374151">伤害 →</text>`;
-  s+=`<g font-size="9" fill="#6b7280"><circle cx="${L+8}" cy="${H-12}" r="4.5" fill="#f59e0b"/><text x="${L+17}" y="${H-9}">吃鸡</text><circle cx="${L+58}" cy="${H-12}" r="4.5" fill="#16a34a" fill-opacity=".75"/><text x="${L+67}" y="${H-9}">前十</text><circle cx="${L+110}" cy="${H-12}" r="4" fill="#c3c9d6"/><text x="${L+118}" y="${H-9}">其他 · 共 ${g0.length} 场</text></g>`;
+  s+=`<text x="${L}" y="${T-10}" font-size="10" fill="#374151">击杀 ↑</text>`;
+  s+=`<text x="${W-R}" y="${T-10}" text-anchor="end" font-size="10" fill="#374151">存活时间（分钟）→</text>`;
+  s+=`<g font-size="9" fill="#6b7280"><circle cx="${L+8}" cy="${H-12}" r="4.5" fill="#f59e0b"/><text x="${L+17}" y="${H-9}">吃鸡</text><circle cx="${L+58}" cy="${H-12}" r="4.5" fill="#16a34a" fill-opacity=".75"/><text x="${L+67}" y="${H-9}">前十</text><circle cx="${L+110}" cy="${H-12}" r="4" fill="#c3c9d6"/><text x="${L+118}" y="${H-9}">其他</text><text x="${L+160}" y="${H-9}">· 气泡越大伤害越高 · 共 ${g0.length} 场</text></g>`;
   return `<svg viewBox="0 0 ${W} ${H}" class="viz-svg" preserveAspectRatio="xMidYMid meet">${s}</svg>`;
 }
 // 单人：主力武器横向条形榜（条长=合计击杀[legacy+普通+竞技]，单轴表达产量；条尾标最远击杀/爆头命中次数等绝对值，颜色=枪械类型），取击杀前 8
@@ -1985,9 +1963,8 @@ function renderSingle(){
     const wlegend=wtypes.map(t=>`<span><i style="background:${WTYP[t][1]}"></i>${WTYP[t][0]}</span>`).join('');
     const scopeTxt=(p.loadedN||0)<(p.allIds||[]).length?`最近 ${p.recent.length} 场`:`近 14 天 ${p.recent.length} 场`;
     h+=`<div class="s-viz">
-      <div class="sg"><h3>每日走势 <span class="tag">${scopeTxt} · 按天聚合 · 柱=场均击杀 / 线=场均伤害</span></h3>${dailyTrendSvg(p.recent)||'<div class="empty">近期对局不足，暂无走势</div>'}</div>
-      <div class="sg"><h3>伤害 × 击杀分布 <span class="tag">${scopeTxt} · 每场一个气泡 · 颜色=名次</span></h3>${scatterSvg(p.recent)||'<div class="empty">近期对局不足，暂无分布图</div>'}</div>
-      <div class="sg" style="grid-column:1/-1"><h3>主力武器 <span class="tag">合计击杀前 8 · 条长=击杀数 · 悬停看详情</span></h3>${weaponBarSvg(wbr)||'<div class="empty">暂无武器数据</div>'}<div class="viz-legend" style="margin-top:6px">${wlegend}</div></div>
+      <div class="sg"><h3>打法风格分布 <span class="tag">${scopeTxt} · 存活×击杀 · 气泡大小=伤害 · 颜色=名次</span></h3>${scatterSvg(p.recent)||'<div class="empty">近期对局不足，暂无分布图</div>'}</div>
+      <div class="sg"><h3>主力武器 <span class="tag">合计击杀前 8 · 条长=击杀数 · 悬停看详情</span></h3>${weaponBarSvg(wbr)||'<div class="empty">暂无武器数据</div>'}<div class="viz-legend" style="margin-top:6px">${wlegend}</div></div>
     </div>`;
   }
   // 卡5：最近对局
