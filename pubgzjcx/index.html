@@ -310,6 +310,14 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
 .seg button{border-radius:0;background:#fff;color:var(--sub);padding:6px 14px;font-size:12.5px}
 .seg button.on{background:var(--pri);color:#fff}
 .mlist{display:flex;flex-direction:column;gap:7px}
+.mmore{margin-top:12px}
+.mmore-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.mmore-btns button{padding:9px 18px;font-size:13px;font-weight:700;border-radius:9px;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--pri)}
+.mmore-btns button:hover{background:#f3effa}
+.mmore-bar{display:flex;align-items:center;justify-content:center;gap:12px;font-size:13px;color:var(--sub);padding:8px 0;flex-wrap:wrap}
+.mmore-bar .spinner{width:14px;height:14px;border-width:2px;margin:0;flex:0 0 auto}
+.mmore-bar button{padding:6px 16px;font-size:12.5px;font-weight:700;border-radius:8px;cursor:pointer;border:1px solid rgba(248,113,113,.7);background:rgba(248,113,113,.12);color:#dc2626}
+.mmore-tip{margin-top:9px;text-align:center;font-size:12px;color:var(--sub);line-height:1.6}
 .mrow{border:1px solid var(--line);border-radius:10px;overflow:hidden}
 .mrow .mhead{display:flex;align-items:center;gap:10px;padding:9px 12px;cursor:pointer;flex-wrap:wrap;background:#faf9fd}
 .mrow .mhead:hover{background:#f3effa}
@@ -1628,14 +1636,24 @@ function renderMulti(){
 }
 
 /* ================================================== 单人 */
-const S={name:'',data:null,weaponFilter:'all',wpnOpen:false,openMatch:null,running:false};
+const S={name:'',data:null,weaponFilter:'all',wpnOpen:false,openMatch:null,running:false,moreBusy:false,moreTick:0,moreDone:0,moreTotal:0};
+const SINGLE_PAGE=25;    // 单人对局：首屏及每次「加载更多」拉取的场次（/matches 详情）
+const SINGLE_KEEP=60;    // 刷新持久化时最多保留最新多少场明细（含全队战报，控制 localStorage 体积）；全部 matchId 仍完整保存
 let sTimer=null;
 function persistMulti(){
   if(!M.players.length)return;
   saveJSON(PK_MULTI,{ts:M.ts,filter:M.filter,recent:M.recent,input:$('qInput').value,
     targets:M.targets,players:M.players,matchOrder:M.matchOrder,matchTotal:M.matchTotal||0,matchFail:M.matchFail||0});
 }
-function persistSingle(){if(S.data)saveJSON(PK_SINGLE,{ts:Date.now(),name:S.name,weaponFilter:S.weaponFilter,data:S.data});}
+function persistSingle(){
+  if(!S.data)return;
+  const d=S.data;
+  // 全部 matchId 体积小、完整保存；对局明细（含全队战报）只持久化最新 SINGLE_KEEP 场，避免 localStorage 超限。
+  // loadedN 表示「已拉到 allIds 的第几个」，按 SINGLE_KEEP 截断（与成功场数解耦，失败场不压缩进度）；刷新后从该断点继续「加载更多」。
+  const keepN=Math.min(d.loadedN||(d.recent||[]).length,SINGLE_KEEP);
+  const data=Object.assign({},d,{recent:(d.recent||[]).slice(0,SINGLE_KEEP),loadedN:keepN});
+  saveJSON(PK_SINGLE,{ts:Date.now(),name:S.name,weaponFilter:S.weaponFilter,data});
+}
 async function runSingle(name){
   name=(name||$('sInput').value||'').trim();
   if(!name){toast('请输入昵称','e');return;}
@@ -1655,31 +1673,14 @@ async function runSingle(name){
       .catch(e=>{p.histLoading=false;if(S.data===p&&!(e instanceof CancelledError))renderSingle();});
     const [surv,clan]=await Promise.all([fetchPlayerSurvival(p.id),p.clanId?fetchClan(p.clanId):Promise.resolve(null)]);
     p.detail.surv=surv;p.clan=clan;
-    // 近期 25 场
-    const ids=p.matchIds.slice(0,25);
+    // 近期对局：官方 /players 一次返回近 14 天全部 matchId，首屏只拉最新 SINGLE_PAGE 场详情，其余由列表底部「加载更多」按需翻页（/matches 不计限流，详情按 id 缓存）
+    p.allIds=p.matchIds.slice();
+    const ids=p.allIds.slice(0,SINGLE_PAGE);
+    p.loadedN=ids.length;
     await pool(ids,8,async id=>{await fetchMatch(id);});
     p.recent=[];
-    ids.forEach(id=>{const mt=matchCache[id];if(!mt)return;const s=mt.parts[p.id],tm=mt.accTeam[p.id];if(!s)return;
-      // 本队精简战报（随结果一起缓存，刷新后可离线展开）
-      const roster=mt.rosters.find(r=>r.members.includes(p.id))||null;
-      const members=roster?roster.members:[p.id];
-      const report={rank:roster?roster.rank:(tm?tm.rank:num(s.winPlace)),won:roster?roster.won:s.winPlace===1,size:members.length,
-        map:mt.map,mode:mt.mode,type:mt.type,custom:mt.custom,duration:mt.duration,createdAt:mt.createdAt,
-        members:members.map(acc=>{const x=mt.parts[acc]||{};return {name:x.name||acc,me:acc===p.id,
-          kills:num(x.kills),dbno:num(x.DBNOs),assists:num(x.assists),dmg:num(x.damageDealt),hs:num(x.headshotKills),
-          revives:num(x.revives),heals:num(x.heals),boosts:num(x.boosts),streak:num(x.killStreaks),killPlace:num(x.killPlace),
-          roadKills:num(x.roadKills),vehDestroy:num(x.vehicleDestroys),teamKills:num(x.teamKills),weapons:num(x.weaponsAcquired),
-          time:num(x.timeSurvived),
-          dist:num(x.walkDistance)+num(x.rideDistance)+num(x.swimDistance),death:x.deathType};})};
-      p.recent.push({matchId:id,rank:tm?tm.rank:num(s.winPlace),won:tm?tm.won:s.winPlace===1,teamId:tm?tm.teamId:null,
-        kills:num(s.kills),dbno:num(s.DBNOs),dmg:num(s.damageDealt),hs:num(s.headshotKills),assists:num(s.assists),
-        revives:num(s.revives),heals:num(s.heals),boosts:num(s.boosts),streak:num(s.killStreaks),killPlace:num(s.killPlace),
-        roadKills:num(s.roadKills),vehDestroy:num(s.vehicleDestroys),teamKills:num(s.teamKills),weapons:num(s.weaponsAcquired),
-        time:num(s.timeSurvived),death:s.deathType,
-        walk:num(s.walkDistance),ride:num(s.rideDistance),swim:num(s.swimDistance),longest:num(s.longestKill),
-        mode:mt.mode,map:mt.map,type:mt.type,custom:mt.custom,duration:mt.duration,createdAt:mt.createdAt,report});});
-    p.recent.sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)));
-    p.matchTotal=ids.length;p.matchFail=ids.filter(id=>!matchCache[id]).length;
+    mergeRecent(p,ids);
+    p.matchTotal=ids.length;p.matchFail=countFail(p);
     p.agg=p.recent.length?aggGames(p.recent):lifeAgg(p.detail);p.horse=horseOf(p.agg);
     S.data=p;renderSingle();persistSingle();
     toast(p.matchFail?(`查询完成，${p.matchFail}/${p.matchTotal} 场明细受 CDN 限制未取到`):'查询完成',p.matchFail?'w':'s');
@@ -1688,6 +1689,100 @@ async function runSingle(name){
     else if(e instanceof RateLimitError){$('singleRes').innerHTML=`<div class="sg"><div class="rate-banner">⚠️ 所有 Key 均触发限流、自动重试仍未恢复，请稍后再点「查询」；多填几个 Key 可显著减少等待。</div></div>`;}
     else $('singleRes').innerHTML=`<div class="sg empty" style="color:var(--red)">查询失败：${esc(e.message)}</div>`;
   }finally{if(sTimer){clearInterval(sTimer);sTimer=null;}S.running=false;$('sBtn').disabled=false;}
+}
+// 从 matchCache 装配单场对局（含本队精简战报，随结果持久化、刷新后可离线展开）；未取到详情返回 null
+function buildGame(p,id){
+  const mt=matchCache[id];if(!mt)return null;
+  const s=mt.parts[p.id],tm=mt.accTeam[p.id];if(!s)return null;
+  const roster=mt.rosters.find(r=>r.members.includes(p.id))||null;
+  const members=roster?roster.members:[p.id];
+  const report={rank:roster?roster.rank:(tm?tm.rank:num(s.winPlace)),won:roster?roster.won:s.winPlace===1,size:members.length,
+    map:mt.map,mode:mt.mode,type:mt.type,custom:mt.custom,duration:mt.duration,createdAt:mt.createdAt,
+    members:members.map(acc=>{const x=mt.parts[acc]||{};return {name:x.name||acc,me:acc===p.id,
+      kills:num(x.kills),dbno:num(x.DBNOs),assists:num(x.assists),dmg:num(x.damageDealt),hs:num(x.headshotKills),
+      revives:num(x.revives),heals:num(x.heals),boosts:num(x.boosts),streak:num(x.killStreaks),killPlace:num(x.killPlace),
+      roadKills:num(x.roadKills),vehDestroy:num(x.vehicleDestroys),teamKills:num(x.teamKills),weapons:num(x.weaponsAcquired),
+      time:num(x.timeSurvived),
+      dist:num(x.walkDistance)+num(x.rideDistance)+num(x.swimDistance),death:x.deathType};})};
+  return {matchId:id,rank:tm?tm.rank:num(s.winPlace),won:tm?tm.won:s.winPlace===1,teamId:tm?tm.teamId:null,
+    kills:num(s.kills),dbno:num(s.DBNOs),dmg:num(s.damageDealt),hs:num(s.headshotKills),assists:num(s.assists),
+    revives:num(s.revives),heals:num(s.heals),boosts:num(s.boosts),streak:num(s.killStreaks),killPlace:num(s.killPlace),
+    roadKills:num(s.roadKills),vehDestroy:num(s.vehicleDestroys),teamKills:num(s.teamKills),weapons:num(s.weaponsAcquired),
+    time:num(s.timeSurvived),death:s.deathType,
+    walk:num(s.walkDistance),ride:num(s.rideDistance),swim:num(s.swimDistance),longest:num(s.longestKill),
+    mode:mt.mode,map:mt.map,type:mt.type,custom:mt.custom,duration:mt.duration,createdAt:mt.createdAt,report};
+}
+// 增量合并：把 ids 中已取到详情的场次并入 p.recent（保留已有场次，含刷新恢复的离线战报），按时间倒序去重
+function mergeRecent(p,ids){
+  const map=new Map((p.recent||[]).map(g=>[g.matchId,g]));
+  ids.forEach(id=>{const g=buildGame(p,id);if(g)map.set(id,g);});
+  p.recent=[...map.values()].sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)));
+}
+// 已加载范围内确认拉取失败（CDN 缺跨域头、缓存为 null）的场次数；尚未拉取（undefined）不计
+function countFail(p){return (p.allIds||[]).slice(0,p.loadedN||0).filter(id=>matchCache[id]===null).length;}
+// 单人对局翻页：all=true 一次拉完近 14 天剩余全部，否则拉下一批 SINGLE_PAGE 场（/matches 详情不计限流、按 id 缓存）
+async function loadMoreMatches(all){
+  const p=S.data;
+  if(!p||S.moreBusy)return;
+  const total=p.allIds.length;
+  if((p.loadedN||0)>=total){toast('已覆盖近 14 天全部场次','s');renderMoreBar();return;}
+  const tick=++S.moreTick;
+  const end=all?total:Math.min(total,p.loadedN+SINGLE_PAGE);
+  const newIds=p.allIds.slice(p.loadedN,end);
+  S.moreBusy=true;S.moreDone=0;S.moreTotal=newIds.length;renderMoreBar();
+  try{
+    await pool(newIds,8,async id=>{if(tick!==S.moreTick)return;await fetchMatch(id);S.moreDone++;renderMoreBar();});
+    if(tick!==S.moreTick){S.moreBusy=false;renderMoreBar();return;} // 被停止：不推进 loadedN，已在途拉到的详情进缓存、下次续拉不浪费
+    p.loadedN=end;
+    mergeRecent(p,newIds);
+    p.matchTotal=p.loadedN;p.matchFail=countFail(p);
+    p.agg=p.recent.length?aggGames(p.recent):lifeAgg(p.detail);p.horse=horseOf(p.agg);
+    S.openMatch=null;S.moreBusy=false;
+    renderSingle();persistSingle();
+    if(p.loadedN>=total)toast(`已加载近 14 天全部 ${p.recent.length} 场`,'s');
+    else toast(`已加载 ${p.recent.length}/${total} 场，统计已更新`,'s');
+  }catch(e){S.moreBusy=false;renderMoreBar();toast('加载更多失败：'+((e&&e.message)||e),'e');}
+}
+function stopMore(){S.moreTick++;S.moreBusy=false;renderMoreBar();toast('已停止加载，可随时继续','w');}
+// 重试已加载范围内因官方 CDN 缓存缺跨域头而失败的场次
+async function retryFailed(){
+  const p=S.data;if(!p||S.moreBusy)return;
+  const ids=(p.allIds||[]).slice(0,p.loadedN||0).filter(id=>matchCache[id]===null);
+  if(!ids.length){toast('当前没有需要重试的场次','s');return;}
+  const tick=++S.moreTick;
+  ids.forEach(id=>{delete matchCache[id];});
+  S.moreBusy=true;S.moreDone=0;S.moreTotal=ids.length;renderMoreBar();
+  await pool(ids,8,async id=>{if(tick!==S.moreTick)return;await fetchMatch(id);S.moreDone++;renderMoreBar();});
+  if(tick!==S.moreTick){S.moreBusy=false;renderMoreBar();return;}
+  S.moreBusy=false;mergeRecent(p,ids);p.matchFail=countFail(p);
+  p.agg=p.recent.length?aggGames(p.recent):lifeAgg(p.detail);p.horse=horseOf(p.agg);
+  S.openMatch=null;renderSingle();persistSingle();
+  toast(p.matchFail?`仍有 ${p.matchFail} 场受 CDN 限制未取到`:'失败场次已重试完成',p.matchFail?'w':'s');
+}
+// 对局列表底部翻页控件（加载更多 / 加载全部 / 重试失败 / 进度与停止）
+function renderMoreBar(){
+  const p=S.data,el=document.getElementById('mMore');if(!el||!p)return;
+  const total=(p.allIds||[]).length,loaded=p.loadedN||0;
+  if(S.moreBusy){
+    el.innerHTML=`<div class="mmore-bar"><span class="spinner"></span>正在加载对局详情 ${S.moreDone}/${S.moreTotal} …<button type="button" id="mMoreStop">停止</button></div>`;
+    const b=document.getElementById('mMoreStop');if(b)b.onclick=stopMore;
+    return;
+  }
+  const fail=p.matchFail||0;
+  if(loaded<total){
+    el.innerHTML=`<div class="mmore-btns">
+        <button type="button" id="mMoreNext">加载更多（还剩 ${total-loaded} 场）</button>
+        <button type="button" id="mMoreAll">加载全部近 14 天（共 ${total} 场）</button>
+        ${fail?`<button type="button" id="mMoreRetry">重试失败 ${fail} 场</button>`:''}
+      </div>
+      <div class="mmore-tip">官方仅保留近 14 天对局，共 ${total} 场；当前已加载最新 ${p.recent.length} 场。马型 / 雷达 / 走势 / 海报均按已加载场次统计，加载更多后自动更新。</div>`;
+    document.getElementById('mMoreNext').onclick=()=>loadMoreMatches(false);
+    document.getElementById('mMoreAll').onclick=()=>loadMoreMatches(true);
+    const r=document.getElementById('mMoreRetry');if(r)r.onclick=retryFailed;
+  }else{
+    el.innerHTML=`<div class="mmore-tip">已覆盖近 14 天全部 ${total} 场${fail?`（其中 ${fail} 场因官方 CDN 缓存限制取不到明细）`:' · 统计为完整 14 天口径'}</div>${fail?`<div class="mmore-btns" style="margin-top:9px"><button type="button" id="mMoreRetry">重试失败 ${fail} 场</button></div>`:''}`;
+    const r2=document.getElementById('mMoreRetry');if(r2)r2.onclick=retryFailed;
+  }
 }
 function renderSingleLoading(){$('singleRes').innerHTML='<div class="sg"><div class="col-status"><div class="spinner"></div>正在查询 '+esc(S.name)+' …</div><div id="sWait" style="margin-top:10px"></div></div>';}
 function renderSingleWait(){const el=$('sWait');if(!el)return;const ws=waitSec();const ks=poolKeyStats();const who=ks.avail>1?`全部 ${ks.avail} 个有效 Key`:'有效 Key';const badNote=ks.bad?`（另有 ${ks.bad} 个无效 Key 已跳过）`:'';el.innerHTML=ws>0?`<div class="rate-banner">${waiter.mode==='cool'?`${who}均触发限流，正等待最早恢复的 Key${badNote}，<b class="rate-cd">${ws}</b> 秒后自动切换续查，请耐心等待…`:`请求较多，${ks.avail>1?`全部 ${ks.avail} 个有效 Key 额度均已用满`:'有效 Key 额度已用满'}${badNote}，<b class="rate-cd">${ws}</b> 秒后自动切换续查，请耐心等待…`}</div>`:'';}
@@ -1748,13 +1843,13 @@ function renderSingle(){
         ${clan?`<span class="pill">战队 ${esc(clan.clanTag||'')} · ${esc(clan.clanName||'')} Lv.${num(clan.clanLevel)} · ${num(clan.clanMemberCount)}人</span>`:''}
         ${p.ban&&p.ban!=='Innocent'?`<span class="pill ban">${esc(p.ban)}</span>`:'<span class="pill">状态正常</span>'}
         <span class="pill">生存熟练度 Lv.${num(sv.level)}</span>
-        <span class="pill">近14天 ${p.recent.length} 场</span>
+        <span class="pill">近14天 ${p.recent.length}${p.allIds&&p.recent.length<p.allIds.length?'/'+p.allIds.length:''} 场</span>
       </div>
       <div class="viz-badges">${badgesHtml(singleBadgeMetrics(p))}</div>
     </div>
     <div style="text-align:center">
       <div class="chp h-${p.horse.tier}" style="font-size:16px">${esc(p.horse.label)}</div>
-      <div class="muted" style="margin-top:5px">${p.agg.__life?'生涯口径':`近${p.recent.length}场`} · 综合分 ${p.horse.score.toFixed(0)}</div>
+      <div class="muted" style="margin-top:5px">${p.agg.__life?'生涯口径':(p.allIds&&p.recent.length<p.allIds.length?`最近${p.recent.length}场`:`近${p.recent.length}场`)} · 综合分 ${p.horse.score.toFixed(0)}</div>
     </div>
   </div></div>`;
   // 卡2：竞技段位——统一只显示两种：当前赛季段位（未定级给灰框）+ 跨赛季历史最高（含当前赛季）
@@ -1824,11 +1919,11 @@ function renderSingle(){
   let mlistNote='';
   if(!p.recent.length){mlistNote='<div class="empty">近期对局明细未能获取：官方 /matches 接口经 CDN 缓存，部分对局的跨域响应头缺失，浏览器直连会被拦截（生涯 / 段位 / 武器 / 生存数据不受影响）。可稍后或换网络环境重试。</div>';}
   else if(p.matchFail){mlistNote=`<div class="hint" style="color:var(--org);margin-bottom:8px">${p.matchFail}/${p.matchTotal} 场明细因官方 CDN 缓存限制暂不可用，已显示其余 ${p.recent.length} 场；稍后或换网络环境重试可能恢复。</div>`;}
-  h+=`<div class="sg"><h3>最近对局（近 14 天 · ${p.recent.length} 场，点击查看全队战报）</h3>${mlistNote}<div class="mlist" id="mList"></div></div>`;
+  h+=`<div class="sg"><h3>最近对局（近 14 天 · ${p.recent.length}${p.allIds&&p.recent.length<p.allIds.length?' / '+p.allIds.length:''} 场，点击查看全队战报）</h3>${mlistNote}<div class="mlist" id="mList"></div><div class="mmore" id="mMore"></div></div>`;
   $('singleRes').innerHTML=h;
   // 武器口径切换
   $('wpnSeg').querySelectorAll('button').forEach(b=>b.onclick=()=>{S.weaponFilter=b.dataset.f;S.wpnOpen=false;$('wpnSeg').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));renderWpnTable();persistSingle();});
-  renderWpnTable();renderMatchList();
+  renderWpnTable();renderMatchList();renderMoreBar();
 }
 function renderWpnTable(){
   const p=S.data;if(!p)return;
@@ -1958,6 +2053,8 @@ function restoreAll(){
   const ss=readJSON(PK_SINGLE);
   if(ss&&ss.data){
     S.name=ss.name||'';S.data=ss.data;S.weaponFilter=ss.weaponFilter||'all';ss.data.histLoading=false;
+    // 刷新后内存 matchCache 已清空，持久化的 CDN 失败计数失效（失败场次回到「未拉取」状态），重置以免出现点不动的陈旧「重试失败」
+    ss.data.matchFail=0;ss.data.matchTotal=ss.data.loadedN||(ss.data.recent||[]).length;
     if(ss.name)$('sInput').value=ss.name;
     renderSingle();
     // 旧缓存若没有历史最高，后台静默补查一次（查到即持久化，之后刷新不再请求）
