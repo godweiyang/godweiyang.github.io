@@ -150,7 +150,7 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
 .pill.ban{background:#fdecec;color:var(--red)}
 .ch-horse{display:flex;justify-content:center;margin-top:auto;padding-top:10px;min-height:20px}
 .chp{display:inline-block;font-size:14px;font-weight:800;letter-spacing:1px;border-radius:999px;padding:3px 15px;border:1px solid transparent;white-space:nowrap}
-.chp.h-T{background:#f1ecfe;color:#7c3aed;border-color:#cbb8f8}.chp.h-A{background:#e8f7ee;color:#16a34a;border-color:#9fdcba}.chp.h-B{background:#e8f0fe;color:#2563eb;border-color:#a9c5f5}.chp.h-C{background:#fdf1e2;color:#ea8a16;border-color:#f3cd9c}.chp.h-D{background:#fdecec;color:#dc2626;border-color:#f3b4b4}.chp.h-N{background:#f3f4f6;color:var(--sub);border-color:#e5e7eb;font-size:12px;font-weight:700;letter-spacing:0}
+.chp.h-T{background:linear-gradient(135deg,#fde68a,#fbbf24 55%,#f59e0b);color:#7c4a03;border-color:#f59e0b;box-shadow:0 2px 10px rgba(245,158,11,.45),inset 0 1px 0 rgba(255,255,255,.45);font-weight:900;letter-spacing:2px}.chp.h-A{background:#e8f7ee;color:#16a34a;border-color:#9fdcba}.chp.h-B{background:#e8f0fe;color:#2563eb;border-color:#a9c5f5}.chp.h-C{background:#fdf1e2;color:#ea8a16;border-color:#f3cd9c}.chp.h-D{background:linear-gradient(135deg,#f87171,#ef4444 50%,#dc2626);color:#fff;border-color:#dc2626;box-shadow:0 2px 10px rgba(220,38,38,.4),inset 0 1px 0 rgba(255,255,255,.25);font-weight:900;letter-spacing:2px}.chp.h-N{background:#f3f4f6;color:var(--sub);border-color:#e5e7eb;font-size:12px;font-weight:700;letter-spacing:0}
 /* 迷你段位 */
 .rankmini{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:1;align-content:stretch}
 .rankmini.one{grid-template-columns:1fr}
@@ -199,7 +199,7 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
 .mm .r2 .t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mm .r2 .tm{white-space:nowrap;flex:0 0 auto;display:inline-flex;align-items:center;gap:5px}
 .mh{flex:0 0 auto;font-size:9.5px;font-weight:800;border-radius:5px;padding:0 6px;line-height:17px;white-space:nowrap;align-self:center}
-.mh.h-T{background:#f1ecfe;color:#7c3aed}.mh.h-A{background:#e8f7ee;color:#16a34a}.mh.h-B{background:#e8f0fe;color:#2563eb}.mh.h-C{background:#fdf1e2;color:#ea8a16}.mh.h-D{background:#fdecec;color:#dc2626}
+.mh.h-T{background:linear-gradient(135deg,#fcd34d,#f59e0b);color:#7c4a03;box-shadow:0 0 6px rgba(245,158,11,.55);font-weight:900}.mh.h-A{background:#e8f7ee;color:#16a34a}.mh.h-B{background:#e8f0fe;color:#2563eb}.mh.h-C{background:#fdf1e2;color:#ea8a16}.mh.h-D{background:linear-gradient(135deg,#f87171,#dc2626);color:#fff;box-shadow:0 0 6px rgba(220,38,38,.5);font-weight:900}
 .mm .comp{flex:0 0 auto;border-radius:4px;padding:0 5px;font-size:10px;font-weight:800;white-space:nowrap;line-height:16px}
 .mm .comp.rank{background:#fdf1e2;color:#b45309}
 .mm .comp.norm{background:#eef0f3;color:#6b7280}
@@ -2251,7 +2251,7 @@ $('sShotBtn').onclick=()=>shotCapture($('singleRes'),'pubgzjcx-单人战绩'+(S.
 
 /* ================================================== 个人战绩海报（纯 Canvas 手绘，1080×1920 竖版 9:16，零依赖，导出 PNG） */
 const POSTER_W=1080, POSTER_H=1920, PAD=46, CW=POSTER_W-PAD*2;
-const HORSE_C={T:'#b79bff',A:'#34d399',B:'#60a5fa',C:'#fb923c',D:'#f87171',N:'#9aa0b4'};
+const HORSE_C={T:'#fbbf24',A:'#34d399',B:'#60a5fa',C:'#fb923c',D:'#f87171',N:'#9aa0b4'};
 const PF_FONT='"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif';
 function shortSeason(sid){const m=String(sid||'').match(/(\d+)$/);return m?('S'+m[1]):'';}
 function posterData(p){
