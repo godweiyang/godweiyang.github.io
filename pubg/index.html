@@ -2440,7 +2440,7 @@ $('sShotBtn').onclick=()=>shotCapture($('singleRes'),'pubgzjcx-单人战绩'+(S.
 
 /* ================================================== 个人战绩海报（纯 Canvas 手绘，1080×1920 竖版 9:16，零依赖，导出 PNG） */
 const POSTER_W=1080, POSTER_H=1920, PAD=46, CW=POSTER_W-PAD*2;
-const HORSE_C={T:'#fbbf24',A:'#34d399',B:'#60a5fa',C:'#fb923c',D:'#f87171',N:'#9aa0b4'};
+const HORSE_C={T:'#d98c00',A:'#1ea672',B:'#0a84ff',C:'#e0730c',D:'#e03131',N:'#8a93a6'};
 const PF_FONT='"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif';
 function shortSeason(sid){const m=String(sid||'').match(/(\d+)$/);return m?('S'+m[1]):'';}
 function posterData(p){
@@ -2483,64 +2483,64 @@ function posterSlogan(m){
   return `${sc} KD ${kd}、前十率 ${top}%，中规中矩的潜力股，属于你的高光局正在路上`;
 }
 function pRR(c,x,y,w,h,r){r=Math.min(r,w/2,h/2);c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();}
-function pPanel(c,x,y,w,h,r=22){pRR(c,x,y,w,h,r);c.fillStyle='rgba(255,255,255,0.055)';c.fill();c.lineWidth=1.5;c.strokeStyle='rgba(167,139,250,0.22)';c.stroke();}
+function pPanel(c,x,y,w,h,r=22){pRR(c,x,y,w,h,r);c.save();c.shadowColor='rgba(30,60,120,0.12)';c.shadowBlur=26;c.shadowOffsetY=9;c.fillStyle='rgba(255,255,255,0.58)';c.fill();c.restore();c.lineWidth=1.4;c.strokeStyle='rgba(255,255,255,0.92)';c.stroke();pRR(c,x,y,w,h,r);c.lineWidth=1;c.strokeStyle='rgba(10,132,255,0.10)';c.stroke();}
 function pText(c,t,x,y,size,col,weight=700,align='left',ls=0){c.font=`${weight} ${size}px ${PF_FONT}`;c.textAlign=align;c.textBaseline='alphabetic';if(ls)c.setLineDash([]);c.fillStyle=col;c.fillText(t,x,y);}
 function pWrap(c,t,x,y,maxW,lh,maxLines){const words=t.split('');let line='',lines=[];for(const ch of words){const test=line+ch;if(c.measureText(test).width>maxW&&line){lines.push(line);line=ch;}else line=test;}if(line)lines.push(line);if(lines.length>maxLines){lines=lines.slice(0,maxLines);lines[maxLines-1]=lines[maxLines-1].slice(0,-1)+'…';}lines.forEach((ln,i)=>c.fillText(ln,x,y+i*lh));return lines.length;}
 function fitSize(c,t,maxW,size,min){let s=size;while(s>min&&c.measureText(t).width>maxW){s-=2;c.font=c.font.replace(/\d+px/,s+'px');}return s;}
 function drawScoreRing(c,cx,cy,r,score,color){
   const frac=Math.max(0,Math.min(1,(Number(score)||0)/100)),ringR=r-13,lw=12;
-  c.save();let og=c.createLinearGradient(cx-r,cy-r,cx+r,cy+r);og.addColorStop(0,'rgba(167,139,250,0.55)');og.addColorStop(1,'rgba(34,211,238,0.55)');c.strokeStyle=og;c.lineWidth=3;c.beginPath();c.arc(cx,cy,r,0,7);c.stroke();c.restore();
-  c.beginPath();c.arc(cx,cy,ringR-lw/2-2,0,7);c.fillStyle='rgba(255,255,255,0.045)';c.fill();
-  c.beginPath();c.arc(cx,cy,ringR,0,7);c.strokeStyle='rgba(255,255,255,0.10)';c.lineWidth=lw;c.stroke();
+  c.save();let og=c.createLinearGradient(cx-r,cy-r,cx+r,cy+r);og.addColorStop(0,'rgba(10,132,255,0.5)');og.addColorStop(1,'rgba(90,200,206,0.5)');c.strokeStyle=og;c.lineWidth=3;c.beginPath();c.arc(cx,cy,r,0,7);c.stroke();c.restore();
+  c.beginPath();c.arc(cx,cy,ringR-lw/2-2,0,7);c.fillStyle='rgba(255,255,255,0.5)';c.fill();
+  c.beginPath();c.arc(cx,cy,ringR,0,7);c.strokeStyle='rgba(10,132,255,0.14)';c.lineWidth=lw;c.stroke();
   if(frac>0.01){c.save();c.shadowColor=color;c.shadowBlur=16;c.beginPath();c.arc(cx,cy,ringR,-Math.PI/2,-Math.PI/2+frac*2*Math.PI);c.strokeStyle=color;c.lineWidth=lw;c.lineCap='round';c.stroke();c.restore();}
-  c.font=`900 46px ${PF_FONT}`;c.fillStyle='#fff';c.textAlign='center';c.textBaseline='middle';c.fillText((Number(score)||0).toFixed(0),cx,cy-6);
-  c.font=`600 17px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.55)';c.fillText('综合分',cx,cy+22);
+  c.font=`900 46px ${PF_FONT}`;c.fillStyle='#1d2939';c.textAlign='center';c.textBaseline='middle';c.fillText((Number(score)||0).toFixed(0),cx,cy-6);
+  c.font=`600 17px ${PF_FONT}`;c.fillStyle='rgba(29,41,57,0.6)';c.fillText('综合分',cx,cy+22);
   c.textBaseline='alphabetic';c.textAlign='left';
 }
 function drawPoster(p){
   const m=posterData(p);
   const cv=document.createElement('canvas');cv.width=POSTER_W;cv.height=POSTER_H;const c=cv.getContext('2d');
   // ---- 背景 ----
-  let bg=c.createLinearGradient(0,0,0,POSTER_H);bg.addColorStop(0,'#241350');bg.addColorStop(0.45,'#1a0f38');bg.addColorStop(1,'#0f0a22');c.fillStyle=bg;c.fillRect(0,0,POSTER_W,POSTER_H);
-  let g1=c.createRadialGradient(540,-140,60,540,-140,780);g1.addColorStop(0,'rgba(124,58,237,0.42)');g1.addColorStop(1,'rgba(124,58,237,0)');c.fillStyle=g1;c.fillRect(0,0,POSTER_W,900);
-  let g2=c.createRadialGradient(560,2060,80,560,2060,760);g2.addColorStop(0,'rgba(34,211,238,0.14)');g2.addColorStop(1,'rgba(34,211,238,0)');c.fillStyle=g2;c.fillRect(0,1150,POSTER_W,770);
+  let bg=c.createLinearGradient(0,0,0,POSTER_H);bg.addColorStop(0,'#eef3fa');bg.addColorStop(0.45,'#e7edf7');bg.addColorStop(1,'#eaf0f9');c.fillStyle=bg;c.fillRect(0,0,POSTER_W,POSTER_H);
+  let g1=c.createRadialGradient(540,-140,60,540,-140,780);g1.addColorStop(0,'rgba(10,132,255,0.18)');g1.addColorStop(1,'rgba(10,132,255,0)');c.fillStyle=g1;c.fillRect(0,0,POSTER_W,900);
+  let g2=c.createRadialGradient(560,2060,80,560,2060,760);g2.addColorStop(0,'rgba(90,200,206,0.18)');g2.addColorStop(1,'rgba(90,200,206,0)');c.fillStyle=g2;c.fillRect(0,1150,POSTER_W,770);
   // 顶部/底部两条氛围光带（置于卡片下层，卡片半透明会透出淡淡紫调，不放散景圆点以免压住文字）
-  let g3=c.createRadialGradient(120,1180,40,120,1180,420);g3.addColorStop(0,'rgba(244,114,182,0.06)');g3.addColorStop(1,'rgba(244,114,182,0)');c.fillStyle=g3;c.fillRect(0,900,520,620);
+  let g3=c.createRadialGradient(120,1180,40,120,1180,420);g3.addColorStop(0,'rgba(255,149,0,0.10)');g3.addColorStop(1,'rgba(255,149,0,0)');c.fillStyle=g3;c.fillRect(0,900,520,620);
   // ---- 顶部标签 ----
-  c.font=`800 26px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.6)';c.textAlign='left';c.fillText('PUBG · 个人战绩海报',PAD,64);
+  c.font=`800 26px ${PF_FONT}`;c.fillStyle='rgba(29,41,57,0.62)';c.textAlign='left';c.fillText('PUBG · 个人战绩海报',PAD,64);
   c.textAlign='right';c.fillText(($('platformSel').selectedOptions[0].textContent||'STEAM'),POSTER_W-PAD,64);c.textAlign='left';
-  let dl=c.createLinearGradient(PAD,0,POSTER_W-PAD,0);dl.addColorStop(0,'rgba(167,139,250,0)');dl.addColorStop(0.5,'rgba(167,139,250,0.7)');dl.addColorStop(1,'rgba(167,139,250,0)');c.fillStyle=dl;c.fillRect(PAD,86,CW,2);
+  let dl=c.createLinearGradient(PAD,0,POSTER_W-PAD,0);dl.addColorStop(0,'rgba(10,132,255,0)');dl.addColorStop(0.5,'rgba(10,132,255,0.35)');dl.addColorStop(1,'rgba(10,132,255,0)');c.fillStyle=dl;c.fillRect(PAD,86,CW,2);
   // ---- 头像 / 昵称 / 徽章 / 马型 ----
   const acx=PAD+74,acy=200,ar=74;
   const hc=HORSE_C[p.horse.tier]||HORSE_C.N;
   drawScoreRing(c,acx,acy,ar,p.horse.score,hc);
   const nx=acx+ar+30;
-  c.font=`900 58px ${PF_FONT}`;fitSize(c,p.name,POSTER_W-PAD-nx-210,58,38);c.fillStyle='#fff';c.fillText(p.name,nx,182);
+  c.font=`900 58px ${PF_FONT}`;fitSize(c,p.name,POSTER_W-PAD-nx-210,58,38);c.fillStyle='#1d2939';c.fillText(p.name,nx,182);
   // 信息小胶囊
   const pills=[`生存 Lv.${num(m.sv.level)||'-'}`, m.lifeScope?'生涯口径':`近14天 ${m.recent.length} 场`, p.ban&&p.ban!=='Innocent'?p.ban:'状态正常'];
   let px=nx;c.font=`700 21px ${PF_FONT}`;
-  pills.forEach(t=>{const tw=c.measureText(t).width+30;if(px+tw>POSTER_W-PAD-210)return;pRR(c,px,200,tw,34,17);c.fillStyle='rgba(255,255,255,0.08)';c.fill();c.strokeStyle='rgba(255,255,255,0.16)';c.lineWidth=1;c.stroke();c.fillStyle='rgba(255,255,255,0.82)';c.textBaseline='middle';c.fillText(t,px+15,218);c.textBaseline='alphabetic';px+=tw+10;});
+  pills.forEach(t=>{const tw=c.measureText(t).width+30;if(px+tw>POSTER_W-PAD-210)return;pRR(c,px,200,tw,34,17);c.fillStyle='rgba(255,255,255,0.62)';c.fill();c.strokeStyle='rgba(255,255,255,0.95)';c.lineWidth=1;c.stroke();c.fillStyle='rgba(29,41,57,0.78)';c.textBaseline='middle';c.fillText(t,px+15,218);c.textBaseline='alphabetic';px+=tw+10;});
   // 徽章胶囊
   px=nx;c.font=`800 21px ${PF_FONT}`;
-  m.badges.forEach(t=>{const tw=c.measureText(t).width+28;if(px+tw>POSTER_W-PAD-210)return;pRR(c,px,244,tw,32,16);c.fillStyle='rgba(139,92,246,0.22)';c.fill();c.strokeStyle='rgba(167,139,250,0.5)';c.lineWidth=1;c.stroke();c.fillStyle='#cbb6ff';c.textBaseline='middle';c.fillText(t,px+14,261);c.textBaseline='alphabetic';px+=tw+9;});
+  m.badges.forEach(t=>{const tw=c.measureText(t).width+28;if(px+tw>POSTER_W-PAD-210)return;pRR(c,px,244,tw,32,16);c.fillStyle='rgba(10,132,255,0.12)';c.fill();c.strokeStyle='rgba(10,132,255,0.35)';c.lineWidth=1;c.stroke();c.fillStyle='#0a66d6';c.textBaseline='middle';c.fillText(t,px+14,261);c.textBaseline='alphabetic';px+=tw+9;});
   // 马型胶囊（右侧）
   const hw=190,hx=POSTER_W-PAD-hw,hy=162;
   c.save();c.shadowColor=hc;c.shadowBlur=18;pRR(c,hx,hy,hw,76,22);c.fillStyle=hexA(hc,0.16);c.fill();c.lineWidth=2;c.strokeStyle=hc;c.stroke();c.restore();
   c.font=`900 34px ${PF_FONT}`;c.fillStyle=hc;c.textAlign='center';c.textBaseline='middle';c.fillText(p.horse.label,hx+hw/2,hy+38);c.textBaseline='alphabetic';c.textAlign='left';
   // ---- 一句话总结 ----
   const sy=318,sh=122;pPanel(c,PAD,sy,CW,sh,24);
-  c.fillStyle='#a78bfa';c.font=`900 56px ${PF_FONT}`;c.textAlign='left';c.fillText('“',PAD+24,sy+58);
-  c.font=`800 31px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.96)';
+  c.fillStyle='#0a84ff';c.font=`900 56px ${PF_FONT}`;c.textAlign='left';c.fillText('“',PAD+24,sy+58);
+  c.font=`800 31px ${PF_FONT}`;c.fillStyle='#1d2939';
   pWrap(c,posterSlogan(m),PAD+72,sy+52,CW-100,42,2);
-  c.font=`600 19px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.5)';c.textAlign='right';c.fillText(`${m.lifeScope?'生涯':'近 '+m.R+' 场'}口径 · ${shortSeason(p.detail.rankSeason)||''}`,POSTER_W-PAD-22,sy+sh-18);c.textAlign='left';
+  c.font=`600 19px ${PF_FONT}`;c.fillStyle='rgba(29,41,57,0.5)';c.textAlign='right';c.fillText(`${m.lifeScope?'生涯':'近 '+m.R+' 场'}口径 · ${shortSeason(p.detail.rankSeason)||''}`,POSTER_W-PAD-22,sy+sh-18);c.textAlign='left';
   // ---- 核心指标 6 卡 ----
-  const metrics=[[m.kd.toFixed(2),'KD','#b79bff'],[Math.round(m.dpg)+'','场均伤害','#fb923c'],[Math.round(m.win*100)+'%','吃鸡率','#fbbf24'],
-    [Math.round(m.top*100)+'%','前十率','#34d399'],[m.dbpg.toFixed(2),'场均击倒','#f472b6'],[fmtMin(m.surv),'场均存活','#22d3ee']];
+  const metrics=[[m.kd.toFixed(2),'KD','#0a84ff'],[Math.round(m.dpg)+'','场均伤害','#f07e0e'],[Math.round(m.win*100)+'%','吃鸡率','#d98c00'],
+    [Math.round(m.top*100)+'%','前十率','#24a148'],[m.dbpg.toFixed(2),'场均击倒','#9b3fd4'],[fmtMin(m.surv),'场均存活','#0f9eaa']];
   const gy=462,gh=146,gap=16,gw=(CW-gap*2)/3;
   metrics.forEach((it,i)=>{const col=i%3,row=Math.floor(i/3),x=PAD+col*(gw+gap),y=gy+row*(gh+gap);
     pPanel(c,x,y,gw,gh,18);c.fillStyle=it[2];pRR(c,x,y,gw,5,3);c.fill();
     c.font=`900 52px ${PF_FONT}`;c.fillStyle=it[2];textCenter(c,it[0],x+gw/2,y+82);
-    c.font=`700 23px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.62)';textCenter(c,it[1],x+gw/2,y+120);});
+    c.font=`700 23px ${PF_FONT}`;c.fillStyle='rgba(29,41,57,0.62)';textCenter(c,it[1],x+gw/2,y+120);});
   // ---- 雷达 + 主力武器 ----
   const vy=800,vh=408,hw2=(CW-gap)/2;
   pPanel(c,PAD,vy,hw2,vh,22);drawCardTitle(c,PAD+24,vy+40,'能力雷达',m.lifeScope?'生涯':'近 '+m.R+' 场',PAD+hw2-24);
@@ -2554,7 +2554,7 @@ function drawPoster(p){
   // ---- 段位 ----
   const ry=1532,rh=148;pPanel(c,PAD,ry,CW,rh,22);
   const midX=POSTER_W/2;
-  c.strokeStyle='rgba(167,139,250,0.25)';c.lineWidth=1;c.beginPath();c.moveTo(midX,ry+26);c.lineTo(midX,ry+rh-26);c.stroke();
+  c.strokeStyle='rgba(10,132,255,0.18)';c.lineWidth=1;c.beginPath();c.moveTo(midX,ry+26);c.lineTo(midX,ry+rh-26);c.stroke();
   drawRankBlock(c,PAD+30,ry,'当前赛季',m.cur,m.cur?modeCn(m.cur.mode):'',false);
   drawRankBlock(c,midX+30,ry,'历史最高（含本赛季）',m.hist,m.hist?shortSeason(m.hist.season):'',true);
   // ---- 生涯数字条 ----
@@ -2562,65 +2562,65 @@ function drawPoster(p){
   const life=[[num(m.life.roundsPlayed),'总场次'],[num(m.life.wins),'总吃鸡'],[num(m.life.kills),'总击杀'],[m.lifeKd.toFixed(2),'生涯 KD'],[Math.round(m.life.longestKill)+'m','最远击杀']];
   const seg=CW/life.length;
   life.forEach((it,i)=>{const cx=PAD+seg*(i+0.5);
-    c.font=`900 40px ${PF_FONT}`;c.fillStyle=i===1?'#fbbf24':'#fff';textCenter(c,it[0],cx,ly+62);
-    c.font=`700 21px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.6)';textCenter(c,it[1],cx,ly+96);});
+    c.font=`900 40px ${PF_FONT}`;c.fillStyle=i===1?'#d98c00':'#1d2939';textCenter(c,it[0],cx,ly+62);
+    c.font=`700 21px ${PF_FONT}`;c.fillStyle='rgba(29,41,57,0.6)';textCenter(c,it[1],cx,ly+96);});
   // ---- 页脚 ----
-  c.font=`800 23px ${PF_FONT}`;c.fillStyle='rgba(199,184,255,0.9)';c.textAlign='left';c.fillText('PUBG 战绩查询 · godweiyang.com/pubg',PAD,1858);
+  c.font=`800 23px ${PF_FONT}`;c.fillStyle='#0a84ff';c.textAlign='left';c.fillText('PUBG 战绩查询 · godweiyang.com/pubg',PAD,1858);
   const now=new Date();const ds=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
-  c.font=`600 21px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.5)';c.textAlign='right';c.fillText(ds,POSTER_W-PAD,1858);c.textAlign='center';
-  c.font=`500 19px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.38)';c.fillText('数据来自 PUBG 官方 API · 近 14 天对局 + 生涯累计',POSTER_W/2,1896);c.textAlign='left';
+  c.font=`600 21px ${PF_FONT}`;c.fillStyle='rgba(29,41,57,0.55)';c.textAlign='right';c.fillText(ds,POSTER_W-PAD,1858);c.textAlign='center';
+  c.font=`500 19px ${PF_FONT}`;c.fillStyle='rgba(29,41,57,0.4)';c.fillText('数据来自 PUBG 官方 API · 近 14 天对局 + 生涯累计',POSTER_W/2,1896);c.textAlign='left';
   return cv;
 }
 function hexA(hex,a){const h=hex.replace('#','');const r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);return `rgba(${r},${g},${b},${a})`;}
 function textCenter(c,t,x,y){c.textAlign='center';c.fillText(t,x,y);c.textAlign='left';}
-function drawCardTitle(c,x,y,title,tag,rightX){c.font=`800 26px ${PF_FONT}`;c.fillStyle='#fff';c.textAlign='left';c.fillText(title,x,y);if(tag){c.font=`600 19px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.45)';c.textAlign='right';c.fillText(tag,rightX,y+4);c.textAlign='left';}}
+function drawCardTitle(c,x,y,title,tag,rightX){c.font=`800 26px ${PF_FONT}`;c.fillStyle='#1d2939';c.textAlign='left';c.fillText(title,x,y);if(tag){c.font=`600 19px ${PF_FONT}`;c.fillStyle='rgba(29,41,57,0.45)';c.textAlign='right';c.fillText(tag,rightX,y+4);c.textAlign='left';}}
 function drawRadar(c,cx,cy,R,m){
   const dims=[['突击',lerp1(m.kpg,0.2,2.2)],['火力',lerp1(m.dpg,60,400)],['精准',lerp1(m.hsr,0,0.45)],['生存',lerp1(m.top,0.2,0.9)],['支援',lerp1(m.apg+m.dbpg,0.1,2.2)],['韧性',lerp1(m.surv,700,1700)]];
   const N=dims.length,pt=(i,v)=>{const ang=-Math.PI/2+i*2*Math.PI/N;return [cx+Math.cos(ang)*R*v,cy+Math.sin(ang)*R*v];};
-  for(let ring=1;ring<=4;ring++){c.beginPath();for(let i=0;i<=N;i++){const [x,y]=pt(i%N,ring/4);i?c.lineTo(x,y):c.moveTo(x,y);}c.strokeStyle='rgba(255,255,255,0.12)';c.lineWidth=1.2;c.stroke();}
-  for(let i=0;i<N;i++){const [x,y]=pt(i,1);c.beginPath();c.moveTo(cx,cy);c.lineTo(x,y);c.strokeStyle='rgba(255,255,255,0.10)';c.stroke();}
+  for(let ring=1;ring<=4;ring++){c.beginPath();for(let i=0;i<=N;i++){const [x,y]=pt(i%N,ring/4);i?c.lineTo(x,y):c.moveTo(x,y);}c.strokeStyle='rgba(29,41,57,0.12)';c.lineWidth=1.2;c.stroke();}
+  for(let i=0;i<N;i++){const [x,y]=pt(i,1);c.beginPath();c.moveTo(cx,cy);c.lineTo(x,y);c.strokeStyle='rgba(29,41,57,0.10)';c.stroke();}
   c.beginPath();dims.forEach((d,i)=>{const [x,y]=pt(i,clamp01(d[1]));i?c.lineTo(x,y):c.moveTo(x,y);});c.closePath();
-  c.fillStyle='rgba(167,139,250,0.32)';c.fill();c.strokeStyle='#b79bff';c.lineWidth=3;c.stroke();
-  dims.forEach((d,i)=>{const [x,y]=pt(i,clamp01(d[1]));c.beginPath();c.arc(x,y,4.5,0,7);c.fillStyle='#fff';c.fill();c.strokeStyle='#8b5cf6';c.lineWidth=2;c.stroke();});
+  c.fillStyle='rgba(10,132,255,0.20)';c.fill();c.strokeStyle='#0a84ff';c.lineWidth=3;c.stroke();
+  dims.forEach((d,i)=>{const [x,y]=pt(i,clamp01(d[1]));c.beginPath();c.arc(x,y,4.5,0,7);c.fillStyle='#fff';c.fill();c.strokeStyle='#0a84ff';c.lineWidth=2;c.stroke();});
   dims.forEach((d,i)=>{const ang=-Math.PI/2+i*2*Math.PI/N,lx=cx+Math.cos(ang)*(R+26),ly=cy+Math.sin(ang)*(R+26);
-    c.font=`700 22px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.78)';c.textAlign=Math.abs(Math.cos(ang))<0.3?'center':(Math.cos(ang)>0?'left':'right');c.textBaseline='middle';c.fillText(d[0],lx,ly);c.textBaseline='alphabetic';});c.textAlign='left';
+    c.font=`700 22px ${PF_FONT}`;c.fillStyle='rgba(29,41,57,0.75)';c.textAlign=Math.abs(Math.cos(ang))<0.3?'center':(Math.cos(ang)>0?'left':'right');c.textBaseline='middle';c.fillText(d[0],lx,ly);c.textBaseline='alphabetic';});c.textAlign='left';
 }
 function drawWpns(c,x,y,w,wr){
-  if(!wr.length){c.font=`600 22px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.45)';c.fillText('暂无武器数据',x,y+120);return;}
+  if(!wr.length){c.font=`600 22px ${PF_FONT}`;c.fillStyle='rgba(29,41,57,0.42)';c.fillText('暂无武器数据',x,y+120);return;}
   const rh=52,maxK=wr[0].kills,nameW=118,tailW=64,bx=x+nameW,bw=w-nameW-tailW;
   wr.forEach((wp,i)=>{const yy=y+i*rh,ty=yy+16,col=WTYP[weaponType(wp.code)][1];
-    c.font=`700 21px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.9)';c.textBaseline='middle';let nm=wp.name;c.font=`700 21px ${PF_FONT}`;while(c.measureText(nm).width>nameW-8&&nm.length>1)nm=nm.slice(0,-1);c.fillText(nm,x,ty+1);
-    pRR(c,bx,ty,bw,16,8);c.fillStyle='rgba(255,255,255,0.08)';c.fill();
+    c.font=`700 21px ${PF_FONT}`;c.fillStyle='rgba(29,41,57,0.88)';c.textBaseline='middle';let nm=wp.name;c.font=`700 21px ${PF_FONT}`;while(c.measureText(nm).width>nameW-8&&nm.length>1)nm=nm.slice(0,-1);c.fillText(nm,x,ty+1);
+    pRR(c,bx,ty,bw,16,8);c.fillStyle='rgba(29,41,57,0.07)';c.fill();
     const wv=Math.max(8,bw*(wp.kills/maxK));pRR(c,bx,ty,wv,16,8);c.fillStyle=col;c.fill();
-    c.font=`800 22px ${PF_FONT}`;c.fillStyle='#fff';c.textAlign='right';c.fillText(wp.kills,x+w,ty+1);c.textAlign='left';c.textBaseline='alphabetic';});
+    c.font=`800 22px ${PF_FONT}`;c.fillStyle='#1d2939';c.textAlign='right';c.fillText(wp.kills,x+w,ty+1);c.textAlign='left';c.textBaseline='alphabetic';});
 }
 function drawTrend(c,x,y,w,h,recent){
   const px=x+40,pw=w-40-16,py=y+16,ph=h-58,base=py+ph;
-  c.strokeStyle='rgba(255,255,255,0.18)';c.lineWidth=1.5;c.beginPath();c.moveTo(px,base);c.lineTo(px+pw,base);c.stroke();
+  c.strokeStyle='rgba(29,41,57,0.18)';c.lineWidth=1.5;c.beginPath();c.moveTo(px,base);c.lineTo(px+pw,base);c.stroke();
   const b=dailyBuckets(recent);
-  if(b.length<2){c.font=`600 22px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.45)';c.textAlign='center';c.fillText('近期对局不足，暂无走势',x+w/2,y+h/2);c.textAlign='left';return;}
+  if(b.length<2){c.font=`600 22px ${PF_FONT}`;c.fillStyle='rgba(29,41,57,0.42)';c.textAlign='center';c.fillText('近期对局不足，暂无走势',x+w/2,y+h/2);c.textAlign='left';return;}
   const n=b.length,ak=b.map(d=>d.kills/d.n),ad=b.map(d=>d.dmg/d.n);
   const maxK=Math.max(1,...ak),maxD=Math.max(1,...ad);
   const slot=pw/n,bw=Math.min(42,slot*0.56);
   const dpts=[];
   b.forEach((d,i)=>{
     const cxp=px+slot*(i+0.5),kh=(ak[i]/maxK)*ph*0.72,bh=Math.max(ak[i]?4:0,kh);
-    pRR(c,cxp-bw/2,base-bh,bw,bh,Math.min(7,bw/2));c.fillStyle=d.wins>0?'#fbbf24':'#34d399';if(ak[i]>0)c.fill();
-    if(ak[i]>0){c.font=`700 16px ${PF_FONT}`;c.textAlign='center';c.lineWidth=3;c.strokeStyle='rgba(15,10,34,0.9)';c.strokeText(ak[i].toFixed(1),cxp,base-bh-6);c.fillStyle='rgba(255,255,255,0.92)';c.fillText(ak[i].toFixed(1),cxp,base-bh-6);}
-    c.font=`500 15px ${PF_FONT}`;c.textAlign='center';c.fillStyle=d.wins>0?'#fbbf24':'rgba(255,255,255,0.52)';
+    pRR(c,cxp-bw/2,base-bh,bw,bh,Math.min(7,bw/2));c.fillStyle=d.wins>0?'#d98c00':'#34c759';if(ak[i]>0)c.fill();
+    if(ak[i]>0){c.font=`700 16px ${PF_FONT}`;c.textAlign='center';c.lineWidth=3;c.strokeStyle='rgba(255,255,255,0.9)';c.strokeText(ak[i].toFixed(1),cxp,base-bh-6);c.fillStyle='#1d2939';c.fillText(ak[i].toFixed(1),cxp,base-bh-6);}
+    c.font=`500 15px ${PF_FONT}`;c.textAlign='center';c.fillStyle=d.wins>0?'#d98c00':'rgba(29,41,57,0.55)';
     c.fillText((d.date.getMonth()+1)+'/'+d.date.getDate(),cxp,base+21);c.textAlign='left';
     dpts.push([cxp,base-(ad[i]/maxD)*ph]);});
-  c.beginPath();dpts.forEach((pt2,i)=>i?c.lineTo(pt2[0],pt2[1]):c.moveTo(pt2[0],pt2[1]));c.strokeStyle='#fb923c';c.lineWidth=3;c.lineJoin='round';c.stroke();
-  dpts.forEach(pt2=>{c.beginPath();c.arc(pt2[0],pt2[1],3.5,0,7);c.fillStyle='#fb923c';c.fill();c.strokeStyle='#1a0f38';c.lineWidth=1.5;c.stroke();});
+  c.beginPath();dpts.forEach((pt2,i)=>i?c.lineTo(pt2[0],pt2[1]):c.moveTo(pt2[0],pt2[1]));c.strokeStyle='#f07e0e';c.lineWidth=3;c.lineJoin='round';c.stroke();
+  dpts.forEach(pt2=>{c.beginPath();c.arc(pt2[0],pt2[1],3.5,0,7);c.fillStyle='#f07e0e';c.fill();c.strokeStyle='#ffffff';c.lineWidth=1.5;c.stroke();});
 }
 function drawRankBlock(c,x,y,label,rk,sub,isHist){
-  c.font=`700 22px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.55)';c.textAlign='left';c.fillText(label,x,y+40);
+  c.font=`700 22px ${PF_FONT}`;c.fillStyle='rgba(29,41,57,0.55)';c.textAlign='left';c.fillText(label,x,y+40);
   if(rk&&rk.tier){const col=tierColor(rk.tier);
     c.font=`900 46px ${PF_FONT}`;c.fillStyle=col;c.fillText(tierCn(rk.tier)+' '+(ROMAN[rk.sub]||rk.sub||''),x,y+92);
-    c.font=`700 22px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.66)';c.fillText((isHist?'':'模式 '+sub+' · ')+(rk.rp||0)+' RP'+(isHist&&sub?' · '+sub:''),x,y+124);
+    c.font=`700 22px ${PF_FONT}`;c.fillStyle='rgba(29,41,57,0.66)';c.fillText((isHist?'':'模式 '+sub+' · ')+(rk.rp||0)+' RP'+(isHist&&sub?' · '+sub:''),x,y+124);
   }else{
-    c.font=`900 42px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.4)';c.fillText(isHist?'暂无记录':'未定级',x,y+92);
-    c.font=`600 21px ${PF_FONT}`;c.fillStyle='rgba(255,255,255,0.4)';c.fillText(isHist?'还没有竞技赛季记录':'完成竞技定级赛后显示',x,y+124);}
+    c.font=`900 42px ${PF_FONT}`;c.fillStyle='rgba(29,41,57,0.42)';c.fillText(isHist?'暂无记录':'未定级',x,y+92);
+    c.font=`600 21px ${PF_FONT}`;c.fillStyle='rgba(29,41,57,0.42)';c.fillText(isHist?'还没有竞技赛季记录':'完成竞技定级赛后显示',x,y+124);}
 }
 let __posterCanvas=null;
 function openPoster(){
