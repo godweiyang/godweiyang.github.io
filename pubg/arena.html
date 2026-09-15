@@ -285,7 +285,7 @@ document.getElementById('genAt').textContent='舱体生成 '+(dateOf(P.ts)||new 
 function gridAxis(ctx,w,h,pad,xl,yl,xlab,ylab,fmtX,fmtY){ctx.strokeStyle='rgba(120,150,200,.12)';ctx.fillStyle='#5b6d8f';ctx.font='9.5px sans-serif';ctx.lineWidth=1;
  for(let i=0;i<=4;i++){const y=pad.t+(h-pad.t-pad.b)*(1-i/4);ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(w-pad.r,y);ctx.stroke();ctx.textAlign='right';ctx.textBaseline='middle';ctx.fillText(fmtY(yl[0]+(yl[1]-yl[0])*i/4),pad.l-5,y);}
  for(let i=0;i<=4;i++){const x=pad.l+(w-pad.l-pad.r)*i/4;ctx.textAlign='center';ctx.textBaseline='top';ctx.fillText(fmtX(xl[0]+(xl[1]-xl[0])*i/4),x,h-pad.b+5);}
- ctx.fillStyle='#7e93b5';ctx.font='10px sans-serif';ctx.textAlign='center';ctx.fillText(xlab,(pad.l+w-pad.r)/2,h-2);
+ ctx.fillStyle='#7e93b5';ctx.font='10px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(xlab,(pad.l+w-pad.r)/2,h-13);
  ctx.save();ctx.translate(11,(pad.t+h-pad.b)/2);ctx.rotate(-Math.PI/2);ctx.fillText(ylab,0,0);ctx.restore();}
 
 /* 1) 3D 战斗星系（持续旋转） */
@@ -303,12 +303,20 @@ const galaxy=(function(){
   const f=3.2,s=f/(f-z2*0.9);return{x:W/2+x*Math.min(W,H)*0.34*s,y:H/2-y*Math.min(W,H)*0.34*s,s,z:z2};}
  function draw(){size();ctx.clearRect(0,0,W,H);const cx=W/2,cy=H/2,R=Math.min(W,H)*0.34;
   // 轴框架（立方体参考）
-  ctx.strokeStyle='rgba(120,150,200,.14)';ctx.lineWidth=1;
+  ctx.strokeStyle='rgba(120,150,200,.08)';ctx.lineWidth=1;
   [[[-1,-1,-1],[1,-1,-1]],[[1,-1,-1],[1,1,-1]],[[1,1,-1],[-1,1,-1]],[[-1,1,-1],[-1,-1,-1]],[[-1,-1,1],[1,-1,1]],[[1,-1,1],[1,1,1]],[[1,1,1],[-1,1,1]],[[-1,1,1],[-1,-1,1]],[[-1,-1,-1],[-1,-1,1]],[[1,-1,-1],[1,-1,1]],[[1,1,-1],[1,1,1]],[[-1,1,-1],[-1,1,1]]].forEach(e=>{const a=project({x:e[0][0],y:e[0][1],z:e[0][2]},ang),b=project({x:e[1][0],y:e[1][1],z:e[1][2]},ang);ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();});
-  // 轴标签
-  ctx.fillStyle='#5b729a';ctx.font='10px sans-serif';ctx.textAlign='center';
-  const ax=(v,nm,col)=>{const q=project(v,ang);ctx.fillStyle=col;ctx.fillText(nm,q.x,q.y);};
-  ax({x:1.15,y:-1,z:-1},'存活→','#34d399');ax({x:-1,y:1.15,z:-1},'伤害→','#fb7185');ax({x:-1,y:-1,z:1.15},'名次好→','#fbbf24');
+  // 三个主轴：从中心出发，箭头方向随旋转投影
+  const axesDef=[{e:{x:1,y:0,z:0},n:'存活',c:'#34d399'},{e:{x:0,y:1,z:0},n:'伤害',c:'#fb7185'},{e:{x:0,y:0,z:1},n:'名次',c:'#fbbf24'}];
+  const O3=project({x:0,y:0,z:0},ang);
+  function axisArrow(p1,p2,col){ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=1.7;
+   ctx.beginPath();ctx.moveTo(p1.x,p1.y);ctx.lineTo(p2.x,p2.y);ctx.stroke();
+   let dx=p2.x-p1.x,dy=p2.y-p1.y,L=Math.hypot(dx,dy)||1;dx/=L;dy/=L;const px=-dy,py=dx,al=9,aw=4.4;
+   ctx.beginPath();ctx.moveTo(p2.x,p2.y);ctx.lineTo(p2.x-dx*al+px*aw,p2.y-dy*al+py*aw);ctx.lineTo(p2.x-dx*al-px*aw,p2.y-dy*al-py*aw);ctx.closePath();ctx.fill();}
+  axesDef.forEach(a=>{const neg=project({x:-a.e.x,y:-a.e.y,z:-a.e.z},ang),pos=project(a.e,ang);
+   ctx.strokeStyle=a.c+'2e';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(neg.x,neg.y);ctx.lineTo(O3.x,O3.y);ctx.stroke();
+   axisArrow(O3,pos,a.c);
+   let dx=pos.x-O3.x,dy=pos.y-O3.y,L=Math.hypot(dx,dy)||1;const lx=pos.x+dx/L*14,ly=pos.y+dy/L*14;
+   ctx.font='bold 10.5px sans-serif';ctx.textAlign=Math.abs(dx/L)<0.4?'center':(dx>0?'left':'right');ctx.textBaseline='middle';ctx.fillStyle=a.c;ctx.shadowColor=a.c;ctx.shadowBlur=6;ctx.fillText(a.n,lx,ly);ctx.shadowBlur=0;});
   const pr=pts.map((p,i)=>Object.assign(project(p,ang),{p,i}));
   // 轨迹线（时间顺序，渐隐）
   ctx.lineWidth=1.2;for(let i=1;i<pr.length;i++){const a=pr[i-1],b=pr[i];const al=0.10+0.18*(i/pr.length);ctx.strokeStyle=`rgba(56,189,248,${al})`;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}
@@ -479,7 +487,9 @@ setupCanvas('cvTree',(ctx,w,h,p)=>{
  const pp=easeOut(p),top=pad+16,areaH=h-top-pad,areaW=w-pad*2;let gx=pad;
  gArr.forEach(g=>{const gw=areaW*(g.sum/tot);const col=(WTYP[g.t]||WTYP.oth)[1];
   ctx.fillStyle=col+'14';ctx.fillRect(gx,pad,Math.max(2,gw-2),h-pad*2);
-  ctx.fillStyle=col;ctx.font=(gw<54?'bold 8.5px':'bold 10px')+' sans-serif';ctx.textAlign='left';ctx.textBaseline='top';ctx.fillText((WSHORT[g.t]||'其他')+' '+g.sum,gx+3,pad+2);
+  const glbl=(WSHORT[g.t]||'其他')+' '+g.sum;
+  ctx.fillStyle=col;ctx.font=(gw<54?'bold 8.5px':'bold 10px')+' sans-serif';ctx.textBaseline='top';
+  if(ctx.measureText(glbl).width>gw-5){ctx.textAlign='right';ctx.fillText(glbl,gx+gw-3,pad+2);}else{ctx.textAlign='left';ctx.fillText(glbl,gx+3,pad+2);}
   let y=top;g.arr.forEach(x=>{const bh=areaH*(x.kills/g.sum)*pp;const hsr=x.kills?x.hs/x.kills:0;
    const alpha=Math.round(clamp(0.30+hsr*0.95,0.30,0.98)*255).toString(16).padStart(2,'0');
    const hx=gx+1,hw=Math.max(2,gw-4),hh=Math.max(1.5,bh-1.5);
