@@ -2187,9 +2187,9 @@ function renderMatchList(){
   el.innerHTML=ids.map(id=>{
     const g=gameFor(p,id);
     if(!g){
-      // matchCache 里还没有该 id（后台尚未拉到）→ 加载中骨架；已判定失败(null)/有数据但无本人 stats → 静态不可用行
+      // matchCache 里还没有该 id（后台尚未拉到）→ 加载中骨架；已判定失败(null)/有数据但无本人 stats → 不渲染占位卡片
       if(matchCache[id]===undefined)return `<div class="mrow pending"><div class="mhead"><span class="mtitle"><span class="skel"></span> 对局详情加载中…</span></div></div>`;
-      return `<div class="mrow failed"><div class="mhead"><span class="mtitle" style="color:var(--sub)">该场明细暂不可用（官方 CDN 缓存限制）</span></div></div>`;
+      return '';
     }
     const cls=g.won?'w1':(g.rank<=10?'t10':'other');
     const h=matchHorse(g);
