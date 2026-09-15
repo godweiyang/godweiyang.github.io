@@ -413,6 +413,8 @@ textarea{width:100%;min-height:96px;resize:vertical;line-height:1.7;font-size:15
 .s-table tr.me{background:var(--pri-softer);font-weight:700}
 .s-table .wrapcell{white-space:normal;min-width:120px}
 .s-table{min-width:600px}
+.s-table a.plink{color:var(--pri);text-decoration:none;font-weight:700;cursor:pointer;border-radius:6px;padding:1px 2px;transition:background .18s ease}
+.s-table a.plink:hover{text-decoration:underline;background:var(--pri-soft)}
 .sg > div:not([class]):has(> table.s-table){overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:rgba(120,140,180,.45) transparent;border-radius:10px}
 .sg > div:not([class]):has(> table.s-table)::-webkit-scrollbar{height:6px}
 .sg > div:not([class]):has(> table.s-table)::-webkit-scrollbar-thumb{background:rgba(120,140,180,.45);border-radius:3px}
@@ -1848,6 +1850,7 @@ const S={name:'',data:null,weaponFilter:'all',wpnOpen:false,openMatch:null,runni
   autoBusy:false,    // 后台是否正在预取剩余对局详情
   autoRun:false,     // 后台预取是否应继续（false=暂停 / 被新查询取代）
   autoTick:0,        // 预取代次，++ 即让正在跑的后台循环作废
+  gen:0,             // 单人查询世代号，切换/前进后退时 ++ 作废旧请求，避免在途响应覆盖新玩家结果
   autoDone:0,autoTotal:0}; // 预取进度（已完成 / 总数）
 const SINGLE_PAGE=25;    // 单人对局：每页场次，也是后台预取每批大小（/matches 详情不计限流）
 const SINGLE_KEEP=60;    // 刷新持久化时最多保留最新多少场明细（含全队战报，控制 localStorage 体积）；全部 matchId 仍完整保存
@@ -1870,7 +1873,8 @@ async function runSingle(name){
   name=(name||$('sInput').value||'').trim();
   if(!name){toast('请输入昵称','e');return;}
   if(!getKey()){toast('请先在顶部填写 API Key','e');return;}
-  if(S.running)return;
+  const myGen=++S.gen;                 // 切换玩家/浏览器前进后退即进入新世代，在途旧请求的结果一律作废、不得渲染
+  const stale=()=>myGen!==S.gen;
   $('sInput').value=name;S.name=name;S.data=null;S.openMatch=null;resetWait();softResetKeyPool();
   S.autoTick++;S.autoRun=false;S.autoBusy=false;S.page=1;S.autoDone=0;S.autoTotal=0; // 终止上一个玩家的后台预取
   S.running=true;$('sBtn').disabled=true;
@@ -1878,13 +1882,16 @@ async function runSingle(name){
   if(sTimer)clearInterval(sTimer);sTimer=setInterval(renderSingleWait,1000);
   try{
     const p=await fetchPlayerByName(name);
+    if(stale())return;
     if(!p){$('singleRes').innerHTML=`<div class="sg empty">未找到玩家「${esc(name)}」，请检查昵称与所选平台。</div>`;return;}
     p.detail=await fetchPlayerCore(p.id);
+    if(stale())return;
     // 跨赛季历史最高段位：core 一拿到就异步查（走限流队列、多 Key 轮询），不阻塞对局明细，完成后补渲染
     p.histLoading=true;
-    fetchHistBest(p.id,12,p.detail.ranked,p.detail.rankSeason).then(res=>{p.histBest=res.best;p.histByMode=res.byMode;p.histLoading=false;if(S.data===p){renderSingle();persistSingle();}})
-      .catch(e=>{p.histLoading=false;if(S.data===p&&!(e instanceof CancelledError))renderSingle();});
+    fetchHistBest(p.id,12,p.detail.ranked,p.detail.rankSeason).then(res=>{if(stale())return;p.histBest=res.best;p.histByMode=res.byMode;p.histLoading=false;if(S.data===p){renderSingle();persistSingle();}})
+      .catch(e=>{if(stale())return;p.histLoading=false;if(S.data===p&&!(e instanceof CancelledError))renderSingle();});
     const [surv,clan]=await Promise.all([fetchPlayerSurvival(p.id),p.clanId?fetchClan(p.clanId):Promise.resolve(null)]);
+    if(stale())return;
     p.detail.surv=surv;p.clan=clan;
     // 近期对局：官方 /players 一次返回近 14 天全部 matchId。首屏只拉最新 SINGLE_PAGE 场详情立即出第 1 页，
     // 其余场次由 startAutoFetch 在后台按页自动预取（/matches 不计限流、按 id 缓存），拉完后统计升级为完整 14 天口径
@@ -1892,19 +1899,22 @@ async function runSingle(name){
     const ids=p.allIds.slice(0,SINGLE_PAGE);
     p.loadedN=ids.length;
     await pool(ids,8,async id=>{await fetchMatch(id);});
+    if(stale())return;
     p.recent=[];
     mergeRecent(p,ids);
     p.matchTotal=ids.length;p.matchFail=countFail(p);
     p.agg=p.recent.length?aggGames(p.recent):lifeAgg(p.detail);p.horse=horseOf(p.agg);
+    if(stale())return;
     S.data=p;S.page=1;S.autoDone=p.loadedN;S.autoTotal=p.allIds.length;
     renderSingle();persistSingle();
     toast(p.matchFail?`首屏已加载，${p.matchFail} 场受 CDN 限制，其余对局后台加载中`:'已出最近对局，正在后台加载完整 14 天',p.matchFail?'w':'s');
     startAutoFetch(p);
   }catch(e){
+    if(stale())return; // 被新一次切换取代的旧请求，其报错静默、不覆盖当前界面
     if(e instanceof CancelledError){/* 任务被停止，静默 */}
     else if(e instanceof RateLimitError){$('singleRes').innerHTML=`<div class="sg"><div class="rate-banner">⚠️ 所有 Key 均触发限流、自动重试仍未恢复，请稍后再点「查询」；多填几个 Key 可显著减少等待。</div></div>`;}
     else $('singleRes').innerHTML=`<div class="sg empty" style="color:var(--red)">查询失败：${esc(e.message)}</div>`;
-  }finally{if(sTimer){clearInterval(sTimer);sTimer=null;}S.running=false;$('sBtn').disabled=false;}
+  }finally{if(!stale()){if(sTimer){clearInterval(sTimer);sTimer=null;}S.running=false;$('sBtn').disabled=false;}}
 }
 // 从 matchCache 装配单场对局（含本队精简战报，随结果持久化、刷新后可离线展开）；未取到详情返回 null
 function buildGame(p,id){
@@ -2230,7 +2240,7 @@ function matchReport(p,g){
   if(g.report){
     const r=g.report;
     const rows=r.members.map(m=>`<tr class="${m.me?'me':''}">
-      <td class="wrapcell">${esc(m.name)}${m.me?'（我）':''}</td>
+      <td class="wrapcell">${m.me?esc(m.name)+'（我）':`<a class="plink" href="${singleHref(m.name)}">${esc(m.name)}</a>`}</td>
       <td>${num(r.rank)}</td><td>${m.kills}</td><td>${m.dbno}</td><td>${m.assists}</td>
       <td>${Math.round(m.dmg)}</td><td>${m.hs}</td><td>${m.streak||0}</td><td>${m.killPlace||'—'}</td>
       <td>${m.revives}</td><td>${m.heals}</td><td>${m.boosts||0}</td><td>${fmtMin(m.time)}</td>
@@ -2246,8 +2256,10 @@ function matchReport(p,g){
   const members=roster?roster.members:[p.id];
   const rows=members.map(acc=>{
     const s=mt.parts[acc]||{},me=acc===p.id;
+    const nm=s.name||'';
+    const nameCell=me?esc(nm||acc)+'（我）':(nm?`<a class="plink" href="${singleHref(nm)}">${esc(nm)}</a>`:esc(acc));
     return `<tr class="${me?'me':''}">
-      <td class="wrapcell">${esc(s.name||acc)}${me?'（我）':''}</td>
+      <td class="wrapcell">${nameCell}</td>
       <td>${num(roster.rank)}</td><td>${num(s.kills)}</td><td>${num(s.DBNOs)}</td><td>${num(s.assists)}</td>
       <td>${Math.round(num(s.damageDealt))}</td><td>${num(s.headshotKills)}</td><td>${num(s.killStreaks)}</td><td>${num(s.killPlace)||'—'}</td>
       <td>${num(s.revives)}</td><td>${num(s.heals)}</td><td>${num(s.boosts)}</td><td>${fmtMin(num(s.timeSurvived))}</td>
@@ -2268,7 +2280,7 @@ function routeView(){
   if(single){
     const m=location.hash.match(/name=([^&]+)/);
     const name=m?decodeURIComponent(m[1]):'';
-    if(name&&name!==S.name){$('sInput').value=name;runSingle(name);}
+    if(name&&name!==S.name){$('sInput').value=name;window.scrollTo(0,0);runSingle(name);}
   }
 }
 window.addEventListener('hashchange',routeView);
@@ -2634,10 +2646,32 @@ routeView();
 </script>
 
 
+
 <script>
 (function(){
   if(window.__motionInit)return;window.__motionInit=1;
   var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* 弹窗打开时锁定背景滚动（样式随 JS 注入，三端统一） */
+  try{
+    var ls=document.createElement('style');
+    ls.textContent='html.modal-open,body.modal-open{overflow:hidden!important;overscroll-behavior:none}.kpmask,.mask,.pomask{overscroll-behavior:contain}';
+    (document.head||document.documentElement).appendChild(ls);
+  }catch(e){}
+  /* 锁定/解锁背景滚动，引用计数支持多弹窗；同源 iframe 内弹窗连带锁外层主文档 */
+  function lockDocs(){
+    var docs=[document];
+    try{if(window.parent&&window.parent!==window&&window.parent.document)docs.push(window.parent.document);}catch(e){}
+    return docs;
+  }
+  function setDocLock(doc,on){
+    var el=doc.documentElement,b=doc.body;
+    [el,b].forEach(function(n){if(!n)return;
+      n.__mlock=(n.__mlock||0)+(on?1:-1);
+      if(n.__mlock<0)n.__mlock=0;
+      n.classList.toggle('modal-open',n.__mlock>0);
+    });
+  }
+  function lockScroll(on){lockDocs().forEach(function(d){setDocLock(d,on);});}
   var RV_SEL='.card,.sg,.mrow,.mm,.match,.rank-card,.stat-box,.fgroup';
   var MODAL_SEL='#keyPoolRoot,#lolpoolRoot,#posterRoot';
   var MODAL_CARD='.kpcard,.card,.pocard';
@@ -2685,10 +2719,11 @@ routeView();
     if(!root||root.__modalWired)return;root.__modalWired=1;
     var card=root.querySelector(MODAL_CARD);
     var was=root.classList.contains('show'),closing=false,timer=null;
-    function fin(){closing=false;root.classList.remove('closing');root.classList.remove('show');was=false;}
+    if(was)lockScroll(true);
+    function fin(){closing=false;root.classList.remove('closing');root.classList.remove('show');was=false;lockScroll(false);}
     new MutationObserver(function(){
       var now=root.classList.contains('show');
-      if(now&&!was){closing=false;root.classList.remove('closing');was=true;return;}
+      if(now&&!was){closing=false;root.classList.remove('closing');was=true;lockScroll(true);return;}
       if(!now&&was&&!closing){
         closing=true;root.classList.add('show','closing');was=true;
         if(timer)clearTimeout(timer);timer=setTimeout(fin,340);
