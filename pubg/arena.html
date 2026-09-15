@@ -296,14 +296,14 @@ const galaxy=(function(){
   x:clamp(g.time/maxT,0,1)*2-1,
   y:clamp(g.dmg/maxD,0,1)*2-1,
   z:clamp((101-clamp(g.rank,1,100))/100,0,1)*2-1}));
- let ang=0.6,tilt=0.42,drag=null,hover=-1;
+ let ang=0.75,tilt=0.58,drag=null,hover=-1;
  function size(){W=cv.clientWidth;H=fixedH;cv.width=W*DPR;cv.height=H*DPR;cv.style.height=H+'px';ctx.setTransform(DPR,0,0,DPR,0,0);}
  function project(p,a){const ca=Math.cos(a),sa=Math.sin(a),ct=Math.cos(tilt),st=Math.sin(tilt);
   let x=p.x*ca-p.z*sa,z1=p.x*sa+p.z*ca;let y=p.y*ct-z1*st,z2=p.y*st+z1*ct;
-  const f=3.2,s=f/(f-z2*0.9);return{x:W/2+x*Math.min(W,H)*0.34*s,y:H/2-y*Math.min(W,H)*0.34*s,s,z:z2};}
+  const f=6,s=f/(f-z2*0.55);return{x:W/2+x*Math.min(W,H)*0.34*s,y:H/2-y*Math.min(W,H)*0.34*s,s,z:z2};}
  function draw(){size();ctx.clearRect(0,0,W,H);const cx=W/2,cy=H/2,R=Math.min(W,H)*0.34;
   // 轴框架（立方体参考）
-  ctx.strokeStyle='rgba(120,150,200,.08)';ctx.lineWidth=1;
+  ctx.strokeStyle='rgba(130,162,210,.16)';ctx.lineWidth=1;
   [[[-1,-1,-1],[1,-1,-1]],[[1,-1,-1],[1,1,-1]],[[1,1,-1],[-1,1,-1]],[[-1,1,-1],[-1,-1,-1]],[[-1,-1,1],[1,-1,1]],[[1,-1,1],[1,1,1]],[[1,1,1],[-1,1,1]],[[-1,1,1],[-1,-1,1]],[[-1,-1,-1],[-1,-1,1]],[[1,-1,-1],[1,-1,1]],[[1,1,-1],[1,1,1]],[[-1,1,-1],[-1,1,1]]].forEach(e=>{const a=project({x:e[0][0],y:e[0][1],z:e[0][2]},ang),b=project({x:e[1][0],y:e[1][1],z:e[1][2]},ang);ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();});
   // 三个主轴：从中心出发，箭头方向随旋转投影
   const axesDef=[{e:{x:1,y:0,z:0},n:'存活',c:'#34d399'},{e:{x:0,y:1,z:0},n:'伤害',c:'#fb7185'},{e:{x:0,y:0,z:1},n:'名次',c:'#fbbf24'}];
@@ -325,7 +325,7 @@ const galaxy=(function(){
   const tnow=performance.now()/1000;
   pr.forEach(o=>{const g=o.p.g;const kr=Math.sqrt((g.kills+0.4)/Math.max(...M.map(x=>x.kills),1));const rad=3.5+kr*11;
    const col=g.rank===1?'#fbbf24':HCOL[g.horse]||'#38bdf8';const hov=(o.i===hover);
-   ctx.globalAlpha=0.55+0.45*o.s;
+   ctx.globalAlpha=0.5+0.5*((o.z+1)/2);
    if(g.rank===1){const pulse=4+Math.sin(tnow*3+o.i)*2.5;ctx.beginPath();ctx.arc(o.x,o.y,rad+pulse,0,7);ctx.strokeStyle='rgba(251,191,36,.5)';ctx.lineWidth=1.4;ctx.stroke();}
    const grd=ctx.createRadialGradient(o.x,o.y,0,o.x,o.y,rad);grd.addColorStop(0,col);grd.addColorStop(1,col+'22');
    ctx.beginPath();ctx.arc(o.x,o.y,rad,0,7);ctx.fillStyle=grd;ctx.shadowColor=col;ctx.shadowBlur=hov?22:9;ctx.fill();
