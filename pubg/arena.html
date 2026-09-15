@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>PUBG 作战数据舱</title>
+<style>
+:root{
+  --bg0:#04060c;
+  --cyan:#22d3ee; --blue:#38bdf8; --gold:#fbbf24; --green:#34d399;
+  --orange:#fb923c; --red:#fb7185; --violet:#a78bfa;
+  --txt:#dbe7ff; --sub:#8298bd; --weak:#5b6d8f;
+  --panel:linear-gradient(160deg,rgba(22,33,58,.68),rgba(9,15,29,.52));
+  --brd:rgba(96,168,255,.16);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:var(--bg0);color:var(--txt);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+body{min-height:100vh;background:
+  radial-gradient(1100px 620px at 12% -8%,rgba(34,211,238,.14),transparent 60%),
+  radial-gradient(1000px 640px at 92% -4%,rgba(99,102,241,.16),transparent 60%),
+  radial-gradient(900px 700px at 50% 118%,rgba(56,189,248,.10),transparent 62%),
+  linear-gradient(180deg,#05080f,#04060c 60%)}
+#bgFx{position:fixed;inset:0;z-index:0;pointer-events:none}
+.wrap{position:relative;z-index:1;max-width:1580px;margin:0 auto;padding:22px 26px 40px}
+header.hud{display:flex;align-items:center;gap:20px;flex-wrap:wrap;
+  padding:18px 22px;border-radius:18px;background:var(--panel);border:1px solid var(--brd);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.03),0 22px 60px rgba(0,0,0,.5);
+  position:relative;overflow:hidden;animation:rise .7s cubic-bezier(.2,.8,.2,1) both}
+header.hud::after{content:"";position:absolute;left:0;top:0;height:2px;width:100%;
+  background:linear-gradient(90deg,transparent,var(--cyan),var(--violet),transparent);opacity:.7;animation:sweep 4.2s linear infinite}
+@keyframes sweep{0%{transform:translateX(-60%)}100%{transform:translateX(60%)}}
+.hud-l{flex:1;min-width:260px}
+.crumb{font-size:11.5px;letter-spacing:3px;color:var(--cyan);text-transform:uppercase;opacity:.85}
+.pname{font-size:34px;font-weight:800;letter-spacing:.5px;line-height:1.15;margin:6px 0 8px;
+  background:linear-gradient(92deg,#fff,#bfe4ff 55%,#8fd3ff);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 26px rgba(56,189,248,.25)}
+.chips{display:flex;gap:7px;flex-wrap:wrap}
+.chip{font-size:11.5px;padding:4px 10px;border-radius:999px;border:1px solid rgba(120,170,255,.22);background:rgba(56,189,248,.08);color:#bcd6f5;letter-spacing:.4px}
+.chip b{color:#fff;font-weight:700}
+.horse{position:relative;width:118px;height:118px;flex:0 0 auto;display:grid;place-items:center}
+.horse .ring{position:absolute;inset:0;border-radius:50%}
+.horse .core{position:relative;width:88px;height:88px;border-radius:50%;display:grid;place-items:center;text-align:center;
+  background:radial-gradient(circle at 34% 30%,rgba(255,255,255,.16),rgba(12,20,38,.92));border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 0 18px rgba(0,0,0,.55),0 0 26px rgba(0,0,0,.4)}
+.horse .hl{font-size:19px;font-weight:800;letter-spacing:1px;line-height:1.1}
+.horse .hs{font-size:10px;color:var(--sub);margin-top:3px}
+.horse .hscore{font-size:13px;font-weight:700;color:#fff}
+.horse.T .ring{background:conic-gradient(from 0deg,#fbbf24,#fff6d5,#f59e0b,#fde68a,#fbbf24);animation:spin 3.6s linear infinite;-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 7px),#000 calc(100% - 6px));mask:radial-gradient(farthest-side,transparent calc(100% - 7px),#000 calc(100% - 6px));filter:drop-shadow(0 0 10px rgba(251,191,36,.6))}
+.horse.A .ring{background:conic-gradient(from 0deg,#34d399,#a7f3d0,#10b981,#34d399);opacity:.9;-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 6px),#000 calc(100% - 5px));mask:radial-gradient(farthest-side,transparent calc(100% - 6px),#000 calc(100% - 5px))}
+.horse.B .ring{background:conic-gradient(from 0deg,#38bdf8,#bae6fd,#0ea5e9,#38bdf8);opacity:.85;-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 6px),#000 calc(100% - 5px));mask:radial-gradient(farthest-side,transparent calc(100% - 6px),#000 calc(100% - 5px))}
+.horse.C .ring{background:conic-gradient(from 0deg,#fb923c,#fed7aa,#f97316,#fb923c);opacity:.8;-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 6px),#000 calc(100% - 5px));mask:radial-gradient(farthest-side,transparent calc(100% - 6px),#000 calc(100% - 5px))}
+.horse.D .ring{background:conic-gradient(from 0deg,#fb7185,#fecdd3,#e11d48,#fb7185);opacity:.8;-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 6px),#000 calc(100% - 5px));mask:radial-gradient(farthest-side,transparent calc(100% - 6px),#000 calc(100% - 5px))}
+.horse.N .ring{background:rgba(120,140,170,.35);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 6px),#000 calc(100% - 5px));mask:radial-gradient(farthest-side,transparent calc(100% - 6px),#000 calc(100% - 5px))}
+@keyframes spin{to{transform:rotate(360deg)}}
+.kpis{display:grid;grid-template-columns:repeat(8,1fr);gap:12px;margin:14px 0}
+.kpi{position:relative;padding:14px 14px 12px;border-radius:14px;background:var(--panel);border:1px solid var(--brd);overflow:hidden;animation:rise .7s cubic-bezier(.2,.8,.2,1) both}
+.kpi::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(var(--c,var(--cyan)),transparent)}
+.kpi .v{font-size:25px;font-weight:800;color:#fff;line-height:1;font-variant-numeric:tabular-nums}
+.kpi .v small{font-size:13px;color:var(--sub);font-weight:600;margin-left:1px}
+.kpi .l{font-size:11.5px;color:var(--sub);margin-top:7px;letter-spacing:.6px}
+.kpi .spark{position:absolute;right:6px;bottom:6px;opacity:.6}
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:14px}
+.grid>*{min-width:0}
+.cv{min-width:0;overflow:hidden}
+.panel{position:relative;border-radius:15px;background:var(--panel);border:1px solid var(--brd);padding:14px 16px 15px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.025),0 18px 48px rgba(0,0,0,.42);animation:rise .7s cubic-bezier(.2,.8,.2,1) both}
+.panel .corner{position:absolute;width:12px;height:12px;border:0 solid var(--cyan);opacity:.55;pointer-events:none;z-index:3}
+.panel .corner.tl{top:7px;left:7px;border-top-width:1.5px;border-left-width:1.5px;border-top-left-radius:4px}
+.panel .corner.tr{top:7px;right:7px;border-top-width:1.5px;border-right-width:1.5px;border-top-right-radius:4px}
+.panel .corner.bl{bottom:7px;left:7px;border-bottom-width:1.5px;border-left-width:1.5px;border-bottom-left-radius:4px}
+.panel .corner.br{bottom:7px;right:7px;border-bottom-width:1.5px;border-right-width:1.5px;border-bottom-right-radius:4px}
+.panel h3{font-size:12.5px;font-weight:700;letter-spacing:1.4px;color:#cfe3ff;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.panel h3::before{content:"";width:4px;height:13px;border-radius:2px;background:linear-gradient(var(--cyan),var(--violet));box-shadow:0 0 8px var(--cyan)}
+.panel h3 .tag{margin-left:auto;font-size:10.5px;color:var(--weak);letter-spacing:.5px;font-weight:500;text-align:right}
+.panel .sub{font-size:10.5px;color:var(--weak);margin:2px 0 8px 12px;letter-spacing:.3px}
+.cv{position:relative;width:100%}
+.cv canvas{display:block;width:100%}
+.col-3{grid-column:span 3}.col-4{grid-column:span 4}.col-5{grid-column:span 5}.col-7{grid-column:span 7}.col-8{grid-column:span 8}.col-12{grid-column:span 12}
+@keyframes rise{from{opacity:0;transform:translateY(26px) scale(.985)}to{opacity:1;transform:none}}
+/* 风格原型 */
+#archBox{margin-top:6px}
+.arch-name{text-align:center;font-size:17px;font-weight:800;letter-spacing:1px;margin:2px 0 3px;
+  background:linear-gradient(92deg,#22d3ee,#a78bfa);-webkit-background-clip:text;background-clip:text;color:transparent}
+.arch-desc{text-align:center;font-size:10.5px;color:var(--sub);margin-bottom:10px}
+.trait{display:grid;grid-template-columns:64px 1fr 34px;gap:8px;align-items:center;font-size:11px;margin:6px 0}
+.trait .tn{color:#cdddf7}.trait .tbar{height:6px;border-radius:4px;background:rgba(120,150,200,.13);overflow:hidden}
+.trait .tbar i{display:block;height:100%;border-radius:4px;width:0;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
+.trait .tv{text-align:right;color:#fff;font-variant-numeric:tabular-nums;font-weight:700}
+/* 地图战术卡 */
+.tac{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:10px}
+.tcard{border-radius:11px;padding:10px 12px;border:1px solid rgba(120,170,255,.14);background:rgba(10,18,34,.5);position:relative;overflow:hidden}
+.tcard .tn{font-size:13.5px;font-weight:800;color:#eaf4ff;display:flex;justify-content:space-between}
+.tcard .tn span{color:var(--cyan);font-size:11px}
+.tcard .tr{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:7px;font-size:10.5px;color:var(--sub)}
+.tcard .tr b{color:#fff;font-weight:700}
+.tcard .wr{height:5px;border-radius:4px;background:rgba(120,150,200,.13);margin-top:8px;overflow:hidden}
+.tcard .wr i{display:block;height:100%;background:linear-gradient(90deg,#fbbf24,#f59e0b)}
+/* 段位 / 纪录 紧凑 */
+.dual{display:grid;grid-template-columns:1fr 1.4fr;gap:16px}
+.ranks{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:9px}
+.rk{border-radius:11px;padding:9px 11px;border:1px solid rgba(120,170,255,.15);background:rgba(10,18,34,.5);position:relative;overflow:hidden}
+.rk .rb{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-weight:800;font-size:11px;color:#06101f;float:left;margin-right:9px}
+.rk .rt{font-size:13.5px;font-weight:800;line-height:1.15}.rk .rs{font-size:10.5px;color:var(--sub);margin-top:2px}
+.rk .rh{clear:both;font-size:10.5px;margin-top:7px;padding-top:6px;border-top:1px dashed rgba(120,160,220,.18);color:var(--sub)}.rk .rh b{font-weight:800}
+.rk.none .rt{color:var(--sub);font-weight:600;font-size:12.5px}
+.hist-hero{display:flex;align-items:center;gap:12px;border-radius:12px;padding:9px 13px;margin-bottom:9px;background:linear-gradient(120deg,rgba(251,191,36,.14),rgba(251,191,36,.03));border:1px solid rgba(251,191,36,.3)}
+.hist-hero .hb{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;font-weight:800;color:#1a1405;background:linear-gradient(140deg,#fde68a,#f59e0b);box-shadow:0 0 18px rgba(251,191,36,.5);flex:0 0 auto}
+.hist-hero .ht1{font-size:10.5px;color:#fcd34d;letter-spacing:1px}.hist-hero .ht2{font-size:16.5px;font-weight:800;color:#ffe9b0}
+.recs{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:8px}
+.rc{border-radius:10px;padding:8px 11px;background:rgba(10,18,34,.5);border:1px solid rgba(120,170,255,.13);position:relative;overflow:hidden}
+.rc .rv{font-size:18px;font-weight:800;color:#fff;line-height:1;font-variant-numeric:tabular-nums}
+.rc .rv small{font-size:11px;color:var(--sub);font-weight:600}
+.rc .rl{font-size:10.5px;color:var(--sub);margin-top:5px;letter-spacing:.3px}
+#tip{position:fixed;z-index:50;pointer-events:none;opacity:0;transition:opacity .12s;background:rgba(8,14,28,.95);border:1px solid rgba(56,189,248,.4);border-radius:10px;padding:9px 11px;font-size:11.5px;box-shadow:0 12px 34px rgba(0,0,0,.6),0 0 18px rgba(56,189,248,.15);max-width:250px;line-height:1.6;backdrop-filter:blur(6px)}
+#tip b{color:#fff}#tip .g{color:var(--gold)}#tip .c{color:var(--cyan)}
+.empty{margin:14vh auto;max-width:440px;text-align:center;border:1px dashed rgba(120,160,220,.3);border-radius:16px;padding:40px 26px;background:rgba(12,20,38,.4)}
+.empty h2{font-size:20px;margin-bottom:10px;color:#e6f1ff}.empty p{color:var(--sub);font-size:13px;line-height:1.8}
+.empty a{display:inline-block;margin-top:16px;padding:9px 20px;border-radius:10px;background:linear-gradient(120deg,var(--cyan),var(--blue));color:#04121f;font-weight:700;text-decoration:none}
+footer{margin-top:18px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--weak);font-size:11px;letter-spacing:.5px;padding:0 4px}
+footer a{color:var(--cyan);text-decoration:none}
+@media(max-width:1100px){.kpis{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:760px){.wrap{padding:14px 12px 30px}.kpis{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.col-3,.col-4,.col-5,.col-7,.col-8,.col-12{grid-column:span 2}.dual{grid-template-columns:1fr}.pname{font-size:26px}.horse{width:96px;height:96px}.horse .core{width:72px;height:72px}}
+</style>
+</head>
+<body>
+<canvas id="bgFx"></canvas>
+<div class="wrap" id="app"></div>
+<div id="tip"></div>
+<script>
+"use strict";
+const KEY='pubg_arena_payload';
+function readPayload(){try{const raw=localStorage.getItem(KEY);return raw?JSON.parse(raw):null;}catch(e){return null;}}
+const P=readPayload();
+const TIER_CN={Bronze:'青铜',Silver:'白银',Gold:'黄金',Platinum:'铂金',Crystal:'翡翠',Diamond:'钻石',Master:'大师',Survivor:'幸存者',Grandmaster:'宗师'};
+const TIER_COLOR={Bronze:'#c08a52',Silver:'#9fb0c3',Gold:'#e3b53b',Platinum:'#34c49c',Crystal:'#22c3d6',Diamond:'#4f86e8',Master:'#a78bfa',Survivor:'#f0557d',Grandmaster:'#ff6b6b'};
+const ROMAN={1:'Ⅰ',2:'Ⅱ',3:'Ⅲ',4:'Ⅳ',5:'Ⅴ'};
+const WTYP={AR:['突击步枪','#38bdf8'],SMG:['冲锋枪','#2dd4bf'],DMR:['射手步枪','#a78bfa'],SR:['栓动狙击','#fb7185'],LMG:['轻机枪','#fbbf24'],SG:['霰弹枪','#34d399'],PST:['手枪','#94a3b8'],oth:['其他','#8b98ad']};
+const WSHORT={AR:'突击',SMG:'冲锋',DMR:'射手',SR:'栓狙',LMG:'轻机',SG:'霰弹',PST:'手枪',oth:'其他'};
+const HCOL={T:'#fbbf24',A:'#34d399',B:'#38bdf8',C:'#fb923c',D:'#fb7185',N:'#64748b'};
+const HNAME={T:'天选马',A:'上等马',B:'中等马',C:'下等马',D:'没有马',N:'暂无评级'};
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const lerp1=(v,lo,hi)=>hi>lo?clamp((v-lo)/(hi-lo),0,1):0;
+const easeOut=t=>1-Math.pow(1-t,3);
+const mean=a=>a.length?a.reduce((s,x)=>s+x,0)/a.length:0;
+const std=a=>{if(a.length<2)return 0;const m=mean(a);return Math.sqrt(mean(a.map(x=>(x-m)*(x-m))));};
+function linReg(ys){const n=ys.length;if(n<2)return 0;const mx=(n-1)/2,my=mean(ys);let num=0,den=0;ys.forEach((y,i)=>{num+=(i-mx)*(y-my);den+=(i-mx)*(i-mx);});return den?num/den:0;}
+function smooth(arr,w){return arr.map((_,i)=>mean(arr.slice(Math.max(0,i-w+1),i+1)));}
+const fmtNum=v=>Number(v||0).toLocaleString('en-US');
+const fmtKm=m=>(m/1000).toFixed(m>=10000?0:1)+'km';
+const fmtMin=s=>{s=Math.round(s||0);return Math.floor(s/60)+'分'+String(s%60).padStart(2,'0')+'秒';};
+const fmtMM=s=>{s=Math.round(s||0);return (s/60).toFixed(1);};
+const pct=(v,d=1)=>(v*100).toFixed(d)+'%';
+const dateOf=ts=>{const d=new Date(ts);return isNaN(d)?null:d;};
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+if(!P){document.getElementById('app').innerHTML='<div class="empty"><h2>暂无作战数据</h2><p>请先在 PUBG 战绩查询的「单人查询」里搜索玩家，再点击顶部的 <b>⚡数据大屏</b> 按钮进入本页。</p><a href="/pubg/#/single">返回查询页</a></div>';}
+else{
+const L=P.life,R=L.rounds||1,M=P.matches||[],MG=[...M].reverse(); // MG 时间正序
+const winRate=L.wins/R,topRate=L.top10/R,hsRate=L.kills?L.hs/L.kills:0;
+const kpg=L.kills/R,dpg=L.dmg/R,dbpg=L.dbno/R,apg=L.assists/R,avgSurv=L.time/R,rpg=L.revives/R;
+const DPR=Math.min(window.devicePixelRatio||1,2);
+
+/* ===== 复合分析：风格六维 + 原型 ===== */
+const ranksArr=M.map(g=>g.rank),rankStd=std(ranksArr);
+const HORDER=['T','A','B','C','D','N'];
+const trans={},hcnt={T:0,A:0,B:0,C:0,D:0,N:0};
+MG.forEach(g=>{hcnt[g.horse]=(hcnt[g.horse]||0)+1;});
+let selfLoop=0,transTot=0;
+for(let i=1;i<MG.length;i++){const a=MG[i-1].horse,b=MG[i].horse;if(!a||!b)continue;trans[a]=trans[a]||{};trans[a][b]=(trans[a][b]||0)+1;transTot++;if(a===b)selfLoop++;}
+const selfLoopRate=transTot?selfLoop/transTot:0;
+const rankScore=MG.map(g=>(101-clamp(g.rank,1,100))/100);
+const trendSlope=linReg(smooth(rankScore,Math.max(3,Math.round(MG.length/8)||3)));
+const trendNorm=lerp1(trendSlope,-0.02,0.02);
+const TRAITS=[
+ {k:'agg',n:'突击火力',v:clamp(0.30*lerp1(L.kd,0.3,2.5)+0.25*lerp1(kpg,0.2,1.5)+0.20*lerp1(hsRate,0.05,0.45)+0.15*lerp1(L.longestKill/100,1,6)+0.10*lerp1(L.roundMost,3,15),0,1)},
+ {k:'surv',n:'生存韧性',v:clamp(0.35*lerp1(avgSurv/60,8,26)+0.30*lerp1(topRate,0.3,0.85)+0.20*lerp1((L.heals+L.boosts)/R,1,12)+0.15*lerp1(winRate,0.02,0.25),0,1)},
+ {k:'sup',n:'团队支援',v:clamp(0.40*lerp1(rpg,0.05,0.8)+0.35*lerp1(apg,0.1,1.2)+0.25*lerp1(dbpg/(kpg+dbpg+1e-9),0.3,0.7),0,1)},
+ {k:'mob',n:'机动游走',v:clamp(0.50*lerp1(L.move/R/1000,1,6)+0.30*lerp1(L.roadKills/R,0.005,0.1)+0.20*lerp1(L.swim/(L.move+1),0.005,0.05),0,1)},
+ {k:'burst',n:'爆发连杀',v:clamp(0.35*lerp1(L.maxStreak,2,12)+0.30*lerp1(L.roundMost,3,15)+0.35*lerp1(Math.max(...M.map(g=>g.kills),0),2,12),0,1)},
+ {k:'cons',n:'稳定掌控',v:clamp(0.40*(1-lerp1(rankStd,8,30))+0.30*selfLoopRate+0.30*trendNorm,0,1)}
+];
+const ARCH={agg:['突击先锋','枪口永远对准交火最密的方向，正面碾压型选手'],surv:['苟分大师','决赛圈永远有你的位置，稳健运营到最后'],sup:['战地医疗兵','击倒救援一肩挑，团队的隐形大腿'],mob:['机动游走','载具与双腿从不闲着，转场如风的战场自由人'],burst:['爆种杀手','不鸣则已一鸣惊人，连杀机器一旦启动挡不住'],cons:['稳定老狗','状态几乎不跳水，队伍最可靠的基本盘']};
+(function(){const sorted=[...TRAITS].sort((a,b)=>b.v-a.v);const top=sorted[0],sec=sorted[1];
+  let arch=ARCH[top.k];
+  if(sorted[0].v>0.62&&sorted[1].v>0.58&&sorted.filter(t=>t.v>0.5).length>=4)arch=['六边形战士','没有明显短板的全能型选手，攻守兼备'];
+  window.__ARCH=arch;window.__TRAITS=TRAITS;})();
+
+/* ===== 地图战术聚合 ===== */
+const mapTac={};M.forEach(g=>{const k=g.map||'未知';if(!mapTac[k])mapTac[k]={n:0,w:0,k:0,d:0,mode:{}};const t=mapTac[k];t.n++;if(g.won)t.w++;t.k+=g.kills;t.d+=g.dmg;t.mode[g.mode]=(t.mode[g.mode]||0)+1;});
+const mapTacArr=Object.entries(mapTac).map(([name,t])=>({name,...t,wr:t.n?t.w/t.n:0,kpg:t.n?t.k/t.n:0,dpg:t.n?t.d/t.n:0,topMode:Object.entries(t.mode).sort((a,b)=>b[1]-a[1])[0]})).sort((a,b)=>b.n-a.n);
+
+/* ===== DOM 骨架 ===== */
+const app=document.getElementById('app');
+const corners=()=>'<i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>';
+const clan=P.clan?`<span class="chip">战队 <b>${esc(P.clan.tag||P.clan.name||'—')}</b> Lv.${P.clan.level}</span>`:'';
+app.innerHTML=`
+<header class="hud">
+  <div class="hud-l">
+    <div class="crumb">PUBG · BATTLE INTELLIGENCE COCKPIT</div>
+    <div class="pname">${esc(P.name)}</div>
+    <div class="chips">
+      <span class="chip">${esc(P.platform||'Steam')}</span>${clan}
+      <span class="chip">生存 Lv.<b>${P.surv.level}</b></span>
+      <span class="chip">活跃 <b>${L.days}</b> 天</span>
+      <span class="chip">近14天 <b>${M.length}</b>/${P.totalAll||M.length} 场</span>
+      ${P.rankSeason?`<span class="chip">${esc(P.rankSeason)}</span>`:''}
+    </div>
+  </div>
+  <div class="horse ${P.horse.tier}"><div class="ring"></div>
+    <div class="core"><div><div class="hl" style="color:${HCOL[P.horse.tier]}">${P.horse.label}</div><div class="hs">综合评价</div><div class="hscore" id="horseScore">0</div></div></div></div>
+</header>
+<div class="kpis" id="kpis"></div>
+<div class="grid">
+  <section class="panel col-8">${corners()}<h3>战斗星系 · 三维战迹<span class="tag">拖拽旋转 · 轴=存活/伤害/名次 · 大小=击杀 · 悬停详情</span></h3>
+    <div class="cv"><canvas id="cvGalaxy" height="430"></canvas></div></section>
+  <section class="panel col-4">${corners()}<h3>作战风格指纹<span class="tag">多指标复合建模</span></h3>
+    <div class="cv"><canvas id="cvStyle" height="236"></canvas></div><div id="archBox"></div></section>
+  <section class="panel col-4">${corners()}<h3>决策象限<span class="tag">生存×火力 · 密度聚集 · 十字=均值</span></h3><div class="cv"><canvas id="cvQuad" height="300"></canvas></div></section>
+  <section class="panel col-4">${corners()}<h3>生存分析曲线<span class="tag">阶梯生存函数 · 金点=吃鸡局</span></h3><div class="cv"><canvas id="cvSurv" height="300"></canvas></div></section>
+  <section class="panel col-4">${corners()}<h3>马型状态流转<span class="tag">相邻对局马型转移</span></h3><div class="cv"><canvas id="cvChord" height="300"></canvas></div></section>
+  <section class="panel col-7">${corners()}<h3>状态演进流<span class="tag">滑动均值 + 线性趋势 · 金带=连胜段</span></h3><div class="cv"><canvas id="cvTrend" height="268"></canvas></div></section>
+  <section class="panel col-5">${corners()}<h3>武器效率象限<span class="tag">爆头率 × 单杀伤害 · 气泡=击杀量</span></h3><div class="cv"><canvas id="cvWpnQuad" height="268"></canvas></div></section>
+  <section class="panel col-7">${corners()}<h3>武器矩阵树图<span class="tag">面积=击杀 · 分组=枪种 · 亮度=爆头率</span></h3><div class="cv"><canvas id="cvTree" height="320"></canvas></div></section>
+  <section class="panel col-5">${corners()}<h3>作战时段热力<span class="tag">星期 × 小时 · 金圈=吃鸡</span></h3><div class="cv"><canvas id="cvHeat" height="320"></canvas></div></section>
+  <section class="panel col-12">${corners()}<h3>地图战术画像<span class="tag">分地图复合表现</span></h3><div class="tac" id="mapTac"></div></section>
+  <section class="panel col-12">${corners()}<h3>竞技段位 · 战场纪录<span class="tag">跨赛季最高 + Lifetime 极值</span></h3><div class="dual"><div id="rankBox"></div><div class="recs" id="recBox"></div></div></section>
+</div>
+<footer><span>数据来源：KRAFTON PUBG Official API · 图表为多指标交叉建模结果，生涯为 Lifetime、战迹分析为近 14 天已加载对局</span><span id="genAt"></span><a href="/pubg/#/single?name=${encodeURIComponent(P.name)}">← 返回战绩查询</a></footer>`;
+
+/* ===== canvas 框架 ===== */
+const drawers=[];
+function setupCanvas(id,draw){const cv=document.getElementById(id);if(!cv)return null;const ctx=cv.getContext('2d');const fixedH=parseInt(cv.getAttribute('height'))||200;
+  function size(){const w=cv.clientWidth||cv.parentElement.clientWidth,h=fixedH;cv.width=w*DPR;cv.height=h*DPR;cv.style.height=h+'px';ctx.setTransform(DPR,0,0,DPR,0,0);return{w,h,ctx};}
+  const obj={cv,size,draw};obj.render=p=>{const s=size();draw(s.ctx,s.w,s.h,p);};drawers.push(obj);return obj;}
+const tip=document.getElementById('tip');
+function moveTip(e){tip.style.left=Math.min(e.clientX+14,innerWidth-262)+'px';tip.style.top=(e.clientY+12)+'px';}
+function hideTip(){tip.style.opacity=0;}
+
+/* ===== KPI（复合指标 + 滚动趋势 sparkline） ===== */
+const kpis=[
+ {v:L.kd,l:'KD（击杀/败场）',d:2,c:'#fb7185',f:'kd'},{v:winRate*100,l:'吃鸡率',d:1,c:'#fbbf24',f:'win'},
+ {v:dpg,l:'场均伤害',d:0,c:'#22d3ee',f:'dmg'},{v:topRate*100,l:'前十率',d:1,c:'#34d399',f:'top'},
+ {v:hsRate*100,l:'爆头转化率',d:1,c:'#a78bfa',f:'hs'},{v:dbpg,l:'场均击倒',d:2,c:'#fb923c',f:'db'},
+ {v:avgSurv/60,l:'场均存活(分)',d:1,c:'#38bdf8',f:'time'},{v:P.horse.score,l:'综合评分',d:0,c:'#fbbf24',f:'score'}
+];
+const kbox=document.getElementById('kpis');
+kbox.innerHTML=kpis.map((k,i)=>`<div class="kpi" style="--c:${k.c};animation-delay:${.05*i}s"><div class="v" data-v="${k.v}" data-d="${k.d}">0</div><div class="l">${k.l}</div><canvas class="spark" width="78" height="26"></canvas></div>`).join('');
+function drawSpark(cv,series,color){const ctx=cv.getContext('2d'),w=78,h=26;ctx.clearRect(0,0,w,h);if(series.length<2)return;const mx=Math.max(...series.map(Math.abs),1),mn=Math.min(...series,0);
+  ctx.beginPath();series.forEach((v,i)=>{const x=i/(series.length-1)*w,y=h-3-((v-mn)/((mx-mn)||1))*(h-8);i?ctx.lineTo(x,y):ctx.moveTo(x,y);});
+  const g=ctx.createLinearGradient(0,0,0,h);ctx.save();ctx.strokeStyle=color;ctx.lineWidth=1.6;ctx.shadowColor=color;ctx.shadowBlur=5;ctx.stroke();ctx.lineTo(w,h);ctx.lineTo(0,h);ctx.closePath();g.addColorStop(0,color+'33');g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.fill();ctx.restore();}
+(function(){const w=Math.max(3,Math.round(MG.length/8)||3);
+ const S={kd:smooth(MG.map(g=>g.kills),w),win:smooth(MG.map(g=>g.won?1:0),w),dmg:smooth(MG.map(g=>g.dmg),w),top:smooth(MG.map(g=>g.rank<=10?1:0),w),
+  hs:smooth(MG.map(g=>g.kills?g.hs/g.kills:0),w),db:smooth(MG.map(g=>g.dbno),w),time:smooth(MG.map(g=>g.time/60),w),score:smooth(MG.map(g=>{const h=g.horse;return {T:92,A:78,B:60,C:42,D:22,N:10}[h]||30;}),w)};
+ kbox.querySelectorAll('.kpi').forEach((el,i)=>drawSpark(el.querySelector('canvas'),(S[kpis[i].f]||[]).slice(-30),kpis[i].c));})();
+function countUp(el){const target=parseFloat(el.dataset.v),d=parseInt(el.dataset.d||0),t0=performance.now();
+ (function step(t){const k=easeOut(clamp((t-t0)/1100,0,1));el.textContent=d?(target*k).toFixed(d):Math.round(target*k).toLocaleString('en-US');if(k<1)requestAnimationFrame(step);})(t0);}
+kbox.querySelectorAll('.v').forEach(countUp);
+const hsEl=document.getElementById('horseScore');hsEl.dataset.v=P.horse.score;hsEl.dataset.d='0';countUp(hsEl);
+document.getElementById('genAt').textContent='舱体生成 '+(dateOf(P.ts)||new Date()).toLocaleString('zh-CN');
+
+/* ===== 风格原型 DOM ===== */
+(function(){const arch=window.__ARCH,tr=window.__TRAITS;
+ const colors={agg:'#fb7185',surv:'#34d399',sup:'#38bdf8',mob:'#22d3ee',burst:'#fb923c',cons:'#a78bfa'};
+ document.getElementById('archBox').innerHTML=`<div class="arch-name">${arch[0]}</div><div class="arch-desc">${arch[1]}</div>`+
+  tr.map(t=>`<div class="trait"><span class="tn">${t.n}</span><span class="tbar"><i data-w="${(t.v*100).toFixed(1)}" style="background:linear-gradient(90deg,${colors[t.k]},${colors[t.k]}99)"></i></span><span class="tv">${Math.round(t.v*100)}</span></div>`).join('');
+ setTimeout(()=>document.querySelectorAll('.trait .tbar i').forEach(i=>i.style.width=i.dataset.w+'%'),150);})();
+
+/* ===== 地图战术卡 DOM ===== */
+(function(){document.getElementById('mapTac').innerHTML=mapTacArr.map(t=>`<div class="tcard">
+  <div class="tn">${esc(t.name)}<span>${t.n} 场</span></div>
+  <div class="wr"><i style="width:${(t.wr*100).toFixed(0)}%"></i></div>
+  <div class="tr"><span>吃鸡 <b>${t.w}</b> · ${pct(t.wr,0)}</span><span>场均击杀 <b>${t.kpg.toFixed(2)}</b></span><span>场均伤害 <b>${Math.round(t.dpg)}</b></span><span>常打 <b>${esc(t.topMode?t.topMode[0]:'—')}</b></span></div>
+ </div>`).join('')||'<div class="rk none">近期无对局</div>';})();
+
+/* ===== 段位 + 纪录 DOM ===== */
+(function(){const box=document.getElementById('rankBox');let h='';
+ if(P.histBest&&P.histBest.tier){const hb=P.histBest;h+=`<div class="hist-hero"><div class="hb">${(TIER_CN[hb.tier]||hb.tier).slice(0,2)}</div><div><div class="ht1">跨赛季历史最高（含当前）</div><div class="ht2">${TIER_CN[hb.tier]||hb.tier} ${ROMAN[hb.sub]||hb.sub||''} · ${hb.rp} RP</div></div></div>`;}
+ const modes=P.ranks||[];if(!modes.length)h+='<div class="rk none"><div class="rt" style="margin-top:4px">当前赛季未定级</div></div>';
+ h+='<div class="ranks">'+modes.map(r=>{const col=TIER_COLOR[r.tier]||'#8b98ad';return `<div class="rk"><div class="rb" style="background:linear-gradient(140deg,${col},${col}aa)">${(TIER_CN[r.tier]||r.tier).slice(0,2)}</div><div class="rt" style="color:${col}">${TIER_CN[r.tier]||r.tier} ${ROMAN[r.sub]||r.sub||''}</div><div class="rs">${r.name} · ${r.rp} RP</div><div class="rh">最高 <b style="color:${col}">${r.bestTier?(TIER_CN[r.bestTier]||r.bestTier)+' '+(ROMAN[r.bestSub]||r.bestSub||''):'—'}</b></div></div>`;}).join('')+'</div>';
+ box.innerHTML=h;
+ let bestWin=0,bestLose=0,cw=0,cl=0,mxK=0,mxD=0;MG.forEach(g=>{if(g.won){cw++;cl=0;}else{cl++;cw=0;}bestWin=Math.max(bestWin,cw);bestLose=Math.max(bestLose,cl);mxK=Math.max(mxK,g.kills);mxD=Math.max(mxD,g.dmg);});
+ const recs=[[L.roundMost,'单局最高击杀',''],[L.maxStreak,'单场最高连杀',''],[L.longestKill,'最远击杀','m'],[fmtMin(L.longestSurv),'最长单局存活',''],[fmtMin(avgSurv),'场均存活',''],[L.revives,'总救援',''],[fmtKm(L.move),'总移动',''],[L.roadKills,'载具碾杀',''],[L.vehDestroy,'打爆载具',''],[L.dailyKills,'今日击杀',''],[L.weeklyKills,'本周击杀',''],[bestWin,'近期最长连胜','场'],[mxK,'近期单局最高击杀',''],[mxD,'近期单局最高伤害',''],[Math.round(rankStd),'名次波动σ',''],[L.teamKills,'误伤队友','']];
+ document.getElementById('recBox').innerHTML=recs.map((r,i)=>`<div class="rc" style="animation:rise .5s ${.02*i}s both"><div class="rv">${r[0]}<small>${r[2]||''}</small></div><div class="rl">${r[1]}</div></div>`).join('');})();
+
+/* ============ 高级可视化（canvas） ============ */
+function gridAxis(ctx,w,h,pad,xl,yl,xlab,ylab,fmtX,fmtY){ctx.strokeStyle='rgba(120,150,200,.12)';ctx.fillStyle='#5b6d8f';ctx.font='9.5px sans-serif';ctx.lineWidth=1;
+ for(let i=0;i<=4;i++){const y=pad.t+(h-pad.t-pad.b)*(1-i/4);ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(w-pad.r,y);ctx.stroke();ctx.textAlign='right';ctx.textBaseline='middle';ctx.fillText(fmtY(yl[0]+(yl[1]-yl[0])*i/4),pad.l-5,y);}
+ for(let i=0;i<=4;i++){const x=pad.l+(w-pad.l-pad.r)*i/4;ctx.textAlign='center';ctx.textBaseline='top';ctx.fillText(fmtX(xl[0]+(xl[1]-xl[0])*i/4),x,h-pad.b+5);}
+ ctx.fillStyle='#7e93b5';ctx.font='10px sans-serif';ctx.textAlign='center';ctx.fillText(xlab,(pad.l+w-pad.r)/2,h-2);
+ ctx.save();ctx.translate(11,(pad.t+h-pad.b)/2);ctx.rotate(-Math.PI/2);ctx.fillText(ylab,0,0);ctx.restore();}
+
+/* 1) 3D 战斗星系（持续旋转） */
+const galaxy=(function(){
+ const cv=document.getElementById('cvGalaxy'),ctx=cv.getContext('2d');const fixedH=430;let W=0,H=0;
+ const maxT=Math.max(...M.map(g=>g.time),1),maxD=Math.max(...M.map(g=>g.dmg),1);
+ const pts=MG.map((g,i)=>({g,i,
+  x:clamp(g.time/maxT,0,1)*2-1,
+  y:clamp(g.dmg/maxD,0,1)*2-1,
+  z:clamp((101-clamp(g.rank,1,100))/100,0,1)*2-1}));
+ let ang=0.6,tilt=0.42,drag=null,hover=-1;
+ function size(){W=cv.clientWidth;H=fixedH;cv.width=W*DPR;cv.height=H*DPR;cv.style.height=H+'px';ctx.setTransform(DPR,0,0,DPR,0,0);}
+ function project(p,a){const ca=Math.cos(a),sa=Math.sin(a),ct=Math.cos(tilt),st=Math.sin(tilt);
+  let x=p.x*ca-p.z*sa,z1=p.x*sa+p.z*ca;let y=p.y*ct-z1*st,z2=p.y*st+z1*ct;
+  const f=3.2,s=f/(f-z2*0.9);return{x:W/2+x*Math.min(W,H)*0.34*s,y:H/2-y*Math.min(W,H)*0.34*s,s,z:z2};}
+ function draw(){size();ctx.clearRect(0,0,W,H);const cx=W/2,cy=H/2,R=Math.min(W,H)*0.34;
+  // 轴框架（立方体参考）
+  ctx.strokeStyle='rgba(120,150,200,.14)';ctx.lineWidth=1;
+  [[[-1,-1,-1],[1,-1,-1]],[[1,-1,-1],[1,1,-1]],[[1,1,-1],[-1,1,-1]],[[-1,1,-1],[-1,-1,-1]],[[-1,-1,1],[1,-1,1]],[[1,-1,1],[1,1,1]],[[1,1,1],[-1,1,1]],[[-1,1,1],[-1,-1,1]],[[-1,-1,-1],[-1,-1,1]],[[1,-1,-1],[1,-1,1]],[[1,1,-1],[1,1,1]],[[-1,1,-1],[-1,1,1]]].forEach(e=>{const a=project({x:e[0][0],y:e[0][1],z:e[0][2]},ang),b=project({x:e[1][0],y:e[1][1],z:e[1][2]},ang);ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();});
+  // 轴标签
+  ctx.fillStyle='#5b729a';ctx.font='10px sans-serif';ctx.textAlign='center';
+  const ax=(v,nm,col)=>{const q=project(v,ang);ctx.fillStyle=col;ctx.fillText(nm,q.x,q.y);};
+  ax({x:1.15,y:-1,z:-1},'存活→','#34d399');ax({x:-1,y:1.15,z:-1},'伤害→','#fb7185');ax({x:-1,y:-1,z:1.15},'名次好→','#fbbf24');
+  const pr=pts.map((p,i)=>Object.assign(project(p,ang),{p,i}));
+  // 轨迹线（时间顺序，渐隐）
+  ctx.lineWidth=1.2;for(let i=1;i<pr.length;i++){const a=pr[i-1],b=pr[i];const al=0.10+0.18*(i/pr.length);ctx.strokeStyle=`rgba(56,189,248,${al})`;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}
+  // 点（按 z 排序远→近）
+  pr.sort((a,b)=>a.z-b.z);
+  const tnow=performance.now()/1000;
+  pr.forEach(o=>{const g=o.p.g;const kr=Math.sqrt((g.kills+0.4)/Math.max(...M.map(x=>x.kills),1));const rad=3.5+kr*11;
+   const col=g.rank===1?'#fbbf24':HCOL[g.horse]||'#38bdf8';const hov=(o.i===hover);
+   ctx.globalAlpha=0.55+0.45*o.s;
+   if(g.rank===1){const pulse=4+Math.sin(tnow*3+o.i)*2.5;ctx.beginPath();ctx.arc(o.x,o.y,rad+pulse,0,7);ctx.strokeStyle='rgba(251,191,36,.5)';ctx.lineWidth=1.4;ctx.stroke();}
+   const grd=ctx.createRadialGradient(o.x,o.y,0,o.x,o.y,rad);grd.addColorStop(0,col);grd.addColorStop(1,col+'22');
+   ctx.beginPath();ctx.arc(o.x,o.y,rad,0,7);ctx.fillStyle=grd;ctx.shadowColor=col;ctx.shadowBlur=hov?22:9;ctx.fill();
+   if(hov){ctx.shadowBlur=0;ctx.strokeStyle='#fff';ctx.lineWidth=1.4;ctx.stroke();}ctx.shadowBlur=0;ctx.globalAlpha=1;
+   if(rad>8||hov){ctx.fillStyle='#eaf4ff';ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(g.kills,o.x,o.y);}});
+  ctx.globalAlpha=1;}
+ cv.addEventListener('mousemove',e=>{const r=cv.getBoundingClientRect();const mx=e.clientX-r.left,my=e.clientY-r.top;let best=-1,bd=1e9;
+  pts.forEach((p,i)=>{const o=project(p,ang);const d=Math.hypot(o.x-mx,o.y-my);const g=p.g;const rad=3.5+Math.sqrt((g.kills+0.4)/Math.max(...M.map(x=>x.kills),1))*11;if(d<Math.max(rad+6,14)&&d<bd){bd=d;best=i;}});
+  hover=best;if(best>=0){const g=pts[best].g;tip.innerHTML=`<b style="color:${g.rank===1?'#fbbf24':HCOL[g.horse]}">#${g.rank} ${g.map} · ${g.mode} · ${g.type}</b><br><span class="c">${g.kills}杀</span> ${g.dbno}倒 ${g.assists}助 ${g.hs}爆头<br>伤害 <b>${g.dmg}</b> · 存活 ${fmtMin(g.time)}<br>${HNAME[g.horse]||''} · ${dateOf(g.ts)?((dateOf(g.ts).getMonth()+1)+'/'+dateOf(g.ts).getDate()+' '+String(dateOf(g.ts).getHours()).padStart(2,'0')+':'+String(dateOf(g.ts).getMinutes()).padStart(2,'0')):''}`;tip.style.opacity=1;moveTip(e);}else hideTip();draw();});
+ cv.addEventListener('mouseleave',()=>{hover=-1;hideTip();draw();});
+ cv.addEventListener('mousedown',e=>{drag={x:e.clientX,a:ang};});
+ window.addEventListener('mouseup',()=>drag=null);
+ window.addEventListener('mousemove',e=>{if(drag){ang=drag.a+(e.clientX-drag.x)*0.01;}});
+ (function loop(){if(document.body.contains(cv)){if(!drag)ang+=0.0032;draw();requestAnimationFrame(loop);}})();
+ size();return{};})();
+
+/* 2) 风格雷达（静态，progress 描边） */
+setupCanvas('cvStyle',(ctx,w,h,p)=>{const cx=w/2,cy=h/2+2,R=Math.min(w,h)/2-44,N=TRAITS.length,pp=easeOut(p);
+ for(let ring=1;ring<=4;ring++){ctx.beginPath();for(let i=0;i<=N;i++){const a=-Math.PI/2+i/N*Math.PI*2,rr=R*ring/4;const x=cx+Math.cos(a)*rr,y=cy+Math.sin(a)*rr;i?ctx.lineTo(x,y):ctx.moveTo(x,y);}ctx.strokeStyle='rgba(120,160,220,'+(ring===4?.18:.09)+')';ctx.stroke();}
+ const cols={agg:'#fb7185',surv:'#34d399',sup:'#38bdf8',mob:'#22d3ee',burst:'#fb923c',cons:'#a78bfa'};
+ for(let i=0;i<N;i++){const a=-Math.PI/2+i/N*Math.PI*2;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+Math.cos(a)*R,cy+Math.sin(a)*R);ctx.strokeStyle='rgba(120,160,220,.1)';ctx.stroke();
+  ctx.fillStyle='#a9bddf';ctx.font='11px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(TRAITS[i].n,cx+Math.cos(a)*(R+26),cy+Math.sin(a)*(R+26));}
+ ctx.beginPath();for(let i=0;i<=N;i++){const t=TRAITS[i%N].v*pp,a=-Math.PI/2+i/N*Math.PI*2;const x=cx+Math.cos(a)*R*t,y=cy+Math.sin(a)*R*t;i?ctx.lineTo(x,y):ctx.moveTo(x,y);}
+ const g=ctx.createLinearGradient(0,cy-R,0,cy+R);g.addColorStop(0,'rgba(34,211,238,.42)');g.addColorStop(1,'rgba(167,139,250,.34)');ctx.fillStyle=g;ctx.strokeStyle='#38e0ff';ctx.lineWidth=2;ctx.shadowColor='#22d3ee';ctx.shadowBlur=13;ctx.fill();ctx.stroke();ctx.shadowBlur=0;
+ for(let i=0;i<N;i++){const t=TRAITS[i].v*pp,a=-Math.PI/2+i/N*Math.PI*2;const x=cx+Math.cos(a)*R*t,y=cy+Math.sin(a)*R*t;ctx.beginPath();ctx.arc(x,y,3.4,0,7);ctx.fillStyle=cols[TRAITS[i].k];ctx.shadowColor=cols[TRAITS[i].k];ctx.shadowBlur=8;ctx.fill();ctx.shadowBlur=0;}});
+
+/* 3) 决策象限：存活 × 伤害 + 密度热力 */
+setupCanvas('cvQuad',(ctx,w,h,p)=>{const pad={l:42,r:14,t:16,b:34};const xs=M.map(g=>g.time/60),ys=M.map(g=>g.dmg);
+ const xMax=Math.max(...xs,1)*1.08,yMax=Math.max(...ys,1)*1.1;const X=v=>pad.l+(v/xMax)*(w-pad.l-pad.r),Y=v=>pad.t+(1-v/yMax)*(h-pad.t-pad.b);
+ gridAxis(ctx,w,h,pad,[0,xMax],[0,yMax],'存活时间(分)','伤害',v=>v.toFixed(0),v=>v>=1000?(v/1000).toFixed(1)+'k':Math.round(v));
+ const pp=easeOut(p);
+ // 密度热力（高斯核）
+ const cols=46,rows=30,cw=(w-pad.l-pad.r)/cols,chh=(h-pad.t-pad.b)/rows;
+ for(let gx=0;gx<cols;gx++)for(let gy=0;gy<rows;gy++){const wx=(gx+0.5)/cols*xMax,wy=(1-(gy+0.5)/rows)*yMax;let dens=0;
+   M.forEach(m=>{const dx=(wx-m.time/60)/(xMax*0.12),dy=(wy-m.dmg)/(yMax*0.14);dens+=Math.exp(-(dx*dx+dy*dy));});
+   if(dens>0.5){ctx.fillStyle=`rgba(56,189,248,${clamp(dens*0.05,0,0.34)*pp})`;ctx.fillRect(pad.l+gx*cw,pad.t+gy*chh,cw+1,chh+1);}}
+ const mx=mean(xs),my=mean(ys);
+ // 象限底标（各象限中部，避开边缘散点）
+ ctx.font='9px sans-serif';ctx.textAlign='center';
+ ctx.fillStyle='rgba(251,191,36,.62)';ctx.fillText('统治级',X(xMax*0.72),Y(yMax*0.965)+4);
+ ctx.fillStyle='rgba(251,113,133,.62)';ctx.fillText('短命枪男',X(xMax*0.28),Y(yMax*0.965)+4);
+ ctx.fillStyle='rgba(52,211,153,.62)';ctx.fillText('伏地魔',X(xMax*0.72),Y(yMax*0.07));
+ ctx.fillStyle='rgba(100,116,139,.75)';ctx.fillText('逛街',X(xMax*0.28),Y(yMax*0.07));
+ // 均值十字
+ ctx.setLineDash([5,4]);ctx.strokeStyle='rgba(200,220,255,.4)';ctx.beginPath();ctx.moveTo(X(mx),pad.t);ctx.lineTo(X(mx),h-pad.b);ctx.moveTo(pad.l,Y(my));ctx.lineTo(w-pad.r,Y(my));ctx.stroke();ctx.setLineDash([]);
+ // 点
+ M.forEach((g,i)=>{const x=X(g.time/60),y=Y(g.dmg);const rad=3+Math.sqrt((g.kills+0.3)/Math.max(...M.map(m=>m.kills),1))*9;const col=g.rank===1?'#fbbf24':(g.rank<=10?'#22d3ee':'#5b729a');
+   ctx.globalAlpha=0.4+0.6*pp;ctx.beginPath();ctx.arc(x,y,rad*pp,0,7);ctx.fillStyle=col;ctx.shadowColor=col;ctx.shadowBlur=g.rank===1?12:6;ctx.fill();ctx.shadowBlur=0;ctx.globalAlpha=1;
+   if(g.rank===1){ctx.strokeStyle='#fde68a';ctx.lineWidth=1.3;ctx.beginPath();ctx.arc(x,y,rad*pp+3,0,7);ctx.stroke();}});
+ // 质心
+ const cxg=X(mean(xs)),cyg=Y(mean(ys));ctx.strokeStyle='#fff';ctx.lineWidth=1.6;ctx.beginPath();ctx.moveTo(cxg-7,cyg);ctx.lineTo(cxg+7,cyg);ctx.moveTo(cxg,cyg-7);ctx.lineTo(cxg,cyg+7);ctx.stroke();
+ ctx._hit=null;ctx.canvas._hit={X,Y,xMax,yMax};});
+(function(){const o=drawers.find(d=>d.cv.id==='cvQuad');if(!o)return;
+ o.cv.addEventListener('mousemove',e=>{const r=o.cv.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;let hit=null,bd=1e9;const H=o.cv._hit;if(!H){hideTip();return;}
+  M.forEach(g=>{const x=H.X(g.time/60),y=H.Y(g.dmg);const d=Math.hypot(x-mx,y-my);if(d<13&&d<bd){bd=d;hit=g;}});
+  if(hit){tip.innerHTML=`<b style="color:${hit.rank===1?'#fbbf24':'#22d3ee'}">#${hit.rank} ${hit.map}</b><br>存活 <b>${fmtMM(hit.time)}分</b> · 伤害 <b>${hit.dmg}</b><br>${hit.kills}杀 ${hit.dbno}倒 · ${HNAME[hit.horse]||''}`;tip.style.opacity=1;moveTip(e);}else hideTip();});
+ o.cv.addEventListener('mouseleave',hideTip);})();
+
+/* 4) 生存分析曲线（阶梯 KM 风格 + 吃鸡金点 + 中位线） */
+setupCanvas('cvSurv',(ctx,w,h,p)=>{const pad={l:42,r:14,t:18,b:34};
+ const times=MG.map(g=>g.time/60);const tMax=Math.max(...times,1)*1.08;const X=v=>pad.l+(v/tMax)*(w-pad.l-pad.r),Y=v=>pad.t+(1-v)*(h-pad.t-pad.b);
+ gridAxis(ctx,w,h,pad,[0,tMax],[0,1],'存活时间(分)','仍存活对局占比',v=>v.toFixed(0),v=>(v*100).toFixed(0)+'%');
+ const pp=easeOut(p);
+ function survCurve(filter,col,fill){const arr=MG.filter(filter).map(g=>g.time/60).sort((a,b)=>a-b);if(!arr.length)return null;
+   const n=arr.length;ctx.beginPath();ctx.moveTo(X(0),Y(1));
+   arr.forEach((t,i)=>{const S1=(n-i)/n,S2=(n-i-1)/n;ctx.lineTo(X(t),Y(S1));ctx.lineTo(X(t),Y(S2));});
+   ctx.lineTo(X(tMax),Y(0));ctx.lineTo(X(tMax),h-pad.b);ctx.lineTo(X(0),h-pad.b);ctx.closePath();
+   const g=ctx.createLinearGradient(0,pad.t,0,h-pad.b);g.addColorStop(0,col+'44');g.addColorStop(1,col+'05');ctx.fillStyle=g;ctx.fill();
+   ctx.beginPath();ctx.moveTo(X(0),Y(1));arr.forEach((t,i)=>{const S1=(n-i)/n,S2=(n-i-1)/n;ctx.lineTo(X(t),Y(S1));ctx.lineTo(X(t),Y(S2));});ctx.strokeStyle=col;ctx.lineWidth=2;ctx.shadowColor=col;ctx.shadowBlur=8;ctx.stroke();ctx.shadowBlur=0;return arr;}
+ const all=survCurve(()=>true,'#38bdf8');
+ // 吃鸡金点
+ MG.filter(g=>g.won).forEach(g=>{const x=X(g.time/60);ctx.beginPath();ctx.arc(x,Y(0.04),4.5,0,7);ctx.fillStyle='#fbbf24';ctx.shadowColor='#fbbf24';ctx.shadowBlur=10;ctx.fill();ctx.shadowBlur=0;});
+ // 中位存活线
+ if(all){const med=all[Math.floor(all.length/2)];ctx.setLineDash([5,4]);ctx.strokeStyle='rgba(251,191,36,.6)';ctx.beginPath();ctx.moveTo(X(med),pad.t);ctx.lineTo(X(med),h-pad.b);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='#fcd34d';ctx.font='10px sans-serif';ctx.textAlign='center';ctx.fillText('中位 '+med.toFixed(1)+'分',X(med),pad.t+10);}
+ const wins=MG.filter(g=>g.won);if(wins.length){ctx.fillStyle='#fcd34d';ctx.font='10px sans-serif';ctx.textAlign='right';ctx.fillText('吃鸡局均存活 '+mean(wins.map(g=>g.time/60)).toFixed(1)+'分',w-pad.r,pad.t+9);}
+ ctx.fillStyle='#64769a';ctx.font='9px sans-serif';ctx.textAlign='left';ctx.fillText('阶梯=随存活时间仍未出局的对局占比',pad.l+2,h-pad.b-6);});
+
+/* 5) 马型状态流转弦图 */
+setupCanvas('cvChord',(ctx,w,h,p)=>{const cx=w/2,cy=h/2+6,R=Math.min(w,h)/2-58;
+ const keys=HORDER.filter(k=>hcnt[k]>0);const N=keys.length;if(!N){ctx.fillStyle='#5b6d8f';ctx.font='12px sans-serif';ctx.textAlign='center';ctx.fillText('暂无单局评级',w/2,h/2);return;}
+ const tot=keys.reduce((s,k)=>s+hcnt[k],0);const pp=easeOut(p);
+ let a0=-Math.PI/2;const arc={};
+ keys.forEach(k=>{const span=(hcnt[k]/tot)*Math.PI*2*0.92;arc[k]={a0,a1:a0+span,mid:a0+span/2};a0+=span+(Math.PI*2*0.08)/N;});
+ function pt(a,r){return{x:cx+Math.cos(a)*r,y:cy+Math.sin(a)*r};}
+ // 弦带
+ keys.forEach(ki=>{const row=trans[ki]||{};keys.forEach(kj=>{const c=row[kj];if(!c)return;const wi=arc[ki],wj=arc[kj];
+   const n1=wi.mid-0.02,n2=wi.mid+0.02;const m1=wj.mid-0.02,m2=wj.mid+0.02;
+   const p1=pt(n1,R*0.96),p2=pt(n2,R*0.96),q1=pt(m1,R*0.96),q2=pt(m2,R*0.96);
+   ctx.beginPath();ctx.moveTo(p1.x,p1.y);ctx.quadraticCurveTo(cx,cy,q1.x,q1.y);ctx.lineTo(q2.x,q2.y);ctx.quadraticCurveTo(cx,cy,p2.x,p2.y);ctx.closePath();
+   ctx.fillStyle=HCOL[ki]+(ki===kj?'26':'30');ctx.fill();});});
+ // 节点弧
+ keys.forEach(k=>{const wi=arc[k],col=HCOL[k];ctx.beginPath();ctx.arc(cx,cy,R,wi.a0,wi.a1);ctx.lineWidth=Math.max(7,14*hcnt[k]/tot)+4;ctx.strokeStyle=col;ctx.shadowColor=col;ctx.shadowBlur=9;ctx.stroke();ctx.shadowBlur=0;
+  const lp=pt(wi.mid,R+22);ctx.fillStyle=col;ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(HNAME[k].replace('马',''),lp.x,lp.y);
+  const cp=pt(wi.mid,R-16);ctx.fillStyle='#eaf4ff';ctx.font='bold 10px sans-serif';ctx.fillText(hcnt[k],cp.x,cp.y);});
+ // 中心
+ ctx.fillStyle='#fff';ctx.font='bold 20px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(tot,cx,cy-4);ctx.fillStyle='#8298bd';ctx.font='9.5px sans-serif';ctx.fillText('状态流转',cx,cy+14);
+ ctx.fillStyle='#5b6d8f';ctx.font='9px sans-serif';ctx.fillText('自环率 '+Math.round(selfLoopRate*100)+'%（越高越稳）',cx,h-12);});
+
+/* 6) 状态演进流（滑动均值多线 + 趋势 + 连胜带） */
+setupCanvas('cvTrend',(ctx,w,h,p)=>{const pad={l:38,r:14,t:16,b:30};const n=MG.length;if(n<3){ctx.fillStyle='#5b6d8f';ctx.font='12px sans-serif';ctx.textAlign='center';ctx.fillText('近期对局不足',w/2,h/2);return;}
+ const ww=Math.max(3,Math.round(n/8));
+ const series=[
+  {d:smooth(MG.map(g=>g.dmg),ww),col:'#fb7185',nm:'伤害'},{d:smooth(MG.map(g=>g.kills+g.dbno*0.6),ww),col:'#fb923c',nm:'击杀+击倒'},
+  {d:smooth(MG.map(g=>g.rank<=10?1:0),ww),col:'#34d399',nm:'前十率'},{d:smooth(rankScore,ww),col:'#38bdf8',nm:'排名分'}];
+ const X=i=>pad.l+i/(n-1)*(w-pad.l-pad.r);
+ // 连胜段背景
+ let seg=0;for(let i=0;i<n;i++){if(MG[i].won){if(!seg||!MG[i-1].won)seg=i;if(i===n-1||!MG[i+1].won){ctx.fillStyle='rgba(251,191,36,.10)';ctx.fillRect(X(seg),pad.t,X(i)-X(seg)+3,h-pad.t-pad.b);}}
+   if(!MG[i].won)seg=0;}
+ ctx.strokeStyle='rgba(120,150,200,.12)';for(let i=0;i<=4;i++){const y=pad.t+(h-pad.t-pad.b)*i/4;ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(w-pad.r,y);ctx.stroke();}
+ const pp=easeOut(p);
+ series.forEach(s=>{const mx=Math.max(...s.d,1e-6);ctx.beginPath();s.d.forEach((v,i)=>{const y=pad.t+(1-clamp(v/mx,0,1)*pp)*(h-pad.t-pad.b);i?ctx.lineTo(X(i),y):ctx.moveTo(X(i),y);});
+   ctx.strokeStyle=s.col;ctx.lineWidth=2;ctx.shadowColor=s.col;ctx.shadowBlur=7;ctx.stroke();ctx.shadowBlur=0;});
+ // 趋势虚线（排名分回归）
+ const rs=smooth(rankScore,ww),slope=linReg(rs),rmx=Math.max(...rs,1e-6);
+ ctx.setLineDash([6,5]);ctx.strokeStyle='rgba(255,255,255,.55)';ctx.lineWidth=1.3;ctx.beginPath();
+ const y0=pad.t+(1-clamp(rs[0]/rmx,0,1))*(h-pad.t-pad.b),y1=pad.t+(1-clamp((rs[0]+slope*(n-1))/rmx,0,1))*(h-pad.t-pad.b);
+ ctx.moveTo(X(0),y0);ctx.lineTo(X(n-1),y1);ctx.stroke();ctx.setLineDash([]);
+ ctx.fillStyle=slope>=0?'#34d399':'#fb7185';ctx.font='bold 10px sans-serif';ctx.textAlign='right';ctx.fillText(slope>=0?'状态上行 ▲':'状态下滑 ▼',w-pad.r,pad.t+8);
+ // 峰值标注
+ let pi=0;MG.forEach((g,i)=>{if(g.dmg>MG[pi].dmg)pi=i;});const pv=series[0].d[pi];ctx.fillStyle='#fde68a';ctx.beginPath();ctx.arc(X(pi),pad.t+(1-pv/Math.max(...series[0].d))*(h-pad.t-pad.b),3.5,0,7);ctx.fill();
+ ctx.fillStyle='#fcd34d';ctx.font='9.5px sans-serif';ctx.textAlign='center';ctx.fillText('峰值 '+MG[pi].dmg,X(pi),pad.t+(1-pv/Math.max(...series[0].d))*(h-pad.t-pad.b)-8);
+ // 图例
+ ctx.textAlign='left';let lx=pad.l+2;series.forEach(s=>{ctx.fillStyle=s.col;ctx.fillRect(lx,h-15,8,3);ctx.fillStyle='#9db4d8';ctx.font='9.5px sans-serif';ctx.fillText(s.nm,lx+11,h-12);lx+=ctx.measureText(s.nm).width+26;});
+ ctx.fillStyle='#5b6d8f';ctx.textAlign='right';ctx.fillText('窗口 '+ww+' 场滑动均值',w-pad.r,h-12);});
+
+/* 7) 武器效率象限：爆头率 × 单杀伤害 */
+setupCanvas('cvWpnQuad',(ctx,w,h,p)=>{const pad={l:44,r:14,t:16,b:34};const W0=(P.weapons||[]).filter(x=>x.kills>=3);
+ if(W0.length<2){ctx.fillStyle='#5b6d8f';ctx.font='12px sans-serif';ctx.textAlign='center';ctx.fillText('武器样本不足',w/2,h/2);return;}
+ W0.forEach(x=>{x.hsr=x.kills?x.hs/x.kills:0;x.dpk=x.kills?x.dmg/x.kills:0;});
+ const xMax=Math.max(...W0.map(x=>x.hsr),0.05)*1.15,yMax=Math.max(...W0.map(x=>x.dpk),50)*1.1;
+ const X=v=>pad.l+(v/xMax)*(w-pad.l-pad.r),Y=v=>pad.t+(1-v/yMax)*(h-pad.t-pad.b);
+ gridAxis(ctx,w,h,pad,[0,xMax],[0,yMax],'爆头率','单杀伤害',v=>(v*100).toFixed(0)+'%',v=>Math.round(v));
+ const pp=easeOut(p),maxK=Math.max(...W0.map(x=>x.kills),1);
+ const ax=mean(W0.map(x=>x.hsr)),ay=mean(W0.map(x=>x.dpk));
+ ctx.setLineDash([5,4]);ctx.strokeStyle='rgba(200,220,255,.35)';ctx.beginPath();ctx.moveTo(X(ax),pad.t);ctx.lineTo(X(ax),h-pad.b);ctx.moveTo(pad.l,Y(ay));ctx.lineTo(w-pad.r,Y(ay));ctx.stroke();ctx.setLineDash([]);
+ ctx.font='9px sans-serif';ctx.textAlign='center';
+ ctx.fillStyle='rgba(167,139,250,.55)';ctx.fillText('精准火力',X(xMax*0.75),Y(yMax*0.95)+11);
+ ctx.fillStyle='rgba(56,189,248,.55)';ctx.fillText('爆头收割',X(xMax*0.75),Y(yMax*0.08)+11);
+ ctx.fillStyle='rgba(251,146,60,.55)';ctx.fillText('压制输出',X(xMax*0.25),Y(yMax*0.95)+11);
+ ctx.fillStyle='rgba(100,116,139,.6)';ctx.fillText('随缘近战',X(xMax*0.25),Y(yMax*0.08)+11);
+ W0.forEach(x=>{const rad=(6+Math.sqrt(x.kills/maxK)*22)*pp;const col=(WTYP[x.type]||WTYP.oth)[1];
+   ctx.globalAlpha=0.8;ctx.beginPath();ctx.arc(X(x.hsr),Y(x.dpk),rad,0,7);const g=ctx.createRadialGradient(X(x.hsr)-rad*.3,Y(x.dpk)-rad*.3,1,X(x.hsr),Y(x.dpk),rad);g.addColorStop(0,col+'e6');g.addColorStop(1,col+'22');ctx.fillStyle=g;ctx.shadowColor=col;ctx.shadowBlur=8;ctx.fill();ctx.shadowBlur=0;ctx.globalAlpha=1;
+   ctx.strokeStyle=col+'cc';ctx.lineWidth=1;ctx.stroke();
+   if(rad>16){ctx.fillStyle='#eaf4ff';ctx.font='bold 8.5px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(x.name.length>6?x.name.slice(0,5)+'…':x.name,X(x.hsr),Y(x.dpk));}x._x=X(x.hsr);x._y=Y(x.dpk);x._r=rad;});
+ ctx.canvas._W=W0;});
+(function(){const o=drawers.find(d=>d.cv.id==='cvWpnQuad');if(!o)return;
+ o.cv.addEventListener('mousemove',e=>{const r=o.cv.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;let hit=null;
+  const W0=o.cv._W;if(!W0)return;
+  W0.forEach(x=>{if(Math.hypot(x._x-mx,x._y-my)<=x._r+3)hit=x;});
+  if(hit){const tn=WTYP[hit.type]||WTYP.oth;tip.innerHTML=`<b style="color:${tn[1]}">${hit.name}</b> · ${tn[0]} · Lv.${hit.level}<br>${hit.kills}杀 · 爆头率 <b>${(hit.hsr*100).toFixed(0)}%</b><br>单杀伤害 <b>${hit.dpk.toFixed(0)}</b> · 击倒 ${hit.grog}<br>最远 ${hit.longest}m · 单场最高 ${hit.best}`;tip.style.opacity=1;moveTip(e);}else hideTip();});
+ o.cv.addEventListener('mouseleave',hideTip);})();
+
+/* 8) 武器树图（切片 treemap：枪种分列，列内武器按击杀纵向堆叠，亮度=爆头率） */
+setupCanvas('cvTree',(ctx,w,h,p)=>{
+ const pad=4;const groups={};(P.weapons||[]).forEach(x=>{if(x.kills<=0)return;(groups[x.type]=groups[x.type]||[]).push(x);});
+ const gArr=Object.entries(groups).map(([t,arr])=>({t,arr:arr.slice().sort((a,b)=>b.kills-a.kills),sum:arr.reduce((s,x)=>s+x.kills,0)})).filter(g=>g.sum>0).sort((a,b)=>b.sum-a.sum);
+ const tot=gArr.reduce((s,g)=>s+g.sum,0);ctx.clearRect(0,0,w,h);
+ if(!tot){ctx.fillStyle='#5b6d8f';ctx.font='12px sans-serif';ctx.textAlign='center';ctx.fillText('暂无武器数据',w/2,h/2);ctx.canvas._groups=[];return;}
+ const pp=easeOut(p),top=pad+16,areaH=h-top-pad,areaW=w-pad*2;let gx=pad;
+ gArr.forEach(g=>{const gw=areaW*(g.sum/tot);const col=(WTYP[g.t]||WTYP.oth)[1];
+  ctx.fillStyle=col+'14';ctx.fillRect(gx,pad,Math.max(2,gw-2),h-pad*2);
+  ctx.fillStyle=col;ctx.font=(gw<54?'bold 8.5px':'bold 10px')+' sans-serif';ctx.textAlign='left';ctx.textBaseline='top';ctx.fillText((WSHORT[g.t]||'其他')+' '+g.sum,gx+3,pad+2);
+  let y=top;g.arr.forEach(x=>{const bh=areaH*(x.kills/g.sum)*pp;const hsr=x.kills?x.hs/x.kills:0;
+   const alpha=Math.round(clamp(0.30+hsr*0.95,0.30,0.98)*255).toString(16).padStart(2,'0');
+   const hx=gx+1,hw=Math.max(2,gw-4),hh=Math.max(1.5,bh-1.5);
+   ctx.fillStyle=col+alpha;ctx.fillRect(hx,y,hw,hh);
+   if(gw>42&&bh>22){ctx.fillStyle='#eef6ff';ctx.font='bold 10px sans-serif';ctx.textAlign='left';ctx.textBaseline='top';ctx.fillText(x.name.length>7?x.name.slice(0,6)+'…':x.name,hx+3,y+3);ctx.fillStyle='#d7e6fb';ctx.font='9px sans-serif';ctx.fillText(x.kills+'杀',hx+3,y+15);}
+   x._rx=hx;x._ry=y;x._rw=hw;x._rh=hh;y+=bh;});
+  g._x=gx;g._w=gw;gx+=gw;});
+ ctx.canvas._groups=gArr;});
+(function(){const o=drawers.find(d=>d.cv.id==='cvTree');if(!o)return;
+ o.cv.addEventListener('mousemove',e=>{const r=o.cv.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;let hit=null,gt=null;
+  (o.cv._groups||[]).forEach(g=>{(g._cells||[]).forEach(c=>{if(mx>=c.x._rx&&mx<=c.x._rx+c.x._rw&&my>=c.x._ry&&my<=c.x._ry+c.x._rh){hit=c.x;gt=g;}});});
+  if(hit){const tn=WTYP[hit.type]||WTYP.oth;tip.innerHTML=`<b style="color:${tn[1]}">${hit.name}</b> · ${tn[0]}<br>${hit.kills}杀 · 爆头 ${hit.hs}（${hit.kills?(hit.hs/hit.kills*100).toFixed(0):0}%）<br>击倒 ${hit.grog} · 伤害 ${fmtNum(hit.dmg)}<br>最远 ${hit.longest}m · 单场最高 ${hit.best}`;tip.style.opacity=1;moveTip(e);}else hideTip();});
+ o.cv.addEventListener('mouseleave',hideTip);})();
+
+/* 9) 星期 × 小时 热力 */
+setupCanvas('cvHeat',(ctx,w,h,p)=>{const pad={l:34,r:8,t:14,b:26};const grid=Array.from({length:7},()=>Array(24).fill(0)),wing=Array.from({length:7},()=>Array(24).fill(0));
+ MG.forEach(g=>{const d=dateOf(g.ts);if(!d)return;const dw=(d.getDay()+6)%7,hh=d.getHours();grid[dw][hh]++;if(g.won)wing[dw][hh]++;});
+ let mx=1;grid.forEach(r=>r.forEach(v=>mx=Math.max(mx,v)));const cw=(w-pad.l-pad.r)/24,chh=(h-pad.t-pad.b)/7,pp=easeOut(p);
+ const dayN=['周一','周二','周三','周四','周五','周六','周日'];
+ for(let dw=0;dw<7;dw++)for(let hh=0;hh<24;hh++){const v=grid[dw][hh];const inten=clamp(v/mx,0,1)*pp;
+   ctx.fillStyle=v?`rgba(56,189,248,${0.12+inten*0.78})`:'rgba(120,150,200,.07)';
+   ctx.fillRect(pad.l+hh*cw+1,pad.t+dw*chh+1,cw-2,chh-2);
+   if(wing[dw][hh]>0){ctx.strokeStyle='#fbbf24';ctx.lineWidth=1.3;ctx.beginPath();ctx.arc(pad.l+hh*cw+cw/2,pad.t+dw*chh+chh/2,Math.min(cw,chh)/2-3,0,7);ctx.stroke();}}
+ ctx.fillStyle='#8298bd';ctx.font='9px sans-serif';ctx.textAlign='right';ctx.textBaseline='middle';
+ for(let dw=0;dw<7;dw++)ctx.fillText(dayN[dw],pad.l-4,pad.t+dw*chh+chh/2);
+ ctx.textAlign='center';ctx.textBaseline='top';for(let hh=0;hh<24;hh+=3)ctx.fillText(hh+'时',pad.l+hh*cw+cw/2,h-pad.b+5);
+ ctx.textAlign='left';ctx.fillStyle='#5b6d8f';ctx.fillText('金圈=该时段吃过鸡',pad.l,pad.t-10);});
+
+/* ===== 背景粒子 ===== */
+const bg=document.getElementById('bgFx'),bctx=bg.getContext('2d');let pts=[];
+function bgSize(){bg.width=innerWidth*DPR;bg.height=innerHeight*DPR;bg.style.width=innerWidth+'px';bg.style.height=innerHeight+'px';bctx.setTransform(DPR,0,0,DPR,0,0);
+ const n=Math.min(70,Math.floor(innerWidth*innerHeight/26000));pts=Array.from({length:n},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,vx:(Math.random()-.5)*.22,vy:(Math.random()-.5)*.22}));}
+function bgDraw(){const W=innerWidth,H=innerHeight;bctx.clearRect(0,0,W,H);
+ pts.forEach(pt=>{pt.x+=pt.vx;pt.y+=pt.vy;if(pt.x<0||pt.x>W)pt.vx*=-1;if(pt.y<0||pt.y>H)pt.vy*=-1;});
+ for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const a=pts[i],b=pts[j],dx=a.x-b.x,dy=a.y-b.y,dd=dx*dx+dy*dy;if(dd<130*130){bctx.strokeStyle='rgba(56,189,248,'+(0.08*(1-Math.sqrt(dd)/130))+')';bctx.beginPath();bctx.moveTo(a.x,a.y);bctx.lineTo(b.x,b.y);bctx.stroke();}}
+ pts.forEach(pt=>{bctx.fillStyle='rgba(120,200,255,.5)';bctx.beginPath();bctx.arc(pt.x,pt.y,1.3,0,7);bctx.fill();});requestAnimationFrame(bgDraw);}
+
+/* ===== 静态面板动画 ===== */
+const T0=performance.now(),DUR=1300;
+function frame(t){const p=clamp((t-T0)/DUR,0,1);drawers.forEach(o=>o.render(p));if(p<1)requestAnimationFrame(frame);}
+window.addEventListener('resize',()=>{bgSize();drawers.forEach(o=>o.render(1));});
+bgSize();bgDraw();requestAnimationFrame(frame);
+}
+</script>
+</body>
+</html>

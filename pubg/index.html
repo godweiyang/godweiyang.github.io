@@ -648,6 +648,7 @@ button:not(:disabled):active,.pager .pg:not(.dis):not(.cur):active,.tabs button:
         <button id="sBtn">查询</button>
         <button id="sShotBtn" class="sec" type="button" disabled>截图分享</button>
         <button id="sPosterBtn" class="sec" type="button" disabled>生成个人海报</button>
+        <button id="sArenaBtn" class="sec" type="button" disabled>⚡数据大屏</button>
         <button id="sReset" class="sec" type="button">清空</button>
       </div>
       <div class="hint">展示生涯总览、当前赛季竞技段位、武器熟练度、生存熟练度，以及近 14 天对局；点开任意对局可查看全队战报。</div>
@@ -2431,14 +2432,51 @@ function shotCapture(el,fname,btn){
   });
 }
 function syncShotBtns(){
-  const mb=$('mShotBtn'),sb=$('sShotBtn'),pb=$('sPosterBtn');
+  const mb=$('mShotBtn'),sb=$('sShotBtn'),pb=$('sPosterBtn'),ab=$('sArenaBtn');
   const sBusy=!$('singleRes')||!$('singleRes').children.length||!!$('singleRes').querySelector('.spinner');
   if(mb)mb.disabled=!$('cols')||!$('cols').children.length;
   if(sb)sb.disabled=sBusy;
   if(pb)pb.disabled=sBusy;
+  if(ab)ab.disabled=sBusy;
 }
 $('mShotBtn').onclick=()=>shotCapture($('mShotWrap'),'pubgzjcx-多人战绩',$('mShotBtn'));
 $('sShotBtn').onclick=()=>shotCapture($('singleRes'),'pubgzjcx-单人战绩'+(S.name?('-'+S.name):''),$('sShotBtn'));
+
+/* ================================================== 数据大屏（全屏酷炫 HUD，独立 arena.html，新标签打开，零依赖，数据来自已查询结果） */
+const ARENA_KEY='pubg_arena_payload';
+function buildPubgArenaPayload(){
+  const p=S.data;if(!p)return null;
+  const d=p.detail,sv=d.surv||{},life=aggModes(d.life),rl=rankedList(d.ranked);
+  const rounds=num(life.roundsPlayed)||0;
+  const kd=kdOf(num(life.kills),rounds,num(life.wins));
+  const totMove=num(life.walkDistance)+num(life.rideDistance)+num(life.swimDistance);
+  const longestSurv=Math.max(0,...Object.values(d.life||{}).map(s=>Math.max(num(s&&s.longestTimeSurvived),num(s&&s.mostSurvivalTime))));
+  const roundMost=Math.max(0,...Object.values(d.life||{}).map(s=>num(s&&s.roundMostKills)));
+  const modes=['solo','solo-fpp','duo','duo-fpp','squad','squad-fpp'].map(m=>{
+    const s=d.life[m]||{},r=num(s.roundsPlayed);if(!r)return null;
+    return {mode:m,name:modeCn(m),rounds:r,wins:num(s.wins),kills:num(s.kills),dbno:num(s.dBNOs),assists:num(s.assists),dmg:num(s.damageDealt),hs:num(s.headshotKills),top10:num(s.top10s),time:num(s.timeSurvived),kd:+kdOf(num(s.kills),r,num(s.wins)).toFixed(2)};
+  }).filter(Boolean);
+  const weapons=weaponRows(d.weapon).map(w=>({name:w.name,type:weaponType(w.code),kills:w.kills,hs:w.hs,grog:w.grog,dmg:Math.round(w.dmg),longest:Math.round(w.longest),best:w.best,level:w.level,normal:w.normal,ranked:w.ranked}))
+    .filter(w=>w.kills>0||w.dmg>0).sort((a,b)=>b.kills-a.kills||b.dmg-a.dmg).slice(0,24);
+  const matches=(p.recent||[]).map(g=>({rank:g.rank,won:!!g.won,map:mapName(g.map),mode:modeCn(g.mode),type:typeCn(g.type,g.custom),kills:g.kills||0,dbno:g.dbno||0,dmg:Math.round(g.dmg||0),hs:g.hs||0,assists:g.assists||0,revives:g.revives||0,time:g.time||0,heals:g.heals||0,boosts:g.boosts||0,streak:g.streak||0,longest:g.longest||0,move:Math.round((g.walk||0)+(g.ride||0)+(g.swim||0)),ts:g.createdAt,death:g.death?deathCn(g.death):'',roadKills:g.roadKills||0,horse:(matchHorse(g)||{}).tier||'N'}));
+  const ranks=rl.map(r=>({mode:r.mode,name:modeCn(r.mode),tier:r.tier,sub:r.sub,rp:r.rp,rounds:r.rounds,wins:r.wins,winRatio:r.winRatio,topRatio:r.topRatio,avgRank:r.avgRank,avgKill:r.avgKill,kda:r.kda,hsRatio:r.hsRatio,avgSurv:r.avgSurv,roundMostKills:r.roundMostKills,killStreak:r.killStreak,longest:r.longest}));
+  const a=p.agg||{};
+  return {game:'pubg',name:p.name,platform:$('platformSel').selectedOptions[0].textContent,
+    clan:p.clan?{tag:p.clan.clanTag||'',name:p.clan.clanName||'',level:num(p.clan.clanLevel)}:null,
+    ban:p.ban||'Innocent',horse:p.horse?{tier:p.horse.tier,label:p.horse.label,score:p.horse.score}:{tier:'N',label:HORSE_LABEL.N,score:0},
+    surv:{level:num(sv.level),tier:num(sv.tier),xp:num(sv.xp),matches:num(sv.totalMatchesPlayed)},
+    life:{rounds,wins:num(life.wins),kills:num(life.kills),dbno:num(life.dBNOs),assists:num(life.assists),dmg:num(life.damageDealt),hs:num(life.headshotKills),top10:num(life.top10s),time:num(life.timeSurvived),revives:num(life.revives),heals:num(life.heals),boosts:num(life.boosts),walk:num(life.walkDistance),ride:num(life.rideDistance),swim:num(life.swimDistance),move:totMove,roadKills:num(life.roadKills),vehDestroy:num(life.vehicleDestroys),weaponsAcquired:num(life.weaponsAcquired),teamKills:num(life.teamKills),suicides:num(life.suicides),dailyKills:num(life.dailyKills),dailyWins:num(life.dailyWins),weeklyKills:num(life.weeklyKills),weeklyWins:num(life.weeklyWins),days:num(life.days),longestKill:Math.round(num(life.longestKill)),maxStreak:num(life.maxKillStreaks),roundMost,longestSurv:Math.round(longestSurv),kd:+kd.toFixed(2)},
+    modes,weapons,ranks,histBest:p.histBest||null,histByMode:p.histByMode||{},matches,
+    totalAll:(p.allIds||[]).length,loadedN:p.loadedN||matches.length,
+    dims:{kd:a.kd||0,dmg:a.dmg||0,top:a.top||0,win:a.win||0,score:(p.horse&&p.horse.score)||0},
+    rankSeason:d.rankSeason?seasonLabel(d.rankSeason):'',ts:Date.now()};
+}
+function openPubgArena(){
+  const pl=buildPubgArenaPayload();if(!pl){toast('请先查询玩家','e');return;}
+  try{localStorage.setItem(ARENA_KEY,JSON.stringify(pl));}catch(e){}
+  window.open('arena.html?name='+encodeURIComponent(S.name),'_blank');
+}
+$('sArenaBtn').onclick=openPubgArena;
 
 /* ================================================== 个人战绩海报（纯 Canvas 手绘，1080×1920 竖版 9:16，零依赖，导出 PNG） */
 //---------------------------------------------------------------------

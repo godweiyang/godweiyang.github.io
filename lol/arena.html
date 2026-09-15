@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>LOL 作战数据舱</title>
+<style>
+:root{
+  --bg0:#04060c;
+  --cyan:#22d3ee; --blue:#38bdf8; --gold:#fbbf24; --green:#34d399;
+  --orange:#fb923c; --red:#fb7185; --violet:#a78bfa;
+  --txt:#dbe7ff; --sub:#8298bd; --weak:#5b6d8f;
+  --panel:linear-gradient(160deg,rgba(22,33,58,.68),rgba(9,15,29,.52));
+  --brd:rgba(96,168,255,.16);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:var(--bg0);color:var(--txt);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+body{min-height:100vh;background:
+  radial-gradient(1100px 620px at 12% -8%,rgba(34,211,238,.14),transparent 60%),
+  radial-gradient(1000px 640px at 92% -4%,rgba(167,139,250,.16),transparent 60%),
+  radial-gradient(900px 700px at 50% 118%,rgba(56,189,248,.10),transparent 62%),
+  linear-gradient(180deg,#05080f,#04060c 60%)}
+#bgFx{position:fixed;inset:0;z-index:0;pointer-events:none}
+.wrap{position:relative;z-index:1;max-width:1580px;margin:0 auto;padding:22px 26px 40px}
+header.hud{display:flex;align-items:center;gap:20px;flex-wrap:wrap;
+  padding:18px 22px;border-radius:18px;background:var(--panel);border:1px solid var(--brd);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.03),0 22px 60px rgba(0,0,0,.5);
+  position:relative;overflow:hidden;animation:rise .7s cubic-bezier(.2,.8,.2,1) both}
+header.hud::after{content:"";position:absolute;left:0;top:0;height:2px;width:100%;
+  background:linear-gradient(90deg,transparent,var(--cyan),var(--violet),transparent);opacity:.7;animation:sweep 4.2s linear infinite}
+@keyframes sweep{0%{transform:translateX(-60%)}100%{transform:translateX(60%)}}
+.avatar{width:64px;height:64px;border-radius:50%;border:2px solid rgba(56,189,248,.5);box-shadow:0 0 22px rgba(56,189,248,.35);background:#0b1426;object-fit:cover;flex:0 0 auto}
+.hud-l{flex:1;min-width:240px}
+.crumb{font-size:11.5px;letter-spacing:3px;color:var(--cyan);text-transform:uppercase;opacity:.85}
+.pname{font-size:32px;font-weight:800;letter-spacing:.5px;line-height:1.15;margin:6px 0 8px;
+  background:linear-gradient(92deg,#fff,#bfe4ff 55%,#8fd3ff);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 26px rgba(56,189,248,.25)}
+.chips{display:flex;gap:7px;flex-wrap:wrap}
+.chip{font-size:11.5px;padding:4px 10px;border-radius:999px;border:1px solid rgba(120,170,255,.22);background:rgba(56,189,248,.08);color:#bcd6f5;letter-spacing:.4px}
+.chip b{color:#fff;font-weight:700}
+.horse{position:relative;width:118px;height:118px;flex:0 0 auto;display:grid;place-items:center}
+.horse .ring{position:absolute;inset:0;border-radius:50%}
+.horse .core{position:relative;width:88px;height:88px;border-radius:50%;display:grid;place-items:center;text-align:center;
+  background:radial-gradient(circle at 34% 30%,rgba(255,255,255,.16),rgba(12,20,38,.92));border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 0 18px rgba(0,0,0,.55),0 0 26px rgba(0,0,0,.4)}
+.horse .hl{font-size:19px;font-weight:800;letter-spacing:1px;line-height:1.1}
+.horse .hs{font-size:10px;color:var(--sub);margin-top:3px}
+.horse .hscore{font-size:13px;font-weight:700;color:#fff}
+.horse.T .ring{background:conic-gradient(from 0deg,#fbbf24,#fff6d5,#f59e0b,#fde68a,#fbbf24);animation:spin 3.6s linear infinite;-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 7px),#000 calc(100% - 6px));mask:radial-gradient(farthest-side,transparent calc(100% - 7px),#000 calc(100% - 6px));filter:drop-shadow(0 0 10px rgba(251,191,36,.6))}
+.horse.A .ring{background:conic-gradient(from 0deg,#34d399,#a7f3d0,#10b981,#34d399);opacity:.9;-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 6px),#000 calc(100% - 5px));mask:radial-gradient(farthest-side,transparent calc(100% - 6px),#000 calc(100% - 5px))}
+.horse.B .ring{background:conic-gradient(from 0deg,#38bdf8,#bae6fd,#0ea5e9,#38bdf8);opacity:.85;-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 6px),#000 calc(100% - 5px));mask:radial-gradient(farthest-side,transparent calc(100% - 6px),#000 calc(100% - 5px))}
+.horse.C .ring{background:conic-gradient(from 0deg,#fb923c,#fed7aa,#f97316,#fb923c);opacity:.8;-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 6px),#000 calc(100% - 5px));mask:radial-gradient(farthest-side,transparent calc(100% - 6px),#000 calc(100% - 5px))}
+.horse.D .ring{background:conic-gradient(from 0deg,#fb7185,#fecdd3,#e11d48,#fb7185);opacity:.8;-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 6px),#000 calc(100% - 5px));mask:radial-gradient(farthest-side,transparent calc(100% - 6px),#000 calc(100% - 5px))}
+.horse.N .ring{background:rgba(120,140,170,.35);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 6px),#000 calc(100% - 5px));mask:radial-gradient(farthest-side,transparent calc(100% - 6px),#000 calc(100% - 5px))}
+@keyframes spin{to{transform:rotate(360deg)}}
+.kpis{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:12px;margin:14px 0}
+.kpi{position:relative;padding:14px 14px 12px;border-radius:14px;background:var(--panel);border:1px solid var(--brd);overflow:hidden;animation:rise .7s cubic-bezier(.2,.8,.2,1) both}
+.kpi::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(var(--c,var(--cyan)),transparent)}
+.kpi .v{font-size:25px;font-weight:800;color:#fff;line-height:1;font-variant-numeric:tabular-nums}
+.kpi .v small{font-size:13px;color:var(--sub);font-weight:600;margin-left:1px}
+.kpi .l{font-size:11.5px;color:var(--sub);margin-top:7px;letter-spacing:.6px}
+.kpi .spark{position:absolute;right:6px;bottom:6px;opacity:.6}
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:14px}
+.grid>*{min-width:0}
+.panel{position:relative;border-radius:15px;background:var(--panel);border:1px solid var(--brd);padding:14px 16px 15px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.025),0 18px 48px rgba(0,0,0,.42);animation:rise .7s cubic-bezier(.2,.8,.2,1) both}
+.panel .corner{position:absolute;width:12px;height:12px;border:0 solid var(--cyan);opacity:.55;pointer-events:none;z-index:3}
+.panel .corner.tl{top:7px;left:7px;border-top-width:1.5px;border-left-width:1.5px;border-top-left-radius:4px}
+.panel .corner.tr{top:7px;right:7px;border-top-width:1.5px;border-right-width:1.5px;border-top-right-radius:4px}
+.panel .corner.bl{bottom:7px;left:7px;border-bottom-width:1.5px;border-left-width:1.5px;border-bottom-left-radius:4px}
+.panel .corner.br{bottom:7px;right:7px;border-bottom-width:1.5px;border-right-width:1.5px;border-bottom-right-radius:4px}
+.panel h3{font-size:12.5px;font-weight:700;letter-spacing:1.4px;color:#cfe3ff;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.panel h3::before{content:"";width:4px;height:13px;border-radius:2px;background:linear-gradient(var(--cyan),var(--violet));box-shadow:0 0 8px var(--cyan)}
+.panel h3 .tag{margin-left:auto;font-size:10.5px;color:var(--weak);letter-spacing:.5px;font-weight:500;text-align:right}
+.cv{min-width:0;overflow:hidden;position:relative;width:100%}
+.cv canvas{display:block;width:100%}
+.col-4{grid-column:span 4}.col-5{grid-column:span 5}.col-7{grid-column:span 7}.col-8{grid-column:span 8}.col-12{grid-column:span 12}
+@keyframes rise{from{opacity:0;transform:translateY(26px) scale(.985)}to{opacity:1;transform:none}}
+#archBox{margin-top:4px}
+.arch-name{text-align:center;font-size:17px;font-weight:800;letter-spacing:1px;margin:2px 0 3px;
+  background:linear-gradient(92deg,#22d3ee,#a78bfa);-webkit-background-clip:text;background-clip:text;color:transparent}
+.arch-desc{text-align:center;font-size:10.5px;color:var(--sub);margin-bottom:9px}
+.trait{display:grid;grid-template-columns:64px 1fr 34px;gap:8px;align-items:center;font-size:11px;margin:5px 0}
+.trait .tn{color:#cdddf7}.trait .tbar{height:6px;border-radius:4px;background:rgba(120,150,200,.13);overflow:hidden}
+.trait .tbar i{display:block;height:100%;border-radius:4px;width:0;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
+.trait .tv{text-align:right;color:#fff;font-variant-numeric:tabular-nums;font-weight:700}
+.dual{display:grid;grid-template-columns:1fr 1.5fr;gap:16px}
+.ranks{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:9px}
+.rk{border-radius:11px;padding:10px 12px;border:1px solid rgba(120,170,255,.15);background:rgba(10,18,34,.5)}
+.rk .rt{font-size:14px;font-weight:800;color:#eaf4ff}.rk .rs{font-size:10.5px;color:var(--sub);margin-top:3px}
+.rk .rh{font-size:10.5px;margin-top:7px;padding-top:6px;border-top:1px dashed rgba(120,160,220,.18);color:var(--sub)}.rk .rh b{color:#cfe3ff;font-weight:700}
+.rk.none .rt{color:var(--sub);font-weight:600;font-size:12.5px}
+.rkhead{font-size:11px;letter-spacing:1px;color:var(--cyan);margin:2px 0 7px}
+.recs{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:8px}
+.rc{border-radius:10px;padding:8px 11px;background:rgba(10,18,34,.5);border:1px solid rgba(120,170,255,.13)}
+.rc .rv{font-size:18px;font-weight:800;color:#fff;line-height:1;font-variant-numeric:tabular-nums}
+.rc .rv small{font-size:11px;color:var(--sub);font-weight:600}
+.rc .rl{font-size:10.5px;color:var(--sub);margin-top:5px;letter-spacing:.3px}
+#tip{position:fixed;z-index:50;pointer-events:none;opacity:0;transition:opacity .12s;background:rgba(8,14,28,.95);border:1px solid rgba(56,189,248,.4);border-radius:10px;padding:9px 11px;font-size:11.5px;box-shadow:0 12px 34px rgba(0,0,0,.6),0 0 18px rgba(56,189,248,.15);max-width:250px;line-height:1.6;backdrop-filter:blur(6px)}
+#tip b{color:#fff}#tip .g{color:var(--gold)}#tip .c{color:var(--cyan)}
+.empty{margin:14vh auto;max-width:440px;text-align:center;border:1px dashed rgba(120,160,220,.3);border-radius:16px;padding:40px 26px;background:rgba(12,20,38,.4)}
+.empty h2{font-size:20px;margin-bottom:10px;color:#e6f1ff}.empty p{color:var(--sub);font-size:13px;line-height:1.8}
+.empty a{display:inline-block;margin-top:16px;padding:9px 20px;border-radius:10px;background:linear-gradient(120deg,var(--cyan),var(--blue));color:#04121f;font-weight:700;text-decoration:none}
+footer{margin-top:18px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--weak);font-size:11px;letter-spacing:.5px;padding:0 4px}
+footer a{color:var(--cyan);text-decoration:none}
+@media(max-width:1100px){.kpis{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:760px){.wrap{padding:14px 12px 30px}.kpis{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.col-4,.col-5,.col-7,.col-8,.col-12{grid-column:span 2}.dual{grid-template-columns:1fr}.pname{font-size:25px}.horse{width:96px;height:96px}.horse .core{width:72px;height:72px}}
+</style>
+</head>
+<body>
+<canvas id="bgFx"></canvas>
+<div class="wrap" id="app"></div>
+<div id="tip"></div>
+<script>
+"use strict";
+const KEY='lol_arena_payload';
+function readPayload(){try{const raw=localStorage.getItem(KEY);return raw?JSON.parse(raw):null;}catch(e){return null;}}
+const P=readPayload();
+const HCOL={T:'#fbbf24',A:'#34d399',B:'#38bdf8',C:'#fb923c',D:'#fb7185',N:'#64748b'};
+const HNAME={T:'天选马',A:'上等马',B:'中等马',C:'下等马',D:'没有马',N:'暂无评级'};
+const POSCOL={'上':'#fb7185','野':'#34d399','中':'#38bdf8','下':'#fbbf24','射':'#fbbf24','辅':'#a78bfa','助':'#a78bfa'};
+const posColor=cn=>{const s=String(cn||'');for(const k in POSCOL){if(s.indexOf(k)>=0)return POSCOL[k];}return '#94a3b8';};
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const lerp1=(v,lo,hi)=>hi>lo?clamp((v-lo)/(hi-lo),0,1):0;
+const easeOut=t=>1-Math.pow(1-t,3);
+const mean=a=>a.length?a.reduce((s,x)=>s+x,0)/a.length:0;
+const std=a=>{if(a.length<2)return 0;const m=mean(a);return Math.sqrt(mean(a.map(x=>(x-m)*(x-m))));};
+function linReg(ys){const n=ys.length;if(n<2)return 0;const mx=(n-1)/2,my=mean(ys);let num=0,den=0;ys.forEach((y,i)=>{num+=(i-mx)*(y-my);den+=(i-mx)*(i-mx);});return den?num/den:0;}
+function smooth(arr,w){return arr.map((_,i)=>mean(arr.slice(Math.max(0,i-w+1),i+1)));}
+const num=v=>{v=Number(v);return isFinite(v)?v:0;};
+const fmtK=n=>n>=10000?(n/1000).toFixed(1)+'k':Math.round(n).toLocaleString('en-US');
+const fmtDur=s=>{s=Math.round(s||0);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');};
+const pct=(v,d=0)=>(v*100).toFixed(d)+'%';
+const dateOf=ts=>{const d=new Date(ts);return isNaN(d)?null:d;};
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+if(!P){document.getElementById('app').innerHTML='<div class="empty"><h2>暂无作战数据</h2><p>请先在 LOL 战绩查询的「单人查询」里搜索召唤师，再点击顶部的 <b>⚡数据大屏</b> 按钮进入本页。</p><a href="/lol/#/single">返回查询页</a></div>';}
+else{
+const M=P.matches||[],N=M.length,R=P.R||N;
+const s=P.summary||{};
+const S=k=>num(s[k]);
+const kda=S('averageKda'),wr=S('winRate'),kp=S('averageKillParticipationRate'),cspm=S('averageCsPerMinute');
+const dmgShare=S('averageDamageDealtToChampionShareOfTeam'),dmgToTop=S('averageDamageDealtToChampionShareToTop');
+const takenShare=S('averageDamageTakenShareOfTeam'),goldShare=S('averageGoldShareOfTeam'),csShare=S('averageCsShareOfTeam');
+const DPR=Math.min(window.devicePixelRatio||1,2);
+const winOf=g=>!!g.win;
+const winsN=M.filter(winOf).length;
+
+/* ===== 派生统计 ===== */
+const kdaArr=M.map(g=>g.kda),kdaStd=std(kdaArr);
+const fbRate=N?M.filter(g=>g.fb).length/N:0;
+const multiRate=N?M.filter(g=>g.penta+g.quadra+g.triple>0).length/N:0;
+const hotRate=N?M.filter(g=>g.kda>=4).length/N:0;
+const hcnt={T:0,A:0,B:0,C:0,D:0,N:0};M.forEach(g=>{hcnt[g.horse&&g.horse.tier]=(hcnt[g.horse&&g.horse.tier]||0)+1;});
+const trans={};let selfLoop=0,transTot=0;
+for(let i=1;i<M.length;i++){const a=M[i-1].horse&&M[i-1].horse.tier,b=M[i].horse&&M[i].horse.tier;if(!a||!b)continue;trans[a]=trans[a]||{};trans[a][b]=(trans[a][b]||0)+1;transTot++;if(a===b)selfLoop++;}
+const selfLoopRate=transTot?selfLoop/transTot:0;
+const w=Math.max(3,Math.round(N/8)||3);
+const trendSlope=linReg(smooth(kdaArr,w)),trendNorm=lerp1(trendSlope,-0.3,0.3);
+
+/* ===== 英雄聚合（补 KDA / 场均伤害 / 主位置） ===== */
+const agg={};M.forEach(g=>{const k=String(g.cid??g.cn);if(!agg[k])agg[k]={k:0,d:0,a:0,dmg:0,n:0,win:0,pos:{}};const t=agg[k];t.k+=g.k;t.d+=g.d;t.a+=g.a;t.dmg+=g.dmg;t.n++;if(g.win)t.win++;if(g.posCn)t.pos[g.posCn]=(t.pos[g.posCn]||0)+1;});
+const champMap={};(P.champs||[]).forEach(c=>{champMap[String(c.id)]=c;});
+const champs=(P.champs||[]).map(c=>{const t=agg[String(c.id)]||{k:0,d:0,a:0,dmg:0,n:0,pos:{}};const pos=Object.entries(t.pos).sort((a,b)=>b[1]-a[1])[0];
+  const cd=t.d>0?(t.k+t.a)/t.d:(t.k+t.a);
+  return {cn:c.cn,icon:c.icon,count:c.count,wr:c.wr,kda:t.n?cd:0,dpg:t.n?t.dmg/t.n:0,pos:pos?pos[0]:(c.cn?'':''),n:t.n};}).filter(c=>c.count>0).slice(0,24);
+
+/* ===== 风格六维 + 原型 ===== */
+const TRAITS=[
+ {k:'carry',n:'输出压制',v:clamp(.38*lerp1(kda,1,5)+.34*lerp1(dmgShare,.15,.38)+.28*lerp1(dmgToTop,.4,1.05),0,1)},
+ {k:'farm',n:'发育能力',v:clamp(.5*lerp1(cspm,3,9)+.28*lerp1(csShare,.12,.3)+.22*lerp1(goldShare,.15,.28),0,1)},
+ {k:'team',n:'参团节奏',v:clamp(.6*lerp1(kp,.3,.78)+.4*lerp1(wr,.35,.72),0,1)},
+ {k:'tank',n:'前排承伤',v:clamp(lerp1(takenShare,.14,.38),0,1)},
+ {k:'burst',n:'爆发多杀',v:clamp(.5*lerp1(multiRate,0,.35)+.3*lerp1(fbRate,0,.35)+.2*lerp1(hotRate,0,.4),0,1)},
+ {k:'cons',n:'稳定掌控',v:clamp(.4*(1-lerp1(kdaStd,1,4))+.3*selfLoopRate+.3*trendNorm,0,1)}
+];
+const ARCH={carry:['团战大核','队伍的输出天花板，伤害与击杀都由你兜底'],farm:['发育大核','埋头发育后期接管比赛，装备成型即无敌'],team:['节奏发动机','参团率拉满的团队粘合剂，节奏由你发起'],tank:['前排壁垒','冲在最前承伤开路，队友最安心的铜墙铁壁'],burst:['瞬间爆发','一血与多杀常客，出手就是瞬秒的刺客'],cons:['稳定基石','状态几乎不跳水，队伍最可靠的基本盘']};
+(function(){const sorted=[...TRAITS].sort((a,b)=>b.v-a.v);let arch=ARCH[sorted[0].k];
+ if(sorted[0].v>0.62&&sorted[1].v>0.58&&sorted.filter(t=>t.v>0.5).length>=4)arch=['六边形战士','没有明显短板的全能型选手，攻守兼备'];
+ window.__ARCH=arch;window.__TRAITS=TRAITS;})();
+
+/* ===== 发力期分桶 ===== */
+function bucket(dur){if(dur<22*60)return 0;if(dur<=30*60)return 1;return 2;}
+const phases=[{n:'前期',g:[]},{n:'中期',g:[]},{n:'后期',g:[]}];
+M.forEach(g=>phases[bucket(g.dur)].g.push(g));
+const phaseStat=phases.map(p=>{const n=p.g.length;return{n:p.n,cnt:n,wr:n?p.g.filter(winOf).length/n:0,kda:n?mean(p.g.map(x=>x.kda)):0,cspm:n?mean(p.g.map(x=>x.cspm)):0};});
+
+/* ===== 伤害构成 ===== */
+let phy=0,mag=0,tru=0,totDmg=0,totTaken=0,totGold=0;M.forEach(g=>{phy+=g.phy;mag+=g.mag;tru+=g.tru;totDmg+=g.dmg;totTaken+=g.taken;totGold+=g.gold;});
+const dmgTrip=[{n:'物理',v:phy,c:'#fb923c'},{n:'魔法',v:mag,c:'#a78bfa'},{n:'真实',v:tru,c:'#e5e7eb'}];
+const dmgTot=phy+mag+tru||1;
+const convert=totGold?totDmg/totGold:0;
+
+/* ===== 战局类型 ===== */
+const GTYPE=[{n:'碾压局',c:'#fbbf24',f:g=>g.win&&(g.kda>=4||g.dur<22*60)},
+ {n:'翻盘局',c:'#c084fc',f:g=>g.win&&g.dur>=30*60&&g.kda<4},
+ {n:'稳健局',c:'#34d399',f:g=>g.win&&!(g.kda>=4||g.dur<22*60)&&!(g.dur>=30*60&&g.kda<4)},
+ {n:'尽力局',c:'#38bdf8',f:g=>!g.win&&g.kda>=2.5},
+ {n:'投降局',c:'#94a3b8',f:g=>!g.win&&g.surrender&&g.kda<2.5},
+ {n:'落败局',c:'#fb7185',f:g=>!g.win&&!g.surrender&&g.kda<2.5}];
+const gtypeCnt=GTYPE.map(t=>({n:t.n,c:t.c,v:M.filter(t.f).length}));
+
+/* ===== 连胜/连败/极值 ===== */
+let cw=0,cl=0,bestW=0,bestL=0;M.forEach(g=>{if(g.win){cw++;cl=0;}else{cl++;cw=0;}bestW=Math.max(bestW,cw);bestL=Math.max(bestL,cl);});
+const maxKda=M.reduce((a,g)=>Math.max(a,g.kda),0),maxK=M.reduce((a,g)=>Math.max(a,g.k),0);
+const maxCs=M.reduce((a,g)=>Math.max(a,g.cs),0),maxDmg=M.reduce((a,g)=>Math.max(a,g.dmg),0);
+const sumP=M.reduce((a,g)=>a+g.penta,0),sumQ=M.reduce((a,g)=>a+g.quadra,0),sumT=M.reduce((a,g)=>a+g.triple,0);
+const avgDur=mean(M.map(g=>g.dur));
+const shortestWin=M.filter(winOf).reduce((a,g)=>a==null?g.dur:Math.min(a,g.dur),null);
+
+/* ===== DOM 骨架 ===== */
+const app=document.getElementById('app');
+const corners=()=>'<i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>';
+const priv=String(P.privacy||'').toUpperCase();
+const primaryCn=(P.positions&&P.positions[0])?P.positions[0].cn:(P.primary||'');
+const lastD=dateOf(P.lastGame);
+app.innerHTML=`
+<header class="hud">
+  ${P.avatar?`<img class="avatar" src="${esc(P.avatar)}" alt="" onerror="this.style.display='none'">`:''}
+  <div class="hud-l">
+    <div class="crumb">LOL · BATTLE INTELLIGENCE COCKPIT</div>
+    <div class="pname">${esc(P.name)}${P.tag?`<span style="font-size:18px;color:#7e93b5;font-weight:600"> #${esc(P.tag)}</span>`:''}</div>
+    <div class="chips">
+      <span class="chip">${esc(P.region||'—')}</span>
+      <span class="chip">等级 <b>${P.level}</b></span>
+      <span class="chip">近 <b>${R}</b> 场</span>
+      ${primaryCn?`<span class="chip">主打 <b>${esc(primaryCn)}</b></span>`:''}
+      <span class="chip">${(priv&&priv!=='PUBLIC')?'战绩私密':'战绩公开'}</span>
+      ${lastD?`<span class="chip">最近对局 <b>${lastD.getMonth()+1}/${lastD.getDate()}</b></span>`:''}
+    </div>
+  </div>
+  <div class="horse ${P.horse.tier}"><div class="ring"></div>
+    <div class="core"><div><div class="hl" style="color:${HCOL[P.horse.tier]}">${P.horse.label}</div><div class="hs">综合评价</div><div class="hscore" id="horseScore">0</div></div></div></div>
+</header>
+<div class="kpis" id="kpis"></div>
+<div class="grid">
+  <section class="panel col-8">${corners()}<h3>战斗星系 · 三维战迹<span class="tag">拖拽旋转 · 轴=伤害/KDA/发育 · 大小=击杀+助攻 · 悬停详情</span></h3>
+    <div class="cv"><canvas id="cvGalaxy" height="430"></canvas></div></section>
+  <section class="panel col-4">${corners()}<h3>作战风格指纹<span class="tag">多指标复合建模</span></h3>
+    <div class="cv"><canvas id="cvStyle" height="236"></canvas></div><div id="archBox"></div></section>
+  <section class="panel col-4">${corners()}<h3>定位象限<span class="tag">输出×承伤 · 密度聚集 · 十字=均值</span></h3><div class="cv"><canvas id="cvQuad" height="300"></canvas></div></section>
+  <section class="panel col-4">${corners()}<h3>KDA 波形与高光时刻<span class="tag">波形+胜负带 · ◆一血 ★多杀</span></h3><div class="cv"><canvas id="cvWave" height="300"></canvas></div></section>
+  <section class="panel col-4">${corners()}<h3>常排队友羁绊网<span class="tag">连线=同场 · 颜色=双人胜率</span></h3><div class="cv"><canvas id="cvMates" height="300"></canvas></div></section>
+  <section class="panel col-7">${corners()}<h3>英雄池三维矩阵<span class="tag">胜率×英雄KDA · 气泡=场次 · 颜色=分路</span></h3><div class="cv"><canvas id="cvChamp" height="272"></canvas></div></section>
+  <section class="panel col-5">${corners()}<h3>发力期雷达<span class="tag">前/中/后期 × 胜率·KDA·补刀</span></h3><div class="cv"><canvas id="cvPhase" height="272"></canvas></div></section>
+  <section class="panel col-4">${corners()}<h3>分路玫瑰<span class="tag">半径=场次 · 亮度=胜率</span></h3><div class="cv"><canvas id="cvPos" height="286"></canvas></div></section>
+  <section class="panel col-4">${corners()}<h3>伤害构成与转化<span class="tag">物理/魔法/真实 · 中心=伤害/经济</span></h3><div class="cv"><canvas id="cvDmg" height="286"></canvas></div></section>
+  <section class="panel col-4">${corners()}<h3>战局类型分布<span class="tag">按胜负·KDA·时长·投降交叉分类</span></h3><div class="cv"><canvas id="cvType" height="286"></canvas></div></section>
+  <section class="panel col-12">${corners()}<h3>竞技段位 · 战场纪录<span class="tag">当前/历史最高 + 近期对局极值</span></h3><div class="dual"><div id="rankBox"></div><div class="recs" id="recBox"></div></div></section>
+</div>
+<footer><span>数据来自本地服务 · 图表为多指标交叉建模结果，统计口径为近期已加载对局</span><span id="genAt"></span><a href="/lol/#/single?name=${encodeURIComponent(P.name)}">← 返回战绩查询</a></footer>`;
+
+/* ===== canvas 框架 ===== */
+const drawers=[];
+function setupCanvas(id,draw){const cv=document.getElementById(id);if(!cv)return null;const ctx=cv.getContext('2d');const fixedH=parseInt(cv.getAttribute('height'))||200;
+  function size(){const w=cv.clientWidth||cv.parentElement.clientWidth,h=fixedH;cv.width=w*DPR;cv.height=h*DPR;cv.style.height=h+'px';ctx.setTransform(DPR,0,0,DPR,0,0);return{w,h,ctx};}
+  const obj={cv,size,draw};obj.render=p=>{const s=size();draw(s.ctx,s.w,s.h,p);};drawers.push(obj);return obj;}
+const tip=document.getElementById('tip');
+function moveTip(e){tip.style.left=Math.min(e.clientX+14,innerWidth-262)+'px';tip.style.top=(e.clientY+12)+'px';}
+function hideTip(){tip.style.opacity=0;}
+function gridAxis(ctx,w,h,pad,xl,yl,xlab,ylab,fmtX,fmtY){ctx.strokeStyle='rgba(120,150,200,.12)';ctx.fillStyle='#5b6d8f';ctx.font='9.5px sans-serif';ctx.lineWidth=1;
+ for(let i=0;i<=4;i++){const y=pad.t+(h-pad.t-pad.b)*(1-i/4);ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(w-pad.r,y);ctx.stroke();ctx.textAlign='right';ctx.textBaseline='middle';ctx.fillText(fmtY(yl[0]+(yl[1]-yl[0])*i/4),pad.l-5,y);}
+ for(let i=0;i<=4;i++){const x=pad.l+(w-pad.l-pad.r)*i/4;ctx.textAlign='center';ctx.textBaseline='top';ctx.fillText(fmtX(xl[0]+(xl[1]-xl[0])*i/4),x,h-pad.b+5);}
+ ctx.fillStyle='#7e93b5';ctx.font='10px sans-serif';ctx.textAlign='center';ctx.fillText(xlab,(pad.l+w-pad.r)/2,h-2);
+ ctx.save();ctx.translate(11,(pad.t+h-pad.b)/2);ctx.rotate(-Math.PI/2);ctx.fillText(ylab,0,0);ctx.restore();}
+
+/* ===== KPI + sparkline ===== */
+const kpis=[
+ {v:kda,l:'场均 KDA',d:2,c:'#22d3ee',f:'kda'},{v:wr*100,l:'胜率',d:1,c:'#34d399',f:'win'},
+ {v:kp*100,l:'参团率',d:1,c:'#a78bfa',f:'kp'},{v:cspm,l:'分均补刀',d:1,c:'#fb923c',f:'cs'},
+ {v:N?mean(M.map(g=>g.k)):0,l:'场均击杀',d:1,c:'#fb7185',f:'k'},{v:N?mean(M.map(g=>g.dmg)):0,l:'场均伤害',d:0,c:'#fbbf24',f:'dmg'},
+ {v:goldShare*100,l:'经济占比',d:1,c:'#38bdf8',f:'gold'},{v:P.horse.score,l:'综合评分',d:0,c:'#fbbf24',f:'score'}
+];
+const kbox=document.getElementById('kpis');
+kbox.innerHTML=kpis.map((k,i)=>`<div class="kpi" style="--c:${k.c};animation-delay:${.05*i}s"><div class="v" data-v="${k.v}" data-d="${k.d}">0</div><div class="l">${k.l}</div><canvas class="spark" width="78" height="26"></canvas></div>`).join('');
+function drawSpark(cv,series,color){const ctx=cv.getContext('2d'),w=78,h=26;ctx.clearRect(0,0,w,h);if(series.length<2)return;const mx=Math.max(...series.map(Math.abs),1),mn=Math.min(...series,0);
+ ctx.beginPath();series.forEach((v,i)=>{const x=i/(series.length-1)*w,y=h-3-((v-mn)/((mx-mn)||1))*(h-8);i?ctx.lineTo(x,y):ctx.moveTo(x,y);});
+ const g=ctx.createLinearGradient(0,0,0,h);ctx.save();ctx.strokeStyle=color;ctx.lineWidth=1.6;ctx.shadowColor=color;ctx.shadowBlur=5;ctx.stroke();ctx.lineTo(w,h);ctx.lineTo(0,h);ctx.closePath();g.addColorStop(0,color+'33');g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.fill();ctx.restore();}
+(function(){const S2={kda:smooth(M.map(g=>g.kda),w),win:smooth(M.map(g=>g.win?1:0),w),kp:smooth(M.map(g=>g.k+g.a),w),cs:smooth(M.map(g=>g.cspm),w),
+ k:smooth(M.map(g=>g.k),w),dmg:smooth(M.map(g=>g.dmg),w),gold:smooth(M.map(g=>g.gold),w),score:smooth(M.map(g=>g.horse?g.horse.score:30),w)};
+ kbox.querySelectorAll('.kpi').forEach((el,i)=>drawSpark(el.querySelector('canvas'),(S2[kpis[i].f]||[]).slice(-30),kpis[i].c));})();
+function countUp(el){const target=parseFloat(el.dataset.v),d=parseInt(el.dataset.d||0),t0=performance.now();
+ (function step(t){const k=easeOut(clamp((t-t0)/1100,0,1));el.textContent=d?(target*k).toFixed(d):Math.round(target*k).toLocaleString('en-US');if(k<1)requestAnimationFrame(step);})(t0);}
+kbox.querySelectorAll('.v').forEach(countUp);
+const hsEl=document.getElementById('horseScore');hsEl.dataset.v=P.horse.score;hsEl.dataset.d='0';countUp(hsEl);
+document.getElementById('genAt').textContent='舱体生成 '+new Date(P.ts||Date.now()).toLocaleString('zh-CN');
+
+/* ===== 风格原型 DOM ===== */
+(function(){const arch=window.__ARCH,tr=window.__TRAITS;
+ const colors={carry:'#fb7185',farm:'#fbbf24',team:'#a78bfa',tank:'#38bdf8',burst:'#fb923c',cons:'#34d399'};
+ document.getElementById('archBox').innerHTML=`<div class="arch-name">${arch[0]}</div><div class="arch-desc">${arch[1]}</div>`+
+  tr.map(t=>`<div class="trait"><span class="tn">${t.n}</span><span class="tbar"><i data-w="${(t.v*100).toFixed(1)}" style="background:linear-gradient(90deg,${colors[t.k]},${colors[t.k]}99)"></i></span><span class="tv">${Math.round(t.v*100)}</span></div>`).join('');
+ setTimeout(()=>document.querySelectorAll('.trait .tbar i').forEach(i=>i.style.width=i.dataset.w+'%'),150);})();
+
+/* ===== 段位 + 纪录 DOM ===== */
+(function(){const box=document.getElementById('rankBox');let h='<div class="rkhead">排位段位（当前 / 历史最高 / 上赛季）</div><div class="ranks">';
+ (P.ranks||[]).forEach(r=>{const q=r.q;if(!q){h+=`<div class="rk none"><div class="rt">${r.title} · 未定级</div></div>`;return;}
+  h+=`<div class="rk"><div class="rt">${r.title} · ${esc(q.tierTxt)}</div><div class="rs">${q.lp} 胜点 · ${q.wins}胜${q.losses}负${q.prov?` · 定级赛剩${q.prov}场`:''}</div>
+   <div class="rh">历史最高 <b>${esc(q.highest)}</b><br>上赛季结算 <b>${esc(q.prevEnd)}</b></div></div>`;});
+ h+='</div>';box.innerHTML=h;
+ const recs=[[kda.toFixed(2),'场均 KDA',''],[pct(wr,1),'胜率',''],[maxKda.toFixed(1),'单局最高 KDA',''],[maxK,'单局最高击杀',''],
+  [maxCs,'单局最高补刀',''],[fmtK(maxDmg),'单局最高伤害',''],[bestW,'最长连胜','场'],[bestL,'最长连败','场'],
+  [sumP,'五杀总数','次'],[sumQ,'四杀总数','次'],[sumT,'三杀总数','次'],[pct(fbRate,0),'一血参与率',''],
+  [fmtDur(avgDur),'场均时长',''],[shortestWin!=null?fmtDur(shortestWin):'—','最快取胜',''],[(P.champs||[]).length,'使用英雄数',''],[(P.positions||[]).length,'分路数','']];
+ document.getElementById('recBox').innerHTML=recs.map((r,i)=>`<div class="rc" style="animation:rise .5s ${.02*i}s both"><div class="rv">${r[0]}<small>${r[2]||''}</small></div><div class="rl">${r[1]}</div></div>`).join('');})();
+
+/* ============ 高级可视化 ============ */
+/* 1) 3D 战斗星系（持续旋转） */
+(function(){
+ const cv=document.getElementById('cvGalaxy'),ctx=cv.getContext('2d');const fixedH=430;let W=0,H=0;
+ const maxD=Math.max(...M.map(g=>g.dmg),1),maxK=Math.max(...M.map(g=>g.kda),1),maxC=Math.max(...M.map(g=>g.cspm),1);
+ const pts=M.map((g,i)=>({g,i,x:clamp(g.dmg/maxD,0,1)*2-1,y:clamp(g.kda/maxK,0,1)*2-1,z:clamp(g.cspm/maxC,0,1)*2-1}));
+ let ang=0.7,tilt=0.42,drag=null,hover=-1;
+ function size(){W=cv.clientWidth;H=fixedH;cv.width=W*DPR;cv.height=H*DPR;cv.style.height=H+'px';ctx.setTransform(DPR,0,0,DPR,0,0);}
+ function project(p,a){const ca=Math.cos(a),sa=Math.sin(a),ct=Math.cos(tilt),st=Math.sin(tilt);
+  let x=p.x*ca-p.z*sa,z1=p.x*sa+p.z*ca;let y=p.y*ct-z1*st,z2=p.y*st+z1*ct;
+  const f=3.2,s=f/(f-z2*0.9);return{x:W/2+x*Math.min(W,H)*0.34*s,y:H/2-y*Math.min(W,H)*0.34*s,s,z:z2};}
+ function draw(){size();ctx.clearRect(0,0,W,H);
+  ctx.strokeStyle='rgba(120,150,200,.14)';ctx.lineWidth=1;
+  [[[-1,-1,-1],[1,-1,-1]],[[1,-1,-1],[1,1,-1]],[[1,1,-1],[-1,1,-1]],[[-1,1,-1],[-1,-1,-1]],[[-1,-1,1],[1,-1,1]],[[1,-1,1],[1,1,1]],[[1,1,1],[-1,1,1]],[[-1,1,1],[-1,-1,1]],[[-1,-1,-1],[-1,-1,1]],[[1,-1,-1],[1,-1,1]],[[1,1,-1],[1,1,1]],[[-1,1,-1],[-1,1,1]]].forEach(e=>{const a=project({x:e[0][0],y:e[0][1],z:e[0][2]},ang),b=project({x:e[1][0],y:e[1][1],z:e[1][2]},ang);ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();});
+  ctx.font='10px sans-serif';ctx.textAlign='center';
+  const ax=(v,nm,col)=>{const q=project(v,ang);ctx.fillStyle=col;ctx.fillText(nm,q.x,q.y);};
+  ax({x:1.15,y:-1,z:-1},'伤害→','#fb7185');ax({x:-1,y:1.15,z:-1},'KDA→','#a78bfa');ax({x:-1,y:-1,z:1.15},'发育→','#fbbf24');
+  const pr=pts.map((p,i)=>Object.assign(project(p,ang),{p,i}));
+  ctx.lineWidth=1.2;for(let i=1;i<pr.length;i++){const a=pr[i-1],b=pr[i];ctx.strokeStyle=`rgba(56,189,248,${0.10+0.18*(i/pr.length)})`;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}
+  pr.sort((a,b)=>a.z-b.z);const tnow=performance.now()/1000;
+  const maxKA=Math.max(...M.map(g=>g.k+g.a),1);
+  pr.forEach(o=>{const g=o.p.g;const rad=3+Math.sqrt((g.k+g.a+0.4)/maxKA)*11;const col=g.win?'#34d399':(HCOL[(g.horse&&g.horse.tier)]||'#38bdf8');const hov=(o.i===hover);
+   ctx.globalAlpha=0.55+0.45*o.s;
+   if(g.penta+g.quadra+g.triple>0){const pulse=3+Math.sin(tnow*3+o.i)*2;ctx.beginPath();ctx.arc(o.x,o.y,rad+pulse,0,7);ctx.strokeStyle='rgba(251,191,36,.6)';ctx.lineWidth=1.4;ctx.stroke();}
+   const grd=ctx.createRadialGradient(o.x,o.y,0,o.x,o.y,rad);grd.addColorStop(0,col);grd.addColorStop(1,col+'22');
+   ctx.beginPath();ctx.arc(o.x,o.y,rad,0,7);ctx.fillStyle=grd;ctx.shadowColor=col;ctx.shadowBlur=hov?22:8;ctx.fill();
+   if(hov){ctx.shadowBlur=0;ctx.strokeStyle='#fff';ctx.lineWidth=1.4;ctx.stroke();}ctx.shadowBlur=0;ctx.globalAlpha=1;
+   if(rad>8||hov){ctx.fillStyle='#eaf4ff';ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(g.k+'/'+g.d+'/'+g.a,o.x,o.y);}});
+  ctx.globalAlpha=1;}
+ cv.addEventListener('mousemove',e=>{const r=cv.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;let best=-1,bd=1e9;const maxKA=Math.max(...M.map(g=>g.k+g.a),1);
+  pts.forEach((p,i)=>{const o=project(p,ang),g=p.g;const rad=3+Math.sqrt((g.k+g.a+0.4)/maxKA)*11;const d=Math.hypot(o.x-mx,o.y-my);if(d<Math.max(rad+6,14)&&d<bd){bd=d;best=i;}});
+  hover=best;if(best>=0){const g=pts[best].g;tip.innerHTML=`<b style="color:${g.win?'#34d399':'#fb7185'}">${g.win?'胜':'负'} · ${g.cn}</b> · ${esc(g.posCn||'')}<br><span class="c">${g.k}/${g.d}/${g.a}</span> KDA ${g.kda.toFixed(1)}<br>伤害 <b>${fmtK(g.dmg)}</b> · 承伤 ${fmtK(g.taken)}<br>${g.cs}刀 · ${fmtDur(g.dur)} · ${g.queue}<br>${g.horse?g.horse.label:''}${g.penta?' · 五杀':g.quadra?' · 四杀':g.triple?' · 三杀':''}`;tip.style.opacity=1;moveTip(e);}else hideTip();draw();});
+ cv.addEventListener('mouseleave',()=>{hover=-1;hideTip();draw();});
+ cv.addEventListener('mousedown',e=>{drag={x:e.clientX,a:ang};});
+ window.addEventListener('mouseup',()=>drag=null);
+ window.addEventListener('mousemove',e=>{if(drag)ang=drag.a+(e.clientX-drag.x)*0.01;});
+ (function loop(){if(document.body.contains(cv)){if(!drag)ang+=0.0032;draw();requestAnimationFrame(loop);}})();
+ size();})();
+
+/* 2) 风格雷达 */
+setupCanvas('cvStyle',(ctx,w,h,p)=>{const cx=w/2,cy=h/2+2,R=Math.min(w,h)/2-44,N=TRAITS.length,pp=easeOut(p);
+ for(let ring=1;ring<=4;ring++){ctx.beginPath();for(let i=0;i<=N;i++){const a=-Math.PI/2+i/N*Math.PI*2,rr=R*ring/4;const x=cx+Math.cos(a)*rr,y=cy+Math.sin(a)*rr;i?ctx.lineTo(x,y):ctx.moveTo(x,y);}ctx.strokeStyle='rgba(120,160,220,'+(ring===4?.18:.09)+')';ctx.stroke();}
+ const cols={carry:'#fb7185',farm:'#fbbf24',team:'#a78bfa',tank:'#38bdf8',burst:'#fb923c',cons:'#34d399'};
+ for(let i=0;i<N;i++){const a=-Math.PI/2+i/N*Math.PI*2;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+Math.cos(a)*R,cy+Math.sin(a)*R);ctx.strokeStyle='rgba(120,160,220,.1)';ctx.stroke();
+  ctx.fillStyle='#a9bddf';ctx.font='11px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(TRAITS[i].n,cx+Math.cos(a)*(R+26),cy+Math.sin(a)*(R+26));}
+ ctx.beginPath();for(let i=0;i<=N;i++){const t=TRAITS[i%N].v*pp,a=-Math.PI/2+i/N*Math.PI*2;const x=cx+Math.cos(a)*R*t,y=cy+Math.sin(a)*R*t;i?ctx.lineTo(x,y):ctx.moveTo(x,y);}
+ const g=ctx.createLinearGradient(0,cy-R,0,cy+R);g.addColorStop(0,'rgba(34,211,238,.42)');g.addColorStop(1,'rgba(167,139,250,.34)');ctx.fillStyle=g;ctx.strokeStyle='#38e0ff';ctx.lineWidth=2;ctx.shadowColor='#22d3ee';ctx.shadowBlur=13;ctx.fill();ctx.stroke();ctx.shadowBlur=0;
+ for(let i=0;i<N;i++){const t=TRAITS[i].v*pp,a=-Math.PI/2+i/N*Math.PI*2;const x=cx+Math.cos(a)*R*t,y=cy+Math.sin(a)*R*t;ctx.beginPath();ctx.arc(x,y,3.4,0,7);ctx.fillStyle=cols[TRAITS[i].k];ctx.shadowColor=cols[TRAITS[i].k];ctx.shadowBlur=8;ctx.fill();ctx.shadowBlur=0;}});
+
+/* 3) 定位象限：输出 × 承伤 + 密度 */
+setupCanvas('cvQuad',(ctx,w,h,p)=>{const pad={l:44,r:14,t:16,b:34};const xs=M.map(g=>g.dmg),ys=M.map(g=>g.taken);
+ const xMax=Math.max(...xs,1)*1.1,yMax=Math.max(...ys,1)*1.1;const X=v=>pad.l+(v/xMax)*(w-pad.l-pad.r),Y=v=>pad.t+(1-v/yMax)*(h-pad.t-pad.b);
+ gridAxis(ctx,w,h,pad,[0,xMax],[0,yMax],'英雄伤害','承受伤害',v=>v>=1000?(v/1000).toFixed(0)+'k':Math.round(v),v=>v>=1000?(v/1000).toFixed(0)+'k':Math.round(v));
+ const pp=easeOut(p);
+ const colsN=46,rowsN2=30,cw=(w-pad.l-pad.r)/colsN,chh=(h-pad.t-pad.b)/rowsN2;
+ for(let gx=0;gx<colsN;gx++)for(let gy=0;gy<rowsN2;gy++){const wx=(gx+0.5)/colsN*xMax,wy=(1-(gy+0.5)/rowsN2)*yMax;let dens=0;
+   M.forEach(m=>{const dx=(wx-m.dmg)/(xMax*0.13),dy=(wy-m.taken)/(yMax*0.14);dens+=Math.exp(-(dx*dx+dy*dy));});
+   if(dens>0.5)ctx.fillStyle=`rgba(56,189,248,${clamp(dens*0.05,0,0.32)*pp})`,ctx.fillRect(pad.l+gx*cw,pad.t+gy*chh,cw+1,chh+1);}
+ const mx=mean(xs),my=mean(ys);
+ ctx.font='9px sans-serif';ctx.textAlign='center';
+ ctx.fillStyle='rgba(251,146,60,.62)';ctx.fillText('陷阵战士',X(xMax*0.72),Y(yMax*0.965)+4);
+ ctx.fillStyle='rgba(167,139,250,.62)';ctx.fillText('后排输出',X(xMax*0.72),Y(yMax*0.07));
+ ctx.fillStyle='rgba(56,189,248,.62)';ctx.fillText('蓝领坦克',X(xMax*0.28),Y(yMax*0.965)+4);
+ ctx.fillStyle='rgba(100,116,139,.75)';ctx.fillText('划水隐身',X(xMax*0.28),Y(yMax*0.07));
+ ctx.setLineDash([5,4]);ctx.strokeStyle='rgba(200,220,255,.4)';ctx.beginPath();ctx.moveTo(X(mx),pad.t);ctx.lineTo(X(mx),h-pad.b);ctx.moveTo(pad.l,Y(my));ctx.lineTo(w-pad.r,Y(my));ctx.stroke();ctx.setLineDash([]);
+ const maxKA=Math.max(...M.map(g=>g.k+g.a),1);
+ M.forEach(g=>{const x=X(g.dmg),y=Y(g.taken);const rad=3+Math.sqrt((g.k+g.a+0.3)/maxKA)*9;const col=g.win?'#34d399':'#fb7185';
+   ctx.globalAlpha=.4+.6*pp;ctx.beginPath();ctx.arc(x,y,rad*pp,0,7);ctx.fillStyle=col;ctx.shadowColor=col;ctx.shadowBlur=6;ctx.fill();ctx.shadowBlur=0;ctx.globalAlpha=1;});
+ const cxg=X(mx),cyg=Y(my);ctx.strokeStyle='#fff';ctx.lineWidth=1.6;ctx.beginPath();ctx.moveTo(cxg-7,cyg);ctx.lineTo(cxg+7,cyg);ctx.moveTo(cxg,cyg-7);ctx.lineTo(cxg,cyg+7);ctx.stroke();
+ ctx.canvas._hit={X,Y};});
+(function(){const o=drawers.find(d=>d.cv.id==='cvQuad');if(!o)return;
+ o.cv.addEventListener('mousemove',e=>{const r=o.cv.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;let hit=null,bd=1e9,H=o.cv._hit;if(!H){hideTip();return;}
+  M.forEach(g=>{const x=H.X(g.dmg),y=H.Y(g.taken);const d=Math.hypot(x-mx,y-my);if(d<13&&d<bd){bd=d;hit=g;}});
+  if(hit){tip.innerHTML=`<b style="color:${hit.win?'#34d399':'#fb7185'}">${hit.win?'胜':'负'} · ${hit.cn}</b> ${esc(hit.posCn||'')}<br>伤害 <b>${fmtK(hit.dmg)}</b> · 承伤 ${fmtK(hit.taken)}<br>${hit.k}/${hit.d}/${hit.a} · ${hit.cs}刀 · ${fmtDur(hit.dur)}`;tip.style.opacity=1;moveTip(e);}else hideTip();});
+ o.cv.addEventListener('mouseleave',hideTip);})();
+
+/* 4) KDA 波形 + 胜负带 + 高光 */
+setupCanvas('cvWave',(ctx,w,h,p)=>{const pad={l:34,r:12,t:16,b:40};if(N<2){ctx.fillStyle='#5b6d8f';ctx.font='12px sans-serif';ctx.textAlign='center';ctx.fillText('对局样本不足',w/2,h/2);return;}
+ const X=i=>pad.l+i/(N-1)*(w-pad.l-pad.r);const topH=h-pad.t-pad.b-26;
+ const kdas=M.map(g=>g.kda);const kMax=Math.max(...kdas,4)*1.1;const Y=v=>pad.t+(1-clamp(v/kMax,0,1))*topH;
+ ctx.strokeStyle='rgba(120,150,200,.12)';for(let i=0;i<=3;i++){const y=pad.t+topH*i/3;ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(w-pad.r,y);ctx.stroke();}
+ const pp=easeOut(p);
+ // 面积波形
+ ctx.beginPath();kdas.forEach((v,i)=>{const y=Y(v*pp);i?ctx.lineTo(X(i),y):ctx.moveTo(X(i),y);});
+ const grd=ctx.createLinearGradient(0,pad.t,0,pad.t+topH);grd.addColorStop(0,'rgba(167,139,250,.4)');grd.addColorStop(1,'rgba(167,139,250,.03)');ctx.lineTo(X(N-1),pad.t+topH);ctx.lineTo(X(0),pad.t+topH);ctx.closePath();ctx.fillStyle=grd;ctx.fill();
+ ctx.beginPath();kdas.forEach((v,i)=>{const y=Y(v*pp);i?ctx.lineTo(X(i),y):ctx.moveTo(X(i),y);});ctx.strokeStyle='#a78bfa';ctx.lineWidth=2;ctx.shadowColor='#a78bfa';ctx.shadowBlur=7;ctx.stroke();ctx.shadowBlur=0;
+ // 滚动均值 + 趋势
+ const sm=smooth(kdas,w);ctx.beginPath();sm.forEach((v,i)=>{const y=Y(v*pp);i?ctx.lineTo(X(i),y):ctx.moveTo(X(i),y);});ctx.strokeStyle='#22d3ee';ctx.lineWidth=1.4;ctx.setLineDash([4,3]);ctx.stroke();ctx.setLineDash([]);
+ const slope=linReg(sm);ctx.fillStyle=slope>=0?'#34d399':'#fb7185';ctx.font='bold 9.5px sans-serif';ctx.textAlign='right';ctx.fillText(slope>=0?'状态上行▲':'状态下滑▼',w-pad.r,pad.t+8);
+ // 高光标记
+ M.forEach((g,i)=>{const x=X(i);
+  if(g.penta||g.quadra||g.triple){ctx.fillStyle=g.penta?'#fbbf24':(g.quadra?'#fb923c':'#fcd34d');ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillText('★',x,Y(g.kda*pp)-9);}
+  else if(g.fb){ctx.fillStyle='#38bdf8';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('◆',x,Y(g.kda*pp)-8);}});
+ // 胜负带
+ const by=pad.t+topH+10,bh=16;M.forEach((g,i)=>{const x=X(i),bw=Math.max(3,(w-pad.l-pad.r)/N-2);ctx.fillStyle=g.win?'rgba(52,211,153,.75)':'rgba(251,113,133,.7)';ctx.fillRect(x-bw/2,by,bw,bh);
+  if(g.surrender){ctx.fillStyle='rgba(255,255,255,.55)';ctx.font='7px sans-serif';ctx.textAlign='center';ctx.fillText('投',x,by+bh/2+2);}});
+ ctx.fillStyle='#7e93b5';ctx.font='9px sans-serif';ctx.textAlign='left';ctx.fillText('绿胜 / 红负（投=投降），虚线为滑动均值',pad.l,by+bh+12);
+ ctx.textAlign='right';ctx.fillText('旧 → 新',w-pad.r,by+bh+12);});
+
+/* 5) 常排队友羁绊网（放射布局） */
+setupCanvas('cvMates',(ctx,w,h,p)=>{const mates=P.mates||[];const cx=w/2,cy=h/2-2,R=Math.min(w,h)/2-74,pp=easeOut(p);
+ if(!mates.length){ctx.fillStyle='#5b6d8f';ctx.font='12px sans-serif';ctx.textAlign='center';ctx.fillText('暂无常排队友数据',w/2,h/2);return;}
+ const maxG=Math.max(...mates.map(m=>m.games),1);
+ const nodes=mates.slice(0,10).map((m,i)=>{const a=-Math.PI/2+i/Math.max(mates.slice(0,10).length,1)*Math.PI*2;return{...m,a,x:cx+Math.cos(a)*R,y:cy+Math.sin(a)*R,r:7+Math.sqrt(m.games/maxG)*11};});
+ // 连线
+ nodes.forEach((n,i)=>{const col=n.wr>=0.55?'#34d399':(n.wr>=0.45?'#fbbf24':'#fb7185');
+  ctx.beginPath();ctx.moveTo(cx,cy);const mx=(cx+n.x)/2,my=(cy+n.y)/2-12;ctx.quadraticCurveTo(mx,my,n.x,n.y);
+  ctx.strokeStyle=col+Math.round(60+120*clamp(n.games/maxG,0,1)).toString(16).padStart(2,'0');ctx.lineWidth=1+3*clamp(n.games/maxG,0,1);ctx.stroke();
+  if(n.opp>0){ctx.setLineDash([3,3]);ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(n.x,n.y);ctx.strokeStyle='rgba(148,163,184,.35)';ctx.lineWidth=1;ctx.stroke();ctx.setLineDash([]);}});
+ // 中心
+ ctx.beginPath();ctx.arc(cx,cy,16,0,7);const hg=ctx.createRadialGradient(cx-5,cy-5,2,cx,cy,16);hg.addColorStop(0,HCOL[P.horse.tier]);hg.addColorStop(1,HCOL[P.horse.tier]+'33');ctx.fillStyle=hg;ctx.shadowColor=HCOL[P.horse.tier];ctx.shadowBlur=14;ctx.fill();ctx.shadowBlur=0;
+ ctx.fillStyle='#04121f';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('我',cx,cy);
+ // 节点
+ nodes.forEach(n=>{const col=n.wr>=0.55?'#34d399':(n.wr>=0.45?'#fbbf24':'#fb7185');
+  ctx.beginPath();ctx.arc(n.x,n.y,n.r*pp,0,7);ctx.fillStyle=col+'cc';ctx.shadowColor=col;ctx.shadowBlur=8;ctx.fill();ctx.shadowBlur=0;ctx.strokeStyle=col;ctx.lineWidth=1;ctx.stroke();
+  ctx.fillStyle='#eaf4ff';ctx.font='bold 8.5px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(pct(n.wr,0),n.x,n.y);
+  const lx=cx+Math.cos(n.a)*(R+n.r+13),ly=cy+Math.sin(n.a)*(R+n.r+13);
+  ctx.fillStyle='#cdddf7';ctx.font='9.5px sans-serif';ctx.textAlign=Math.cos(n.a)>0.2?'left':(Math.cos(n.a)<-0.2?'right':'center');ctx.textBaseline='middle';
+  const nm=n.name.length>4?n.name.slice(0,4)+'…':n.name;ctx.fillText(nm,lx,ly-5);ctx.fillStyle='#7e93b5';ctx.font='8.5px sans-serif';ctx.fillText(n.games+'场',lx,ly+6);
+  n._x=n.x;n._y=n.y;n._r=n.r;});
+ ctx.canvas._nodes=nodes;});
+(function(){const o=drawers.find(d=>d.cv.id==='cvMates');if(!o)return;
+ o.cv.addEventListener('mousemove',e=>{const r=o.cv.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;let hit=null;(o.cv._nodes||[]).forEach(n=>{if(Math.hypot(n._x-mx,n._y-my)<=n._r+4)hit=n;});
+  if(hit){tip.innerHTML=`<b>${esc(hit.name)}#${esc(hit.tag)}</b><br>同场 <b>${hit.games}</b> 场 · 双人胜率 <b style="color:${hit.wr>=0.55?'#34d399':hit.wr>=0.45?'#fbbf24':'#fb7185'}">${pct(hit.wr,0)}</b><br>作为对手 ${hit.opp} 场`;tip.style.opacity=1;moveTip(e);}else hideTip();});
+ o.cv.addEventListener('mouseleave',hideTip);})();
+
+/* 6) 英雄池三维气泡：胜率 × KDA */
+setupCanvas('cvChamp',(ctx,w,h,p)=>{const pad={l:42,r:16,t:16,b:34};const data=champs.filter(c=>c.n>=1);
+ if(data.length<2){ctx.fillStyle='#5b6d8f';ctx.font='12px sans-serif';ctx.textAlign='center';ctx.fillText('英雄样本不足',w/2,h/2);ctx.canvas._C=[];return;}
+ const kdaMax=Math.max(...data.map(c=>Math.max(c.kda,1)),5)*1.1;
+ const X=v=>pad.l+clamp(v,0,1)*(w-pad.l-pad.r),Y=v=>pad.t+(1-clamp(v/kdaMax,0,1))*(h-pad.t-pad.b);
+ gridAxis(ctx,w,h,pad,[0,1],[0,kdaMax],'胜率','英雄 KDA',v=>(v*100).toFixed(0)+'%',v=>v.toFixed(1));
+ const pp=easeOut(p),maxC=Math.max(...data.map(c=>c.count),1);
+ const ax=mean(M.map(()=>0))||wr,ay=mean(data.map(c=>c.kda));
+ ctx.setLineDash([5,4]);ctx.strokeStyle='rgba(200,220,255,.35)';ctx.beginPath();ctx.moveTo(X(wr),pad.t);ctx.lineTo(X(wr),h-pad.b);ctx.moveTo(pad.l,Y(ay));ctx.lineTo(w-pad.r,Y(ay));ctx.stroke();ctx.setLineDash([]);
+ ctx.font='9px sans-serif';ctx.textAlign='center';
+ ctx.fillStyle='rgba(251,191,36,.6)';ctx.fillText('绝活常胜',X(0.78),Y(kdaMax*0.95)+4);
+ ctx.fillStyle='rgba(56,189,248,.6)';ctx.fillText('躺赢混分',X(0.78),Y(kdaMax*0.08));
+ ctx.fillStyle='rgba(251,113,133,.6)';ctx.fillText('院长带不动',X(0.24),Y(kdaMax*0.95)+4);
+ ctx.fillStyle='rgba(100,116,139,.75)';ctx.fillText('练英雄',X(0.24),Y(kdaMax*0.08));
+ data.forEach(c=>{const rad=(6+Math.sqrt(c.count/maxC)*22)*pp;const col=posColor(c.pos);
+  ctx.globalAlpha=.82;ctx.beginPath();ctx.arc(X(c.wr),Y(c.kda),rad,0,7);const g=ctx.createRadialGradient(X(c.wr)-rad*.3,Y(c.kda)-rad*.3,1,X(c.wr),Y(c.kda),rad);g.addColorStop(0,col+'e6');g.addColorStop(1,col+'22');ctx.fillStyle=g;ctx.shadowColor=col;ctx.shadowBlur=8;ctx.fill();ctx.shadowBlur=0;ctx.globalAlpha=1;ctx.strokeStyle=col+'cc';ctx.lineWidth=1;ctx.stroke();
+  if(rad>18){ctx.fillStyle='#eaf4ff';ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(c.cn.length>5?c.cn.slice(0,4)+'…':c.cn,X(c.wr),Y(c.kda));}
+  c._x=X(c.wr);c._y=Y(c.kda);c._r=rad;});
+ ctx.canvas._C=data;});
+(function(){const o=drawers.find(d=>d.cv.id==='cvChamp');if(!o)return;
+ o.cv.addEventListener('mousemove',e=>{const r=o.cv.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;let hit=null;(o.cv._C||[]).forEach(c=>{if(Math.hypot(c._x-mx,c._y-my)<=c._r+3)hit=c;});
+  if(hit){tip.innerHTML=`<b style="color:${posColor(hit.pos)}">${esc(hit.cn)}</b> · ${esc(hit.pos||'混合')}<br>${hit.count}场 · 胜率 <b>${pct(hit.wr,0)}</b><br>近期 KDA ${hit.kda.toFixed(1)} · 场均伤害 ${fmtK(hit.dpg)}`;tip.style.opacity=1;moveTip(e);}else hideTip();});
+ o.cv.addEventListener('mouseleave',hideTip);})();
+
+/* 7) 发力期雷达（前/中/后期 × 胜率/KDA/补刀） */
+setupCanvas('cvPhase',(ctx,w,h,p)=>{const cx=w/2,cy=h/2+4,R=Math.min(w,h)/2-52,pp=easeOut(p);const axN=3;
+ const wrV=phaseStat.map(x=>x.wr),kdaV=phaseStat.map(x=>x.kda),csV=phaseStat.map(x=>x.cspm);
+ const kdaM=Math.max(...kdaV,1),csM=Math.max(...csV,1);
+ const series=[{v:wrV.map(x=>x),col:'#34d399',nm:'胜率'},{v:kdaV.map(x=>x/kdaM),col:'#fb7185',nm:'KDA'},{v:csV.map(x=>x/csM),col:'#fbbf24',nm:'补刀'}];
+ for(let ring=1;ring<=4;ring++){ctx.beginPath();for(let i=0;i<=axN;i++){const a=-Math.PI/2+i/axN*Math.PI*2,rr=R*ring/4;const x=cx+Math.cos(a)*rr,y=cy+Math.sin(a)*rr;i?ctx.lineTo(x,y):ctx.moveTo(x,y);}ctx.strokeStyle='rgba(120,160,220,'+(ring===4?.18:.09)+')';ctx.stroke();}
+ for(let i=0;i<axN;i++){const a=-Math.PI/2+i/axN*Math.PI*2;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+Math.cos(a)*R,cy+Math.sin(a)*R);ctx.strokeStyle='rgba(120,160,220,.12)';ctx.stroke();
+  ctx.fillStyle='#cdddf7';ctx.font='bold 12px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(phaseStat[i].n,cx+Math.cos(a)*(R+22),cy+Math.sin(a)*(R+22));
+  ctx.fillStyle='#7e93b5';ctx.font='9px sans-serif';ctx.fillText(phaseStat[i].cnt+'场',cx+Math.cos(a)*(R+38),cy+Math.sin(a)*(R+38));}
+ series.forEach(sr=>{ctx.beginPath();for(let i=0;i<=axN;i++){const t=(sr.v[i%axN]||0)*pp,a=-Math.PI/2+i/axN*Math.PI*2;const x=cx+Math.cos(a)*R*t,y=cy+Math.sin(a)*R*t;i?ctx.lineTo(x,y):ctx.moveTo(x,y);}ctx.fillStyle=sr.col+'22';ctx.strokeStyle=sr.col;ctx.lineWidth=1.8;ctx.shadowColor=sr.col;ctx.shadowBlur=7;ctx.fill();ctx.stroke();ctx.shadowBlur=0;});
+ // 图例 + 最强发力期
+ let best=0;phaseStat.forEach((x,i)=>{if(x.cnt&&x.wr>phaseStat[best].wr)best=i;});
+ ctx.font='10px sans-serif';let lx=cx-R+4;series.forEach(sr=>{ctx.fillStyle=sr.col;ctx.fillRect(lx,h-26,9,3);ctx.fillStyle='#9db4d8';ctx.textAlign='left';ctx.fillText(sr.nm,lx+12,h-24);lx+=58;});
+ ctx.fillStyle='#fcd34d';ctx.font='bold 10.5px sans-serif';ctx.textAlign='center';ctx.fillText('最强发力期：'+phaseStat[best].n+'（胜率'+pct(phaseStat[best].wr,0)+'）',cx,h-8);});
+
+/* 8) 分路玫瑰（南丁格尔：半径=场次，亮度=胜率） */
+setupCanvas('cvPos',(ctx,w,h,p)=>{const pos=(P.positions||[]).filter(x=>x.count>0).slice(0,6);const cx=w/2,cy=h/2-6,R=Math.min(w,h)/2-54,pp=easeOut(p);
+ if(!pos.length){ctx.fillStyle='#5b6d8f';ctx.font='12px sans-serif';ctx.textAlign='center';ctx.fillText('暂无分路数据',w/2,h/2);return;}
+ const tot=pos.reduce((s,x)=>s+x.count,0),maxC=Math.max(...pos.map(x=>x.count));
+ ctx.strokeStyle='rgba(120,160,220,.12)';for(let ring=1;ring<=3;ring++){ctx.beginPath();ctx.arc(cx,cy,R*ring/3,0,7);ctx.stroke();}
+ let a0=-Math.PI/2;
+ pos.forEach(x=>{const span=x.count/tot*Math.PI*2*0.94,gap=Math.PI*2*0.06/pos.length;const col=posColor(x.cn);
+  const rr=R*(0.25+0.75*x.count/maxC)*pp;
+  ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,rr,a0,a0+span);ctx.closePath();ctx.fillStyle=col+Math.round(60+140*x.wr).toString(16).padStart(2,'0');ctx.fill();ctx.strokeStyle=col;ctx.lineWidth=1;ctx.stroke();
+  // 胜率内弧
+  ctx.beginPath();ctx.arc(cx,cy,R*0.22*pp,a0,a0+span);ctx.strokeStyle=col;ctx.lineWidth=2.5;ctx.globalAlpha=.5+0.5*x.wr;ctx.stroke();ctx.globalAlpha=1;
+  const mid=a0+span/2,lx=cx+Math.cos(mid)*(rr+14),ly=cy+Math.sin(mid)*(rr+14);
+  ctx.fillStyle='#eaf4ff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(x.cn||x.pos,lx,ly-5);ctx.fillStyle=col;ctx.font='9px sans-serif';ctx.fillText(x.count+'场 '+pct(x.wr,0),lx,ly+7);
+  a0+=span+gap;});
+ ctx.fillStyle='#7e93b5';ctx.font='9px sans-serif';ctx.textAlign='center';ctx.fillText('内环亮度=胜率',cx,h-8);});
+
+/* 9) 伤害构成复合环 + 中心转化率 */
+setupCanvas('cvDmg',(ctx,w,h,p)=>{const cx=w/2,cy=h/2-10,R=Math.min(w,h)/2-58,rIn=R*0.58,pp=easeOut(p);
+ let a0=-Math.PI/2;
+ dmgTrip.forEach(t=>{const frac=t.v/dmgTot,span=frac*Math.PI*2*pp;
+  ctx.beginPath();ctx.arc(cx,cy,R,a0,a0+span);ctx.arc(cx,cy,rIn,a0+span,a0,true);ctx.closePath();ctx.fillStyle=t.c+Math.round(150+80*frac).toString(16).padStart(2,'0');ctx.shadowColor=t.c;ctx.shadowBlur=6;ctx.fill();ctx.shadowBlur=0;
+  const mid=a0+span/2;if(frac>0.05){ctx.fillStyle='#0b1426';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(pct(frac,0),cx+Math.cos(mid)*(R*0.82),cy+Math.sin(mid)*(R*0.82));
+   ctx.fillStyle=t.c;ctx.font='10.5px sans-serif';ctx.fillText(t.n,cx+Math.cos(mid)*(R+16),cy+Math.sin(mid)*(R+16));}
+  a0+=span;});
+ // 中心转化
+ ctx.fillStyle='#fff';ctx.font='bold 22px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(pct(convert,0),cx,cy-6);
+ ctx.fillStyle='#8298bd';ctx.font='9.5px sans-serif';ctx.fillText('伤害/经济 转化',cx,cy+14);
+ ctx.fillStyle='#7e93b5';ctx.font='9.5px sans-serif';ctx.fillText('场均伤害 '+fmtK(N?totDmg/N:0)+' · 场均承伤 '+fmtK(N?totTaken/N:0),cx,h-8);});
+
+/* 10) 战局类型 donut */
+setupCanvas('cvType',(ctx,w,h,p)=>{const cx=w/2,cy=h/2-14,R=Math.min(w,h)/2-66,rIn=R*0.6,pp=easeOut(p);const tot=gtypeCnt.reduce((s,t)=>s+t.v,0)||1;
+ let a0=-Math.PI/2;
+ gtypeCnt.forEach(t=>{if(!t.v)return;const span=t.v/tot*Math.PI*2*pp;
+  ctx.beginPath();ctx.arc(cx,cy,R,a0,a0+span);ctx.arc(cx,cy,rIn,a0+span,a0,true);ctx.closePath();ctx.fillStyle=t.c+'d9';ctx.strokeStyle='rgba(4,6,12,.8)';ctx.lineWidth=1.5;ctx.fill();ctx.stroke();
+  const mid=a0+span/2;if(t.v/tot>0.06){ctx.fillStyle='#0b1426';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(t.v,cx+Math.cos(mid)*(R*0.82),cy+Math.sin(mid)*(R*0.82));}
+  a0+=span;});
+ ctx.fillStyle='#fff';ctx.font='bold 22px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(N,cx,cy-6);ctx.fillStyle='#8298bd';ctx.font='9.5px sans-serif';ctx.fillText('总对局',cx,cy+14);
+ // 图例
+ let ly=h-78;ctx.textAlign='left';gtypeCnt.forEach(t=>{const lx=cx-R;ctx.fillStyle=t.c;ctx.fillRect(lx,ly,9,9);ctx.fillStyle='#cdddf7';ctx.font='9.5px sans-serif';ctx.textBaseline='middle';ctx.fillText(t.n+' '+t.v+'（'+pct(t.v/(tot||1),0)+'）',lx+14,ly+5);ly+=14;});});
+
+/* ===== 背景粒子 ===== */
+const bg=document.getElementById('bgFx'),bctx=bg.getContext('2d');let bpts=[];
+function bgSize(){bg.width=innerWidth*DPR;bg.height=innerHeight*DPR;bg.style.width=innerWidth+'px';bg.style.height=innerHeight+'px';bctx.setTransform(DPR,0,0,DPR,0,0);
+ const n=Math.min(70,Math.floor(innerWidth*innerHeight/26000));bpts=Array.from({length:n},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,vx:(Math.random()-.5)*.22,vy:(Math.random()-.5)*.22}));}
+function bgDraw(){const W=innerWidth,H=innerHeight;bctx.clearRect(0,0,W,H);
+ bpts.forEach(pt=>{pt.x+=pt.vx;pt.y+=pt.vy;if(pt.x<0||pt.x>W)pt.vx*=-1;if(pt.y<0||pt.y>H)pt.vy*=-1;});
+ for(let i=0;i<bpts.length;i++)for(let j=i+1;j<bpts.length;j++){const a=bpts[i],b=bpts[j],dx=a.x-b.x,dy=a.y-b.y,dd=dx*dx+dy*dy;if(dd<130*130){bctx.strokeStyle='rgba(56,189,248,'+(0.08*(1-Math.sqrt(dd)/130))+')';bctx.beginPath();bctx.moveTo(a.x,a.y);bctx.lineTo(b.x,b.y);bctx.stroke();}}
+ bpts.forEach(pt=>{bctx.fillStyle='rgba(120,200,255,.5)';bctx.beginPath();bctx.arc(pt.x,pt.y,1.3,0,7);bctx.fill();});requestAnimationFrame(bgDraw);}
+
+/* ===== 静态面板动画 ===== */
+const T0=performance.now(),DUR=1300;
+function frame(t){const p=clamp((t-T0)/DUR,0,1);drawers.forEach(o=>o.render(p));if(p<1)requestAnimationFrame(frame);}
+window.addEventListener('resize',()=>{bgSize();drawers.forEach(o=>o.render(1));});
+bgSize();bgDraw();requestAnimationFrame(frame);
+}
+</script>
+</body>
+</html>
