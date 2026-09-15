@@ -233,7 +233,7 @@ app.innerHTML=`
 </header>
 <div class="kpis" id="kpis"></div>
 <div class="grid">
-  <section class="panel col-8">${corners()}<h3>战斗星系 · 三维战迹<span class="tag">拖拽旋转 · 轴=伤害/KDA/发育 · 大小=击杀+助攻 · 悬停详情</span></h3>
+  <section class="panel col-8">${corners()}<h3>战斗星系 · 三维战迹<span class="tag">拖拽任意方向旋转 · 轴=伤害/KDA/发育 · 大小=击杀+助攻 · 悬停详情</span></h3>
     <div class="cv"><canvas id="cvGalaxy" height="430"></canvas></div></section>
   <section class="panel col-4">${corners()}<h3>作战风格指纹<span class="tag">多指标复合建模</span></h3>
     <div class="cv"><canvas id="cvStyle" height="236"></canvas></div><div id="archBox"></div></section>
@@ -341,13 +341,18 @@ document.getElementById('genAt').textContent='舱体生成 '+new Date(P.ts||Date
    if(hov){ctx.shadowBlur=0;ctx.strokeStyle='#fff';ctx.lineWidth=1.4;ctx.stroke();}ctx.shadowBlur=0;ctx.globalAlpha=1;
    if(rad>=11||hov){ctx.fillStyle='#eaf4ff';ctx.font='bold 8.5px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(g.k+'/'+g.d+'/'+g.a,o.x,o.y);}});
   ctx.globalAlpha=1;}
- cv.addEventListener('mousemove',e=>{const r=cv.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;let best=-1,bd=1e9;const maxKA=Math.max(...M.map(g=>g.k+g.a),1);
+ cv.style.cursor='grab';
+ cv.addEventListener('mousemove',e=>{if(drag){hideTip();return;}const r=cv.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;let best=-1,bd=1e9;const maxKA=Math.max(...M.map(g=>g.k+g.a),1);
   pts.forEach((p,i)=>{const o=project(p,ang),g=p.g;const rad=3+Math.sqrt((g.k+g.a+0.4)/maxKA)*11;const d=Math.hypot(o.x-mx,o.y-my);if(d<Math.max(rad+6,14)&&d<bd){bd=d;best=i;}});
   hover=best;if(best>=0){const g=pts[best].g;tip.innerHTML=`<b style="color:${g.win?'#34d399':'#fb7185'}">${g.win?'胜':'负'} · ${g.cn}</b> · ${esc(g.posCn||'')}<br><span class="c">${g.k}/${g.d}/${g.a}</span> KDA ${g.kda.toFixed(1)}<br>伤害 <b>${fmtK(g.dmg)}</b> · 承伤 ${fmtK(g.taken)}<br>${g.cs}刀 · ${fmtDur(g.dur)} · ${g.queue}<br>${g.horse?g.horse.label:''}${g.penta?' · 五杀':g.quadra?' · 四杀':g.triple?' · 三杀':''}`;tip.style.opacity=1;moveTip(e);}else hideTip();draw();});
  cv.addEventListener('mouseleave',()=>{hover=-1;hideTip();draw();});
- cv.addEventListener('mousedown',e=>{drag={x:e.clientX,a:ang};});
- window.addEventListener('mouseup',()=>drag=null);
- window.addEventListener('mousemove',e=>{if(drag)ang=drag.a+(e.clientX-drag.x)*0.01;});
+ cv.addEventListener('mousedown',e=>{drag={x:e.clientX,y:e.clientY,a:ang,t:tilt};cv.style.cursor='grabbing';e.preventDefault();});
+ window.addEventListener('mouseup',()=>{if(drag){drag=null;cv.style.cursor='grab';}});
+ window.addEventListener('mousemove',e=>{if(drag){ang=drag.a+(e.clientX-drag.x)*0.01;tilt=drag.t-(e.clientY-drag.y)*0.01;}});
+ cv.addEventListener('touchstart',e=>{const t=e.touches[0];if(t)drag={x:t.clientX,y:t.clientY,a:ang,t:tilt};},{passive:true});
+ cv.addEventListener('touchmove',e=>{if(drag){const t=e.touches[0];if(t){ang=drag.a+(t.clientX-drag.x)*0.01;tilt=drag.t-(t.clientY-drag.y)*0.01;}e.preventDefault();}},{passive:false});
+ window.addEventListener('touchend',()=>drag=null);
+ window.addEventListener('touchcancel',()=>drag=null);
  (function loop(){if(document.body.contains(cv)){if(!drag)ang+=0.0032;draw();requestAnimationFrame(loop);}})();
  size();})();
 
