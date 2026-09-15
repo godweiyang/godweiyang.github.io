@@ -300,7 +300,7 @@ const galaxy=(function(){
  function size(){W=cv.clientWidth;H=fixedH;cv.width=W*DPR;cv.height=H*DPR;cv.style.height=H+'px';ctx.setTransform(DPR,0,0,DPR,0,0);}
  function project(p,a){const ca=Math.cos(a),sa=Math.sin(a),ct=Math.cos(tilt),st=Math.sin(tilt);
   let x=p.x*ca-p.z*sa,z1=p.x*sa+p.z*ca;let y=p.y*ct-z1*st,z2=p.y*st+z1*ct;
-  const f=6,s=f/(f-z2*0.55);return{x:W/2+x*Math.min(W,H)*0.34*s,y:H/2-y*Math.min(W,H)*0.34*s,s,z:z2};}
+  const s=1;return{x:W/2+x*Math.min(W,H)*0.34*s,y:H/2-y*Math.min(W,H)*0.34*s,s,z:z2};}
  function draw(){size();ctx.clearRect(0,0,W,H);const cx=W/2,cy=H/2,R=Math.min(W,H)*0.34;
   // 轴框架（立方体参考）
   ctx.strokeStyle='rgba(130,162,210,.16)';ctx.lineWidth=1;

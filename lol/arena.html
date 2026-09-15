@@ -313,7 +313,7 @@ document.getElementById('genAt').textContent='舱体生成 '+new Date(P.ts||Date
  function size(){W=cv.clientWidth;H=fixedH;cv.width=W*DPR;cv.height=H*DPR;cv.style.height=H+'px';ctx.setTransform(DPR,0,0,DPR,0,0);}
  function project(p,a){const ca=Math.cos(a),sa=Math.sin(a),ct=Math.cos(tilt),st=Math.sin(tilt);
   let x=p.x*ca-p.z*sa,z1=p.x*sa+p.z*ca;let y=p.y*ct-z1*st,z2=p.y*st+z1*ct;
-  const f=6,s=f/(f-z2*0.55);return{x:W/2+x*Math.min(W,H)*0.34*s,y:H/2-y*Math.min(W,H)*0.34*s,s,z:z2};}
+  const s=1;return{x:W/2+x*Math.min(W,H)*0.34*s,y:H/2-y*Math.min(W,H)*0.34*s,s,z:z2};}
  function draw(){size();ctx.clearRect(0,0,W,H);
   ctx.strokeStyle='rgba(130,162,210,.16)';ctx.lineWidth=1;
   [[[-1,-1,-1],[1,-1,-1]],[[1,-1,-1],[1,1,-1]],[[1,1,-1],[-1,1,-1]],[[-1,1,-1],[-1,-1,-1]],[[-1,-1,1],[1,-1,1]],[[1,-1,1],[1,1,1]],[[1,1,1],[-1,1,1]],[[-1,1,1],[-1,-1,1]],[[-1,-1,-1],[-1,-1,1]],[[1,-1,-1],[1,-1,1]],[[1,1,-1],[1,1,1]],[[-1,1,-1],[-1,1,1]]].forEach(e=>{const a=project({x:e[0][0],y:e[0][1],z:e[0][2]},ang),b=project({x:e[1][0],y:e[1][1],z:e[1][2]},ang);ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();});
