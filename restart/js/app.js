@@ -20,7 +20,7 @@
 
   // ---------- 数据加载 ----------
   var DATA = null, game = null;
-  var FILES = ['talents.json', 'meta.json', 'events-child.json', 'events-teen.json', 'events-prime.json', 'events-veteran.json', 'events-extra.json'];
+  var FILES = ['talents.json', 'meta.json', 'events-child.json', 'events-teen.json', 'events-prime.json', 'events-veteran.json', 'events-extra.json', 'events-choices.json'];
   function loadData() {
     return Promise.all(FILES.map(function (f) {
       return fetch('data/' + f).then(function (r) { if (!r.ok) throw new Error(f); return r.json(); });
@@ -242,7 +242,7 @@
   function openChoice() {
     busy = true;
     var ev = run.pending.event, vis = game['_visibleChoices'](run, ev);
-    $('q-age').textContent = ev.age + ' 岁 · 人生岔路口';
+    $('q-age').textContent = run.age + ' 岁 · 人生岔路口';
     $('q-text').textContent = ev.text;
     var box = $('q-options'); box.innerHTML = '';
     vis.forEach(function (ch, i) {
@@ -335,6 +335,13 @@
     var hi = pickMoment(run.special.highlight), lo = pickMoment(run.special.disaster);
     $('p-hi').classList.toggle('hidden', !hi); $('p-hi-t').textContent = hi ? (hi.age + ' 岁：' + hi.text) : '';
     $('p-lo').classList.toggle('hidden', !lo); $('p-lo-t').textContent = lo ? (lo.age + ' 岁：' + lo.text) : '';
+    // 二维码：扫码回到游戏
+    try {
+      var qr = qrcode(0, 'M');
+      qr.addData('https://godweiyang.com/restart/');
+      qr.make();
+      $('p-qr-img').src = qr.createDataURL(5, 2);
+    } catch (e) {}
 
     // 精萃
     var gain = ESSENCE[end.tier] || 30;

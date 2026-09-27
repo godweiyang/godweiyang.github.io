@@ -196,6 +196,7 @@
     this._drift(run);
 
     var yearEvents = [];
+    var self = this;
     var cands = this.eventsForAge(run, run.age);
 
     // 固定事件优先
@@ -205,10 +206,11 @@
     var picks = [];
     fixed.forEach(function (e) { if (picks.indexOf(e) < 0) picks.push(e); });
 
-    // 每岁 0~2 条随机事件，30 岁后减少
+    // 每岁 0~2 条随机【自动】事件（choice 不再占用名额），30 岁后减少
+    var autoOthers = others.filter(function (e) { return e.type !== 'choice'; });
     var nRand = run.age < 13 ? 1 : (run.age < 25 ? (this.chance(run, 0.85) ? 1 : 0) + (this.chance(run, 0.35) ? 1 : 0) : (this.chance(run, 0.6) ? 1 : 0));
     for (var k = 0; k < nRand; k++) {
-      var pool = others.filter(function (e) { return picks.indexOf(e) < 0; });
+      var pool = autoOthers.filter(function (e) { return picks.indexOf(e) < 0; });
       if (!pool.length) break;
       picks.push(this._pickWeighted(run, pool));
     }
@@ -220,19 +222,25 @@
       return [];
     }
 
-    // 选择事件：本岁若有，作为 pending（取第一个 choice 事件），其它先自动播报
-    var choice = null;
-    for (var c = 0; c < picks.length; c++) {
-      if (picks[c].type === 'choice' && this._visibleChoices(run, picks[c]).length) { choice = picks[c]; break; }
+    // 选择事件独立处理：固定 choice 必出；否则当年以高概率从候选里补一个
+    var choice = picks.filter(function (e) {
+      return e.type === 'choice' && self._visibleChoices(run, e).length;
+    })[0];
+    if (!choice) {
+      var cc = others.filter(function (e) {
+        return e.type === 'choice' && self._visibleChoices(run, e).length;
+      });
+      var cp = run.mode === 'easy' ? 0.95 : 0.85;
+      if (cc.length && this.chance(run, cp)) choice = this._pickWeighted(run, cc);
     }
-    var self = this;
+
     picks.forEach(function (e) {
       if (e === choice) return;
-      self._runAuto(run, e);
-      yearEvents.push(e);
+      yearEvents.push(self._runAuto(run, e));
     });
 
     if (choice) {
+      run.dealt[choice.id] = true;
       run.pending = { event: choice };
     } else {
       run.pending = null;
@@ -246,10 +254,10 @@
     var a = run.attrs;
     var power = a.ap * 0.3 + a.aw * 0.3 + a.me * 0.2 + a.soc * 0.1 + a.fam * 0.1;
     var age = run.age, d = 0;
-    if (age >= 13 && age <= 18) d = (power - 4.0) * 18 + (this.roll(run, 31) - 15);
-    else if (age >= 19 && age <= 24) d = (power - 4.2) * 44 + (this.roll(run, 61) - 30);
-    else if (age >= 25 && age <= 30) d = (power - 5.4) * 24 + (this.roll(run, 41) - 20);
-    else if (age >= 31) d = (power - 6.2) * 20 + (this.roll(run, 31) - 15);
+    if (age >= 13 && age <= 18) d = (power - 5.0) * 14 + (this.roll(run, 31) - 15);
+    else if (age >= 19 && age <= 24) d = (power - 5.6) * 30 + (this.roll(run, 61) - 30);
+    else if (age >= 25 && age <= 30) d = (power - 6.0) * 18 + (this.roll(run, 41) - 20);
+    else if (age >= 31) d = (power - 6.6) * 16 + (this.roll(run, 31) - 15);
     d = Math.round(d);
     if (d !== 0 && age >= 13) {
       run.rp = clamp(run.rp + d, 0, 99999);
@@ -281,9 +289,15 @@
   };
   Game.prototype._runAuto = function (run, e) {
     run.dealt[e.id] = true;
+    var rec = {
+      age: run.age, id: e.id, text: e.text,
+      eff: e.eff, vars: e.vars, flags: e.flags, rp: e.rp,
+      special: e.special, death: e.death
+    };
     this._effect(run, { eff: e.eff, vars: e.vars, flags: e.flags, rp: e.rp, special: e.special, text: e.text });
-    run.log.push({ age: run.age, id: e.id, text: e.text });
+    run.log.push(rec);
     if (e.death) this._resolveDeath(run, e);
+    return rec;
   };
 
   Game.prototype._visibleChoices = function (run, e) {
@@ -381,13 +395,13 @@
     // 2. 好结局
     var good = null;
     var fl = run.flags;
-    if (run.peakRp >= 2300 && fl.made_peak) good = this._endingObj('g_champion');
+    if (run.peakRp >= 2500 && fl.made_peak) good = this._endingObj('g_champion');
     else if (fl.pro_played && (fl.pro_bench || fl.became_coach)) good = this._endingObj('g_pro');
     else if (fl.champion_coach) good = this._endingObj('g_coach');
     else if (fl.stream_growing && fl.stream_crossroads && run.attrs.soc >= 8) good = this._endingObj('g_streamer');
     else if (fl.happy_casual && fl.married) good = this._endingObj('g_couple');
-    else if (fl.play_support && run.peakRp >= 1600) good = this._endingObj('g_support');
-    else if (run.peakRp >= 1300 && fl.peak_rp) good = this._endingObj('g_diamond');
+    else if (fl.play_support && run.peakRp >= 2500) good = this._endingObj('g_support');
+    else if (run.peakRp >= 2500 && fl.peak_rp) good = this._endingObj('g_diamond');
 
     var ending = hidden || good;
 

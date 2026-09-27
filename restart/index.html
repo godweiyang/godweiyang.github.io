@@ -191,6 +191,10 @@ button{font-family:inherit;cursor:pointer;border:none}
 .p-moment.hi .mh{color:var(--gold)}.p-moment.lo .mh{color:var(--lose)}
 .p-foot{text-align:center;margin-top:16px;font-size:11px;color:var(--mut);letter-spacing:1px}
 .p-foot b{color:var(--sub)}
+.p-qr{display:flex;align-items:center;justify-content:center;gap:12px;margin:16px 0 4px}
+.p-qr img{width:92px;height:92px;border-radius:10px;background:#fff;padding:6px;box-sizing:border-box;display:block}
+.p-qr-text{font-size:12px;line-height:1.6;color:var(--sub);text-align:left}
+.p-qr-text b{color:var(--gold);font-weight:900}
 .essence-pop{text-align:center;margin:16px 0 6px;font-size:14px}
 .essence-pop b{color:var(--gold);font-size:20px}
 .end-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
@@ -327,6 +331,10 @@ button{font-family:inherit;cursor:pointer;border:none}
       <div class="p-attrs" id="p-attrs"></div>
       <div class="p-moment hi" id="p-hi"><div class="mh">🏅 高光一役</div><span id="p-hi-t"></span></div>
       <div class="p-moment lo" id="p-lo"><div class="mh">💀 至暗时刻</div><span id="p-lo-t"></span></div>
+      <div class="p-qr">
+        <img id="p-qr-img" width="92" height="92" alt="二维码" src="">
+        <div class="p-qr-text">扫码重开<br><b>你的开黑人生</b></div>
+      </div>
       <div class="p-foot"><b>godweiyang.com</b> · 开黑重开模拟器</div>
     </div>
     <div class="essence-pop">本局获得蓝色精萃 <b id="p-essence">0</b></div>
@@ -372,6 +380,7 @@ button{font-family:inherit;cursor:pointer;border:none}
 <div id="toast-host"></div>
 
 <script src="vendor/html-to-image.min.js"></script>
+<script src="vendor/qrcode.min.js"></script>
 <script src="js/engine.js"></script>
 <script src="js/app.js"></script>
 </body>

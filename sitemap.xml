@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://godweiyang.com/restart/data/events-choices.json</loc>
+    
+    <lastmod>2026-09-27T09:28:04.638Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://godweiyang.com/restart/data/meta.json</loc>
     
     <lastmod>2026-09-27T07:42:52.875Z</lastmod>
