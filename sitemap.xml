@@ -2,6 +2,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://godweiyang.com/restart/data/events-veteran.json</loc>
+    
+    <lastmod>2026-09-27T11:28:48.064Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://godweiyang.com/restart/data/events-choices.json</loc>
+    
+    <lastmod>2026-09-27T11:28:48.062Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://godweiyang.com/restart/data/events-prime.json</loc>
+    
+    <lastmod>2026-09-27T11:27:45.357Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://godweiyang.com/restart/data/events-echo.json</loc>
     
     <lastmod>2026-09-27T11:01:55.646Z</lastmod>
@@ -16,30 +37,9 @@
   </url>
   
   <url>
-    <loc>https://godweiyang.com/restart/data/events-choices.json</loc>
-    
-    <lastmod>2026-09-27T10:57:58.846Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://godweiyang.com/restart/data/events-extra.json</loc>
     
     <lastmod>2026-09-27T10:57:58.844Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://godweiyang.com/restart/data/events-veteran.json</loc>
-    
-    <lastmod>2026-09-27T10:57:58.842Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://godweiyang.com/restart/data/events-prime.json</loc>
-    
-    <lastmod>2026-09-27T10:57:58.840Z</lastmod>
     
   </url>
   
