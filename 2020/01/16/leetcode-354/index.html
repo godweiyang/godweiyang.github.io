@@ -13,7 +13,7 @@
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-题目描述给定一些标记了宽度和高度的信封，宽度和高度以整数对形式 (w, h) 出现。当另一个信封的宽度和高度都比这个信封大的时候，这个信封就可以放进另一个信封里，如同俄罗斯套娃一样。
+题目描述给定一些标记了宽度和高度的信封，宽度和高度以整数对形式 (w, h) 出现。当另一个信封的宽度和高度都比这个信封大的时候，这个信封就可以放进另一个信封里，如同俄罗斯套娃一样。
 ">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -521,8 +521,8 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
-<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一些标记了宽度和高度的信封，宽度和高度以整数对形式 (w, h) 出现。当另一个信封的宽度和高度都比这个信封大的时候，这个信封就可以放进另一个信封里，如同俄罗斯套娃一样。</p>
+<p><img src="/medias/contact.jpg" alt=""></p>
+<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一些标记了宽度和高度的信封，宽度和高度以整数对形式 (w, h) 出现。当另一个信封的宽度和高度都比这个信封大的时候，这个信封就可以放进另一个信封里，如同俄罗斯套娃一样。</p>
 <p>请计算最多能有多少个信封能组成一组“俄罗斯套娃”信封（即可以把一个信封放到另一个信封里面）。</p>
 <p><strong>说明:</strong><br>不允许旋转信封。</p>
 <p><strong>示例1</strong></p>
@@ -531,11 +531,11 @@
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>题目要求矩形一个套着一个，然后求出最多套多少个，而一个矩形能套在另一个矩形上面的条件是长宽都大于另一个。</p>
 <p>那么我们可以按照长度从小到大排个序，这样只有排在后面的矩形可以套在前面的矩形上。但是宽度也有限制条件，也得大于前面的矩形，那么问题就转化成了，把宽度看成一个序列，找到一个最长的上升序列，序列的长度就是我们要的答案。但是这里有个问题，就是矩形如果是相同长度，它们的宽度按照什么来排序呢？如果也是从小到大排，那么可能会出现多个相同长度的矩形套在一起，这是不符合题意的。所以我们对相同长度的矩形采取宽度降序的方法排序，这样它们之中最多只会被选中一个了。</p>
 <p>那么问题就变成了经典的<strong>最长上升子序列问题了</strong>。</p>
-<h3 id="方法1"><a href="#方法1" class="headerlink" title="方法1"></a>方法1</h3><p>用 dp[i] 表示以第 i 个元素 a[i] 结尾的最长子序列的长度，那么我们可以遍历所有 a[i] 之前的元素 a[j] ，如果 a[j] 小于 a[i] ，那就说明 a[i] 可以加在 a[j] 后面，然后长度就变成了 dp[j] + 1 。所以遍历所有符合条件的 j ，找到长度最长的，然后更新 dp[i] &#x3D; dp[j] + 1 。最后的答案就是 dp 数组中最大的值。</p>
+<h3 id="方法1"><a href="#方法1" class="headerlink" title="方法1"></a>方法1</h3><p>用 dp[i] 表示以第 i 个元素 a[i] 结尾的最长子序列的长度，那么我们可以遍历所有 a[i] 之前的元素 a[j] ，如果 a[j] 小于 a[i] ，那就说明 a[i] 可以加在 a[j] 后面，然后长度就变成了 dp[j] + 1 。所以遍历所有符合条件的 j ，找到长度最长的，然后更新 dp[i] = dp[j] + 1 。最后的答案就是 dp 数组中最大的值。</p>
 <p>这种方法时间复杂度是 $O(n^2)$，如果序列太长会超时。本题中 c++ 没有超时，但是 python 超时了。</p>
 <h3 id="方法2"><a href="#方法2" class="headerlink" title="方法2"></a>方法2</h3><p>那么有什么方法来优化呢？下面介绍一种二分优化方法。</p>
 <p>这次假设 dp[len] 表示长度为 len 的上升子序列最后一个元素的最小值。这个值要尽量小，什么意思呢？也就是相同长度的上升序列，最后一个元素小的那个序列，后面可以加的元素可选择余地肯定更大。那么这个数组怎么更新呢？</p>
-<p>初始的时候 len 就是 0 ，因为没有找到任何上升子序列。如果现在找到了长度为 len 的子序列，然后最后一个元素最小值是 dp[len] ，这时候来了一个新元素 a[i] ，如果它比 dp[len] 大，说明 a[i] 可以加在 dp[len] 后面，那么 len 就变成了 len + 1 ， 并且 dp[len + 1] 更新为 a[i]。那如果 a[i] 小于等于 dp[len] 呢？那就继续往前遍历，找到第一个 dp[l] &lt; a[i] &lt;&#x3D; dp[l+1] 的位置，这个位置说明了什么呢？说明了 a[i] 可以加在 dp[l] 后面构成长度为 l + 1 的子序列，并且 dp[l+1] 可以变得更小，所以更新为 a[i] 。这样 a[i] 就处理完了，最后 len 就是答案。</p>
+<p>初始的时候 len 就是 0 ，因为没有找到任何上升子序列。如果现在找到了长度为 len 的子序列，然后最后一个元素最小值是 dp[len] ，这时候来了一个新元素 a[i] ，如果它比 dp[len] 大，说明 a[i] 可以加在 dp[len] 后面，那么 len 就变成了 len + 1 ， 并且 dp[len + 1] 更新为 a[i]。那如果 a[i] 小于等于 dp[len] 呢？那就继续往前遍历，找到第一个 dp[l] &lt; a[i] &lt;= dp[l+1] 的位置，这个位置说明了什么呢？说明了 a[i] 可以加在 dp[l] 后面构成长度为 l + 1 的子序列，并且 dp[l+1] 可以变得更小，所以更新为 a[i] 。这样 a[i] 就处理完了，最后 len 就是答案。</p>
 <p>但是这样看起来复杂度没有变啊，其实这里有一个很好的性质，因为长度越大的序列，最后一个元素的最小值一定是大于长度小的序列最后一个元素的，所以 dp 数组是单调递增的，这样我们就可以用二分来寻找 a[i] 适合插入的位置。时间复杂度降到了 $O(n\log n)$。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="方法1（c-）"><a href="#方法1（c-）" class="headerlink" title="方法1（c++）"></a>方法1（c++）</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">maxEnvelopes</span><span class="params">(vector&lt;vector&lt;<span class="type">int</span>&gt;&gt;&amp; envelopes)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = envelopes.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span> (n &lt; <span class="number">1</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">sort</span>(envelopes.<span class="built_in">begin</span>(), envelopes.<span class="built_in">end</span>(), cmp);</span><br><span class="line">        <span class="type">int</span> res = <span class="number">1</span>;</span><br><span class="line">        <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">dp</span><span class="params">(n, <span class="number">1</span>)</span></span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; i; ++j) &#123;</span><br><span class="line">                <span class="keyword">if</span> (envelopes[j][<span class="number">1</span>] &lt; envelopes[i][<span class="number">1</span>]) &#123;</span><br><span class="line">                    dp[i] = <span class="built_in">max</span>(dp[i], dp[j] + <span class="number">1</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            res = <span class="built_in">max</span>(res, dp[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">static</span> <span class="type">bool</span> <span class="title">cmp</span><span class="params">(<span class="type">const</span> vector&lt;<span class="type">int</span>&gt;&amp; a, <span class="type">const</span> vector&lt;<span class="type">int</span>&gt;&amp; b)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (a[<span class="number">0</span>] != b[<span class="number">0</span>]) <span class="keyword">return</span> a[<span class="number">0</span>] &lt; b[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">return</span> a[<span class="number">1</span>] &gt; b[<span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
@@ -789,8 +789,8 @@
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-题目描述在二维地图上， 0 代表海洋， 1 代表陆地，我们最多只能将一格 0 海洋变成 1 变成陆地。
-进行填海之后，地图上最大的岛屿面积是多少？（上、下、左、右四个方向相连的 1 可
+题目描述在二维地图上， 0 代表海洋， 1 代表陆地，我们最多只能将一格 0 海洋变成 1 变成陆地。
+进行填海之后，地图上最大的岛屿面积是多少？（上、下、左、右四个方向相连的 1 可
                         
                     </div>
                     <div class="publish-info">
@@ -1064,7 +1064,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

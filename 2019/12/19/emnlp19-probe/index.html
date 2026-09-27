@@ -525,11 +525,11 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <p><strong>论文地址：</strong><a href="https://www.aclweb.org/anthology/D19-1275.pdf">Designing and Interpreting Probes with Control Tasks</a></p>
 <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>NLP任务都存在着一个常见的问题：<strong>我的神经网络有没有学到某个性质$Y$？</strong><br>所以我们需要构造出一种方法，来告诉我们模型是否真的学到了某些性质。</p>
 <p>例如对于ELMo，我们想知道它是否学到了POS tag信息，所以我们需要设计一种探测任务（probe task）。</p>
-<p><img src="/1.jpg"></p>
+<p><img src="1.jpg" alt=""></p>
 <p>如上图所示，我们将句子输入到ELMo中，得到每个单词的上下文表示。<br>然后用probe函数（一般是MLP或者linear）进行分类，得到每个单词的POS tag。</p>
 <p>注意到这里的ELMo是不进行fine-tune的，也就是固定住不变的，模型参数只有probe参数。</p>
 <p>但是我们能否说，POS tag效果好，那么ELMo学的就好呢？<br>其实是不行的，因为有三点因素可能影响到最终的tag准确率：</p>
@@ -546,18 +546,18 @@
 </ul>
 <p>下面我们一一关注这三个问题。</p>
 <h1 id="问题1"><a href="#问题1" class="headerlink" title="问题1"></a>问题1</h1><p>首先答案是否定的，探测任务上准确率越高，并不能代表着表示学到了你想要的性质。</p>
-<p><img src="/2.jpg"></p>
+<p><img src="2.jpg" alt=""></p>
 <p>还是用ELMo和POS tag举例子，上面这个模型用1000隐层维度的MLP作为probe函数，最终取得了97.3的高准确率。<br>但是我们不能说EMLo能够很好的学到了POS tag信息，因为可能是MLP很好的拟合出了POS tag分布。</p>
-<p>所以我们提出了**控制任务（control task）**的概念，也就是用同样的模型去预测一个随机任务。<br>例如对于POS tag任务，PTB数据集里一共有45个tag，我们给每个单词重新随机分配一个tag，然后用探测模型预测句子的随机tag。<br>这样其实有个小问题，就是消除了单词的一词多义问题，一个单词在所有语境下tag都是一样的了。</p>
-<p><img src="/3.jpg"></p>
+<p>所以我们提出了<strong>控制任务（control task）</strong>的概念，也就是用同样的模型去预测一个随机任务。<br>例如对于POS tag任务，PTB数据集里一共有45个tag，我们给每个单词重新随机分配一个tag，然后用探测模型预测句子的随机tag。<br>这样其实有个小问题，就是消除了单词的一词多义问题，一个单词在所有语境下tag都是一样的了。</p>
+<p><img src="3.jpg" alt=""></p>
 <p>测试下来结果如上图所示。<br>可以看到MLP和linear对POS tag结果基本没有影响，都非常的高。<br>但是对control任务也就是随机tag影响很大，MLP并没有降低很多（92.8），但是linear降低了很多（71.2）。<br>于是我们将这个差值叫做<strong>selectivity</strong>。如果selectivity越大，说明probe函数影响越小，可能不是probe函数拟合出来的结果。<br>如果selectivity越小，说明不管是gold的label还是随机的label，准确率都很高，这就可能是probe函数拟合出来的结果了，而不是表示学出来的。</p>
 <h1 id="问题2"><a href="#问题2" class="headerlink" title="问题2"></a>问题2</h1><p>显然linear的学习能力明显不如MLP，那么不同的参数设置对最终结果是否有影响呢？</p>
-<p><img src="/4.jpg"></p>
+<p><img src="4.jpg" alt=""></p>
 <p>上图举了两个例子，分别是dropout和隐层维度对结果的影响。<br>可以看出简单的正则化对selectivity影响不是很大，但是隐层维度影响特别大。</p>
-<p><img src="/5.jpg"></p>
+<p><img src="5.jpg" alt=""></p>
 <p>具体的参数影响如上图所示，最终选取了使得准确率比较高，selectivity相对大的参数配置。</p>
 <h1 id="问题3"><a href="#问题3" class="headerlink" title="问题3"></a>问题3</h1><p>答案也是肯定的。</p>
-<p><img src="/6.jpg"></p>
+<p><img src="6.jpg" alt=""></p>
 <p>比如上面这个例子，一般认为ELMo第1层POS tag效果是要好于第2层的，probe测试下来也是这样。<br>但是可以发现，第2层的selectivity更大，说明其实第2层才更好的学到了POS tag信息。<br>那为什么第1层效果更好呢？可能是因为它更靠近单词层，所以保留了更多单词的信息。<br>这也说明了selectivity方法可能也不是完美的，可能通过聚类预测POS tag，第2层效果会更好。</p>
 <h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>具体的实验细节和分析就不说了，大体就是这么个思想。<br>这篇主要就是说明了，光靠准确率并不能说明一个encoder的表示学到了某种性质，而可能是模型拟合的结果。<br>所以他们提出了control task，同时预测一个随机输出，如果准确率差距较大，则验证了表示学到了性质。<br>当然这个方法还有一些问题，比如probe函数的挑选，还有文中依存句法分析的control task的设计是有瑕疵的。</p>
 
@@ -1073,7 +1073,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

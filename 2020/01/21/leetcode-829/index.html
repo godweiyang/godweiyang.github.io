@@ -496,7 +496,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    674
+                    659
                 </div>
                 
 
@@ -522,7 +522,7 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个正整数 N ，试求有多少组连续正整数满足所有数字之和为 N ?</p>
 <p><strong>示例1</strong></p>
 <figure class="highlight text"><table><tr><td class="code"><pre><span class="line">输入：</span><br><span class="line">5</span><br><span class="line">输出：</span><br><span class="line">2</span><br><span class="line">解释：</span><br><span class="line">5 = 5 = 2 + 3，共有两组连续整数([5],[2,3])求和后为 5。</span><br></pre></td></tr></table></figure>
@@ -535,13 +535,13 @@
 
 <p><strong>提示</strong></p>
 <ul>
-<li>1 &lt;&#x3D; N &lt;&#x3D; 10^9</li>
+<li>1 &lt;= N &lt;= 10^9</li>
 </ul>
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>这是一道非常经典的数学题，挺基础的，不知道为什么这也能算困难难度的题目？</p>
 <h3 id="暴力法"><a href="#暴力法" class="headerlink" title="暴力法"></a>暴力法</h3><p>遍历所有的连续数字区间 (i, j) ，然后求和看等不等于 N 。这种方法时间复杂度是 $O(n^2)$ ，显然不可行。</p>
-<h3 id="暴力法优化"><a href="#暴力法优化" class="headerlink" title="暴力法优化"></a>暴力法优化</h3><p>遍历所有的连续数字区间的左端点 i。然后假设区间长度为 n ，那么根据求和公式有 (2i+n-1)n&#x2F;2&#x3D;N ，然后只需要看这个方程的解是否是整数就行。时间复杂度可以降到 $O(n)$ ，但还是太高了。</p>
-<h3 id="数学方法"><a href="#数学方法" class="headerlink" title="数学方法"></a>数学方法</h3><p>根据上面的求和公式，对于起点 i 和长度 n ，求和得到 (2i+n-1)n&#x2F;2&#x3D;N 。我们可以先粗略推算一下 i 和 n 的范围，起点 i 的范围是 [1, N]毋庸置疑，而区间长度 n 的范围就可以考究一下了，一个出发点是：上面式子可以解出 i&#x3D;(N-n(n-1)&#x2F;2)&#x2F;n ，而 i&gt;&#x3D;1 ，可以解出 (n+1)n&lt;&#x3D;2N ，所以 n 的范围其实只有根号 N 级别，可以直接遍历。另一个出发点是最小的 n 个数加起来就是 1 加到 n 等于 n(n+1)&#x2F;2 ，这个要小于等于 N ，解出来也是 (n+1)n&lt;&#x3D;2N 。</p>
-<p>所以我们只需要从 1 开始遍历 n ，直到 (n+1)n&gt;2N 为止，然后判断 (N-n(n-1)&#x2F;2)&#x2F;n 是否是整数就行了（前面终止条件可以保证 i 一定大于 0 ）。</p>
+<h3 id="暴力法优化"><a href="#暴力法优化" class="headerlink" title="暴力法优化"></a>暴力法优化</h3><p>遍历所有的连续数字区间的左端点 i。然后假设区间长度为 n ，那么根据求和公式有 (2i+n-1)n/2=N ，然后只需要看这个方程的解是否是整数就行。时间复杂度可以降到 $O(n)$ ，但还是太高了。</p>
+<h3 id="数学方法"><a href="#数学方法" class="headerlink" title="数学方法"></a>数学方法</h3><p>根据上面的求和公式，对于起点 i 和长度 n ，求和得到 (2i+n-1)n/2=N 。我们可以先粗略推算一下 i 和 n 的范围，起点 i 的范围是 [1, N]毋庸置疑，而区间长度 n 的范围就可以考究一下了，一个出发点是：上面式子可以解出 i=(N-n(n-1)/2)/n ，而 i&gt;=1 ，可以解出 (n+1)n&lt;=2N ，所以 n 的范围其实只有根号 N 级别，可以直接遍历。另一个出发点是最小的 n 个数加起来就是 1 加到 n 等于 n(n+1)/2 ，这个要小于等于 N ，解出来也是 (n+1)n&lt;=2N 。</p>
+<p>所以我们只需要从 1 开始遍历 n ，直到 (n+1)n&gt;2N 为止，然后判断 (N-n(n-1)/2)/n 是否是整数就行了（前面终止条件可以保证 i 一定大于 0 ）。</p>
 <p>最终时间复杂度降到了 $O(\sqrt(N))$ 。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="数学方法（c-）"><a href="#数学方法（c-）" class="headerlink" title="数学方法（c++）"></a>数学方法（c++）</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">consecutiveNumbersSum</span><span class="params">(<span class="type">int</span> N)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> n = <span class="number">1</span>; (n + <span class="number">1</span>) * n &lt;= <span class="number">2</span> * N; ++n) &#123;</span><br><span class="line">            <span class="keyword">if</span> ((N - n * (n - <span class="number">1</span>) / <span class="number">2</span>) % n == <span class="number">0</span>) res++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
@@ -791,8 +791,8 @@
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-题目描述第 i 个人的体重为 people[i]，每艘船可以承载的最大重量为 limit。
-每艘船最多可同时载两人，但条件是这些人的重量之和最多为 limit。
+题目描述第 i 个人的体重为 people[i]，每艘船可以承载的最大重量为 limit。
+每艘船最多可同时载两人，但条件是这些人的重量之和最多为 limit。
 返回载到每一个人所需的
                         
                     </div>
@@ -1070,7 +1070,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

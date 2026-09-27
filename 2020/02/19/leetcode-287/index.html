@@ -13,7 +13,7 @@
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-题目描述给定一个包含 $n + 1$ 个整数的数组 $nums$，其数字都在 $1$ 到 $n$ 之间（包括 $1$ 和 $n$），可知至少存在一个重复的整数。假设只有一个重复的整数，">
+题目描述给定一个包含 $n + 1$ 个整数的数组 $nums$，其数字都在 $1$ 到 $n$ 之间（包括 $1$ 和 $n$），可知至少存在一个重复的整数。假设只有一个重复的整数，">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -494,7 +494,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.4k
+                    1.3k
                 </div>
                 
 
@@ -520,8 +520,8 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
-<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个包含 $n + 1$ 个整数的数组 $nums$，其数字都在 $1$ 到 $n$ 之间（包括 $1$ 和 $n$），可知至少存在一个重复的整数。假设只有一个重复的整数，找出这个重复的数。</p>
+<p><img src="/medias/contact.jpg" alt=""></p>
+<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个包含 $n + 1$ 个整数的数组 $nums$，其数字都在 $1$ 到 $n$ 之间（包括 $1$ 和 $n$），可知至少存在一个重复的整数。假设只有一个重复的整数，找出这个重复的数。</p>
 <p><strong>说明</strong></p>
 <ul>
 <li>不能更改原数组（假设数组是只读的）。</li>
@@ -541,23 +541,23 @@
 <p>反之如果 $cnt \le m$ ，那么说明满足 $m+1 \le nums[i] \le n$ 的数的数量是 $n+1-cnt \ge n-m+1$ ，而抽屉大小是 $n-m$ ，所以根据抽屉原理，$m+1$ 到 $n$ 中一定有一个数出现了至少两次。</p>
 <p>综上，可以采用二分法，不断缩小 $m$ 的范围，最终得到这个出现至少两次的数的值。</p>
 <p>时间复杂度 $O(n \log n)$ 。</p>
-<h3 id="快慢指针法"><a href="#快慢指针法" class="headerlink" title="快慢指针法"></a>快慢指针法</h3><p>因为 $nums$ 中数据范围是 $1$ 到 $n$ ，所以 $nums[0] &#x3D; x \neq 0$ 。那么接着用 $x$ 作为下标来索引值，得到 $nums[x] &#x3D; y$ 。如果 $y$ 已经出现过了 ，那么重复值已经找到了。否则的话 $y$ 还没出现过的话，继续用 $y$ 作为下标来索引，直到出现重复值。</p>
+<h3 id="快慢指针法"><a href="#快慢指针法" class="headerlink" title="快慢指针法"></a>快慢指针法</h3><p>因为 $nums$ 中数据范围是 $1$ 到 $n$ ，所以 $nums[0] = x \neq 0$ 。那么接着用 $x$ 作为下标来索引值，得到 $nums[x] = y$ 。如果 $y$ 已经出现过了 ，那么重复值已经找到了。否则的话 $y$ 还没出现过的话，继续用 $y$ 作为下标来索引，直到出现重复值。</p>
 <p>可以发现按照这种方法索引下去，形成了一个链，也就是 $0 \to x \to y \to \cdots$ 。最终这条链末端一定会产生出一个环，那么环的入口一定就是那个重复的数。</p>
 <p>举个例子，如下图所示，最终环产生在了 $2 \to 4 \to 2$ 上面，而 $2$ 又是链进入环的入口，所以重复的数就是 $2$ 。</p>
-<p><img src="/1.png"></p>
+<p><img src="1.png" alt=""></p>
 <p>那么如何求<strong>链表中的环</strong>呢？这其实是一道面试经常会问到的经典题，标准解法就是用两个<strong>快慢指针</strong>。</p>
 <p>初始时两个指针指着链表头结点，然后同时移动。慢指针一次移动一个结点，快指针一次移动两个结点。当下一次快指针又和慢指针相遇时，停止移动。然后用第三个指针指着头结点，慢指针留在原地，两者同时移动，都是一次移动一个结点，直到相遇。这时两者指着的结点就是环的入口了。</p>
 <p>大家可以用上面的例子自己画图演示一下，我下面严格证明一下为什么这样是对的。</p>
 <p>假设如下图所示，链表中链的长度是 $m$ ，环的长度是 $n$ 。</p>
-<p><img src="/4.jpg"></p>
+<p><img src="4.jpg" alt=""></p>
 <p>假设慢指针和快指针第一次相遇时，慢指针移动的距离是 $x$ ，那么快指针移动距离就是 $2x$ 。</p>
-<p>可以列出等式 $2x - x &#x3D; kn$ ，也就是两者距离差值一定是环长度的正整数 $k$ 倍，同时 $k$ 是使得 $x &#x3D; kn \ge m$ 的最小正整数，即 $(k-1)n &lt; m \le kn$。这时候慢指针离入口的距离是 $n - (x - m) &#x3D; m - (k - 1)n$ ，也就是说，慢指针只需要再多绕 $k-1$ 个环的长度，就能恰好和从头结点而来的指针相遇在入口处。</p>
+<p>可以列出等式 $2x - x = kn$ ，也就是两者距离差值一定是环长度的正整数 $k$ 倍，同时 $k$ 是使得 $x = kn \ge m$ 的最小正整数，即 $(k-1)n &lt; m \le kn$。这时候慢指针离入口的距离是 $n - (x - m) = m - (k - 1)n$ ，也就是说，慢指针只需要再多绕 $k-1$ 个环的长度，就能恰好和从头结点而来的指针相遇在入口处。</p>
 <p>时间复杂度 $O(n)$ 。</p>
 <p><strong>扩展：</strong></p>
 <p>那有人可能会问了，那要是链最后回到了 $0$ ，不就没有链，只有环了吗？哪来的入口？这是对的，所以本题中限制了 $nums$ 数组里都是大于 $0$ 的，如果范围是 $0$ 到 $n-1$ 的话，不能直接用数值但下标索引了，不然会出现下面这种情况，也就是 $0$ 也在环里了。</p>
-<p><img src="/2.jpg"></p>
+<p><img src="2.jpg" alt=""></p>
 <p>其实这种情况我们只需要稍稍修改一下索引，让 $0$ 不可能出现在环里就行了，也就是让 $nums[i] + 1$ 当作索引，如下图所示。最终重复的数只需要减去 $1$ 就行了。</p>
-<p><img src="/3.jpg"></p>
+<p><img src="3.jpg" alt=""></p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="二分法（c-）"><a href="#二分法（c-）" class="headerlink" title="二分法（c++）"></a>二分法（c++）</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">findDuplicate</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = nums.<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">        <span class="type">int</span> l = <span class="number">1</span>, r = n;</span><br><span class="line">        <span class="keyword">while</span> (l &lt; r) &#123;</span><br><span class="line">            <span class="type">int</span> m = l+(r-l)/<span class="number">2</span>;</span><br><span class="line">            <span class="type">int</span> cnt = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n<span class="number">+1</span>; ++i) &#123;</span><br><span class="line">                <span class="keyword">if</span> (nums[i] &lt;= m) cnt++;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (cnt &gt; m) r = m;</span><br><span class="line">            <span class="keyword">else</span> l = m + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> l;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <h3 id="快慢指针法（c-）"><a href="#快慢指针法（c-）" class="headerlink" title="快慢指针法（c++）"></a>快慢指针法（c++）</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">findDuplicate</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> slow = <span class="number">0</span>, fast = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">            slow = nums[slow];</span><br><span class="line">            fast = nums[nums[fast]];</span><br><span class="line">            <span class="keyword">if</span> (slow == fast) <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> find = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (find != slow) &#123;</span><br><span class="line">            slow = nums[slow];</span><br><span class="line">            find = nums[find];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> find;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
@@ -865,7 +865,7 @@
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-题目描述给定一个整数 $n(0 \le n \le 10^{100})$ 、将 $n$ 的 334 位二进制表示形式（不包括开头可能的值为 0 的位，$n&#x3D;0$ 表示为 1 
+题目描述给定一个整数 $n(0 \le n \le 10^{100})$ 、将 $n$ 的 334 位二进制表示形式（不包括开头可能的值为 0 的位，$n=0$ 表示为 1 位 0）前
                         
                     </div>
                     <div class="publish-info">
@@ -1082,7 +1082,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

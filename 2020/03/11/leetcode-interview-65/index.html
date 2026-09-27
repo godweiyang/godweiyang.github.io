@@ -14,9 +14,9 @@
 
 
 题目链接LeetCode 面试题65. 不用加减乘除做加法
-题目描述写一个函数，求两个整数之和，要求在函数体内不得使用 $+,-,*,&amp;#x2F;$ 四则运算符号。
+题目描述写一个函数，求两个整数之和，要求在函数体内不得使用 $+,-,*,/$ 四则运算符号。
 示例1
-输入：a ">
+输入：a = 1, ">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -497,7 +497,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    656
+                    655
                 </div>
                 
 
@@ -523,9 +523,9 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <h2 id="题目链接"><a href="#题目链接" class="headerlink" title="题目链接"></a>题目链接</h2><p><a href="https://leetcode-cn.com/problems/bu-yong-jia-jian-cheng-chu-zuo-jia-fa-lcof/" title="LeetCode 面试题65. 不用加减乘除做加法">LeetCode 面试题65. 不用加减乘除做加法</a></p>
-<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>写一个函数，求两个整数之和，要求在函数体内不得使用 $+,-,*,&#x2F;$ 四则运算符号。</p>
+<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>写一个函数，求两个整数之和，要求在函数体内不得使用 $+,-,*,/$ 四则运算符号。</p>
 <p><strong>示例1</strong></p>
 <figure class="highlight text"><table><tr><td class="code"><pre><span class="line">输入：</span><br><span class="line">a = 1, b = 1</span><br><span class="line">输出：</span><br><span class="line">2</span><br></pre></td></tr></table></figure>
 
@@ -537,7 +537,7 @@
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>因为不允许采用四则运算，所以只能考虑位运算了。</p>
 <p>其实就是用二进制来模拟加法操作。首先将两个数最低位相加，如果都是 $1$ ，那么就得到 $0$ ，并且进位 $1$ ，然后接着算下一位。</p>
 <p>但是这样一位一位模拟不方便实现，更简单的实现方法是直接把两个数对应位相加，不管进位。然后进位单独计算，如果某一位两个数都是 $1$ ，那么进位就会对下一位产生影响。然后接着算不进位求和加上进位的值，再计算新的进位，依次重复下去，直到进位为 $0$ 为止。</p>
-<p>用一个实际的例子来演示一下，计算 $3+7$ 的值，其中 $s$ 表示每一步不考虑进位的求和，$c$ 表示每一步的进位，最后得到结果 $1010$ ，也就是十进制的 $10$ ：<br><img src="/1.jpg"></p>
+<p>用一个实际的例子来演示一下，计算 $3+7$ 的值，其中 $s$ 表示每一步不考虑进位的求和，$c$ 表示每一步的进位，最后得到结果 $1010$ ，也就是十进制的 $10$ ：<br><img src="1.jpg" alt=""></p>
 <p>但是这里还是用到了加法怎么办呢？因为是二进制，所以不考虑进位求和的话，可以直接采用<strong>异或</strong>运算。而计算进位的话，直接用<strong>位与</strong>和<strong>左移一位</strong>就行了。</p>
 <p>在 c++ 和 python 具体实现中，还有几个注意事项：</p>
 <ul>
@@ -796,8 +796,8 @@
 
 
 题目链接LeetCode 69. x 的平方根
-题目描述实现 int sqrt(int n) 函数。
-计算并返回 $n$ 的平方根，其中 $n$ 是非负整数。
+题目描述实现 int sqrt(int n) 函数。
+计算并返回 $n$ 的平方根，其中 $n$ 是非负整数。
 由于返回类型是整数，结果
                         
                     </div>
@@ -856,7 +856,7 @@
 
 
 题目链接LeetCode 174. 地下城游戏
-题目描述一些恶魔抓住了公主（P）并将她关在了地下城的右下角。地下城是由 M x N 个房间组成的二维网格。我们英勇的骑士（K）最初被安置
+题目描述一些恶魔抓住了公主（P）并将她关在了地下城的右下角。地下城是由 M x N 个房间组成的二维网格。我们英勇的骑士（K）最初被安置
                         
                     </div>
                     <div class="publish-info">
@@ -1073,7 +1073,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

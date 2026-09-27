@@ -520,7 +520,7 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给出非负整数数组 A ，返回两个非重叠（连续）子数组中元素的最大和，子数组的长度分别为 L 和 M。（这里需要澄清的是，长为 L 的子数组可以出现在长为 M 的子数组之前或之后。）</p>
 <p><strong>示例1</strong></p>
 <figure class="highlight text"><table><tr><td class="code"><pre><span class="line">输入：</span><br><span class="line">A = [0,6,5,2,2,5,1,9,4], L = 1, M = 2</span><br><span class="line">输出：</span><br><span class="line">20</span><br><span class="line">解释：</span><br><span class="line">子数组的一种选择中，[9] 长度为 1，[6,5] 长度为 2。</span><br></pre></td></tr></table></figure>
@@ -533,14 +533,14 @@
 
 <p><strong>提示</strong></p>
 <ul>
-<li>L &gt;&#x3D; 1</li>
-<li>M &gt;&#x3D; 1</li>
-<li>L + M &lt;&#x3D; A.length &lt;&#x3D; 1000</li>
-<li>0 &lt;&#x3D; A[i] &lt;&#x3D; 1000</li>
+<li>L &gt;= 1</li>
+<li>M &gt;= 1</li>
+<li>L + M &lt;= A.length &lt;= 1000</li>
+<li>0 &lt;= A[i] &lt;= 1000</li>
 </ul>
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>这题意思就是找到两段给定长度的、不重合的、连续的区间，使得两段区间和最大。</p>
 <p>因为长度是给定的，所以我们只需要预处理好前缀和 sum ，然后给定区间右端点，就可以直接算出区间和。<br>那么如果枚举两段区间的右端点，时间复杂度也才 $O(n^2)$ ，极限情况下也就 1e6 左右，貌似也还可以接受。</p>
-<p>那有没有更快的方法呢？试试动态规划！因为两段区间有前后顺序，我们不妨假设长度为 L 的区间在后面。<br>用 dpm[i] 表示前 i 个数中长度为 M 的区间和的最大值。<br>那么 dpm[i] &#x3D; max{dpm[i-1], sum[i] - sum[i-M]} ，也就是要么取最后 M 个数，要么最后一个数不取，在前 i - 1 个数里面找答案。<br>然后 dpm 全部处理完之后，遍历数组，假设长度为 L 的区间以 A[i] 结束，那么我们只需要在 A[0] 到 A[i-L] 中间找长度为 M 的区间最大和就行了，那答案不就是上面求好的 dpm[i-L] 吗？这样最终时间复杂度就是 $O(n)$ 了。</p>
+<p>那有没有更快的方法呢？试试动态规划！因为两段区间有前后顺序，我们不妨假设长度为 L 的区间在后面。<br>用 dpm[i] 表示前 i 个数中长度为 M 的区间和的最大值。<br>那么 dpm[i] = max{dpm[i-1], sum[i] - sum[i-M]} ，也就是要么取最后 M 个数，要么最后一个数不取，在前 i - 1 个数里面找答案。<br>然后 dpm 全部处理完之后，遍历数组，假设长度为 L 的区间以 A[i] 结束，那么我们只需要在 A[0] 到 A[i-L] 中间找长度为 M 的区间最大和就行了，那答案不就是上面求好的 dpm[i-L] 吗？这样最终时间复杂度就是 $O(n)$ 了。</p>
 <p>结束了吗？并没有！空间还能不能优化呢？其实当我们遍历长度为 L 的区间时，长度为 M 的区间不用每次都重新遍历，可以重复利用之前的结果，每次向右移动直到和长度为 L 的区间衔接上为止。这样就等于用了两个指针，分别指向了两个区间的右端点，总共最多移动 2n 次就行了。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="动态规划（c-）"><a href="#动态规划（c-）" class="headerlink" title="动态规划（c++）"></a>动态规划（c++）</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="type">static</span> <span class="type">const</span> <span class="type">int</span> N = <span class="number">1010</span>;</span><br><span class="line">    <span class="type">int</span> dpl[N], dpm[N], sum[N];</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">maxSumTwoNoOverlap</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; A, <span class="type">int</span> L, <span class="type">int</span> M)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">memset</span>(dpl, <span class="number">0</span>, <span class="keyword">sizeof</span> dpl);</span><br><span class="line">        <span class="built_in">memset</span>(dpm, <span class="number">0</span>, <span class="keyword">sizeof</span> dpm);</span><br><span class="line">        sum[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> n = A.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            sum[i<span class="number">+1</span>] = sum[i] + A[i];</span><br><span class="line">        &#125;</span><br><span class="line">        dpl[L] = sum[L];</span><br><span class="line">        dpm[M] = sum[M];</span><br><span class="line">        <span class="type">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (i &gt;= L) &#123;</span><br><span class="line">                dpl[i<span class="number">+1</span>] = <span class="built_in">max</span>(dpl[i], sum[i<span class="number">+1</span>] - sum[i<span class="number">+1</span>-L]);</span><br><span class="line">                res = <span class="built_in">max</span>(res, sum[i<span class="number">+1</span>] - sum[i<span class="number">+1</span>-L] + dpm[i<span class="number">+1</span>-L]);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (i &gt;= M) &#123;</span><br><span class="line">                dpm[i<span class="number">+1</span>] = <span class="built_in">max</span>(dpm[i], sum[i<span class="number">+1</span>] - sum[i<span class="number">+1</span>-M]);</span><br><span class="line">                res = <span class="built_in">max</span>(res, sum[i<span class="number">+1</span>] - sum[i<span class="number">+1</span>-M] + dpl[i<span class="number">+1</span>-M]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
@@ -795,7 +795,7 @@
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-题目描述给定一些标记了宽度和高度的信封，宽度和高度以整数对形式 (w, h) 出现。当另一个信封的宽度和高度都比这个信封大的时候，这个信封就可以放进另一个信封里，如同俄罗斯套娃一样。
+题目描述给定一些标记了宽度和高度的信封，宽度和高度以整数对形式 (w, h) 出现。当另一个信封的宽度和高度都比这个信封大的时候，这个信封就可以放进另一个信封里，如同俄罗斯套娃一样。
 
                         
                     </div>
@@ -853,7 +853,7 @@
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-题目描述给定一个已排序的正整数数组 nums ，和一个正整数 n 。从 [1, n] 区间内选取任意个数字补充到 nums 中，使得 [1, n] 区间内的任何数字都可以用 nums 
+题目描述给定一个已排序的正整数数组 nums ，和一个正整数 n 。从 [1, n] 区间内选取任意个数字补充到 nums 中，使得 [1, n] 区间内的任何数字都可以用 nums 
                         
                     </div>
                     <div class="publish-info">
@@ -1070,7 +1070,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

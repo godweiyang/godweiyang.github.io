@@ -524,10 +524,10 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <p><strong>论文地址：</strong><a href="https://www.aclweb.org/anthology/P18-1198/">What you can cram into a single $&amp;!#* vector: Probing sentence embeddings for linguistic properties</a></p>
 <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>本文主要探究了不同encoder在不同任务上训练得到的句子向量表示，是否蕴含了各种语言性质。</p>
-<p><img src="/1.png"></p>
+<p><img src="1.png" alt=""></p>
 <p>本文主要有三个贡献点：</p>
 <ul>
 <li>分析了三种类型的encoder，并在7个任务上预训练句向量。</li>
@@ -554,10 +554,10 @@
 <p>第9个任务是预测句子中名词或动词是否被替换过（<strong>SOMO</strong>）。<br>这个任务随机将句子中名词或者动词替换为其他名词或动词，然后2分类预测是否做过替换。<br>替换保证换过之后单词前后的bigram出现频次还是相似的。</p>
 <p>第10个任务是预测一个带有从句的句子前后关系是否正确（<strong>CoordInv</strong>）。<br>比如“今天下雨了，因为我没出门。”这句话前后转折关系就反过来了。</p>
 <h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><p>10种探测任务上的表现如下：</p>
-<p><img src="/2.jpg"></p>
+<p><img src="2.jpg" alt=""></p>
 <p>vote结果是随机的。<br>然后是人类分析结果，句法和语义信息也不能保证是100%正确。<br>Length是只用长度作为输入，可以看出只有SentLen预测正确了，其他都等于随机猜。<br>朴素贝叶斯方法对词信息比较敏感，WC任务效果很好。<br>BoV方法因为不包含词序信息，所以BShift任务很差，等于随机猜。</p>
 <p>再看几种不同的编码器。<br>首先是用LSTM最后一个时刻隐层输出作为句向量。然后是每个维度用不同时刻的最大值作为句向量。最后是门卷积网络编码器。<br>采用的预训练任务有随机初始化，自编码器，机器翻译（三种语言），Seq2Tree，SkipThought（预测下一个句子）和NLI。<br>可以看出Seq2Tree训练出来的句向量在对句法敏感的几种性质上都取得了最好的结果。<br>比较两个LSTM编码器，可以发现采用max的向量表示效果更好。</p>
-<p><img src="/3.png"><br>上面这个图显示了不同的下游任务和10种语言性质之间的相关度，蓝色表示相关度高，红色表示低。<br>可以发现几乎所有的任务对于句子长度信息都不是很敏感，或者句子长度并不能有效地提升任务的性能。<br>再如SST2任务，情感分类任务的话对于单复数和句法结构信息可能也不是很敏感。</p>
+<p><img src="3.png" alt=""><br>上面这个图显示了不同的下游任务和10种语言性质之间的相关度，蓝色表示相关度高，红色表示低。<br>可以发现几乎所有的任务对于句子长度信息都不是很敏感，或者句子长度并不能有效地提升任务的性能。<br>再如SST2任务，情感分类任务的话对于单复数和句法结构信息可能也不是很敏感。</p>
 <h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>这篇论文主要就是提出了10种探测任务，用来探索模型的10种性质。<br>但是这篇论文里的方法其实还是有点问题的，就如上一篇control task所讲的那样，probe task的准确率并不一定能反应语言性质学习的好坏。<br>但是无妨，这些探测任务还是可以用在我们编码器或者预训练语言模型的分析中的。</p>
 
             </div>
@@ -1082,7 +1082,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

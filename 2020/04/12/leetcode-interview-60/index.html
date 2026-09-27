@@ -492,14 +492,14 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    657
+                    649
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    3 分
+                    2 分
                 </div>
                 
                 
@@ -529,17 +529,26 @@
 <figure class="highlight text"><table><tr><td class="code"><pre><span class="line">输入：</span><br><span class="line">2</span><br><span class="line">输出:</span><br><span class="line">[0.02778,0.05556,0.08333,0.11111,0.13889,0.16667,0.13889,0.11111,0.08333,0.05556,0.02778]</span><br></pre></td></tr></table></figure>
 
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>令 $dp[n][s]$ 表示投掷 $n$ 个骰子，点数为 $s$ 的方法数。那么可以根据最后一个骰子的点数情况（$1$ 到 $6$），递归进行计算：</p>
-<p>$$<br>dp[n][s] &#x3D; \sum_{i&#x3D;1}^{6}{dp[n-1][s-i]}<br>$$</p>
-<p>当然还得加一些约束，例如 $n-1$ 个骰子的点数范围是 $[n-1, 6(n-1)]$ ，所以一定有 $n-1 \le s-i \le 6(n-1)$ ，即 $s-6(n-1) \le i \le s-(n-1)$。所以综上 $i$ 的范围是 $\max{{1, s-6(n-1)}} \le i \le \min{{6, s-(n-1)}}$，最后的转移方程就是：</p>
-<p>$$<br>dp[n][s] &#x3D; \sum_{i&#x3D;\max{{1, s-6(n-1)}}}^{\min{{6, s-(n-1)}}}{dp[n-1][s-i]}<br>$$</p>
-<p>但是，考虑到在计算 $n-1$ 个骰子时，如果 $i &lt; s-6(n-1)$ ，那么 $s-i &gt; 6(n-1)$ ，也就是 $dp[n-1][s-i]$ 是根本不会被计算的。所以初始化的时候如果都是 $0$ ，那么就不用管这个下界了，也就是转移方程为：</p>
-<p>$$<br>dp[n][s] &#x3D; \sum_{i&#x3D;1}^{\min{{6, s-(n-1)}}}{dp[n-1][s-i]}<br>$$</p>
+$$
+dp[n][s] = \sum_{i=1}^{6}{dp[n-1][s-i]}
+$$
+
+<p>当然还得加一些约束，例如 $n-1$ 个骰子的点数范围是 $[n-1, 6(n-1)]$ ，所以一定有 $n-1 \le s-i \le 6(n-1)$ ，即 $s-6(n-1) \le i \le s-(n-1)$。所以综上 $i$ 的范围是 $\max{\{1, s-6(n-1)\}} \le i \le \min{\{6, s-(n-1)\}}$，最后的转移方程就是：</p>
+$$
+dp[n][s] = \sum_{i=\max{\{1, s-6(n-1)\}}}^{\min{\{6, s-(n-1)\}}}{dp[n-1][s-i]}
+$$
+
+<p>但是，考虑到在计算 $n-1$ 个骰子时，如果 $i < s-6(n-1)$ ，那么 $s-i > 6(n-1)$ ，也就是 $dp[n-1][s-i]$ 是根本不会被计算的。所以初始化的时候如果都是 $0$ ，那么就不用管这个下界了，也就是转移方程为：</p>
+$$
+dp[n][s] = \sum_{i=1}^{\min{\{6, s-(n-1)\}}}{dp[n-1][s-i]}
+$$
+
 <p>此外，因为每次计算只会用到 $n-1$ 个骰子的方法数，所以第一个维度可以省去。但是注意计算的时候 $s$ 就得逆序遍历了，这样才不会覆盖掉 $n-1$ 个骰子的方案数，造成后面的计算错误。</p>
 <p>最后答案就是 $\frac{dp[n][s]}{6^n}$ 。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="动态规划-空间优化（c-）"><a href="#动态规划-空间优化（c-）" class="headerlink" title="动态规划+空间优化（c++）"></a>动态规划+空间优化（c++）</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="type">double</span>&gt; <span class="title">twoSum</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">dp</span><span class="params">(<span class="number">6</span>*n<span class="number">+1</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">6</span>; ++i) dp[i] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">2</span>; i &lt;= n; ++i) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> s = <span class="number">6</span>*i; s &gt;= i; --s) &#123;</span><br><span class="line">                dp[s] = <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt;= <span class="built_in">min</span>(<span class="number">6</span>, s-i<span class="number">+1</span>); ++j) &#123;</span><br><span class="line">                    dp[s] += dp[s-j];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">double</span> total = <span class="built_in">pow</span>(<span class="number">6</span>, n);</span><br><span class="line">        vector&lt;<span class="type">double</span>&gt; res;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> s = n; s &lt;= <span class="number">6</span>*n; ++s) &#123;</span><br><span class="line">            res.<span class="built_in">push_back</span>(dp[s]/total);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <blockquote>
-<p>关注公众号【算法码上来】，每日算法干货马上就来！<br><img src="/medias/contact.jpg"></p>
+<p>关注公众号【算法码上来】，每日算法干货马上就来！<br><img src="/medias/contact.jpg" alt=""></p>
 </blockquote>
 
             </div>
@@ -1055,7 +1064,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

@@ -489,7 +489,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    521
+                    519
                 </div>
                 
 
@@ -512,18 +512,18 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>学妹昨晚参加了B站的2022届秋招算法笔试，做完给我发来了一道题，想考考我，说挺难的。<br><img src="/2.jpg"></p>
-<p>我看了两分钟，给她发去了我的思路。然后学妹一眼就看懂了，立马秒过。<br><img src="/1.jpg"></p>
+                <p>学妹昨晚参加了B站的2022届秋招算法笔试，做完给我发来了一道题，想考考我，说挺难的。<br><img src="2.jpg" alt=""></p>
+<p>我看了两分钟，给她发去了我的思路。然后学妹一眼就看懂了，立马秒过。<br><img src="1.jpg" alt=""></p>
 <p>那么这道题到底是怎么做的呢？</p>
 <p>题目要求将$n$个数切分成$k$块，求每块的序号乘上该块内数字之和的最大值。</p>
-<p>那么首先我们可以用$S_i$来表示前缀和，也就是$S_i &#x3D; \sum_{j &lt; i}{a_j}$。</p>
+<p>那么首先我们可以用$S_i$来表示前缀和，也就是$S_i = \sum_{j &lt; i}{a_j}$。</p>
 <p>然后假设$k$个子序列中，第$i$个子序列的末尾元素为$a_{d_i}$，其中$1 \le i \le k$。那么第$i$个子序列的元素和就可以用前缀和来表示为$S_{d_i} - S_{d_{i-1}}$。</p>
 <p>然后题目要求的最大值就可以表示为：</p>
 <p>$$<br>\sum_{1 \le i \le k}{i \cdot (S_{d_i} - S_{d_{i-1}})}<br>$$</p>
 <p>展开并化简就可以得到：</p>
 <p>$$<br>-\sum_{0 \le i \le k-1}{S_{d_i}} + k \cdot S_{d_k}<br>$$</p>
 <p>后面一项$k \cdot S_{d_k}$就是整个数组之和的$k$倍，是一个定值。所以要求这个式子的最大值，就是求$\sum_{0 \le i \le k-1}{S_{d_i}}$的最小值。</p>
-<p>又因为$S_{d_0} &#x3D; 0$，所以就是求$\sum_{1 \le i \le k-1}{S_{d_i}}$的最小值。</p>
+<p>又因为$S_{d_0} = 0$，所以就是求$\sum_{1 \le i \le k-1}{S_{d_i}}$的最小值。</p>
 <p>可以发现，这$k-1$个前缀和其实是互不干扰的，所以只需要对所有的前缀和进行排序，取最小的$k-1$个就行了。</p>
 <p>C++代码如下：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="type">long</span> <span class="type">long</span> ll;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">300010</span>;</span><br><span class="line"></span><br><span class="line">ll a[N];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> n, k;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;n, &amp;k);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%lld&quot;</span>, &amp;a[i]);</span><br><span class="line">        <span class="keyword">if</span> (i) a[i] += a[i<span class="number">-1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">sort</span>(a, a+n<span class="number">-1</span>);</span><br><span class="line">    ll res = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; k<span class="number">-1</span>; ++i)</span><br><span class="line">        res += a[i];</span><br><span class="line">    res = -res + k * a[n<span class="number">-1</span>];</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%lld\n&quot;</span>, res);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -771,8 +771,8 @@
                         
                             模型量化是模型加速方向一个很重要的方法，主要思想就是用int8数据格式来存储和进行计算。这样做有两点好处：
 
-可以减小模型存储的体积。原本float32存储需要4个字节，现在int8存储只需要1个字节，体积是原来的1&#x2F;4。
-可以加
+可以减小模型存储的体积。原本float32存储需要4个字节，现在int8存储只需要1个字节，体积是原来的1/4。
+可以加快计算速度
                         
                     </div>
                     <div class="publish-info">
@@ -1038,7 +1038,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

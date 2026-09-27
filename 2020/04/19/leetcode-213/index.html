@@ -492,7 +492,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    501
+                    500
                 </div>
                 
 
@@ -529,12 +529,17 @@
 <p>如果不偷第一个，那么问题就变成了在后 $n-1$ 个里面偷取的最大价值。</p>
 <p>如果不偷最后一个，那么问题就变成了在前 $n-1$ 个里面偷取的最大价值。</p>
 <p>而这两个转化后的问题就没有首尾连接的约束了，可以直接采用上一题的解法求解，转移方程还是：</p>
-<p>$$<br>dp[i] &#x3D; \max{{dp[i-1], dp[i-2]+p[i]}}<br>$$</p>
+
+$$
+dp[i] = \max{\{dp[i-1], dp[i-2]+p[i]\}}
+$$
+
+
 <p>最终取两种情况的较大值就行了。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="c"><a href="#c" class="headerlink" title="c++"></a>c++</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">rob1</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> l, <span class="type">int</span> r)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> prepre = <span class="number">0</span>, pre = <span class="number">0</span>, now = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = l; i &lt;= r; ++i) &#123;</span><br><span class="line">            now = <span class="built_in">max</span>(pre, prepre+nums[i]);</span><br><span class="line">            prepre = pre;</span><br><span class="line">            pre = now;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> now;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">rob</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span> (n == <span class="number">1</span>) <span class="keyword">return</span> nums[<span class="number">0</span>];</span><br><span class="line">        <span class="type">int</span> a = <span class="built_in">rob1</span>(nums, <span class="number">0</span>, n<span class="number">-2</span>);</span><br><span class="line">        <span class="type">int</span> b = <span class="built_in">rob1</span>(nums, <span class="number">1</span>, n<span class="number">-1</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">max</span>(a, b);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <blockquote>
-<p>关注公众号【算法码上来】，每日算法干货马上就来！<br><img src="/medias/contact.jpg"></p>
+<p>关注公众号【算法码上来】，每日算法干货马上就来！<br><img src="/medias/contact.jpg" alt=""></p>
 </blockquote>
 
             </div>
@@ -1052,7 +1057,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

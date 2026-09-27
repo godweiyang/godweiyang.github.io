@@ -492,7 +492,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.7k
+                    1.6k
                 </div>
                 
 
@@ -518,41 +518,41 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <p>上节课讲到下降阶乘幂和差分运算，这节课继续讲它和差分的各种性质。</p>
 <h1 id="性质1"><a href="#性质1" class="headerlink" title="性质1"></a>性质1</h1><hr>
 <p>首先在后面章节会证明，${(x + y)^{\underline{m}}}$的二项展开形式和普通的${(x + y)^m}$是一样的，这里提一下，暂时用不到。</p>
 <h1 id="性质2"><a href="#性质2" class="headerlink" title="性质2"></a>性质2</h1><hr>
-<p>接下来给出下降阶乘幂为负数的定义：<br>\[{x^{ \underline{- m}}} &#x3D; \frac{1}{ {(x + 1)(x + 2) \ldots (x + m)}}\]</p>
+<p>接下来给出下降阶乘幂为负数的定义：<br>\[{x^{ \underline{- m}}} = \frac{1}{ {(x + 1)(x + 2) \ldots (x + m)}}\]</p>
 <h1 id="性质3"><a href="#性质3" class="headerlink" title="性质3"></a>性质3</h1><hr>
-<p>和普通幂${x^{m + n}} &#x3D; {x^m}{x^n}$不同，下降阶乘幂有如下性质：<br>\[{x^{\underline{m + n}}} &#x3D; {x^{\underline{m}}}{(x - m)^{\underline{n}}}\]</p>
+<p>和普通幂${x^{m + n}} = {x^m}{x^n}$不同，下降阶乘幂有如下性质：<br>\[{x^{\underline{m + n}}} = {x^{\underline{m}}}{(x - m)^{\underline{n}}}\]</p>
 <h1 id="性质4"><a href="#性质4" class="headerlink" title="性质4"></a>性质4</h1><hr>
-<p>上一节课说到，定义下降阶乘幂的好处就是为了求差分方便，下降阶乘幂的差分为：<br>\[\Delta ({x^{\underline{m}}}) &#x3D; m{x^{\underline{ {m - 1}}}}\]<br>反之，类比不定积分，它的不定和为：<br>\[\sum\nolimits_a^b { {x^{\underline{m}}}\delta x} &#x3D; \left. {\frac{ { {x^{\underline{m + 1}}}}}{ {m + 1}}} \right|_a^b\]</p>
-<p>但是这里$m \ne  - 1$，那要是$m &#x3D;  - 1$怎么办呢？<br>直接运用差分定义可以求出<br>\[\begin{array}{l}{x^{ \underline{- 1}}} &#x3D; \frac{1}{ {x + 1}} &#x3D; \Delta f(x) &#x3D; f(x + 1) - f(x)\ \Rightarrow f(x) &#x3D; {H_x}\end{array}\]</p>
-<p>所以<br>\[\sum\nolimits_a^b { {x^{\underline{m}}}\delta x} &#x3D; \left{ {\begin{array}{*{20}{c}}{\left. {\frac{ { {x^{\underline{m + 1}}}}}{ {m + 1}}} \right|_a^b,m \ne - 1}\{\left. { {H_x}} \right|_a^b,m &#x3D; - 1}\end{array}} \right.\]</p>
+<p>上一节课说到，定义下降阶乘幂的好处就是为了求差分方便，下降阶乘幂的差分为：<br>\[\Delta ({x^{\underline{m}}}) = m{x^{\underline{ {m - 1}}}}\]<br>反之，类比不定积分，它的不定和为：<br>\[\sum\nolimits_a^b { {x^{\underline{m}}}\delta x} = \left. {\frac{ { {x^{\underline{m + 1}}}}}{ {m + 1}}} \right|_a^b\]</p>
+<p>但是这里$m \ne  - 1$，那要是$m =  - 1$怎么办呢？<br>直接运用差分定义可以求出<br>\[\begin{array}{l}{x^{ \underline{- 1}}} = \frac{1}{ {x + 1}} = \Delta f(x) = f(x + 1) - f(x)\ \Rightarrow f(x) = {H_x}\end{array}\]</p>
+<p>所以<br>\[\sum\nolimits_a^b { {x^{\underline{m}}}\delta x} = \left{ {\begin{array}{*{20}{c}}{\left. {\frac{ { {x^{\underline{m + 1}}}}}{ {m + 1}}} \right|_a^b,m \ne - 1}\{\left. { {H_x}} \right|_a^b,m = - 1}\end{array}} \right.\]</p>
 <h1 id="性质5"><a href="#性质5" class="headerlink" title="性质5"></a>性质5</h1><hr>
-<p>在微积分里面，$e^x$的导数是它自身。那么什么函数的差分是自身呢？<br>通过定义可以很容易算出来：<br>\[\begin{array}{l}f(x + 1) - f(x) &#x3D; f(x)\ \Rightarrow f(x + 1) &#x3D; 2f(x)\ \Rightarrow f(x) &#x3D; {2^x}\end{array}\]</p>
-<p>进一步推广可以得到：<br>\[\Delta ({c^x}) &#x3D; {c^{x + 1}} - {c^x} &#x3D; (c - 1){c^x}\]<br>所以得到如下一种新的等比数列计算方式：<br>\[\sum\limits_{a \le k &lt; b} { {c^k}} &#x3D; \sum\nolimits_a^b { {c^x}\delta x} &#x3D; \left. {\frac{ { {c^x}}}{ {c - 1}}} \right|_a^b &#x3D; \frac{ { {c^b} - {c^a}}}{ {c - 1}}\]</p>
+<p>在微积分里面，$e^x$的导数是它自身。那么什么函数的差分是自身呢？<br>通过定义可以很容易算出来：<br>\[\begin{array}{l}f(x + 1) - f(x) = f(x)\ \Rightarrow f(x + 1) = 2f(x)\ \Rightarrow f(x) = {2^x}\end{array}\]</p>
+<p>进一步推广可以得到：<br>\[\Delta ({c^x}) = {c^{x + 1}} - {c^x} = (c - 1){c^x}\]<br>所以得到如下一种新的等比数列计算方式：<br>\[\sum\limits_{a \le k &lt; b} { {c^k}} = \sum\nolimits_a^b { {c^x}\delta x} = \left. {\frac{ { {c^x}}}{ {c - 1}}} \right|_a^b = \frac{ { {c^b} - {c^a}}}{ {c - 1}}\]</p>
 <h1 id="性质6"><a href="#性质6" class="headerlink" title="性质6"></a>性质6</h1><hr>
-<p>结合律和分配律在差分运算里也适用。<br>\[\begin{array}{l}\Delta (cf) &#x3D; c\Delta (f)\\Delta (f + g) &#x3D; \Delta (f) + \Delta (g)\end{array}\]</p>
+<p>结合律和分配律在差分运算里也适用。<br>\[\begin{array}{l}\Delta (cf) = c\Delta (f)\\Delta (f + g) = \Delta (f) + \Delta (g)\end{array}\]</p>
 <h1 id="性质7"><a href="#性质7" class="headerlink" title="性质7"></a>性质7</h1><hr>
-<p>类似分部积分，这里也可以分部来求差分。<br>\[\begin{array}{l}\Delta (u(x)v(x)) &#x3D; u(x + 1)v(x + 1) - u(x)v(x)\ &#x3D; u(x + 1)v(x + 1) - u(x)v(x + 1) + u(x)v(x + 1) - u(x)v(x)\ &#x3D; [u(x + 1) - u(x)]v(x + 1) + u(x)[v(x + 1) - v(x)]\ &#x3D; u(x)\Delta (v(x)) + v(x + 1)\Delta (u(x))\end{array}\]<br>这里给出一个新的记号叫做移位运算：<br>\[Ef(x) &#x3D; f(x + 1)\]<br>所以就得到了差分的分部运算法则：<br>\[\Delta (uv) &#x3D; u\Delta (v) + Ev\Delta (u)\]<br>对两边求和，又可以得到不定求和的分部运算法则：<br>\[\sum {u\Delta (v)} &#x3D; uv - \sum {Ev\Delta (u)} \]</p>
+<p>类似分部积分，这里也可以分部来求差分。<br>\[\begin{array}{l}\Delta (u(x)v(x)) = u(x + 1)v(x + 1) - u(x)v(x)\ = u(x + 1)v(x + 1) - u(x)v(x + 1) + u(x)v(x + 1) - u(x)v(x)\ = [u(x + 1) - u(x)]v(x + 1) + u(x)[v(x + 1) - v(x)]\ = u(x)\Delta (v(x)) + v(x + 1)\Delta (u(x))\end{array}\]<br>这里给出一个新的记号叫做移位运算：<br>\[Ef(x) = f(x + 1)\]<br>所以就得到了差分的分部运算法则：<br>\[\Delta (uv) = u\Delta (v) + Ev\Delta (u)\]<br>对两边求和，又可以得到不定求和的分部运算法则：<br>\[\sum {u\Delta (v)} = uv - \sum {Ev\Delta (u)} \]</p>
 <p>这个分部法则非常有用，下面举两个例子来说明一下怎么用。</p>
-<h2 id="例1"><a href="#例1" class="headerlink" title="例1"></a>例1</h2><p>一道老题，计算：<br>\[\sum\limits_{k &#x3D; 0}^n {k{2^k}} \]<br>首先计算<br>\[\sum {x{2^x}\delta x} \]<br>在这里可以令<br>\[u &#x3D; x,v &#x3D; {2^x}\]<br>所以<br>\[\sum {x{2^x}\delta x} &#x3D; x{2^x} - \sum { {2^{x + 1}}\delta x} &#x3D; x{2^x} - {2^{x + 1}} + C\]<br>那么求和式就可以转化为不定求和来算了：<br>\[\begin{array}{l}\sum\limits_{k &#x3D; 0}^n {k{2^k}} &#x3D; \sum\nolimits_0^{n + 1} {x{2^x}\delta x} \ &#x3D; \left. {x{2^x} - {2^{x + 1}}} \right|_0^{n + 1}\ &#x3D; (n - 1){2^{n + 1}} + 2\end{array}\]</p>
-<h2 id="例2"><a href="#例2" class="headerlink" title="例2"></a>例2</h2><p>计算<br>\[\sum\limits_{0 \le k &lt; n} {k{H_k}} \]<br>首先计算<br>\[\sum {x{H_x}\delta x} \]<br>这里注意要令<br>\[u &#x3D; {H_x},\Delta v &#x3D; x\]<br>不能倒过来哦，因为$H_x$的不定和很难求出来的。所以<br>\[\begin{array}{l}\sum {x{H_x}\delta x} &#x3D; \frac{ { {x^{\underline{2}}}}}{2}{H_x} - \sum {\frac{ { { {(x + 1)}^{\underline{2}}}}}{2}} {x^{ \underline{- 1}}}\delta x\ &#x3D; \frac{ { {x^{\underline{2}}}}}{2}{H_x} - \frac{1}{2}\sum { {x^{\underline{1}}}\delta x} \ &#x3D; \frac{ { {x^{\underline{2}}}}}{2}{H_x} - \frac{ { {x^{\underline{2}}}}}{4} + C\end{array}\]</p>
-<p>所以<br>\[\sum\limits_{0 \le k &lt; n} {k{H_k}} &#x3D; \sum\nolimits_0^n {x{H_x}\delta x} &#x3D; \frac{ { {n^{\underline{2}}}}}{2}({H_n} - \frac{1}{2})\]</p>
+<h2 id="例1"><a href="#例1" class="headerlink" title="例1"></a>例1</h2><p>一道老题，计算：<br>\[\sum\limits_{k = 0}^n {k{2^k}} \]<br>首先计算<br>\[\sum {x{2^x}\delta x} \]<br>在这里可以令<br>\[u = x,v = {2^x}\]<br>所以<br>\[\sum {x{2^x}\delta x} = x{2^x} - \sum { {2^{x + 1}}\delta x} = x{2^x} - {2^{x + 1}} + C\]<br>那么求和式就可以转化为不定求和来算了：<br>\[\begin{array}{l}\sum\limits_{k = 0}^n {k{2^k}} = \sum\nolimits_0^{n + 1} {x{2^x}\delta x} \ = \left. {x{2^x} - {2^{x + 1}}} \right|_0^{n + 1}\ = (n - 1){2^{n + 1}} + 2\end{array}\]</p>
+<h2 id="例2"><a href="#例2" class="headerlink" title="例2"></a>例2</h2><p>计算<br>\[\sum\limits_{0 \le k &lt; n} {k{H_k}} \]<br>首先计算<br>\[\sum {x{H_x}\delta x} \]<br>这里注意要令<br>\[u = {H_x},\Delta v = x\]<br>不能倒过来哦，因为$H_x$的不定和很难求出来的。所以<br>\[\begin{array}{l}\sum {x{H_x}\delta x} = \frac{ { {x^{\underline{2}}}}}{2}{H_x} - \sum {\frac{ { { {(x + 1)}^{\underline{2}}}}}{2}} {x^{ \underline{- 1}}}\delta x\ = \frac{ { {x^{\underline{2}}}}}{2}{H_x} - \frac{1}{2}\sum { {x^{\underline{1}}}\delta x} \ = \frac{ { {x^{\underline{2}}}}}{2}{H_x} - \frac{ { {x^{\underline{2}}}}}{4} + C\end{array}\]</p>
+<p>所以<br>\[\sum\limits_{0 \le k &lt; n} {k{H_k}} = \sum\nolimits_0^n {x{H_x}\delta x} = \frac{ { {n^{\underline{2}}}}}{2}({H_n} - \frac{1}{2})\]</p>
 <h1 id="无限求和"><a href="#无限求和" class="headerlink" title="无限求和"></a>无限求和</h1><hr>
-<p>回顾一下以前我们是怎么计算下面求和式的。<br>\[S &#x3D; {\rm{1}} + \frac{1}{2} + \frac{1}{4} + \cdots \]<br>首先两边同时乘2，得到：<br>\[2S &#x3D; 2 + {\rm{1}} + \frac{1}{2} + \frac{1}{4} + \cdots &#x3D; 2 + S\]<br>解出<br>\[S &#x3D; 2\]</p>
-<p>那么可不可以用同样的方法计算下面式子呢？<br>\[T &#x3D; 1 + 2 + 4 + 8 + \cdots \]<br>两边同时乘2，得到：<br>\[2T &#x3D; 2 + 4 + 8 + \cdots &#x3D; T - 1\]<br>解出<br>\[T &#x3D; -1\]<br>显然不可能，因为这里的$T$是发散的，所以不能这么求。那么如何用一般的方法来求解呢？</p>
+<p>回顾一下以前我们是怎么计算下面求和式的。<br>\[S = {\rm{1}} + \frac{1}{2} + \frac{1}{4} + \cdots \]<br>首先两边同时乘2，得到：<br>\[2S = 2 + {\rm{1}} + \frac{1}{2} + \frac{1}{4} + \cdots = 2 + S\]<br>解出<br>\[S = 2\]</p>
+<p>那么可不可以用同样的方法计算下面式子呢？<br>\[T = 1 + 2 + 4 + 8 + \cdots \]<br>两边同时乘2，得到：<br>\[2T = 2 + 4 + 8 + \cdots = T - 1\]<br>解出<br>\[T = -1\]<br>显然不可能，因为这里的$T$是发散的，所以不能这么求。那么如何用一般的方法来求解呢？</p>
 <p>首先我们只考虑正数求和，求解$\sum\limits_{k \in K} { {a_k}} $，其中$K$是一个无限集合。<br>那么，如果存在$A$，使得对任意$F \subset K$，都有<br>\[\sum\limits_{k \in F} { {a_k}}  \le A\]<br>那么我们说这个最小的$A$就是$\sum\limits_{k \in K} { {a_k}} $的结果。<br>如果不存在这么一个$A$，那么这个求和式就是发散的，即结果为正无穷。</p>
-<p>一般使用中，对于$K &#x3D; N$，我们可以令$F &#x3D; { 0,1,2, \ldots ,n} $<br>所以<br>\[\sum\limits_{k \ge 0} { {a_k}} &#x3D; \mathop {\lim }\limits_{n \to \infty } \sum\limits_{k &#x3D; 0}^n { {a_k}} \]</p>
-<p>举两个例子，比如<br>\[\sum\limits_{k \ge 0} { {x^k}} &#x3D; \mathop {\lim }\limits_{n \to \infty } \frac{ {1 - {x^{n + 1}}}}{ {1 - x}} &#x3D; \left{ {\begin{array}{*{20}{c}}{\frac{1}{ {1 - x}},0 \le x &lt; 1}\{\infty ,x \ge 1}\end{array}} \right.\]<br>再如：<br>\[\sum\limits_{k \ge 0} {\frac{1}{ {(k + 1)(k + 2)}}} &#x3D; \sum\limits_{k \ge 0} { {k^{ \underline{- 2}}}} &#x3D; \mathop {\lim }\limits_{n \to \infty } \sum\limits_{k &#x3D; 0}^n { {k^{ \underline{- 2}}}} &#x3D; \mathop {\lim }\limits_{n \to \infty } \left. {\frac{ { {k^{ \underline{- 1}}}}}{ { - 1}}} \right|_0^{n + 1} &#x3D; 1\]</p>
+<p>一般使用中，对于$K = N$，我们可以令$F = { 0,1,2, \ldots ,n} $<br>所以<br>\[\sum\limits_{k \ge 0} { {a_k}} = \mathop {\lim }\limits_{n \to \infty } \sum\limits_{k = 0}^n { {a_k}} \]</p>
+<p>举两个例子，比如<br>\[\sum\limits_{k \ge 0} { {x^k}} = \mathop {\lim }\limits_{n \to \infty } \frac{ {1 - {x^{n + 1}}}}{ {1 - x}} = \left{ {\begin{array}{*{20}{c}}{\frac{1}{ {1 - x}},0 \le x &lt; 1}\{\infty ,x \ge 1}\end{array}} \right.\]<br>再如：<br>\[\sum\limits_{k \ge 0} {\frac{1}{ {(k + 1)(k + 2)}}} = \sum\limits_{k \ge 0} { {k^{ \underline{- 2}}}} = \mathop {\lim }\limits_{n \to \infty } \sum\limits_{k = 0}^n { {k^{ \underline{- 2}}}} = \mathop {\lim }\limits_{n \to \infty } \left. {\frac{ { {k^{ \underline{- 1}}}}}{ { - 1}}} \right|_0^{n + 1} = 1\]</p>
 <p>剩下的问题就是如何求有正有负的和式？</p>
 <p>可以考虑的方案就是用不同的配对，将正负组合在一起，从而相消求和。</p>
-<p>但是不同的组合方式会得到不同的答案。就比如：<br>\[\sum\limits_{k \ge 0} { { {( - 1)}^k}} &#x3D; 1 - 1 + 1 - 1 + \cdots \]<br>有两种组合方式：<br>\[(1 - 1) + (1 - 1) + \cdots &#x3D; 0\]<br>和<br>\[1 - (1 - 1) - (1 - 1) - \cdots &#x3D; 1\]<br>得到了两种不同的结果。</p>
-<p>事实上，我们可以将正数和负数分开求和，因为正数求和我们已经解决了，所以我们定义：<br>\[x &#x3D; {x^ + } - {x^ - }\]<br>其中<br>\[{x^ + } &#x3D; x \cdot [x &gt; 0],{x^ - } &#x3D; - x \cdot [x &lt; 0]\]</p>
-<p>所以求和式可以分成两部分分别求和：<br>\[\sum\limits_{k \in K} { {a_k}} &#x3D; \sum\limits_{k \in K} { {a_k}^ + } - \sum\limits_{k \in K} { {a_k}^ - } \]</p>
-<p>最后推广到二重求和：<br>\[\sum\limits_{j \in J,k \in {K_j}} { {a_{j,k}}} &#x3D; \sum\limits_{j \in J} {\sum\limits_{k \in {K_j}} { {a_{j,k}}} } &#x3D; \sum\limits_{j \in J} { {A_j}} &#x3D; A\]</p>
+<p>但是不同的组合方式会得到不同的答案。就比如：<br>\[\sum\limits_{k \ge 0} { { {( - 1)}^k}} = 1 - 1 + 1 - 1 + \cdots \]<br>有两种组合方式：<br>\[(1 - 1) + (1 - 1) + \cdots = 0\]<br>和<br>\[1 - (1 - 1) - (1 - 1) - \cdots = 1\]<br>得到了两种不同的结果。</p>
+<p>事实上，我们可以将正数和负数分开求和，因为正数求和我们已经解决了，所以我们定义：<br>\[x = {x^ + } - {x^ - }\]<br>其中<br>\[{x^ + } = x \cdot [x &gt; 0],{x^ - } = - x \cdot [x &lt; 0]\]</p>
+<p>所以求和式可以分成两部分分别求和：<br>\[\sum\limits_{k \in K} { {a_k}} = \sum\limits_{k \in K} { {a_k}^ + } - \sum\limits_{k \in K} { {a_k}^ - } \]</p>
+<p>最后推广到二重求和：<br>\[\sum\limits_{j \in J,k \in {K_j}} { {a_{j,k}}} = \sum\limits_{j \in J} {\sum\limits_{k \in {K_j}} { {a_{j,k}}} } = \sum\limits_{j \in J} { {A_j}} = A\]</p>
 <p>这里也没啥好细说的，就先了解了解吧。</p>
 
             </div>
@@ -853,7 +853,7 @@
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-今天继续讲求和的方法。针对以下求和式，我们用8种方法来求解：\[{S_n} &#x3D; \sum\limits_{0 \le k \le n} { {k^2}} \]大家应该都已经背
+今天继续讲求和的方法。针对以下求和式，我们用8种方法来求解：\[{S_n} = \sum\limits_{0 \le k \le n} { {k^2}} \]大家应该都已经背上了它的答
                         
                     </div>
                     <div class="publish-info">
@@ -1066,7 +1066,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

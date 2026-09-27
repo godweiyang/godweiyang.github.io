@@ -534,7 +534,7 @@
 
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">add2_kernel</span><span class="params">(<span class="type">float</span>* c,</span></span></span><br><span class="line"><span class="params"><span class="function">                            <span class="type">const</span> <span class="type">float</span>* a,</span></span></span><br><span class="line"><span class="params"><span class="function">                            <span class="type">const</span> <span class="type">float</span>* b,</span></span></span><br><span class="line"><span class="params"><span class="function">                            <span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = blockIdx.x * blockDim.x + threadIdx.x; \</span><br><span class="line">            i &lt; n; i += gridDim.x * blockDim.x) &#123;</span><br><span class="line">        c[i] = a[i] + b[i];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">launch_add2</span><span class="params">(<span class="type">float</span>* c,</span></span></span><br><span class="line"><span class="params"><span class="function">                 <span class="type">const</span> <span class="type">float</span>* a,</span></span></span><br><span class="line"><span class="params"><span class="function">                 <span class="type">const</span> <span class="type">float</span>* b,</span></span></span><br><span class="line"><span class="params"><span class="function">                 <span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="function">dim3 <span class="title">grid</span><span class="params">((n + <span class="number">1023</span>) / <span class="number">1024</span>)</span></span>;</span><br><span class="line">    <span class="function">dim3 <span class="title">block</span><span class="params">(<span class="number">1024</span>)</span></span>;</span><br><span class="line">    add2_kernel&lt;&lt;&lt;grid, block&gt;&gt;&gt;(c, a, b, n);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>这里实现的功能是两个长度为$n$的tensor相加，每个block有1024个线程，一共有$n&#x2F;1024$个block。具体CUDA细节就不讲了，本文重点不在于这个。</p>
+<p>这里实现的功能是两个长度为$n$的tensor相加，每个block有1024个线程，一共有$n/1024$个block。具体CUDA细节就不讲了，本文重点不在于这个。</p>
 <p><code>add2_kernel</code>是kernel函数，运行在GPU端的。而<code>launch_add2</code>是CPU端的执行函数，调用kernel。注意它是异步的，调用完之后控制权立刻返回给CPU，所以之后计算时间的时候要格外小心，很容易只统计到调用的时间。</p>
 <h3 id="Torch-C-封装"><a href="#Torch-C-封装" class="headerlink" title="Torch C++封装"></a>Torch C++封装</h3><p>这里涉及到的是<code>add2.cpp</code>，这个文件主要功能是提供一个PyTorch可以调用的接口。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;torch/extension.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;add2.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">torch_launch_add2</span><span class="params">(torch::Tensor &amp;c,</span></span></span><br><span class="line"><span class="params"><span class="function">                       <span class="type">const</span> torch::Tensor &amp;a,</span></span></span><br><span class="line"><span class="params"><span class="function">                       <span class="type">const</span> torch::Tensor &amp;b,</span></span></span><br><span class="line"><span class="params"><span class="function">                       <span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">launch_add2</span>((<span class="type">float</span> *)c.<span class="built_in">data_ptr</span>(),</span><br><span class="line">                (<span class="type">const</span> <span class="type">float</span> *)a.<span class="built_in">data_ptr</span>(),</span><br><span class="line">                (<span class="type">const</span> <span class="type">float</span> *)b.<span class="built_in">data_ptr</span>(),</span><br><span class="line">                n);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">PYBIND11_MODULE</span>(TORCH_EXTENSION_NAME, m) &#123;</span><br><span class="line">    m.<span class="built_in">def</span>(<span class="string">&quot;torch_launch_add2&quot;</span>,</span><br><span class="line">          &amp;torch_launch_add2,</span><br><span class="line">          <span class="string">&quot;add2 kernel warpper&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -577,19 +577,19 @@
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">QdstrmImporter -i report1.qdstrm</span><br></pre></td></tr></table></figure>
 
 <p>最后将生成的<code>report1.qdrep</code>文件用Nsight Systems软件打开，我这里是mac系统。</p>
-<h3 id="两次同步"><a href="#两次同步" class="headerlink" title="两次同步"></a>两次同步</h3><p>这是正确的统计时间的方法，我们打开Nsight Systems，放大kernel运行那一段可以看到下图：<br><img src="/1.png"></p>
+<h3 id="两次同步"><a href="#两次同步" class="headerlink" title="两次同步"></a>两次同步</h3><p>这是正确的统计时间的方法，我们打开Nsight Systems，放大kernel运行那一段可以看到下图：<br><img src="1.png" alt=""></p>
 <p>其中第1和第3个框分别是cuda和torch的GPU warm up过程，这部分没有进行线程同步（上面的黄色块）。</p>
-<p>而第2和第4个框就分别是cuda和torch的加法执行过程了，我们可以放大来看看。<br><img src="/2.png"></p>
+<p>而第2和第4个框就分别是cuda和torch的加法执行过程了，我们可以放大来看看。<br><img src="2.png" alt=""></p>
 <p>可以看出，每执行一次（一个框）都经过了三个步骤：先是调用api（左上角蓝色框），然后执行kernel（下方蓝色框），最后线程同步（右上角黄色框）。</p>
-<p>所以最后算出来的时间就是这三个步骤的耗时，也就是下图选中的范围：<br><img src="/3.png"></p>
-<p>时间大概在29us左右，和我们实际代码测出来的也是比较接近的：<br><img src="/4.png"></p>
+<p>所以最后算出来的时间就是这三个步骤的耗时，也就是下图选中的范围：<br><img src="3.png" alt=""></p>
+<p>时间大概在29us左右，和我们实际代码测出来的也是比较接近的：<br><img src="4.png" alt=""></p>
 <p>其实我们实际想要知道的耗时并不包括api调用和线程同步的时间，但是这部分时间在python端不好去掉，所以就加上了。</p>
-<h3 id="第一次同步，第二次不同步"><a href="#第一次同步，第二次不同步" class="headerlink" title="第一次同步，第二次不同步"></a>第一次同步，第二次不同步</h3><p>放大每次执行的过程：<br><img src="/5.png"></p>
-<p>可以看出，虽然长的和上一种情况几乎一模一样，但是在api调用完之后，立刻就进行计时了，所以耗时只有8us左右，实际测出来情况也是这样的：<br><img src="/6.png"></p>
-<h3 id="第一次不同步，第二次同步"><a href="#第一次不同步，第二次同步" class="headerlink" title="第一次不同步，第二次同步"></a>第一次不同步，第二次同步</h3><p>我们先来看一下实际统计的时间：<br><img src="/7.png"></p>
-<p>很奇怪是不是，第一次运行耗时非常久，那我们可视化看看到底怎么回事：<br><img src="/8.png"></p>
+<h3 id="第一次同步，第二次不同步"><a href="#第一次同步，第二次不同步" class="headerlink" title="第一次同步，第二次不同步"></a>第一次同步，第二次不同步</h3><p>放大每次执行的过程：<br><img src="5.png" alt=""></p>
+<p>可以看出，虽然长的和上一种情况几乎一模一样，但是在api调用完之后，立刻就进行计时了，所以耗时只有8us左右，实际测出来情况也是这样的：<br><img src="6.png" alt=""></p>
+<h3 id="第一次不同步，第二次同步"><a href="#第一次不同步，第二次同步" class="headerlink" title="第一次不同步，第二次同步"></a>第一次不同步，第二次同步</h3><p>我们先来看一下实际统计的时间：<br><img src="7.png" alt=""></p>
+<p>很奇怪是不是，第一次运行耗时非常久，那我们可视化看看到底怎么回事：<br><img src="8.png" alt=""></p>
 <p>可以看出，因为第一次开始计时前没有同步线程，所以在GPU warm up调用api完毕后，第一次cuda kernel调用就开始了。然后一直等到warm up执行完毕，才开始执行第一次cuda kernel，然后是线程同步，结束后才结束计时。这个过程非常长，差不多有130us左右。然后第二次开始执行就很正常了，因为kernel结束的同步相当于是下一次执行之前的同步。</p>
-<h3 id="两次不同步"><a href="#两次不同步" class="headerlink" title="两次不同步"></a>两次不同步</h3><p>先来看看执行情况：<br><img src="/9.png"></p>
+<h3 id="两次不同步"><a href="#两次不同步" class="headerlink" title="两次不同步"></a>两次不同步</h3><p>先来看看执行情况：<br><img src="9.png" alt=""></p>
 <p>可以看出因为没有任何同步，所有GPU warm up和cuda kernel的api调用全接在一起了，执行也是。所以计时只计算到了每个api调用的时间，差不多在7us左右。</p>
 <p>上面四种情况，torch指令情形几乎一样，因此不再赘述。</p>
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>通过这篇文章，应该可以大致了解PyTorch实现自定义CUDA算子并调用的方法，也能知道怎么正确的测量CUDA程序的耗时。</p>
@@ -1118,7 +1118,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

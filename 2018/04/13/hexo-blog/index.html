@@ -527,7 +527,7 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <blockquote>
 <p><strong>关注我公众号：算法码上来，获取实时更新</strong>。有任何问题请加 QQ 技术交流群【群号：864832264】。如果觉得有用的话可以看心情打赏一杯奶茶，我会很开心哒。</p>
 </blockquote>
@@ -550,7 +550,7 @@
 <figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">hexo g  # 生成博客网页文件</span><br><span class="line">hexo s  # 本地预览博客</span><br><span class="line">hexo d  # 上传网页文件到github</span><br></pre></td></tr></table></figure>
 
 <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>17年9月的时候开始搭建了第一个自己的独立博客，到现在也稍微像模像样了。很多小伙伴应该也想过搭建一个自己的博客，网上也有一堆详细教程。我在此稍稍总结一下具体的搭建步骤，另外网上很少有修改博客源码的个性化教程，我就稍稍分享一下我的一些修改经验，更多的个性化操作需要你自己以后去摸索。</p>
-<p>具体效果可以参观我的博客：<a href="https://godweiyang.com/">godweiyang.com</a>，欢迎大家支持。</p>
+<p>具体效果可以参观我的博客：<a href="https://godweiyang.com">godweiyang.com</a>，欢迎大家支持。</p>
 <p>我不是一个前端程序员，有些东西不是很了解，写的有问题或有改进的地方请大家指出。</p>
 <p>首先要了解一下我们搭建博客要用到的框架。Hexo是高效的静态站点生成框架，它基于Node.js。通过Hexo，你可以直接使用Markdown语法来撰写博客。相信很多小伙伴写工程都写过README.md文件吧，对，就是这个格式的！写完后只需两三条命令即可将生成的网页上传到你的github上，然后别人就可以看到你的网页啦。是不是很简单？你无需关心网页源代码的具体细节，你只需要用心写好你的博客内容就行。</p>
 <p><strong>目录结构</strong></p>
@@ -579,13 +579,13 @@
 <p>安装选项还是全部默认，只不过最后一步添加路径时选择<code>Use Git from the Windows Command Prompt</code>，这样我们就可以直接在命令提示符里打开git了。</p>
 <p>安装完成后在命令提示符中输入<code>git --version</code>验证是否安装成功。</p>
 <h1 id="注册Github账号"><a href="#注册Github账号" class="headerlink" title="注册Github账号"></a>注册Github账号</h1><p>接下来就去注册一个github账号，用来存放我们的网站。大多数小伙伴应该都有了吧，作为一个合格的程序猿（媛）还是要有一个的。</p>
-<p>打开<a href="https://github.com/">https://github.com/</a>，新建一个项目，如下所示：<br><img src="/1.jpg"><br>然后如下图所示，输入自己的项目名字，后面一定要加<code>.github.io</code>后缀，README初始化也要勾上。<strong>名称一定要和你的github名字完全一样，比如你github名字叫<code>abc</code>，那么仓库名字一定要是<code>abc.github.io</code>。</strong><br><img src="/2.jpg"><br>然后项目就建成了，点击<code>Settings</code>，向下拉到最后有个<code>GitHub Pages</code>，点击<code>Choose a theme</code>选择一个主题。然后等一会儿，再回到<code>GitHub Pages</code>，会变成下面这样：<br><img src="/3.jpg"><br>点击那个链接，就会出现自己的网页啦，效果如下：<br><img src="/4.jpg"></p>
+<p>打开<a href="https://github.com/">https://github.com/</a>，新建一个项目，如下所示：<br><img src="1.jpg" alt=""><br>然后如下图所示，输入自己的项目名字，后面一定要加<code>.github.io</code>后缀，README初始化也要勾上。<strong>名称一定要和你的github名字完全一样，比如你github名字叫<code>abc</code>，那么仓库名字一定要是<code>abc.github.io</code>。</strong><br><img src="2.jpg" alt=""><br>然后项目就建成了，点击<code>Settings</code>，向下拉到最后有个<code>GitHub Pages</code>，点击<code>Choose a theme</code>选择一个主题。然后等一会儿，再回到<code>GitHub Pages</code>，会变成下面这样：<br><img src="3.jpg" alt=""><br>点击那个链接，就会出现自己的网页啦，效果如下：<br><img src="4.jpg" alt=""></p>
 <h1 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h1><p>在合适的地方新建一个文件夹，用来存放自己的博客文件，比如我的博客文件都存放在<code>D:\study\program\blog</code>目录下。</p>
 <p>在该目录下右键点击<code>Git Bash Here</code>，打开git的控制台窗口，以后我们所有的操作都在git控制台进行，就不要用Windows自带的控制台了。</p>
 <p>定位到该目录下，输入<code>npm i hexo-cli -g</code>安装Hexo。会有几个报错，无视它就行。</p>
 <p>安装完后输入<code>hexo -v</code>验证是否安装成功。</p>
 <p>然后就要初始化我们的网站，输入<code>hexo init</code>初始化文件夹，接着输入<code>npm install</code>安装必备的组件。</p>
-<p>这样本地的网站配置也弄好啦，输入<code>hexo g</code>生成静态网页，然后输入<code>hexo s</code>打开本地服务器，然后浏览器打开<a href="http://localhost:4000/">http://localhost:4000/</a>，就可以看到我们的博客啦，效果如下：<br><img src="/5.jpg"></p>
+<p>这样本地的网站配置也弄好啦，输入<code>hexo g</code>生成静态网页，然后输入<code>hexo s</code>打开本地服务器，然后浏览器打开<a href="http://localhost:4000/">http://localhost:4000/</a>，就可以看到我们的博客啦，效果如下：<br><img src="5.jpg" alt=""></p>
 <p>按<code>ctrl+c</code>关闭本地服务器。</p>
 <h1 id="连接Github与本地"><a href="#连接Github与本地" class="headerlink" title="连接Github与本地"></a>连接Github与本地</h1><p>首先右键打开git bash，然后输入下面命令：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git config --global user.name <span class="string">&quot;godweiyang&quot;</span></span><br><span class="line">git config --global user.email <span class="string">&quot;792321264@qq.com&quot;</span></span><br></pre></td></tr></table></figure>
@@ -594,12 +594,12 @@
 <p>然后生成密钥SSH key：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa -C <span class="string">&quot;792321264@qq.com&quot;</span></span><br></pre></td></tr></table></figure>
 
-<p>打开<a href="http://github.com/">github</a>，在头像下面点击<code>settings</code>，再点击<code>SSH and GPG keys</code>，新建一个SSH，名字随便。</p>
+<p>打开<a href="http://github.com">github</a>，在头像下面点击<code>settings</code>，再点击<code>SSH and GPG keys</code>，新建一个SSH，名字随便。</p>
 <p>git bash中输入</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> ~/.ssh/id_rsa.pub</span><br></pre></td></tr></table></figure>
 
 <p>将输出的内容复制到框中，点击确定保存。</p>
-<p>输入<code>ssh -T git@github.com</code>，如果如下图所示，出现你的用户名，那就成功了。<br><img src="/6.jpg"></p>
+<p>输入<code>ssh -T git@github.com</code>，如果如下图所示，出现你的用户名，那就成功了。<br><img src="6.jpg" alt=""></p>
 <p>打开博客根目录下的<code>_config.yml</code>文件，这是博客的配置文件，在这里你可以修改与博客相关的各种信息。</p>
 <p>修改最后一行的配置：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: git</span><br><span class="line">  repository: https://github.com/godweiyang/godweiyang.github.io</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
@@ -610,8 +610,8 @@
 <p>然后打开<code>D:\study\program\blog\source\_posts</code>的目录，可以发现下面多了一个文件夹和一个<code>.md</code>文件，一个用来存放你的图片等数据，另一个就是你的文章文件啦。</p>
 <p>编写完markdown文件后，根目录下输入<code>hexo g</code>生成静态网页，然后输入<code>hexo s</code>可以本地预览效果，最后输入<code>hexo d</code>上传到github上。这时打开你的github.io主页就能看到发布的文章啦。</p>
 <h1 id="绑定域名"><a href="#绑定域名" class="headerlink" title="绑定域名"></a>绑定域名</h1><p>现在默认的域名还是<code>xxx.github.io</code>，是不是很没有牌面？想不想也像我一样弄一个专属域名呢，首先你得购买一个域名，xx云都能买，看你个人喜好了。</p>
-<p>以我的百度云为例，如下图所示，添加两条解析记录：<br><img src="/7.jpg"></p>
-<p>然后打开你的github博客项目，点击<code>settings</code>，拉到下面<code>Custom domain</code>处，填上你自己的域名，保存：<br><img src="/8.jpg"></p>
+<p>以我的百度云为例，如下图所示，添加两条解析记录：<br><img src="7.jpg" alt=""></p>
+<p>然后打开你的github博客项目，点击<code>settings</code>，拉到下面<code>Custom domain</code>处，填上你自己的域名，保存：<br><img src="8.jpg" alt=""></p>
 <p>这时候你的项目根目录应该会出现一个名为<code>CNAME</code>的文件了。如果没有的话，打开你本地博客<code>/source</code>目录，我的是<code>D:\study\program\blog\source</code>，新建<code>CNAME</code>文件，注意没有后缀。然后在里面写上你的域名，保存。最后运行<code>hexo g</code>、<code>hexo d</code>上传到github。</p>
 <h1 id="备份博客源文件"><a href="#备份博客源文件" class="headerlink" title="备份博客源文件"></a>备份博客源文件</h1><p>有时候我们想换一台电脑继续写博客，这时候就可以将博客目录下的所有源文件都上传到github上面。</p>
 <p>首先在github博客仓库下新建一个分支<code>hexo</code>，然后<code>git clone</code>到本地，把<code>.git</code>文件夹拿出来，放在博客根目录下。</p>
@@ -623,7 +623,7 @@
 <p><strong>如果大家下载好了源代码，就可以直接使用了，基本可以跳过文章后面的部分了！喜欢的记得star并fork哦！</strong></p>
 <h1 id="个性化设置（matery主题）"><a href="#个性化设置（matery主题）" class="headerlink" title="个性化设置（matery主题）"></a>个性化设置（matery主题）</h1><p>下面的个性化设置主要针对的是<code>matery</code>主题，如果你想用我现在博客这个主题，可以直接看这个章节。</p>
 <h2 id="更换主题"><a href="#更换主题" class="headerlink" title="更换主题"></a>更换主题</h2><p>这两天花时间将我的博客换了一个主题，现在这个主题看着更加的炫（zhuang）酷（bi），并且响应式更友好，点起来就很舒服，功能也多很多。</p>
-<p>主题的原地址在这里：<a href="https://github.com/blinkfox/hexo-theme-matery">hexo-theme-matery</a>，它的文档写得也非常的详细，还有中英文两个版本，作者回复也很及时。效果图如下，可以看出非常合我的口味：<br><img src="/21.jpg"></p>
+<p>主题的原地址在这里：<a href="https://github.com/blinkfox/hexo-theme-matery">hexo-theme-matery</a>，它的文档写得也非常的详细，还有中英文两个版本，作者回复也很及时。效果图如下，可以看出非常合我的口味：<br><img src="21.jpg" alt=""></p>
 <p>但是我自己使用起来还是遇到了好几个问题，经过两天的不懈摸鱼，终于基本解决了，这里分享一下。</p>
 <p>首先先按照文档教程安装一遍主题，然后是可以正常打开的，如果你是一般使用的话，基本没啥问题了。但是我是重度强迫症，一点小毛病就看着难受，下面列举一下我遇到的问题以及解决方法。</p>
 <h2 id="文章头设置"><a href="#文章头设置" class="headerlink" title="文章头设置"></a>文章头设置</h2><p>首先为了新建文章方便，建议将<code>/scaffolds/post.md</code>修改为如下代码：</p>
@@ -641,10 +641,10 @@
 
 <p>这样就会多出一张card，然后可以在<code>/source/about/index.md</code>下面写上你的简历了，当然这里的位置随你自己设置，你也可以把简历作为第一个card。</p>
 <h2 id="解决mathjax与代码高亮的冲突"><a href="#解决mathjax与代码高亮的冲突" class="headerlink" title="解决mathjax与代码高亮的冲突"></a>解决mathjax与代码高亮的冲突</h2><p>如果你按照教程安装了代码高亮插件<code>hexo-prism-plugin</code>，单独使用是没有问题的，但如果你又使用了mathjax，并且按照网上教程，安装<code>kramed</code>插件并修改了js文件里的正则表达式（为了解决markdown和mathjax的语法冲突），好了，那你的代码就无法高亮了。解决方法很简单，别用<code>kramed</code>插件了，还用原来自带的<code>marked</code>插件，直接改它的正则表达式就行了，改法如下：</p>
-<p>打开<code>D:\study\program\blog\node_modules\marked\lib\marked.js</code><br><code>escape: </code>处替换成：</p>
+<p>打开<code>D:\study\program\blog\node_modules\marked\lib\marked.js</code><br><code>escape:</code>处替换成：</p>
 <figure class="highlight json"><table><tr><td class="code"><pre><span class="line">escape<span class="punctuation">:</span> /^\\(<span class="punctuation">[</span>`*\<span class="punctuation">[</span>\<span class="punctuation">]</span>()#$+\-.!_&gt;<span class="punctuation">]</span>)/<span class="punctuation">,</span></span><br></pre></td></tr></table></figure>
 
-<p><code>em: </code>处替换成：</p>
+<p><code>em:</code>处替换成：</p>
 <figure class="highlight json"><table><tr><td class="code"><pre><span class="line">em<span class="punctuation">:</span> /^\*((?<span class="punctuation">:</span>\*\*|<span class="punctuation">[</span>\s\S<span class="punctuation">]</span>)+?)\*(?!\*)/<span class="punctuation">,</span></span><br></pre></td></tr></table></figure>
 
 <p>这时在文章里写数学公式基本没有问题了，但是要注意：<br><strong>数学公式中如果出现了连续两个{，中间一定要加空格！</strong></p>
@@ -681,7 +681,7 @@
 
 <p>字体也放根目录下，自己找字体。然后每次写完一篇文章可以运行<code>python3 watermark.py postname</code>添加水印，如果第一次运行要给所有文章添加水印，可以运行<code>python3 watermark.py all</code>。</p>
 <h2 id="添加网易云音乐BGM"><a href="#添加网易云音乐BGM" class="headerlink" title="添加网易云音乐BGM"></a>添加网易云音乐BGM</h2><p>写文章的时候，想插入一段BGM怎么办？</p>
-<p>首先打开网易云网页版，找到想听的歌曲，然后点击生成外链：<br><img src="/15.jpg"><br>复制如下代码：<br><img src="/16.jpg"></p>
+<p>首先打开网易云网页版，找到想听的歌曲，然后点击生成外链：<br><img src="15.jpg" alt=""><br>复制如下代码：<br><img src="16.jpg" alt=""></p>
 <p>粘贴到文章里就行了，为了美观，设置一下居中，具体代码如下：</p>
 <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">align</span>=<span class="string">&quot;middle&quot;</span>&gt;</span>这里粘贴刚刚复制的代码<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
@@ -725,7 +725,7 @@
 <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">var</span> <span class="title class_">OriginTitile</span> = <span class="variable language_">document</span>.<span class="property">title</span>,</span></span><br><span class="line"><span class="language-javascript">    st</span></span><br><span class="line"><span class="language-javascript">  <span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;visibilitychange&#x27;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="variable language_">document</span>.<span class="property">hidden</span></span></span><br><span class="line"><span class="language-javascript">      ? ((<span class="variable language_">document</span>.<span class="property">title</span> = <span class="string">&#x27;Σ(っ °Д °;)っ喔哟，崩溃啦！&#x27;</span>), <span class="built_in">clearTimeout</span>(st))</span></span><br><span class="line"><span class="language-javascript">      : ((<span class="variable language_">document</span>.<span class="property">title</span> = <span class="string">&#x27;φ(゜▽゜*)♪咦，又好了！&#x27;</span>),</span></span><br><span class="line"><span class="language-javascript">        (st = <span class="built_in">setTimeout</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">          <span class="variable language_">document</span>.<span class="property">title</span> = <span class="title class_">OriginTitile</span></span></span><br><span class="line"><span class="language-javascript">        &#125;, <span class="number">3e3</span>)))</span></span><br><span class="line"><span class="language-javascript">  &#125;)</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <h1 id="常见问题及解答（FAQ）"><a href="#常见问题及解答（FAQ）" class="headerlink" title="常见问题及解答（FAQ）"></a>常见问题及解答（FAQ）</h1><p>这个章节主要更新许多同学在搭建博客的过程中咨询我的一些问题。</p>
-<h2 id="为什么本地生成完ssh-key之后没有-ssh文件夹？"><a href="#为什么本地生成完ssh-key之后没有-ssh文件夹？" class="headerlink" title="为什么本地生成完ssh key之后没有.ssh文件夹？"></a>为什么本地生成完ssh key之后没有.ssh文件夹？</h2><p>这是我没有想到会遇到的问题，但是很多人还是遇到了，主要问题就是在输入完<code>ssh-keygen -t rsa -C &quot;792321264@qq.com&quot; </code>之后，很多同学没有按照提示继续输入，而是就这么结束了，然后报错了也没有发现。正确做法是按照提示，一路按回车就行了。</p>
+<h2 id="为什么本地生成完ssh-key之后没有-ssh文件夹？"><a href="#为什么本地生成完ssh-key之后没有-ssh文件夹？" class="headerlink" title="为什么本地生成完ssh key之后没有.ssh文件夹？"></a>为什么本地生成完ssh key之后没有.ssh文件夹？</h2><p>这是我没有想到会遇到的问题，但是很多人还是遇到了，主要问题就是在输入完<code>ssh-keygen -t rsa -C &quot;792321264@qq.com&quot;</code>之后，很多同学没有按照提示继续输入，而是就这么结束了，然后报错了也没有发现。正确做法是按照提示，一路按回车就行了。</p>
 <h2 id="为什么代码块显示有问题？"><a href="#为什么代码块显示有问题？" class="headerlink" title="为什么代码块显示有问题？"></a>为什么代码块显示有问题？</h2><p>代码要显示正确，要注意以下几个点：</p>
 <ul>
 <li>根目录<code>_config.yml</code>文件下的<code>highlight</code>中的<code>line_number</code>要设置为<code>false</code>，因为行号有bug，当然如果你按照上面教程修复了bug，就可以改成<code>true</code>。</li>
@@ -743,9 +743,9 @@
 <h1 id="个性化设置（beantech主题，已停更）"><a href="#个性化设置（beantech主题，已停更）" class="headerlink" title="个性化设置（beantech主题，已停更）"></a>个性化设置（beantech主题，已停更）</h1><p><strong>下面的个性化设置主要针对的是我之前使用的<code>beantech</code>主题，当然如果你想用我现在博客这个主题，可以不看这部分。这部分已经停止更新，今后我只会更新<code>matery</code>主题的各种配置。</strong></p>
 <h2 id="更换主题-1"><a href="#更换主题-1" class="headerlink" title="更换主题"></a>更换主题</h2><p>网上大多数主题都是github排名第一的<code>Next</code>主题，但是我个人不是很喜欢，我更喜欢<code>beantech</code>主题，地址在<a href="https://github.com/YenYuHsuan/hexo-theme-beantech">传送门</a>。</p>
 <p>首先要注意的是，<strong>这个github项目不仅包含了主题文件，还包含了hexo的各种文件</strong>。</p>
-<p>所以首先下载下来这个项目，然后推荐将下图所有文件全部替换你原本博客根目录下的文件：<br><img src="/9.jpg"></p>
+<p>所以首先下载下来这个项目，然后推荐将下图所有文件全部替换你原本博客根目录下的文件：<br><img src="9.jpg" alt=""></p>
 <p>当然一般的主题和这个主题有点不一样，只含有主题文件夹，所以把整个文件夹丢到<code>theme</code>下就行了。</p>
-<p>然后运行<code>hexo clean</code>清空所有生成的网页缓存，<code>hexo g</code>、<code>hexo d</code>。这时候新的主题网页就生成好了，博客根目录的情况应该大致如下：<br><img src="/10.jpg"></p>
+<p>然后运行<code>hexo clean</code>清空所有生成的网页缓存，<code>hexo g</code>、<code>hexo d</code>。这时候新的主题网页就生成好了，博客根目录的情况应该大致如下：<br><img src="10.jpg" alt=""></p>
 <h2 id="博客目录构成介绍"><a href="#博客目录构成介绍" class="headerlink" title="博客目录构成介绍"></a>博客目录构成介绍</h2><p>从上图可以看出，博客的目录结构如下：</p>
 <figure class="highlight md"><table><tr><td class="code"><pre><span class="line"><span class="bullet">-</span> node<span class="emphasis">_modules</span></span><br><span class="line"><span class="emphasis">- public</span></span><br><span class="line"><span class="emphasis">- scaffolds</span></span><br><span class="line"><span class="emphasis">- source</span></span><br><span class="line"><span class="emphasis">  - \_</span>posts</span><br><span class="line"><span class="bullet">  -</span> about</span><br><span class="line"><span class="bullet">  -</span> archive</span><br><span class="line"><span class="bullet">  -</span> img</span><br><span class="line"><span class="bullet">  -</span> tags</span><br><span class="line"><span class="bullet">-</span> themes</span><br></pre></td></tr></table></figure>
 
@@ -755,7 +755,7 @@
 <h2 id="修复文档分类bug"><a href="#修复文档分类bug" class="headerlink" title="修复文档分类bug"></a>修复文档分类bug</h2><p>这个主题文档分类功能有个bug，一直没有得到解决，直到最近，我才发现是源文件的单词拼错了。。。</p>
 <p>打开<code>D:\study\program\blog\scaffolds\post.md</code>，单词<code>catagories</code>改为<code>categories</code>。</p>
 <h2 id="添加畅言评论插件"><a href="#添加畅言评论插件" class="headerlink" title="添加畅言评论插件"></a>添加畅言评论插件</h2><p>主题自带了多说评论插件，但是多说已经关闭了，所以我换成了畅言评论插件。</p>
-<p>首先你得注册一个畅言账号，<a href="http://changyan.kuaizhan.com/">地址</a>。<br>然后打开如下页面，复制该段代码：<br><img src="/11.jpg"><br>打开<code>D:\study\program\blog\themes\beantech\layout\post.ejs</code>，将代码粘贴到如下位置：<br><img src="/12.jpg"><br>然后重新生成一下网页，可以看到效果图如下：<br><img src="/13.jpg"><br>更多插件例如热评话题之类的，可以自行在畅言后台找到代码添加。</p>
+<p>首先你得注册一个畅言账号，<a href="http://changyan.kuaizhan.com/">地址</a>。<br>然后打开如下页面，复制该段代码：<br><img src="11.jpg" alt=""><br>打开<code>D:\study\program\blog\themes\beantech\layout\post.ejs</code>，将代码粘贴到如下位置：<br><img src="12.jpg" alt=""><br>然后重新生成一下网页，可以看到效果图如下：<br><img src="13.jpg" alt=""><br>更多插件例如热评话题之类的，可以自行在畅言后台找到代码添加。</p>
 <h2 id="添加图片放大功能"><a href="#添加图片放大功能" class="headerlink" title="添加图片放大功能"></a>添加图片放大功能</h2><p>首先下载<code>zooming.js</code>文件<a href="https://github.com/godweiyang/godweiyang.github.io/blob/master/js/zooming.js">地址</a>，保存在<code>D:\study\program\blog\themes\beantech\source\js</code>目录下。</p>
 <p>打开<code>D:\study\program\blog\themes\beantech\layout\post.ejs</code>，在最下方粘贴如下代码：</p>
 <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span> <span class="attr">src</span>=<span class="string">&quot;/js/zooming.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
@@ -765,17 +765,17 @@
 <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span></span></span><br><span class="line"><span class="tag">  <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">src</span>=<span class="string">&quot;http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default&quot;</span></span></span><br><span class="line"><span class="tag">&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>由于markdown语法与mathjax语法存在冲突，所以还需要修改源文件。</p>
-<p>打开<code>D:\study\program\blog\node_modules\marked\lib\marked.js</code><br><code>escape: </code>处替换成：</p>
+<p>打开<code>D:\study\program\blog\node_modules\marked\lib\marked.js</code><br><code>escape:</code>处替换成：</p>
 <figure class="highlight json"><table><tr><td class="code"><pre><span class="line">escape<span class="punctuation">:</span> /^$<span class="punctuation">[</span>`*\<span class="punctuation">[</span>\<span class="punctuation">]</span>()#$+\-.!_&gt;<span class="punctuation">]</span>)/</span><br></pre></td></tr></table></figure>
 
-<p><code>em: </code>处替换成：</p>
+<p><code>em:</code>处替换成：</p>
 <figure class="highlight json"><table><tr><td class="code"><pre><span class="line">em<span class="punctuation">:</span> /^\*((?<span class="punctuation">:</span>\*\*|<span class="punctuation">[</span>\s\S<span class="punctuation">]</span>)+?)\*(?!\*)/</span><br></pre></td></tr></table></figure>
 
 <p>这时在文章里写数学公式基本没有问题了，但是要注意：<br><strong>数学公式中如果出现了连续两个{，中间一定要加空格！</strong></p>
-<p>举个例子:<br>行内公式：$y &#x3D; f(x)$<br>代码：</p>
+<p>举个例子:<br>行内公式：$y = f(x)$<br>代码：</p>
 <figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="built_in">$</span>y = f(x)<span class="built_in">$</span></span><br></pre></td></tr></table></figure>
 
-<p>行间公式：<br>\[y &#x3D; {f_{ {g_1}}}(x)\]<br>代码：</p>
+<p>行间公式：<br>\[y = {f_{ {g_1}}}(x)\]<br>代码：</p>
 <figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="keyword">\\</span>[y = &#123;f<span class="built_in">_</span>&#123; &#123;g<span class="built_in">_</span>1&#125;&#125;&#125;(x)<span class="keyword">\\</span>]</span><br></pre></td></tr></table></figure>
 
 <p><strong>注意上面花括号之间有空格！</strong></p>
@@ -788,15 +788,15 @@
 <h2 id="添加置顶功能"><a href="#添加置顶功能" class="headerlink" title="添加置顶功能"></a>添加置顶功能</h2><p>运行如下两条命令安装置顶插件：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm uninstall hexo-generator-index --save</span><br><span class="line">npm install hexo-generator-index-pin-top --save</span><br></pre></td></tr></table></figure>
 
-<p>然后打开<code>D:\study\program\blog\themes\beantech\layout\index.ejs</code>，在如下位置添加代码：<br><img src="/14.jpg"></p>
+<p>然后打开<code>D:\study\program\blog\themes\beantech\layout\index.ejs</code>，在如下位置添加代码：<br><img src="14.jpg" alt=""></p>
 <figure class="highlight html"><table><tr><td class="code"><pre><span class="line">&lt;% if (post.top) &#123;%&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">i</span> <span class="attr">class</span>=<span class="string">&quot;fa fa-thumb-tack&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">font</span> <span class="attr">color</span>=<span class="string">&quot;7D26CD&quot;</span>&gt;</span>置顶<span class="tag">&lt;/<span class="name">font</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;post-meta-divider&quot;</span>&gt;</span>|<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">&lt;%&#125;%&gt;</span><br></pre></td></tr></table></figure>
 
 <p>然后在你想置顶的文章md文件里，添加如下配置选项：</p>
 <figure class="highlight json"><table><tr><td class="code"><pre><span class="line">top<span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br></pre></td></tr></table></figure>
 
 <h2 id="添加访客人数统计和字数统计"><a href="#添加访客人数统计和字数统计" class="headerlink" title="添加访客人数统计和字数统计"></a>添加访客人数统计和字数统计</h2><p>我们使用一个国外的流量统计网站：<a href="gostats.com">gostats.com</a>，首先注册一下。</p>
-<p>然后自己添加网站地址，过程就不详细说了，然后点击<code>Get counter code</code>，选择一个自己喜欢的风格。<br>如下图所示，选择一个样式，选择<code>HTML</code>，生成代码：<br><img src="/17.jpg"></p>
-<p>复制这段代码到<code>D:\study\program\blog\themes\beantech\layout\_partial\footer.ejs</code>，具体位置如下：<br><img src="/18.jpg"><br>默认的代码和我图中不一样，因为我不想点击图片跳转到它统计网站的链接，可以模仿我的自行修改。</p>
+<p>然后自己添加网站地址，过程就不详细说了，然后点击<code>Get counter code</code>，选择一个自己喜欢的风格。<br>如下图所示，选择一个样式，选择<code>HTML</code>，生成代码：<br><img src="17.jpg" alt=""></p>
+<p>复制这段代码到<code>D:\study\program\blog\themes\beantech\layout\_partial\footer.ejs</code>，具体位置如下：<br><img src="18.jpg" alt=""><br>默认的代码和我图中不一样，因为我不想点击图片跳转到它统计网站的链接，可以模仿我的自行修改。</p>
 <p>字数统计首先安装插件</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm i --save hexo-wordcount</span><br></pre></td></tr></table></figure>
 
@@ -804,7 +804,7 @@
 <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;post-count&quot;</span>&gt;</span>&lt;%= totalcount(site) %&gt; words altogether<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>具体位置见上图。</p>
-<h2 id="文章属性配置"><a href="#文章属性配置" class="headerlink" title="文章属性配置"></a>文章属性配置</h2><p>首先解释一下文章开头的属性配置，如下图所示：<br><img src="/19.jpg"></p>
+<h2 id="文章属性配置"><a href="#文章属性配置" class="headerlink" title="文章属性配置"></a>文章属性配置</h2><p>首先解释一下文章开头的属性配置，如下图所示：<br><img src="19.jpg" alt=""></p>
 <figure class="highlight json"><table><tr><td class="code"><pre><span class="line">title<span class="punctuation">:</span> 文章标题</span><br><span class="line">catalog<span class="punctuation">:</span> 是否显示段落目录</span><br><span class="line">date<span class="punctuation">:</span> 文章日期</span><br><span class="line">subtitle<span class="punctuation">:</span> 子标题</span><br><span class="line">header-img<span class="punctuation">:</span> 顶部背景图片</span><br><span class="line">top<span class="punctuation">:</span> 是否置顶</span><br><span class="line">tags<span class="punctuation">:</span> 标签</span><br><span class="line">categories<span class="punctuation">:</span> 分类</span><br></pre></td></tr></table></figure>
 
 <p>每次写文章修改每个值就行了。</p>
@@ -1053,7 +1053,7 @@
 
 今天主要讲了取整与递归式的结合，还有取模的相关知识。
 例题1
-给出下列递归式：\[\begin{array}{l}{K_0}{\rm{ &#x3D; }}1\{K_{n + 1}} &
+给出下列递归式：\[\begin{array}{l}{K_0}{\rm{ = }}1\{K_{n + 1}} = 1 + 
                         
                     </div>
                     <div class="publish-info">
@@ -1322,7 +1322,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

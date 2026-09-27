@@ -496,7 +496,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    571
+                    570
                 </div>
                 
 
@@ -522,7 +522,7 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个非负整数 n ，计算各位数字都不同的数字 x 的个数，其中 $0 \le x &lt; 10^n$ 。</p>
 <p><strong>示例1</strong></p>
 <figure class="highlight text"><table><tr><td class="code"><pre><span class="line">输入：</span><br><span class="line">2</span><br><span class="line">输出：</span><br><span class="line">91</span><br><span class="line">解释：</span><br><span class="line">答案应为除去 11,22,33,44,55,66,77,88,99 外，在 [0,100) 区间内的所有数字。</span><br></pre></td></tr></table></figure>
@@ -530,7 +530,7 @@
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>这题要求所有数位数字都不相同的数字个数，那么我们可以将答案分成不同长度。</p>
 <h3 id="方法1"><a href="#方法1" class="headerlink" title="方法1"></a>方法1</h3><p>对于长度为 n 的数字，第一位取值有 1<del>9 一共 9 种情况，而后面 n - 1 位可以从 0</del>9 中随机取出 n - 1 个不同数字，然后随机排列。因为要和第一位不同，所以后面的数字选择只有 9 种情况，所以方案数是排列数 $A_{9}^{n-1}$。</p>
 <p>然后一直累和到长度为 1 的数字，最后还有个特例，就是 0 ，它是首位可以为 0 的唯一情况。</p>
-<p>所以最终答案就是 $\sum_{i&#x3D;0}^{n-1}{A_{9}^{i}} + 1$ 。具体实现的时候可以将阶乘预处理好，然后直接用就行了。</p>
+<p>所以最终答案就是 $\sum_{i=0}^{n-1}{A_{9}^{i}} + 1$ 。具体实现的时候可以将阶乘预处理好，然后直接用就行了。</p>
 <h3 id="方法2"><a href="#方法2" class="headerlink" title="方法2"></a>方法2</h3><p>因为 n 不会太大，所以我们可以本地将每个 n 对应的答案算出来，然后保存到数组里，提交的时候直接取答案就行了。这种方法非常投机取巧，适合直接做会超时，但是答案数量又不是太多的情况。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="方法1（c-）"><a href="#方法1（c-）" class="headerlink" title="方法1（c++）"></a>方法1（c++）</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">countNumbersWithUniqueDigits</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">       <span class="type">int</span> fact[<span class="number">10</span>] = &#123;<span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">6</span>, <span class="number">24</span>, <span class="number">120</span>, <span class="number">720</span>, <span class="number">5040</span>, <span class="number">40320</span>, <span class="number">362880</span>&#125;;</span><br><span class="line">       <span class="type">int</span> res = <span class="number">0</span>;</span><br><span class="line">       <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">10</span>-n; i &lt;= <span class="number">9</span>; ++i) &#123;</span><br><span class="line">           res += fact[<span class="number">9</span>] / fact[i];</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> res * <span class="number">9</span> + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
@@ -844,7 +844,7 @@
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-题目描述给定一个正整数数组 A，如果 A 的某个子数组中不同整数的个数恰好为 K，则称 A 的这个连续、不一定独立的子数组为好子数组。（例如，[1,2,3,1,2] 中有 3 个不同的
+题目描述给定一个正整数数组 A，如果 A 的某个子数组中不同整数的个数恰好为 K，则称 A 的这个连续、不一定独立的子数组为好子数组。（例如，[1,2,3,1,2] 中有 3 个不同的
                         
                     </div>
                     <div class="publish-info">
@@ -1061,7 +1061,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

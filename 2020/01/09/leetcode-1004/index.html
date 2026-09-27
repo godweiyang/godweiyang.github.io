@@ -497,7 +497,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    775
+                    765
                 </div>
                 
 
@@ -523,7 +523,7 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="https://godweiyang.com/medias/contact.jpg"></p>
+<p><img src="https://godweiyang.com/medias/contact.jpg" alt=""></p>
 <h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个由若干 0 和 1 组成的数组 A ，我们最多可以将 K 个值从 0 变成 1 。</p>
 <p>返回仅包含 1 的最长（连续）子数组的长度。</p>
 <p><strong>示例1</strong></p>
@@ -534,12 +534,12 @@
 
 <p><strong>提示</strong></p>
 <ul>
-<li>1 &lt;&#x3D; A.length &lt;&#x3D; 20000</li>
-<li>0 &lt;&#x3D; K &lt;&#x3D; A.length</li>
+<li>1 &lt;= A.length &lt;= 20000</li>
+<li>0 &lt;= K &lt;= A.length</li>
 <li>A[i] 为 0 或 1</li>
 </ul>
-<h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>这题可以采用滑动窗口方法来求解。<br>也就是用头尾指针 l 和 r ，初始化都是 l &#x3D; r &#x3D; 0 ，然后向右移动指针 r 。<br>用变量 cnt0 记录 [l, r] 区间内有几个 0 ，用 res 保存答案。</p>
-<p>如果 A[r] &#x3D; 0 ，那就 0 的数量 cnt0 加 1 。<br>并且 0 的数量和 K 判断，如果 cnt0 &lt;&#x3D; K ，那就说明 [l, r] 中间的 0 不多，可以用至多 K 次机会填充，那就继续向右移动 r 。<br>但是如果 cnt0 &gt; K ，那就说明 0 的数量太多了，得删掉点 0 了，这时候就得向右移动 l 。<br>这时候看情况，如果 A[l] &#x3D; 0 ，就要减小 cnt0 ，直到 cnt0 &lt;&#x3D; K 为止，不再移动 l 。<br>然后继续移动 r ，重复上面过程即可。过程中时刻更新最长的距离 res 。</p>
+<h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>这题可以采用滑动窗口方法来求解。<br>也就是用头尾指针 l 和 r ，初始化都是 l = r = 0 ，然后向右移动指针 r 。<br>用变量 cnt0 记录 [l, r] 区间内有几个 0 ，用 res 保存答案。</p>
+<p>如果 A[r] = 0 ，那就 0 的数量 cnt0 加 1 。<br>并且 0 的数量和 K 判断，如果 cnt0 &lt;= K ，那就说明 [l, r] 中间的 0 不多，可以用至多 K 次机会填充，那就继续向右移动 r 。<br>但是如果 cnt0 &gt; K ，那就说明 0 的数量太多了，得删掉点 0 了，这时候就得向右移动 l 。<br>这时候看情况，如果 A[l] = 0 ，就要减小 cnt0 ，直到 cnt0 &lt;= K 为止，不再移动 l 。<br>然后继续移动 r ，重复上面过程即可。过程中时刻更新最长的距离 res 。</p>
 <p>因为 l 和 r 分别最多移动 n 次，所以最终的时间复杂度是 $O(n)$ 的。</p>
 <p>那么为什么这样是正确的呢？不会漏掉正确答案所在的区间吗？<br>我们看看漏掉的是哪些区间。<br>对于一个固定的 r ，移动 l 直到 0 的数量小于等于 K （记为 l’ ）的过程中，漏掉的是 [&lt;l, r] 和 [&gt;l’, r] 这些区间。<br>前者 0 数量太多，不符合题意；后者长度更小，显然不是答案。<br>然后继续右移 r ，直到第一个 0 数量大于 K 的位置，漏掉了 [&lt;l, &gt;r] 和 [&gt;l, &gt;r] 区间。<br>前者 0 的数量一定大于 K ，为什么呢？因为右端点在 r 的时候， l 已经是最靠左使得 0 数量小于等于 K 的位置了，而现在 r 向右移动了， l 更不可能左移了；后者长度更小，不予考虑。<br>综上考虑，最优的区间一定被考虑充分了。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">longestOnes</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; A, <span class="type">int</span> K)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = A.<span class="built_in">size</span>();</span><br><span class="line">        <span class="type">int</span> l = <span class="number">0</span>, r = <span class="number">0</span>, cnt0 = <span class="number">0</span>, res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (r &lt; n) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!A[r]) &#123;</span><br><span class="line">                cnt0++;</span><br><span class="line">                <span class="keyword">while</span> (cnt0 &gt; K &amp;&amp; l &lt;= r) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (!A[l++]) cnt0--;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            res = <span class="built_in">max</span>(res, r - l + <span class="number">1</span>);</span><br><span class="line">            r++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
@@ -787,7 +787,7 @@
 
 
 题目描述给你一个正整数数组 nums ，你需要从中任选一些子集，然后将子集中每一个数乘以一个任意整数，并求出他们的和。
-假如该和结果为 1 ，那么原数组就是一个「好数组」，则返回 Tr
+假如该和结果为 1 ，那么原数组就是一个「好数组」，则返回 Tr
                         
                     </div>
                     <div class="publish-info">
@@ -1066,7 +1066,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

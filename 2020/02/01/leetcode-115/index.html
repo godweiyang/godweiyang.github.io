@@ -13,7 +13,7 @@
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-题目描述给定一个字符串 S 和一个字符串 T，计算在 S 的子序列中 T 出现的个数。
+题目描述给定一个字符串 S 和一个字符串 T，计算在 S 的子序列中 T 出现的个数。
 一个字符串的一个子序列是指，通过删除一些（也可以不删除）字符且不干扰剩余字符相对位置所组成的新字">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -521,9 +521,9 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
-<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个字符串 S 和一个字符串 T，计算在 S 的子序列中 T 出现的个数。</p>
-<p>一个字符串的一个子序列是指，通过删除一些（也可以不删除）字符且不干扰剩余字符相对位置所组成的新字符串。（例如，”ACE” 是 “ABCDE” 的一个子序列，而 “AEC” 不是）</p>
+<p><img src="/medias/contact.jpg" alt=""></p>
+<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个字符串 S 和一个字符串 T，计算在 S 的子序列中 T 出现的个数。</p>
+<p>一个字符串的一个子序列是指，通过删除一些（也可以不删除）字符且不干扰剩余字符相对位置所组成的新字符串。（例如，”ACE” 是 “ABCDE” 的一个子序列，而 “AEC” 不是）</p>
 <p><strong>示例1</strong></p>
 <figure class="highlight text"><table><tr><td class="code"><pre><span class="line">输入：</span><br><span class="line">S = &quot;rabbbit&quot;, T = &quot;rabbit&quot;</span><br><span class="line">输出：</span><br><span class="line">3</span><br><span class="line">解释：</span><br><span class="line">如下图所示, 有 3 种可以从 S 中得到 &quot;rabbit&quot; 的方案。</span><br><span class="line">(上箭头符号 ^ 表示选取的字母)</span><br><span class="line"></span><br><span class="line">rabbbit</span><br><span class="line">^^^^ ^^</span><br><span class="line">rabbbit</span><br><span class="line">^^ ^^^^</span><br><span class="line">rabbbit</span><br><span class="line">^^^ ^^^</span><br></pre></td></tr></table></figure>
 
@@ -537,14 +537,14 @@
 <p>为了防止重复计算，还要加上记忆化搜索，用数组记录一下每个状态的方案数。状态 (i, j) 就表示在 s[0] 到 s[i] 中寻找 t[0] 到 t[j] 的方案数。</p>
 <h3 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h3><p>当然一般上面那种 dfs 都可以转化成动态规划的写法。</p>
 <p>这里动态规划就是从长度比较短的字符串开始求解。初始状态是 dp[i][0] ，表示 s[0] 到 s[i] 之中有多少个 t[0] ，这很容易求出来。</p>
-<p>然后两层循环遍历两个的字符串的结尾，跟上面 dfs 方法一样，如果 s[i] 和 t[j] 不相等，那么 dp[i][j] &#x3D; dp[i-1][j] ；否则的话再加上一个 dp[i-1][j-1] 就行了。</p>
+<p>然后两层循环遍历两个的字符串的结尾，跟上面 dfs 方法一样，如果 s[i] 和 t[j] 不相等，那么 dp[i][j] = dp[i-1][j] ；否则的话再加上一个 dp[i-1][j-1] 就行了。</p>
 <h3 id="动态规划-空间优化"><a href="#动态规划-空间优化" class="headerlink" title="动态规划+空间优化"></a>动态规划+空间优化</h3><p>上面动态规划方法有个问题就是字符串如果太长的话，空间会吃不消。而仔细观察就会发现，当循环到 i ，然后遍历 j 的时候，其实只会用到 i-1 的状态。那么我们就可以去掉第一维，只保存 j 的所有状态就行了。</p>
 <p>但是有个注意的点是，第二层循环 j 的顺序要变一下，要从大往小遍历。因为 j 需要用到 (i-1, j-1) 时刻的状态值，如果你从小到大遍历，那么 (i, j-1) 的方案数就会把 (i-1, j-1) 的方案数覆盖掉，之后你获取到的就不是 i-1 时刻的方案数了。</p>
 <p>另一个小区别是 dp[i][0] 的计算被移到了第一层循环的最后，而不是初始化就计算好了。这是因为第一维 i 被去掉了，所以只能在用到的时候再更新计算。</p>
 <h3 id="动态规划-空间优化-时间优化"><a href="#动态规划-空间优化-时间优化" class="headerlink" title="动态规划+空间优化+时间优化"></a>动态规划+空间优化+时间优化</h3><p>其实上面一个方法速度已经不错了，但是时间上还是有优化的余地的。</p>
-<p>可以发现，只有当 s[i] &#x3D; t[j] 的时候，才需要更新 (i, j) 的方案数。所以我们只需要提前预处理出来每个字母 s[i] 在 字符串 t 中的哪些位置出现过就行了。然后遍历的时候只需要直接取出这些位置来更新就行了。</p>
+<p>可以发现，只有当 s[i] = t[j] 的时候，才需要更新 (i, j) 的方案数。所以我们只需要提前预处理出来每个字母 s[i] 在 字符串 t 中的哪些位置出现过就行了。然后遍历的时候只需要直接取出这些位置来更新就行了。</p>
 <p>而实际运行中也会发现， dfs 要比动态规划快很多！这是因为 dfs 只会遍历合法的那些状态，而动态规划会把所有状态都计算出来，不管对最后的答案有没有帮助。</p>
-<p>举个例子，s &#x3D; “abcbbbb” ， t &#x3D; “abc” ，因为 t 只在 s 的前三个字母中出现了，所以如果我们寻找 t 的子串 “ab” 在 s 中出现次数的时候，从第二个 b 开始都是没有任何意义的，因为后面都没有 c 给你匹配了。</p>
+<p>举个例子，s = “abcbbbb” ， t = “abc” ，因为 t 只在 s 的前三个字母中出现了，所以如果我们寻找 t 的子串 “ab” 在 s 中出现次数的时候，从第二个 b 开始都是没有任何意义的，因为后面都没有 c 给你匹配了。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="dfs-记忆化搜索（c-）"><a href="#dfs-记忆化搜索（c-）" class="headerlink" title="dfs+记忆化搜索（c++）"></a>dfs+记忆化搜索（c++）</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">numDistinct</span><span class="params">(string s, string t)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = s.<span class="built_in">size</span>(), m = t.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span> (n &lt; m) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        vector&lt;vector&lt;<span class="type">int</span>&gt; &gt; <span class="built_in">dp</span>(n, <span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;(m, <span class="number">-1</span>));</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">dfs</span>(n<span class="number">-1</span>, m<span class="number">-1</span>, s, t, dp);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">dfs</span><span class="params">(<span class="type">int</span> i, <span class="type">int</span> j, string&amp; s, string&amp; t, vector&lt;vector&lt;<span class="type">int</span>&gt; &gt;&amp; dp)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (j &lt; <span class="number">0</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (i &lt; <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (dp[i][j] &gt;= <span class="number">0</span>) <span class="keyword">return</span> dp[i][j];</span><br><span class="line">        <span class="type">int</span> res = <span class="built_in">dfs</span>(i<span class="number">-1</span>, j, s, t, dp);</span><br><span class="line">        <span class="keyword">if</span> (s[i] == t[j]) res += <span class="built_in">dfs</span>(i<span class="number">-1</span>, j<span class="number">-1</span>, s, t, dp);</span><br><span class="line">        <span class="keyword">return</span> dp[i][j]=res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <h3 id="动态规划（c-）"><a href="#动态规划（c-）" class="headerlink" title="动态规划（c++）"></a>动态规划（c++）</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">numDistinct</span><span class="params">(string s, string t)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = s.<span class="built_in">size</span>(), m = t.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span> (n &lt; m) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        vector&lt;vector&lt;<span class="type">long</span>&gt; &gt; <span class="built_in">dp</span>(n, <span class="built_in">vector</span>&lt;<span class="type">long</span>&gt;(m, <span class="number">0</span>));</span><br><span class="line">        dp[<span class="number">0</span>][<span class="number">0</span>] = (s[<span class="number">0</span>] == t[<span class="number">0</span>]);</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            dp[i][<span class="number">0</span>] = dp[i<span class="number">-1</span>][<span class="number">0</span>] + (s[i] == t[<span class="number">0</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt; m; ++j) &#123;</span><br><span class="line">                dp[i][j] = dp[i<span class="number">-1</span>][j];</span><br><span class="line">                <span class="keyword">if</span> (s[i] == t[j]) &#123;</span><br><span class="line">                    dp[i][j] += dp[i<span class="number">-1</span>][j<span class="number">-1</span>];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[n<span class="number">-1</span>][m<span class="number">-1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
@@ -807,7 +807,7 @@
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-题目描述给定一个包含非负数的数组和一个目标整数 k，编写一个函数来判断该数组是否含有连续的子数组，其大小至少为 2，总和为 k 的倍数，即总和为 n*k，其中 n 也是一个整数。
+题目描述给定一个包含非负数的数组和一个目标整数 k，编写一个函数来判断该数组是否含有连续的子数组，其大小至少为 2，总和为 k 的倍数，即总和为 n*k，其中 n 也是一个整数。
 示例
                         
                     </div>
@@ -865,7 +865,7 @@
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-题目描述给定一个数组 nums，有一个大小为 k 的滑动窗口从数组的最左侧移动到数组的最右侧。你只可以看到在滑动窗口内的 k 个数字。滑动窗口每次只向右移动一位。
+题目描述给定一个数组 nums，有一个大小为 k 的滑动窗口从数组的最左侧移动到数组的最右侧。你只可以看到在滑动窗口内的 k 个数字。滑动窗口每次只向右移动一位。
 返回滑动窗口中的最大
                         
                     </div>
@@ -1083,7 +1083,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

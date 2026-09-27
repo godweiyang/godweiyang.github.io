@@ -536,7 +536,7 @@
 <h3 id="精简实现方式（c-）"><a href="#精简实现方式（c-）" class="headerlink" title="精简实现方式（c++）"></a>精简实现方式（c++）</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">typedef</span> pair&lt;<span class="type">int</span>, <span class="type">int</span>&gt; pii;</span><br><span class="line"></span><br><span class="line">    <span class="function">pii <span class="title">dfs</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!root) <span class="keyword">return</span> &#123;<span class="number">0</span>, <span class="number">0</span>&#125;;</span><br><span class="line">        pii l = <span class="built_in">dfs</span>(root-&gt;left);</span><br><span class="line">        pii r = <span class="built_in">dfs</span>(root-&gt;right);</span><br><span class="line">        <span class="type">int</span> r0 = <span class="built_in">max</span>(l.first, l.second) + <span class="built_in">max</span>(r.first, r.second);</span><br><span class="line">        <span class="type">int</span> r1 = l.first + r.first + root-&gt;val;</span><br><span class="line">        <span class="keyword">return</span> &#123;r0, r1&#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">rob</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        pii res = <span class="built_in">dfs</span>(root);</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">max</span>(res.first, res.second);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <blockquote>
-<p>关注公众号【算法码上来】，每日算法干货马上就来！<br><img src="/medias/contact.jpg"></p>
+<p>关注公众号【算法码上来】，每日算法干货马上就来！<br><img src="/medias/contact.jpg" alt=""></p>
 </blockquote>
 
             </div>
@@ -1053,7 +1053,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

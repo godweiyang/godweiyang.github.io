@@ -14,7 +14,7 @@
 
 
 题目链接LeetCode 959. 由斜杠划分区域
-题目描述在由 1 x 1 方格组成的 N x N 网格 grid 中，每个 1 x 1 方块由 &amp;#x2F;、\ 或空格构成。这些字">
+题目描述在由 1 x 1 方格组成的 N x N 网格 grid 中，每个 1 x 1 方块由 /、\ 或空格构成。这些字符会将方块">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -521,40 +521,40 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <h2 id="题目链接"><a href="#题目链接" class="headerlink" title="题目链接"></a>题目链接</h2><p><a href="https://leetcode-cn.com/problems/regions-cut-by-slashes/" title="LeetCode 959. 由斜杠划分区域">LeetCode 959. 由斜杠划分区域</a></p>
-<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>在由 1 x 1 方格组成的 N x N 网格 grid 中，每个 1 x 1 方块由 &#x2F;、\ 或空格构成。这些字符会将方块划分为一些共边的区域。</p>
-<p>（请注意，反斜杠字符是转义的，因此 \ 用 “\“ 表示。）。</p>
+<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>在由 1 x 1 方格组成的 N x N 网格 grid 中，每个 1 x 1 方块由 /、\ 或空格构成。这些字符会将方块划分为一些共边的区域。</p>
+<p>（请注意，反斜杠字符是转义的，因此 \ 用 “\“ 表示。）。</p>
 <p>返回区域的数目。</p>
 <p><strong>示例1</strong></p>
 <figure class="highlight text"><table><tr><td class="code"><pre><span class="line">输入：</span><br><span class="line">[</span><br><span class="line">  &quot; /&quot;,</span><br><span class="line">  &quot;/ &quot;</span><br><span class="line">]</span><br><span class="line">输出：</span><br><span class="line">2</span><br><span class="line">解释：</span><br><span class="line">2x2 网格如下：</span><br></pre></td></tr></table></figure>
 
-<p><img src="/1.png"></p>
+<p><img src="1.png" alt=""></p>
 <p><strong>示例2</strong></p>
 <figure class="highlight text"><table><tr><td class="code"><pre><span class="line">输入：</span><br><span class="line">[</span><br><span class="line">  &quot; /&quot;,</span><br><span class="line">  &quot;  &quot;</span><br><span class="line">]</span><br><span class="line">输出：</span><br><span class="line">1</span><br><span class="line">解释：</span><br><span class="line">2x2 网格如下：</span><br></pre></td></tr></table></figure>
 
-<p><img src="/2.png"></p>
+<p><img src="2.png" alt=""></p>
 <p><strong>示例3</strong></p>
 <figure class="highlight text"><table><tr><td class="code"><pre><span class="line">输入：</span><br><span class="line">[</span><br><span class="line">  &quot;\\/&quot;,</span><br><span class="line">  &quot;/\\&quot;</span><br><span class="line">]</span><br><span class="line">输出：</span><br><span class="line">4</span><br><span class="line">解释：</span><br><span class="line">（回想一下，因为 \ 字符是转义的，所以 &quot;\\/&quot; 表示 \/，而 &quot;/\\&quot; 表示 /\。）</span><br><span class="line">2x2 网格如下：</span><br></pre></td></tr></table></figure>
 
-<p><img src="/3.png"></p>
+<p><img src="3.png" alt=""></p>
 <p><strong>示例4</strong></p>
 <figure class="highlight text"><table><tr><td class="code"><pre><span class="line">输入：</span><br><span class="line">[</span><br><span class="line">  &quot;/\\&quot;,</span><br><span class="line">  &quot;\\/&quot;</span><br><span class="line">]</span><br><span class="line">输出：</span><br><span class="line">5</span><br><span class="line">解释：</span><br><span class="line">（回想一下，因为 \ 字符是转义的，所以 &quot;/\\&quot; 表示 /\，而 &quot;\\/&quot; 表示 \/。）</span><br><span class="line">2x2 网格如下：</span><br></pre></td></tr></table></figure>
 
-<p><img src="/4.png"></p>
+<p><img src="4.png" alt=""></p>
 <p><strong>示例5</strong></p>
 <figure class="highlight text"><table><tr><td class="code"><pre><span class="line">输入：</span><br><span class="line">[</span><br><span class="line">  &quot;//&quot;,</span><br><span class="line">  &quot;/ &quot;</span><br><span class="line">]</span><br><span class="line">输出：</span><br><span class="line">3</span><br><span class="line">解释：</span><br><span class="line">2x2 网格如下：</span><br></pre></td></tr></table></figure>
 
-<p><img src="/5.png"></p>
+<p><img src="5.png" alt=""></p>
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>这题如果不用写代码，直接让你数的话，那就非常简单了。但是要想实现代码，还是有点麻烦的。</p>
 <p>最主要的麻烦点在于，如果表示出斜杠的划分？这里我提供了三种不同的方法。</p>
-<h3 id="方法-1"><a href="#方法-1" class="headerlink" title="方法 1"></a>方法 1</h3><p><img src="/6.jpg"><br>如上图所示，首先将每个格子划分成 3 x 3 的更小的网格，然后对角线上填充 1 来表示斜杠，其余地方全部填充 0 。</p>
+<h3 id="方法-1"><a href="#方法-1" class="headerlink" title="方法 1"></a>方法 1</h3><p><img src="6.jpg" alt=""><br>如上图所示，首先将每个格子划分成 3 x 3 的更小的网格，然后对角线上填充 1 来表示斜杠，其余地方全部填充 0 。</p>
 <p>那么问题就转化为了求一个 3N x 3N 的网格上的 0 的连通块一共有几块，这就用普通的 dfs 搜一遍就知道了。</p>
-<p>那么这里有个问题，为什么不能每个格子划分成 2 x 2 呢？如下图所示，这样会导致两个格子中的 0 无法只用上下左右四个方向来联通：<br><img src="/9.jpg"></p>
-<h3 id="方法-2"><a href="#方法-2" class="headerlink" title="方法 2"></a>方法 2</h3><p><img src="/7.jpg"><br>如上图所示，这种方法采用了并查集的思想。</p>
+<p>那么这里有个问题，为什么不能每个格子划分成 2 x 2 呢？如下图所示，这样会导致两个格子中的 0 无法只用上下左右四个方向来联通：<br><img src="9.jpg" alt=""></p>
+<h3 id="方法-2"><a href="#方法-2" class="headerlink" title="方法 2"></a>方法 2</h3><p><img src="7.jpg" alt=""><br>如上图所示，这种方法采用了并查集的思想。</p>
 <p>首先将一个格子用 X 划分成四块，上图左半部分是各自之间的连通性，两个格子的相邻部分是一定连通的。</p>
 <p>而右半部分是格子内部的连通性。如果有斜杠，那就将斜杠两边的两小块都连起来。如果没有斜杠，那就将四小块都连起来，而这只需要三条线就够了。</p>
-<h3 id="方法-3"><a href="#方法-3" class="headerlink" title="方法 3"></a>方法 3</h3><p><img src="/8.jpg"><br>如上图所示，这个方法还是采用了并查集的思想。这次我们不以格子为计算单元了，我们来看格点。</p>
+<h3 id="方法-3"><a href="#方法-3" class="headerlink" title="方法 3"></a>方法 3</h3><p><img src="8.jpg" alt=""><br>如上图所示，这个方法还是采用了并查集的思想。这次我们不以格子为计算单元了，我们来看格点。</p>
 <p>初始的时候，四周一圈的格点都是连通的（红色线），而内部的格点都是孤立的。这时候只有一个区域，也就是整个平面。</p>
 <p>然后一个格子一个格子添加斜杠。首先添加绿色斜杠，也就是连接 0 和 5 格点，这时候发现这两个点不在一个连通块里，那么就没有产生区域。</p>
 <p>然后添加蓝色斜杠，也就是连接 2 和 5 格点，这时候发现这两个点在同一个连通块里，那么就产生了一个新的区域（也就是灰色部分）。</p>
@@ -866,7 +866,7 @@
 
 
 题目链接LeetCode 135. 分发糖果
-题目描述老师想给孩子们分发糖果，有 $N$ 个孩子站成了一条直线，老师会根据每个孩子的表现，预先给他们评分。
+题目描述老师想给孩子们分发糖果，有 $N$ 个孩子站成了一条直线，老师会根据每个孩子的表现，预先给他们评分。
 你需要按照以下要求，帮助老师
                         
                     </div>
@@ -1084,7 +1084,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

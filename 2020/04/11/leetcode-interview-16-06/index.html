@@ -494,7 +494,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    606
+                    604
                 </div>
                 
 
@@ -531,7 +531,7 @@
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>首先最暴力的方法就是 $O(n^2)$ 暴力枚举两个数组中的所有数对，然后计算绝对值最小的差值，这样显然是会超时的。</p>
 <p>所以我们先分别对两个数组从小到大进行排序，然后用双指针的方法来计算。</p>
 <ul>
-<li>初始的时候 $i &#x3D; 0, j &#x3D; 0$ 分别指着两个数组的第一个元素。</li>
+<li>初始的时候 $i = 0, j = 0$ 分别指着两个数组的第一个元素。</li>
 <li>然后计算 $a[i]-b[j]$ 的绝对值，如果比当前最小值还要小，就更新最小值。</li>
 <li>然后判断 $a[i]$ 和 $b[j]$ 的大小关系。如果 $a[i] &gt; b[j]$ ，那么如果增大 $i$ ，差值只会越来越大，所以只能增大 $j$ 。同理如果 $a[i] &lt; b[j]$ ，那就增大 $i$ 。</li>
 <li>最后如果其中一个数组遍历完了就结束遍历。</li>
@@ -543,7 +543,7 @@
 <h3 id="python"><a href="#python" class="headerlink" title="python"></a>python</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">smallestDifference</span>(<span class="params">self, a: <span class="type">List</span>[<span class="built_in">int</span>], b: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        a.sort()</span><br><span class="line">        b.sort()</span><br><span class="line">        n, m = <span class="built_in">len</span>(a), <span class="built_in">len</span>(b)</span><br><span class="line">        i, j, res = <span class="number">0</span>, <span class="number">0</span>, <span class="number">2147483647</span></span><br><span class="line">        <span class="keyword">while</span> i &lt; n <span class="keyword">and</span> j &lt; m:</span><br><span class="line">            res = <span class="built_in">min</span>(res, <span class="built_in">abs</span>(a[i]-b[j]))</span><br><span class="line">            <span class="keyword">if</span> a[i] &gt; b[j]: j += <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>: i += <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
 
 <blockquote>
-<p>关注公众号【算法码上来】，每日算法干货马上就来！<br><img src="/medias/contact.jpg"></p>
+<p>关注公众号【算法码上来】，每日算法干货马上就来！<br><img src="/medias/contact.jpg" alt=""></p>
 </blockquote>
 
             </div>
@@ -1060,7 +1060,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

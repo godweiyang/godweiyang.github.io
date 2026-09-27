@@ -491,7 +491,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    815
+                    817
                 </div>
                 
 
@@ -532,14 +532,14 @@
 <li>第三个参数 <code>vector a</code> 代表每堆石子堆的石子个数</li>
 </ul>
 <h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>一拿到这个题目，就看出来这是一道二分答案的题目。</p>
-<p>首先定义上下界 <code>l = 1, r = min{a[i]}</code> ，也就是说，每一堆个数最小值至少为 <code>1</code> ，最多就是初始的时候最小的那堆个数。</p>
+<p>首先定义上下界 <code>l = 1, r = min&#123;a[i]&#125;</code> ，也就是说，每一堆个数最小值至少为 <code>1</code> ，最多就是初始的时候最小的那堆个数。</p>
 <p>然后对于 <code>mid = (l + r) / 2</code> ，含义就是假设最终最小的那堆有 <code>mid</code> 个。我们求出初始时每一堆最多可以划分出多少个数全部大于等于 <code>mid</code> 的子堆，显然个数是 <code>a[i] / mid</code> 取整，记总堆数为 <code>cnt</code>。</p>
 <p>如果 <code>cnt &lt; m</code> ，那么说明 <code>mid</code> 太大了，你最多也不可能划分成 <code>m</code> 堆，所以更新 <code>r = mid - 1</code> 。如果 <code>cnt &gt; m</code> ，那么说明 <code>mid</code> 太小了，你能划分的堆数大于了 <code>m</code> ，那么更新 <code>l = mid + 1</code> 。最后如果 <code>cnt = m</code> ，你就暂存一下答案，因为这时的 <code>mid</code> 是有可能成为最终答案的。但是 <code>mid</code> 还是可能太小了，因为 <code>mid</code> 稍微大一点 <code>cnt</code> 是不会变的，所以继续更新 <code>l = mid + 1</code> 。</p>
 <p>最终返回暂存的答案 <code>res</code> 即可。注意这题的二分框架和之前做过的有所不同，在等号判断上得特别小心，我一开始没想清楚，错了好多次才通过的。</p>
 <h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 分石子</span></span><br><span class="line"><span class="comment">     * @param n int整型</span></span><br><span class="line"><span class="comment">     * @param m long长整型</span></span><br><span class="line"><span class="comment">     * @param a int整型vector</span></span><br><span class="line"><span class="comment">     * @return int整型</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">solve</span><span class="params">(<span class="type">int</span> n, <span class="type">long</span> <span class="type">long</span> m, vector&lt;<span class="type">int</span>&gt;&amp; a)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">typedef</span> <span class="type">long</span> <span class="type">long</span> ll;</span><br><span class="line">        ll l = <span class="number">1</span>, r = *<span class="built_in">min_element</span>(a.<span class="built_in">begin</span>(), a.<span class="built_in">end</span>()), res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (l &lt;= r) &#123;</span><br><span class="line">            ll mid = l + (r - l) / <span class="number">2</span>;</span><br><span class="line">            ll cnt = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">auto</span> x : a) &#123;</span><br><span class="line">                cnt += x / mid;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (cnt &lt; m) r = mid - <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                l = mid + <span class="number">1</span>;</span><br><span class="line">                res = mid;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <blockquote>
-<p>关注公众号【算法码上来】，每日算法干货马上就来！<br><img src="/medias/contact.jpg"></p>
+<p>关注公众号【算法码上来】，每日算法干货马上就来！<br><img src="/medias/contact.jpg" alt=""></p>
 </blockquote>
 
             </div>
@@ -1057,7 +1057,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

@@ -520,30 +520,30 @@
             <div id="articleContent">
                 <p>昨天推导了一下交叉熵的反向传播梯度，今天再来推导一下层归一化（LayerNorm），这是一种常见的归一化方法。</p>
 <h1 id="前向传播"><a href="#前向传播" class="headerlink" title="前向传播"></a>前向传播</h1><p>假设待归一化的$m$维向量为$x$，均值和标准差分别是$\mu{(x)}$和$\sigma{(x)}$，LayerNorm的参数是$w$和$b$，那么层归一化后的输出为：</p>
-<p>$$<br>y &#x3D; w \odot \frac{x - \mu}{\sqrt{\sigma^2 + \epsilon}} + b<br>$$</p>
+<p>$$<br>y = w \odot \frac{x - \mu}{\sqrt{\sigma^2 + \epsilon}} + b<br>$$</p>
 <p>这里的极小量$\epsilon$是为了防止标准差为0导致溢出。为了简单起见，我们不加上这一项，原公式也就变成了：</p>
-<p>$$<br>y &#x3D; w \odot \frac{x - \mu}{\sigma} + b<br>$$</p>
+<p>$$<br>y = w \odot \frac{x - \mu}{\sigma} + b<br>$$</p>
 <h1 id="反向传播"><a href="#反向传播" class="headerlink" title="反向传播"></a>反向传播</h1><p>假设损失函数$\mathcal{L}$对输出$y$的梯度是$\frac{\partial{\mathcal{L}}}{\partial{y}}$，那么这里需要求三个梯度：$\frac{\partial{\mathcal{L}}}{\partial{w}}$、$\frac{\partial{\mathcal{L}}}{\partial{b}}$和$\frac{\partial{\mathcal{L}}}{\partial{x}}$。</p>
-<p>令$\hat x &#x3D; \frac{x - \mu}{\sigma}$，那么原公式就变成了：</p>
-<p>$$<br>y &#x3D; w \odot \hat x + b<br>$$</p>
+<p>令$\hat x = \frac{x - \mu}{\sigma}$，那么原公式就变成了：</p>
+<p>$$<br>y = w \odot \hat x + b<br>$$</p>
 <p>两个参数的梯度非常简单：</p>
-<p>$$<br>\begin{aligned}<br>\frac{\partial{\mathcal{L}}}{\partial{w_i}} &amp;&#x3D; \frac{\partial{\mathcal{L}}}{\partial{y_i}} \cdot \frac{\partial{\mathcal{y_i}}}{\partial{w_i}} &#x3D; \frac{\partial{\mathcal{L}}}{\partial{y_i}} \cdot \hat x_i \<br>\frac{\partial{\mathcal{L}}}{\partial{b_i}} &amp;&#x3D; \frac{\partial{\mathcal{L}}}{\partial{y_i}} \cdot \frac{\partial{\mathcal{y_i}}}{\partial{b_i}} &#x3D; \frac{\partial{\mathcal{L}}}{\partial{y_i}}<br>\end{aligned}<br>$$</p>
+<p>$$<br>\begin{aligned}<br>\frac{\partial{\mathcal{L}}}{\partial{w_i}} &amp;= \frac{\partial{\mathcal{L}}}{\partial{y_i}} \cdot \frac{\partial{\mathcal{y_i}}}{\partial{w_i}} = \frac{\partial{\mathcal{L}}}{\partial{y_i}} \cdot \hat x_i \<br>\frac{\partial{\mathcal{L}}}{\partial{b_i}} &amp;= \frac{\partial{\mathcal{L}}}{\partial{y_i}} \cdot \frac{\partial{\mathcal{y_i}}}{\partial{b_i}} = \frac{\partial{\mathcal{L}}}{\partial{y_i}}<br>\end{aligned}<br>$$</p>
 <p>对输入$x$的梯度等于：</p>
-<p>$$<br>\frac{\partial{\mathcal{L}}}{\partial{x_i}} &#x3D; \frac{1}{\sigma} \cdot \left[\frac{\partial{\mathcal{L}}}{\partial{y_i}} \cdot w_i - \frac{1}{m}\cdot \left( \sum_j {\frac{\partial{\mathcal{L}}}{\partial{y_j}} \cdot w_j} + \hat x_i \cdot \sum_j {\frac{\partial{\mathcal{L}}}{\partial{y_j}} \cdot w_j \cdot \hat x_j}\right)\right]<br>$$</p>
+<p>$$<br>\frac{\partial{\mathcal{L}}}{\partial{x_i}} = \frac{1}{\sigma} \cdot \left[\frac{\partial{\mathcal{L}}}{\partial{y_i}} \cdot w_i - \frac{1}{m}\cdot \left( \sum_j {\frac{\partial{\mathcal{L}}}{\partial{y_j}} \cdot w_j} + \hat x_i \cdot \sum_j {\frac{\partial{\mathcal{L}}}{\partial{y_j}} \cdot w_j \cdot \hat x_j}\right)\right]<br>$$</p>
 <h2 id="推导过程"><a href="#推导过程" class="headerlink" title="推导过程"></a>推导过程</h2><p>对输入$x$的梯度可以写成：</p>
-<p>$$<br>\begin{aligned}<br>\frac{\partial{\mathcal{L}}}{\partial{x_i}} &amp;&#x3D; \sum_j {\frac{\partial{\mathcal{L}}}{\partial{y_j}} \cdot \frac{\partial{\mathcal{y_j}}}{\partial{\hat x_j}}} \cdot \frac{\partial{\mathcal{\hat x_j}}}{\partial{x_i}} \<br>&amp;&#x3D; \sum_j {\frac{\partial{\mathcal{L}}}{\partial{y_j}} \cdot w_j \cdot \frac{\partial{\mathcal{\hat x_j}}}{\partial{x_i}}}<br>\end{aligned}<br>$$</p>
+<p>$$<br>\begin{aligned}<br>\frac{\partial{\mathcal{L}}}{\partial{x_i}} &amp;= \sum_j {\frac{\partial{\mathcal{L}}}{\partial{y_j}} \cdot \frac{\partial{\mathcal{y_j}}}{\partial{\hat x_j}}} \cdot \frac{\partial{\mathcal{\hat x_j}}}{\partial{x_i}} \<br>&amp;= \sum_j {\frac{\partial{\mathcal{L}}}{\partial{y_j}} \cdot w_j \cdot \frac{\partial{\mathcal{\hat x_j}}}{\partial{x_i}}}<br>\end{aligned}<br>$$</p>
 <p>这里只需要计算最后一项就行了：</p>
-<p>$$<br>\begin{aligned}<br>\frac{\partial{\mathcal{\hat x_j}}}{\partial{x_i}} &amp;&#x3D; \frac{\partial}{\partial{x_i}}\left(\frac{x_j - \mu}{\sigma}\right) \<br>&amp;&#x3D; \frac{\partial{(x_j - \mu)}}{\partial x_i} \cdot \sigma^{-1} + (x_j - \mu) \cdot \frac{\partial\sigma}{\partial x_i} \cdot (-\sigma^{-2}) \<br>&amp;&#x3D; \left(\delta_{ij} - \frac{\partial{\mu}}{\partial x_i}\right) \cdot \sigma^{-1} - \sigma^{-2} \cdot (x_j - \mu) \cdot \frac{\partial\sigma}{\partial x_i}<br>\end{aligned}<br>$$</p>
-<p>其中$\delta_{ij}$只有当$i&#x3D;j$的时候才会等于1，否则都等于0。这里只需要求出均值和标准差对$x_i$的梯度就行了。直接给出结论，证明比较简单，放在了文末：</p>
-<p>$$<br>\begin{aligned}<br>\frac{\partial \mu}{\partial x_i} &amp;&#x3D; \frac{1}{m} \<br>\frac{\partial \sigma}{\partial x_i} &amp;&#x3D; \frac{1}{m} \cdot \sigma^{-1} \cdot (x_i - \mu)<br>\end{aligned}<br>$$</p>
+<p>$$<br>\begin{aligned}<br>\frac{\partial{\mathcal{\hat x_j}}}{\partial{x_i}} &amp;= \frac{\partial}{\partial{x_i}}\left(\frac{x_j - \mu}{\sigma}\right) \<br>&amp;= \frac{\partial{(x_j - \mu)}}{\partial x_i} \cdot \sigma^{-1} + (x_j - \mu) \cdot \frac{\partial\sigma}{\partial x_i} \cdot (-\sigma^{-2}) \<br>&amp;= \left(\delta_{ij} - \frac{\partial{\mu}}{\partial x_i}\right) \cdot \sigma^{-1} - \sigma^{-2} \cdot (x_j - \mu) \cdot \frac{\partial\sigma}{\partial x_i}<br>\end{aligned}<br>$$</p>
+<p>其中$\delta_{ij}$只有当$i=j$的时候才会等于1，否则都等于0。这里只需要求出均值和标准差对$x_i$的梯度就行了。直接给出结论，证明比较简单，放在了文末：</p>
+<p>$$<br>\begin{aligned}<br>\frac{\partial \mu}{\partial x_i} &amp;= \frac{1}{m} \<br>\frac{\partial \sigma}{\partial x_i} &amp;= \frac{1}{m} \cdot \sigma^{-1} \cdot (x_i - \mu)<br>\end{aligned}<br>$$</p>
 <p>代入可以得到：</p>
-<p>$$<br>\begin{aligned}<br>\frac{\partial{\mathcal{\hat x_j}}}{\partial{x_i}} &amp;&#x3D; \left(\delta_{ij} - \frac{\partial{\mu}}{\partial x_i}\right) \cdot \sigma^{-1} - \sigma^{-2} \cdot (x_j - \mu) \cdot \frac{\partial\sigma}{\partial x_i} \<br>&amp;&#x3D; \left(\delta_{ij} - \frac{1}{m}\right) \cdot \sigma^{-1} - \sigma^{-2} \cdot (x_j - \mu) \cdot \frac{1}{m} \cdot \sigma^{-1} \cdot (x_i - \mu) \<br>&amp;&#x3D; \sigma^{-1} \cdot \delta_{ij} - \frac{1}{m} \cdot \sigma^{-1} - \frac{1}{m} \cdot \sigma^{-3} \cdot (x_i - \mu) \cdot (x_j - \mu) \<br>&amp;&#x3D;  \sigma^{-1} \cdot \delta_{ij} - \frac{1}{m} \cdot \sigma^{-1} - \frac{1}{m} \cdot \sigma^{-1} \cdot {\hat x_i} \cdot {\hat x_j}<br>\end{aligned}<br>$$</p>
+<p>$$<br>\begin{aligned}<br>\frac{\partial{\mathcal{\hat x_j}}}{\partial{x_i}} &amp;= \left(\delta_{ij} - \frac{\partial{\mu}}{\partial x_i}\right) \cdot \sigma^{-1} - \sigma^{-2} \cdot (x_j - \mu) \cdot \frac{\partial\sigma}{\partial x_i} \<br>&amp;= \left(\delta_{ij} - \frac{1}{m}\right) \cdot \sigma^{-1} - \sigma^{-2} \cdot (x_j - \mu) \cdot \frac{1}{m} \cdot \sigma^{-1} \cdot (x_i - \mu) \<br>&amp;= \sigma^{-1} \cdot \delta_{ij} - \frac{1}{m} \cdot \sigma^{-1} - \frac{1}{m} \cdot \sigma^{-3} \cdot (x_i - \mu) \cdot (x_j - \mu) \<br>&amp;=  \sigma^{-1} \cdot \delta_{ij} - \frac{1}{m} \cdot \sigma^{-1} - \frac{1}{m} \cdot \sigma^{-1} \cdot {\hat x_i} \cdot {\hat x_j}<br>\end{aligned}<br>$$</p>
 <p>最后带入梯度$\frac{\partial{\mathcal{L}}}{\partial{x_i}}$中可以得到：</p>
-<p>$$<br>\begin{aligned}<br>\frac{\partial{\mathcal{L}}}{\partial{x_i}} &amp;&#x3D; \sum_j {\frac{\partial{\mathcal{L}}}{\partial{y_j}} \cdot w_j \cdot \frac{\partial{\mathcal{\hat x_j}}}{\partial{x_i}}} \<br>&amp;&#x3D; \sum_j {\frac{\partial{\mathcal{L}}}{\partial{y_j}} \cdot w_j \cdot \left(\sigma^{-1} \cdot \delta_{ij} - \frac{1}{m} \cdot \sigma^{-1} - \frac{1}{m} \cdot \sigma^{-1} \cdot {\hat x_i} \cdot {\hat x_j}\right)} \<br>&amp;&#x3D; \frac{1}{\sigma} \cdot \frac{\partial{\mathcal{L}}}{\partial{y_i}} \cdot w_i - \frac{1}{m \sigma} \cdot \sum_j {\frac{\partial{\mathcal{L}}}{\partial{y_j}} \cdot w_j} - \frac{\hat x_i}{m \sigma} \cdot \sum_j {\frac{\partial{\mathcal{L}}}{\partial{y_j}} \cdot w_j \cdot \hat x_j} \<br>&amp;&#x3D; \frac{1}{\sigma} \cdot \left[\frac{\partial{\mathcal{L}}}{\partial{y_i}} \cdot w_i - \frac{1}{m}\cdot \left( \sum_j {\frac{\partial{\mathcal{L}}}{\partial{y_j}} \cdot w_j} + \hat x_i \cdot \sum_j {\frac{\partial{\mathcal{L}}}{\partial{y_j}} \cdot w_j \cdot \hat x_j}\right)\right]<br>\end{aligned}<br>$$</p>
+<p>$$<br>\begin{aligned}<br>\frac{\partial{\mathcal{L}}}{\partial{x_i}} &amp;= \sum_j {\frac{\partial{\mathcal{L}}}{\partial{y_j}} \cdot w_j \cdot \frac{\partial{\mathcal{\hat x_j}}}{\partial{x_i}}} \<br>&amp;= \sum_j {\frac{\partial{\mathcal{L}}}{\partial{y_j}} \cdot w_j \cdot \left(\sigma^{-1} \cdot \delta_{ij} - \frac{1}{m} \cdot \sigma^{-1} - \frac{1}{m} \cdot \sigma^{-1} \cdot {\hat x_i} \cdot {\hat x_j}\right)} \<br>&amp;= \frac{1}{\sigma} \cdot \frac{\partial{\mathcal{L}}}{\partial{y_i}} \cdot w_i - \frac{1}{m \sigma} \cdot \sum_j {\frac{\partial{\mathcal{L}}}{\partial{y_j}} \cdot w_j} - \frac{\hat x_i}{m \sigma} \cdot \sum_j {\frac{\partial{\mathcal{L}}}{\partial{y_j}} \cdot w_j \cdot \hat x_j} \<br>&amp;= \frac{1}{\sigma} \cdot \left[\frac{\partial{\mathcal{L}}}{\partial{y_i}} \cdot w_i - \frac{1}{m}\cdot \left( \sum_j {\frac{\partial{\mathcal{L}}}{\partial{y_j}} \cdot w_j} + \hat x_i \cdot \sum_j {\frac{\partial{\mathcal{L}}}{\partial{y_j}} \cdot w_j \cdot \hat x_j}\right)\right]<br>\end{aligned}<br>$$</p>
 <h2 id="均值和标准差的梯度"><a href="#均值和标准差的梯度" class="headerlink" title="均值和标准差的梯度"></a>均值和标准差的梯度</h2><p>均值的梯度为：</p>
-<p>$$<br>\begin{aligned}<br>\frac{\partial \mu}{\partial x_i} &amp;&#x3D; \frac{\partial}{\partial x_i} \left(\frac{1}{m} \cdot \sum_j{x_j}\right) \<br>&amp;&#x3D; \frac{1}{m}<br>\end{aligned}<br>$$</p>
-<p>标准差的计算公式可以写成$\sigma &#x3D; \left[\mu(x^2) - \mu^2(x)\right]^{\frac{1}{2}}$，所以梯度为：</p>
-<p>$$<br>\begin{aligned}<br>\frac{\partial \sigma}{\partial x_i} &amp;&#x3D;  \frac{\partial}{\partial x_i} \left[\mu(x^2) - \mu^2(x)\right]^{\frac{1}{2}} \<br>&amp;&#x3D; \frac{1}{2} \cdot \left[\mu(x^2) - \mu^2(x)\right]^{-\frac{1}{2}} \cdot \left(\frac{2}{m} \cdot x_i - \frac{2}{m} \cdot \mu \right) \<br>&amp;&#x3D; \frac{1}{m} \cdot \sigma^{-1} \cdot (x_i - \mu)<br>\end{aligned}<br>$$</p>
+<p>$$<br>\begin{aligned}<br>\frac{\partial \mu}{\partial x_i} &amp;= \frac{\partial}{\partial x_i} \left(\frac{1}{m} \cdot \sum_j{x_j}\right) \<br>&amp;= \frac{1}{m}<br>\end{aligned}<br>$$</p>
+<p>标准差的计算公式可以写成$\sigma = \left[\mu(x^2) - \mu^2(x)\right]^{\frac{1}{2}}$，所以梯度为：</p>
+<p>$$<br>\begin{aligned}<br>\frac{\partial \sigma}{\partial x_i} &amp;=  \frac{\partial}{\partial x_i} \left[\mu(x^2) - \mu^2(x)\right]^{\frac{1}{2}} \<br>&amp;= \frac{1}{2} \cdot \left[\mu(x^2) - \mu^2(x)\right]^{-\frac{1}{2}} \cdot \left(\frac{2}{m} \cdot x_i - \frac{2}{m} \cdot \mu \right) \<br>&amp;= \frac{1}{m} \cdot \sigma^{-1} \cdot (x_i - \mu)<br>\end{aligned}<br>$$</p>
 
             </div>
             <hr />
@@ -1064,7 +1064,7 @@ SC会议是什么？可能很多同学都没听过SC是什么会议，SC会议�
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

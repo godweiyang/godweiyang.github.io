@@ -522,14 +522,14 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
-<p><img src="/1.png"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
+<p><img src="1.png" alt=""></p>
 <p>今天网上冲浪的时候突然看到一道小学六年级的数学题，如上图所示，求阴影部分的面积。</p>
 <p>我下意识就想到了微积分，这不就建立坐标系，求出交点，计算积分就行了嘛。转念一想，小学生哪里会积分，这道题一定有简单的解法。</p>
 <p>经过一番努力，我尝试出了一共两种精确解法和一种近似解法，但都超出了小学生的理解范畴。</p>
-<p>首先我们把图左右翻转一下，方便建立坐标系，如下图所示：<br><img src="/2.png"></p>
+<p>首先我们把图左右翻转一下，方便建立坐标系，如下图所示：<br><img src="2.png" alt=""></p>
 <h2 id="积分方法"><a href="#积分方法" class="headerlink" title="积分方法"></a>积分方法</h2><p>首先联立半圆和对角线的方程：</p>
-<p>$$<br>\begin{aligned}<br>x^2+(y-4)^2-16&amp;&#x3D;0 \<br>x+2y-4&amp;&#x3D;0<br>\end{aligned}<br>$$</p>
+<p>$$<br>\begin{aligned}<br>x^2+(y-4)^2-16&amp;=0 \<br>x+2y-4&amp;=0<br>\end{aligned}<br>$$</p>
 <p>解出交点E的坐标是$(\frac{12}{5}, \frac{4}{5})$</p>
 <p>所以可以直接求下面积分，得到要求的阴影面积：</p>
 <p>$$<br>\int_{0}^{\frac{12}{5}}{\left(\sqrt{16-x^2}+4\right)}dx + \int_{\frac{12}{5}}^{4}{\left(2-\frac{1}{2}x\right)}dx<br>$$</p>
@@ -551,19 +551,19 @@
 <h3 id="CUDA实现"><a href="#CUDA实现" class="headerlink" title="CUDA实现"></a>CUDA实现</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;chrono&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;curand_kernel.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="type">unsigned</span> <span class="type">long</span> <span class="type">long</span> <span class="type">int</span> ull;</span><br><span class="line"></span><br><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">monte_carlo_kernel</span><span class="params">(ull* res, ull cnt, <span class="type">const</span> <span class="type">int</span> seed)</span> </span>&#123;</span><br><span class="line">  ull i = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line">  <span class="keyword">if</span> (i &gt;= cnt) <span class="keyword">return</span>;</span><br><span class="line">  curandStatePhilox4_32_10_t state;</span><br><span class="line">  <span class="built_in">curand_init</span>(seed, i, <span class="number">0</span>, &amp;state);</span><br><span class="line">  double2 rand = <span class="built_in">curand_uniform2_double</span>(&amp;state);</span><br><span class="line">  <span class="type">double</span> x = rand.x;</span><br><span class="line">  <span class="type">double</span> y = rand.y;</span><br><span class="line">  <span class="keyword">if</span> (x * x + (y - <span class="number">1</span>) * (y - <span class="number">1</span>) &gt; <span class="number">1</span> &amp;&amp; x + <span class="number">2</span> * y - <span class="number">1</span> &lt; <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="built_in">atomicAdd</span>(res, <span class="number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">launch_monte_carlo</span><span class="params">(ull* res, ull cnt, cudaStream_t&amp; stream)</span> </span>&#123;</span><br><span class="line">  ull grid_dim = cnt &gt;&gt; <span class="number">10</span>;</span><br><span class="line">  monte_carlo_kernel&lt;&lt;&lt;grid_dim + <span class="number">1</span>, <span class="number">1024</span>, <span class="number">0</span>, stream&gt;&gt;&gt;(</span><br><span class="line">      res, cnt,</span><br><span class="line">      std::chrono::<span class="built_in">duration_cast</span>&lt;std::chrono::microseconds&gt;(</span><br><span class="line">          std::chrono::system_clock::<span class="built_in">now</span>().<span class="built_in">time_since_epoch</span>())</span><br><span class="line">          .<span class="built_in">count</span>());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  ull* res;</span><br><span class="line">  <span class="built_in">cudaMallocManaged</span>(&amp;res, <span class="built_in">sizeof</span>(ull));</span><br><span class="line">  res[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">  ull cnt = <span class="number">1e10</span>;</span><br><span class="line">  cudaStream_t stream;</span><br><span class="line">  <span class="built_in">cudaStreamCreate</span>(&amp;stream);</span><br><span class="line">  <span class="built_in">launch_monte_carlo</span>(res, cnt, stream);</span><br><span class="line">  <span class="built_in">cudaDeviceSynchronize</span>();</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;%.5f\n&quot;</span>, res[<span class="number">0</span>] * <span class="number">16.0</span> / cnt);</span><br><span class="line">  <span class="built_in">cudaFree</span>(res);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h2 id="标准方法"><a href="#标准方法" class="headerlink" title="标准方法"></a>标准方法</h2><p>其实标准的小学生解法不需要建坐标系，只需要如下图所示，做4条辅助线就行。</p>
-<p><img src="/3.png"></p>
+<p><img src="3.png" alt=""></p>
 <p>很容易证明，辅助线将三角形ACD划分出来的5个小三角形是全等的。</p>
 <p>那么阴影面积就等于正方形AOBD减去四分之一圆BOD，再减去最右侧的弧边三角形ADE。而弧边三角形ADE面积等于三角形ACD减去三角形BCE，再减去扇形BDE。</p>
 <p>所以问题的关键就是求角DBE的大小，因为小三角形的边长可以轻易求出，所以最终答案很好算：</p>
 <p>$$<br>\frac{32}{5}-4\pi+16 \arctan{\frac{1}{2}}<br>$$</p>
 <p>可以发现和之前高等数学得到的结果形式并不同，其实数值是一样的，所以我们得到了一个等式：</p>
-<p>$$<br>4\arctan{\frac{1}{2}}+2\arcsin{\frac{3}{5}}&#x3D;\pi<br>$$</p>
-<p>这个可能看起来不是那么直观，但确实是成立的，根据反三角函数恒等式$2\arctan x &#x3D; \arctan \frac{2x}{1-x^2}$，可以推出等号左边等于$2(\arctan \frac{4}{3} + \arcsin \frac{3}{5})$。构造一个边长3、4、5的直角三角形，显然答案就是$\pi$。</p>
+<p>$$<br>4\arctan{\frac{1}{2}}+2\arcsin{\frac{3}{5}}=\pi<br>$$</p>
+<p>这个可能看起来不是那么直观，但确实是成立的，根据反三角函数恒等式$2\arctan x = \arctan \frac{2x}{1-x^2}$，可以推出等号左边等于$2(\arctan \frac{4}{3} + \arcsin \frac{3}{5})$。构造一个边长3、4、5的直角三角形，显然答案就是$\pi$。</p>
 <h2 id="总结与拓展"><a href="#总结与拓展" class="headerlink" title="总结与拓展"></a>总结与拓展</h2><p>其实这道题小学生也没几个人能做出来，就算给我们做也得费老鼻子劲，还不一定算的对。</p>
 <p>最近还看到了很多类似的趣图，这里分享给大家，闲暇时间可以做了玩玩。</p>
 <p>可以在评论区说出你的答案哦。</p>
-<p><img src="/4.jpg"></p>
-<p><img src="/5.png"></p>
+<p><img src="4.jpg" alt=""></p>
+<p><img src="5.png" alt=""></p>
 
             </div>
             <hr />
@@ -1080,7 +1080,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

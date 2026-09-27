@@ -506,7 +506,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    6 分
+                    5 分
                 </div>
                 
                 
@@ -525,7 +525,7 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <h2 id="论文地址"><a href="#论文地址" class="headerlink" title="论文地址"></a>论文地址</h2><p><a href="http://arxiv.org/abs/1909.02134" title="PaLM: A Hybrid Parser and Language Model">PaLM: A Hybrid Parser and Language Model</a></p>
 <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>本文介绍了如何将一个句法分析器融入到神经网络语言模型中，这样在利用了句法信息增强语言模型效果的同时，还可以去掉句法上的监督信号，用来无监督地生成句法树。</p>
 <p>其实将句法信息加入到语言模型中地思想之前就有了，比如PRPN（<a href="http://arxiv.org/abs/1711.02013" title="Neural Language Modeling by Jointly Learning Syntax and Lexicon">Shen et al.</a>）和ON-LSTM（<a href="http://arxiv.org/abs/1810.09536" title="Ordered Neurons: Integrating Tree Structures into Recurrent Neural Networks">Shen et al.</a>）。而本文提出了一种新的融入句法信息的方法，相比于之前的两个模型，主要有如下优点：</p>
@@ -534,21 +534,21 @@
 <li>在LSTM中加入的attention信息可以用句法信息来监督，可解释性更强，可以和语言模型联合训练。</li>
 <li>如果没有句法信息监督也不要紧，模型可以无监督预测出句法树。</li>
 </ul>
-<h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><h3 id="span-attention"><a href="#span-attention" class="headerlink" title="span attention"></a>span attention</h3><p>模型中的attention是怎么做的呢？在 $t$ 时刻，模型关注以 $t - 1$ 结尾的所有 span 。但是为了减少运算量，这里只考虑最短的 $m$ 个 span ，也就是 ${[i, t - 1]}_{i &#x3D; t - m}^{t - 1}$ 。</p>
+<h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><h3 id="span-attention"><a href="#span-attention" class="headerlink" title="span attention"></a>span attention</h3><p>模型中的attention是怎么做的呢？在 $t$ 时刻，模型关注以 $t - 1$ 结尾的所有 span 。但是为了减少运算量，这里只考虑最短的 $m$ 个 span ，也就是 ${[i, t - 1]}_{i = t - m}^{t - 1}$ 。</p>
 <p>首先采用普通的 RNN 来获得 $t$ 时刻的隐层表示 $h_t$，然后采用双向 WFSA-RRNN （<a href="https://arxiv.org/abs/1808.09357" title="Rational Recurrences">Peng et al.</a>）进一步得到表示， WFSA-RRNN 的单元更新公式如下：</p>
-<p>$$<br>    \begin{aligned}<br>        f_t &amp;&#x3D; \sigma(W_f h_t) \<br>        u_t &amp;&#x3D; (1 - f_t) \odot \tanh(W_u h_t) \<br>        c_t &amp;&#x3D; f_t \odot c_{t-1} + u_t<br>    \end{aligned}<br>$$</p>
+<p>$$<br>    \begin{aligned}<br>        f_t &amp;= \sigma(W_f h_t) \<br>        u_t &amp;= (1 - f_t) \odot \tanh(W_u h_t) \<br>        c_t &amp;= f_t \odot c_{t-1} + u_t<br>    \end{aligned}<br>$$</p>
 <p>然后 span $[i, j]$ 的表示 $c_{i, j}$ 可以计算为：</p>
-<p>$$<br>    c_{i, j} &#x3D; c_j - c_{i-1}\odot_{k&#x3D;i}^{j}f_k<br>$$</p>
+<p>$$<br>    c_{i, j} = c_j - c_{i-1}\odot_{k=i}^{j}f_k<br>$$</p>
 <p>这个式子其实是从下面这个式子推算而来的：</p>
-<p>$$<br>    c_{i, j} &#x3D; u_j + \sum_{k&#x3D;i}^{j-1}{u_k \odot_{l&#x3D;k+1}^{j}f_l}<br>$$</p>
+<p>$$<br>    c_{i, j} = u_j + \sum_{k=i}^{j-1}{u_k \odot_{l=k+1}^{j}f_l}<br>$$</p>
 <p>具体计算过程就不在这里看了，详见论文附录，其实就是用的 WSFA-RRNN 的单元更新公式化简得到的。</p>
 <p><strong>注意上面向量都省略了前向箭头！</strong></p>
-<p>下面就是计算所有 span 表示的算法伪代码：<br><img src="/1.jpg"></p>
+<p>下面就是计算所有 span 表示的算法伪代码：<br><img src="1.jpg" alt=""></p>
 <p>可以看出复杂度还是挺高的，但是可以用 GPU 并行加速。</p>
 <p>然后就是计算attention了。<br>首先令 $g([i, j])$ 为向量 $c_{ij}$前后向拼接得到，表示 span [i, j] 的最终向量表示。<br>那么在 $t + 1$ 时刻，上下文向量 $a_{t + 1}$ 可以表示为：</p>
-<p>$$<br>    \begin{aligned}<br>        a_{t+1} &amp;&#x3D; \sum_{i&#x3D;0}^{m-1}{w_{t,i}g([t-i,t])} \<br>        w_{t,i} &amp;&#x3D; \frac{\exp{s_{t,i}}}{\sum_{j&#x3D;0}^{m-1}{\exp{s_{t,j}}}}<br>    \end{aligned}<br>$$</p>
+<p>$$<br>    \begin{aligned}<br>        a_{t+1} &amp;= \sum_{i=0}^{m-1}{w_{t,i}g([t-i,t])} \<br>        w_{t,i} &amp;= \frac{\exp{s_{t,i}}}{\sum_{j=0}^{m-1}{\exp{s_{t,j}}}}<br>    \end{aligned}<br>$$</p>
 <p>其中 $s_{t, i}$ 定义为：</p>
-<p>$$<br>    s_{t,i} &#x3D; \text{MLP}(h_{t+1};g([t-i, t]))<br>$$</p>
+<p>$$<br>    s_{t,i} = \text{MLP}(h_{t+1};g([t-i, t]))<br>$$</p>
 <p>最后拼接 $h_{t+1}$ 和 $a_{t+1}$ 作为最后的隐层输出。</p>
 <p>总结一下，计算步骤是这样的：</p>
 <ul>
@@ -557,18 +557,18 @@
 <li>最后对所有以 $t$ 结尾的 span 表示加权求和，得到下一时刻的隐层表示，并预测下一个单词。</li>
 </ul>
 <h3 id="生成句法树"><a href="#生成句法树" class="headerlink" title="生成句法树"></a>生成句法树</h3><p>这就和以往自顶向下解码句法树的算法一样了，对于 span $[i, j]$，寻找使得右儿子得分最高的 split $k$ 即可：</p>
-<p>$$<br>    k &#x3D; \text{argmax}<em>{k \in {0,\ldots,m-1}}s</em>{j,k}<br>$$</p>
+<p>$$<br>    k = \text{argmax}<em>{k \in {0,\ldots,m-1}}s</em>{j,k}<br>$$</p>
 <p>而如果是有监督的话，对于每个位置 $t$ ，都会预测一个 attention $w_t$，并且有一个 gold 的左边界 $y_t$。<br>注意<strong>这里的 $y_t$ 不一定是 one-hot 的</strong>，因为在一棵句法树中，一个右端点可能对应着很多不同的左端点。<br>最终的损失函数为：</p>
-<p>$$<br>    \mathcal{L} &#x3D; \mathcal{L}<em>{\text{LM}}+\frac{\lambda}{N}\sum</em>{t&#x3D;1}^{N}{\mathcal{H}(y_t, w_t)}<br>$$</p>
+<p>$$<br>    \mathcal{L} = \mathcal{L}<em>{\text{LM}}+\frac{\lambda}{N}\sum</em>{t=1}^{N}{\mathcal{H}(y_t, w_t)}<br>$$</p>
 <p>而这里的句法树监督其实可以用现成的 parser ，或者直接用左右二叉树之类的就行了，主要目的是为了提升语言模型性能。</p>
-<p>下图就是一个简单的例子：<br><img src="/2.jpg"></p>
+<p>下图就是一个简单的例子：<br><img src="2.jpg" alt=""></p>
 <h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><p>这是一篇短文，所以实验就很简单了。</p>
-<p>首先是PTB上的语言模型困惑度：<br><img src="/3.jpg"></p>
-<p>然后是WikiText2上的语言模型困惑度：<br><img src="/4.jpg"></p>
+<p>首先是PTB上的语言模型困惑度：<br><img src="3.jpg" alt=""></p>
+<p>然后是WikiText2上的语言模型困惑度：<br><img src="4.jpg" alt=""></p>
 <p>两个实验都可以看出加了句法树监督的语言模型效果更好，而无监督隐式的语言模型效果也还可以。注意这里的AWD-LSTM指的是之前提出的一种LSTM变体（<a href="https://arxiv.org/abs/1708.02182" title="Regularizing and Optimizing LSTM Language Models">Merity et al.</a>）。看得出来这些模型参数量其实没多大差别，而如果句法信息乱加监督（比如用右二叉树），效果反而会变差。</p>
-<p>接着是无监督句法分析的效果：<br><img src="/5.jpg"></p>
+<p>接着是无监督句法分析的效果：<br><img src="5.jpg" alt=""></p>
 <p>可以发现效果还是很差的，只比随机的二叉树好了那么一丢丢。比之前的 PRPN 差许多，和 DIROA 相比就更不用谈了（<a href="http://arxiv.org/abs/1904.02142" title="Unsupervised Latent Tree Induction with Deep Inside-Outside Recursive Autoencoders">Drozdov et al.</a>）。这也说明了对语言模型有用的句法信息可能并不符合 PTB 句法树结构。</p>
-<p>最后还分析了左结合多还是右结合多：<br><img src="/6.jpg"></p>
+<p>最后还分析了左结合多还是右结合多：<br><img src="6.jpg" alt=""></p>
 <p>可以看出，基本全部都是右结合，也就是attention基本都聚焦在了 span 的最左边的单词。具体原因作者也不知道，留着未来探索。</p>
 <h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><blockquote>
 <p>其实这篇短文和我 ACL 的工作挺像的，着实让我惊了一身冷汗（<strong>希望 ACL 能中，加油！</strong>）。</p>
@@ -878,7 +878,7 @@
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-题目描述给你一个正整数的数组 A（其中的元素不一定完全不同），请你返回可在 一次交换（交换两数字 A[i] 和 A[j] 的位置）后得到的、按字典序排列小于 A 的最大可能排列。
+题目描述给你一个正整数的数组 A（其中的元素不一定完全不同），请你返回可在 一次交换（交换两数字 A[i] 和 A[j] 的位置）后得到的、按字典序排列小于 A 的最大可能排列。
 如果
                         
                     </div>
@@ -1096,7 +1096,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

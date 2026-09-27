@@ -523,17 +523,17 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <h1 id="随机数种子"><a href="#随机数种子" class="headerlink" title="随机数种子"></a>随机数种子</h1><hr>
 <p>这是玄学，姑且就设为我的QQ号，看起来效果不错。</p>
 <h1 id="神经网络维数"><a href="#神经网络维数" class="headerlink" title="神经网络维数"></a>神经网络维数</h1><hr>
 <p>不断测试发现，64维效果最好，但最后可能改成512维的。<br>而且64维的话CPU跑的比GPU还要快6倍，但是512维的话GPU就比CPU快6倍左右了。<br>所以维度低还是用CPU比较好。</p>
 <h1 id="结点分数"><a href="#结点分数" class="headerlink" title="结点分数"></a>结点分数</h1><hr>
-<p>\[\begin{array}{l}Score(A \to BC) &#x3D; \lambda d \cdot (W \cdot e + b) + Spcfg(A)\Spcfg(A) &#x3D; \log (Spcfg(B) \cdot Spcfg(C) \cdot p(A \to BC))\end{array}\]<br>其中$d,W,b$是权值矩阵，$\lambda$是超参数，测试发现设为100左右效果最好。</p>
+<p>\[\begin{array}{l}Score(A \to BC) = \lambda d \cdot (W \cdot e + b) + Spcfg(A)\Spcfg(A) = \log (Spcfg(B) \cdot Spcfg(C) \cdot p(A \to BC))\end{array}\]<br>其中$d,W,b$是权值矩阵，$\lambda$是超参数，测试发现设为100左右效果最好。</p>
 <h1 id="结点表示"><a href="#结点表示" class="headerlink" title="结点表示"></a>结点表示</h1><hr>
-<p>\[e &#x3D; LST{M^{left}}({e_{right}})\]<br>至于用左儿子还是右儿子作为LSTM，还是加一层动态规划记录两者最优值，小数据上暂时没有太大差别。</p>
+<p>\[e = LST{M^{left}}({e_{right}})\]<br>至于用左儿子还是右儿子作为LSTM，还是加一层动态规划记录两者最优值，小数据上暂时没有太大差别。</p>
 <h1 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h1><hr>
-<p>\[L(\theta ) &#x3D; Scor{e_{predict}}(ROOT) - Scor{e_{gold}}(ROOT) + k \cdot \Delta (predict,gold) + \frac{1}{2}{\left| \theta \right|^2}\]<br>其中正则项加了可以使loss下降更稳定，但是效果貌似不如不加，可能是因为数据集太小吧。<br>$k$一般取0.1。</p>
+<p>\[L(\theta ) = Scor{e_{predict}}(ROOT) - Scor{e_{gold}}(ROOT) + k \cdot \Delta (predict,gold) + \frac{1}{2}{\left| \theta \right|^2}\]<br>其中正则项加了可以使loss下降更稳定，但是效果貌似不如不加，可能是因为数据集太小吧。<br>$k$一般取0.1。</p>
 <h1 id="batch"><a href="#batch" class="headerlink" title="batch"></a>batch</h1><hr>
 <p>batch取50左右效果最好，不过我用的是dynet自带的自动batch，手动batch还不是很会写，所以效率提升不是很大。</p>
 <h1 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h1><hr>
@@ -794,7 +794,7 @@
 
 
 今天讲了多重求和，也就是一个和式由多个下标来指定。
-首先是最简单的形式：\[\sum\limits_{1 \le j,k \le n} { {a_j}{b_k}} &#x3D; (\s
+首先是最简单的形式：\[\sum\limits_{1 \le j,k \le n} { {a_j}{b_k}} = (\sum\li
                         
                     </div>
                     <div class="publish-info">
@@ -848,7 +848,7 @@
 
 
 今天讲了一种将递归式转化为求和的方法。
-考虑如下递归式：\[{a_n}{T_n} &#x3D; {b_n}{T_{n - 1}} + {c_n}\]两边同时乘以$s_n$得到：\[{s
+考虑如下递归式：\[{a_n}{T_n} = {b_n}{T_{n - 1}} + {c_n}\]两边同时乘以$s_n$得到：\[{s_n}{a
                         
                     </div>
                     <div class="publish-info">
@@ -1061,7 +1061,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

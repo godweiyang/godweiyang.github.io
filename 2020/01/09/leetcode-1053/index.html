@@ -13,7 +13,7 @@
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-题目描述给你一个正整数的数组 A（其中的元素不一定完全不同），请你返回可在 一次交换（交换两数字 A[i] 和 A[j] 的位置）后得到的、按字典序排列小于 A 的最大可能排列。
+题目描述给你一个正整数的数组 A（其中的元素不一定完全不同），请你返回可在 一次交换（交换两数字 A[i] 和 A[j] 的位置）后得到的、按字典序排列小于 A 的最大可能排列。
 如果">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -495,7 +495,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    634
+                    630
                 </div>
                 
 
@@ -521,8 +521,8 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="https://godweiyang.com/medias/contact.jpg"></p>
-<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个正整数的数组 A（其中的元素不一定完全不同），请你返回可在 一次交换（交换两数字 A[i] 和 A[j] 的位置）后得到的、按字典序排列小于 A 的最大可能排列。</p>
+<p><img src="https://godweiyang.com/medias/contact.jpg" alt=""></p>
+<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个正整数的数组 A（其中的元素不一定完全不同），请你返回可在 一次交换（交换两数字 A[i] 和 A[j] 的位置）后得到的、按字典序排列小于 A 的最大可能排列。</p>
 <p>如果无法这么操作，就请返回原数组。</p>
 <p><strong>示例1</strong></p>
 <figure class="highlight text"><table><tr><td class="code"><pre><span class="line">输入：</span><br><span class="line">[3,2,1]</span><br><span class="line">输出：</span><br><span class="line">[3,1,2]</span><br><span class="line">解释：</span><br><span class="line">交换 2 和 1</span><br></pre></td></tr></table></figure>
@@ -538,8 +538,8 @@
 
 <p><strong>提示</strong></p>
 <ul>
-<li>1 &lt;&#x3D; A.length &lt;&#x3D; 10000</li>
-<li>1 &lt;&#x3D; A[i] &lt;&#x3D; 10000</li>
+<li>1 &lt;= A.length &lt;= 10000</li>
+<li>1 &lt;= A[i] &lt;= 10000</li>
 </ul>
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>这题主要出发点有以下几点：</p>
 <ul>
@@ -552,7 +552,7 @@
 <p>因为 A[i+1] 到 A[n-1] 子数组是单调递增的，所以不用全部遍历一遍，只需要从最右边开始往左找到第一个比 A[i] 小的数就行了。<br>然后从这个数开始，继续往左找和它相等的数，直到最左边一个相等的数 ，就是答案了。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">prevPermOpt1</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; A)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = A.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = n<span class="number">-2</span>; i &gt;= <span class="number">0</span>; --i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (A[i] &gt; A[i<span class="number">+1</span>]) &#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="type">int</span> j = n<span class="number">-1</span>; j &gt; i; --j) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (A[j] &lt; A[i]) &#123;</span><br><span class="line">                        <span class="keyword">for</span> (<span class="type">int</span> k = j; k &gt;= i; --k) &#123;</span><br><span class="line">                            <span class="keyword">if</span> (A[k] != A[j]) &#123;</span><br><span class="line">                                <span class="built_in">swap</span>(A[i], A[k<span class="number">+1</span>]);</span><br><span class="line">                                <span class="keyword">break</span>;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> A;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
-<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>最后不管是用时还是空间消耗都超越了100%的用户：<br><img src="/1.png" alt="运行结果"></p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>最后不管是用时还是空间消耗都超越了100%的用户：<br><img src="1.png" alt="运行结果"></p>
 
             </div>
             <hr />
@@ -1075,7 +1075,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

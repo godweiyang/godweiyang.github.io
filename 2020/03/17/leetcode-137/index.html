@@ -522,7 +522,7 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <h2 id="题目链接"><a href="#题目链接" class="headerlink" title="题目链接"></a>题目链接</h2><p><a href="https://leetcode-cn.com/problems/single-number-ii/" title="LeetCode 137. 只出现一次的数字 II">LeetCode 137. 只出现一次的数字 II</a></p>
 <h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素均出现了三次。找出那个只出现了一次的元素。</p>
 <p><strong>说明：</strong><br>你的算法应该具有线性时间复杂度。 你可以不使用额外空间来实现吗？</p>
@@ -537,9 +537,9 @@
 <p>那么就很简单了，统计一下有多少个数这一位上是 1 ，然后模 3 取余数，结果就是这个单独的数这一位上的值了。</p>
 <p>遍历 32 位整数的每一位，就可以得到这个单独的数是多少了。</p>
 <p><strong>推广到一般情况：</strong><br>如果其他数都出现了 $k$ 次，一个数出现了一次。那么如果 $k$ 是偶数，还是把所有的数异或起来就行了。如果 $k$ 是奇数，那么统计每一位是 1 的个数，然后模 $k$ 取余数就能得到那个单独的数了。</p>
-<h3 id="位运算"><a href="#位运算" class="headerlink" title="位运算"></a>位运算</h3><p>我们还可以用自动机来做这题，根据某一位 1 的个数，我们可以得到如下的状态自动机：<br><img src="/1.png"><br>初始的时候在状态 0 （有 0 个 1），然后如果下一个数这一位是 1，就进入状态 1（有 1 个 1），接着如果下一个数这一位是 1，就进入状态 2（有 2 个 1），接着如果下一个数这一位是 1，就进入状态 3（有 3 个 1），最后如果再来了一个数这一位还是 1，就说明是一个新的数了，等价于回到了状态 1。而每个状态如果来的数这一位是 0 ，都会保持状态不变。</p>
-<p>当然这个自动机还可以简化，注意观察可以发现状态 3 和状态 0 是等价的（输入 0 都保持不变，输入 1 都会进入状态 1）。所以我们将状态 1 和状态 3 合并为一个状态 0 ，得到如下的状态自动机：<br><img src="/2.jpg"></p>
-<p>因为一共有三个状态，所以我们需要用两个变量来表示状态。用 <code>once</code> 表示是否在状态 1，用 <code>twice</code> 来表示是否在状态 2 。那么两个变量都为 0 就表示在状态 0 。然后可以得到如下的状态转移表：<br><img src="/3.jpg"></p>
+<h3 id="位运算"><a href="#位运算" class="headerlink" title="位运算"></a>位运算</h3><p>我们还可以用自动机来做这题，根据某一位 1 的个数，我们可以得到如下的状态自动机：<br><img src="1.png" alt=""><br>初始的时候在状态 0 （有 0 个 1），然后如果下一个数这一位是 1，就进入状态 1（有 1 个 1），接着如果下一个数这一位是 1，就进入状态 2（有 2 个 1），接着如果下一个数这一位是 1，就进入状态 3（有 3 个 1），最后如果再来了一个数这一位还是 1，就说明是一个新的数了，等价于回到了状态 1。而每个状态如果来的数这一位是 0 ，都会保持状态不变。</p>
+<p>当然这个自动机还可以简化，注意观察可以发现状态 3 和状态 0 是等价的（输入 0 都保持不变，输入 1 都会进入状态 1）。所以我们将状态 1 和状态 3 合并为一个状态 0 ，得到如下的状态自动机：<br><img src="2.jpg" alt=""></p>
+<p>因为一共有三个状态，所以我们需要用两个变量来表示状态。用 <code>once</code> 表示是否在状态 1，用 <code>twice</code> 来表示是否在状态 2 。那么两个变量都为 0 就表示在状态 0 。然后可以得到如下的状态转移表：<br><img src="3.jpg" alt=""></p>
 <p>注意观察 <code>once</code> 只有两种情况下转移后为 1 。一种是 <code>once=0, twice=0, x=1</code> ，另一种是 <code>once=1, twice=0, x=0</code> 。其他所有情况下 <code>once</code> 都转移为 0 。这两种情况都满足 <code>x^once=1</code> 并且 <code>twice=0</code> ，所以 <code>once</code> 的转移就是 <code>once = (x^once) &amp; (~twice)</code> 。</p>
 <p>同理，观察 <code>twice</code> 只有两种情况下转移后为 1 。一种是 <code>once=1, twice=0, x=1</code> ，另一种是 <code>once=0, twice=1, x=0</code> 。其他所有情况下 <code>twice</code> 都转移为 0 。这两种情况都满足 <code>x^twice=1</code> 并且 <code>once^twice=1</code> ，所以 <code>twice</code> 的转移就是 <code>twice = (x^twice) &amp; (once^twice)</code> 。<strong>但是</strong>！！！ <code>once</code> 已经抢先一步转移过了，所以值已经变掉了，一个解决方法就是用临时变量保存一下前一个状态的 <code>once</code> 值。另一个方法就是，这两种情况下，<code>once</code> 都会转移到 0 ，所以判断条件直接用转移后的 <code>once=0</code> 就行了，随后转移就是 <code>twice = (x^twice) &amp; (~once)</code> 。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="逐位考虑（c-）"><a href="#逐位考虑（c-）" class="headerlink" title="逐位考虑（c++）"></a>逐位考虑（c++）</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">singleNumber</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">32</span>; ++i) &#123;</span><br><span class="line">            <span class="type">int</span> cnt = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">auto</span> x : nums) &#123;</span><br><span class="line">                cnt += (x&gt;&gt;i)&amp;<span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            res |= (cnt%<span class="number">3</span>)&lt;&lt;i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
@@ -1071,7 +1071,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

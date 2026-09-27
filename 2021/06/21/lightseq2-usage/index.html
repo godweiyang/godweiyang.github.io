@@ -528,10 +528,10 @@
                 <p>最近总有学妹问我，论文要截稿了，模型来不及跑怎么办？</p>
 <p>还有学妹问我，有好多idea，验证一个就要跑一周怎么办？</p>
 <p>这时候我想起了下面这张图，我想这句话反映了大多数从事人工智能的科研工作者们目前的状态。</p>
-<p><img src="/1.png"></p>
+<p><img src="1.png" alt=""></p>
 <p>于是我告诉学妹，想要快，找我就对了，我教你怎样让你的模型训练加速3倍以上！</p>
 <p>这里我们需要用到的就是字节跳动AI Lab最近开源的训练加速引擎——LightSeq。</p>
-<p><img src="/2.png"></p>
+<p><img src="2.png" alt=""></p>
 <p>具体的原理这里就不做过多介绍了，另一篇文章里写的很详细：<a href="https://bytedance.feishu.cn/docs/doccn9w7UdOYcEOD99FjFVpdFzf#">训练加速3倍！字节跳动推出业界首个NLP模型全流程加速引擎</a>。今天我来教大家如何使用LightSeq。</p>
 <h2 id="安装步骤"><a href="#安装步骤" class="headerlink" title="安装步骤"></a>安装步骤</h2><p>LightSeq依赖第三方库Ninja对CUDA进行编译，所以先装它：</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pip install ninja</span><br></pre></td></tr></table></figure>
@@ -566,15 +566,15 @@
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">from</span> lightseq.training.ops.pytorch.transformer_encoder_layer <span class="keyword">import</span> LSTransformerEncoderLayer</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">train</span>(<span class="params">model, inputs, masks</span>):</span><br><span class="line">    inputs = inputs.to(device=<span class="string">&quot;cuda:0&quot;</span>)</span><br><span class="line">    masks = masks.to(device=<span class="string">&quot;cuda:0&quot;</span>)</span><br><span class="line">    model.to(device=<span class="string">&quot;cuda:0&quot;</span>)</span><br><span class="line">    model.train()</span><br><span class="line">    opt = torch.optim.Adam(model.parameters(), lr=<span class="number">1e-3</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1000</span>):</span><br><span class="line">        opt.zero_grad()</span><br><span class="line">        outputs = model(inputs, masks)</span><br><span class="line">        loss = torch.square(outputs).mean()</span><br><span class="line">        loss.backward()</span><br><span class="line">        opt.step()</span><br><span class="line">        <span class="keyword">if</span> epoch % <span class="number">200</span> == <span class="number">0</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;epoch &#123;:&gt;3d&#125;: loss = &#123;:&gt;5.3f&#125;&quot;</span>.<span class="built_in">format</span>(epoch, loss))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="comment"># 定义LightSeq配置</span></span><br><span class="line">    config = LSTransformerEncoderLayer.get_config(</span><br><span class="line">        max_batch_tokens=<span class="number">4096</span>,</span><br><span class="line">        max_seq_len=<span class="number">256</span>,</span><br><span class="line">        hidden_size=<span class="number">1024</span>,</span><br><span class="line">        intermediate_size=<span class="number">4096</span>,</span><br><span class="line">        nhead=<span class="number">16</span>,</span><br><span class="line">        attn_prob_dropout_ratio=<span class="number">0.1</span>,</span><br><span class="line">        activation_dropout_ratio=<span class="number">0.1</span>,</span><br><span class="line">        hidden_dropout_ratio=<span class="number">0.1</span>,</span><br><span class="line">        pre_layer_norm=<span class="literal">True</span>,</span><br><span class="line">        fp16=<span class="literal">False</span>,</span><br><span class="line">        local_rank=<span class="number">0</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 随机生成输入</span></span><br><span class="line">    bsz, sl = <span class="number">10</span>, <span class="number">80</span></span><br><span class="line">    inputs = torch.randn(bsz, sl, config.hidden_size)</span><br><span class="line">    masks = torch.zeros(bsz, sl)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 定义LightSeq编码层并进行训练</span></span><br><span class="line">    model = LSTransformerEncoderLayer(config)</span><br><span class="line">    train(model, inputs, masks)</span><br></pre></td></tr></table></figure>
 
 <h2 id="训练速度"><a href="#训练速度" class="headerlink" title="训练速度"></a>训练速度</h2><p>说了这么多，实际速度到底怎么样？我用Fairseq测了一下训练的总耗时：</p>
-<p><img src="/4.png"></p>
+<p><img src="4.png" alt=""></p>
 <p>不同模型大小、不同批处理大小、不同显卡上加速效果都是有区别的，但总体上都能缩短一半左右的训练时间。</p>
 <p>如果你的显卡比较老旧（我相信大多数学校实验室都是这样的），显存又比较小，那么批处理大小只能设置的很小，那加速比甚至能达到3倍以上。</p>
 <h2 id="项目地址"><a href="#项目地址" class="headerlink" title="项目地址"></a>项目地址</h2><p>学妹试了直叫好，让我下次别再这么快了。</p>
-<p><img src="/6.png"></p>
+<p><img src="6.png" alt=""></p>
 <p>你也别忘了点个star，让更多的人享受到极速的快乐。</p>
-<p><img src="/7.png"></p>
+<p><img src="7.png" alt=""></p>
 <p><strong>LightSeq地址：</strong><br><a href="https://github.com/bytedance/lightseq">https://github.com/bytedance/lightseq</a></p>
-<p><img src="/5.png"></p>
+<p><img src="5.png" alt=""></p>
 
             </div>
             <hr />
@@ -1099,7 +1099,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

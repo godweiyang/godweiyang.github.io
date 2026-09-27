@@ -13,8 +13,8 @@
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-题目描述第 i 个人的体重为 people[i]，每艘船可以承载的最大重量为 limit。
-每艘船最多可同时载两人，但条件是这些人的重量之和最多为 limit。
+题目描述第 i 个人的体重为 people[i]，每艘船可以承载的最大重量为 limit。
+每艘船最多可同时载两人，但条件是这些人的重量之和最多为 limit。
 返回载到每一个人所需的">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -496,7 +496,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    852
+                    847
                 </div>
                 
 
@@ -522,9 +522,9 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
-<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>第 i 个人的体重为 people[i]，每艘船可以承载的最大重量为 limit。</p>
-<p>每艘船最多可同时载两人，但条件是这些人的重量之和最多为 limit。</p>
+<p><img src="/medias/contact.jpg" alt=""></p>
+<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>第 i 个人的体重为 people[i]，每艘船可以承载的最大重量为 limit。</p>
+<p>每艘船最多可同时载两人，但条件是这些人的重量之和最多为 limit。</p>
 <p>返回载到每一个人所需的最小船数。(保证每个人都能被船载)。</p>
 <p><strong>示例1</strong></p>
 <figure class="highlight text"><table><tr><td class="code"><pre><span class="line">输入：</span><br><span class="line">people = [1,2], limit = 3</span><br><span class="line">输出：</span><br><span class="line">1</span><br><span class="line">解释：</span><br><span class="line">1 艘船载 (1, 2)</span><br></pre></td></tr></table></figure>
@@ -537,8 +537,8 @@
 
 <p><strong>提示</strong></p>
 <ul>
-<li>1 &lt;&#x3D; people.length &lt;&#x3D; 50000</li>
-<li>1 &lt;&#x3D; people[i] &lt;&#x3D; limit &lt;&#x3D; 30000</li>
+<li>1 &lt;= people.length &lt;= 50000</li>
+<li>1 &lt;= people[i] &lt;= limit &lt;= 30000</li>
 </ul>
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>这题第一直觉就是，对于一个人 people[i] 来说，装了他之后船上还剩 limit-people[i] 的空间，所以第二个人要尽量装能装得下的人中最重的那个。</p>
 <p>那如果直接这么遍历显然不行，时间复杂度是 $O(n^2)$ 的。所以我们先对重量进行排序，然后从最轻的人开始看，如果他能和最重的坐一个船，那就去掉他们俩，在剩下的人里继续找；如果不能的话，那么最重的人只能单独坐船，然后看能不能和第二重的人坐一个船，依次下去。</p>
@@ -1075,7 +1075,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

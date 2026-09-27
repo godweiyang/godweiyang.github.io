@@ -15,7 +15,7 @@
 
 今天主要讲了取整与递归式的结合，还有取模的相关知识。
 例题1
-给出下列递归式：\[\begin{array}{l}{K_0}{\rm{ &amp;#x3D; }}1\{K_{n + 1}} &amp;">
+给出下列递归式：\[\begin{array}{l}{K_0}{\rm{ = }}1\{K_{n + 1}} = 1 + ">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -518,10 +518,10 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <p>今天主要讲了取整与递归式的结合，还有取模的相关知识。</p>
 <h1 id="例题1"><a href="#例题1" class="headerlink" title="例题1"></a>例题1</h1><hr>
-<p>给出下列递归式：<br>\[\begin{array}{l}{K_0}{\rm{ &#x3D; }}1\{K_{n + 1}} &#x3D; 1 + \min (2{K_{\left\lfloor {n&#x2F;2} \right\rfloor }},3{K_{\left\lfloor {n&#x2F;3} \right\rfloor }}),n \ge 0\end{array}\]<br>现在不要求你求解，要你证明：<br>\[{K_n} \ge n\]<br>首先想到的就是数学归纳法，假设对于任意$k \le n$，都有${K_k} \ge k$，那么：<br>\[\begin{array}{l}{K_{n + 1}} &#x3D; 1 + \min (2{K_{\left\lfloor {n&#x2F;2} \right\rfloor }},3{K_{\left\lfloor {n&#x2F;3} \right\rfloor }})\ \ge 1 + \min (2\left\lfloor {\frac{n}{2}} \right\rfloor ,3\left\lfloor {\frac{n}{3}} \right\rfloor )\end{array}\]<br>如果$n &#x3D; 2k$，那么${K_{n + 1}} \ge 1 + n$。<br>如果$n &#x3D; 2k + 1$，那么${K_{n + 1}} \ge n$，这时不成立。</p>
+<p>给出下列递归式：<br>\[\begin{array}{l}{K_0}{\rm{ = }}1\{K_{n + 1}} = 1 + \min (2{K_{\left\lfloor {n/2} \right\rfloor }},3{K_{\left\lfloor {n/3} \right\rfloor }}),n \ge 0\end{array}\]<br>现在不要求你求解，要你证明：<br>\[{K_n} \ge n\]<br>首先想到的就是数学归纳法，假设对于任意$k \le n$，都有${K_k} \ge k$，那么：<br>\[\begin{array}{l}{K_{n + 1}} = 1 + \min (2{K_{\left\lfloor {n/2} \right\rfloor }},3{K_{\left\lfloor {n/3} \right\rfloor }})\ \ge 1 + \min (2\left\lfloor {\frac{n}{2}} \right\rfloor ,3\left\lfloor {\frac{n}{3}} \right\rfloor )\end{array}\]<br>如果$n = 2k$，那么${K_{n + 1}} \ge 1 + n$。<br>如果$n = 2k + 1$，那么${K_{n + 1}} \ge n$，这时不成立。</p>
 <p>所以数学归纳法无法证明，今后我们会用其他方法来证明这个式子。</p>
 <h1 id="约瑟夫环新解"><a href="#约瑟夫环新解" class="headerlink" title="约瑟夫环新解"></a>约瑟夫环新解</h1><hr>
 <p>还记得约瑟夫环问题吗？详见<a href="http://godweiyang.com/2018/02/27/concrete-math-1/">第一节课</a>。</p>
@@ -532,29 +532,29 @@
 <p>考虑当前踢到的人编号为$kq$，那么此时已经踢掉了$k$个人，所以接下去的人新的编号为$n + k(q - 1) + 1 \ldots$。</p>
 <p>所以编号为$kq+d$的人编号变成了$n + k(q - 1) + d$，其中$1 \le d &lt; q$。</p>
 <p>直到最后，可以发现活下来的人编号为$qn$，问题是怎么根据这个编号推出他原来的编号？</p>
-<p>以$n &#x3D; 10$，$q &#x3D; 3$为例，下图就是每个人新的编号：<br><img src="/1.jpg"></p>
-<p>令<br>\[N &#x3D; n + k(q - 1) + d\]<br>所以他上一次的编号是<br>\[kq + d &#x3D; kq + N - n - k(q - 1) &#x3D; k + N - n\]<br>因为<br>\[k &#x3D; \frac{ {N - n - d}}{ {q - 1}} &#x3D; \left\lfloor {\frac{ {N - n - 1}}{ {q - 1}}} \right\rfloor \]<br>所以上一次编号可以写为<br>\[\left\lfloor {\frac{ {N - n - 1}}{ {q - 1}}} \right\rfloor + N - n\]</p>
+<p>以$n = 10$，$q = 3$为例，下图就是每个人新的编号：<br><img src="1.jpg" alt=""></p>
+<p>令<br>\[N = n + k(q - 1) + d\]<br>所以他上一次的编号是<br>\[kq + d = kq + N - n - k(q - 1) = k + N - n\]<br>因为<br>\[k = \frac{ {N - n - d}}{ {q - 1}} = \left\lfloor {\frac{ {N - n - 1}}{ {q - 1}}} \right\rfloor \]<br>所以上一次编号可以写为<br>\[\left\lfloor {\frac{ {N - n - 1}}{ {q - 1}}} \right\rfloor + N - n\]</p>
 <p>因此最后存活的人编号可以用如下的算法计算：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">N = qn</span><br><span class="line">while N &gt; n:</span><br><span class="line">	N = k + N - n</span><br><span class="line">ans = N</span><br></pre></td></tr></table></figure>
 
-<p>其中$k &#x3D; \left\lfloor {\frac{ {N - n - 1}}{ {q - 1}}} \right\rfloor $</p>
-<p>如果我们用$D &#x3D; qn + 1 - N$替代$N$，将会进一步简化算法：<br>\[\begin{array}{l}D &#x3D; qn + 1 - N\ &#x3D; qn + 1 - \left( {\left\lfloor {\frac{ {(qn + 1 - D) - n - 1}}{ {q - 1}}} \right\rfloor + qn + 1 - D - n} \right)\ &#x3D; n + D - \left\lfloor {\frac{ {(q - 1)n - D}}{ {q - 1}}} \right\rfloor \ &#x3D; D - \left\lfloor {\frac{ { - D}}{ {q - 1}}} \right\rfloor \ &#x3D; D + \left\lceil {\frac{D}{ {q - 1}}} \right\rceil \ &#x3D; \left\lceil {\frac{q}{ {q - 1}}D} \right\rceil \end{array}\]</p>
+<p>其中$k = \left\lfloor {\frac{ {N - n - 1}}{ {q - 1}}} \right\rfloor $</p>
+<p>如果我们用$D = qn + 1 - N$替代$N$，将会进一步简化算法：<br>\[\begin{array}{l}D = qn + 1 - N\ = qn + 1 - \left( {\left\lfloor {\frac{ {(qn + 1 - D) - n - 1}}{ {q - 1}}} \right\rfloor + qn + 1 - D - n} \right)\ = n + D - \left\lfloor {\frac{ {(q - 1)n - D}}{ {q - 1}}} \right\rfloor \ = D - \left\lfloor {\frac{ { - D}}{ {q - 1}}} \right\rfloor \ = D + \left\lceil {\frac{D}{ {q - 1}}} \right\rceil \ = \left\lceil {\frac{q}{ {q - 1}}D} \right\rceil \end{array}\]</p>
 <p>算法伪代码如下：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">D = 1</span><br><span class="line">while D &lt;= (q-1)n:</span><br><span class="line">	D = k</span><br><span class="line">ans = qn + 1 - D</span><br></pre></td></tr></table></figure>
 
-<p>其中$k &#x3D; \left\lceil {\frac{q}{ {q - 1}}D} \right\rceil $</p>
+<p>其中$k = \left\lceil {\frac{q}{ {q - 1}}D} \right\rceil $</p>
 <h1 id="模的性质"><a href="#模的性质" class="headerlink" title="模的性质"></a>模的性质</h1><hr>
-<h2 id="定义与性质"><a href="#定义与性质" class="headerlink" title="定义与性质"></a>定义与性质</h2><p>模定义如下：<br>\[x\bmod y &#x3D; x - y\left\lfloor {\frac{x}{y}} \right\rfloor \]<br>特别的<br>\[x\bmod 0 &#x3D; x\]</p>
-<p>与此类似，定义一个与模类似的运算：<br>\[x{\rm{ mumble }}y &#x3D; y\left\lceil {\frac{x}{y}} \right\rceil - x\]<br>形象理解如下图所示：<br><img src="/2.jpg"><br>圆的周长是$y$，一共走过的路长（红色+绿色部分）是$x$，所以$x\bmod y$就是绿色部分，$x{\rm{ mumble }}y$就是一圈长度减去绿色部分。</p>
-<p>模有一些性质：<br>\[c(x\bmod y) &#x3D; (cx)\bmod (cy)\]</p>
+<h2 id="定义与性质"><a href="#定义与性质" class="headerlink" title="定义与性质"></a>定义与性质</h2><p>模定义如下：<br>\[x\bmod y = x - y\left\lfloor {\frac{x}{y}} \right\rfloor \]<br>特别的<br>\[x\bmod 0 = x\]</p>
+<p>与此类似，定义一个与模类似的运算：<br>\[x{\rm{ mumble }}y = y\left\lceil {\frac{x}{y}} \right\rceil - x\]<br>形象理解如下图所示：<br><img src="2.jpg" alt=""><br>圆的周长是$y$，一共走过的路长（红色+绿色部分）是$x$，所以$x\bmod y$就是绿色部分，$x{\rm{ mumble }}y$就是一圈长度减去绿色部分。</p>
+<p>模有一些性质：<br>\[c(x\bmod y) = (cx)\bmod (cy)\]</p>
 <h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><p>考虑如下问题，怎么平均分配$n$个东西给$m$个人？</p>
 <p>很容易想到，首先分给每个人$\left\lfloor {\frac{n}{m}} \right\rfloor $个东西，剩下$n\bmod m$件东西分给前$n\bmod m$个人，一人多一件就行。</p>
 <p>概括起来就是，前$n\bmod m$个人，每人$\left\lceil {\frac{n}{m}} \right\rceil $件，剩下的人，每人$\left\lfloor {\frac{n}{m}} \right\rfloor $件。</p>
 <p>那有没有办法统一表示呢？有的，每个人分到的件数为<br>\[\left\lceil {\frac{ {n - k + 1}}{m}} \right\rceil ,1 \le k \le m\]</p>
-<p>为什么呢？假设<br>\[n &#x3D; qm + r,0 \le r &lt; m\]<br>那么<br>\[\begin{array}{l}\left\lceil {\frac{ {n - k + 1}}{m}} \right\rceil &#x3D; \left\lceil {\frac{ {qm + r - k + 1}}{m}} \right\rceil \ &#x3D; q + \left\lceil {\frac{ {r - k + 1}}{m}} \right\rceil \end{array}\]<br>当$1 \le k \le r$时，<br>\[\left\lceil {\frac{ {n - k + 1}}{m}} \right\rceil &#x3D; 1\]<br>当$r &lt; k \le m$时，<br>\[\left\lceil {\frac{ {n - k + 1}}{m}} \right\rceil &#x3D; 0\]</p>
-<p>得证，因此可以得到如下等式：<br>\[n &#x3D; \left\lceil {\frac{n}{m}} \right\rceil + \left\lceil {\frac{ {n - 1}}{m}} \right\rceil + \cdots + \left\lceil {\frac{ {n - m + 1}}{m}} \right\rceil \]</p>
-<p>由$n &#x3D; \left\lfloor {\frac{n}{2}} \right\rfloor + \left\lceil {\frac{n}{2}} \right\rceil $<br>可以进一步将其转换为下取整形式：<br>\[n &#x3D; \left\lfloor {\frac{n}{m}} \right\rfloor + \left\lfloor {\frac{ {n + 1}}{m}} \right\rfloor + \cdots + \left\lfloor {\frac{ {n + m - 1}}{m}} \right\rfloor \]</p>
-<p>令$n &#x3D; \left\lfloor {mx} \right\rfloor $<br>我们得到了一个令人惊奇的等式：<br>\[\left\lfloor {mx} \right\rfloor &#x3D; \left\lfloor x \right\rfloor + \left\lfloor {x + \frac{1}{m}} \right\rfloor + \cdots + \left\lfloor {x + \frac{ {m - 1}}{m}} \right\rfloor \]</p>
+<p>为什么呢？假设<br>\[n = qm + r,0 \le r &lt; m\]<br>那么<br>\[\begin{array}{l}\left\lceil {\frac{ {n - k + 1}}{m}} \right\rceil = \left\lceil {\frac{ {qm + r - k + 1}}{m}} \right\rceil \ = q + \left\lceil {\frac{ {r - k + 1}}{m}} \right\rceil \end{array}\]<br>当$1 \le k \le r$时，<br>\[\left\lceil {\frac{ {n - k + 1}}{m}} \right\rceil = 1\]<br>当$r &lt; k \le m$时，<br>\[\left\lceil {\frac{ {n - k + 1}}{m}} \right\rceil = 0\]</p>
+<p>得证，因此可以得到如下等式：<br>\[n = \left\lceil {\frac{n}{m}} \right\rceil + \left\lceil {\frac{ {n - 1}}{m}} \right\rceil + \cdots + \left\lceil {\frac{ {n - m + 1}}{m}} \right\rceil \]</p>
+<p>由$n = \left\lfloor {\frac{n}{2}} \right\rfloor + \left\lceil {\frac{n}{2}} \right\rceil $<br>可以进一步将其转换为下取整形式：<br>\[n = \left\lfloor {\frac{n}{m}} \right\rfloor + \left\lfloor {\frac{ {n + 1}}{m}} \right\rfloor + \cdots + \left\lfloor {\frac{ {n + m - 1}}{m}} \right\rfloor \]</p>
+<p>令$n = \left\lfloor {mx} \right\rfloor $<br>我们得到了一个令人惊奇的等式：<br>\[\left\lfloor {mx} \right\rfloor = \left\lfloor x \right\rfloor + \left\lfloor {x + \frac{1}{m}} \right\rfloor + \cdots + \left\lfloor {x + \frac{ {m - 1}}{m}} \right\rfloor \]</p>
 <h1 id="HDU3089"><a href="#HDU3089" class="headerlink" title="HDU3089"></a>HDU3089</h1><hr>
 <p>最后用今天介绍的约瑟夫环算法来解决一道经典的ACM题！题目链接：<a href="http://acm.hdu.edu.cn/showproblem.php?pid=3089">杭电3089</a>。</p>
 <p>C++代码如下：</p>
@@ -1078,7 +1078,7 @@ inside-outside算法是用来预测一棵句法分析树的概率的算法，算
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

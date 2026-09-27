@@ -523,7 +523,7 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个字符串数组 A，找到以 A 中每个字符串作为子字符串的最短字符串。</p>
 <p>我们可以假设 A 中没有字符串是 A 中另一个字符串的子字符串。</p>
 <p><strong>示例1</strong></p>
@@ -534,8 +534,8 @@
 
 <p><strong>提示</strong></p>
 <ul>
-<li>1 &lt;&#x3D; A.length &lt;&#x3D; 12</li>
-<li>1 &lt;&#x3D; A[i].length &lt;&#x3D; 20</li>
+<li>1 &lt;= A.length &lt;= 12</li>
+<li>1 &lt;= A[i].length &lt;= 20</li>
 </ul>
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><blockquote>
 <p>这是每日算法系列更新以来，做过最难的一道题目了，也是第一次涉及到字符串类型的题目。如果觉得难，可以忽略今天这题。</p>
@@ -545,7 +545,12 @@
 <p>这题就要用到<strong>状态压缩动态规划</strong>了，按照字面意思理解就是动态规划的状态是经过压缩的，那具体什么意思呢？</p>
 <p>首先我们用二进制来表示每个字符串选取状态， 1 表示选取， 0 表示没有选取。比如 4 个字符串 ，我们选取了第 0 个和第 2 个，那么我们就可以用 1010 来表示这个选取状态，而 1010 转化成 10 进制就是 10 ，所以我们就可以用 10 这个数字来表示这种选取状态。状态最小值是 0 ，表示一个都没有选取，最大值是 $2^n-1$ ，表示所有的字符串都选取了。</p>
 <p>然后定义 $dp[s][i]$ 表示选取状态为 s 的情况下，最后一个字符串是第 i 个的情况下，最短的长度是多少。那么去掉第 i 个字符串，选取状态就变成了 $s \oplus 2^i$ ，其中 $\oplus$ 表示异或操作。然后遍历所有的 $dp[s \oplus 2^i][j]$ ，也就是看前一个状态以哪个字符串结尾长度最短。那么状态更新就是：</p>
-<p>$$<br>dp[s][i]&#x3D;\min{{dp[s \oplus 2^i][j]+A[i].length-o[j][i]}}<br>$$</p>
+
+$$
+dp[s][i]=\min{\{dp[s \oplus 2^i][j]+A[i].length-o[j][i]\}}
+$$
+
+
 <p>其中 $o[j][i]$ 表示 $A[j]$ 和 $A[i]$ 最大重合的长度，可以预处理出来。</p>
 <p>与此同时，我们还需要一个数组 $path[s][i]$ ，用来保存 s 状态下结尾是 $A[i]$ 时，前一个字符串最优是哪个。在做完动态规划之后，再进行回溯，找出整个最优序列是什么。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="c"><a href="#c" class="headerlink" title="c++"></a>c++</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">string <span class="title">shortestSuperstring</span><span class="params">(vector&lt;string&gt;&amp; A)</span> </span>&#123;</span><br><span class="line">        <span class="type">const</span> <span class="type">int</span> INF = <span class="number">0x3f3f3f3f</span>;</span><br><span class="line">        <span class="type">int</span> n = A.<span class="built_in">size</span>(), M = (<span class="number">1</span>&lt;&lt;n);</span><br><span class="line">        <span class="type">int</span> o[n][n];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; ++j) &#123;</span><br><span class="line">                o[i][j] = <span class="built_in">overlap</span>(A[i], A[j]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> dp[M][n], path[M][n];</span><br><span class="line">        <span class="built_in">memset</span>(dp, INF, <span class="keyword">sizeof</span> dp);</span><br><span class="line">        <span class="built_in">memset</span>(path, <span class="number">0</span>, <span class="keyword">sizeof</span> path);</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            dp[<span class="number">1</span>&lt;&lt;i][i] = A[i].<span class="built_in">size</span>();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> s = <span class="number">0</span>; s &lt; M; ++s) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">                <span class="keyword">if</span> ((s^(<span class="number">1</span>&lt;&lt;i)) == <span class="number">0</span>) <span class="keyword">continue</span>;</span><br><span class="line">                <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; ++j) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (i != j &amp;&amp; ((s&gt;&gt;j)&amp;<span class="number">1</span>)) &#123;</span><br><span class="line">                        <span class="keyword">if</span> (dp[s][i] &gt; dp[s^(<span class="number">1</span>&lt;&lt;i)][j]+A[i].<span class="built_in">size</span>()-o[j][i]) &#123;</span><br><span class="line">                            dp[s][i] = dp[s^(<span class="number">1</span>&lt;&lt;i)][j]+A[i].<span class="built_in">size</span>()-o[j][i];</span><br><span class="line">                            path[s][i] = j;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> last = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (dp[M<span class="number">-1</span>][i] &lt; dp[M<span class="number">-1</span>][last]) &#123;</span><br><span class="line">                last = i;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        vector&lt;<span class="type">int</span>&gt; seq = &#123;last&#125;;</span><br><span class="line">        <span class="type">int</span> s = M - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n<span class="number">-1</span>; ++i) &#123;</span><br><span class="line">            <span class="type">int</span> tmp = last;</span><br><span class="line">            last = path[s][last];</span><br><span class="line">            seq.<span class="built_in">push_back</span>(last);</span><br><span class="line">            s = s^(<span class="number">1</span>&lt;&lt;tmp);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">reverse</span>(seq.<span class="built_in">begin</span>(), seq.<span class="built_in">end</span>());</span><br><span class="line">        string res = A[seq[<span class="number">0</span>]];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            res += A[seq[i]].<span class="built_in">substr</span>(o[seq[i<span class="number">-1</span>]][seq[i]]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">overlap</span><span class="params">(<span class="type">const</span> string&amp; a, <span class="type">const</span> string&amp; b)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> na = a.<span class="built_in">size</span>(), nb = b.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="built_in">min</span>(na, nb); i &gt;= <span class="number">1</span> ; --i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (a.<span class="built_in">substr</span>(na-i) == b.<span class="built_in">substr</span>(<span class="number">0</span>, i)) <span class="keyword">return</span> i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
@@ -797,7 +802,7 @@
 
 
 题目描述如果连续数字之间的差严格地在正数和负数之间交替，则数字序列称为摆动序列。第一个差（如果存在的话）可能是正数或负数。少于两个元素的序列也是摆动序列。
-例如， [1,7,4,9,2
+例如， [1,7,4,9,2
                         
                     </div>
                     <div class="publish-info">
@@ -854,8 +859,8 @@
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-题目描述第 i 个人的体重为 people[i]，每艘船可以承载的最大重量为 limit。
-每艘船最多可同时载两人，但条件是这些人的重量之和最多为 limit。
+题目描述第 i 个人的体重为 people[i]，每艘船可以承载的最大重量为 limit。
+每艘船最多可同时载两人，但条件是这些人的重量之和最多为 limit。
 返回载到每一个人所需的
                         
                     </div>
@@ -1073,7 +1078,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

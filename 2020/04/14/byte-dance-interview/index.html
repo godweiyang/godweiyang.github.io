@@ -546,7 +546,7 @@
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function">string <span class="title">f</span><span class="params">(string s, <span class="type">int</span> k)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> n = s.<span class="built_in">size</span>();</span><br><span class="line">    k = n - k;</span><br><span class="line">    stack&lt;<span class="type">char</span>&gt; st;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">        <span class="keyword">while</span> (!st.<span class="built_in">empty</span>() &amp;&amp; st.<span class="built_in">top</span>() &gt; s[i] &amp;&amp; k) &#123;</span><br><span class="line">            st.<span class="built_in">pop</span>();</span><br><span class="line">            k--;</span><br><span class="line">        &#125;</span><br><span class="line">        st.<span class="built_in">push</span>(s[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    string res = <span class="string">&quot;&quot;</span>;</span><br><span class="line">    <span class="keyword">while</span> (!st.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">        <span class="keyword">if</span> (k) k--;</span><br><span class="line">        <span class="keyword">else</span> res += st.<span class="built_in">top</span>();</span><br><span class="line">        st.<span class="built_in">pop</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">reverse</span>(res.<span class="built_in">begin</span>(), res.<span class="built_in">end</span>());</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    string s;</span><br><span class="line">    <span class="type">int</span> k;</span><br><span class="line">    cin &gt;&gt; s &gt;&gt; k;</span><br><span class="line">    cout &lt;&lt; <span class="built_in">f</span>(s, k) &lt;&lt; endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <blockquote>
-<p>关注公众号【算法码上来】，每日算法干货马上就来！<br><img src="/medias/contact.jpg"></p>
+<p>关注公众号【算法码上来】，每日算法干货马上就来！<br><img src="/medias/contact.jpg" alt=""></p>
 </blockquote>
 
             </div>
@@ -1061,7 +1061,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

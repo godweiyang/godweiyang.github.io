@@ -500,7 +500,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    992
+                    981
                 </div>
                 
 
@@ -526,7 +526,7 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <p>论文链接：<a href="https://www.aclweb.org/anthology/P/P17/P17-2036.pdf">P17-2036</a></p>
 <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><hr>
 <p>最近许多研究者都注意到了上下文在对话系统中的重要性，也做了很多的研究，但是没有系统的比较来分析怎么样才能有效地利用上下文。我们做了详细的研究来比较不同的模型，研究上下文在对话系统中的作用。同时，我们提出了度量上下文与查询之间相关性的方法，比其他方法性能都出色。</p>
@@ -536,18 +536,18 @@
 <li>我们怎么样才能更好的利用上下文？</li>
 <li>上下文对神经对话系统的影响是什么？</li>
 </ul>
-<p>未分层模型通常使用经典的encode-decoder框架，我们实验中用的是RNN+GRU，decode时beamsearch大小为5。分层模型有三种方法结合上下文和查询：池化、连接、连续整合。<br><img src="/hierarchical_model.jpg"><br><img src="/2.jpg"><br>但是我们发现加权后的实验结果还不如直接使用最后一个隐含层的结果，我们猜测是因为这个RNN不是很长，所以对前面的结果保存的比较好，所以我们实验直接使用最后一个隐含层作为输出。<br>衡量上下文和查询的相关程度：<br>\[{s_{ {c_i}}} &#x3D; sim({c_i},q) &#x3D; \frac{ { {e_{c_i} } \cdot {e_q}}}{ {\left\| {e_{c_i}} \right\| \cdot \left\| { {e_q}} \right\|}}\]<br>其中：\[{e_{c_i}} &#x3D; \sum\limits_{w \in {c_i}} {e_w} ,{e_q} &#x3D; \sum\limits_{w’ \in {c_i}} {e_w’} \]<br>归一化：<br>\[\alpha _{c_i} &#x3D; \frac{ {\exp ({s_{ {c_i}}})}} { {\sum\nolimits_{j &#x3D; 0}^n {\exp ({s_{ {c_i}}})} + \exp ({s_q})}}\]<br>\[{ {\alpha _q} &#x3D; \frac{ {\exp ({s_q})}}{ {\sum\nolimits_{j &#x3D; 0}^n {\exp ({s_{ {c_i}}})} + \exp ({s_q})}}}\]<br>两种连接方法：</p>
+<p>未分层模型通常使用经典的encode-decoder框架，我们实验中用的是RNN+GRU，decode时beamsearch大小为5。分层模型有三种方法结合上下文和查询：池化、连接、连续整合。<br><img src="hierarchical_model.jpg" alt=""><br><img src="2.jpg" alt=""><br>但是我们发现加权后的实验结果还不如直接使用最后一个隐含层的结果，我们猜测是因为这个RNN不是很长，所以对前面的结果保存的比较好，所以我们实验直接使用最后一个隐含层作为输出。<br>衡量上下文和查询的相关程度：<br>\[{s_{ {c_i}}} = sim({c_i},q) = \frac{ { {e_{c_i} } \cdot {e_q}}}{ {\left\| {e_{c_i}} \right\| \cdot \left\| { {e_q}} \right\|}}\]<br>其中：\[{e_{c_i}} = \sum\limits_{w \in {c_i}} {e_w} ,{e_q} = \sum\limits_{w’ \in {c_i}} {e_w’} \]<br>归一化：<br>\[\alpha _{c_i} = \frac{ {\exp ({s_{ {c_i}}})}} { {\sum\nolimits_{j = 0}^n {\exp ({s_{ {c_i}}})} + \exp ({s_q})}}\]<br>\[{ {\alpha _q} = \frac{ {\exp ({s_q})}}{ {\sum\nolimits_{j = 0}^n {\exp ({s_{ {c_i}}})} + \exp ({s_q})}}}\]<br>两种连接方法：</p>
 <ul>
-<li>WSeq(sum):<br>\[{v_{enc}} &#x3D; \sum\limits_{i &#x3D; 0}^n { {\alpha _{ {c_i}}}{h_{ {c_i}}} + {\alpha _q}{h_q}} \]</li>
-<li>WSeq(concat):<br>\[{v_{enc}} &#x3D; \left[ { {\alpha _{ {c_0}}}{h_{ {c_0}}}; \ldots ;{\alpha _{ {c_n}}}{h_{ {c_n}}};{\alpha _q}{h_q}} \right]\]</li>
+<li>WSeq(sum):<br>\[{v_{enc}} = \sum\limits_{i = 0}^n { {\alpha _{ {c_i}}}{h_{ {c_i}}} + {\alpha _q}{h_q}} \]</li>
+<li>WSeq(concat):<br>\[{v_{enc}} = \left[ { {\alpha _{ {c_0}}}{h_{ {c_0}}}; \ldots ;{\alpha _{ {c_n}}}{h_{ {c_n}}};{\alpha _q}{h_q}} \right]\]</li>
 </ul>
 <h1 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h1><hr>
-<p>我们在百度贴吧问答数据集上做实验。<br><img src="/1.jpg"></p>
+<p>我们在百度贴吧问答数据集上做实验。<br><img src="1.jpg" alt=""></p>
 <h1 id="实验结果分析"><a href="#实验结果分析" class="headerlink" title="实验结果分析"></a>实验结果分析</h1><hr>
 <p>虽然BLEU不适合用来度量对话系统这种开放式的系统。但是我们没有足够的人力物力来对结果一一标注，所以还是采用BLEU。下面回到最开始提出的两个问题。</p>
 <ul>
 <li>我们怎么样才能更好的利用上下文？<br>首先我们发现采用上下文实验结果的确比不采用的更好了。然后分层的模型结果比不分层的更好。我们猜测原因可能是对话系统不同于其他NLP任务，对话系统句子可能出自不同的人。让每个上下文保持独立很重要，而不是简单的池化结合到一起，所以直接连接起来效果更好。上下文和查询相关性对系统有帮助。</li>
-<li>上下文对神经对话系统的影响是什么？<br><img src="/3.jpg"><br>可以看出，采用上下文的模型能产生更长、更有意义、更多样性的回答。我们还发现了一个有趣的现象：一个encode-decoder模型如果想要生成有意义的回答，必须要足够多的有意义的信息提供给它。这解释了为什么seq2seq在其他NLP任务表现得很好，但是在对话系统表现得不好。</li>
+<li>上下文对神经对话系统的影响是什么？<br><img src="3.jpg" alt=""><br>可以看出，采用上下文的模型能产生更长、更有意义、更多样性的回答。我们还发现了一个有趣的现象：一个encode-decoder模型如果想要生成有意义的回答，必须要足够多的有意义的信息提供给它。这解释了为什么seq2seq在其他NLP任务表现得很好，但是在对话系统表现得不好。</li>
 </ul>
 
             </div>
@@ -1059,7 +1059,7 @@ coursera上面的课程要钱，还贼贵。所以我就直接在网易公开课
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

@@ -520,13 +520,13 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <blockquote>
 <p>这节课内容太多了，再加上感冒身体不舒服，下面的定理就不一一证明了，大家可以自行练习。以后有空我会补上的！</p>
 </blockquote>
 <h1 id="例题1"><a href="#例题1" class="headerlink" title="例题1"></a>例题1</h1><hr>
-<p>首先接着上节课同余继续讲，在<a href="http://godweiyang.com/2018/04/23/concrete-math-9/">第三章例题2</a>中，我们遗留了一个问题：对于如下序列<br>\[0\bmod m,n\bmod m,2n\bmod m, \ldots ,(m - 1)n\bmod m\]<br>它的值就是<br>\[0,d,2d, \ldots ,(m&#x2F;d - 1)d\]<br>的某个排列，并且重复了$d$次。其中$d &#x3D; gcd(m, n)$</p>
-<p>首先我们有如下同余式：<br>\[jn \equiv kn(\bmod m) \Leftrightarrow j(n&#x2F;d) \equiv k(n&#x2F;d)(\bmod m&#x2F;d)\]<br>这就可以看出该序列的确是重复出现了$d$次，那么剩下的问题就是证明这$m&#x2F;d$个数恰好就是<br>\[{ 0,d,2d, \ldots ,m - d} \]<br>的某个排列。<br>令$m &#x3D; m’d,n &#x3D; n’d$，所以有<br>\[kn\bmod m &#x3D; d(kn’\bmod m’)\]<br>所以我们只考虑$m \bot n$的情形，在此情形下，我们可以得到<br>\[jn \equiv kn(\bmod m) \Leftrightarrow j \equiv k(\bmod m)\]<br>由此可以看出，这$m-1$个数一定就是<br>\[{ 0,1,2, \ldots ,m - 1} \]<br>至此得证。</p>
+<p>首先接着上节课同余继续讲，在<a href="http://godweiyang.com/2018/04/23/concrete-math-9/">第三章例题2</a>中，我们遗留了一个问题：对于如下序列<br>\[0\bmod m,n\bmod m,2n\bmod m, \ldots ,(m - 1)n\bmod m\]<br>它的值就是<br>\[0,d,2d, \ldots ,(m/d - 1)d\]<br>的某个排列，并且重复了$d$次。其中$d = gcd(m, n)$</p>
+<p>首先我们有如下同余式：<br>\[jn \equiv kn(\bmod m) \Leftrightarrow j(n/d) \equiv k(n/d)(\bmod m/d)\]<br>这就可以看出该序列的确是重复出现了$d$次，那么剩下的问题就是证明这$m/d$个数恰好就是<br>\[{ 0,d,2d, \ldots ,m - d} \]<br>的某个排列。<br>令$m = m’d,n = n’d$，所以有<br>\[kn\bmod m = d(kn’\bmod m’)\]<br>所以我们只考虑$m \bot n$的情形，在此情形下，我们可以得到<br>\[jn \equiv kn(\bmod m) \Leftrightarrow j \equiv k(\bmod m)\]<br>由此可以看出，这$m-1$个数一定就是<br>\[{ 0,1,2, \ldots ,m - 1} \]<br>至此得证。</p>
 <p>下面介绍几个著名的数论定理。</p>
 <h1 id="费马最后定理"><a href="#费马最后定理" class="headerlink" title="费马最后定理"></a>费马最后定理</h1><hr>
 <p>对于所有的正整数$a,b,c,n&gt;2$，有<br>\[{a^n} + {b^n} \ne {c^n}\]</p>
@@ -539,27 +539,27 @@
 <p>所以我们有欧拉定理<br>\[{n^{\varphi (m)}} \equiv 1(\bmod m)\]<br>其中$n \bot m$，可以发现，当$m$是素数时，欧拉定理就是费马小定理，所以欧拉定理是费马小定理的推广形式。</p>
 <p>欧拉定理有很多有趣的性质，这里就不一一介绍了，详情见<a href="https://blog.csdn.net/howe_young/article/details/50282775">博客地址</a>。</p>
 <h1 id="莫比乌斯函数"><a href="#莫比乌斯函数" class="headerlink" title="莫比乌斯函数"></a>莫比乌斯函数</h1><hr>
-<p>定义莫比乌斯函数$\mu (m)$为<br>\[\sum\limits_{d|m} {\mu (d)} &#x3D; [m &#x3D; 1]\]</p>
+<p>定义莫比乌斯函数$\mu (m)$为<br>\[\sum\limits_{d|m} {\mu (d)} = [m = 1]\]</p>
 <p>这个定义看起来很奇怪是不是？其实这是一个递归定义，可以递归地计算得到所有的值。</p>
-<p>这个函数有什么用呢？主要用来进行莫比乌斯反演：<br>\[g(m) &#x3D; \sum\limits_{d|m} {f(d)} \Leftrightarrow f(m) &#x3D; \sum\limits_{d|m} {\mu (d)g(\frac{m}{d})} \]</p>
+<p>这个函数有什么用呢？主要用来进行莫比乌斯反演：<br>\[g(m) = \sum\limits_{d|m} {f(d)} \Leftrightarrow f(m) = \sum\limits_{d|m} {\mu (d)g(\frac{m}{d})} \]</p>
 <p>详细的性质及应用也不介绍了，给大家推荐一个牛逼的博客<a href="https://blog.csdn.net/acdreamers/article/details/8542292">博客地址</a>，我当时学ACM的时候这部分都是看着他的学的。</p>
 <h1 id="组合数入门"><a href="#组合数入门" class="headerlink" title="组合数入门"></a>组合数入门</h1><hr>
-<p>定义组合数$\left( {\begin{array}{c}n\k\end{array}} \right)$为从$n$个物品中取出$k$个物品的方法数，具体计算为<br>\[\left( {\begin{array}{c}n\k\end{array}} \right) &#x3D; \frac{ {n(n - 1) \ldots (n - k + 1)}}{ {k(k - 1) \ldots 1}}\]</p>
-<p>推广到实数领域，定义<br>\[\left( {\begin{array}{c}r\k\end{array}} \right) &#x3D; \left{ {\begin{array}{c}{\frac{ {r(r - 1) \ldots (r - k + 1)}}{ {k(k - 1) \ldots 1}} &#x3D; \frac{ { {r^{\underline{k}}}}}{ {k!}},k \ge 0}\{0,k &lt; 0}\end{array}} \right.\]</p>
+<p>定义组合数$\left( {\begin{array}{c}n\k\end{array}} \right)$为从$n$个物品中取出$k$个物品的方法数，具体计算为<br>\[\left( {\begin{array}{c}n\k\end{array}} \right) = \frac{ {n(n - 1) \ldots (n - k + 1)}}{ {k(k - 1) \ldots 1}}\]</p>
+<p>推广到实数领域，定义<br>\[\left( {\begin{array}{c}r\k\end{array}} \right) = \left{ {\begin{array}{c}{\frac{ {r(r - 1) \ldots (r - k + 1)}}{ {k(k - 1) \ldots 1}} = \frac{ { {r^{\underline{k}}}}}{ {k!}},k \ge 0}\{0,k &lt; 0}\end{array}} \right.\]</p>
 <p>下面介绍一些组合数性质。</p>
-<h2 id="性质1"><a href="#性质1" class="headerlink" title="性质1"></a>性质1</h2><p>\[\left( {\begin{array}{c}n\k\end{array}} \right) &#x3D; \left( {\begin{array}{c}n\{n - k}\end{array}} \right),n,k \in \mathbb{Z},n \ge 0\]<br>这里为什么要限定$n \ge 0$呢？举个例子，如果$n &#x3D; -1$，那么有<br>\[\left( {\begin{array}{c}{ - 1}\k\end{array}} \right) \ne \left( {\begin{array}{c}{ - 1}\{ - 1 - k}\end{array}} \right)\]<br>因为左边等于${( - 1)^k}$，而右边等于${( - 1)^{-1-k}}$。</p>
-<h2 id="性质2"><a href="#性质2" class="headerlink" title="性质2"></a>性质2</h2><p>\[\left( {\begin{array}{c}r\k\end{array}} \right) &#x3D; \frac{r}{k}\left( {\begin{array}{c}{r - 1}\{k - 1}\end{array}} \right)\]</p>
-<h2 id="性质3"><a href="#性质3" class="headerlink" title="性质3"></a>性质3</h2><p>\[(r - k)\left( {\begin{array}{c}r\k\end{array}} \right) &#x3D; r\left( {\begin{array}{c}{r - 1}\k\end{array}} \right)\]</p>
-<h2 id="性质4"><a href="#性质4" class="headerlink" title="性质4"></a>性质4</h2><p>\[\left( {\begin{array}{c}r\k\end{array}} \right) &#x3D; \left( {\begin{array}{c}{r - 1}\k\end{array}} \right) + \left( {\begin{array}{c}{r - 1}\{k - 1}\end{array}} \right)\]<br>这条性质可以通过性质3和性质4两边分别相加得到。</p>
-<h2 id="性质5"><a href="#性质5" class="headerlink" title="性质5"></a>性质5</h2><p>\[\sum\limits_{k \le n} {\left( {\begin{array}{c}{r + k}\k\end{array}} \right)} &#x3D; \left( {\begin{array}{c}{r + n + 1}\n\end{array}} \right)\]</p>
-<h2 id="性质6"><a href="#性质6" class="headerlink" title="性质6"></a>性质6</h2><p>\[\sum\limits_{0 \le k \le n} {\left( {\begin{array}{c}k\m\end{array}} \right)} &#x3D; \left( {\begin{array}{c}{n + 1}\{m + 1}\end{array}} \right)\]</p>
-<h2 id="性质7"><a href="#性质7" class="headerlink" title="性质7"></a>性质7</h2><p>微分形式：<br>\[\Delta \left( {\left( {\begin{array}{c}x\m\end{array}} \right)} \right) &#x3D; \left( {\begin{array}{c}{x + 1}\m\end{array}} \right) - \left( {\begin{array}{c}x\m\end{array}} \right) &#x3D; \left( {\begin{array}{c}x\{m - 1}\end{array}} \right)\]<br>\[\sum {\left( {\begin{array}{c}x\m\end{array}} \right)\delta x &#x3D; } \left( {\begin{array}{c}x\{m + 1}\end{array}} \right) + C\]</p>
+<h2 id="性质1"><a href="#性质1" class="headerlink" title="性质1"></a>性质1</h2><p>\[\left( {\begin{array}{c}n\k\end{array}} \right) = \left( {\begin{array}{c}n\{n - k}\end{array}} \right),n,k \in \mathbb{Z},n \ge 0\]<br>这里为什么要限定$n \ge 0$呢？举个例子，如果$n = -1$，那么有<br>\[\left( {\begin{array}{c}{ - 1}\k\end{array}} \right) \ne \left( {\begin{array}{c}{ - 1}\{ - 1 - k}\end{array}} \right)\]<br>因为左边等于${( - 1)^k}$，而右边等于${( - 1)^{-1-k}}$。</p>
+<h2 id="性质2"><a href="#性质2" class="headerlink" title="性质2"></a>性质2</h2><p>\[\left( {\begin{array}{c}r\k\end{array}} \right) = \frac{r}{k}\left( {\begin{array}{c}{r - 1}\{k - 1}\end{array}} \right)\]</p>
+<h2 id="性质3"><a href="#性质3" class="headerlink" title="性质3"></a>性质3</h2><p>\[(r - k)\left( {\begin{array}{c}r\k\end{array}} \right) = r\left( {\begin{array}{c}{r - 1}\k\end{array}} \right)\]</p>
+<h2 id="性质4"><a href="#性质4" class="headerlink" title="性质4"></a>性质4</h2><p>\[\left( {\begin{array}{c}r\k\end{array}} \right) = \left( {\begin{array}{c}{r - 1}\k\end{array}} \right) + \left( {\begin{array}{c}{r - 1}\{k - 1}\end{array}} \right)\]<br>这条性质可以通过性质3和性质4两边分别相加得到。</p>
+<h2 id="性质5"><a href="#性质5" class="headerlink" title="性质5"></a>性质5</h2><p>\[\sum\limits_{k \le n} {\left( {\begin{array}{c}{r + k}\k\end{array}} \right)} = \left( {\begin{array}{c}{r + n + 1}\n\end{array}} \right)\]</p>
+<h2 id="性质6"><a href="#性质6" class="headerlink" title="性质6"></a>性质6</h2><p>\[\sum\limits_{0 \le k \le n} {\left( {\begin{array}{c}k\m\end{array}} \right)} = \left( {\begin{array}{c}{n + 1}\{m + 1}\end{array}} \right)\]</p>
+<h2 id="性质7"><a href="#性质7" class="headerlink" title="性质7"></a>性质7</h2><p>微分形式：<br>\[\Delta \left( {\left( {\begin{array}{c}x\m\end{array}} \right)} \right) = \left( {\begin{array}{c}{x + 1}\m\end{array}} \right) - \left( {\begin{array}{c}x\m\end{array}} \right) = \left( {\begin{array}{c}x\{m - 1}\end{array}} \right)\]<br>\[\sum {\left( {\begin{array}{c}x\m\end{array}} \right)\delta x = } \left( {\begin{array}{c}x\{m + 1}\end{array}} \right) + C\]</p>
 <h1 id="二项式系数"><a href="#二项式系数" class="headerlink" title="二项式系数"></a>二项式系数</h1><hr>
-<p>\[{(x + y)^r} &#x3D; \sum\limits_k {\left( {\begin{array}{c}r\k\end{array}} \right)} {x^k}{y^{r - k}},r \in \mathbb{Z}\]</p>
+<p>\[{(x + y)^r} = \sum\limits_k {\left( {\begin{array}{c}r\k\end{array}} \right)} {x^k}{y^{r - k}},r \in \mathbb{Z}\]</p>
 <p>二项式系数也有很多有趣的性质。</p>
-<p>\[{2^n} &#x3D; \left( {\begin{array}{c}n\0\end{array}} \right) + \left( {\begin{array}{c}n\1\end{array}} \right) + \cdots + \left( {\begin{array}{c}n\n\end{array}} \right)\]</p>
-<p>\[{0^n} &#x3D; \left( {\begin{array}{c}n\0\end{array}} \right) - \left( {\begin{array}{c}n\1\end{array}} \right) + \cdots + {( - 1)^n}\left( {\begin{array}{c}n\n\end{array}} \right)\]<br>即奇数项系数和等于偶数项系数和。</p>
-<p>推广到实数域：<br>\[{(1 + z)^r} &#x3D; \sum\limits_k {\left( {\begin{array}{c}r\k\end{array}} \right){z^k}} ,\left| z \right| &lt; 1,r \in \mathbb{R}\]<br>可以通过泰勒展开证明。</p>
+<p>\[{2^n} = \left( {\begin{array}{c}n\0\end{array}} \right) + \left( {\begin{array}{c}n\1\end{array}} \right) + \cdots + \left( {\begin{array}{c}n\n\end{array}} \right)\]</p>
+<p>\[{0^n} = \left( {\begin{array}{c}n\0\end{array}} \right) - \left( {\begin{array}{c}n\1\end{array}} \right) + \cdots + {( - 1)^n}\left( {\begin{array}{c}n\n\end{array}} \right)\]<br>即奇数项系数和等于偶数项系数和。</p>
+<p>推广到实数域：<br>\[{(1 + z)^r} = \sum\limits_k {\left( {\begin{array}{c}r\k\end{array}} \right){z^k}} ,\left| z \right| &lt; 1,r \in \mathbb{R}\]<br>可以通过泰勒展开证明。</p>
 
             </div>
             <hr />
@@ -1074,7 +1074,7 @@ LR序列表示对于任意分数$\frac{a}{b}$，我们从$\frac{1}{1}$开始走�
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

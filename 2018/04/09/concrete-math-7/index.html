@@ -493,14 +493,14 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.6k
+                    1.5k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    8 分
+                    7 分
                 </div>
                 
                 
@@ -519,31 +519,31 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <p>首先声明一下，最近这段时间忙毕设，没时间更新博客了，大家见谅。</p>
 <p>今天这节课开始讲解取整相关知识，主要是数论相关的了。</p>
 <h1 id="符号定义"><a href="#符号定义" class="headerlink" title="符号定义"></a>符号定义</h1><hr>
-<p>向下取整函数$\left\lfloor x \right\rfloor $定义为小于等于$x$的最大整数。<br>向上取整函数$\left\lceil x \right\rceil $定义为大于等于$x$的最小整数。<br>${ x} $定义为实数$x$的小数部分，即<br>\[{ x} &#x3D; x - \left\lfloor x \right\rfloor \]</p>
+<p>向下取整函数$\left\lfloor x \right\rfloor $定义为小于等于$x$的最大整数。<br>向上取整函数$\left\lceil x \right\rceil $定义为大于等于$x$的最小整数。<br>${ x} $定义为实数$x$的小数部分，即<br>\[{ x} = x - \left\lfloor x \right\rfloor \]</p>
 <h1 id="性质"><a href="#性质" class="headerlink" title="性质"></a>性质</h1><hr>
-<h2 id="性质1"><a href="#性质1" class="headerlink" title="性质1"></a>性质1</h2><p>\[\left\lceil x \right\rceil - \left\lfloor x \right\rfloor &#x3D; [x \in \mathbb{Z}]\]</p>
+<h2 id="性质1"><a href="#性质1" class="headerlink" title="性质1"></a>性质1</h2><p>\[\left\lceil x \right\rceil - \left\lfloor x \right\rfloor = [x \in \mathbb{Z}]\]</p>
 <h2 id="性质2"><a href="#性质2" class="headerlink" title="性质2"></a>性质2</h2><p>取整函数范围：<br>\[x - 1 &lt; \left\lfloor x \right\rfloor \le x \le \left\lceil x \right\rceil &lt; x + 1\]</p>
-<h2 id="性质3"><a href="#性质3" class="headerlink" title="性质3"></a>性质3</h2><p>负数的取整：<br>\[\begin{array}{l}\left\lfloor { - x} \right\rfloor &#x3D; - \left\lceil x \right\rceil \\left\lceil { - x} \right\rceil &#x3D; - \left\lfloor x \right\rfloor \end{array}\]</p>
-<h2 id="性质4"><a href="#性质4" class="headerlink" title="性质4"></a>性质4</h2><p>取整函数中的整数可以提取出来：<br>\[\left\lfloor {x + n} \right\rfloor &#x3D; \left\lfloor x \right\rfloor + n\]</p>
+<h2 id="性质3"><a href="#性质3" class="headerlink" title="性质3"></a>性质3</h2><p>负数的取整：<br>\[\begin{array}{l}\left\lfloor { - x} \right\rfloor = - \left\lceil x \right\rceil \\left\lceil { - x} \right\rceil = - \left\lfloor x \right\rfloor \end{array}\]</p>
+<h2 id="性质4"><a href="#性质4" class="headerlink" title="性质4"></a>性质4</h2><p>取整函数中的整数可以提取出来：<br>\[\left\lfloor {x + n} \right\rfloor = \left\lfloor x \right\rfloor + n\]</p>
 <h1 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h1><hr>
-<h2 id="应用1"><a href="#应用1" class="headerlink" title="应用1"></a>应用1</h2><p>证明：<br>\[\left\lfloor {\sqrt {\left\lfloor x \right\rfloor } } \right\rfloor &#x3D; \left\lfloor {\sqrt x } \right\rfloor \]</p>
-<p>更一般的，我们还可以证明，对于任意连续、递增的函数$f(x)$，如果它满足<br>\[f(x) \in \mathbb{Z} \Rightarrow x \in \mathbb{Z}\]<br>那么有<br>\[\begin{array}{l}\left\lfloor {f(x)} \right\rfloor &#x3D; \left\lfloor {f(\left\lfloor x \right\rfloor )} \right\rfloor \\left\lceil {f(x)} \right\rceil &#x3D; \left\lceil {f(\left\lceil x \right\rceil )} \right\rceil \end{array}\]</p>
+<h2 id="应用1"><a href="#应用1" class="headerlink" title="应用1"></a>应用1</h2><p>证明：<br>\[\left\lfloor {\sqrt {\left\lfloor x \right\rfloor } } \right\rfloor = \left\lfloor {\sqrt x } \right\rfloor \]</p>
+<p>更一般的，我们还可以证明，对于任意连续、递增的函数$f(x)$，如果它满足<br>\[f(x) \in \mathbb{Z} \Rightarrow x \in \mathbb{Z}\]<br>那么有<br>\[\begin{array}{l}\left\lfloor {f(x)} \right\rfloor = \left\lfloor {f(\left\lfloor x \right\rfloor )} \right\rfloor \\left\lceil {f(x)} \right\rceil = \left\lceil {f(\left\lceil x \right\rceil )} \right\rceil \end{array}\]</p>
 <p>我们证明第2个式子，第1个同理可证。</p>
-<p>如果$x &#x3D; \left\lceil x \right\rceil $，显然成立。</p>
-<p>否则$x &lt; \left\lceil x \right\rceil $，因为$f(x)$递增，所以有<br>\[f(x) &lt; f(\left\lceil x \right\rceil )\]<br>两边同时取整，有<br>\[\left\lceil {f(x)} \right\rceil  \le \left\lceil {f(\left\lceil x \right\rceil )} \right\rceil \]<br>要证左右两边相等，那么只要证<br>\[\left\lceil {f(x)} \right\rceil  &lt; \left\lceil {f(\left\lceil x \right\rceil )} \right\rceil \]<br>不成立即可。假设上式成立，那么由中间值定理，一定存在$x \le y &lt; \left\lceil x \right\rceil $，使得<br>\[f(y) &#x3D; \left\lceil {f(x)} \right\rceil \]<br>**敲黑板！！**这里是怎么来的呢？<br>由下图可以看出，当下面式子成立时，满足中间值定理<br>\[f(x) &lt; \left\lceil {f(x)} \right\rceil  &lt; f(\left\lceil x \right\rceil )\]<br>但是在这里，我们假设是<br>\[\left\lceil {f(x)} \right\rceil  &lt; \left\lceil {f(\left\lceil x \right\rceil )} \right\rceil \]<br>那么由$\left\lceil {f(x)} \right\rceil &lt; \left\lceil {f(\left\lceil x \right\rceil )} \right\rceil $能否推出$\left\lceil {f(x)} \right\rceil &lt; f(\left\lceil x \right\rceil )$呢？当然是可以的。<br>\[\begin{array}{l}\left\lceil {f(x)} \right\rceil  &lt; \left\lceil {f(\left\lceil x \right\rceil )} \right\rceil \ \Rightarrow \left\lceil {f(x)} \right\rceil  \le \left\lceil {f(\left\lceil x \right\rceil )} \right\rceil  - 1 &lt; f(\left\lceil x \right\rceil )\end{array}\]<br><img src="/1.jpg"><br>所以<br>\[f(y) \in \mathbb{Z} \Rightarrow y \in \mathbb{Z}\]<br>又因为$x \le y &lt; \left\lceil x \right\rceil $，所以不存在整数$y$，矛盾！</p>
-<p>所以证得<br>\[\left\lceil {f(x)} \right\rceil &#x3D; \left\lceil {f(\left\lceil x \right\rceil )} \right\rceil \]</p>
-<p>另一个特殊的例子是<br>\[\left\lfloor {\frac{ {x + m}}{n}} \right\rfloor &#x3D; \left\lfloor {\frac{ {\left\lfloor x \right\rfloor + m}}{n}} \right\rfloor \]<br>其中$m$和$n$都是整数，并且$n$是正整数。</p>
+<p>如果$x = \left\lceil x \right\rceil $，显然成立。</p>
+<p>否则$x &lt; \left\lceil x \right\rceil $，因为$f(x)$递增，所以有<br>\[f(x) &lt; f(\left\lceil x \right\rceil )\]<br>两边同时取整，有<br>\[\left\lceil {f(x)} \right\rceil  \le \left\lceil {f(\left\lceil x \right\rceil )} \right\rceil \]<br>要证左右两边相等，那么只要证<br>\[\left\lceil {f(x)} \right\rceil  &lt; \left\lceil {f(\left\lceil x \right\rceil )} \right\rceil \]<br>不成立即可。假设上式成立，那么由中间值定理，一定存在$x \le y &lt; \left\lceil x \right\rceil $，使得<br>\[f(y) = \left\lceil {f(x)} \right\rceil \]<br><strong>敲黑板！！</strong>这里是怎么来的呢？<br>由下图可以看出，当下面式子成立时，满足中间值定理<br>\[f(x) &lt; \left\lceil {f(x)} \right\rceil  &lt; f(\left\lceil x \right\rceil )\]<br>但是在这里，我们假设是<br>\[\left\lceil {f(x)} \right\rceil  &lt; \left\lceil {f(\left\lceil x \right\rceil )} \right\rceil \]<br>那么由$\left\lceil {f(x)} \right\rceil &lt; \left\lceil {f(\left\lceil x \right\rceil )} \right\rceil $能否推出$\left\lceil {f(x)} \right\rceil &lt; f(\left\lceil x \right\rceil )$呢？当然是可以的。<br>\[\begin{array}{l}\left\lceil {f(x)} \right\rceil  &lt; \left\lceil {f(\left\lceil x \right\rceil )} \right\rceil \ \Rightarrow \left\lceil {f(x)} \right\rceil  \le \left\lceil {f(\left\lceil x \right\rceil )} \right\rceil  - 1 &lt; f(\left\lceil x \right\rceil )\end{array}\]<br><img src="1.jpg" alt=""><br>所以<br>\[f(y) \in \mathbb{Z} \Rightarrow y \in \mathbb{Z}\]<br>又因为$x \le y &lt; \left\lceil x \right\rceil $，所以不存在整数$y$，矛盾！</p>
+<p>所以证得<br>\[\left\lceil {f(x)} \right\rceil = \left\lceil {f(\left\lceil x \right\rceil )} \right\rceil \]</p>
+<p>另一个特殊的例子是<br>\[\left\lfloor {\frac{ {x + m}}{n}} \right\rfloor = \left\lfloor {\frac{ {\left\lfloor x \right\rfloor + m}}{n}} \right\rfloor \]<br>其中$m$和$n$都是整数，并且$n$是正整数。</p>
 <h2 id="应用2"><a href="#应用2" class="headerlink" title="应用2"></a>应用2</h2><p>接着介绍区间相关的性质。</p>
-<p>求1到1000中使得下列式子成立的$n$一共有多少个？<br>\[\left\lfloor {\sqrt[3]{n}} \right\rfloor |n\]<br>求解方法如下：<br>\[\begin{array}{l}W{\rm{ &#x3D; }}\sum\limits*{1 \le n \le 1000} {\left[ {\left\lfloor {\sqrt[3]{n}} \right\rfloor |n} \right]} \ &#x3D; \sum\limits*{k,n} {\left[ {k &#x3D; \left\lfloor {\sqrt[3]{n}} \right\rfloor } \right]\left[ {k|n} \right]\left[ {1 \le n \le 1000} \right]} \ &#x3D; \sum\limits*{k,m,n} {\left[ { {k^3} \le n &lt; { {(k + 1)}^3}} \right]\left[ {n &#x3D; km} \right]} \left[ {1 \le n \le 1000} \right]\ &#x3D; 1 + \sum\limits*{k,m} {\left[ { {k^3} \le km &lt; { {(k + 1)}^3}} \right]} \left[ {1 \le k &lt; 10} \right]\ &#x3D; 1 + \sum\limits*{k,m} {\left[ {m \in [{k^2},{ {(k + 1)}^3}&#x2F;k)} \right]} \left[ {1 \le k &lt; 10} \right]\ &#x3D; 1 + \sum\limits*{1 \le k &lt; 10} {(\left\lceil { {k^2} + 3k + 3 + 1&#x2F;k} \right\rceil - \left\lceil { {k^2}} \right\rceil )} \ &#x3D; 1 + \sum\limits_{1 \le k &lt; 10} {(3k + 4)} \ &#x3D; 172\end{array}\]</p>
-<p>继续推广，求1到$N$中使得上面式子成立的$n$有多少个？<br>令<br>\[K &#x3D; \left\lfloor {\sqrt[3]{N}} \right\rfloor \]<br>也就是小于等于$\left\lfloor {\sqrt[3]{N}} \right\rfloor $的最大整数。<br>所以<br>\[\begin{array}{l}W &#x3D; \sum\limits_{1 \le k &lt; K} {(3k + 4)} + \sum\limits_m {\left[ { {K^3} \le Km \le N} \right]} \ &#x3D; \left\lfloor {N&#x2F;K} \right\rfloor + \frac{1}{2}{K^2} + \frac{5}{2}K - 3\end{array}\]<br>渐进地等于<br>\[W &#x3D; \frac{3}{2}{N^{2&#x2F;3}} + O({N^{1&#x2F;3}})\]</p>
-<h2 id="应用3"><a href="#应用3" class="headerlink" title="应用3"></a>应用3</h2><p>定义一个实数的谱为：<br>\[Spec(\alpha ) &#x3D; { \left\lfloor \alpha \right\rfloor ,\left\lfloor {2\alpha } \right\rfloor ,\left\lfloor {3\alpha } \right\rfloor , \ldots } \]</p>
+<p>求1到1000中使得下列式子成立的$n$一共有多少个？<br>\[\left\lfloor {\sqrt[3]{n}} \right\rfloor |n\]<br>求解方法如下：<br>\[\begin{array}{l}W{\rm{ = }}\sum\limits<em>{1 \le n \le 1000} {\left[ {\left\lfloor {\sqrt[3]{n}} \right\rfloor |n} \right]} \ = \sum\limits</em>{k,n} {\left[ {k = \left\lfloor {\sqrt[3]{n}} \right\rfloor } \right]\left[ {k|n} \right]\left[ {1 \le n \le 1000} \right]} \ = \sum\limits<em>{k,m,n} {\left[ { {k^3} \le n &lt; { {(k + 1)}^3}} \right]\left[ {n = km} \right]} \left[ {1 \le n \le 1000} \right]\ = 1 + \sum\limits</em>{k,m} {\left[ { {k^3} \le km &lt; { {(k + 1)}^3}} \right]} \left[ {1 \le k &lt; 10} \right]\ = 1 + \sum\limits<em>{k,m} {\left[ {m \in [{k^2},{ {(k + 1)}^3}/k)} \right]} \left[ {1 \le k &lt; 10} \right]\ = 1 + \sum\limits</em>{1 \le k &lt; 10} {(\left\lceil { {k^2} + 3k + 3 + 1/k} \right\rceil - \left\lceil { {k^2}} \right\rceil )} \ = 1 + \sum\limits_{1 \le k &lt; 10} {(3k + 4)} \ = 172\end{array}\]</p>
+<p>继续推广，求1到$N$中使得上面式子成立的$n$有多少个？<br>令<br>\[K = \left\lfloor {\sqrt[3]{N}} \right\rfloor \]<br>也就是小于等于$\left\lfloor {\sqrt[3]{N}} \right\rfloor $的最大整数。<br>所以<br>\[\begin{array}{l}W = \sum\limits_{1 \le k &lt; K} {(3k + 4)} + \sum\limits_m {\left[ { {K^3} \le Km \le N} \right]} \ = \left\lfloor {N/K} \right\rfloor + \frac{1}{2}{K^2} + \frac{5}{2}K - 3\end{array}\]<br>渐进地等于<br>\[W = \frac{3}{2}{N^{2/3}} + O({N^{1/3}})\]</p>
+<h2 id="应用3"><a href="#应用3" class="headerlink" title="应用3"></a>应用3</h2><p>定义一个实数的谱为：<br>\[Spec(\alpha ) = { \left\lfloor \alpha \right\rfloor ,\left\lfloor {2\alpha } \right\rfloor ,\left\lfloor {3\alpha } \right\rfloor , \ldots } \]</p>
 <p>很容易证明如果两个实数$\alpha \ne \beta $，那么<br>\[Spec(\alpha ) \ne Spec(\beta )\]</p>
 <p>假设$\alpha  &lt; \beta $，那么令<br>\[m(\beta  - \alpha ) \ge 1\]<br>所以<br>$m\beta \ge m\alpha + 1 \Rightarrow \left\lfloor {m\beta } \right\rfloor &gt; \left\lfloor {m\alpha } \right\rfloor $<br>所以集合$Spec(\beta )$中小于$\left\lfloor {m\alpha } \right\rfloor $的元素个数小于$m$。而集合$Spec(\alpha )$中小于$\left\lfloor {m\alpha } \right\rfloor $的元素个数大于等于$m$。所以两个集合不相等。</p>
-<p>谱有很多奇妙的性质，例如下面两个谱：<br>\[\begin{array}{l}Spec(\sqrt 2 ) &#x3D; { \left\lfloor {\sqrt 2 } \right\rfloor ,\left\lfloor {2\sqrt 2 } \right\rfloor ,\left\lfloor {3\sqrt 2 } \right\rfloor , \ldots } \Spec(2{\rm{ + }}\sqrt 2 ) &#x3D; { \left\lfloor {2{\rm{ + }}\sqrt 2 } \right\rfloor ,\left\lfloor {2(2{\rm{ + }}\sqrt 2 )} \right\rfloor ,\left\lfloor {3(2{\rm{ + }}\sqrt 2 )} \right\rfloor , \ldots } \end{array}\]<br>可以发现，这两个谱正好划分了正整数集。<br>证明方法也很简单，只要证明对任意正整数$n$，两个集合中小于$n$的元素个数之和为$n$，过程如下：<br>\[\begin{array}{l}\left\lfloor {k\sqrt 2 } \right\rfloor \le n\ \Rightarrow k\sqrt 2 &lt; n + 1\ \Rightarrow k &lt; \frac{ {n + 1}}{ {\sqrt 2 }}\end{array}\]<br>所以第一个集合中小于$n$的元素个数为<br>\[\left\lfloor {\frac{ {n + 1}}{ {\sqrt 2 }}} \right\rfloor \]<br>同理第二个集合中小于$n$的元素个数为<br>\[\left\lfloor {\frac{ {n + 1}}{ {2 + \sqrt 2 }}} \right\rfloor \]<br>所以总个数为<br>\[\begin{array}{l}\left\lfloor {\frac{ {n + 1}}{ {\sqrt 2 }}} \right\rfloor + \left\lfloor {\frac{ {n + 1}}{ {2 + \sqrt 2 }}} \right\rfloor \ &#x3D; \left\lfloor {\frac{ {\sqrt 2 }}{2}(n + 1)} \right\rfloor + \left\lfloor {\frac{ {2 - \sqrt 2 }}{2}(n + 1)} \right\rfloor \ &#x3D; n + 1 + \left\lfloor {\frac{ {\sqrt 2 }}{2}(n + 1)} \right\rfloor + \left\lfloor { - \frac{ {\sqrt 2 }}{2}(n + 1)} \right\rfloor \ &#x3D; n + 1 + \left\lfloor {\frac{ {\sqrt 2 }}{2}(n + 1)} \right\rfloor + \left\lfloor {\frac{ {\sqrt 2 }}{2}(n + 1)} \right\rfloor - 1\ &#x3D; n\end{array}\]<br>得证。</p>
+<p>谱有很多奇妙的性质，例如下面两个谱：<br>\[\begin{array}{l}Spec(\sqrt 2 ) = { \left\lfloor {\sqrt 2 } \right\rfloor ,\left\lfloor {2\sqrt 2 } \right\rfloor ,\left\lfloor {3\sqrt 2 } \right\rfloor , \ldots } \Spec(2{\rm{ + }}\sqrt 2 ) = { \left\lfloor {2{\rm{ + }}\sqrt 2 } \right\rfloor ,\left\lfloor {2(2{\rm{ + }}\sqrt 2 )} \right\rfloor ,\left\lfloor {3(2{\rm{ + }}\sqrt 2 )} \right\rfloor , \ldots } \end{array}\]<br>可以发现，这两个谱正好划分了正整数集。<br>证明方法也很简单，只要证明对任意正整数$n$，两个集合中小于$n$的元素个数之和为$n$，过程如下：<br>\[\begin{array}{l}\left\lfloor {k\sqrt 2 } \right\rfloor \le n\ \Rightarrow k\sqrt 2 &lt; n + 1\ \Rightarrow k &lt; \frac{ {n + 1}}{ {\sqrt 2 }}\end{array}\]<br>所以第一个集合中小于$n$的元素个数为<br>\[\left\lfloor {\frac{ {n + 1}}{ {\sqrt 2 }}} \right\rfloor \]<br>同理第二个集合中小于$n$的元素个数为<br>\[\left\lfloor {\frac{ {n + 1}}{ {2 + \sqrt 2 }}} \right\rfloor \]<br>所以总个数为<br>\[\begin{array}{l}\left\lfloor {\frac{ {n + 1}}{ {\sqrt 2 }}} \right\rfloor + \left\lfloor {\frac{ {n + 1}}{ {2 + \sqrt 2 }}} \right\rfloor \ = \left\lfloor {\frac{ {\sqrt 2 }}{2}(n + 1)} \right\rfloor + \left\lfloor {\frac{ {2 - \sqrt 2 }}{2}(n + 1)} \right\rfloor \ = n + 1 + \left\lfloor {\frac{ {\sqrt 2 }}{2}(n + 1)} \right\rfloor + \left\lfloor { - \frac{ {\sqrt 2 }}{2}(n + 1)} \right\rfloor \ = n + 1 + \left\lfloor {\frac{ {\sqrt 2 }}{2}(n + 1)} \right\rfloor + \left\lfloor {\frac{ {\sqrt 2 }}{2}(n + 1)} \right\rfloor - 1\ = n\end{array}\]<br>得证。</p>
 
             </div>
             <hr />
@@ -1059,7 +1059,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

@@ -525,19 +525,19 @@
 </blockquote>
 <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>首先这篇综述是讲AutoML的，不单单是NAS，但是因为NAS是AutoML中最最重要的一部分，所以主要篇章还是用来讲NAS了。据作者所说，应该是第一篇完整讲述AutoML整个流程的综述。</p>
 <p>首先，本文将AutoML划分成了如下几个流程：</p>
-<p><img src="/1.png"></p>
+<p><img src="1.png" alt=""></p>
 <p>先是数据准备，然后是特征工程，接着是模型生成，最后就是模型评估了。其中模型生成又可以分为搜索空间和优化方法，搜索空间有传统的ML模型或者DL模型，优化方法又分为超参数优化和结构优化。NAS的话主要就涉及到DL模型的搜索空间定义、结构优化和模型评估策略这三块。</p>
 <p>因为我主要关注NAS这块，所以其他部分就只简单介绍一下，不做过多解读。</p>
-<h3 id="数据准备"><a href="#数据准备" class="headerlink" title="数据准备"></a>数据准备</h3><p><img src="/2.png"></p>
+<h3 id="数据准备"><a href="#数据准备" class="headerlink" title="数据准备"></a>数据准备</h3><p><img src="2.png" alt=""></p>
 <p>看上面这个图应该很清楚了，数据准备主要分为数据收集、数据清洗和数据增强三个部分。</p>
 <h3 id="数据收集"><a href="#数据收集" class="headerlink" title="数据收集"></a>数据收集</h3><p>有开源的就去下开源的，没开源的就去互联网上爬，要是什么都没有呢，那就通过GAN之类的技术来生成伪数据，有总比没有好嘛。</p>
 <h3 id="数据清洗"><a href="#数据清洗" class="headerlink" title="数据清洗"></a>数据清洗</h3><p>就是清洗数据中的噪声、脏数据，这一过程可能需要一些知识去判断什么是噪声。还有一个研究主题就是如何清洗每天更新的源源不断的新数据。</p>
-<h3 id="数据增强"><a href="#数据增强" class="headerlink" title="数据增强"></a>数据增强</h3><p><img src="/3.png"></p>
+<h3 id="数据增强"><a href="#数据增强" class="headerlink" title="数据增强"></a>数据增强</h3><p><img src="3.png" alt=""></p>
 <p>数据增强某种程度上也可以被视为数据收集的一种工具，因为效果都是一样的，增加了新数据。但是它的目的有所不同，主要是为了防止模型过拟合。上图针对不同数据有很多增强方法，这里就不介绍了。</p>
 <h2 id="特征工程"><a href="#特征工程" class="headerlink" title="特征工程"></a>特征工程</h2><p>有句话叫：数据和特征决定了机器学习的上界，而模型和算法只是为了去近似这个上界。主要可以分成三块，特征选择、特征构建和特征提取。这里也不多介绍了，因为在DL里特征工程用得很少，DL模型可以自己从数据中学出特征，很少需要自己手动构造特征了。</p>
 <h2 id="模型生成"><a href="#模型生成" class="headerlink" title="模型生成"></a>模型生成</h2><p>从这块开始进入到了NAS的领域。之前说了，搜索空间分为ML和DL两块，本文只关注DL，而优化方法又分为超参优化和网络架构优化，本文也主要只关注网络架构优化，因为超参优化是挑选出最优网络架构之后的事情了，不过也有工作将NAS用在超参优化上的，这个就不在讨论范围内了。</p>
-<p><img src="/4.png"></p>
-<p><img src="/5.png"></p>
+<p><img src="4.png" alt=""></p>
+<p><img src="5.png" alt=""></p>
 <p>上面两张图是NAS的一般流程：</p>
 <ul>
 <li>首先针对不同的任务定义一个搜索空间，这个搜索空间就决定了你搜出来的网络架构可能长什么样子，也决定了你搜出来的架构可能性有多少，当然是越大越好，但是带来的后果就是搜索速度太慢。</li>
@@ -549,25 +549,25 @@
 <h4 id="整体结构搜索"><a href="#整体结构搜索" class="headerlink" title="整体结构搜索"></a>整体结构搜索</h4><p>就是按照DAG的拓扑序，依次生成出模型架构出来。一般来说，用一个RNN来生成，每生成一个node，都要预测出它的输入是哪些node（残差）、作用在它上面的op有哪些。</p>
 <p>但是这种方法太慢了，搜索的复杂度是指数级别的，因此在最初的几篇RL论文里，都用了几百个GPU训练了几十天才搜出来，穷苦人家可搜不起。</p>
 <h4 id="cell搜索"><a href="#cell搜索" class="headerlink" title="cell搜索"></a>cell搜索</h4><p>这种方式也是借鉴了人类设计神经网络的经验，像ResNet系列都是将一个个cell层层堆叠得到的，因此如果只搜一个cell，然后将相同的cell堆叠起来岂不是大大减小了搜索空间。后面的很多工作都是基于cell来搜索的，比如NASNet。</p>
-<p><img src="/6.png"></p>
+<p><img src="6.png" alt=""></p>
 <p>在NASNet中，cell被分成了两种，一种是normal cell，它的输入输出维度保持相同，另一种是reduction cell，它的结构和normal cell相似，但是输出的宽度和高度减半，通道数加倍。</p>
 <p>最后搜索出最优cell之后，根据需要堆叠不同层数的cell就行了，这个层数也是人为定义的。但是这里就会存在一个训练和评估不一致的问题，一般来说，在搜索的时候，为了减小显存占用，会堆叠比较少的层数去评估。但是在得到最优cell之后，用来retrain时会堆叠比较多的层数，这里就不一定是最优解了。也有工作做这方面的优化，比如P-DARTS，在搜索阶段逐渐增加堆叠的层数。</p>
-<p><img src="/7.png"></p>
+<p><img src="7.png" alt=""></p>
 <h4 id="分层搜索"><a href="#分层搜索" class="headerlink" title="分层搜索"></a>分层搜索</h4><p>当然搜索cell也是存在问题的，忽视了整体结构的优化，而且每一层的cell相同也不一定最好啊。因此后来的工作又提出了分层搜索的方法。</p>
 <p>比如Auto-deeplab在搜索cell的同时，还搜索了不同层的分辨率，下一层的分辨率可以是一半、不变或两倍，这一步限制一是为了减小搜索空间，二是为了增加稳定性，防止分辨率变化太大。</p>
-<p><img src="/8.png"></p>
+<p><img src="8.png" alt=""></p>
 <p>再如HierNAS，按照层次结构来搜索网络架构，第一层是一些原子操作，第二层用这些原子操作生成一些比较小的网络，第三层用第二层的小网络再搭建出一个更大的网络，依次下去。</p>
-<p><img src="/9.png"></p>
+<p><img src="9.png" alt=""></p>
 <p>再如progressive NAS，为了减小一个cell里面的搜索空间大小，从一个cell里面只有一个block开始搜索，每次挑出top-k个cell，在基础上衍生出两个block，依次下去。评估性能用的是代理模型直接预测，不需要真的训练一遍。</p>
 <p>再如MnasNet，它将整个网络分为了若干个cell，每个cell串行了若干个block，每个cell的block数量可能不同，而单个cell里面的block结构是相同的，这样就考虑到了整体的网络搜索空间。和堆叠cell不同的是，每个block的结构比较简单，不然的话整体上搜索复杂度还是太大了。当然这篇主要还是为了做移动端部署，因此做了多目标NAS，将延时也考虑到了目标函数中去。</p>
-<p><img src="/10.png"></p>
+<p><img src="10.png" alt=""></p>
 <p>之前的方法还存在一个问题，就是基本都是在小数据集上做的搜索评估，最后将最优结构运用到大数据集上，这就存在不一致性。因此例如ProxylessNAS就直接在大数据集上搜索评估，为了减小显存消耗，采用BinaryConnect，每次只激活两个结点之间的一条边。</p>
 <h4 id="网络态射"><a href="#网络态射" class="headerlink" title="网络态射"></a>网络态射</h4><p>这类方法主要思想就是在已经训练好的成熟网络基础上增加宽度、深度等等，继承父网络的参数，加速子网络的训练。</p>
 <p>首先是Net2Net，扩展分为两个方向，一种是宽度上的，一种是深度上的，不能同时进行。</p>
-<p><img src="/11.png"></p>
+<p><img src="11.png" alt=""></p>
 <p>因此后来就有了网络态射，可以处理任意线性层和非线性层，并且深度和宽度上可以同时扩展。</p>
 <h3 id="架构优化"><a href="#架构优化" class="headerlink" title="架构优化"></a>架构优化</h3><p>定义好搜索空间后，就要采用架构优化算法来搜索出最优的架构了。</p>
-<h4 id="演化算法"><a href="#演化算法" class="headerlink" title="演化算法"></a>演化算法</h4><p><img src="/12.png"></p>
+<h4 id="演化算法"><a href="#演化算法" class="headerlink" title="演化算法"></a>演化算法</h4><p><img src="12.png" alt=""></p>
 <p>演化算法就是模仿的生物进化过程。首先要对网络架构进行编码，方便之后的操作。可以将图结构编码为二进制串，但是这样固定长度不灵活。于是就有了Cartesian genetic programming、Neuro evolution of augmenting topologies、Cellular encoding等各种编码方法，详细就不介绍了。</p>
 <p>一般演化算法分为四步：选择、交叉、变异、替换。</p>
 <ul>
@@ -576,9 +576,9 @@
 <li>变异。上面两步做完后，有很多方式可以对个体进行变异，比如随机翻转某一位，随机增加或者删除两层之间的连接等等。</li>
 <li>替换。新的个体加入种群后，旧的个体要被删除掉。可以删除最久之前的，也可以删除效果最差的，也有工作一个都不删除，只要你内存和时间顶得住。</li>
 </ul>
-<h4 id="强化学习"><a href="#强化学习" class="headerlink" title="强化学习"></a>强化学习</h4><p><img src="/13.png"></p>
+<h4 id="强化学习"><a href="#强化学习" class="headerlink" title="强化学习"></a>强化学习</h4><p><img src="13.png" alt=""></p>
 <p>强化学习主要思想就是用一个控制器（一般是RNN）来生成网络架构，然后评估得到得分作为反馈更新控制器参数。有用策略梯度的，也有用Q-learning的，还有用PPO算法的等等。第一篇NAS论文就是用的RL，但是这一类方法普遍很费卡，一般人玩不起。</p>
-<h4 id="梯度下降"><a href="#梯度下降" class="headerlink" title="梯度下降"></a>梯度下降</h4><p><img src="/14.png"></p>
+<h4 id="梯度下降"><a href="#梯度下降" class="headerlink" title="梯度下降"></a>梯度下降</h4><p><img src="14.png" alt=""></p>
 <p>前两种都是在离散空间搜结构，梯度下降方法是将离散空间变为了连续空间。第一个提出的是DARTS，在两个结点之间定义了若干种操作，然后做softmax，最后在评估的时候取argmax。</p>
 <p>这种方法也有不好，比如成倍增加了显存，本来一条边现在需要成倍的计算量，此外用了代理任务，在小数据集上训的层数比较少，迁移到大数据集上层数又很多。也有解决方法，比如P-DARTS，随着训练进行逐渐加层数，为了减小计算量，还逐渐减少了每条边上的操作数。而GDAS每次只选概率最大的那个操作边做前向，反向传播用gumbel softmax。</p>
 <p>两套参数联合优化也是很困难的，DARTS用的是交替优化，一次优化结构参数，一次优化模型权重。</p>
@@ -594,7 +594,7 @@
 <h3 id="权重共享"><a href="#权重共享" class="headerlink" title="权重共享"></a>权重共享</h3><p>比如ENAS，可以在多次评估模型性能时，继承之前相同node的参数，可以加快收敛速度。网络态射也是用到了权重共享。</p>
 <h3 id="代理模型-1"><a href="#代理模型-1" class="headerlink" title="代理模型"></a>代理模型</h3><p>直接学习一个预测器，输入是网络架构，输出是它的性能，当然这需要提前先训练一些模型，得到（架构，性能）的若干数据，然后才能学习出这个预测器，PNAS就是这么干的。当然预测器的学习数据肯定不会多，所以SemiNAS就用半监督的方法，利用大量无标注的结构去预测出性能，加入到训练集中继续优化预测器。</p>
 <h3 id="early-stop"><a href="#early-stop" class="headerlink" title="early stop"></a>early stop</h3><p>可以只训练几轮，然后根据前期的学习曲线预测出最终的性能。</p>
-<h2 id="一些讨论"><a href="#一些讨论" class="headerlink" title="一些讨论"></a>一些讨论</h2><h3 id="效果对比"><a href="#效果对比" class="headerlink" title="效果对比"></a>效果对比</h3><p><img src="/15.png"><br><img src="/16.png"></p>
+<h2 id="一些讨论"><a href="#一些讨论" class="headerlink" title="一些讨论"></a>一些讨论</h2><h3 id="效果对比"><a href="#效果对比" class="headerlink" title="效果对比"></a>效果对比</h3><p><img src="15.png" alt=""><br><img src="16.png" alt=""></p>
 <p>可以看出，演化算法和强化学习搜索时间都非常长，除了个别几个用了权重共享之类技巧的。梯度下降方法全部都挺快的，但是整体效果都不如其他几类方法。</p>
 <h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>从整体流程上来看，NAS方法还可以分为一阶段和两阶段。两阶段是一般做法，第一个阶段就是搜索评估阶段，选出最好的架构，第二个阶段就是retrain这个最优架构，在验证集上评估。而一阶段就是只需要训练一次超网络，联合优化架构参数和模型权重，之后不需要再retrain了。比如比较有名的Once-for-all，采用了progressive shrinking算法来使得子网络之间的性能相互不受到影响。</p>
 <p>NAS还可以分为one-shot和non-one-shot，one-shot意思就是搜索空间重合的，可以重复利用之前的参数，比如ENAS、网络态射、ProxylessNAS等都是的。</p>
@@ -610,36 +610,36 @@
 <h2 id="经典论文简析"><a href="#经典论文简析" class="headerlink" title="经典论文简析"></a>经典论文简析</h2><h3 id="（NAS）-ICLR-17-Neural-Architecture-Search-with-Reinforcement-Learning"><a href="#（NAS）-ICLR-17-Neural-Architecture-Search-with-Reinforcement-Learning" class="headerlink" title="（NAS）[ICLR 17] Neural Architecture Search with Reinforcement Learning"></a>（NAS）[ICLR 17] Neural Architecture Search with Reinforcement Learning</h3><p><strong>动机</strong><br>用强化学习来采样网络，生成出最优网络结构，避免人工设计。</p>
 <p><strong>方法</strong><br>用RNN来预测CNN或者RNN的结构，采样结构，下游任务效果作为强化学习得分，策略梯度更新参数。</p>
 <p>CNN预定义好层数，LSTM每5层预测CNN一层的5个参数。</p>
-<p><img src="/17.png"></p>
+<p><img src="17.png" alt=""></p>
 <p>RNN预定义好cell的计算拓扑图，LSTM预测每个node的计算逻辑。</p>
-<p><img src="/18.png"></p>
-<p><strong>实验</strong><br><img src="/19.png"></p>
+<p><img src="18.png" alt=""></p>
+<p><strong>实验</strong><br><img src="19.png" alt=""></p>
 <p>接近人类设计网络的最好水平。速度超慢，800 K40，28天，只适用于小数据集例如CIFAR-10。</p>
 <p><strong>评价</strong><br>强化学习应用到NAS的第一篇论文。</p>
 <h3 id="（NASNet）-CVPR-18-Learning-Transferable-Architectures-for-Scalable-Image-Recognition"><a href="#（NASNet）-CVPR-18-Learning-Transferable-Architectures-for-Scalable-Image-Recognition" class="headerlink" title="（NASNet）[CVPR 18] Learning Transferable Architectures for Scalable Image Recognition"></a>（NASNet）[CVPR 18] Learning Transferable Architectures for Scalable Image Recognition</h3><p><strong>动机</strong><br>RL直接搜太慢了，只能用在小数据集，ImageNet之类的大数据集没法用。</p>
 <p><strong>方法</strong><br>提出了NASNet，用堆叠相同cell的方式减小搜索空间。在CIFAR-10上面学习cell结构，通过增加堆叠层数的方式迁移到ImageNet上去。用PPO替代策略梯度。</p>
-<p><img src="/20.png"></p>
+<p><img src="20.png" alt=""></p>
 <p>选择之前的两个node，分别预测对应op，然后预测合并op。</p>
-<p><img src="/21.png"></p>
-<p><strong>实验</strong><br><img src="/22.png"><br><img src="/23.png"></p>
+<p><img src="21.png" alt=""></p>
+<p><strong>实验</strong><br><img src="22.png" alt=""><br><img src="23.png" alt=""></p>
 <p>效果和参数量都好于前作，达到了SOTA水平。速度加快很多，500 P100，4天，相比于前作加速7倍。</p>
 <p><strong>评价</strong><br>NASNet，通过cell堆叠加快了结构搜索的速度，同时效果达到了SOTA，并且容易迁移到其他任务上去。</p>
 <h3 id="（ENAS）-ICML-18-Efficient-Neural-Architecture-Search-via-Parameter-Sharing"><a href="#（ENAS）-ICML-18-Efficient-Neural-Architecture-Search-via-Parameter-Sharing" class="headerlink" title="（ENAS）[ICML 18] Efficient Neural Architecture Search via Parameter Sharing"></a>（ENAS）[ICML 18] Efficient Neural Architecture Search via Parameter Sharing</h3><p><strong>动机</strong><br>之前的方法采样出一个结构，在dev上得到acc，然后就会抛弃权重，重新采样训练，非常耗时。</p>
 <p><strong>方法</strong><br>定义一个超图，每次搜出的子图共享权重。</p>
 <p>对于RNN cell，LSTM的每两个step预测之前某个node作为输入，再预测op，最后出度0的node拼接作为输出。</p>
-<p><img src="/24.png"></p>
+<p><img src="24.png" alt=""></p>
 <p>对于CNN，一种策略是直接生成整个网络，每个node先预测之前哪些作为输入，然后预测op。</p>
-<p><img src="/25.png"></p>
+<p><img src="25.png" alt=""></p>
 <p>另一种策略和NASNet类似，堆叠cell，搜索空间缩小到一个cell。</p>
-<p><strong>实验</strong><br><img src="/26.png"></p>
+<p><strong>实验</strong><br><img src="26.png" alt=""></p>
 <p>优于NAS和NASNet，1 1080Ti，16小时，相比NAS加速1000倍。</p>
 <p><strong>评价</strong><br>训练速度很快，AutoKeras背后就采用了ENAS。</p>
 <h3 id="（DARTS）-ICLR-19-DARTS-Differentiable-Architecture-Search"><a href="#（DARTS）-ICLR-19-DARTS-Differentiable-Architecture-Search" class="headerlink" title="（DARTS）[ICLR 19] DARTS: Differentiable Architecture Search"></a>（DARTS）[ICLR 19] DARTS: Differentiable Architecture Search</h3><p><strong>动机</strong><br>离散结构搜索太慢了，采样+验证+反馈的循环很耗时。</p>
 <p><strong>方法</strong><br>连续域结构搜索代替离散域结构搜索，用微分来优化结构。</p>
 <p>两套参数：模型参数$w$（训练集优化）、结构参数$\alpha$（验证集优化）。</p>
 <p>交替优化两套参数，softmax+relax学习最终结构。</p>
-<p><img src="/27.png"></p>
-<p><strong>实验</strong><br><img src="/28.png"></p>
+<p><img src="27.png" alt=""></p>
+<p><strong>实验</strong><br><img src="28.png" alt=""></p>
 <p>效果达到或接近了SOTA，速度上比ENAS慢，比其他的方法快。</p>
 <p><strong>评价</strong><br>第一个用可微分方法做NAS的，第一个连续空间搜索代替离散空间搜索。</p>
 <h3 id="ICLR-19-Rethinking-the-Value-of-Network-Pruning"><a href="#ICLR-19-Rethinking-the-Value-of-Network-Pruning" class="headerlink" title="[ICLR 19] Rethinking the Value of Network Pruning"></a>[ICLR 19] Rethinking the Value of Network Pruning</h3><p><strong>动机</strong><br>现有的剪枝方法存在问题，很多操作不合理，没有必要。</p>
@@ -654,7 +654,7 @@
 <li>大模型剪枝后，随机初始化重新训练，效果和继承参数finetune差不多。</li>
 </ul>
 <p>所以本文认为剪枝后的结构重要，而参数不是那么重要。</p>
-<p><strong>实验</strong><br><img src="/29.png"></p>
+<p><strong>实验</strong><br><img src="29.png" alt=""></p>
 <p>一系列实验结果验证了猜想，此外本文还否定了彩票假设，认为剪枝后随机初始化即可，没必要和原始初始化相同。</p>
 <p><strong>评价</strong><br>仍然有一些局限性，比如数据分布均衡、模型比较大，估计在其他设置下不一定work。而且不如finetune速度快。</p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><h3 id="不错的综述或讨论"><a href="#不错的综述或讨论" class="headerlink" title="不错的综述或讨论"></a>不错的综述或讨论</h3><p><a href="https://lilianweng.github.io/lil-log/2020/08/06/neural-architecture-search.html">https://lilianweng.github.io/lil-log/2020/08/06/neural-architecture-search.html</a><br><a href="https://jinzhuojun.blog.csdn.net/article/details/84698471">https://jinzhuojun.blog.csdn.net/article/details/84698471</a><br><a href="http://www.tensorinfinity.com/paper_136.html">http://www.tensorinfinity.com/paper_136.html</a><br><a href="https://zhuanlan.zhihu.com/p/73785074">https://zhuanlan.zhihu.com/p/73785074</a><br><a href="https://www.zhihu.com/question/359162202">https://www.zhihu.com/question/359162202</a><br><a href="https://github.com/pzhren/Awesome-NAS">https://github.com/pzhren/Awesome-NAS</a><br>Neural Architecture Search: A Survey<br>A Comprehensive Survey of Neural Architecture Search: Challenges and Solutions<br>AutoML: A Survey of the State-of-the-Art<br>A Comprehensive Survey of Neural Architecture Search: Challenges and Solutions</p>
@@ -1182,7 +1182,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

@@ -522,26 +522,26 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个整数 n，计算所有小于等于 n 的非负整数中数字 1 出现的个数。</p>
 <p><strong>示例1</strong></p>
 <figure class="highlight text"><table><tr><td class="code"><pre><span class="line">输入：</span><br><span class="line">13</span><br><span class="line">输出：</span><br><span class="line">6</span><br><span class="line">解释：</span><br><span class="line">数字 1 出现在以下数字中: 1, 10, 11, 12, 13 。</span><br></pre></td></tr></table></figure>
 
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>这题是我搜数位 dp 题目搜出来的，于是我直接用数位 dp 方法把它过了，后来发现其实没必要这么麻烦，简单的计算就能算出来了，这里两个方法我都讲一下。</p>
-<h3 id="数学方法"><a href="#数学方法" class="headerlink" title="数学方法"></a>数学方法</h3><p>我们不妨用 n &#x3D; 12345 来举个例子。要求小于等于 n 的数字里有多少个 1 ，我们不妨转换个角度，看某一位数字是 1 的话，有多少数字小于 n 。</p>
-<p>例如从右向左数第 i &#x3D; 2 位（数字 3 ），如果这一位取 1 ，那么左边 2 位如果取 0-11 ，那么右边 2 位就没有任何限制，从 0 取到 99 都行。如果左边 2 位如果取 12 ，那么就得考虑 n 中第 i 位是几了，如果大于 1 ，那么右边 2 位还是没有限制；如果等于 1 ，那么右边 2 位只能取 0-45 ；如果等于 0 ，那就没得取了。</p>
+<h3 id="数学方法"><a href="#数学方法" class="headerlink" title="数学方法"></a>数学方法</h3><p>我们不妨用 n = 12345 来举个例子。要求小于等于 n 的数字里有多少个 1 ，我们不妨转换个角度，看某一位数字是 1 的话，有多少数字小于 n 。</p>
+<p>例如从右向左数第 i = 2 位（数字 3 ），如果这一位取 1 ，那么左边 2 位如果取 0-11 ，那么右边 2 位就没有任何限制，从 0 取到 99 都行。如果左边 2 位如果取 12 ，那么就得考虑 n 中第 i 位是几了，如果大于 1 ，那么右边 2 位还是没有限制；如果等于 1 ，那么右边 2 位只能取 0-45 ；如果等于 0 ，那就没得取了。</p>
 <p>下面这张图是我打的草稿，看的更清楚一点：</p>
-<p><img src="/1.jpg"></p>
-<p>一般化描述就是，考虑从右往左数第 i 位是 1 的数字数量。那么 n 中第 i 位左边部分的数字是 $\left\lfloor \frac{n}{10^{i+1}} \right\rfloor$ ，而右边可以取的数量是 $10^i$ ，相乘就是总的数量 $\left\lfloor \frac{n}{10^{i+1}} \right\rfloor \cdot 10^i$ 。如果左边直接取最大值，那么就要考虑第 i 位数字是几了，计算可以得到第 i 位数字为 $\left\lfloor \frac{n}{10^{i}} \right\rfloor % 10$ ，记为 x 。如果 $x &gt; 1$ ，那么右边无限制，有 $10^i$ 种取法；如果 $x &#x3D; 1$ ，那么右边有 $n % 10^i + 1$ 种取法；如果 $x &#x3D; 0$ ，那么右边无法取，因为第 i 位都没法取 1 。</p>
-<p>综上，令 $x &#x3D; \left\lfloor \frac{n}{10^{i}} \right\rfloor % 10$ ，那么答案就是：</p>
-<p>$$<br>\left\lfloor \frac{n}{10^{i+1}} \right\rfloor \cdot 10^i + 10^i \cdot [x &gt; 1] + (n % 10^i + 1) \cdot [x &#x3D; 1]<br>$$</p>
+<p><img src="1.jpg" alt=""></p>
+<p>一般化描述就是，考虑从右往左数第 i 位是 1 的数字数量。那么 n 中第 i 位左边部分的数字是 $\left\lfloor \frac{n}{10^{i+1}} \right\rfloor$ ，而右边可以取的数量是 $10^i$ ，相乘就是总的数量 $\left\lfloor \frac{n}{10^{i+1}} \right\rfloor \cdot 10^i$ 。如果左边直接取最大值，那么就要考虑第 i 位数字是几了，计算可以得到第 i 位数字为 $\left\lfloor \frac{n}{10^{i}} \right\rfloor % 10$ ，记为 x 。如果 $x &gt; 1$ ，那么右边无限制，有 $10^i$ 种取法；如果 $x = 1$ ，那么右边有 $n % 10^i + 1$ 种取法；如果 $x = 0$ ，那么右边无法取，因为第 i 位都没法取 1 。</p>
+<p>综上，令 $x = \left\lfloor \frac{n}{10^{i}} \right\rfloor % 10$ ，那么答案就是：</p>
+<p>$$<br>\left\lfloor \frac{n}{10^{i+1}} \right\rfloor \cdot 10^i + 10^i \cdot [x &gt; 1] + (n % 10^i + 1) \cdot [x = 1]<br>$$</p>
 <h3 id="数位dp"><a href="#数位dp" class="headerlink" title="数位dp"></a>数位dp</h3><p>数位 dp 就麻烦许多了，不想看的可以直接跳过了。</p>
 <p>首先我们从最高位开始往右递归计算，用 pos, count, limit 来表示计算到第 pos 位（从左往右，和数学方法不一样）时，已经出现了 count 个 1 ，并且之后的数字有无限制（也就是能否取遍 0-9 ），这种状态之下方法数是多少。</p>
-<p>那么第 pos 位我们可以取的数字有哪些呢？如果 limit &#x3D; 1 也就是有限制，那么只能取 0-n中第pos位，如果没有限制那就取 0-9 。</p>
+<p>那么第 pos 位我们可以取的数字有哪些呢？如果 limit = 1 也就是有限制，那么只能取 0-n中第pos位，如果没有限制那就取 0-9 。</p>
 <p>假设第 pos 位取 1 ，那么 pos 就转移到了 pos+1 ，count 转移到了 count+1 ，limit 呢？只有当原来有限制，并且第 pos 位正好取了最大值也就是 n 中第 pos 位数字时，limit 还是 1 ，否则的话限制取消，后面的数字随便取。如果第 pos 位不取 1 ，那么除了 count 不变以外，其他两个状态还是跟上面一样转移。</p>
 <p>终止状态的话，如果遍历到了最后一位结束，就返回 count 数量就行了，表示当前数字中有 count 个 1 。</p>
-<p>这样的话会有很多重复计算的状态，所以需要用到记忆化搜索，用 dp[pos][count] 来保存 pos, count, limit&#x3D;0 状态下的答案。为什么只保存 limit&#x3D;0 的答案呢？因为只有无限制的情况下，后面的数字才能随便取，跟 n 是多少没有关系。否则的话 n 变了后面的值就会受限于 n ，那么就不是一个定值了，没法保存。</p>
-<p>那么 limit&#x3D;1 不保存的话会不会超时呢？不会的，因为每一位只有一种取法会使得后面的数字继续有限制，所以整体上来看，有限制的状态个数是个常数，并不需要担心超时。</p>
+<p>这样的话会有很多重复计算的状态，所以需要用到记忆化搜索，用 dp[pos][count] 来保存 pos, count, limit=0 状态下的答案。为什么只保存 limit=0 的答案呢？因为只有无限制的情况下，后面的数字才能随便取，跟 n 是多少没有关系。否则的话 n 变了后面的值就会受限于 n ，那么就不是一个定值了，没法保存。</p>
+<p>那么 limit=1 不保存的话会不会超时呢？不会的，因为每一位只有一种取法会使得后面的数字继续有限制，所以整体上来看，有限制的状态个数是个常数，并不需要担心超时。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="数学方法（c-）"><a href="#数学方法（c-）" class="headerlink" title="数学方法（c++）"></a>数学方法（c++）</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">countDigitOne</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">long</span> i = <span class="number">1</span>; i &lt;= n; i *= <span class="number">10</span>) &#123;</span><br><span class="line">            res += n / (i * <span class="number">10</span>) * i;</span><br><span class="line">            <span class="type">int</span> x = (n / i) % <span class="number">10</span>;</span><br><span class="line">            res += x &gt; <span class="number">1</span> ? i : (n % i + <span class="number">1</span>) * x;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <h3 id="数位dp（c-）"><a href="#数位dp（c-）" class="headerlink" title="数位dp（c++）"></a>数位dp（c++）</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="type">int</span> a[<span class="number">14</span>];</span><br><span class="line">    <span class="type">int</span> dp[<span class="number">14</span>][<span class="number">14</span>];</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">dfs</span><span class="params">(<span class="type">int</span> pos, <span class="type">int</span> count, <span class="type">int</span> limit)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!pos) <span class="keyword">return</span> count;</span><br><span class="line">        <span class="keyword">if</span> (!limit &amp;&amp; dp[pos][count] != <span class="number">-1</span>) <span class="keyword">return</span> dp[pos][count];</span><br><span class="line">        <span class="type">int</span> res = <span class="number">0</span>, ub = limit ? a[pos] : <span class="number">9</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt;= ub; ++i) &#123;</span><br><span class="line">            res += <span class="built_in">dfs</span>(pos<span class="number">-1</span>, count+(i==<span class="number">1</span>), limit&amp;&amp;i==a[pos]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> limit ? res : dp[pos][count]=res;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">countDigitOne</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">memset</span>(dp, <span class="number">-1</span>, <span class="keyword">sizeof</span> dp);</span><br><span class="line">        <span class="type">int</span> len = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (n) &#123;</span><br><span class="line">            a[++len] = n % <span class="number">10</span>;</span><br><span class="line">            n /= <span class="number">10</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">dfs</span>(len, <span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
@@ -843,7 +843,7 @@
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-题目描述给定一个包含非负数的数组和一个目标整数 k，编写一个函数来判断该数组是否含有连续的子数组，其大小至少为 2，总和为 k 的倍数，即总和为 n*k，其中 n 也是一个整数。
+题目描述给定一个包含非负数的数组和一个目标整数 k，编写一个函数来判断该数组是否含有连续的子数组，其大小至少为 2，总和为 k 的倍数，即总和为 n*k，其中 n 也是一个整数。
 示例
                         
                     </div>
@@ -1061,7 +1061,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

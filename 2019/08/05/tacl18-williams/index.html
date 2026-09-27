@@ -525,7 +525,7 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <p><strong>论文地址：</strong><a href="https://aclweb.org/anthology/papers/Q/Q18/Q18-1019/">Do latent tree learning models identify meaningful structure in sentences?</a></p>
 <p>本文是一篇分析类论文，主要对近年来几种无监督句法分析模型（RL-SPINN和ST-Gumbel）进行了分析，得出了如下三个结论：</p>
 <ul>
@@ -543,11 +543,11 @@
 <li>模型学到的语法和任何可识别的语法规则相近的程度。</li>
 </ul>
 <h1 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h1><p>这篇论文主要分析了两种模型：SPINN模型及其变体，ST-Gumbel模型。</p>
-<h2 id="SPINN模型及其变体"><a href="#SPINN模型及其变体" class="headerlink" title="SPINN模型及其变体"></a>SPINN模型及其变体</h2><p><img src="/1.png" alt="SPINN模型图。"><br><strong>SPINN模型</strong>如图1所示，其实它也是基于转移系统的，没有太大区别。唯一区别就是它提出来不是用来做句法分析的，而是用来对句子编码，来产生句子的向量表示。模型的转移系统的句法监督来自于斯坦福的PCFG Parser，所以不一定完全准确，但是对于下游任务性能提升够用了。</p>
+<h2 id="SPINN模型及其变体"><a href="#SPINN模型及其变体" class="headerlink" title="SPINN模型及其变体"></a>SPINN模型及其变体</h2><p><img src="1.png" alt="SPINN模型图。"><br><strong>SPINN模型</strong>如图1所示，其实它也是基于转移系统的，没有太大区别。唯一区别就是它提出来不是用来做句法分析的，而是用来对句子编码，来产生句子的向量表示。模型的转移系统的句法监督来自于斯坦福的PCFG Parser，所以不一定完全准确，但是对于下游任务性能提升够用了。</p>
 <p>然后是<strong>RL-SPINN</strong>，和SPINN模型基本完全一样。最大的区别就是转移系统不是用现成的parser来提供监督了，而是用下游任务准确率作为得分来做强化学习进行优化。</p>
 <p>还有<strong>SPINN-NC</strong>（No Connection），取消了tracking模块和composition模块的连接，也就是句法树的表示不依赖buffer里的单词了，这样SPINN模型就退化为了Tree-LSTM了，完全等价。这个变体主要用来和ST-Gumbel模型进行对比，因为ST-Gumbel也是用的Tree-LSTM作为composition模块。</p>
 <p>最后一个变体是<strong>SPINN-PI-NT</strong>（Parsed Input, No Tracking），这个变体模型移除了Tracking模块，同时依赖它的两个模块之间的连接也移除了。这个模型的转移系统就没法预测了，只能根据现成的句法树直接转移。这个变体主要用来对比，用现成的parser和训练出来的parser影响有多大。</p>
-<h2 id="ST-Gumbel模型"><a href="#ST-Gumbel模型" class="headerlink" title="ST-Gumbel模型"></a>ST-Gumbel模型</h2><p><img src="/2.png" alt="ST-Gumbel模型图。"><br>这个模型其实就是使用Tree-RNN来计算任意相邻两个结点的得分，然后合并得分最高的两个结点，最后直到只剩一个根节点。如果是有监督学习的话，这样是可行的。但是现在是无监督，所以中间过程的两个结点的得分是没法直接加入到损失函数里的，而中间过程的决策又是离散的，没法计算梯度。所以提出了用ST Gumbel-Softmax来代替传统的softmax，这样就能估计出反向传播的梯度了，而不用强化学习方法了。</p>
+<h2 id="ST-Gumbel模型"><a href="#ST-Gumbel模型" class="headerlink" title="ST-Gumbel模型"></a>ST-Gumbel模型</h2><p><img src="2.png" alt="ST-Gumbel模型图。"><br>这个模型其实就是使用Tree-RNN来计算任意相邻两个结点的得分，然后合并得分最高的两个结点，最后直到只剩一个根节点。如果是有监督学习的话，这样是可行的。但是现在是无监督，所以中间过程的两个结点的得分是没法直接加入到损失函数里的，而中间过程的决策又是离散的，没法计算梯度。所以提出了用ST Gumbel-Softmax来代替传统的softmax，这样就能估计出反向传播的梯度了，而不用强化学习方法了。</p>
 <h2 id="其他对比模型"><a href="#其他对比模型" class="headerlink" title="其他对比模型"></a>其他对比模型</h2><p>第一个是<strong>单向LSTM和RNN</strong>。</p>
 <p>第二个还是<strong>SPINN-PI-NT</strong>，但是转移序列是随机的，不是正确的。</p>
 <p>第三个也是<strong>SPINN-PI-NT</strong>，但是转移序列对应的是最大深度的句法树和平衡二叉树。</p>
@@ -555,7 +555,7 @@
 <p>这里对几种模型做一个说明。无句法监督的模型只有RL-SPINN和ST-Gumbel两种。单向LSTM和RNN是和句法树没有任何关系的，只用来学习句子的表示。剩下的SPINN，SPINN-NC和SPINN-PI-NT都是需要句法监督的。</p>
 </blockquote>
 <h2 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h2><p>采用了三个数据集，PTB，SNLI和MultiNLI，并且提前都做了二叉化。更多的实验细节就不说了，直接去看论文吧。</p>
-<h1 id="隐式句法树对句子理解有帮助吗？"><a href="#隐式句法树对句子理解有帮助吗？" class="headerlink" title="隐式句法树对句子理解有帮助吗？"></a>隐式句法树对句子理解有帮助吗？</h1><p><img src="/3.png" alt="表1：测试集对比结果。"><br>表1是各种模型在SNLI数据集和MultiNLI数据集上的对比结果，其中SNLI是只在SNLI上训练，而MultiNLI是在两个数据集上共同训练。</p>
+<h1 id="隐式句法树对句子理解有帮助吗？"><a href="#隐式句法树对句子理解有帮助吗？" class="headerlink" title="隐式句法树对句子理解有帮助吗？"></a>隐式句法树对句子理解有帮助吗？</h1><p><img src="3.png" alt="表1：测试集对比结果。"><br>表1是各种模型在SNLI数据集和MultiNLI数据集上的对比结果，其中SNLI是只在SNLI上训练，而MultiNLI是在两个数据集上共同训练。</p>
 <p>从表1中可以得出几个结论：</p>
 <ul>
 <li>首先看Prior Work: Baselines，LSTM和BiLSTM是不学习句法树的，Tree-LSTM和SPINN是监督学习句法树的，SPINN-PI-NT是不学习句法树的，直接根据正确句法树转移。可以看出，SPINN-PI-NT的效果略好于LSTM，不如BiLSTM，所以<strong>正确句法树对下游任务的提升是微乎其微的，至少用Tree-LSTM作为composition函数和在NLI数据集上是这样</strong>。</li>
@@ -566,7 +566,7 @@
 <blockquote>
 <p>结论：隐式句法树对句子理解的确有帮助。</p>
 </blockquote>
-<h1 id="这些模型得出的句法树结果一致吗？"><a href="#这些模型得出的句法树结果一致吗？" class="headerlink" title="这些模型得出的句法树结果一致吗？"></a>这些模型得出的句法树结果一致吗？</h1><p><img src="/4.png" alt="表2：在MultiNLI验证集上，5轮运行得出的平均准确率和最高准确率。Self F1表示每轮结果和其它4轮结果的一致程度。"><br>表2是两个句法监督模型，两个无监督模型和两种固定的句法树的对比结果。</p>
+<h1 id="这些模型得出的句法树结果一致吗？"><a href="#这些模型得出的句法树结果一致吗？" class="headerlink" title="这些模型得出的句法树结果一致吗？"></a>这些模型得出的句法树结果一致吗？</h1><p><img src="4.png" alt="表2：在MultiNLI验证集上，5轮运行得出的平均准确率和最高准确率。Self F1表示每轮结果和其它4轮结果的一致程度。"><br>表2是两个句法监督模型，两个无监督模型和两种固定的句法树的对比结果。</p>
 <p>从这个结果可以得出两个结论：</p>
 <ul>
 <li>除了不带Leaf GRU的ST-Gumbel准确率方差有异常，其他的方差都差不多。这说明了超参数和随机初始化对模型性能影响不是很大。</li>
@@ -575,10 +575,10 @@
 <blockquote>
 <p>结论：除了ST-Gumbel模型，其他模型运行多次结果还是基本一致的。</p>
 </blockquote>
-<h1 id="这些模型学到了PTB语法吗？"><a href="#这些模型学到了PTB语法吗？" class="headerlink" title="这些模型学到了PTB语法吗？"></a>这些模型学到了PTB语法吗？</h1><p><img src="/5.png" alt="表3：在整个PTB数据集上的测试结果，训练是在SNLI和MultiNLI上的。"></p>
+<h1 id="这些模型学到了PTB语法吗？"><a href="#这些模型学到了PTB语法吗？" class="headerlink" title="这些模型学到了PTB语法吗？"></a>这些模型学到了PTB语法吗？</h1><p><img src="5.png" alt="表3：在整个PTB数据集上的测试结果，训练是在SNLI和MultiNLI上的。"></p>
 <p>表3显示了在SNLI和MultiNLI上训练后的模型，在PTB上测试的结果。</p>
 <p>首先可以看出，两个句法监督模型在PTB上的F1也很低，只有四五十左右，但是两个无监督模型更差，甚至不如随机生成的句法树好。这说明了<strong>这些模型根本没有学到PTB语法信息</strong>。而不同类别的准确率也印证了这一点。</p>
-<p><img src="/6.png" alt="表4：不同模型在MultiNLI验证集上关于左二叉树、右二叉树、斯坦福句法分析器产生的句法树的F1值，以及产生的句法树的深度对比结果。"></p>
+<p><img src="6.png" alt="表4：不同模型在MultiNLI验证集上关于左二叉树、右二叉树、斯坦福句法分析器产生的句法树的F1值，以及产生的句法树的深度对比结果。"></p>
 <p>而从表4中可以看出，两个句法监督模型在MultiNLI数据集上的表现也不错，能有六七十左右的F1值，并且模型偏向于预测出右二叉树。而无监督模型效果就很差了，甚至还不如随机生成的句法树和平衡树，并且RL-SPINN模型输出基本都是左二叉树。而根据语言学知识，右二叉树是更符合语法的。</p>
 <p>最后一列是不同模型产生出的句法树的深度。可以看出RL-SPINN的深度最大，ST-Gumbel深度最小，和随机生成的差不多。而ST-Gumbel对下游任务提升是最大的，所以可以猜测，<strong>深度比较浅，单词的信息可以更好地保留到根节点，句子的编码可能更好</strong>。另一篇论文做过实验验证过这件事，他们用句子的平衡树跑Tree-LSTM得到表示来做SNLI，效果很好。</p>
 <blockquote>
@@ -1119,7 +1119,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

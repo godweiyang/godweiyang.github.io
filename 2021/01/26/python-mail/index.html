@@ -496,7 +496,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    797
+                    795
                 </div>
                 
 
@@ -522,12 +522,12 @@
                 <blockquote>
 <p>最近碰到个脑子可能不大正常的人，整天给一堆人群发乱七八糟的邮件，各种喷人、编造谣言和绯闻，看的很是心烦。</p>
 </blockquote>
-<p><img src="/1.png" alt="一个上午就发了这么多"><br><img src="/2.png" alt="都是编造的我老家各种老师、官员的绯闻"></p>
+<p><img src="1.png" alt="一个上午就发了这么多"><br><img src="2.png" alt="都是编造的我老家各种老师、官员的绯闻"></p>
 <p>于是乎我找了段python代码，给她自动发邮件轰炸一下。</p>
 <p>代码很简单，如下所示：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#coding: utf-8</span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> smtplib</span><br><span class="line"><span class="keyword">from</span> email.mime.multipart <span class="keyword">import</span> MIMEMultipart</span><br><span class="line"><span class="keyword">from</span> email.mime.text <span class="keyword">import</span> MIMEText</span><br><span class="line"><span class="keyword">from</span> email.header <span class="keyword">import</span> Header</span><br><span class="line"></span><br><span class="line">smtpserver = <span class="string">&#x27;smtp.163.com&#x27;</span></span><br><span class="line">username = <span class="string">&#x27;username@163.com&#x27;</span></span><br><span class="line">password = <span class="string">&#x27;password&#x27;</span></span><br><span class="line">sender = <span class="string">&#x27;username@163.com&#x27;</span></span><br><span class="line">receiver = [<span class="string">&#x27;username@qq.com&#x27;</span>]</span><br><span class="line"><span class="comment"># receiver = [&#x27;username1@qq.com&#x27;, &#x27;username2@163.com&#x27;]</span></span><br><span class="line"></span><br><span class="line">msg = MIMEMultipart(<span class="string">&#x27;mixed&#x27;</span>)</span><br><span class="line">subject = <span class="string">&#x27;发送主题&#x27;</span></span><br><span class="line">subject = Header(subject, <span class="string">&#x27;utf-8&#x27;</span>).encode()</span><br><span class="line">msg[<span class="string">&#x27;Subject&#x27;</span>] = subject</span><br><span class="line">msg[<span class="string">&#x27;From&#x27;</span>] = <span class="string">&#x27;username &lt;username@163.com&gt;&#x27;</span></span><br><span class="line">msg[<span class="string">&#x27;To&#x27;</span>] = <span class="string">&#x27;username &lt;username@163.com&gt;&#x27;</span></span><br><span class="line"><span class="comment"># msg[&#x27;To&#x27;] = &#x27;username1 &lt;username1@163.com&gt;; username2 &lt;username2@163.com&gt;&#x27;</span></span><br><span class="line">msg[<span class="string">&#x27;Date&#x27;</span>] = <span class="string">&#x27;2021-1-26&#x27;</span></span><br><span class="line"></span><br><span class="line">text = <span class="string">&quot;邮件正文&quot;</span></span><br><span class="line">text_plain = MIMEText(text, <span class="string">&#x27;plain&#x27;</span>, <span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">msg.attach(text_plain)</span><br><span class="line"></span><br><span class="line">total = <span class="number">1000</span></span><br><span class="line">send = <span class="number">0</span></span><br><span class="line">error = <span class="number">0</span></span><br><span class="line"><span class="keyword">while</span> error &lt; <span class="number">10</span> <span class="keyword">and</span> send &lt; total:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        smtp = smtplib.SMTP()</span><br><span class="line">        smtp.connect(<span class="string">&#x27;smtp.163.com&#x27;</span>)</span><br><span class="line">        smtp.login(username, password)</span><br><span class="line">        <span class="keyword">while</span> send &lt; total:</span><br><span class="line">            smtp.sendmail(sender, receiver, msg.as_string())</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;第&#123;&#125;封邮件发送成功！&quot;</span>.<span class="built_in">format</span>(send+<span class="number">1</span>))</span><br><span class="line">            send += <span class="number">1</span></span><br><span class="line">            error = <span class="number">0</span></span><br><span class="line">            time.sleep(<span class="number">60</span>)</span><br><span class="line">        smtp.sendmail(sender, receiver, msg.as_string())</span><br><span class="line">        smtp.quit()</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;发生错误，重新发送&quot;</span>)</span><br><span class="line">        error += <span class="number">1</span></span><br><span class="line">        <span class="keyword">continue</span></span><br></pre></td></tr></table></figure>
 
-<p>首先你需要开启你的邮箱的<strong>POP3&#x2F;SMTP</strong>和<strong>IMAP&#x2F;SMTP</strong>服务，一般在邮箱设置的账户里，找找都能找到，注意开启后会获得一段<strong>授权码</strong>，牢记它！之后的操作用它来替换你原本的邮箱密码。</p>
+<p>首先你需要开启你的邮箱的<strong>POP3/SMTP</strong>和<strong>IMAP/SMTP</strong>服务，一般在邮箱设置的账户里，找找都能找到，注意开启后会获得一段<strong>授权码</strong>，牢记它！之后的操作用它来替换你原本的邮箱密码。</p>
 <p>上面代码详细含义如下：</p>
 <ul>
 <li><code>smtpserver</code>替换成你自己邮箱的服务器地址，百度可以搜到。</li>
@@ -1067,7 +1067,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

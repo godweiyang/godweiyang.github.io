@@ -523,15 +523,15 @@
             <div id="articleContent">
                 <p>最近有学妹问我，我训了一个Transformer模型，但是预测好慢啊，有啥解决方案吗？</p>
 <p>我心想，你又想好，又想快，咋不上天🚀呢？</p>
-<p><img src="/1.png"></p>
+<p><img src="1.png" alt=""></p>
 <p>于是我跟她说，你可以试试lightseq啊，跟闪电⚡️一样快，用了你就可以上天了。</p>
 <p>她一脸懵比，lightseq是啥玩意儿啊？咋就能让我的模型起飞🛫️了呢？</p>
 <p>我跟她说，你不需要知道太多细节，你只需要知道它是一个Transformer系列模型推理加速库就行了。</p>
 <p>她还是一脸疑惑，那用起来能有huggingface方便吗？你看人家就两行代码。</p>
 <p>我不屑一笑，就这？lightseq也只要两行代码就够了！</p>
-<p><img src="/2.jpeg"></p>
+<p><img src="2.jpeg" alt=""></p>
 <p>为了方便，我用了一个bart模型预测句子中mask单词的例子来给她吹了一波。</p>
-<p>不懂什么是bart？建议先去看看huggingface的文档：<br><a href="https://huggingface.co/transformers/model_doc/bart.html">https://huggingface.co/transformers/model_doc&#x2F;bart.html</a></p>
+<p>不懂什么是bart？建议先去看看huggingface的文档：<br><a href="https://huggingface.co/transformers/model_doc/bart.html">https://huggingface.co/transformers/model_doc/bart.html</a></p>
 <h2 id="huggingface-bart"><a href="#huggingface-bart" class="headerlink" title="huggingface bart"></a>huggingface bart</h2><p>我们平时想用huggingface的bart来预测句子中的mask单词，大体上都会像下面这样写代码：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> BartTokenizer, BartForConditionalGeneration</span><br><span class="line"></span><br><span class="line">tokenizer = BartTokenizer.from_pretrained(<span class="string">&quot;facebook/bart-base&quot;</span>)</span><br><span class="line">model = BartForConditionalGeneration.from_pretrained(<span class="string">&quot;facebook/bart-base&quot;</span>)</span><br><span class="line"></span><br><span class="line">sentences = [<span class="string">&quot;I love that girl, but &lt;mask&gt; does not &lt;mask&gt; me.&quot;</span>]</span><br><span class="line">inputs = tokenizer(sentences, return_tensors=<span class="string">&quot;pt&quot;</span>, padding=<span class="literal">True</span>)</span><br><span class="line">generated_ids = model.generate(inputs[<span class="string">&quot;input_ids&quot;</span>], max_length=<span class="number">50</span>)</span><br><span class="line">res = tokenizer.batch_decode(generated_ids, skip_special_tokens=<span class="literal">True</span>)</span><br><span class="line"><span class="built_in">print</span>(res)</span><br></pre></td></tr></table></figure>
 
@@ -540,7 +540,7 @@
 
 <p>最后会输出句子“I love that girl, but she does not love me.”，句子中的两个“mask”被预测成了“she”和“love”。</p>
 <p>看起来预测的很nice，但是预测的也太慢了，这要是有一堆句子要去预测，不得等到🐒年🐎月？</p>
-<p><img src="/3.jpeg"></p>
+<p><img src="3.jpeg" alt=""></p>
 <p>接下来我们来看看lightseq是怎么加速预测的。</p>
 <h2 id="lightseq-bart"><a href="#lightseq-bart" class="headerlink" title="lightseq bart"></a>lightseq bart</h2><p>代码我都放在下面地址了，只要两分钟就能跑出结果了：<br><a href="https://github.com/bytedance/lightseq/tree/master/examples/inference/python">https://github.com/bytedance/lightseq/tree/master/examples/inference/python</a></p>
 <p>运行前要先安装一下<code>lightseq</code>包：</p>
@@ -553,7 +553,7 @@
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> lightseq.inference <span class="keyword">as</span> lsi</span><br><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> BartTokenizer</span><br><span class="line"></span><br><span class="line">tokenizer = BartTokenizer.from_pretrained(<span class="string">&quot;facebook/bart-base&quot;</span>)</span><br><span class="line">model = lsi.Transformer(<span class="string">&quot;lightseq_bart_base.hdf5&quot;</span>, <span class="number">128</span>)</span><br><span class="line"></span><br><span class="line">sentences = [<span class="string">&quot;I love that girl, but &lt;mask&gt; does not &lt;mask&gt; me.&quot;</span>]</span><br><span class="line">inputs = tokenizer(sentences, return_tensors=<span class="string">&quot;pt&quot;</span>, padding=<span class="literal">True</span>)</span><br><span class="line">generated_ids = model.infer(inputs[<span class="string">&quot;input_ids&quot;</span>])</span><br><span class="line">generated_ids = [ids[<span class="number">0</span>] <span class="keyword">for</span> ids <span class="keyword">in</span> generated_ids[<span class="number">0</span>]]</span><br><span class="line">res = tokenizer.batch_decode(generated_ids, skip_special_tokens=<span class="literal">True</span>)</span><br><span class="line"><span class="built_in">print</span>(res)</span><br></pre></td></tr></table></figure>
 
 <p>看得出来仅仅替换了模型定义和模型推理那两行代码而已，是不是非常简单快速？</p>
-<p><img src="/4.jpeg"></p>
+<p><img src="4.jpeg" alt=""></p>
 <p>这时候她又问了，那我换一个模型，比如bert，要怎么导出pb模型呢？</p>
 <p>也很简单，只需要为bert也单独写一个<code>hf_bert_export.py</code>就行了。不过目前还在开发中，之后会慢慢完善常见的一些模型的。</p>
 <h2 id="速度到底怎么样？"><a href="#速度到底怎么样？" class="headerlink" title="速度到底怎么样？"></a>速度到底怎么样？</h2><p>我写好了一个例子，就在<code>ls_bart.py</code>里，直接运行就行了，当然你也可以加上<code>--user_input</code>参数来手动输入句子。</p>
@@ -565,7 +565,7 @@
 
 <p>可以看出预测的是真的🐂🍺，最后两句歌词都预测的很完美，能看出是啥歌吗？</p>
 <p>再看预测时间，lightseq是huggingface的10倍左右，真是一个天上一个地下啊。</p>
-<p><img src="/6.jpeg"></p>
+<p><img src="6.jpeg" alt=""></p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>总结一下，想要使用lightseq加速你的模型，只需要两步就行了：</p>
 <ul>
 <li>将你的模型转换为hdf5格式的模型。（lightseq为你写好了转换脚本，不断更新中）</li>
@@ -574,7 +574,7 @@
 <p>学妹赶紧打住了我，好了好了，我知道很🐂🍺了。还给你装起来了，我这就去用。</p>
 <p>但是源码哪里有？我想学一学。</p>
 <p>我又甩给她一串地址：<br><a href="https://github.com/bytedance/lightseq">https://github.com/bytedance/lightseq</a></p>
-<p><img src="/5.png"></p>
+<p><img src="5.png" alt=""></p>
 <p>好好看，好好学，都是CUDA写的，要是看得迷糊，建议先去看看我之前的入门教程嗷：<br><a href="https://godweiyang.com/2021/03/28/nn-cuda-example/">https://godweiyang.com/2021/03/28/nn-cuda-example/</a></p>
 <p>从此，世上又多了一位快如⚡️的👨。</p>
 
@@ -1105,7 +1105,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

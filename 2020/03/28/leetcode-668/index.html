@@ -15,7 +15,7 @@
 
 题目链接LeetCode 668. 乘法表中第k小的数
 题目描述几乎每一个人都用乘法表。但是你能在乘法表中快速找到第 $k$ 小的数字吗？
-给定高度 $m$、宽度 $n$ 的一张 $m">
+给定高度 $m$、宽度 $n$ 的一张 $m">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -522,10 +522,10 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <h2 id="题目链接"><a href="#题目链接" class="headerlink" title="题目链接"></a>题目链接</h2><p><a href="https://leetcode-cn.com/problems/kth-smallest-number-in-multiplication-table/" title="LeetCode 668. 乘法表中第k小的数">LeetCode 668. 乘法表中第k小的数</a></p>
 <h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>几乎每一个人都用乘法表。但是你能在乘法表中快速找到第 $k$ 小的数字吗？</p>
-<p>给定高度 $m$、宽度 $n$ 的一张 $m \times n$ 的乘法表，以及正整数 $k$，你需要返回表中第 $k$ 小的数字。</p>
+<p>给定高度 $m$、宽度 $n$ 的一张 $m \times n$ 的乘法表，以及正整数 $k$，你需要返回表中第 $k$ 小的数字。</p>
 <p><strong>示例1</strong></p>
 <figure class="highlight text"><table><tr><td class="code"><pre><span class="line">输入：</span><br><span class="line">m = 3, n = 3, k = 5</span><br><span class="line">输出：</span><br><span class="line">3</span><br><span class="line">解释：</span><br><span class="line">乘法表:</span><br><span class="line">1	2	3</span><br><span class="line">2	4	6</span><br><span class="line">3	6	9</span><br><span class="line">第5小的数字是 3 (1, 2, 2, 3, 3).</span><br></pre></td></tr></table></figure>
 
@@ -541,13 +541,13 @@
 <p>对数级别首先想到的肯定是二分了，我们二分第 $k$ 小的数 $mid$ ，然后求出乘法表中小于等于 $mid$ 的数的数量 $cnt$ 。如果发现 $cnt \le mid$ ，那就说明这个答案太大了，还可以继续缩小。否则的话答案太小了，得增大一点。</p>
 <p>那么对于枚举的答案 $mid$ 来说，如何找到乘法表中有多少小于等于它的数呢？我们可以直接从 $1$ 开始枚举，和 $1$ 相乘并且结果小于等于 $mid$ 的数有 $mid$ 个，当然还有个 $n$ 的限制，所以是 $\min{(mid, n)}$ 个。然后和 $2$ 相乘并且结果小于等于 $mid$ 的数有 $\min{(\left\lfloor\frac{mid}{2}\right\rfloor, n)}$ 个。依此类推下去，最终和 $m$ 相乘并且结果小于等于 $mid$ 的数有 $\min{(\left\lfloor\frac{mid}{m}\right\rfloor, n)}$ 个。</p>
 <p>所以最终小于等于 $mid$ 的个数 $cnt$ 就可以计算为：</p>
-<p>$$<br>\sum_{i&#x3D;1}^{m}{\min{\left(\left\lfloor\frac{mid}{i}\right\rfloor, n\right)}}<br>$$</p>
+<p>$$<br>\sum_{i=1}^{m}{\min{\left(\left\lfloor\frac{mid}{i}\right\rfloor, n\right)}}<br>$$</p>
 <h3 id="二分法-优化"><a href="#二分法-优化" class="headerlink" title="二分法+优化"></a>二分法+优化</h3><p>当然这题计算还可以进行一些优化。</p>
 <p>首先第 $k$ 小的数是一定小于等于 $k$ 的，所以我们的二分上界可以定为 $k$ 。</p>
 <p>其次注意到当 $i &gt; mid$ 之后，个数一定是 $0$，所以 $i$ 只需要枚举到 $\min{(mid, m)}$ 就行了。</p>
-<p>然后当 $i \le \left\lfloor\frac{mid}{n}\right\rfloor$ 时，有 $\min{\left(\left\lfloor\frac{mid}{i}\right\rfloor, n\right)} &#x3D; n$，所以这部分的求和结果就是 $n\left\lfloor\frac{mid}{n}\right\rfloor$ 。所以 $cnt$ 又可以写为：</p>
-<p>$$<br>n\left\lfloor\frac{mid}{n}\right\rfloor + \sum_{i&#x3D;\left\lfloor\frac{mid}{n}\right\rfloor+1}^{\min{(mid, m)}}{\left\lfloor\frac{mid}{i}\right\rfloor}<br>$$</p>
-<p>最后，对于某个 $i &#x3D; t$ ，我们会发现如果 $i$ 慢慢增大，某一段连续区间内 $\left\lfloor\frac{mid}{i}\right\rfloor$ 的值都是不会变的。而 $i$ 最大可以增大到 $\left\lfloor\frac{mid}{\left\lfloor\frac{mid}{t}\right\rfloor}\right\rfloor$，那么这一段区间内的求和就可以直接算出来：</p>
+<p>然后当 $i \le \left\lfloor\frac{mid}{n}\right\rfloor$ 时，有 $\min{\left(\left\lfloor\frac{mid}{i}\right\rfloor, n\right)} = n$，所以这部分的求和结果就是 $n\left\lfloor\frac{mid}{n}\right\rfloor$ 。所以 $cnt$ 又可以写为：</p>
+<p>$$<br>n\left\lfloor\frac{mid}{n}\right\rfloor + \sum_{i=\left\lfloor\frac{mid}{n}\right\rfloor+1}^{\min{(mid, m)}}{\left\lfloor\frac{mid}{i}\right\rfloor}<br>$$</p>
+<p>最后，对于某个 $i = t$ ，我们会发现如果 $i$ 慢慢增大，某一段连续区间内 $\left\lfloor\frac{mid}{i}\right\rfloor$ 的值都是不会变的。而 $i$ 最大可以增大到 $\left\lfloor\frac{mid}{\left\lfloor\frac{mid}{t}\right\rfloor}\right\rfloor$，那么这一段区间内的求和就可以直接算出来：</p>
 <p>$$<br>\left\lfloor\frac{mid}{t}\right\rfloor \left(\left\lfloor\frac{mid}{\left\lfloor\frac{mid}{t}\right\rfloor}\right\rfloor-t+1\right)<br>$$</p>
 <p>接着令 $i$ 直接跳转到 $\left\lfloor\frac{mid}{\left\lfloor\frac{mid}{t}\right\rfloor}\right\rfloor + 1$ 就可以了，这样就不用慢慢加 $1$ 计算了。要特别注意的是最后不能超过 $m$ 。</p>
 <p>理论上这样的计算复杂度是更低的，但是实际运行中速度还不如不加最后一步优化，可能原因是除法操作次数太多了，反而总的操作次数超过了直接遍历计算。</p>
@@ -1078,7 +1078,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

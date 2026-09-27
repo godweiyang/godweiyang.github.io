@@ -13,7 +13,7 @@
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-题目描述给定一个正整数数组 A，如果 A 的某个子数组中不同整数的个数恰好为 K，则称 A 的这个连续、不一定独立的子数组为好子数组。（例如，[1,2,3,1,2] 中有 3 个不同的">
+题目描述给定一个正整数数组 A，如果 A 的某个子数组中不同整数的个数恰好为 K，则称 A 的这个连续、不一定独立的子数组为好子数组。（例如，[1,2,3,1,2] 中有 3 个不同的">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -520,9 +520,9 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
-<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个正整数数组 A，如果 A 的某个子数组中不同整数的个数恰好为 K，则称 A 的这个连续、不一定独立的子数组为好子数组。<br>（例如，[1,2,3,1,2] 中有 3 个不同的整数：1，2，以及 3。）</p>
-<p>返回 A 中好子数组的数目。</p>
+<p><img src="/medias/contact.jpg" alt=""></p>
+<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个正整数数组 A，如果 A 的某个子数组中不同整数的个数恰好为 K，则称 A 的这个连续、不一定独立的子数组为好子数组。<br>（例如，[1,2,3,1,2] 中有 3 个不同的整数：1，2，以及 3。）</p>
+<p>返回 A 中好子数组的数目。</p>
 <p><strong>示例1</strong></p>
 <figure class="highlight text"><table><tr><td class="code"><pre><span class="line">输入：</span><br><span class="line">A = [1,2,1,2,3], K = 2</span><br><span class="line">输出：</span><br><span class="line">7</span><br><span class="line">解释：</span><br><span class="line">恰好由 2 个不同整数组成的子数组：</span><br><span class="line">[1,2], [2,1], [1,2], [2,3], [1,2,1], [2,1,2], [1,2,1,2]</span><br></pre></td></tr></table></figure>
 
@@ -531,9 +531,9 @@
 
 <p><strong>提示</strong></p>
 <ul>
-<li>1 &lt;&#x3D; A.length &lt;&#x3D; 20000</li>
-<li>1 &lt;&#x3D; A[i] &lt;&#x3D; A.length</li>
-<li>1 &lt;&#x3D; K &lt;&#x3D; A.length</li>
+<li>1 &lt;= A.length &lt;= 20000</li>
+<li>1 &lt;= A[i] &lt;= A.length</li>
+<li>1 &lt;= K &lt;= A.length</li>
 </ul>
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>这题最暴力的方法就是用一个字典维护每个数出现的次数，然后遍历所有的区间，求出不同整数个数正好等于 K 的区间个数。<br>但是这种方法时间复杂度是 $O(n^2)$，一定会超时，所以考虑其他方法。</p>
 <p>现在考虑右边界为 j 的情况，左边界 i 有什么规律呢？<br>我们可以证明，满足 [i, j] 正好包含 K 个不同整数的 i 的取值是一段连续的区间。<br>假设 [i, j]包含 K 个不同整数，同时 [i’, j] 也包含 K 个不同整数（i &lt; i’），因为从 i 移动到 i’ 每个数的数量是非增的，所以这过程中没有增加新的数，也没有任何一个数的数量降到了0。</p>
@@ -848,7 +848,7 @@
 
 
 题目描述给你一个正整数数组 nums ，你需要从中任选一些子集，然后将子集中每一个数乘以一个任意整数，并求出他们的和。
-假如该和结果为 1 ，那么原数组就是一个「好数组」，则返回 Tr
+假如该和结果为 1 ，那么原数组就是一个「好数组」，则返回 Tr
                         
                     </div>
                     <div class="publish-info">
@@ -1065,7 +1065,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

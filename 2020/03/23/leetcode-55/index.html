@@ -523,7 +523,7 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <h2 id="题目链接"><a href="#题目链接" class="headerlink" title="题目链接"></a>题目链接</h2><p><a href="https://leetcode-cn.com/problems/jump-game/" title="LeetCode 55. 跳跃游戏">LeetCode 55. 跳跃游戏</a></p>
 <h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个非负整数数组，你最初位于数组的第一个位置。</p>
 <p>数组中的每个元素代表你在该位置可以跳跃的最大长度。</p>
@@ -534,21 +534,21 @@
 <p><strong>示例2</strong></p>
 <figure class="highlight text"><table><tr><td class="code"><pre><span class="line">输入：</span><br><span class="line">[3,2,1,0,4]</span><br><span class="line">输出：</span><br><span class="line">false</span><br><span class="line">解释：</span><br><span class="line">无论怎样，你总会到达索引为 3 的位置。但该位置的最大跳跃长度是 0 ， 所以你永远不可能到达最后一个位置。</span><br></pre></td></tr></table></figure>
 
-<h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><h3 id="动态规划-正推"><a href="#动态规划-正推" class="headerlink" title="动态规划+正推"></a>动态规划+正推</h3><p>用 $dp[i]$ 表示位置 $i$ 是否可达，初始的时候都是 $0$ ，只有 $dp[0] &#x3D; 1$ ，因为起点一定是可达的。</p>
-<p>然后从位置 $0$ 开始遍历。对于位置 $i$ ，如果发现 $dp[i] &#x3D; 0$，那么从前面的位置无法到达它，那么就更无法到达后面的位置了，所以直接返回 <code>false</code> 。</p>
+<h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><h3 id="动态规划-正推"><a href="#动态规划-正推" class="headerlink" title="动态规划+正推"></a>动态规划+正推</h3><p>用 $dp[i]$ 表示位置 $i$ 是否可达，初始的时候都是 $0$ ，只有 $dp[0] = 1$ ，因为起点一定是可达的。</p>
+<p>然后从位置 $0$ 开始遍历。对于位置 $i$ ，如果发现 $dp[i] = 0$，那么从前面的位置无法到达它，那么就更无法到达后面的位置了，所以直接返回 <code>false</code> 。</p>
 <p>否则的话，它能到达的范围是 $i+1$ 到 $i+nums[i]$ ，所以把这部分的 $dp$ 值都标记为 $1$ 。</p>
 <p>如果发现 $i+nums[i] \ge n-1$ ，就说明当前位置直接就能跳到终点了，直接返回 <code>true</code> 。</p>
 <p>时间复杂度 $O(n^2)$，空间复杂度 $O(n)$ 。</p>
-<h3 id="动态规划-倒推"><a href="#动态规划-倒推" class="headerlink" title="动态规划+倒推"></a>动态规划+倒推</h3><p>用 $dp[i]$ 表示从位置 $i$ 能否到达终点，初始的时候都是 $0$ ，只有 $dp[n-1] &#x3D; 1$ ，因为从终点一定是可到达终点的。</p>
-<p>然后从位置 $n-2$ 开始往前遍历。对于位置 $i$ ，如果 $i+nums[i] \ge n-1$，那就说明当前位置直接就可以到达终点，那么就令 $dp[i] &#x3D; 1$ 。</p>
-<p>否则的话遍历所有的 $dp[i+1]$ 到 $dp[i+nums[i]]$ ，如果其中有等于 $1$ 的，那就说明先跳到那个位置，就能再跳到终点了。一个都没有的话 $dp[i] &#x3D; 0$ 。</p>
+<h3 id="动态规划-倒推"><a href="#动态规划-倒推" class="headerlink" title="动态规划+倒推"></a>动态规划+倒推</h3><p>用 $dp[i]$ 表示从位置 $i$ 能否到达终点，初始的时候都是 $0$ ，只有 $dp[n-1] = 1$ ，因为从终点一定是可到达终点的。</p>
+<p>然后从位置 $n-2$ 开始往前遍历。对于位置 $i$ ，如果 $i+nums[i] \ge n-1$，那就说明当前位置直接就可以到达终点，那么就令 $dp[i] = 1$ 。</p>
+<p>否则的话遍历所有的 $dp[i+1]$ 到 $dp[i+nums[i]]$ ，如果其中有等于 $1$ 的，那就说明先跳到那个位置，就能再跳到终点了。一个都没有的话 $dp[i] = 0$ 。</p>
 <p>最后看 $dp[0]$ 是否为 $1$ 就行了。</p>
 <p>时间复杂度 $O(n^2)$，空间复杂度 $O(n)$ 。</p>
 <h3 id="贪心-正推"><a href="#贪心-正推" class="headerlink" title="贪心+正推"></a>贪心+正推</h3><p>在上面的动态规划方法中，对于位置 $i$ ，我们需要把他能到达的位置全部做上标记。</p>
 <p>但是其实没有必要这么做，只需要记录一下能到的最远的那个位置 $maxx$ 就行了。如果遍历之后的位置 $j$ 时，发现 $maxx &lt; j$ ，那就说明之前的所有位置最远都无法到达 $j$ ，那就直接返回 <code>false</code> 。否则的话，比较一下当前能到达的最远位置，更新一下 $maxx$ 的值。</p>
 <p>时间复杂度 $O(n)$，空间复杂度 $O(1)$ 。</p>
 <h3 id="贪心-倒推"><a href="#贪心-倒推" class="headerlink" title="贪心+倒推"></a>贪心+倒推</h3><p>还是从上面的动态规划方法改变来的，上面动态规划在位置 $i$ ，需要遍历所有它能到达的位置，然后看有没有位置能够到达终点。</p>
-<p>其实只需要看能到的最远的那个位置就行了，我们用 $minn$ 表示后面的位置中最靠前的那个能够到达终点的位置。如果最远到达位置满足 $i+nums[i] \ge minn$，那就说明位置 $i$ 可以直接跳到 $minn$ ，那么就更新 $minn &#x3D; i$ 。否则的话怎么跳都跳不到终点，因为 $i$ 和 $minn$ 之间的位置都是无法到达终点的。</p>
+<p>其实只需要看能到的最远的那个位置就行了，我们用 $minn$ 表示后面的位置中最靠前的那个能够到达终点的位置。如果最远到达位置满足 $i+nums[i] \ge minn$，那就说明位置 $i$ 可以直接跳到 $minn$ ，那么就更新 $minn = i$ 。否则的话怎么跳都跳不到终点，因为 $i$ 和 $minn$ 之间的位置都是无法到达终点的。</p>
 <p>需要注意的是，这里最远的位置 $i+nums[i]$ 不一定能到达终点哦，但是中间的某个位置可能能够达到。</p>
 <p>时间复杂度 $O(n)$，空间复杂度 $O(1)$ 。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="动态规划-正推（c-）"><a href="#动态规划-正推（c-）" class="headerlink" title="动态规划+正推（c++）"></a>动态规划+正推（c++）</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">canJump</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">dp</span><span class="params">(n, <span class="number">0</span>)</span></span>;</span><br><span class="line">        dp[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!dp[i]) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            <span class="keyword">if</span> (i+nums[i] &gt;= n<span class="number">-1</span>) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> j = i<span class="number">+1</span>; j &lt;= i+nums[i]; ++j) &#123;</span><br><span class="line">                dp[j] = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
@@ -1079,7 +1079,7 @@ LeetCode 5364. 按既定顺序创建目标数组题目链接https:/
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

@@ -520,9 +520,9 @@
                 <blockquote>
 <p>可能有些同学只会写 <code>python</code> ，看不懂 <code>c++</code>。但是一个是因为我懒，多解时不想再写一遍 <code>python</code> 了，一个是理解算法最重要，语言不重要。今天学妹发来一张图，我觉得说的很好。</p>
 </blockquote>
-<p><img src="/1.jpg" alt="院长大大如是说"></p>
+<p><img src="1.jpg" alt="院长大大如是说"></p>
 <h2 id="题目链接"><a href="#题目链接" class="headerlink" title="题目链接"></a>题目链接</h2><p><a href="https://leetcode-cn.com/problems/count-number-of-nice-subarrays/" title="LeetCode 1248. 统计「优美子数组」">LeetCode 1248. 统计「优美子数组」</a></p>
-<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个整数数组 <code>nums</code> 和一个整数 <code>k</code>。</p>
+<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个整数数组 <code>nums</code> 和一个整数 <code>k</code>。</p>
 <p>如果某个<strong>连续</strong>子数组中恰好有 <code>k</code> 个奇数数字，我们就认为这个子数组是「优美子数组」。</p>
 <p>请返回这个数组中「优美子数组」的数目。</p>
 <p><strong>示例1</strong></p>
@@ -557,7 +557,7 @@
 <h3 id="前缀和（c-）"><a href="#前缀和（c-）" class="headerlink" title="前缀和（c++）"></a>前缀和（c++）</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">numberOfSubarrays</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">count</span><span class="params">(n<span class="number">+1</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">        count[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="type">int</span> res = <span class="number">0</span>, odd = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            odd += nums[i]&amp;<span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (odd &gt;= k) res += count[odd-k];</span><br><span class="line">            count[odd]++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <blockquote>
-<p>关注公众号【算法码上来】，每日算法干货马上就来！<br><img src="/medias/contact.jpg"></p>
+<p>关注公众号【算法码上来】，每日算法干货马上就来！<br><img src="/medias/contact.jpg" alt=""></p>
 </blockquote>
 
             </div>
@@ -1073,7 +1073,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

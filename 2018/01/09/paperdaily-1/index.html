@@ -13,7 +13,7 @@
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-自从这学期没课以来，一直过着非正常人的生活，作息时间比正常人推迟了3个小时：**3点睡觉、12点起床、15点吃午饭、21点吃晚饭。**因此决定不再如此颓废，每日泛读一篇顶会paper，">
+自从这学期没课以来，一直过着非正常人的生活，作息时间比正常人推迟了3个小时：3点睡觉、12点起床、15点吃午饭、21点吃晚饭。因此决定不再如此颓废，每日泛读一篇顶会paper，了解其大">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -502,7 +502,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    979
+                    976
                 </div>
                 
 
@@ -528,20 +528,20 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
-<p>自从这学期没课以来，一直过着非正常人的生活，作息时间比正常人推迟了3个小时：**3点睡觉、12点起床、15点吃午饭、21点吃晚饭。**因此决定不再如此颓废，每日泛读一篇顶会paper，了解其大概思想即可，然后大概将思想发出来，美其名曰：PaperDaily，就从今天开始吧。</p>
+<p><img src="/medias/contact.jpg" alt=""></p>
+<p>自从这学期没课以来，一直过着非正常人的生活，作息时间比正常人推迟了3个小时：<strong>3点睡觉、12点起床、15点吃午饭、21点吃晚饭。</strong>因此决定不再如此颓废，每日泛读一篇顶会paper，了解其大概思想即可，然后大概将思想发出来，美其名曰：PaperDaily，就从今天开始吧。</p>
 <p>今天要讲的这篇是昨天偶然看到的，AAAI18的paper，正好与我文本挖掘课大作业主题一样，所以就看了一下。</p>
 <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><hr>
 <p>这篇paper提出的模型叫做LM-LSTM-CRF，看起来和前面讲过的加入语言模型的两篇没有大区别，事实是区别的确不是很大。之前讲过的transfer模型基本都是共享一部分模型（底层模型），上层模型都是每个任务有各自独立的模型。然而这篇paper的模型所有部分全部共享，这就会带来许多表示上面的问题。于是这篇paper和以往最大的区别就是在character level LSTM之上加入了一个highway layer，用来将LSTM产生的字符表示映射到不同的表示空间，这样语言模型（这里的语言模型是基于字符层面的）和序列标注模型就可以共享character level LSTM。</p>
 <h1 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h1><hr>
-<p>不多说，直接上图：<br><img src="/1.png"></p>
+<p>不多说，直接上图：<br><img src="1.png" alt=""></p>
 <h3 id="character-level-LSTM"><a href="#character-level-LSTM" class="headerlink" title="character level LSTM"></a>character level LSTM</h3><p>这里和传统的差不多，只是改每个token单独训练一个LSTM为所有字符联合训练上下文表示（为了语言模型共用嘛），但是只在两个tokens之间输出token表示。</p>
-<h3 id="highway-layer"><a href="#highway-layer" class="headerlink" title="highway layer"></a>highway layer</h3><p>其实就是对输出做了线性变换+门操作，具体表示如下：<br>\[\begin{array}{l}m &#x3D; H(n) &#x3D; t \odot g({W_H}n + {b_H}) + (1 - t) \odot n\t &#x3D; \sigma ({W_T}n + {b_T})\end{array}\]最终一共产生四个highway输出，分别是前后向序列标注表示和前后向语言模型表示。而序列标注的LSTM输入共有三个，分别是词向量、前后向序列标注表示。</p>
+<h3 id="highway-layer"><a href="#highway-layer" class="headerlink" title="highway layer"></a>highway layer</h3><p>其实就是对输出做了线性变换+门操作，具体表示如下：<br>\[\begin{array}{l}m = H(n) = t \odot g({W_H}n + {b_H}) + (1 - t) \odot n\t = \sigma ({W_T}n + {b_T})\end{array}\]最终一共产生四个highway输出，分别是前后向序列标注表示和前后向语言模型表示。而序列标注的LSTM输入共有三个，分别是词向量、前后向序列标注表示。</p>
 <h3 id="word-level-LSTM"><a href="#word-level-LSTM" class="headerlink" title="word level LSTM"></a>word level LSTM</h3><p>和传统的没什么不同。。。</p>
 <h3 id="CRF-layer"><a href="#CRF-layer" class="headerlink" title="CRF layer"></a>CRF layer</h3><p>没什么不一样。。。</p>
 <h3 id="joint-training"><a href="#joint-training" class="headerlink" title="joint training"></a>joint training</h3><p>总的损失函数就是语言模型损失函数加上序列标注损失函数，系数这里设置为1:1。</p>
 <h1 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h1><hr>
-<p>直接上图，这里和之前我看过的几篇paper都进行了比较，还是非常bang的！<br><img src="/2.png"><br>注意到，他们的结果和<code>Peter 2017.</code>比较还是差了一点，因为<code>Peter 2017.</code>虽然也使用了语言模型作为辅助训练，但是他们语言模型是在大量无标注数据下进行训练的，而且花费时间特别长！而本文根本不需要任何辅助数据，少量标注数据？足够了！就在他们上面联合训练一个语言模型就行了，花费时间大大缩短。</p>
+<p>直接上图，这里和之前我看过的几篇paper都进行了比较，还是非常bang的！<br><img src="2.png" alt=""><br>注意到，他们的结果和<code>Peter 2017.</code>比较还是差了一点，因为<code>Peter 2017.</code>虽然也使用了语言模型作为辅助训练，但是他们语言模型是在大量无标注数据下进行训练的，而且花费时间特别长！而本文根本不需要任何辅助数据，少量标注数据？足够了！就在他们上面联合训练一个语言模型就行了，花费时间大大缩短。</p>
 <p>其实我个人认为，这零点几的提升意义并不是很大，时间大大缩短倒是挺不错的，毕竟<code>Peter 2017.</code>那篇32个GPU都要训练半个月。。。<br>更远一步思考，也许可以将语言模型和序列标注独立开来训练，先用语言模型来训练character level LSTM，再用它产生每个token的表示，直接输入到序列标注的LSTM中，当然highway layer还是必要的，毕竟表示空间是不同的。这样可以利用大量的无标注数据了，但是训练时间也会大大加长，而且感觉和<code>Peter 2017.</code>的模型区别貌似不大了？只是联合训练了一个character level LSTM而已。</p>
 <p>以上都是我的拙见，毕竟这篇也就粗略读了一下没仔细看，各位有什么想法也欢迎和我讨论。</p>
 
@@ -1069,7 +1069,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

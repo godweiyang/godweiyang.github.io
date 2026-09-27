@@ -13,7 +13,7 @@
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-题目描述人们会互相发送好友请求，现在给定一个包含有他们年龄的数组，ages[i] 表示第 i 个人的年龄。
+题目描述人们会互相发送好友请求，现在给定一个包含有他们年龄的数组，ages[i] 表示第 i 个人的年龄。
 当满足以下条件时，A 不能给 B（A、B不为同一人）发送好友请求：
 
 age">
@@ -497,7 +497,7 @@ age">
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1k
+                    991
                 </div>
                 
 
@@ -523,16 +523,16 @@ age">
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
-<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>人们会互相发送好友请求，现在给定一个包含有他们年龄的数组，ages[i] 表示第 i 个人的年龄。</p>
+<p><img src="/medias/contact.jpg" alt=""></p>
+<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>人们会互相发送好友请求，现在给定一个包含有他们年龄的数组，ages[i] 表示第 i 个人的年龄。</p>
 <p>当满足以下条件时，A 不能给 B（A、B不为同一人）发送好友请求：</p>
 <ul>
-<li>age[B] &lt;&#x3D; 0.5 * age[A] + 7</li>
-<li>age[B] &gt; age[A]</li>
-<li>age[B] &gt; 100 &amp;&amp; age[A] &lt; 100</li>
+<li>age[B] &lt;= 0.5 * age[A] + 7</li>
+<li>age[B] &gt; age[A]</li>
+<li>age[B] &gt; 100 &amp;&amp; age[A] &lt; 100</li>
 </ul>
 <p>否则，A 可以给 B 发送好友请求。</p>
-<p>注意如果 A 向 B 发出了请求，不等于 B 也一定会向 A 发出请求。而且，人们不会给自己发送好友请求。 </p>
+<p>注意如果 A 向 B 发出了请求，不等于 B 也一定会向 A 发出请求。而且，人们不会给自己发送好友请求。 </p>
 <p>求总共会发出多少份好友请求?</p>
 <p><strong>示例1</strong></p>
 <figure class="highlight text"><table><tr><td class="code"><pre><span class="line">输入：</span><br><span class="line">[16,16]</span><br><span class="line">输出：</span><br><span class="line">2</span><br><span class="line">解释：</span><br><span class="line">二人可以互发好友申请。</span><br></pre></td></tr></table></figure>
@@ -545,8 +545,8 @@ age">
 
 <p><strong>提示</strong></p>
 <ul>
-<li>1 &lt;&#x3D; ages.length &lt;&#x3D; 20000.</li>
-<li>1 &lt;&#x3D; ages[i] &lt;&#x3D; 120.</li>
+<li>1 &lt;= ages.length &lt;= 20000.</li>
+<li>1 &lt;= ages[i] &lt;= 120.</li>
 </ul>
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>仔细观察一下这三个条件，我们把 $age[A]$ 简写为 a ，把 $age[B]$ 简写为 b ，那么如果 a 可以向 b 发送邀请的话，必须同时满足下面三个条件：</p>
 <ul>
@@ -557,10 +557,10 @@ age">
 <p>可以发现，如果满足了条件 2 ，那么一定会满足条件 3 ，所以最终只需要满足 $b \le a \le 2b-15$ 就行了。</p>
 <h3 id="暴力法"><a href="#暴力法" class="headerlink" title="暴力法"></a>暴力法</h3><p>这题最暴力的方法显然就是遍历任意数对 a 和 b ，看两个数是否符合这个条件，但是时间复杂度太高，不可行。</p>
 <h3 id="二分法"><a href="#二分法" class="headerlink" title="二分法"></a>二分法</h3><p>另一个方法是先对数组进行排序，然后遍历每一个数作为 b ，然后二分寻找 $2b-15$ 在哪就行了，中间的数字都可以作为 a ，这样最终的时间复杂度是 $O(n \log n)$ 。</p>
-<h3 id="计数法"><a href="#计数法" class="headerlink" title="计数法"></a>计数法</h3><p>有没有更好的办法呢？注意到年龄的范围最大只有 120 ，那么我们可以统计每个年龄出现的人数，用 $c[i]$ 来表示 i 岁的人数。那么 b 岁的人数就有 $c[b]$ 个，而符合条件的 a 在 $[b, 2b-15]$ 之间。其中 $a &#x3D; b$ 需要单独讨论，因为包含了自己邀请自己的情况，这种情况邀请的数量是 $c[b] \cdot (c[b] - 1)$ 。而 a 在 $[b+1, 2b-15]$ 范围内的话，数量是 $\sum_{b+1 \le a \le 2b-15}{c[b] \cdot c[a]}$ 。所以最终的总数量就是：</p>
-<p>$$<br>\begin{aligned}<br>S_b &amp;&#x3D; \sum_{b+1 \le a \le 2b-15}{c[b] \cdot c[a]} + c[b] \cdot (c[b] - 1)    \<br>&amp;&#x3D; c[b] \cdot (\sum_{b \le a \le 2b-15}{c[a]} - 1)<br>\end{aligned}<br>$$</p>
+<h3 id="计数法"><a href="#计数法" class="headerlink" title="计数法"></a>计数法</h3><p>有没有更好的办法呢？注意到年龄的范围最大只有 120 ，那么我们可以统计每个年龄出现的人数，用 $c[i]$ 来表示 i 岁的人数。那么 b 岁的人数就有 $c[b]$ 个，而符合条件的 a 在 $[b, 2b-15]$ 之间。其中 $a = b$ 需要单独讨论，因为包含了自己邀请自己的情况，这种情况邀请的数量是 $c[b] \cdot (c[b] - 1)$ 。而 a 在 $[b+1, 2b-15]$ 范围内的话，数量是 $\sum_{b+1 \le a \le 2b-15}{c[b] \cdot c[a]}$ 。所以最终的总数量就是：</p>
+<p>$$<br>\begin{aligned}<br>S_b &amp;= \sum_{b+1 \le a \le 2b-15}{c[b] \cdot c[a]} + c[b] \cdot (c[b] - 1)    \<br>&amp;= c[b] \cdot (\sum_{b \le a \le 2b-15}{c[a]} - 1)<br>\end{aligned}<br>$$</p>
 <p>如果用前缀和 $sum$ 来预处理 $c$ 数组的话，可以进一步简化为：</p>
-<p>$$<br>S_b &#x3D; c[b] \cdot (sum[2b-15] - sum[b-1] - 1)<br>$$</p>
+<p>$$<br>S_b = c[b] \cdot (sum[2b-15] - sum[b-1] - 1)<br>$$</p>
 <p>考虑到 $2b-15$ 可能会大于数组中年龄的最大值，所以我们设置一个阈值来截断它。最终的总数量就是 $\sum_{b}{S_b}$ ，这里 b 的取值范围是有讲究的。因为不等式需要满足 $b \le 2b-15$ ，所以 $b \ge 15$ 。这样最终的时间复杂度降到了 $O(MA)$ ，其中 MA 表示年龄的最大值。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="c"><a href="#c" class="headerlink" title="c++"></a>c++</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">numFriendRequests</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; ages)</span> </span>&#123;</span><br><span class="line">        <span class="type">const</span> <span class="type">int</span> MA = <span class="number">120</span>;</span><br><span class="line">        <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">count</span><span class="params">(MA<span class="number">+1</span>, <span class="number">0</span>)</span>, <span class="title">sum</span><span class="params">(MA<span class="number">+1</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">        <span class="type">int</span> n = ages.<span class="built_in">size</span>(), res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            count[ages[i]]++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= MA; ++i) &#123;</span><br><span class="line">            sum[i] = sum[i<span class="number">-1</span>] + count[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> b = <span class="number">15</span>; b &lt;= MA; ++b) &#123;</span><br><span class="line">            res += count[b] * (sum[<span class="built_in">min</span>(MA, <span class="number">2</span>*b<span class="number">-15</span>)] - sum[b<span class="number">-1</span>] - <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
@@ -808,9 +808,9 @@ age">
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-题目描述给定一个整数 n, 返回从 1 到 n 的字典顺序。
-例如，给定 n &#x3D; 13，返回 [1,10,11,12,13,2,3,4,5,6,7,8,9] 。
-请尽可能的优
+题目描述给定一个整数 n, 返回从 1 到 n 的字典顺序。
+例如，给定 n = 13，返回 [1,10,11,12,13,2,3,4,5,6,7,8,9] 。
+请尽可能的优化算法的时
                         
                     </div>
                     <div class="publish-info">
@@ -1081,7 +1081,7 @@ age">
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

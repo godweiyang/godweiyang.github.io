@@ -522,8 +522,8 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <p>周末在家没事干，也没人约了打游戏，于是打开了gayhub闲逛，哦不，是github。</p>
-<p><img src="/1.jpeg"></p>
-<p>然后发现了一个挺有意思的项目:<br><img src="/2.png"></p>
+<p><img src="1.jpeg" alt=""></p>
+<p>然后发现了一个挺有意思的项目:<br><img src="2.png" alt=""></p>
 <p><strong>也就是将你模型中的参数全部存储为一个连续的内存块，加速你的模型训练。</strong></p>
 <p>于是我抱着试试看的心态，基于Fairseq和LightSeq分别实现了两个单层的Transformer编码层模型，简单写了一个例子试了一下。</p>
 <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>首先为了运行我这个例子，你需要安装上面提到的<code>contiguous-params</code>库。然后还需要安装<code>fairseq</code>和<code>lightseq</code>库。</p>
@@ -537,12 +537,12 @@
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">parameters = ContiguousParams(model.parameters())</span><br><span class="line">opt = torch.optim.Adam(parameters.contiguous(), lr=<span class="number">1e-3</span>)</span><br></pre></td></tr></table></figure>
 
 <p>首先用<code>ContiguousParams</code>类封装<code>model.parameters()</code>，然后将封装后的<code>parameters.contiguous()</code>送进优化器中，这里送进去的就已经是连续存储的一整块参数了。</p>
-<p>我们详细阅读<code>ContiguousParams</code>的源码，可以发现实现很简单：<br><a href="https://github.com/PhilJd/contiguous_pytorch_params/blob/master/contiguous_params/params.py">https://github.com/PhilJd/contiguous_pytorch_params&#x2F;blob&#x2F;master&#x2F;contiguous_params&#x2F;params.py</a></p>
+<p>我们详细阅读<code>ContiguousParams</code>的源码，可以发现实现很简单：<br><a href="https://github.com/PhilJd/contiguous_pytorch_params/blob/master/contiguous_params/params.py">https://github.com/PhilJd/contiguous_pytorch_params/blob/master/contiguous_params/params.py</a></p>
 <p>核心代码就是下面这个函数，注释中我都详细解释了每一步在干嘛：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">make_params_contiguous</span>(<span class="params">self</span>):</span><br><span class="line">    index = <span class="number">0</span></span><br><span class="line">    <span class="comment"># 遍历所有的参数</span></span><br><span class="line">    <span class="keyword">for</span> p <span class="keyword">in</span> <span class="variable language_">self</span>._parameters:</span><br><span class="line">        <span class="comment"># 计算参数p的大小</span></span><br><span class="line">        size = p.numel()</span><br><span class="line">        <span class="comment"># 在连续参数块中的对应位置赋值参数p</span></span><br><span class="line">        <span class="variable language_">self</span>._param_buffer[index:index + size] = p.data.view(-<span class="number">1</span>)</span><br><span class="line">        <span class="comment"># 将参数p的数值和梯度都重新指向连续参数块和连续梯度块的对应位置</span></span><br><span class="line">        p.data = <span class="variable language_">self</span>._param_buffer[index:index + size].view(p.data.shape)</span><br><span class="line">        p.grad = <span class="variable language_">self</span>._grad_buffer[index:index + size].view(p.data.shape)</span><br><span class="line">        <span class="comment"># 连续内存块位置偏移到下一个参数</span></span><br><span class="line">        index += size</span><br><span class="line">    <span class="comment"># 连续参数块的梯度设置为连续梯度块</span></span><br><span class="line">    <span class="variable language_">self</span>._param_buffer.grad = <span class="variable language_">self</span>._grad_buffer</span><br></pre></td></tr></table></figure>
 
 <p>所以在封装了原始参数之后，之后模型计算就会从连续内存块中对应位置取出数值，然后进行计算。</p>
-<h2 id="运行结果"><a href="#运行结果" class="headerlink" title="运行结果"></a>运行结果</h2><p>我在V100显卡上运行了一下上面的例子，结果如下：<br><img src="/3.png"></p>
+<h2 id="运行结果"><a href="#运行结果" class="headerlink" title="运行结果"></a>运行结果</h2><p>我在V100显卡上运行了一下上面的例子，结果如下：<br><img src="3.png" alt=""></p>
 <p>可以看出，LightSeq在采用参数连续化前后，三部分运行时间几乎没有任何变化，这主要是由于LightSeq已经在模型内部做过参数连续化了，因此速度已经很快了。</p>
 <p>而Fairseq前后的第三部分，也就是参数更新部分时间缩减非常多，从1.5秒缩短到了0.1秒，总的训练时间几乎缩短了将近一半。</p>
 <p>最后对比LightSeq和Fairseq可以明显发现，LightSeq的训练时间比Fairseq快非常多。主要是因为LightSeq采用了算子融合等各种技术，加速了Transformer模型的训练。</p>
@@ -1079,7 +1079,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

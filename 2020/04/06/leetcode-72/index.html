@@ -10,7 +10,7 @@
     <meta name="google-site-verification" content="yCy2azpds5XSuGZvis6OuA-XIGF5GuGpYRAaGfD6o48" />
     <meta name="360-site-verification" content="b7c11a830ef90fd1464ad6206bb7b6e7" />
     <meta name="description" content="题目链接LeetCode 72. 编辑距离
-题目描述给你两个单词 word1 和 word2，请你计算出将 word1 转换成 word2 所使用的最少操作数 。
+题目描述给你两个单词 word1 和 word2，请你计算出将 word1 转换成 word2 所使用的最少操作数 。
 你可以对一个单词进行如下三种操作：
 
 插入一个字符
@@ -496,7 +496,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    839
+                    833
                 </div>
                 
 
@@ -520,7 +520,7 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h2 id="题目链接"><a href="#题目链接" class="headerlink" title="题目链接"></a>题目链接</h2><p><a href="https://leetcode-cn.com/problems/edit-distance/" title="LeetCode 72. 编辑距离">LeetCode 72. 编辑距离</a></p>
-<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你两个单词 <code>word1</code> 和 <code>word2</code>，请你计算出将 <code>word1</code> 转换成 <code>word2</code> 所使用的最少操作数 。</p>
+<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你两个单词 <code>word1</code> 和 <code>word2</code>，请你计算出将 <code>word1</code> 转换成 <code>word2</code> 所使用的最少操作数 。</p>
 <p>你可以对一个单词进行如下三种操作：</p>
 <ul>
 <li>插入一个字符</li>
@@ -535,21 +535,26 @@
 
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>这是一道典型的动态规划题目，我们用 $dp[i][j]$ 表示 $word1_{1:i}$ 转换成 $word2_{1:j}$ 所需要的最小步数。那么对于最后一个字符来说，有如下四种情况：</p>
 <ul>
-<li>如果 $word1_{i} &#x3D; word2_{j}$ ，那么最后一个字符不需要操作，答案就是 $dp[i-1][j-1]$ 。</li>
+<li>如果 $word1_{i} = word2_{j}$ ，那么最后一个字符不需要操作，答案就是 $dp[i-1][j-1]$ 。</li>
 <li>如果 最后一步操作是插入得到的，那么问题就转化为了 $word1_{1:i}$ 转换成 $word2_{1:j-1}$ 所需要的最小步数。最后再插入 $word2_{j}$ 就行了，答案就是 $dp[i][j-1] + 1$ 。</li>
 <li>如果 最后一步操作是删除得到的，那么问题就转化为了 $word1_{1:i-1}$ 转换成 $word2_{1:j}$ 所需要的最小步数。最后再删除 $word1_{i}$ 就行了，答案就是 $dp[i-1][j] + 1$ 。</li>
 <li>如果 最后一步操作是替换得到的，那么问题就转化为了 $word1_{1:i-1}$ 转换成 $word2_{1:j-1}$ 所需要的最小步数。最后再将 $word1_{i}$ 替换为 $word2_{j}$ 就行了，答案就是 $dp[i-1][j-1] + 1$ 。</li>
 </ul>
-<p>综上，如果 $word1_{i} &#x3D; word2_{j}$ ，那么 $dp[i][j] &#x3D; dp[i-1][j-1]$ 。否则的话：</p>
-<p>$$<br>dp[i][j] &#x3D; \min{{dp[i][j-1], dp[i-1][j], dp[i-1][j-1]}} + 1<br>$$</p>
-<p>初始化就是，所有的 $dp[0][i] &#x3D; i$ ，因为需要插入 $i$ 次。所有的 $dp[i][0] &#x3D; i$ ，因为需要删除 $i$ 次。</p>
+<p>综上，如果 $word1_{i} = word2_{j}$ ，那么 $dp[i][j] = dp[i-1][j-1]$ 。否则的话：</p>
+
+$$
+dp[i][j] = \min{\{dp[i][j-1], dp[i-1][j], dp[i-1][j-1]\}} + 1
+$$
+
+
+<p>初始化就是，所有的 $dp[0][i] = i$ ，因为需要插入 $i$ 次。所有的 $dp[i][0] = i$ ，因为需要删除 $i$ 次。</p>
 <p>总的时间复杂度就是 $O(nm)$ 。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="c"><a href="#c" class="headerlink" title="c++"></a>c++</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">minDistance</span><span class="params">(string word1, string word2)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = word<span class="number">1.</span><span class="built_in">size</span>(), m = word<span class="number">2.</span><span class="built_in">size</span>();</span><br><span class="line">        vector&lt;vector&lt;<span class="type">int</span>&gt; &gt; <span class="built_in">dp</span>(n<span class="number">+1</span>, <span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;(m<span class="number">+1</span>, INT_MAX));</span><br><span class="line">        dp[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; m; ++i) dp[<span class="number">0</span>][i<span class="number">+1</span>] = i + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i) dp[i<span class="number">+1</span>][<span class="number">0</span>] = i + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; m; ++j) &#123;</span><br><span class="line">                <span class="keyword">if</span> (word1[i] == word2[j]) &#123;</span><br><span class="line">                    dp[i<span class="number">+1</span>][j<span class="number">+1</span>] = dp[i][j];</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// 插入</span></span><br><span class="line">                dp[i<span class="number">+1</span>][j<span class="number">+1</span>] = <span class="built_in">min</span>(dp[i<span class="number">+1</span>][j<span class="number">+1</span>], dp[i<span class="number">+1</span>][j]<span class="number">+1</span>);</span><br><span class="line">                <span class="comment">// 删除</span></span><br><span class="line">                dp[i<span class="number">+1</span>][j<span class="number">+1</span>] = <span class="built_in">min</span>(dp[i<span class="number">+1</span>][j<span class="number">+1</span>], dp[i][j<span class="number">+1</span>]<span class="number">+1</span>);</span><br><span class="line">                <span class="comment">// 替换</span></span><br><span class="line">                dp[i<span class="number">+1</span>][j<span class="number">+1</span>] = <span class="built_in">min</span>(dp[i<span class="number">+1</span>][j<span class="number">+1</span>], dp[i][j]<span class="number">+1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[n][m];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <h3 id="python"><a href="#python" class="headerlink" title="python"></a>python</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">minDistance</span>(<span class="params">self, word1: <span class="built_in">str</span>, word2: <span class="built_in">str</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        n, m = <span class="built_in">len</span>(word1), <span class="built_in">len</span>(word2)</span><br><span class="line">        dp = [[<span class="number">0</span>]*(m+<span class="number">1</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(n+<span class="number">1</span>)]</span><br><span class="line">        dp[<span class="number">0</span>] = [i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(m+<span class="number">1</span>)]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n+<span class="number">1</span>): dp[i][<span class="number">0</span>] = i</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(m):</span><br><span class="line">                <span class="keyword">if</span> word1[i] == word2[j]:</span><br><span class="line">                    dp[i+<span class="number">1</span>][j+<span class="number">1</span>] = dp[i][j]</span><br><span class="line">                    <span class="keyword">continue</span></span><br><span class="line">                dp[i+<span class="number">1</span>][j+<span class="number">1</span>] = <span class="built_in">min</span>(dp[i+<span class="number">1</span>][j], dp[i][j+<span class="number">1</span>], dp[i][j]) + <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> dp[n][m]</span><br></pre></td></tr></table></figure>
 
 <blockquote>
-<p>关注公众号【算法码上来】，每日算法干货马上就来！<br><img src="/medias/contact.jpg"></p>
+<p>关注公众号【算法码上来】，每日算法干货马上就来！<br><img src="/medias/contact.jpg" alt=""></p>
 </blockquote>
 
             </div>
@@ -848,10 +853,10 @@
                     <div class="summary block-with-text">
                         
                             题目链接LeetCode 229. 求众数 II
-题目描述给定一个大小为 $n$ 的数组，找出其中所有出现超过 $\lfloor n&#x2F;3 \rfloor$ 次的元素。
+题目描述给定一个大小为 $n$ 的数组，找出其中所有出现超过 $\lfloor n/3 \rfloor$ 次的元素。
 说明：
 
-要求算法的时间复杂度为 $O(n)$，空间复杂度为 
+要求算法的时间复杂度为 $O(n)$，空间复杂度为 $O(1)
                         
                     </div>
                     <div class="publish-info">
@@ -1068,7 +1073,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

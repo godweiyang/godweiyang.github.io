@@ -521,35 +521,35 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <blockquote>
 <p>2019年就要过去了，想知道你平时用的最多的词是什么吗？想知道你一天中哪个时间段聊天最多吗？想知道这一年谁和你聊的最多吗？<br>本文将会一步一步地教你如何导出微信聊天记录，并且对它们进行深入分析。</p>
 </blockquote>
 <h1 id="导出微信聊天数据"><a href="#导出微信聊天数据" class="headerlink" title="导出微信聊天数据"></a>导出微信聊天数据</h1><p>这一步是最为关键的，没有数据何谈分析？<br>在之前的教程中，我已经教过了如何导出微信聊天记录到电脑（仅限安卓）。<br>详见之前的博文：<a href="https://godweiyang.com/2019/08/09/wechat-explore/">https://godweiyang.com/2019/08/09/wechat-explore/</a>。</p>
 <p>下载所需要的两个python处理脚本：<br><a href="https://github.com/godweiyang/wechat-analysis">https://github.com/godweiyang/wechat-analysis</a></p>
 <h1 id="表格结构分析"><a href="#表格结构分析" class="headerlink" title="表格结构分析"></a>表格结构分析</h1><p>在第9个步骤之后，你就会得到下面这样的一张excel表格：</p>
-<p><img src="/1.jpg" alt="微信聊天记录表格"></p>
+<p><img src="1.jpg" alt="微信聊天记录表格"></p>
 <p>这个表格有很多列。<br><code>msgId</code>列表示消息的序号。<br><code>type</code>列表示消息的类型，我们这里只需要用到类型1。<br><code>isSend</code>列表示是发送（1）还是接收（0）的消息。<br><code>createTime</code>列表示消息的时间，不过这里用的是相对时间，单位是毫秒，所以计算的时候要特别注意。<br><code>talker</code>列表示聊天的对象，如果有后缀<code>@chatroom</code>就表示是群聊，如果有前缀<code>gh_</code>就表示是公众号消息，其他的全部都是私聊。<br><code>content</code>列表示消息内容。</p>
 <p><strong>首先将<code>type</code>列只勾选1，因为其他信息都是我们不需要的。</strong></p>
 <h1 id="这一年聊天出现最多的词是什么？"><a href="#这一年聊天出现最多的词是什么？" class="headerlink" title="这一年聊天出现最多的词是什么？"></a>这一年聊天出现最多的词是什么？</h1><p>这个部分我们细分为四个类型，分别是私聊发送的消息，私聊接收的消息，群聊发送的消息和群聊接收的消息。</p>
 <p><strong>私聊发送的消息：</strong><br>第一行<code>isSend</code>列勾选1，<code>talker</code>列去掉所有后缀<code>@chatroom</code>和前缀<code>gh_</code>的勾。<br>然后得到如下的表格：</p>
-<p><img src="/2.jpg" alt="私聊发送消息汇总"></p>
-<p>然后选中第I列，按<code>ctrl+c</code>复制，新建一个<code>wechat_send_person_2019.txt</code>，并粘贴进去。<br><img src="/3.jpg" alt="选中第I列"></p>
+<p><img src="2.jpg" alt="私聊发送消息汇总"></p>
+<p>然后选中第I列，按<code>ctrl+c</code>复制，新建一个<code>wechat_send_person_2019.txt</code>，并粘贴进去。<br><img src="3.jpg" alt="选中第I列"></p>
 <p><strong>私聊接收的消息：</strong><br>第一行<code>isSend</code>列勾选0，<code>talker</code>列去掉所有后缀<code>@chatroom</code>和前缀<code>gh_</code>的勾。<br>然后选中第I列，按<code>ctrl+c</code>复制，新建一个<code>wechat_receive_person_2019.txt</code>，并粘贴进去。</p>
 <p><strong>群聊发送的消息：</strong><br>第一行<code>isSend</code>列勾选1，<code>talker</code>列勾选所有后缀<code>@chatroom</code>。<br>然后选中第I列，按<code>ctrl+c</code>复制，新建一个<code>wechat_send_group_2019.txt</code>，并粘贴进去。</p>
 <p><strong>群聊接收的消息：</strong><br>第一行<code>isSend</code>列勾选0，<code>talker</code>列勾选所有后缀<code>@chatroom</code>。<br>然后选中第I列，按<code>ctrl+c</code>复制，新建一个<code>wechat_receive_group_2019.txt</code>，并粘贴进去。</p>
 <p>然后这四个txt文件就可以分别生成词云了。<br>生成词云的方法请看我之前的教程：<a href="https://godweiyang.com/2019/07/27/wordcloud/">https://godweiyang.com/2019/07/27/wordcloud/</a>。</p>
-<p>最终的效果图如下所示：<br><img src="/4.jpg" alt="私聊发送消息词云"><br><img src="/5.jpg" alt="私聊接收消息词云"><br><img src="/6.jpg" alt="群聊发送消息词云"><br><img src="/7.jpg" alt="群聊接收消息词云"></p>
-<h1 id="你最喜欢在哪一个时间段发消息？"><a href="#你最喜欢在哪一个时间段发消息？" class="headerlink" title="你最喜欢在哪一个时间段发消息？"></a>你最喜欢在哪一个时间段发消息？</h1><p>首先<code>talker</code>列去掉前缀<code>gh_</code>的勾，其他全部勾选上。<br>然后注意到<code>createTime</code>列默认用的是科学计数法，所以修改一下。<br>选中G列，右键点<code>单元格格式-自定义</code>，<code>类型</code>一栏填写0，确认。<br>然后就会变成下面这样：<br><img src="/10.jpg" alt="去除科学计数法"></p>
+<p>最终的效果图如下所示：<br><img src="4.jpg" alt="私聊发送消息词云"><br><img src="5.jpg" alt="私聊接收消息词云"><br><img src="6.jpg" alt="群聊发送消息词云"><br><img src="7.jpg" alt="群聊接收消息词云"></p>
+<h1 id="你最喜欢在哪一个时间段发消息？"><a href="#你最喜欢在哪一个时间段发消息？" class="headerlink" title="你最喜欢在哪一个时间段发消息？"></a>你最喜欢在哪一个时间段发消息？</h1><p>首先<code>talker</code>列去掉前缀<code>gh_</code>的勾，其他全部勾选上。<br>然后注意到<code>createTime</code>列默认用的是科学计数法，所以修改一下。<br>选中G列，右键点<code>单元格格式-自定义</code>，<code>类型</code>一栏填写0，确认。<br>然后就会变成下面这样：<br><img src="10.jpg" alt="去除科学计数法"></p>
 <p>然后选中G列，复制粘贴到新建的<code>wechat_send_all_time_2019.txt</code>。<br>注意要把第一行的列名去掉。</p>
 <p>然后就是数据处理与画图部分了。</p>
 <p>直接运行命令：<br><code>python3 process_time.py wechat_send_all_time_2019.txt</code></p>
-<p>出来的效果图如下：<br><img src="/8.jpg" alt="各个时间段发送消息数"></p>
+<p>出来的效果图如下：<br><img src="8.jpg" alt="各个时间段发送消息数"></p>
 <h1 id="这一年你和谁互动最多？"><a href="#这一年你和谁互动最多？" class="headerlink" title="这一年你和谁互动最多？"></a>这一年你和谁互动最多？</h1><p>首先<code>talker</code>列去掉后缀<code>@chatroom</code>和前缀<code>gh_</code>的勾，其他全部勾选上。<br>然后<code>isSend</code>列0和1都勾上。<br>然后选中H和I列，粘贴到新建的<code>people.txt</code>。</p>
 <p>直接运行命令：<br><code>python3 process_people.py people.txt</code></p>
-<p>出来的效果图如下：<br><img src="/9.jpg" alt="和你互动最多的前10个人"></p>
+<p>出来的效果图如下：<br><img src="9.jpg" alt="和你互动最多的前10个人"></p>
 <p>注意这里用户名并不会显示出来，只会显示微信的id，所以你需要去excel表格里一个个搜索看聊天内容，自己手动看是谁。</p>
-<p>最后安利一下我的公众号，大家可以关注一下，不定期分享NLP专业知识和计算机知识：<br><img src="/11.jpg" alt="微信公众号"></p>
+<p>最后安利一下我的公众号，大家可以关注一下，不定期分享NLP专业知识和计算机知识：<br><img src="11.jpg" alt="微信公众号"></p>
 
             </div>
             <hr />
@@ -1076,7 +1076,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

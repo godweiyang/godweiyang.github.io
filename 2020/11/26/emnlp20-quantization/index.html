@@ -527,38 +527,38 @@ Fully Quantized Transformer for Machine">
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <blockquote>
 <p>花了几天看了三篇EMNLP 2020中关于Transformer模型量化的相关论文，快速记一下要点。</p>
 </blockquote>
 <h2 id="Fully-Quantized-Transformer-for-Machine-Translation"><a href="#Fully-Quantized-Transformer-for-Machine-Translation" class="headerlink" title="Fully Quantized Transformer for Machine Translation"></a>Fully Quantized Transformer for Machine Translation</h2><p>这篇是华为诺亚方舟实验室和蒙特利尔大学合作的，发表在findings上面。</p>
 <p><strong>论文地址：</strong><br><a href="https://www.aclweb.org/anthology/2020.findings-emnlp.1.pdf">https://www.aclweb.org/anthology/2020.findings-emnlp.1.pdf</a></p>
-<p><img src="/1.png"></p>
+<p><img src="1.png" alt=""></p>
 <h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><p>针对Transformer结构的计算密集型算子进行了activation量化，除了bias以外的所有weight进行了量化，这一点其实我们组也都做过了。</p>
 <p>采用的是量化感知训练（QAT），反向传播采用的是straight-through estimator。</p>
 <p>考虑到每个channel的分布有差异，因此针对每个channel单独学习量化的scale参数。</p>
 <p>零值的处理：padding无需考虑，反正会被mask掉。ReLU和attention softmax之后的量化强制定义量化下界为0。量化全部加在dropout之前。</p>
 <p>剪枝采用结构化剪枝，因为稀疏性剪枝需要硬件或库支持，比较麻烦。这里只对FFN参数进行剪枝，而且不是采用传统的百分比阈值，而是根据ReLU之后值计算出第一层FFN输出的每一列的max值，根据max值是否超过一定阈值来剪枝，这个阈值设定为所有列max值的方差乘上一个常数。这里好处就是剪枝的百分比不固定了，每一层动态剪，可多可少。</p>
-<h3 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h3><p><img src="/2.png"><br>可以看出训练后量化（PTQ）降得还是略多的，而QAT的8位或6位基本没怎么降，4位的话影响就很大了。结果也是符合我们组实践效果的。</p>
+<h3 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h3><p><img src="2.png" alt=""><br>可以看出训练后量化（PTQ）降得还是略多的，而QAT的8位或6位基本没怎么降，4位的话影响就很大了。结果也是符合我们组实践效果的。</p>
 <h3 id="评价"><a href="#评价" class="headerlink" title="评价"></a>评价</h3><p>自我感觉这篇没啥创新，不过最后也只是findings，没有中主会。量化位置和一些trick也都是很容易想到的，而每个channel单独量化其实实践下来意义也不大，不加这个trick效果也很好了已经。FFN最后也并没有剪去多少参数。</p>
 <h2 id="Extremely-Low-Bit-Transformer-Quantization-for-On-Device-Neural-Machine-Translation"><a href="#Extremely-Low-Bit-Transformer-Quantization-for-On-Device-Neural-Machine-Translation" class="headerlink" title="Extremely Low Bit Transformer Quantization for On-Device Neural Machine Translation"></a>Extremely Low Bit Transformer Quantization for On-Device Neural Machine Translation</h2><p>这篇是三星做的，也发表在findings上面。</p>
 <p><strong>论文地址：</strong><br><a href="https://www.aclweb.org/anthology/2020.findings-emnlp.433.pdf">https://www.aclweb.org/anthology/2020.findings-emnlp.433.pdf</a></p>
-<p><img src="/3.png"></p>
-<h3 id="方法-1"><a href="#方法-1" class="headerlink" title="方法"></a>方法</h3><p>这篇没有采用比较常用的uniform量化方式（也就是将浮点数区间等比例映射到整数区间），而是采用binary-code，也就是将参数$w$表示成$q$（量化位数）个相同维度的二值向量$b$的线性组合，最后矩阵和向量相乘可以变为：$y &#x3D; \sum_{i&#x3D;1}^{q}{(\alpha_i \circ (B_i \cdot x))}$，具体这里可以怎么加速可以参看三星之前的论文：BiQGEMM: Matrix Multiplication with Lookup Table For Binary-Coding-based Quantized DNNs。</p>
-<p>这篇针对embedding的不同词频采用了不同的量化位数，具体方案可以看下面的伪代码：<br><img src="/4.png"><br>总之就是词频越高，量化位数越多。而大多数单词词频都很低，1%的单词占据了95%的词频，所以他们位数高一点影响不大。针对每个词向量，采用的是不同的量化参数，这也是考虑到每个词向量的空间分布有差异。</p>
+<p><img src="3.png" alt=""></p>
+<h3 id="方法-1"><a href="#方法-1" class="headerlink" title="方法"></a>方法</h3><p>这篇没有采用比较常用的uniform量化方式（也就是将浮点数区间等比例映射到整数区间），而是采用binary-code，也就是将参数$w$表示成$q$（量化位数）个相同维度的二值向量$b$的线性组合，最后矩阵和向量相乘可以变为：$y = \sum_{i=1}^{q}{(\alpha_i \circ (B_i \cdot x))}$，具体这里可以怎么加速可以参看三星之前的论文：BiQGEMM: Matrix Multiplication with Lookup Table For Binary-Coding-based Quantized DNNs。</p>
+<p>这篇针对embedding的不同词频采用了不同的量化位数，具体方案可以看下面的伪代码：<br><img src="4.png" alt=""><br>总之就是词频越高，量化位数越多。而大多数单词词频都很低，1%的单词占据了95%的词频，所以他们位数高一点影响不大。针对每个词向量，采用的是不同的量化参数，这也是考虑到每个词向量的空间分布有差异。</p>
 <p>针对encoder和decoder中的不同类型attention，论文也是采用了不同的量化位数。</p>
 <p>训练策略上，这里finetune阶段每2000步开启一次量化，为了节约训练时间。</p>
-<h3 id="实验结果-1"><a href="#实验结果-1" class="headerlink" title="实验结果"></a>实验结果</h3><p><img src="/5.png"><br>可以看出embedding量化影响还是比较大的，特别是量化到2位以下时。而全部采用2位量化效果很差。如果用本文的量化方法，可以看出大部分配置下，损失都在1个点以内，效果还是不错的。</p>
+<h3 id="实验结果-1"><a href="#实验结果-1" class="headerlink" title="实验结果"></a>实验结果</h3><p><img src="5.png" alt=""><br>可以看出embedding量化影响还是比较大的，特别是量化到2位以下时。而全部采用2位量化效果很差。如果用本文的量化方法，可以看出大部分配置下，损失都在1个点以内，效果还是不错的。</p>
 <h3 id="评价-1"><a href="#评价-1" class="headerlink" title="评价"></a>评价</h3><p>这篇采用non-uniform量化方式，实现起来还是更复杂一点的，而且在矩阵相乘的加速优化方面，并没有过多阐述怎么实现。此外没有对比uniform量化和non-uniform量化方式的差距，不清楚性能的提升是non-uniform量化占主导，还是根据词频和不同attention类型采用不同量化位数占了主导。最后人工设计因素过多，比如attention的量化位数都得人来定好，应用起来不是很灵活。</p>
 <h2 id="TernaryBERT-Distillation-aware-Ultra-low-Bit-BERT"><a href="#TernaryBERT-Distillation-aware-Ultra-low-Bit-BERT" class="headerlink" title="TernaryBERT: Distillation-aware Ultra-low Bit BERT"></a>TernaryBERT: Distillation-aware Ultra-low Bit BERT</h2><p>这篇还是华为诺亚方舟实验室做的，发表在EMNLP主会上面。</p>
 <p><strong>论文地址：</strong><br><a href="https://www.aclweb.org/anthology/2020.emnlp-main.37.pdf">https://www.aclweb.org/anthology/2020.emnlp-main.37.pdf</a></p>
-<p><img src="/6.png"></p>
-<h3 id="方法-2"><a href="#方法-2" class="headerlink" title="方法"></a>方法</h3><p><img src="/7.png"><br>如上图所示，这篇在量化基础上还加上了蒸馏。</p>
-<p>首先对于weight量化，采用三值量化，训练方法用的是TWN或者LAT，具体原理可以去看侯璐的论文：<a href="https://houlu369.github.io/%EF%BC%8C%E8%80%8Cactivation%E8%BF%98%E6%98%AF%E9%87%87%E7%94%A8%E4%B8%80%E8%88%AC%E7%9A%84min-max%E9%87%8F%E5%8C%96%E3%80%82">https://houlu369.github.io/，而activation还是采用一般的min-max量化。</a></p>
+<p><img src="6.png" alt=""></p>
+<h3 id="方法-2"><a href="#方法-2" class="headerlink" title="方法"></a>方法</h3><p><img src="7.png" alt=""><br>如上图所示，这篇在量化基础上还加上了蒸馏。</p>
+<p>首先对于weight量化，采用三值量化，训练方法用的是TWN或者LAT，具体原理可以去看侯璐的论文：<a href="https://houlu369.github.io/，而activation还是采用一般的min-max量化。">https://houlu369.github.io/，而activation还是采用一般的min-max量化。</a></p>
 <p>量化参数的话，embedding每一行采用一套参数，而其他所有weight都是一整个采用一套参数。</p>
 <p>蒸馏采用三个loss：hidden state、attention和logits。teacher是全精度的，student有两个，第一个是全精度的，模型和teacher一模一样。然后采用TWN或LAT量化得到三值网络，计算loss，最后反向传播更新全精度student的参数。</p>
 <p>此外还有两个trick，一是用了数据增强，二是全精度的student模型初始化是用的finetune后的teacher。</p>
-<h3 id="实验结果-2"><a href="#实验结果-2" class="headerlink" title="实验结果"></a>实验结果</h3><p><img src="/8.png"><br>在GLUE上做的实验，最大压缩率可以达到23倍，看起来效果比普通的Q-BERT、Q8-BERT还是好了不少的，比BERT也只差了1个点左右。这里所有的activation都只量化到了8位，估计再低试了效果也不好。</p>
+<h3 id="实验结果-2"><a href="#实验结果-2" class="headerlink" title="实验结果"></a>实验结果</h3><p><img src="8.png" alt=""><br>在GLUE上做的实验，最大压缩率可以达到23倍，看起来效果比普通的Q-BERT、Q8-BERT还是好了不少的，比BERT也只差了1个点左右。这里所有的activation都只量化到了8位，估计再低试了效果也不好。</p>
 <h3 id="评价-2"><a href="#评价-2" class="headerlink" title="评价"></a>评价</h3><p>GLUE和SQUAD上看起来效果很不错，压缩率也很高，但是融合的手段有点多：蒸馏、数据增强、模型初始化等，消融实验也可以看出来去掉蒸馏和数据增强后效果降了非常多，因此TWN和LAT相比于一般的min-max量化实际中到底有多大优势不得而知。最后这篇论文没有做机器翻译任务，都是做的分类任务，如果在更困难的生成任务上效果也很好，才真的有说服力。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>综合看下来，这三篇论文采用了三种完全不同的量化方法。第一篇最好实现，TensorFlow自带的量化也是采用这种方式，8比特效果也近乎无损，但是更低的话就不大行了。后两篇都是超低比特量化，一个用的是binary-code，一个是TWN或LAT，压缩率都很高。第二篇根据词频或重要性区分不同参数的量化位数，在超低比特情况下还能保持很好的效果。第三篇直接超低比特量化，但是用了蒸馏等一系列操作把性能提升了上去，遗憾的是没有做机器翻译任务，让人产生怀疑。</p>
 <p>不过最后只有第三篇中了主会，不管怎么样，还是有很多值得借鉴的地方的。</p>
@@ -1081,7 +1081,7 @@ Fully Quantized Transformer for Machine">
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

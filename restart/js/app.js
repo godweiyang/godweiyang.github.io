@@ -20,7 +20,7 @@
 
   // ---------- 数据加载 ----------
   var DATA = null, game = null;
-  var FILES = ['talents.json', 'meta.json', 'events-child.json', 'events-teen.json', 'events-prime.json', 'events-veteran.json', 'events-extra.json', 'events-choices.json', 'events-pro.json', 'events-echo.json'];
+  var FILES = ['talents.json', 'meta.json', 'events-teen.json', 'events-prime.json', 'events-veteran.json', 'events-extra.json', 'events-choices.json', 'events-pro.json', 'events-echo.json'];
   function loadData() {
     return Promise.all(FILES.map(function (f) {
       return fetch('data/' + f).then(function (r) { if (!r.ok) throw new Error(f); return r.json(); });

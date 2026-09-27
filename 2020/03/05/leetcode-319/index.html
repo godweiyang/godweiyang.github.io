@@ -13,7 +13,7 @@
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-题目描述初始时有 $n$ 个灯泡关闭。 第 $1$ 轮，你打开所有的灯泡。 第 $2$ 轮，每两个灯泡你关闭一次。 第 $3$ 轮，每三个灯泡切换一次开关（如果关闭则开启，如果开启则关">
+题目描述初始时有 $n$ 个灯泡关闭。 第 $1$ 轮，你打开所有的灯泡。 第 $2$ 轮，每两个灯泡你关闭一次。 第 $3$ 轮，每三个灯泡切换一次开关（如果关闭则开启，如果开启则关">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -494,7 +494,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    673
+                    667
                 </div>
                 
 
@@ -520,22 +520,22 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
-<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>初始时有 $n$ 个灯泡关闭。 第 $1$ 轮，你打开所有的灯泡。 第 $2$ 轮，每两个灯泡你关闭一次。 第 $3$ 轮，每三个灯泡切换一次开关（如果关闭则开启，如果开启则关闭）。第 $i$ 轮，每 $i$ 个灯泡切换一次开关。 对于第 $n$ 轮，你只切换最后一个灯泡的开关。 找出 $n$ 轮后有多少个亮着的灯泡。</p>
+<p><img src="/medias/contact.jpg" alt=""></p>
+<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>初始时有 $n$ 个灯泡关闭。 第 $1$ 轮，你打开所有的灯泡。 第 $2$ 轮，每两个灯泡你关闭一次。 第 $3$ 轮，每三个灯泡切换一次开关（如果关闭则开启，如果开启则关闭）。第 $i$ 轮，每 $i$ 个灯泡切换一次开关。 对于第 $n$ 轮，你只切换最后一个灯泡的开关。 找出 $n$ 轮后有多少个亮着的灯泡。</p>
 <p><strong>示例1</strong></p>
 <figure class="highlight text"><table><tr><td class="code"><pre><span class="line">输入：</span><br><span class="line">3</span><br><span class="line">输出：</span><br><span class="line">1</span><br><span class="line">解释：</span><br><span class="line">初始时, 灯泡状态 [关闭, 关闭, 关闭].</span><br><span class="line">第一轮后, 灯泡状态 [开启, 开启, 开启].</span><br><span class="line">第二轮后, 灯泡状态 [开启, 关闭, 开启].</span><br><span class="line">第三轮后, 灯泡状态 [开启, 关闭, 关闭].</span><br><span class="line"></span><br><span class="line">你应该返回 1，因为只有一个灯泡还亮着。</span><br></pre></td></tr></table></figure>
 
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>首先有 $n$ 个灯泡，假设编号为 $1$ 到 $n$ 。第 $1$ 轮，所有编号是 $1$ 的倍数的灯泡被开关了一次。第 $2$ 轮，所有编号是 $2$ 的倍数的灯泡被开关了一次。类推下去，第 $i$ 轮，所有编号是 $i$ 的倍数的灯泡被开关了一次。</p>
 <p>综上，对于编号为 $i$ 的灯泡来说，它最终被开关的次数取决于 $i$ 有几个因数。如果有奇数个因数，那么它最后就是开着的，否则就是关着的。</p>
 <p>那么我们有一个定理：<strong>如果一个正整数有奇数个因数，那么它一定是完全平方数</strong>。</p>
-<p>最浅显的证明就是，一个数 $i$ 的因数按照从小到大排个序，首尾两两一对之积一定等于 $i$ 。而如果因数只有奇数个，最中间一个因数 $x$ 只会出现一次，那么 $i &#x3D; x^2$ 。</p>
+<p>最浅显的证明就是，一个数 $i$ 的因数按照从小到大排个序，首尾两两一对之积一定等于 $i$ 。而如果因数只有奇数个，最中间一个因数 $x$ 只会出现一次，那么 $i = x^2$ 。</p>
 <p>严格证明也不难，首先将 $i$ 质因数分解为：</p>
-<p>$$<br>i &#x3D; p_1^{c_1}p_2^{c_2}\cdots p_k^{c_k}<br>$$</p>
+<p>$$<br>i = p_1^{c_1}p_2^{c_2}\cdots p_k^{c_k}<br>$$</p>
 <p>那么 $i$ 的因数个数就是：</p>
 <p>$$<br>(c_1+1)(c_2+1)\cdots (c_k+1)<br>$$</p>
 <p>因为 $i$ 的因数个数是奇数，所以任意 $c_j + 1$ 必定是奇数，即任意 $c_j$ 必定是偶数。</p>
 <p>那么 $i$ 就可以写作：</p>
-<p>$$<br>i &#x3D; (p_1^{c_1&#x2F;2}p_2^{c_2&#x2F;2}\cdots p_k^{c_k&#x2F;2})^2<br>$$</p>
+<p>$$<br>i = (p_1^{c_1/2}p_2^{c_2/2}\cdots p_k^{c_k/2})^2<br>$$</p>
 <p>这就证明了 $i$ 一定是一个完全平方数。</p>
 <p>所以问题就转化为了<strong>求 $1$ 到 $n$ 之间有多少个完全平方数</strong>。答案就是 $\left\lfloor\sqrt{n}\right\rfloor$ 。</p>
 <p>在具体实现的时候，为了防止出现浮点数误差（比如 $\sqrt{9}$ 算出来是 $2.9999$ ，取整得到 $2$），我们可以计算 $\left\lfloor\sqrt{n+0.5}\right\rfloor$ 的结果。</p>
@@ -783,7 +783,7 @@
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-题目描述现有一个房间，墙上挂有 $n$ 只已经打开的灯泡和 $4$ 个按钮。在进行了 $m$ 次未知操作后，你需要返回这 $n$ 只灯泡可能有多少种不同的状态。
+题目描述现有一个房间，墙上挂有 $n$ 只已经打开的灯泡和 $4$ 个按钮。在进行了 $m$ 次未知操作后，你需要返回这 $n$ 只灯泡可能有多少种不同的状态。
 假设这 $n$ 只灯泡
                         
                     </div>
@@ -841,7 +841,7 @@
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-题目描述给你一个整数数组 digits，你可以通过按任意顺序连接其中某些数字来形成 3 的倍数，请你返回所能得到的最大的 3 的倍数。
+题目描述给你一个整数数组 digits，你可以通过按任意顺序连接其中某些数字来形成 3 的倍数，请你返回所能得到的最大的 3 的倍数。
 由于答案可能不在整数数据类型范围内，请以字符串形
                         
                     </div>
@@ -1059,7 +1059,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

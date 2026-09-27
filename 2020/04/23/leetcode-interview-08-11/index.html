@@ -534,14 +534,14 @@
 
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>首先我们规定一些记号，用 $p[i]$ 来表示第 $i$ 种硬币的面值，用 $dp[i][j]$ 表示用前 $i$ 种硬币组成面值 $j$ 的方案数。令 $n$ 表示需要表示的面值，$m$ 表示硬币数。</p>
 <h3 id="朴素想法（错误）"><a href="#朴素想法（错误）" class="headerlink" title="朴素想法（错误）"></a>朴素想法（错误）</h3><p>首先我们可以想到，最朴素的方法不就是<strong>组成面值 $j$ 的方案数等于所有组成面值 $j-p[k]$ 的方案数之和</strong>：</p>
-<p>$$<br>dp[i][j] &#x3D; \sum_{k&#x3D;0}^{i}{dp[i][j-p[k]]}<br>$$</p>
+<p>$$<br>dp[i][j] = \sum_{k=0}^{i}{dp[i][j-p[k]]}<br>$$</p>
 <p>但是这样有个很严重的问题，就是会产生重复计算，也就是将 <code>6 = 1 + 5</code> 和 <code>6 = 5 + 1</code> 视为两种情况。</p>
 <h3 id="动态规划-1"><a href="#动态规划-1" class="headerlink" title="动态规划 1"></a>动态规划 1</h3><p>朴素想法的纠正方法就是，<strong>规定拆解后的数字是有序的</strong>，这样就不会出现重复计算了。</p>
 <p>那么具体怎么实现呢？其实只需要加上一个约束，也就是强制令 $p[k]$ 为组成面值 $j$ 的最大面值硬币。那么用掉它之后，组成面值 $j-p[k]$ 的最大面值硬币仍然只能是 $p[k]$ ，这样转移下去就一定是有序的，不会出现面值突然增大的情况。转移方程只需要修改一下转移后的可用硬币 $i$：</p>
-<p>$$<br>dp[i][j] &#x3D; \sum_{k&#x3D;0}^{i}{dp[k][j-p[k]]}<br>$$</p>
+<p>$$<br>dp[i][j] = \sum_{k=0}^{i}{dp[k][j-p[k]]}<br>$$</p>
 <p>时间复杂度 $O(nm^2)$ ，空间复杂度 $O(nm)$ 。</p>
 <h3 id="动态规划-2（超时）"><a href="#动态规划-2（超时）" class="headerlink" title="动态规划 2（超时）"></a>动态规划 2（超时）</h3><p>另一条思考路线是，我们<strong>假设第 $i$ 个硬币用 $k$ 枚，然后枚举所有的 $k$</strong> 就行了。转移方程很好写：</p>
-<p>$$<br>dp[i][j] &#x3D; \sum_{k&#x3D;0}^{\lfloor j&#x2F;p[i] \rfloor}{dp[i-1][j-k \cdot p[i]]}<br>$$</p>
+<p>$$<br>dp[i][j] = \sum_{k=0}^{\lfloor j/p[i] \rfloor}{dp[i-1][j-k \cdot p[i]]}<br>$$</p>
 <p>但是这样时间复杂度太高了，直接超时。</p>
 <p>时间复杂度 $O(n^2m)$ ，空间复杂度 $O(nm)$ 。</p>
 <h3 id="转移方程优化"><a href="#转移方程优化" class="headerlink" title="转移方程优化"></a>转移方程优化</h3><blockquote>
@@ -549,35 +549,35 @@
 </blockquote>
 <p><strong>动态规划 1：</strong></p>
 <p>首先看第一个方法，转移方程为：</p>
-<p>$$<br>dp[i][j] &#x3D; \sum_{k&#x3D;0}^{i}{dp[k][j-p[k]]}<br>$$</p>
-<p>我们令 $i &#x3D; i - 1$ ，又可以得到：</p>
-<p>$$<br>dp[i-1][j] &#x3D; \sum_{k&#x3D;0}^{i-1}{dp[k][j-p[k]]}<br>$$</p>
+<p>$$<br>dp[i][j] = \sum_{k=0}^{i}{dp[k][j-p[k]]}<br>$$</p>
+<p>我们令 $i = i - 1$ ，又可以得到：</p>
+<p>$$<br>dp[i-1][j] = \sum_{k=0}^{i-1}{dp[k][j-p[k]]}<br>$$</p>
 <p>两式左右两边相减可以得到：</p>
-<p>$$<br>dp[i][j] &#x3D; dp[i-1][j] + dp[i][j-p[i]]<br>$$</p>
+<p>$$<br>dp[i][j] = dp[i-1][j] + dp[i][j-p[i]]<br>$$</p>
 <p><strong>动态规划 2：</strong></p>
 <p>再看第二个方法，转移方程为：</p>
-<p>$$<br>dp[i][j] &#x3D; \sum_{k&#x3D;0}^{\lfloor j&#x2F;p[i] \rfloor}{dp[i-1][j-k \cdot p[i]]}<br>$$</p>
-<p>令 $j &#x3D; j - p[i]$ ，又可以得到：</p>
-<p>$$<br>dp[i][j-p[i]] &#x3D; \sum_{k&#x3D;1}^{\lfloor j&#x2F;p[i] \rfloor}{dp[i-1][j-k \cdot p[i]]}<br>$$</p>
+<p>$$<br>dp[i][j] = \sum_{k=0}^{\lfloor j/p[i] \rfloor}{dp[i-1][j-k \cdot p[i]]}<br>$$</p>
+<p>令 $j = j - p[i]$ ，又可以得到：</p>
+<p>$$<br>dp[i][j-p[i]] = \sum_{k=1}^{\lfloor j/p[i] \rfloor}{dp[i-1][j-k \cdot p[i]]}<br>$$</p>
 <p>两式左右两边相减可以得到：</p>
-<p>$$<br>dp[i][j] &#x3D; dp[i-1][j] + dp[i][j-p[i]]<br>$$</p>
+<p>$$<br>dp[i][j] = dp[i-1][j] + dp[i][j-p[i]]<br>$$</p>
 <p><strong>最终形式：</strong></p>
-<p>所以，最终**两个方法消去求和之后，形式是一样的！**都是：</p>
-<p>$$<br>dp[i][j] &#x3D; dp[i-1][j] + dp[i][j-p[i]]<br>$$</p>
+<p>所以，最终<strong>两个方法消去求和之后，形式是一样的！</strong>都是：</p>
+<p>$$<br>dp[i][j] = dp[i-1][j] + dp[i][j-p[i]]<br>$$</p>
 <p>时间复杂度 $O(nm)$ ，空间复杂度 $O(nm)$ 。</p>
 <h3 id="空间优化"><a href="#空间优化" class="headerlink" title="空间优化"></a>空间优化</h3><p>注意到，上面转移方程每个时刻 $i$ 其实只和 $i-1$ 还有 $i$ 时刻有关，所以可以把第一个维度消除掉。这样转移方程就变为了：</p>
-<p>$$<br>dp[j] &#x3D; dp[j] + dp[j-p[i]]<br>$$</p>
+<p>$$<br>dp[j] = dp[j] + dp[j-p[i]]<br>$$</p>
 <p>但是需要特别注意的是，这里一共有三项，分别表示的是第 $i$ 时刻、第 $i-1$ 时刻、第 $i$ 时刻。所以在两层循环遍历的时候，<strong>第一层循环必须是遍历硬币 $i$ ，第二层才是遍历组成的面值 $j$ ，这样才不会导致第 $i-1$ 时刻的值被覆盖掉无法访问。</strong></p>
 <p>时间复杂度 $O(nm)$ ，空间复杂度 $O(n)$ 。</p>
 <h3 id="数学法"><a href="#数学法" class="headerlink" title="数学法"></a>数学法</h3><p>这个方法就只针对本题硬币种类比较少的情况了。</p>
 <p>假设组成面值 $n$ 需要 $i$ 枚 <code>25</code> 分， $a$ 枚 <code>10</code> 分， $b$ 枚 <code>5</code> 分， $c$ 枚 <code>1</code> 分，那么有：</p>
-<p>$$<br>n &#x3D; 25i + 10a + 5b + c<br>$$</p>
-<p>这里 $i$ 我们是需要枚举的，范围是 $[0, \lfloor n&#x2F;25 \rfloor]$ ，所以我们令 $r &#x3D; n - 25i$，那么就得到了：</p>
-<p>$$<br>r &#x3D; 10a + 5b + c<br>$$</p>
-<p>那么 $a$ 的范围是 $[0, \lfloor r&#x2F;10 \rfloor]$ 。而 $a$ 确定了之后， $b$ 的范围就是 $[0, \lfloor (r-10a)&#x2F;5 \rfloor]$ 。而 $a, b$ 都确定了之后， $c$ 是唯一确定了的。所以最终的方案数就是：</p>
-<p>$$<br>\begin{aligned}<br>\sum_{a&#x3D;0}^{\lfloor r&#x2F;10 \rfloor}{\sum_{b&#x3D;0}^{\lfloor (r-10a)&#x2F;5 \rfloor}{1}} &amp;&#x3D; \sum_{a&#x3D;0}^{\lfloor r&#x2F;10 \rfloor}{(\lfloor (r-10a)&#x2F;5 \rfloor + 1)}\<br>&amp;&#x3D; \sum_{a&#x3D;0}^{\lfloor r&#x2F;10 \rfloor}{(\lfloor r&#x2F;5 \rfloor -2a + 1)}\<br>&amp;&#x3D; (\lfloor r&#x2F;10 \rfloor + 1)(\lfloor r&#x2F;5 \rfloor + 1) - (\lfloor r&#x2F;10 \rfloor + 1)\lfloor r&#x2F;10 \rfloor \<br>&amp; &#x3D;(\lfloor r&#x2F;10 \rfloor + 1)(\lfloor r&#x2F;5 \rfloor - \lfloor r&#x2F;10 \rfloor + 1)<br>\end{aligned}<br>$$</p>
-<p>所以最终我们遍历 $i \in [0, \lfloor n&#x2F;25 \rfloor]$，然后令 $r &#x3D; n - 25i$。接着令 $x &#x3D; \lfloor r&#x2F;10 \rfloor$，$y &#x3D; \lfloor r&#x2F;5 \rfloor$，最后对 $(x+1)(y-x+1)$ 进行累加就行了：</p>
-<p>$$<br>\sum_{i&#x3D;0}^{\lfloor n&#x2F;25 \rfloor}{(x+1)(y-x+1)}<br>$$</p>
+<p>$$<br>n = 25i + 10a + 5b + c<br>$$</p>
+<p>这里 $i$ 我们是需要枚举的，范围是 $[0, \lfloor n/25 \rfloor]$ ，所以我们令 $r = n - 25i$，那么就得到了：</p>
+<p>$$<br>r = 10a + 5b + c<br>$$</p>
+<p>那么 $a$ 的范围是 $[0, \lfloor r/10 \rfloor]$ 。而 $a$ 确定了之后， $b$ 的范围就是 $[0, \lfloor (r-10a)/5 \rfloor]$ 。而 $a, b$ 都确定了之后， $c$ 是唯一确定了的。所以最终的方案数就是：</p>
+<p>$$<br>\begin{aligned}<br>\sum_{a=0}^{\lfloor r/10 \rfloor}{\sum_{b=0}^{\lfloor (r-10a)/5 \rfloor}{1}} &amp;= \sum_{a=0}^{\lfloor r/10 \rfloor}{(\lfloor (r-10a)/5 \rfloor + 1)}\<br>&amp;= \sum_{a=0}^{\lfloor r/10 \rfloor}{(\lfloor r/5 \rfloor -2a + 1)}\<br>&amp;= (\lfloor r/10 \rfloor + 1)(\lfloor r/5 \rfloor + 1) - (\lfloor r/10 \rfloor + 1)\lfloor r/10 \rfloor \<br>&amp; =(\lfloor r/10 \rfloor + 1)(\lfloor r/5 \rfloor - \lfloor r/10 \rfloor + 1)<br>\end{aligned}<br>$$</p>
+<p>所以最终我们遍历 $i \in [0, \lfloor n/25 \rfloor]$，然后令 $r = n - 25i$。接着令 $x = \lfloor r/10 \rfloor$，$y = \lfloor r/5 \rfloor$，最后对 $(x+1)(y-x+1)$ 进行累加就行了：</p>
+<p>$$<br>\sum_{i=0}^{\lfloor n/25 \rfloor}{(x+1)(y-x+1)}<br>$$</p>
 <p>时间复杂度 $O(n)$ ，空间复杂度 $O(1)$ 。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="动态规划-1（c-）"><a href="#动态规划-1（c-）" class="headerlink" title="动态规划 1（c++）"></a>动态规划 1（c++）</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">typedef</span> <span class="type">long</span> <span class="type">long</span> ll;</span><br><span class="line">    <span class="type">static</span> <span class="type">const</span> ll mod = <span class="number">1e9</span> + <span class="number">7</span>;</span><br><span class="line">    <span class="type">static</span> <span class="type">const</span> <span class="type">int</span> N = <span class="number">1000010</span>;</span><br><span class="line">    <span class="type">static</span> <span class="type">const</span> <span class="type">int</span> M = <span class="number">4</span>;</span><br><span class="line"></span><br><span class="line">    ll dp[M][N];</span><br><span class="line">    <span class="type">int</span> p[M] = &#123;<span class="number">1</span>, <span class="number">5</span>, <span class="number">10</span>, <span class="number">25</span>&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">waysToChange</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">memset</span>(dp, <span class="number">0</span>, <span class="keyword">sizeof</span> dp);</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; M; ++i) dp[i][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; M; ++i) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt;= n; ++j) &#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="type">int</span> k = <span class="number">0</span>; k &lt;= i; ++k) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (j &gt;= p[k]) &#123;</span><br><span class="line">                        (dp[i][j] += dp[k][j-p[k]]) %= mod;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[M<span class="number">-1</span>][n];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
@@ -590,7 +590,7 @@
 <h3 id="数学法（c-）"><a href="#数学法（c-）" class="headerlink" title="数学法（c++）"></a>数学法（c++）</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">typedef</span> <span class="type">long</span> <span class="type">long</span> ll;</span><br><span class="line">    <span class="type">static</span> <span class="type">const</span> ll mod = <span class="number">1e9</span> + <span class="number">7</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">waysToChange</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">        ll res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt;= n/<span class="number">25</span>; ++i) &#123;</span><br><span class="line">            ll r = n - <span class="number">25</span> * i;</span><br><span class="line">            ll x = r / <span class="number">10</span>, y = r / <span class="number">5</span>;</span><br><span class="line">            (res += (x + <span class="number">1</span>) * (y - x + <span class="number">1</span>)) %= mod;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <blockquote>
-<p>关注公众号【算法码上来】，每日算法干货马上就来！<br><img src="/medias/contact.jpg"></p>
+<p>关注公众号【算法码上来】，每日算法干货马上就来！<br><img src="/medias/contact.jpg" alt=""></p>
 </blockquote>
 
             </div>
@@ -1106,7 +1106,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

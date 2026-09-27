@@ -13,8 +13,8 @@
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-题目描述珂珂喜欢吃香蕉。这里有 N 堆香蕉，第 i 堆中有 piles[i] 根香蕉。警卫已经离开了，将在 H 小时后回来。
-珂珂可以决定她吃香蕉的速度 K （单位：根&amp;#x2F;小时">
+题目描述珂珂喜欢吃香蕉。这里有 N 堆香蕉，第 i 堆中有 piles[i] 根香蕉。警卫已经离开了，将在 H 小时后回来。
+珂珂可以决定她吃香蕉的速度 K （单位：根/小时）。每个小">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -495,7 +495,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    783
+                    770
                 </div>
                 
 
@@ -521,9 +521,9 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
-<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>珂珂喜欢吃香蕉。这里有 N 堆香蕉，第 i 堆中有 piles[i] 根香蕉。警卫已经离开了，将在 H 小时后回来。</p>
-<p>珂珂可以决定她吃香蕉的速度 K （单位：根&#x2F;小时）。每个小时，她将会选择一堆香蕉，从中吃掉 K 根。如果这堆香蕉少于 K 根，她将吃掉这堆的所有香蕉，然后这一小时内不会再吃更多的香蕉。  </p>
+<p><img src="/medias/contact.jpg" alt=""></p>
+<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>珂珂喜欢吃香蕉。这里有 N 堆香蕉，第 i 堆中有 piles[i] 根香蕉。警卫已经离开了，将在 H 小时后回来。</p>
+<p>珂珂可以决定她吃香蕉的速度 K （单位：根/小时）。每个小时，她将会选择一堆香蕉，从中吃掉 K 根。如果这堆香蕉少于 K 根，她将吃掉这堆的所有香蕉，然后这一小时内不会再吃更多的香蕉。  </p>
 <p>珂珂喜欢慢慢吃，但仍然想在警卫回来前吃掉所有的香蕉。</p>
 <p>返回她可以在 H 小时内吃掉所有香蕉的最小速度 K（K 为整数）。</p>
 <p><strong>示例1</strong></p>
@@ -537,11 +537,11 @@
 
 <p><strong>提示</strong></p>
 <ul>
-<li>1 &lt;&#x3D; piles.length &lt;&#x3D; 10^4</li>
-<li>piles.length &lt;&#x3D; H &lt;&#x3D; 10^9</li>
-<li>1 &lt;&#x3D; piles[i] &lt;&#x3D; 10^9</li>
+<li>1 &lt;= piles.length &lt;= 10^4</li>
+<li>piles.length &lt;= H &lt;= 10^9</li>
+<li>1 &lt;= piles[i] &lt;= 10^9</li>
 </ul>
-<h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>简单复述一下题意，就是有 N 堆香蕉，每堆有 piles[i] 个，现在要求一个整数速度 K ，吃一堆香蕉要的时间是 piles[i] &#x2F; K （不是整数要上取整），问使得吃完所有香蕉所需总时间小于等于 H 的最小速度 K 是多少？</p>
+<h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>简单复述一下题意，就是有 N 堆香蕉，每堆有 piles[i] 个，现在要求一个整数速度 K ，吃一堆香蕉要的时间是 piles[i] / K （不是整数要上取整），问使得吃完所有香蕉所需总时间小于等于 H 的最小速度 K 是多少？</p>
 <p>显然 K 越小，吃每堆香蕉所需要的时间就越长，总时间也就越长，那么自然而然可以想到二分答案 K 。</p>
 <p>对于当前的 K ，我们遍历数组，算出总时间，如果总时间大于 H ，那就说明 K 太小了，还得提速；如果总时间小于等于 H ，那就说明速度 K 还可以降一点，总时间可能不变（因为存在上取整），也可能变大。</p>
 <p>这样最终的时间复杂度仅仅只有 $O(n \log \mathcal{M})$ ，其中 $\mathcal{M}$ 是数组中的最大值，也就是二分上界。但其实这里还可以优化一下二分的上下界，比如上界，最大其实就是数组中的最大元素大小， K 再大也没有意义了。</p>
@@ -551,9 +551,9 @@
 
 <h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>注意上面的代码还是有几个小细节的：</p>
 <ul>
-<li>二分终止条件设置的是 $l &gt;&#x3D; r$ ，所以 $l$ 的更新必须是 $l &#x3D; m + 1$ ，因为如果 $l &#x3D; r - 1$ 的话，$m$ 会等于 $l$ 。</li>
-<li>为了防止整型溢出，计算 $l$ 和 $r$ 均值的时候不要写 $(l + r) &#x2F; 2$ 。</li>
-<li>上取整简单写法就是 $(p + m - 1) &#x2F; m$ 。</li>
+<li>二分终止条件设置的是 $l &gt;= r$ ，所以 $l$ 的更新必须是 $l = m + 1$ ，因为如果 $l = r - 1$ 的话，$m$ 会等于 $l$ 。</li>
+<li>为了防止整型溢出，计算 $l$ 和 $r$ 均值的时候不要写 $(l + r) / 2$ 。</li>
+<li>上取整简单写法就是 $(p + m - 1) / m$ 。</li>
 </ul>
 
             </div>
@@ -858,8 +858,8 @@
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-题目描述已有方法 rand7 可生成 1 到 7 范围内的均匀随机整数，试写一个方法 rand10 生成 1 到 10 范围内的均匀随机整数。
-不要使用系统的 Math.random(
+题目描述已有方法 rand7 可生成 1 到 7 范围内的均匀随机整数，试写一个方法 rand10 生成 1 到 10 范围内的均匀随机整数。
+不要使用系统的 Math.random(
                         
                     </div>
                     <div class="publish-info">
@@ -1076,7 +1076,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

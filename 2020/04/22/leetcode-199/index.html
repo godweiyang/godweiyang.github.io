@@ -532,7 +532,7 @@
 <h3 id="bfs（c-）"><a href="#bfs（c-）" class="headerlink" title="bfs（c++）"></a>bfs（c++）</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">rightSideView</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        vector&lt;<span class="type">int</span>&gt; res;</span><br><span class="line">        queue&lt;TreeNode*&gt; Q;</span><br><span class="line">        <span class="keyword">if</span> (root) Q.<span class="built_in">push</span>(root);</span><br><span class="line">        <span class="keyword">while</span> (!Q.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">            <span class="type">int</span> sz = Q.<span class="built_in">size</span>();</span><br><span class="line">            <span class="keyword">while</span> (sz--) &#123;</span><br><span class="line">                TreeNode* node = Q.<span class="built_in">front</span>();</span><br><span class="line">                Q.<span class="built_in">pop</span>();</span><br><span class="line">                <span class="keyword">if</span> (!sz) res.<span class="built_in">push_back</span>(node-&gt;val);</span><br><span class="line">                <span class="keyword">if</span> (node-&gt;left) Q.<span class="built_in">push</span>(node-&gt;left);</span><br><span class="line">                <span class="keyword">if</span> (node-&gt;right) Q.<span class="built_in">push</span>(node-&gt;right);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <blockquote>
-<p>关注公众号【算法码上来】，每日算法干货马上就来！<br><img src="/medias/contact.jpg"></p>
+<p>关注公众号【算法码上来】，每日算法干货马上就来！<br><img src="/medias/contact.jpg" alt=""></p>
 </blockquote>
 
             </div>
@@ -1051,7 +1051,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

@@ -520,8 +520,8 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
-<p>首先给大家说明一下，前两天因为新入手了一个ukulele（就是下图这玩意），所以痴迷于学习弹奏，没有更新博客。照这个节奏下去，PaperDaily恐怕是要变成PaperWeekly了。（囧。。。）寒假一定要学会《小幸运》，嗯。<br><img src="/ukulele.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
+<p>首先给大家说明一下，前两天因为新入手了一个ukulele（就是下图这玩意），所以痴迷于学习弹奏，没有更新博客。照这个节奏下去，PaperDaily恐怕是要变成PaperWeekly了。（囧。。。）寒假一定要学会《小幸运》，嗯。<br><img src="ukulele.jpg" alt=""></p>
 <p>好了，今天开始恢复吧（说不准过两天我又鸽了，嘻嘻嘻）。</p>
 <p>今天要讲的这篇是TACL2017的，是关于树状LSTM的。</p>
 <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><hr>
@@ -532,10 +532,10 @@
 <li>增加了反向的树状LSTM，也就是top-down的LSTM。那有人就很好奇了，一个结点分解成两个结点，怎么可能？其实从头结点到任意一个其他结点的路径都可以看成一个独立的LSTM，如果向左参数就是$U_L$，否则就是$U_R$。</li>
 </ul>
 <h1 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h1><hr>
-<p><img src="/1.png"><br>图1是序列LSTM和树状LSTM的结构区别，这个树状LSTM是之前传统的树状LSTM，不带head结点的。</p>
-<p>之前的基本的树状LSTM的结点单元的具体公式如下：<br><img src="/5.png"><br>具体我就不解释了（懒。。。），自行类比序列LSTM。</p>
-<p>加入head结点之后，公式区别如下（加粗所示）：<br><img src="/2.png"><br><img src="/3.png"><br><img src="/4.png"></p>
-<p>那么top-down是怎么做的呢？<br><img src="/6.png"><br>这里可以看出来，向左向右是用的两套不同的参数。注意到，top-down方向的LSTM前提是一定要用head机制作为支撑！不然头结点的$x$算不出来的话是没有办法计算的哦。</p>
+<p><img src="1.png" alt=""><br>图1是序列LSTM和树状LSTM的结构区别，这个树状LSTM是之前传统的树状LSTM，不带head结点的。</p>
+<p>之前的基本的树状LSTM的结点单元的具体公式如下：<br><img src="5.png" alt=""><br>具体我就不解释了（懒。。。），自行类比序列LSTM。</p>
+<p>加入head结点之后，公式区别如下（加粗所示）：<br><img src="2.png" alt=""><br><img src="3.png" alt=""><br><img src="4.png" alt=""></p>
+<p>那么top-down是怎么做的呢？<br><img src="6.png" alt=""><br>这里可以看出来，向左向右是用的两套不同的参数。注意到，top-down方向的LSTM前提是一定要用head机制作为支撑！不然头结点的$x$算不出来的话是没有办法计算的哦。</p>
 <p>具体训练过程等等就不再阐述了。</p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><hr>
 <p>这个模型主要是用在了文本分类和情感分类上，我在想能不能用在我的毕设上面。</p>
@@ -1063,7 +1063,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

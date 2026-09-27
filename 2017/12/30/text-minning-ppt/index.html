@@ -501,14 +501,14 @@ Sequence ">
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.4k
+                    1.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    8 分
+                    6 分
                 </div>
                 
                 
@@ -527,7 +527,7 @@ Sequence ">
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <p>历经几个星期的磨难，文本挖掘课的presentation课件初稿基本完成了，1月中下旬开讲，这次讲的是基于少量标注数据的序列标注，下面是我的综述。</p>
 <h1 id="Outline"><a href="#Outline" class="headerlink" title="Outline"></a>Outline</h1><hr>
 <ul>
@@ -546,8 +546,8 @@ Sequence ">
 <li>Neural network models</li>
 <li>RNN, LSTM, GRU</li>
 </ul>
-<h3 id="Neural-Network-Model"><a href="#Neural-Network-Model" class="headerlink" title="Neural Network Model"></a>Neural Network Model</h3><p><img src="/1.png"></p>
-<h3 id="Results"><a href="#Results" class="headerlink" title="Results"></a>Results</h3><p><img src="/3.png"></p>
+<h3 id="Neural-Network-Model"><a href="#Neural-Network-Model" class="headerlink" title="Neural Network Model"></a>Neural Network Model</h3><p><img src="1.png" alt=""></p>
+<h3 id="Results"><a href="#Results" class="headerlink" title="Results"></a>Results</h3><p><img src="3.png" alt=""></p>
 <h3 id="Sequence-Tagging-with-Little-Labeled-Data"><a href="#Sequence-Tagging-with-Little-Labeled-Data" class="headerlink" title="Sequence Tagging with Little Labeled Data"></a>Sequence Tagging with Little Labeled Data</h3><p><strong>Backgrounds</strong><br>Although recent neural networks obtain state-of-the-art performance on several sequence tagging tasks, they can’t be used for tasks with little labeled data.<br><strong>Approaches</strong></p>
 <ul>
 <li><del>Self-taught learning</del></li>
@@ -568,17 +568,17 @@ Sequence ">
 <li>Scientific Information Extraction with Semi-supervised Neural Tagging. Luan et al. EMNLP17.</li>
 <li>Graph-based Semi-supervised Acoustic Modeling in DNN-based Speech Recognition. Liu et al. IEEE SLT14.</li>
 </ul>
-<h3 id="Language-Models-Added"><a href="#Language-Models-Added" class="headerlink" title="Language Models Added"></a>Language Models Added</h3><p><img src="/2.png"></p>
-<h3 id="Language-Modeling-Objective"><a href="#Language-Modeling-Objective" class="headerlink" title="Language Modeling Objective"></a>Language Modeling Objective</h3><p>\[\begin{array}{l}\overrightarrow { {m_t}} &#x3D; \tanh (\overrightarrow { {W_m}} \overrightarrow { {h_t}} )\\overleftarrow { {m_t}} &#x3D; \tanh (\overleftarrow { {W_m}} \overleftarrow { {h_t}} )\P({w_{t + 1}}|\overrightarrow { {m_t}} ) &#x3D; {\rm{softmax}}(\overrightarrow { {W_q}} \overrightarrow { {m_t}} )\P({w_{t - 1}}|\overleftarrow { {m_t}} ) &#x3D; {\rm{softmax}}(\overleftarrow { {W_q}} \overleftarrow { {m_t}} )\\overrightarrow E &#x3D; - \sum\limits_{t &#x3D; 1}^{T - 1} {\log (P({w_{t + 1}}|\overrightarrow { {m_t}} ))} \\overleftarrow E &#x3D; - \sum\limits_{t &#x3D; 2}^T {\log (P({w_{t - 1}}|\overleftarrow { {m_t}} ))} \E &#x3D; E + \gamma (\overrightarrow E + \overleftarrow E )\end{array}\]</p>
-<h3 id="Results-1"><a href="#Results-1" class="headerlink" title="Results"></a>Results</h3><p><img src="/4.png"><br><img src="/5.png"></p>
-<h3 id="Language-Models-Added-1"><a href="#Language-Models-Added-1" class="headerlink" title="Language Models Added"></a>Language Models Added</h3><p><img src="/6.png"></p>
-<h3 id="Bidirectional-Language-Model"><a href="#Bidirectional-Language-Model" class="headerlink" title="Bidirectional Language Model"></a>Bidirectional Language Model</h3><p>\[\begin{array}{l}h<em>k^{LM} &#x3D; [\overrightarrow {h_k^{LM}} ;\overleftarrow {h_k^{LM}} ]\{h</em>{k,1}} &#x3D; [\overrightarrow { {h_{k,1}}} ;\overleftarrow { {h_{k,1}}} ;h_k^{LM}]\end{array}\]<br><strong>Alternative</strong></p>
+<h3 id="Language-Models-Added"><a href="#Language-Models-Added" class="headerlink" title="Language Models Added"></a>Language Models Added</h3><p><img src="2.png" alt=""></p>
+<h3 id="Language-Modeling-Objective"><a href="#Language-Modeling-Objective" class="headerlink" title="Language Modeling Objective"></a>Language Modeling Objective</h3><p>&lt;!–swig￼0–&gt;</p>
+<h3 id="Results-1"><a href="#Results-1" class="headerlink" title="Results"></a>Results</h3><p><img src="4.png" alt=""><br><img src="5.png" alt=""></p>
+<h3 id="Language-Models-Added-1"><a href="#Language-Models-Added-1" class="headerlink" title="Language Models Added"></a>Language Models Added</h3><p><img src="6.png" alt=""></p>
+<h3 id="Bidirectional-Language-Model"><a href="#Bidirectional-Language-Model" class="headerlink" title="Bidirectional Language Model"></a>Bidirectional Language Model</h3><p>&lt;!–swig￼1–&gt;<br><strong>Alternative</strong></p>
 <ul>
 <li>Replace $[\overrightarrow { {h_{k,1}}} ;\overleftarrow { {h_{k,1}}} ;h_k^{LM}]$ with $f([\overrightarrow { {h_{k,1}}} ;\overleftarrow { {h_{k,1}}} ;h_k^{LM}])$.</li>
 <li>Concatenate the LM embeddings at different locations in the baseline sequence tagger.</li>
 <li>Decrease the number of parameters in the second RNN layer.</li>
 </ul>
-<h3 id="Results-2"><a href="#Results-2" class="headerlink" title="Results"></a>Results</h3><p><img src="/7.png"><br><img src="/8.png"></p>
+<h3 id="Results-2"><a href="#Results-2" class="headerlink" title="Results"></a>Results</h3><p><img src="7.png" alt=""><br><img src="8.png" alt=""></p>
 <h3 id="Conclusions"><a href="#Conclusions" class="headerlink" title="Conclusions"></a>Conclusions</h3><ul>
 <li>The language model transfer across domains.</li>
 <li>The model is robust even when trained on a large number of labeled data.</li>
@@ -590,13 +590,13 @@ Sequence ">
 <li>Use the CRF marginal as a regularization term to do label propagation on the graph.</li>
 <li>The smoothed posterior is then used to either interpolate with the CRF marginal or as an additional feature to the neural network.</li>
 <li>Graph Construction</li>
-<li>${w_{uv}} &#x3D; {d_e}(u,v)$ if $v \in K(u)$ or $u \in K(v)$.</li>
-<li>Label Propagation<br><img src="/9.png"></li>
-<li>Uncertain Label Marginalizing<br>\[\mathcal{Y}({x_t}) &#x3D; \left{ {\begin{array}{*{20}{c}}{{ {y_t}} }&amp;{ {\rm{if \ }}p({y_t}|x;\theta ) &gt; \eta }\{ {\rm{All \ label \ types}}}&amp;{ {\rm{otherwise}}}\end{array}} \right.\]</li>
-<li>Score<br>\[\phi (y;x,\theta ) &#x3D; \sum\limits_{t &#x3D; 0}^n { {T_{ {y_t},{y_{t + 1}}}}} + \sum\limits_{t &#x3D; 1}^n { {P_{t,{y_t}}}} \]</li>
-<li>Probability<br>\[{p_\theta }(\mathcal{Y}({x^k})|{x^k}) &#x3D; \frac{ {\sum\nolimits_{ {y^k} \in \mathcal{Y}({x^k})} {\exp (\phi ({y^k};{x^k},\theta ))} }}{ {\sum\nolimits_{y’ \in Y} {\exp (\phi (y’;x,\theta ))} }}\]<br><img src="/10.png"></li>
+<li>${w_{uv}} = {d_e}(u,v)$ if $v \in K(u)$ or $u \in K(v)$.</li>
+<li>Label Propagation<br><img src="9.png" alt=""></li>
+<li>Uncertain Label Marginalizing<br>&lt;!–swig￼7–&gt;</li>
+<li>Score<br>&lt;!–swig￼8–&gt;</li>
+<li>Probability<br>&lt;!–swig￼9–&gt;<br><img src="10.png" alt=""></li>
 </ul>
-<h3 id="Results-3"><a href="#Results-3" class="headerlink" title="Results"></a>Results</h3><p><img src="/11.png"></p>
+<h3 id="Results-3"><a href="#Results-3" class="headerlink" title="Results"></a>Results</h3><p><img src="11.png" alt=""></p>
 <h3 id="Conclusions-1"><a href="#Conclusions-1" class="headerlink" title="Conclusions"></a>Conclusions</h3><ul>
 <li>In-domain data performs better than cross-domain data.</li>
 <li>The combination of in-domain data and ULM algorithms performs well.</li>
@@ -615,28 +615,28 @@ Sequence ">
 <li>Cross-Lingual Transfer Learning for POS Tagging without Cross-Lingual Resources. Kim et al. EMNLP17.</li>
 </ul>
 <h3 id="Cross-domain-Transfer"><a href="#Cross-domain-Transfer" class="headerlink" title="Cross-domain Transfer"></a>Cross-domain Transfer</h3><ul>
-<li>Label mapping exist<br><img src="/13.png"></li>
-<li>Disparate label sets<br><img src="/12.png"></li>
+<li>Label mapping exist<br><img src="13.png" alt=""></li>
+<li>Disparate label sets<br><img src="12.png" alt=""></li>
 </ul>
-<p><img src="/20.png"><br><img src="/15.png"></p>
+<p><img src="20.png" alt=""><br><img src="15.png" alt=""></p>
 <h3 id="Domain-Projections"><a href="#Domain-Projections" class="headerlink" title="Domain Projections"></a>Domain Projections</h3><ul>
-<li>Domain Masks<br>\[\begin{array}{l}{m_1} &#x3D; [\overrightarrow 1 ,\overrightarrow 1 ,\overrightarrow 0 ],{m_2} &#x3D; [\overrightarrow 1 ,\overrightarrow 0 ,\overrightarrow 1 ]\\hat h &#x3D; {m_d} \odot h\end{array}\]</li>
-<li>Linear Projection<br>\[\hat h &#x3D; {T_d}h\]</li>
+<li>Domain Masks<br>&lt;!–swig￼10–&gt;</li>
+<li>Linear Projection<br>&lt;!–swig￼11–&gt;</li>
 </ul>
-<h3 id="Results-4"><a href="#Results-4" class="headerlink" title="Results"></a>Results</h3><p><img src="/16.png"></p>
+<h3 id="Results-4"><a href="#Results-4" class="headerlink" title="Results"></a>Results</h3><p><img src="16.png" alt=""></p>
 <h3 id="Conclusions-2"><a href="#Conclusions-2" class="headerlink" title="Conclusions"></a>Conclusions</h3><ul>
 <li>Multi-task learning can help domain adaptation.</li>
 <li>The number of shared parameters has great impact on the performance.</li>
 <li>We may use other domain adaptation methods besides parameter sharing and representation learning.</li>
 </ul>
-<h3 id="Cross-lingual-Transfer"><a href="#Cross-lingual-Transfer" class="headerlink" title="Cross-lingual Transfer"></a>Cross-lingual Transfer</h3><p><img src="/17.png"><br><img src="/18.png"></p>
+<h3 id="Cross-lingual-Transfer"><a href="#Cross-lingual-Transfer" class="headerlink" title="Cross-lingual Transfer"></a>Cross-lingual Transfer</h3><p><img src="17.png" alt=""><br><img src="18.png" alt=""></p>
 <ul>
-<li>Sequence Tagging Loss<br>\[{\mathcal{L}<em>p} &#x3D; - \sum\limits</em>{i &#x3D; 1}^S {\sum\limits_{j &#x3D; 1}^N { {p_{i,j}}\log ({ {\hat p}_{i,j}})} }\]</li>
-<li>Language Classifier Loss<br>\[{\mathcal{L}<em>a} &#x3D; - \sum\limits</em>{i &#x3D; 1}^S { {l_i}\log ({ {\hat l}_i})}\]</li>
-<li>Bidirectional Language Model Loss<br>\[{\mathcal{L}<em>l} &#x3D; - \sum\limits</em>{i &#x3D; 1}^S {\sum\limits_{j &#x3D; 1}^N {\log (P({w_{j + 1}}|{f_j})) + \log (P({w_{j - 1}}|{b_j}))} }\]</li>
-<li>Total Loss<br>\[\mathcal{L} &#x3D; {w_s}({\mathcal{L}_p} + \lambda {\mathcal{L}_a} + \lambda {\mathcal{L}_l})\]</li>
+<li>Sequence Tagging Loss<br>&lt;!–swig￼12–&gt;</li>
+<li>Language Classifier Loss<br>&lt;!–swig￼13–&gt;</li>
+<li>Bidirectional Language Model Loss<br>&lt;!–swig￼14–&gt;</li>
+<li>Total Loss<br>&lt;!–swig￼15–&gt;</li>
 </ul>
-<h3 id="Results-5"><a href="#Results-5" class="headerlink" title="Results"></a>Results</h3><p><img src="/19.png"></p>
+<h3 id="Results-5"><a href="#Results-5" class="headerlink" title="Results"></a>Results</h3><p><img src="19.png" alt=""></p>
 <h3 id="Conclusions-3"><a href="#Conclusions-3" class="headerlink" title="Conclusions"></a>Conclusions</h3><ul>
 <li>The language classifier can train the common LSTM to be language-agnostic.</li>
 <li>Either too many or too little labeled data decrease the performance.</li>
@@ -1186,7 +1186,7 @@ Sequence ">
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

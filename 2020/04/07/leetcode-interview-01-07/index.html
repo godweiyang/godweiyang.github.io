@@ -532,11 +532,11 @@
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><h3 id="旋转"><a href="#旋转" class="headerlink" title="旋转"></a>旋转</h3><p>可以发现，每个格子旋转四次之后都会回到原位。所以对于每个格子，我们只需要交换和它相关的一共四个格子的位置就行了。</p>
 <p>对于格子 <code>(i, j)</code> ，我们可以推算出它旋转后的三个新位置是 <code>(j, n-1-i), (n-1-i, n-1-j), (n-1-j, i)</code> 。所以只需要一个临时变量保存其中一个位置的值，然后按顺序交换位置就行了。</p>
 <p>当然为了避免重复旋转，我们只能枚举四分之一的格子，如果 <code>n</code> 是偶数，如下图所示，我们可以这么划分：</p>
-<p><img src="/3.jpg"></p>
+<p><img src="3.jpg" alt=""></p>
 <p>如果 <code>n</code> 是奇数，可以如下图这么划分：</p>
-<p><img src="/2.jpg"></p>
+<p><img src="2.jpg" alt=""></p>
 <p>当然你也可以不规则的划分，如下图这样，只是代码写起来有点费劲：</p>
-<p><img src="/1.jpg"></p>
+<p><img src="1.jpg" alt=""></p>
 <h3 id="翻转"><a href="#翻转" class="headerlink" title="翻转"></a>翻转</h3><p>这题还可以不通过模拟旋转来实现旋转。</p>
 <p>上面说过了，格子 <code>(i, j)</code> 旋转后的新位置是 <code>(j, n-1-i)</code> 。</p>
 <p>那么我们可以先沿着主对角线翻转矩阵，这样格子 <code>(i, j)</code> 位置就换到了 <code>(j, i)</code> 。</p>
@@ -552,7 +552,7 @@
 <h3 id="翻转（python）"><a href="#翻转（python）" class="headerlink" title="翻转（python）"></a>翻转（python）</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">rotate</span>(<span class="params">self, matrix: <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">int</span>]]</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        n = <span class="built_in">len</span>(matrix)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(i+<span class="number">1</span>, n):</span><br><span class="line">                matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(n//<span class="number">2</span>):</span><br><span class="line">                matrix[i][j], matrix[i][n-<span class="number">1</span>-j] = matrix[i][n-<span class="number">1</span>-j], matrix[i][j]</span><br></pre></td></tr></table></figure>
 
 <blockquote>
-<p>关注公众号【算法码上来】，每日算法干货马上就来！<br><img src="/medias/contact.jpg"></p>
+<p>关注公众号【算法码上来】，每日算法干货马上就来！<br><img src="/medias/contact.jpg" alt=""></p>
 </blockquote>
 
             </div>
@@ -851,7 +851,7 @@
                     <div class="summary block-with-text">
                         
                             题目链接LeetCode 72. 编辑距离
-题目描述给你两个单词 word1 和 word2，请你计算出将 word1 转换成 word2 所使用的最少操作数 。
+题目描述给你两个单词 word1 和 word2，请你计算出将 word1 转换成 word2 所使用的最少操作数 。
 你可以对一个单词进行如下三种操作：
 
 插入一个字符
@@ -1073,7 +1073,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

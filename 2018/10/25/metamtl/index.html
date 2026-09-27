@@ -527,7 +527,7 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <blockquote>
 <p>这篇文章是知识分析课准备讲的论文，随便拿来看一看了，简单介绍一下吧，论文是复旦邱锡鹏老师组写的。</p>
 </blockquote>
@@ -542,7 +542,7 @@
 </ul>
 <h1 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h1><hr>
 <h2 id="任务介绍"><a href="#任务介绍" class="headerlink" title="任务介绍"></a>任务介绍</h2><p>本文主要在序列标注和文本分类两个任务上面做实验，而且是多任务的，序列标注包括NER和POS tagging，文本分类包括多个不同领域的文本分类。</p>
-<h2 id="传统模型"><a href="#传统模型" class="headerlink" title="传统模型"></a>传统模型</h2><p>传统的多任务模型共享一个私有LSTM特征表示层，用这个私有LSTM学习出句子的表示，然后和词向量拼接共同输入到任务特定的公有LSTM去。具体结构如下图所示：<br><img src="/1.jpg"><br>输出层每个任务都是不共享的，和一般的模型一样，这里就不介绍了。最终的损失函数为所有任务的损失函数加权之和。</p>
+<h2 id="传统模型"><a href="#传统模型" class="headerlink" title="传统模型"></a>传统模型</h2><p>传统的多任务模型共享一个私有LSTM特征表示层，用这个私有LSTM学习出句子的表示，然后和词向量拼接共同输入到任务特定的公有LSTM去。具体结构如下图所示：<br><img src="1.jpg" alt=""><br>输出层每个任务都是不共享的，和一般的模型一样，这里就不介绍了。最终的损失函数为所有任务的损失函数加权之和。</p>
 <p>多任务模型的训练策略如下所示：</p>
 <ul>
 <li>首先随机选择一个任务。</li>
@@ -551,16 +551,16 @@
 <li>不断重复以上三个过程。</li>
 </ul>
 <p>这样就可以训练出一个适用于所有任务的多任务模型。</p>
-<h2 id="元多任务学习"><a href="#元多任务学习" class="headerlink" title="元多任务学习"></a>元多任务学习</h2><p>传统模型只共享了特征表示层，也就是共享了私有LSTM。本文的模型创新就是通过Meta-LSTM动态生成针对每个任务、每个时刻不同的参数，然后用每个任务特定的Basic-LSTM进行编码。具体结构如下图所示：<br><img src="/2.jpg"><br>其中Basic-LSTM的结构和普通的LSTM基本一样，唯一区别就是每个时刻的参数W和b是通过Meta-LSTM动态生成的，形式化定义如下：<br><img src="/3.jpg"><br>因为W维度过大，计算复杂度太高，并且也容易导致过拟合，所以这里采用了SVD分解：<br><img src="/4.jpg"><br>而这里的$z_t$就是通过Meta-LSTM动态生成的，形式化定义如下：<br><img src="/5.jpg"><br>如果精简的表示出这个LSTM之间的关系，可以写成如下形式：<br><img src="/6.jpg"><br>概括起来就是：<strong>Basic-LSTM上一个时刻的输出$h_{t - 1}$、Meta-LSTM上一个时刻的输出$\hat h_{t - 1}$和当前时刻的单词表示$x_t$作为Meta-LSTM当前时刻的输入，产生的输出$z_t$用来产生Basic-LSTM当前时刻的参数矩阵。</strong></p>
+<h2 id="元多任务学习"><a href="#元多任务学习" class="headerlink" title="元多任务学习"></a>元多任务学习</h2><p>传统模型只共享了特征表示层，也就是共享了私有LSTM。本文的模型创新就是通过Meta-LSTM动态生成针对每个任务、每个时刻不同的参数，然后用每个任务特定的Basic-LSTM进行编码。具体结构如下图所示：<br><img src="2.jpg" alt=""><br>其中Basic-LSTM的结构和普通的LSTM基本一样，唯一区别就是每个时刻的参数W和b是通过Meta-LSTM动态生成的，形式化定义如下：<br><img src="3.jpg" alt=""><br>因为W维度过大，计算复杂度太高，并且也容易导致过拟合，所以这里采用了SVD分解：<br><img src="4.jpg" alt=""><br>而这里的$z_t$就是通过Meta-LSTM动态生成的，形式化定义如下：<br><img src="5.jpg" alt=""><br>如果精简的表示出这个LSTM之间的关系，可以写成如下形式：<br><img src="6.jpg" alt=""><br>概括起来就是：<strong>Basic-LSTM上一个时刻的输出$h_{t - 1}$、Meta-LSTM上一个时刻的输出$\hat h_{t - 1}$和当前时刻的单词表示$x_t$作为Meta-LSTM当前时刻的输入，产生的输出$z_t$用来产生Basic-LSTM当前时刻的参数矩阵。</strong></p>
 <p>Meta-LSTM主要有如下两个优点：</p>
 <ul>
 <li>一个就是每个时刻的参数动态生成。</li>
 <li>另一个就是比普通的LSTM参数数量更少，因为有SVD分解。</li>
 </ul>
 <h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><hr>
-<h2 id="文本分类"><a href="#文本分类" class="headerlink" title="文本分类"></a>文本分类</h2><p>文本分类任务是在16个购物网站评论数据集上做的，数据集大小如下所示：<br><img src="/7.jpg"><br>最后在大多数数据集上，Meta-LSTM都能做到最好结果，具体结果如下：<br><img src="/8.jpg"></p>
+<h2 id="文本分类"><a href="#文本分类" class="headerlink" title="文本分类"></a>文本分类</h2><p>文本分类任务是在16个购物网站评论数据集上做的，数据集大小如下所示：<br><img src="7.jpg" alt=""><br>最后在大多数数据集上，Meta-LSTM都能做到最好结果，具体结果如下：<br><img src="8.jpg" alt=""></p>
 <h2 id="序列标注"><a href="#序列标注" class="headerlink" title="序列标注"></a>序列标注</h2><hr>
-<p>序列标注任务是在三个数据集上面做的，两个是NER数据集，一个是POS tagging数据集，具体结果如下：<br><img src="/9.jpg"><br>只能说比最基础的LSTM+CRF模型高了那么一丢丢吧。</p>
+<p>序列标注任务是在三个数据集上面做的，两个是NER数据集，一个是POS tagging数据集，具体结果如下：<br><img src="9.jpg" alt=""><br>只能说比最基础的LSTM+CRF模型高了那么一丢丢吧。</p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><hr>
 <p>本文提出了一种function-level的多任务共享机制，即使用Meta-LSTM来动态产生Basic-LSTM每个时刻的参数矩阵。</p>
 <blockquote>
@@ -1092,7 +1092,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

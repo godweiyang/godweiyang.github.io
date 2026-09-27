@@ -14,7 +14,7 @@
 
 
 题目链接LeetCode 135. 分发糖果
-题目描述老师想给孩子们分发糖果，有 $N$ 个孩子站成了一条直线，老师会根据每个孩子的表现，预先给他们评分。
+题目描述老师想给孩子们分发糖果，有 $N$ 个孩子站成了一条直线，老师会根据每个孩子的表现，预先给他们评分。
 你需要按照以下要求，帮助老师">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -522,9 +522,9 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <h2 id="题目链接"><a href="#题目链接" class="headerlink" title="题目链接"></a>题目链接</h2><p><a href="https://leetcode-cn.com/problems/candy/" title="LeetCode 135. 分发糖果">LeetCode 135. 分发糖果</a></p>
-<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>老师想给孩子们分发糖果，有 $N$ 个孩子站成了一条直线，老师会根据每个孩子的表现，预先给他们评分。</p>
+<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>老师想给孩子们分发糖果，有 $N$ 个孩子站成了一条直线，老师会根据每个孩子的表现，预先给他们评分。</p>
 <p>你需要按照以下要求，帮助老师给这些孩子分发糖果：</p>
 <ul>
 <li>每个孩子至少分配到 $1$ 个糖果。</li>
@@ -538,7 +538,7 @@
 <figure class="highlight text"><table><tr><td class="code"><pre><span class="line">输入：</span><br><span class="line">[1,2,2]</span><br><span class="line">输出：</span><br><span class="line">4</span><br><span class="line">解释：</span><br><span class="line">你可以分别给这三个孩子分发 1、2、1 颗糖果。</span><br><span class="line">第三个孩子只得到 1 颗糖果，这已满足上述两个条件。</span><br></pre></td></tr></table></figure>
 
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>这题虽然难度定义成<strong>困难</strong>，但其实代码不长，思路也比较简单清晰。</p>
-<p>首先明确一下题目中的两个条件，我们可以把所有人的分数在坐标轴中连起来，这样就形成了一个波形图（<strong>图片来自官方题解</strong>）：<br><img src="/1.png"><br>那么这就像一座一座山峰一样，在谷底（左右两边分数都大于等于它）糖果数一定是 $1$ 。从谷底往两侧扩展，糖果数逐渐加 $1$ 就行了。</p>
+<p>首先明确一下题目中的两个条件，我们可以把所有人的分数在坐标轴中连起来，这样就形成了一个波形图（<strong>图片来自官方题解</strong>）：<br><img src="1.png" alt=""><br>那么这就像一座一座山峰一样，在谷底（左右两边分数都大于等于它）糖果数一定是 $1$ 。从谷底往两侧扩展，糖果数逐渐加 $1$ 就行了。</p>
 <p>要注意的一点是图中 pt.13 那个位置也是一个谷底，因为它右边的分数等于它。</p>
 <p>那么问题的关键就是如何找到这些谷底了。</p>
 <h3 id="两次遍历"><a href="#两次遍历" class="headerlink" title="两次遍历"></a>两次遍历</h3><p>首先初始化所有人都分到 $1$ 个糖果。</p>
@@ -552,13 +552,15 @@
 <p>当遇到谷底的时候，就表明一座山遍历结束了，那么我们只需要比较 <code>up</code> 和 <code>down</code> 的大小就知道峰顶取值了。</p>
 <p>而如何判断一座山遍历结束呢？假设现在遍历到了第 $i$ 个学生，我们再用两个变量，<code>ns</code> 表示 $i-1$ 到 $i$ 的变化趋势（$1$：上升，$-1$：下降，$0$：不变），<code>os</code> 表示前一个时刻 $i-2$ 到 $i-1$ 的变化趋势。那么谷底只有下面三种情况：</p>
 <ul>
-<li>$os &lt; 0$ 且 $ns &gt; 0$ 。也就是前一个时刻在下降，当前时刻上升了，那显然第 $i-1$ 个学生是谷底。</li>
-<li>$os &lt; 0$ 且 $ns &#x3D; 0$ 。也就是前一个时刻在下降，当前时刻不变，这种情况下第 $i-1$ 个学生也是谷底，因为根据题意，他的糖果数没必要比第 $i$ 个学生多。</li>
-<li>$os &gt; 0$ 且 $ns &#x3D; 0$ 。也就是前一个时刻在上升，当前时刻不变。这种情况下，山峰只有上坡（到峰顶 $i-1$ 结束），没有下坡，所以这座山也遍历结束了，得计算糖果数了。</li>
+<li>$os < 0$ 且 $ns > 0$ 。也就是前一个时刻在下降，当前时刻上升了，那显然第 $i-1$ 个学生是谷底。</li>
+<li>$os < 0$ 且 $ns = 0$ 。也就是前一个时刻在下降，当前时刻不变，这种情况下第 $i-1$ 个学生也是谷底，因为根据题意，他的糖果数没必要比第 $i$ 个学生多。</li>
+<li>$os > 0$ 且 $ns = 0$ 。也就是前一个时刻在上升，当前时刻不变。这种情况下，山峰只有上坡（到峰顶 $i-1$ 结束），没有下坡，所以这座山也遍历结束了，得计算糖果数了。
+
+</li>
 </ul>
-<p>这座山峰的的糖果数可以表示为三部分之和：上坡、下坡和峰顶。上坡就是 $1+2+\ldots+up$，下坡就是 $1+2+\ldots+down$，峰顶就是 $\max{{up, down}}+1$ 。算完了之后，这座山峰就再也不用考虑了， <code>up</code> 和 <code>down</code> 都清零。</p>
+<p>这座山峰的的糖果数可以表示为三部分之和：上坡、下坡和峰顶。上坡就是 $1+2+\ldots+up$，下坡就是 $1+2+\ldots+down$，峰顶就是 $\max{\{up, down\}}+1$ 。算完了之后，这座山峰就再也不用考虑了， <code>up</code> 和 <code>down</code> 都清零。</p>
 <p>在具体实现的时候，这个方法细节有点多，一不小心就会错，直接看代码注释吧。</p>
-<p>继续看下面这张图：<br><img src="/1.png"><br>贴一段官方的样例解释：<br><img src="/2.jpg"></p>
+<p>继续看下面这张图：<br><img src="1.png" alt=""><br>贴一段官方的样例解释：<br><img src="2.jpg" alt=""></p>
 <p>时间复杂度 $O(n)$ ，空间复杂度 $O(1)$ 。</p>
 <h3 id="单调栈"><a href="#单调栈" class="headerlink" title="单调栈"></a>单调栈</h3><p>我们用一个单调栈来保存单调下降的得分，也就是下坡。</p>
 <p>当遍历到第 $i$ 个学生时，如果栈顶元素 $j$ 的得分小于等于 $i$ 的得分，也就是遇到谷底了，那么就出栈，直到栈空。</p>
@@ -814,7 +816,7 @@
 
 
 题目链接LeetCode 959. 由斜杠划分区域
-题目描述在由 1 x 1 方格组成的 N x N 网格 grid 中，每个 1 x 1 方块由 &#x2F;、\ 或空格构成。这些字
+题目描述在由 1 x 1 方格组成的 N x N 网格 grid 中，每个 1 x 1 方块由 /、\ 或空格构成。这些字符会将方块
                         
                     </div>
                     <div class="publish-info">
@@ -1091,7 +1093,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

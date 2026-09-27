@@ -13,7 +13,7 @@
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-题目描述给定一个包括 n 个整数的数组 nums 和 一个目标值 target。找出 nums 中的三个整数，使得它们的和与 target 最接近。返回这三个数的和。假定每组输入只存在">
+题目描述给定一个包括 n 个整数的数组 nums 和 一个目标值 target。找出 nums 中的三个整数，使得它们的和与 target 最接近。返回这三个数的和。假定每组输入只存在">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -494,7 +494,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    556
+                    554
                 </div>
                 
 
@@ -520,15 +520,15 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
-<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个包括 n 个整数的数组 nums 和 一个目标值 target。找出 nums 中的三个整数，使得它们的和与 target 最接近。返回这三个数的和。假定每组输入只存在唯一答案。</p>
+<p><img src="/medias/contact.jpg" alt=""></p>
+<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个包括 n 个整数的数组 nums 和 一个目标值 target。找出 nums 中的三个整数，使得它们的和与 target 最接近。返回这三个数的和。假定每组输入只存在唯一答案。</p>
 <p><strong>示例1</strong></p>
 <figure class="highlight text"><table><tr><td class="code"><pre><span class="line">输入：</span><br><span class="line">nums = [-1，2，1，-4], target = 1.</span><br><span class="line">输出：</span><br><span class="line">2</span><br><span class="line">解释：</span><br><span class="line">与 target 最接近的三个数的和为 2. (-1 + 2 + 1 = 2).</span><br></pre></td></tr></table></figure>
 
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>最暴力的方法就是直接枚举三个不同的数，然后求出差值最小的和，但是这样时间复杂度是 $O(n^3)$ ，太高了。</p>
 <p>那么我们先枚举一个数试试，并且假设它是最小的数，然后寻找比它大的两个数就行了，这就需要我们先对数组进行排序（假设排序后数组是 $a$ ）。</p>
 <p>如果枚举的数是 $a[i]$ ，那么我们只需要寻找和 $t - a[i]$ 差值最小的两个数之和就行了。</p>
-<p>如果用双指针的方法，初始时令 $l &#x3D; i + 1$ ，同时 $r &#x3D; n - 1$ 。那么如果 $a[i] + a[l] + a[r] &gt; t$ ，就说明 $r$ 太大了，需要左移。否则的话如果 $a[i] + a[l] + a[r] &lt; t$ ，就说明 $l$ 太小了，需要右移。在不断移动的过程中更新最小差值就行了，因为 $l$ 和 $r$ 最终一共只移动了 $O(n)$ 步，所以总的时间复杂度只有 $O(n \log n + n^2)$ ，忽略低阶项之后只有 $O(n^2)$ ，还是可以接受的。</p>
+<p>如果用双指针的方法，初始时令 $l = i + 1$ ，同时 $r = n - 1$ 。那么如果 $a[i] + a[l] + a[r] &gt; t$ ，就说明 $r$ 太大了，需要左移。否则的话如果 $a[i] + a[l] + a[r] &lt; t$ ，就说明 $l$ 太小了，需要右移。在不断移动的过程中更新最小差值就行了，因为 $l$ 和 $r$ 最终一共只移动了 $O(n)$ 步，所以总的时间复杂度只有 $O(n \log n + n^2)$ ，忽略低阶项之后只有 $O(n^2)$ ，还是可以接受的。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="c"><a href="#c" class="headerlink" title="c++"></a>c++</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">threeSumClosest</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = nums.<span class="built_in">size</span>(), res = <span class="number">10000000</span>;</span><br><span class="line">        <span class="built_in">sort</span>(nums.<span class="built_in">begin</span>(), nums.<span class="built_in">end</span>());</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n - <span class="number">2</span>; ++i) &#123;</span><br><span class="line">            <span class="type">int</span> l = i + <span class="number">1</span>, r = n - <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">while</span> (l &lt; r) &#123;</span><br><span class="line">                <span class="type">int</span> sum = nums[i] + nums[l] + nums[r];</span><br><span class="line">                <span class="keyword">if</span> (sum == target) <span class="keyword">return</span> sum;</span><br><span class="line">                <span class="keyword">if</span> (<span class="built_in">abs</span>(sum-target) &lt; <span class="built_in">abs</span>(res-target)) res = sum;</span><br><span class="line">                <span class="keyword">if</span> (sum &gt; target) r--;</span><br><span class="line">                <span class="keyword">else</span> l++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <h3 id="python"><a href="#python" class="headerlink" title="python"></a>python</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">threeSumClosest</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>], target: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        n, res = <span class="built_in">len</span>(nums), <span class="number">10000000</span></span><br><span class="line">        nums.sort()</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n-<span class="number">2</span>):</span><br><span class="line">            l, r = i+<span class="number">1</span>, n-<span class="number">1</span></span><br><span class="line">            <span class="keyword">while</span> l &lt; r:</span><br><span class="line">                s = nums[i] + nums[l] + nums[r]</span><br><span class="line">                <span class="keyword">if</span> s == target:</span><br><span class="line">                    <span class="keyword">return</span> s</span><br><span class="line">                <span class="keyword">if</span> <span class="built_in">abs</span>(s-target) &lt; <span class="built_in">abs</span>(res-target):</span><br><span class="line">                    res = s</span><br><span class="line">                <span class="keyword">if</span> s &gt; target:</span><br><span class="line">                    r -= <span class="number">1</span></span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    l += <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
@@ -1051,7 +1051,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

@@ -523,7 +523,7 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <h2 id="题目链接"><a href="#题目链接" class="headerlink" title="题目链接"></a>题目链接</h2><p><a href="https://leetcode-cn.com/problems/airplane-seat-assignment-probability/" title="LeetCode 1227. 飞机座位分配概率">LeetCode 1227. 飞机座位分配概率</a></p>
 <h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>有 $n$ 位乘客即将登机，飞机正好有 $n$ 个座位。第一位乘客的票丢了，他随便选了一个座位坐下。</p>
 <p>剩下的乘客将会：</p>
@@ -531,7 +531,7 @@
 <li>如果他们自己的座位还空着，就坐到自己的座位上。</li>
 <li>当他们自己的座位被占用时，随机选择其他座位。</li>
 </ul>
-<p>第 $n$ 位乘客坐在自己的座位上的概率是多少？</p>
+<p>第 $n$ 位乘客坐在自己的座位上的概率是多少？</p>
 <p><strong>示例1</strong></p>
 <figure class="highlight text"><table><tr><td class="code"><pre><span class="line">输入：</span><br><span class="line">n = 1</span><br><span class="line">输出：</span><br><span class="line">1.00000</span><br><span class="line">解释：</span><br><span class="line">第一个人只会坐在自己的位置上。</span><br></pre></td></tr></table></figure>
 
@@ -548,15 +548,15 @@
 </ul>
 <p>对于第三种情况，我们可以换个角度看问题。现在面临的问题是，$i$ 号选择坐在哪？这时候还没入场的有 $i$ 到 $n$ 号乘客，而座位还剩 $1$ 和 $i+1$ 到 $n$ 号。那既然 $i$ 号乘客坐在 $1$ 号座位的话，后面的人都能坐回原位，那我们就把 $1$ 号座位当作是 $i$ 号乘客原本的座位就行了嘛，反正我最后又不要求 $i$ 号乘客坐回原位的概率，你坐哪都没事，只要别影响到其他人就行了。那么问题的规模就被缩小到了 $n-i+1$ ，我们递归求解就行了。</p>
 <p>令 $f(n)$ 表示 $n$ 个人的情况下，最后一个人坐回原位的概率，按照上面的分析，我们可以列出递推式：</p>
-<p>$$<br>f(n) &#x3D; \frac{1}{n}\left(1 + \sum_{i&#x3D;2}^{n-1}{f(n-i+1)}\right)<br>$$</p>
-<p>这个递推式想必大家高中就会求了，令 $n &#x3D; n-1$再写出一项：</p>
-<p>$$<br>f(n-1) &#x3D; \frac{1}{n-1}\left(1 + \sum_{i&#x3D;2}^{n-2}{f(n-i)}\right)<br>$$</p>
+<p>$$<br>f(n) = \frac{1}{n}\left(1 + \sum_{i=2}^{n-1}{f(n-i+1)}\right)<br>$$</p>
+<p>这个递推式想必大家高中就会求了，令 $n = n-1$再写出一项：</p>
+<p>$$<br>f(n-1) = \frac{1}{n-1}\left(1 + \sum_{i=2}^{n-2}{f(n-i)}\right)<br>$$</p>
 <p>然后两式相减得到：</p>
-<p>$$<br>nf(n) - (n-1)f(n-1) &#x3D; f(n-1)<br>$$</p>
+<p>$$<br>nf(n) - (n-1)f(n-1) = f(n-1)<br>$$</p>
 <p>即：</p>
-<p>$$<br>f(n) &#x3D; f(n-1) &#x3D; \cdots &#x3D; f(2)<br>$$</p>
-<p>那么我们就可以得到最终的答案了，对任意的 $n \ge 2$ 都有 $f(n) &#x3D; f(2) &#x3D; 0.5$ 。</p>
-<p>还有一个特例就是 $f(1) &#x3D; 1.0$ ，这样这题就证好了。</p>
+<p>$$<br>f(n) = f(n-1) = \cdots = f(2)<br>$$</p>
+<p>那么我们就可以得到最终的答案了，对任意的 $n \ge 2$ 都有 $f(n) = f(2) = 0.5$ 。</p>
+<p>还有一个特例就是 $f(1) = 1.0$ ，这样这题就证好了。</p>
 <p>这题最关键的一步就是 $1$ 号坐在了 $i$ 号座位后，$i$ 号何去何从？如果你能换个角度，把 $1$ 号座位给 $i$ 号（因为给他之后，对后面的乘客座位没有任何影响，那么就能把 $1$ 号座位看成就是 $i$ 号乘客的），那么问题就能递归下去了。题解区许多人这一步为什么能递归下去？根本没有讲清楚。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="c"><a href="#c" class="headerlink" title="c++"></a>c++</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">double</span> <span class="title">nthPersonGetsNthSeat</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> n==<span class="number">1</span> ? <span class="number">1</span> : <span class="number">.5</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
@@ -805,7 +805,7 @@
 
 
 题目链接LeetCode 135. 分发糖果
-题目描述老师想给孩子们分发糖果，有 $N$ 个孩子站成了一条直线，老师会根据每个孩子的表现，预先给他们评分。
+题目描述老师想给孩子们分发糖果，有 $N$ 个孩子站成了一条直线，老师会根据每个孩子的表现，预先给他们评分。
 你需要按照以下要求，帮助老师
                         
                     </div>
@@ -864,8 +864,8 @@
 
 
 题目链接LeetCode 69. x 的平方根
-题目描述实现 int sqrt(int n) 函数。
-计算并返回 $n$ 的平方根，其中 $n$ 是非负整数。
+题目描述实现 int sqrt(int n) 函数。
+计算并返回 $n$ 的平方根，其中 $n$ 是非负整数。
 由于返回类型是整数，结果
                         
                     </div>
@@ -1083,7 +1083,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

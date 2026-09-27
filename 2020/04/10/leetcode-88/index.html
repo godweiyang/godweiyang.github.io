@@ -524,8 +524,8 @@
 <h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你两个有序整数数组 <code>nums1</code> 和 <code>nums2</code>，请你将 <code>nums2</code> 合并到 <code>nums1</code> 中，使 <code>nums1</code> 成为一个有序数组。</p>
 <p><strong>说明：</strong></p>
 <ul>
-<li>初始化 <code>nums1</code> 和 <code>nums2</code> 的元素数量分别为 <code>m</code> 和 <code>n</code> 。</li>
-<li>你可以假设 <code>nums1</code> 有足够的空间（空间大小大于或等于 <code>m + n</code>）来保存 <code>nums2</code> 中的元素。</li>
+<li>初始化 <code>nums1</code> 和 <code>nums2</code> 的元素数量分别为 <code>m</code> 和 <code>n</code> 。</li>
+<li>你可以假设 <code>nums1</code> 有足够的空间（空间大小大于或等于 <code>m + n</code>）来保存 <code>nums2</code> 中的元素。</li>
 </ul>
 <p><strong>示例1</strong></p>
 <figure class="highlight text"><table><tr><td class="code"><pre><span class="line">输入：</span><br><span class="line">nums1 = [1,2,3,0,0,0], m = 3</span><br><span class="line">nums2 = [2,5,6],       n = 3</span><br><span class="line">输出:</span><br><span class="line">[1,2,2,3,5,6]</span><br></pre></td></tr></table></figure>
@@ -540,7 +540,7 @@
 <h3 id="python"><a href="#python" class="headerlink" title="python"></a>python</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">merge</span>(<span class="params">self, nums1: <span class="type">List</span>[<span class="built_in">int</span>], m: <span class="built_in">int</span>, nums2: <span class="type">List</span>[<span class="built_in">int</span>], n: <span class="built_in">int</span></span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        i, j = m-<span class="number">1</span>, n-<span class="number">1</span></span><br><span class="line">        <span class="keyword">while</span> i &gt;= <span class="number">0</span> <span class="keyword">and</span> j &gt;= <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">if</span> nums1[i] &gt; nums2[j]:</span><br><span class="line">                nums1[i+j+<span class="number">1</span>] = nums1[i]</span><br><span class="line">                i -= <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                nums1[i+j+<span class="number">1</span>] = nums2[j]</span><br><span class="line">                j -= <span class="number">1</span></span><br><span class="line">        <span class="keyword">while</span> j &gt;= <span class="number">0</span>:</span><br><span class="line">            nums1[j] = nums2[j]</span><br><span class="line">            j -= <span class="number">1</span></span><br></pre></td></tr></table></figure>
 
 <blockquote>
-<p>关注公众号【算法码上来】，每日算法干货马上就来！<br><img src="/medias/contact.jpg"></p>
+<p>关注公众号【算法码上来】，每日算法干货马上就来！<br><img src="/medias/contact.jpg" alt=""></p>
 </blockquote>
 
             </div>
@@ -1058,7 +1058,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

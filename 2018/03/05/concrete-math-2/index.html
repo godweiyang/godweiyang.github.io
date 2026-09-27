@@ -14,7 +14,7 @@
 
 
 今天主要讲了关于递推式和求和的一些方法，主要是成套方法。
-约瑟夫环推广上一节课说到，约瑟夫环问题的解是\[f(n) &amp;#x3D; 2l + 1\]其中$n &amp;#x3D; {2^m} +">
+约瑟夫环推广上一节课说到，约瑟夫环问题的解是\[f(n) = 2l + 1\]其中$n = {2^m} + l$将$n$写成二">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -491,14 +491,14 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    603
+                    547
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    3 分
+                    2 分
                 </div>
                 
                 
@@ -517,11 +517,11 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <p>今天主要讲了关于递推式和求和的一些方法，主要是成套方法。</p>
-<h1 id="约瑟夫环推广"><a href="#约瑟夫环推广" class="headerlink" title="约瑟夫环推广"></a>约瑟夫环推广</h1><p>上一节课说到，约瑟夫环问题的解是<br>\[f(n) &#x3D; 2l + 1\]<br>其中$n &#x3D; {2^m} + l$<br>将$n$写成二进制可以发现，$f(n)$就是$n$的二进制循环左移1位。<br>现在做一下推广，求解如下递推式：<br>\[\begin{array}{l}f(1) &#x3D; \alpha \f(2n) &#x3D; 2f(n) + \beta \f(2n + 1) &#x3D; 2f(n) + \gamma \end{array}\]<br>可以设<br>\[f(n) &#x3D; A(n)\alpha + B(n)\beta + C(n)\gamma \]<br>同样，令$n &#x3D; {2^m} + l$<br>可以解出<br>\[\begin{array}{l}A(n) &#x3D; {2^m}\B(n) &#x3D; {2^m} - 1 - l\C(n) &#x3D; l\end{array}\]<br>再从二进制角度理解一下，将递推式继续推广：<br>\[\begin{array}{l}f(j) &#x3D; {\alpha _j},1 \le j &lt; d\f(dn + j) &#x3D; cf(n) + {\beta <em>j},0 \le j \le d,n \ge 1\end{array}\]<br>可以得到解为<br>\[f({({b_m}{b</em>{m - 1}} \ldots {b_1}{b_0})_d}) &#x3D; {({\alpha _{ {b_m}}}{\beta <em>{ {b</em>{m - 1}}}}{\beta <em>{ {b</em>{m - 2}}}} \ldots {\beta _{ {b_1}}}{\beta _{ {b_0}}})_c}\]</p>
-<h1 id="递推式求和"><a href="#递推式求和" class="headerlink" title="递推式求和"></a>递推式求和</h1><p>求解如下递推式：<br>\[\begin{array}{l}{R_0} &#x3D; \alpha \{R_n} &#x3D; {R_{n - 1}} + \beta n + \gamma \end{array}\]<br>用成套方法求解，设<br>\[{R_n} &#x3D; A(n)\alpha + B(n)\beta + C(n)\gamma \]<br>首先令${R_n} &#x3D; 1$，可以得到$\alpha  &#x3D; 1,\beta  &#x3D; 0,\gamma  &#x3D; 0$，所以$A(n) &#x3D; 1$。<br>再令${R_n} &#x3D; n$，可以得到$\alpha  &#x3D; 0,\beta  &#x3D; 0,\gamma  &#x3D; 1$，所以$C(n) &#x3D; n$。<br>最后令${R_n} &#x3D; {n^2}$，可以得到$\alpha  &#x3D; 0,\beta  &#x3D; 2,\gamma  &#x3D;  - 1$，所以$2B(n) - C(n) &#x3D; {n^2}$，所以$B(n) &#x3D; ({n^2} + n)&#x2F;2$</p>
-<p>再来一个更复杂的递推式：<br>\[\begin{array}{l}{R_0} &#x3D; \alpha \{R_n} &#x3D; 2{R_{n - 1}} + \beta n + \gamma \end{array}\]<br>同样的方法，设<br>\[{R_n} &#x3D; A(n)\alpha + B(n)\beta + C(n)\gamma \]<br>首先令${R_n} &#x3D; 1$，可以得到$\alpha  &#x3D; 1,\beta  &#x3D; 0,\gamma  &#x3D; -1$，所以$A(n) - C(n) &#x3D; 1$。<br>再令${R_n} &#x3D; n$，可以得到$\alpha  &#x3D; 0,\beta  &#x3D; -1,\gamma  &#x3D; 2$，所以$2C(n) - B(n) &#x3D; n$。<br>这时候能不能令${R_n} &#x3D; {n^2}$呢？答案是不能，因为如果${R_n} &#x3D; {n^2}$，那么<br>\[{n^2} &#x3D; 2{(n - 1)^2} + \beta n + \gamma \]显然不可能成立。<br>观察系数，可以令${R_n} &#x3D; 2^n$，可以得到$\alpha  &#x3D; 1,\beta  &#x3D; 0,\gamma  &#x3D; 0$，所以$A(n) &#x3D; 2^n$。<br>所以<br>\[A(n) &#x3D; {2^n},B(n) &#x3D; {2^{n + 1}} - n + 2,C(n) &#x3D; {2^n} + 1\]</p>
+<h1 id="约瑟夫环推广"><a href="#约瑟夫环推广" class="headerlink" title="约瑟夫环推广"></a>约瑟夫环推广</h1><p>上一节课说到，约瑟夫环问题的解是<br>\[f(n) = 2l + 1\]<br>其中$n = {2^m} + l$<br>将$n$写成二进制可以发现，$f(n)$就是$n$的二进制循环左移1位。<br>现在做一下推广，求解如下递推式：<br>\[\begin{array}{l}f(1) = \alpha \f(2n) = 2f(n) + \beta \f(2n + 1) = 2f(n) + \gamma \end{array}\]<br>可以设<br>\[f(n) = A(n)\alpha + B(n)\beta + C(n)\gamma \]<br>同样，令$n = {2^m} + l$<br>可以解出<br>\[\begin{array}{l}A(n) = {2^m}\B(n) = {2^m} - 1 - l\C(n) = l\end{array}\]<br>再从二进制角度理解一下，将递推式继续推广：<br>\[\begin{array}{l}f(j) = {\alpha <em>j},1 \le j &lt; d\f(dn + j) = cf(n) + {\beta _j},0 \le j \le d,n \ge 1\end{array}\]<br>可以得到解为<br>\[f({({b_m}{b</em>{m - 1}} \ldots {b_1}{b_0})<em>d}) = {({\alpha _{ {b_m}}}{\beta _{ {b</em>{m - 1}}}}{\beta <em>{ {b</em>{m - 2}}}} \ldots {\beta _{ {b_1}}}{\beta _{ {b_0}}})_c}\]</p>
+<h1 id="递推式求和"><a href="#递推式求和" class="headerlink" title="递推式求和"></a>递推式求和</h1><p>求解如下递推式：<br>\[\begin{array}{l}{R_0} = \alpha \{R_n} = {R_{n - 1}} + \beta n + \gamma \end{array}\]<br>用成套方法求解，设<br>\[{R_n} = A(n)\alpha + B(n)\beta + C(n)\gamma \]<br>首先令${R_n} = 1$，可以得到$\alpha  = 1,\beta  = 0,\gamma  = 0$，所以$A(n) = 1$。<br>再令${R_n} = n$，可以得到$\alpha  = 0,\beta  = 0,\gamma  = 1$，所以$C(n) = n$。<br>最后令${R_n} = {n^2}$，可以得到$\alpha  = 0,\beta  = 2,\gamma  =  - 1$，所以$2B(n) - C(n) = {n^2}$，所以$B(n) = ({n^2} + n)/2$</p>
+<p>再来一个更复杂的递推式：<br>\[\begin{array}{l}{R_0} = \alpha \{R_n} = 2{R_{n - 1}} + \beta n + \gamma \end{array}\]<br>同样的方法，设<br>\[{R_n} = A(n)\alpha + B(n)\beta + C(n)\gamma \]<br>首先令${R_n} = 1$，可以得到$\alpha  = 1,\beta  = 0,\gamma  = -1$，所以$A(n) - C(n) = 1$。<br>再令${R_n} = n$，可以得到$\alpha  = 0,\beta  = -1,\gamma  = 2$，所以$2C(n) - B(n) = n$。<br>这时候能不能令${R_n} = {n^2}$呢？答案是不能，因为如果${R_n} = {n^2}$，那么<br>\[{n^2} = 2{(n - 1)^2} + \beta n + \gamma \]显然不可能成立。<br>观察系数，可以令${R_n} = 2^n$，可以得到$\alpha  = 1,\beta  = 0,\gamma  = 0$，所以$A(n) = 2^n$。<br>所以<br>\[A(n) = {2^n},B(n) = {2^{n + 1}} - n + 2,C(n) = {2^n} + 1\]</p>
 
             </div>
             <hr />
@@ -1037,7 +1037,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

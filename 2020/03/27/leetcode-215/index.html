@@ -521,7 +521,7 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <h2 id="题目链接"><a href="#题目链接" class="headerlink" title="题目链接"></a>题目链接</h2><p><a href="https://leetcode-cn.com/problems/kth-largest-element-in-an-array/" title="LeetCode 215. 数组中的第K个最大元素">LeetCode 215. 数组中的第K个最大元素</a></p>
 <h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>在未排序的数组中找到第 k 个最大的元素。请注意，你需要找的是数组排序后的第 k 个最大的元素，而不是第 k 个不同的元素。</p>
 <p><strong>示例1</strong></p>
@@ -549,7 +549,7 @@
 <p>首先对前 $n-k+1$ 个元素建立初始堆。然后遍历后面的元素，如果小于堆顶元素的话，就和堆顶元素交换位置，并调整堆。</p>
 <p>大根堆大小始终为 $n-k+1$ 。</p>
 <h3 id="快速选择"><a href="#快速选择" class="headerlink" title="快速选择"></a>快速选择</h3><p>思想类似于快速排序，首先随机选取一个元素 $p$，然后将区间内元素比 $p$ 小的都放在 $p$ 左边，比 $p$ 大的都放在 $p$ 右边。</p>
-<p>然后看 $p$ 的下标 $i$，如果 $i+1 &#x3D; n-k+1$，那就说明 $p$ 就是第 $n-k+1$ 小（第 $k$ 大）的元素，直接返回即可。否则如果 $i+1 &lt; n-k+1$，那就说明第 $k$ 大元素在 $p$ 的右边区间内，递归寻找即可。否则就在左边区间，递归寻找。</p>
+<p>然后看 $p$ 的下标 $i$，如果 $i+1 = n-k+1$，那就说明 $p$ 就是第 $n-k+1$ 小（第 $k$ 大）的元素，直接返回即可。否则如果 $i+1 &lt; n-k+1$，那就说明第 $k$ 大元素在 $p$ 的右边区间内，递归寻找即可。否则就在左边区间，递归寻找。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="排序（c-）"><a href="#排序（c-）" class="headerlink" title="排序（c++）"></a>排序（c++）</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">findKthLargest</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">sort</span>(nums.<span class="built_in">begin</span>(), nums.<span class="built_in">end</span>(), <span class="built_in">greater</span>&lt;<span class="type">int</span>&gt;());</span><br><span class="line">        <span class="keyword">return</span> nums[k<span class="number">-1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <h3 id="小根堆-STL优先队列（c-）"><a href="#小根堆-STL优先队列（c-）" class="headerlink" title="小根堆+STL优先队列（c++）"></a>小根堆+STL优先队列（c++）</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">findKthLargest</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> k)</span> </span>&#123;</span><br><span class="line">        priority_queue&lt;<span class="type">int</span>, vector&lt;<span class="type">int</span>&gt;, greater&lt;<span class="type">int</span>&gt;&gt; Q;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> x : nums) &#123;</span><br><span class="line">            Q.<span class="built_in">push</span>(x);</span><br><span class="line">            <span class="keyword">while</span> (Q.<span class="built_in">size</span>() &gt; k) Q.<span class="built_in">pop</span>();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> Q.<span class="built_in">top</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
@@ -816,7 +816,7 @@
 
 题目链接LeetCode 668. 乘法表中第k小的数
 题目描述几乎每一个人都用乘法表。但是你能在乘法表中快速找到第 $k$ 小的数字吗？
-给定高度 $m$、宽度 $n$ 的一张 $m
+给定高度 $m$、宽度 $n$ 的一张 $m
                         
                     </div>
                     <div class="publish-info">
@@ -1091,7 +1091,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

@@ -13,7 +13,7 @@
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-题目描述给定一个整数数组，其中第 i 个元素代表了第 i 天的股票价格 。​
+题目描述给定一个整数数组，其中第 i 个元素代表了第 i 天的股票价格 。​
 设计一个算法计算出最大利润。在满足以下约束条件下，你可以尽可能地完成更多的交易（多次买卖一支股票）:
 你不">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -496,7 +496,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    504
+                    500
                 </div>
                 
 
@@ -522,8 +522,8 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
-<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个整数数组，其中第 i 个元素代表了第 i 天的股票价格 。​</p>
+<p><img src="/medias/contact.jpg" alt=""></p>
+<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个整数数组，其中第 i 个元素代表了第 i 天的股票价格 。​</p>
 <p>设计一个算法计算出最大利润。在满足以下约束条件下，你可以尽可能地完成更多的交易（多次买卖一支股票）:</p>
 <p>你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。<br>卖出股票后，你无法在第二天买入股票 (即冷冻期为 1 天)。</p>
 <p><strong>示例1</strong></p>
@@ -532,8 +532,8 @@
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>这是 <strong>【买卖股票的最佳时机】</strong> 系列题目的第六题。</p>
 <p>这题其实就是在系列题目第二题基础上加了个限制条件，也就是每次卖了之后，隔一天才能继续买。</p>
 <p>模仿第五题，还是采用动态规划。令 $dp0[i]$ 为第 $i$ 只股票之前（包含）买卖（最后一次操作是买）可以获得的最大利润， $dp1[i]$ 为第 $i$ 只股票之前（包含）买卖（最后一次操作是卖）可以获得的最大利润。那么类似的有如下转移方程：</p>
-<p>$$<br>\begin{aligned}<br>dp0[i] &amp;&#x3D; \max{\left{dp0[i-1], dp1[i-2] - price[i]\right}} \<br>dp1[i] &amp;&#x3D; \max{\left{dp1[i-1], dp0[i-1] + price[i]\right}}<br>\end{aligned}<br>$$</p>
-<p>初始情况就是 $dp0[0] &#x3D; -price[0]$ 和 $dp1[0] &#x3D; 0$ 。</p>
+<p>$$<br>\begin{aligned}<br>dp0[i] &amp;= \max{\left{dp0[i-1], dp1[i-2] - price[i]\right}} \<br>dp1[i] &amp;= \max{\left{dp1[i-1], dp0[i-1] + price[i]\right}}<br>\end{aligned}<br>$$</p>
+<p>初始情况就是 $dp0[0] = -price[0]$ 和 $dp1[0] = 0$ 。</p>
 <p>和第二、五题区别就是 $dp0[i]$ 的转移方程中有个 $dp1[i-2]$ ，也就是得隔一项，去算前前一天之前（包含）的买卖最大利润。</p>
 <p>时间复杂度是 $O(n)$ 。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="python"><a href="#python" class="headerlink" title="python"></a>python</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">maxProfit</span>(<span class="params">self, prices: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        n = <span class="built_in">len</span>(prices)</span><br><span class="line">        <span class="keyword">if</span> n == <span class="number">0</span>: <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">        dp0 = [-prices[<span class="number">0</span>]] * n</span><br><span class="line">        dp1 = [<span class="number">0</span>] * n</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, n):</span><br><span class="line">            dp0[i] = <span class="built_in">max</span>(dp0[i-<span class="number">1</span>], -prices[i])</span><br><span class="line">            <span class="keyword">if</span> i &gt;= <span class="number">2</span>:</span><br><span class="line">                dp0[i] = <span class="built_in">max</span>(dp0[i], dp1[i-<span class="number">2</span>]-prices[i])</span><br><span class="line">            dp1[i] = <span class="built_in">max</span>(dp1[i-<span class="number">1</span>], dp0[i-<span class="number">1</span>]+prices[i])</span><br><span class="line">        <span class="keyword">return</span> dp1[n-<span class="number">1</span>]</span><br></pre></td></tr></table></figure>
@@ -838,7 +838,7 @@
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-题目描述给定一个整数数组 prices，其中第 i 个元素代表了第 i 天的股票价格 ；非负整数 fee 代表了交易股票的手续费用。
+题目描述给定一个整数数组 prices，其中第 i 个元素代表了第 i 天的股票价格 ；非负整数 fee 代表了交易股票的手续费用。
 你可以无限次地完成交易，但是你每次交易都需要付手续
                         
                     </div>
@@ -1056,7 +1056,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

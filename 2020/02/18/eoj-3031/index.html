@@ -13,7 +13,7 @@
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-题目描述给定一个整数 $n(0 \le n \le 10^{100})$ 、将 $n$ 的 334 位二进制表示形式（不包括开头可能的值为 0 的位，$n&amp;#x3D;0$ 表示为 1 ">
+题目描述给定一个整数 $n(0 \le n \le 10^{100})$ 、将 $n$ 的 334 位二进制表示形式（不包括开头可能的值为 0 的位，$n=0$ 表示为 1 位 0）前">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -520,9 +520,9 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
-<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个整数 $n(0 \le n \le 10^{100})$ 、将 $n$ 的 334 位二进制表示形式（不包括开头可能的值为 0 的位，$n&#x3D;0$ 表示为 1 位 0）前后倒置，输出倒置后的二进制数对应的整数。</p>
-<p>例如： $n&#x3D;10$ ，其二进制表示为（330 个 0）1010 ，倒置后为 0101 ，对应输出就是 5 。</p>
+<p><img src="/medias/contact.jpg" alt=""></p>
+<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个整数 $n(0 \le n \le 10^{100})$ 、将 $n$ 的 334 位二进制表示形式（不包括开头可能的值为 0 的位，$n=0$ 表示为 1 位 0）前后倒置，输出倒置后的二进制数对应的整数。</p>
+<p>例如： $n=10$ ，其二进制表示为（330 个 0）1010 ，倒置后为 0101 ，对应输出就是 5 。</p>
 <p><strong>题目链接</strong><br><a href="https://acm.ecnu.edu.cn/problem/3031/">https://acm.ecnu.edu.cn/problem/3031/</a></p>
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>这题考查的主要是大数的进制转换，其他没有什么算法技巧，但是对代码实现要求还是挺高的，适合用来锻炼你的<strong>耐心</strong>和<strong>代码风格</strong>。</p>
 <p>整体思路非常简单，不就是先把输入的 10 进制数 $x$ 转化成 2 进制数 $b$ ，再把 $b$ 所有位颠倒过来，最后再把 $b$ 转化成 10 进制输出就行了。</p>
@@ -531,8 +531,8 @@
 <p>这就涉及到了<strong>大数的任意进制转换</strong>问题，假设 $x$ 是 $a$ 进制数，我们要把它转化为 $b$ 进制的 $y$ （初始时为空）。那么转化步骤如下：</p>
 <ul>
 <li>求 $x % b$ ，并把余数接在 $y$ 的最高位。</li>
-<li>令 $x &#x3D; \left\lfloor x &#x2F; b \right\rfloor$ 。</li>
-<li>重复步骤 1 ，直到 $x &#x3D; 0$ 。</li>
+<li>令 $x = \left\lfloor x / b \right\rfloor$ 。</li>
+<li>重复步骤 1 ，直到 $x = 0$ 。</li>
 </ul>
 <p>部分代码如下：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">while</span> (n &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    y.<span class="built_in">push_back</span>(<span class="built_in">mod</span>(x, a, b));</span><br><span class="line">    <span class="built_in">div</span>(x, a, b);</span><br><span class="line">    n = x.<span class="built_in">size</span>();</span><br><span class="line">    <span class="keyword">if</span> (n == <span class="number">1</span> &amp;&amp; !x[<span class="number">0</span>]) <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -792,7 +792,7 @@
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-题目描述给定一个包含 $n + 1$ 个整数的数组 $nums$，其数字都在 $1$ 到 $n$ 之间（包括 $1$ 和 $n$），可知至少存在一个重复的整数。假设只有一个重复的整数，
+题目描述给定一个包含 $n + 1$ 个整数的数组 $nums$，其数字都在 $1$ 到 $n$ 之间（包括 $1$ 和 $n$），可知至少存在一个重复的整数。假设只有一个重复的整数，
                         
                     </div>
                     <div class="publish-info">
@@ -1062,7 +1062,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

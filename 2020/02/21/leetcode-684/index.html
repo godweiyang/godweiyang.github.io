@@ -521,11 +521,11 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>在本问题中, 树指的是一个连通且无环的无向图。</p>
 <p>输入一个图，该图由一个有着 $N$ 个节点（节点值不重复 $1, 2, …, N$）的树及一条附加的边构成。附加的边的两个顶点包含在 $1$ 到 $N$ 中间，这条附加的边不属于树中已存在的边。</p>
-<p>结果图是一个以边组成的二维数组。每一个边的元素是一对 $[u, v]$ ，满足 $u &lt; v$，表示连接顶点 $u$ 和 $v$ 的无向图的边。</p>
-<p>返回一条可以删去的边，使得结果图是一个有着 $N$ 个节点的树。如果有多个答案，则返回二维数组中最后出现的边。答案边 $[u, v]$ 应满足相同的格式 $u &lt; v$。</p>
+<p>结果图是一个以边组成的二维数组。每一个边的元素是一对 $[u, v]$ ，满足 $u &lt; v$，表示连接顶点 $u$ 和 $v$ 的无向图的边。</p>
+<p>返回一条可以删去的边，使得结果图是一个有着 $N$ 个节点的树。如果有多个答案，则返回二维数组中最后出现的边。答案边 $[u, v]$ 应满足相同的格式 $u &lt; v$。</p>
 <p><strong>示例1</strong></p>
 <figure class="highlight text"><table><tr><td class="code"><pre><span class="line">输入：</span><br><span class="line">[[1,2], [1,3], [2,3]]</span><br><span class="line">输出：</span><br><span class="line">[2,3]</span><br><span class="line">解释：</span><br><span class="line">  1</span><br><span class="line"> / \</span><br><span class="line">2 - 3</span><br></pre></td></tr></table></figure>
 
@@ -541,11 +541,11 @@
 <p>那么我们一条条边加入到图里去，直到出现了环为止，那么这条边就是冲突的边，需要删除掉。</p>
 <p>那么怎么判断是否出现了环呢？如果加入一条边 $[u, v]$ 的时候，两个结点所在的连通块不是同一个，那么一定没有环。否则的话，两个结点连在了同一棵子树上，那么一定会产生一个环。</p>
 <p>如何高效的判断两个结点是否在同一棵子树上呢？这就需要用到一个数据结构——<strong>并查集</strong>。</p>
-<p>并查集采用一个数组 $f[i]$ 来表示结点 $i$ 的父结点。那么初始的时候没有任何边，定义所有结点的父结点等于它自身： $f[i] &#x3D; i$ 。</p>
-<p>当加入一条边 $[u, v]$ 的时候，可以沿着 $u \to f[u] \to f[f[u]] \to \cdots$ 的路径递归找到 $u$ 所在子树的根结点 $ru$（$v$ 同理得到 $rv$），然后只需要判断两个根结点是否相同就行了。如果根结点相同，那么就产生环了，直接输出这个冲突边就行。否则的话就要把这两棵子树连到一起，最简单的做法就是直接把 $ru$ 连到 $rv$ 下面，当作它的子结点，那么就需要更新 $f[ru] &#x3D; rv$ 。</p>
+<p>并查集采用一个数组 $f[i]$ 来表示结点 $i$ 的父结点。那么初始的时候没有任何边，定义所有结点的父结点等于它自身： $f[i] = i$ 。</p>
+<p>当加入一条边 $[u, v]$ 的时候，可以沿着 $u \to f[u] \to f[f[u]] \to \cdots$ 的路径递归找到 $u$ 所在子树的根结点 $ru$（$v$ 同理得到 $rv$），然后只需要判断两个根结点是否相同就行了。如果根结点相同，那么就产生环了，直接输出这个冲突边就行。否则的话就要把这两棵子树连到一起，最简单的做法就是直接把 $ru$ 连到 $rv$ 下面，当作它的子结点，那么就需要更新 $f[ru] = rv$ 。</p>
 <p>下面讲两个常用的并查集优化。</p>
 <p><strong>路径压缩：</strong><br>因为我们无需关注每一棵子树结构是什么样的，我们只关注它的根结点是谁。所以为了减小查找根结点的时间，每个结点离根结点要尽量近。</p>
-<p>那么我们定义查找根结点函数 $find(u)$ ，如果 $u &#x3D; f[u]$ ，那么不用找了，它自己就是根结点。否则的话调用 $find(f[u])$ 递归寻找子树的根结点。最后做一步路径压缩的优化，把根结点当作 $u$ 的父结点：$f[u] &#x3D; find(f[u])$ 。这样下次再查找的时候，路径长度就变为了 $1$ ，一步就能找到根结点了。</p>
+<p>那么我们定义查找根结点函数 $find(u)$ ，如果 $u = f[u]$ ，那么不用找了，它自己就是根结点。否则的话调用 $find(f[u])$ 递归寻找子树的根结点。最后做一步路径压缩的优化，把根结点当作 $u$ 的父结点：$f[u] = find(f[u])$ 。这样下次再查找的时候，路径长度就变为了 $1$ ，一步就能找到根结点了。</p>
 <p><strong>按秩合并：</strong><br>合并两棵子树的时候，为了使得合并后的子树高度尽量小，我们需要把高度小的那棵子树接在高度高的那棵下面，当作儿子。</p>
 <p>所以我们定义一个 $rank[i]$ 数组，用来记录 $i$ 这个结点作为根结点的子树高度，初始时全都是 $1$ 。那么在合并的时候，把 $rank$ 值小的接到大的下面去，如果一样怎么办呢？随便接，然后把合并后的根结点 $rank$ 值加 $1$ 就行了。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="c"><a href="#c" class="headerlink" title="c++"></a>c++</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="type">static</span> <span class="type">const</span> <span class="type">int</span> N = <span class="number">1010</span>;</span><br><span class="line">    <span class="type">int</span> f[N], rank[N];</span><br><span class="line"></span><br><span class="line">    <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">findRedundantConnection</span><span class="params">(vector&lt;vector&lt;<span class="type">int</span>&gt;&gt;&amp; edges)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">init</span>();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> e : edges) &#123;</span><br><span class="line">            <span class="type">int</span> u = e[<span class="number">0</span>], v = e[<span class="number">1</span>];</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">same</span>(u, v)) <span class="keyword">return</span> &#123;u, v&#125;;</span><br><span class="line">            <span class="keyword">else</span> <span class="built_in">join</span>(u, v);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> &#123;<span class="number">-1</span>, <span class="number">-1</span>&#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; N; ++i) &#123;</span><br><span class="line">            f[i] = i;</span><br><span class="line">            rank[i] = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">find</span><span class="params">(<span class="type">int</span> u)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> u==f[u] ? u : f[u]=<span class="built_in">find</span>(f[u]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">join</span><span class="params">(<span class="type">int</span> u, <span class="type">int</span> v)</span> </span>&#123;</span><br><span class="line">        u = <span class="built_in">find</span>(u);</span><br><span class="line">        v = <span class="built_in">find</span>(v);</span><br><span class="line">        <span class="keyword">if</span> (u == v) <span class="keyword">return</span>;</span><br><span class="line">        <span class="keyword">if</span> (rank[u] &lt; rank[v]) &#123;</span><br><span class="line">            f[u] = v;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            f[v] = u;</span><br><span class="line">            <span class="keyword">if</span> (rank[u] == rank[v]) &#123;</span><br><span class="line">                rank[u]++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">same</span><span class="params">(<span class="type">int</span> u, <span class="type">int</span> v)</span> </span>&#123;</span><br><span class="line">        u = <span class="built_in">find</span>(u);</span><br><span class="line">        v = <span class="built_in">find</span>(v);</span><br><span class="line">        <span class="keyword">return</span> u == v;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
@@ -1069,7 +1069,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

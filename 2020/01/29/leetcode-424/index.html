@@ -13,7 +13,7 @@
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-题目描述给你一个仅由大写英文字母组成的字符串，你可以将任意位置上的字符替换成另外的字符，总共可最多替换 k 次。在执行上述操作后，找到包含重复字母的最长子串的长度。
+题目描述给你一个仅由大写英文字母组成的字符串，你可以将任意位置上的字符替换成另外的字符，总共可最多替换 k 次。在执行上述操作后，找到包含重复字母的最长子串的长度。
 示例1
 输入：s ">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -522,15 +522,15 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
-<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个仅由大写英文字母组成的字符串，你可以将任意位置上的字符替换成另外的字符，总共可最多替换 k 次。在执行上述操作后，找到包含重复字母的最长子串的长度。</p>
+<p><img src="/medias/contact.jpg" alt=""></p>
+<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你一个仅由大写英文字母组成的字符串，你可以将任意位置上的字符替换成另外的字符，总共可最多替换 k 次。在执行上述操作后，找到包含重复字母的最长子串的长度。</p>
 <p><strong>示例1</strong></p>
 <figure class="highlight text"><table><tr><td class="code"><pre><span class="line">输入：</span><br><span class="line">s = &quot;ABAB&quot;, k = 2</span><br><span class="line">输出：</span><br><span class="line">4</span><br><span class="line">解释：</span><br><span class="line">用两个&#x27;A&#x27;替换为两个&#x27;B&#x27;,反之亦然。</span><br></pre></td></tr></table></figure>
 
 <p><strong>示例2</strong></p>
 <figure class="highlight text"><table><tr><td class="code"><pre><span class="line">输入：</span><br><span class="line">s = &quot;AABABBA&quot;, k = 1</span><br><span class="line">输出：</span><br><span class="line">4</span><br><span class="line">解释：</span><br><span class="line">将中间的一个&#x27;A&#x27;替换为&#x27;B&#x27;,字符串变为 &quot;AABBBBA&quot;。</span><br><span class="line">子串 &quot;BBBB&quot; 有最长重复字母, 答案为 4。</span><br></pre></td></tr></table></figure>
 
-<p><strong>提示</strong><br>字符串长度和 k 不会超过 10^4。</p>
+<p><strong>提示</strong><br>字符串长度和 k 不会超过 10^4。</p>
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>这题和之前做过的一题非常类似：<a href="https://godweiyang.com/2020/01/09/leetcode-1004/">每日算法系列【LeetCode 1004】最大连续1的个数 III</a>，只不过这题字符数量变成了 26 个。</p>
 <p>方法和那题类似，都是用滑动窗口。用数组 count 记录每个字母出现的次数，并且用变量 cmax 记录窗口中出现次数最多的字母数量。</p>
 <p>当前窗口是 [l, r] ，如果保留窗口中出现次数最多的字母，将其他字母全部替换为这个字母，那么替换次数就是 $r - l + 1 - cmax$ 。如果它大于 k ，那就说明不能继续向右扩展，而是需要左端点右移，缩小窗口了。缩小的过程中时刻更新 cmax 的值就行了，直到 $r - l + 1 - cmax$ 再次小于等于 k ，然后继续右移 r 。</p>
@@ -786,8 +786,8 @@
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-题目描述有 n 个气球，编号为0 到 n-1，每个气球上都标有一个数字，这些数字存在数组 nums 中。
-现在要求你戳破所有的气球。每当你戳破一个气球 i 时，你可以获得 nums[l
+题目描述有 n 个气球，编号为0 到 n-1，每个气球上都标有一个数字，这些数字存在数组 nums 中。
+现在要求你戳破所有的气球。每当你戳破一个气球 i 时，你可以获得 nums[l
                         
                     </div>
                     <div class="publish-info">
@@ -1063,7 +1063,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

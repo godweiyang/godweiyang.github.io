@@ -14,8 +14,8 @@
 
 
 题目链接LeetCode 69. x 的平方根
-题目描述实现 int sqrt(int n) 函数。
-计算并返回 $n$ 的平方根，其中 $n$ 是非负整数。
+题目描述实现 int sqrt(int n) 函数。
+计算并返回 $n$ 的平方根，其中 $n$ 是非负整数。
 由于返回类型是整数，结果">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -523,10 +523,10 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <h2 id="题目链接"><a href="#题目链接" class="headerlink" title="题目链接"></a>题目链接</h2><p><a href="https://leetcode-cn.com/problems/sqrtx/" title="LeetCode 69. x 的平方根">LeetCode 69. x 的平方根</a></p>
-<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>实现 <code>int sqrt(int n)</code> 函数。</p>
-<p>计算并返回 $n$ 的平方根，其中 $n$ 是非负整数。</p>
+<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>实现 <code>int sqrt(int n)</code> 函数。</p>
+<p>计算并返回 $n$ 的平方根，其中 $n$ 是非负整数。</p>
 <p>由于返回类型是整数，结果只保留整数的部分，小数部分将被舍去。</p>
 <p><strong>示例1</strong></p>
 <figure class="highlight text"><table><tr><td class="code"><pre><span class="line">输入：</span><br><span class="line">4</span><br><span class="line">输出：</span><br><span class="line">2</span><br></pre></td></tr></table></figure>
@@ -534,22 +534,22 @@
 <p><strong>示例2</strong></p>
 <figure class="highlight text"><table><tr><td class="code"><pre><span class="line">输入：</span><br><span class="line">8</span><br><span class="line">输出：</span><br><span class="line">2</span><br><span class="line">解释：</span><br><span class="line">8 的平方根是 2.82842..., 由于返回类型是整数，小数部分将被舍去。</span><br></pre></td></tr></table></figure>
 
-<h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>为了更加通用，我们这里直接实现 <code>double sqrt(double n)</code> 函数。也就是求出 $\sqrt{n}$ 的精确值，然后取整就行了。</p>
+<h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>为了更加通用，我们这里直接实现 <code>double sqrt(double n)</code> 函数。也就是求出 $\sqrt{n}$ 的精确值，然后取整就行了。</p>
 <p>今天要教给大家的主要有三种方法：<strong>牛顿法</strong>、<strong>二分法</strong>和<strong>梯度下降法</strong>，速度上是依次下降的。</p>
-<p>首先令 $\sqrt{n} &#x3D; x$ ，也就是 $x^2 - n &#x3D; 0$ ，也就是我们要求 $x^2 - n$ 的零点。</p>
-<p>如果我们把 $x^2 - n$ 当作某个函数的导数，那么原函数就是 $f(x) &#x3D; \frac{1}{3}x^3 - nx$ ，它的导数就是 $f’(x) &#x3D; x^2 - n$ 。</p>
-<p>现在问题很明朗了，要求 $\sqrt{n}$ 的值，等价于求 $f’(x) &#x3D; 0$ 的根，等价于求 $f(x)$ 的极小值点（因为导数在非负数区间上零点唯一）。</p>
-<h3 id="牛顿法"><a href="#牛顿法" class="headerlink" title="牛顿法"></a>牛顿法</h3><p>求 $f’(x) &#x3D; 0$ 的根可以采用牛顿法。</p>
+<p>首先令 $\sqrt{n} = x$ ，也就是 $x^2 - n = 0$ ，也就是我们要求 $x^2 - n$ 的零点。</p>
+<p>如果我们把 $x^2 - n$ 当作某个函数的导数，那么原函数就是 $f(x) = \frac{1}{3}x^3 - nx$ ，它的导数就是 $f’(x) = x^2 - n$ 。</p>
+<p>现在问题很明朗了，要求 $\sqrt{n}$ 的值，等价于求 $f’(x) = 0$ 的根，等价于求 $f(x)$ 的极小值点（因为导数在非负数区间上零点唯一）。</p>
+<h3 id="牛顿法"><a href="#牛顿法" class="headerlink" title="牛顿法"></a>牛顿法</h3><p>求 $f’(x) = 0$ 的根可以采用牛顿法。</p>
 <p>首先选取一个初值 $x_0$ ，然后在函数 $(x_0, f’(x_0))$ 处作切线，求出切线与 $x$ 轴交点 。接着将交点坐标作为新的 $x_0$ ，然后重复上面步骤，直到 $f’(x_0)$ 和 $0$ 差值小于某个阈值。</p>
 <p>直接给出计算得到的更新公式吧，大家也可以自己通过切线方程推导一下：</p>
-<p>$$<br>x_0 \leftarrow x_0 - \frac{f’(x_0)}{f’’(x_0)} &#x3D; \frac{1}{2}(x_0+\frac{n}{x_0})<br>$$</p>
+<p>$$<br>x_0 \leftarrow x_0 - \frac{f’(x_0)}{f’’(x_0)} = \frac{1}{2}(x_0+\frac{n}{x_0})<br>$$</p>
 <p>还可以通过泰勒展开得到这个公式，这里就不详细阐述了。</p>
 <h3 id="梯度下降法"><a href="#梯度下降法" class="headerlink" title="梯度下降法"></a>梯度下降法</h3><p>求 $f(x)$ 的极小值点可以采用梯度下降法。</p>
 <p>首先选取一个初值 $x_0$ ，然后按照 $f(x_0)$ 的导数的逆方向更新 $x_0$ ，具体更新多少取决于你设置的学习率 $lr$ 。</p>
 <p>更新公式就是：</p>
-<p>$$<br>x_0 \leftarrow x_0 - lr \cdot f’(x_0) &#x3D; x_0 - lr \cdot (x_0^2 - n)<br>$$</p>
+<p>$$<br>x_0 \leftarrow x_0 - lr \cdot f’(x_0) = x_0 - lr \cdot (x_0^2 - n)<br>$$</p>
 <h3 id="二分法"><a href="#二分法" class="headerlink" title="二分法"></a>二分法</h3><p>这就是很普通的二分方法了，因为 $f’(x)$ 在 $[0,\infty)$ 区间上是单调递增的，所以可以采用二分法求出零点，这里就不赘述了。</p>
-<h3 id="速度比较"><a href="#速度比较" class="headerlink" title="速度比较"></a>速度比较</h3><p>我运行了一下从 $100$ 到 $10000$ 每 $100$ 个数开根号的结果，统计了一下三种方法需要的计算次数，如下图所示：<br><img src="/1.jpg"><br>可以发现，牛顿法和二分法都是速度很快的，随着 $n$ 增大，需要的次数越来越多。但是梯度下降法的次数和学习率关系很大，学习率大了可能收敛次数变小，但是可能不收敛（左右振荡）。随着 $n$ 的增大，梯度下降法所需要的次数反而下降了，因为 $n$ 越大，函数越陡峭， $x_0$ 处的导数就越大，这样 $x_0$ 的更新幅度特别大。但是 $n$ 特别大了以后，梯度下降法需要的时间就非常长了，学习率不是很好设置了。而导数也已经超出了 <code>int</code> 范围，实现上也不是很方便。</p>
+<h3 id="速度比较"><a href="#速度比较" class="headerlink" title="速度比较"></a>速度比较</h3><p>我运行了一下从 $100$ 到 $10000$ 每 $100$ 个数开根号的结果，统计了一下三种方法需要的计算次数，如下图所示：<br><img src="1.jpg" alt=""><br>可以发现，牛顿法和二分法都是速度很快的，随着 $n$ 增大，需要的次数越来越多。但是梯度下降法的次数和学习率关系很大，学习率大了可能收敛次数变小，但是可能不收敛（左右振荡）。随着 $n$ 的增大，梯度下降法所需要的次数反而下降了，因为 $n$ 越大，函数越陡峭， $x_0$ 处的导数就越大，这样 $x_0$ 的更新幅度特别大。但是 $n$ 特别大了以后，梯度下降法需要的时间就非常长了，学习率不是很好设置了。而导数也已经超出了 <code>int</code> 范围，实现上也不是很方便。</p>
 <h3 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h3><p>具体实现上这题有几个注意的点，因为这题只要求你返回取整结果，所以要特别当心浮点数误差。</p>
 <p>而梯度下降法实现时，学习率不能太大，不然会产生振荡，此外还会导致 $x_0$ 更新幅度过大，直接变成负数，然后就陷入了死循环。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="c"><a href="#c" class="headerlink" title="c++"></a>c++</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">mySqrt</span><span class="params">(<span class="type">int</span> x)</span> </span>&#123;</span><br><span class="line">        <span class="type">long</span> y = <span class="built_in">int</span>(<span class="built_in">newtonSqrt</span>(x)) + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> y*y &gt; x ? y<span class="number">-1</span> : y;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">double</span> <span class="title">newtonSqrt</span><span class="params">(<span class="type">double</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="type">double</span> x0 = n;</span><br><span class="line">        <span class="keyword">while</span> (<span class="built_in">abs</span>(x0*x0-n) &gt;= <span class="number">1e-6</span>) &#123;</span><br><span class="line">            x0 = <span class="number">0.5</span>*(n/x0+x0);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> x0;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">double</span> <span class="title">binarySqrt</span><span class="params">(<span class="type">double</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="type">double</span> l = <span class="number">0</span>, r = n;</span><br><span class="line">        <span class="keyword">while</span> (r-l &gt;= <span class="number">1e-6</span>) &#123;</span><br><span class="line">            <span class="type">double</span> m = (l+r)/<span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span> (m*m &lt; n) l = m;</span><br><span class="line">            <span class="keyword">else</span> r = m;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> r;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 超时</span></span><br><span class="line">    <span class="function"><span class="type">double</span> <span class="title">gdSqrt</span><span class="params">(<span class="type">double</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="type">double</span> x0 = n;</span><br><span class="line">        <span class="keyword">while</span> (<span class="built_in">abs</span>(x0*x0-n) &gt;= <span class="number">1e-6</span>) &#123;</span><br><span class="line">            <span class="type">double</span> lr = <span class="built_in">min</span>(<span class="number">1e-3</span>, <span class="number">1e-1</span>*x0/(x0*x0-n));</span><br><span class="line">            x0 = x0-lr*(x0*x0-n);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> x0;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
@@ -857,9 +857,9 @@
 
 
 题目链接LeetCode 面试题65. 不用加减乘除做加法
-题目描述写一个函数，求两个整数之和，要求在函数体内不得使用 $+,-,*,&#x2F;$ 四则运算符号。
+题目描述写一个函数，求两个整数之和，要求在函数体内不得使用 $+,-,*,/$ 四则运算符号。
 示例1
-输入：a 
+输入：a = 1, 
                         
                     </div>
                     <div class="publish-info">
@@ -1076,7 +1076,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

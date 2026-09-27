@@ -498,7 +498,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    741
+                    732
                 </div>
                 
 
@@ -524,7 +524,7 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <p><strong>题目链接：<a href="https://acm.ecnu.edu.cn/problem/3006/">EOJ3006</a></strong></p>
 <h1 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h1><hr>
 <p>给定一个多项式${(ax + by)^k}$，计算多项式展开后${x^n}{y^m}$项的系数，结果对1000000007取模。</p>
@@ -533,9 +533,9 @@
 <p>拓展一下，如果$n,k$都是小于$10^9$的，那么就不能直接计算了。</p>
 <p>这时候要用到一个大组合数取模的定理，叫做lucas定理：</p>
 <blockquote>
-<p><strong>定理：</strong><br>对于组合数取模<br>\[C_n^m\bmod p\]<br>其中$p$是质数。<br>如果令$n&#x3D;sp+q,m&#x3D;tp+r. (q,r&lt;p)$<br>那么有<br>\[C_{sp + q}^{tp + r} \equiv C_s^tC_q^r\bmod p\]<br><strong>证明:</strong><br>\[\begin{array}{l}{(1 + x)^n} \equiv {(1 + x)^{sp + q}} \equiv {(1 + x)^{sp}}{(1 + x)^q}\ \equiv {({(1 + x)^p})^s}{(1 + x)^q} \equiv {(1 + {x^p})^s}{(1 + x)^q}\ \equiv \sum\limits_{i &#x3D; 0}^s {C_s^i{x^{ip}}} \sum\limits_{j &#x3D; 0}^q {C_q^j{x^j}} \bmod p\end{array}\]<br>其中$(1 + x)^n$中$x^{tp+r}$项的系数为$C_{sp + q}^{tp + r}$，而在同余号右边$x^{tp+r}$项的系数只能为$C_s^tC_q^r$。<br>因为假设<br>\[tp + r &#x3D; ip + j\]<br>所以<br>\[(t - i)p &#x3D; j - r\]<br>而<br>\[ - p &lt; - r \le j - r \le q - r &lt; p - r \le p\]<br>所以只能是<br>\[t - i &#x3D; 0,j - r &#x3D; 0\]<br>所以<br>\[C_{sp + q}^{tp + r} \equiv C_s^tC_q^r\bmod p\]</p>
+<p><strong>定理：</strong><br>对于组合数取模<br>\[C_n^m\bmod p\]<br>其中$p$是质数。<br>如果令$n=sp+q,m=tp+r. (q,r&lt;p)$<br>那么有<br>\[C_{sp + q}^{tp + r} \equiv C_s^tC_q^r\bmod p\]<br><strong>证明:</strong><br>\[\begin{array}{l}{(1 + x)^n} \equiv {(1 + x)^{sp + q}} \equiv {(1 + x)^{sp}}{(1 + x)^q}\ \equiv {({(1 + x)^p})^s}{(1 + x)^q} \equiv {(1 + {x^p})^s}{(1 + x)^q}\ \equiv \sum\limits_{i = 0}^s {C_s^i{x^{ip}}} \sum\limits_{j = 0}^q {C_q^j{x^j}} \bmod p\end{array}\]<br>其中$(1 + x)^n$中$x^{tp+r}$项的系数为$C_{sp + q}^{tp + r}$，而在同余号右边$x^{tp+r}$项的系数只能为$C_s^tC_q^r$。<br>因为假设<br>\[tp + r = ip + j\]<br>所以<br>\[(t - i)p = j - r\]<br>而<br>\[ - p &lt; - r \le j - r \le q - r &lt; p - r \le p\]<br>所以只能是<br>\[t - i = 0,j - r = 0\]<br>所以<br>\[C_{sp + q}^{tp + r} \equiv C_s^tC_q^r\bmod p\]</p>
 </blockquote>
-<p>在代码实现中，应用lucas定理之后，将$C_n^m$替换为$C_s^t$继续调用lucas定理即可。递归终止条件是$t&#x3D;0$。</p>
+<p>在代码实现中，应用lucas定理之后，将$C_n^m$替换为$C_s^t$继续调用lucas定理即可。递归终止条件是$t=0$。</p>
 <p>最后计算$C_q^r\bmod p$时直接应用组合数定义即可：<br>\[C_q^r \equiv \frac{ {q!}}{ {r!(q - r)!}} \equiv q!{(r!(q - r)!)^{p - 2}} \equiv q!{(r!(q - r)!\bmod p)^{p - 2}}\bmod p\]<br>这里还用到了逆元：<br>\[{a^{ - 1}} \equiv {a^{p - 2}}\bmod p\]<br>证明详见我的另一篇博客：<a href="http://godweiyang.com/2018/05/14/concrete-math-12/">具体数学-第12课</a>中的费马小定理和欧拉定理。</p>
 <h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><hr>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="type">long</span> <span class="type">long</span> LL;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> MAXN = <span class="number">1000000</span> + <span class="number">10</span>;</span><br><span class="line"><span class="type">const</span> LL MOD = <span class="number">1e9</span> + <span class="number">7</span>;</span><br><span class="line"></span><br><span class="line">LL f[MAXN];</span><br><span class="line"></span><br><span class="line"><span class="function">LL <span class="title">QuickPow</span><span class="params">(LL a, LL n, LL p)</span> </span>&#123;</span><br><span class="line">    LL res = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span> (n &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (n &amp; <span class="number">1</span>) &#123;</span><br><span class="line">            res = (res * a) % p;</span><br><span class="line">        &#125;</span><br><span class="line">        a = (a * a) % p;</span><br><span class="line">        n &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">LL <span class="title">C</span><span class="params">(LL n, LL m, LL p)</span> </span>&#123;</span><br><span class="line">    LL res = f[n] * <span class="built_in">QuickPow</span>((f[m] * f[n-m]) % p, p - <span class="number">2</span>, p) % p;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    f[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt; MAXN; ++i) &#123;</span><br><span class="line">        f[i] = (f[i - <span class="number">1</span>] * i) % MOD;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">init</span>();</span><br><span class="line">    <span class="type">int</span> T;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;T);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> t = <span class="number">0</span>; t &lt; T; ++t) &#123;</span><br><span class="line">        LL a, b, k, n, m;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%lld%lld%lld%lld%lld&quot;</span>, &amp;a, &amp;b, &amp;k, &amp;n, &amp;m);</span><br><span class="line">        LL res = (((<span class="built_in">QuickPow</span>(a, n, MOD) * <span class="built_in">QuickPow</span>(b, m, MOD)) % MOD) * <span class="built_in">C</span>(k, n, MOD)) % MOD;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;case #%d:\n%lld\n&quot;</span>, t, res);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -1065,7 +1065,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

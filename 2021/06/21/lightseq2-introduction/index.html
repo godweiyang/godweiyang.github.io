@@ -522,11 +522,11 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="/ls.png"></p>
+                <p><img src="ls.png" alt=""></p>
 <p>如今NLP和CV领域的大部分任务都将Transformer作为基础模型。而早在2019年12月，字节跳动曾经开源过一款Transformer类模型推理加速引擎——LightSeq。作为业界第一款支持多种模型和解码方法的推理加速引擎，LightSeq的推理速度快于其它同类软件，更是远远超过了TensorFlow和PyTorch。</p>
 <p>最近，LightSeq发布了最新版本，引入了引擎方面的重大更新——支持了Transformer全流程训练加速，在不同的批处理大小下相比主流训练库最高可加速3倍多！至此从训练到推理部署的整个过程都已被LightSeq打通。</p>
 <p>那么它到底采用了哪些技术呢？下面笔者根据LightSeq公布的资料为你逐个揭晓。</p>
-<h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p><img src="/1.png" alt="图1：Transformer模型结构图（以机器翻译为例）"></p>
+<h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p><img src="1.png" alt="图1：Transformer模型结构图（以机器翻译为例）"></p>
 <p>Transformer模型 [1]自从2017年被谷歌提出之后，成为了众多NLP任务以及部分CV任务的主流模型，尤其是机器翻译、文本生成、文本摘要、时间序列预测等任务。图1是机器翻译任务使用Transformer进行训练的一个例子。但由于硬件资源的匮乏，很多高校实验室或者公司都无法训练很大的模型，而降低批处理大小等措施又会导致训练时间成倍增加。因此如何利用有限的资源最快训练出模型成为了亟待解决的问题。</p>
 <p>针对这一痛点，字节跳动推出了LightSeq训练加速引擎，对Transformer训练的整个计算过程进行了优化。从词嵌入层、编码层、解码层，到最后的损失函数层，从前向传播、反向传播、梯度同步，到最后的参数更新，LightSeq都进行了细致的性能分析和优化。以机器翻译任务为例，仅需要修改几行代码开启LightSeq训练加速，就可以加速最多3倍以上。</p>
 <p>总的来说，LightSeq具有如下几个优点：</p>
@@ -537,7 +537,7 @@
 <li>提供丰富的二次开发工具。<br>LightSeq提供了完整的CUDA kernel和Transformer自定义层的单元测试功能，可以测试自定义算子的正确性，同时分析出运行时间和加速比，帮助开发者更快地验证功能的正确性和有效性。</li>
 </ol>
 <p>表1列举了不同训练加速引擎之间支持的功能对比：</p>
-<p><img src="/t1.png" alt="表1：不同训练加速引擎支持功能对比"></p>
+<p><img src="t1.png" alt="表1：不同训练加速引擎支持功能对比"></p>
 <h2 id="快速上手"><a href="#快速上手" class="headerlink" title="快速上手"></a>快速上手</h2><p>LightSeq提供了多种便捷的运行方式，点击文末链接可以快速体验。这里简单讲解一下快速接入LightSeq进行训练的两种方式。</p>
 <h3 id="使用自定义层"><a href="#使用自定义层" class="headerlink" title="使用自定义层"></a>使用自定义层</h3><p>LightSeq提供了许多自定义层供用户灵活使用。</p>
 <p>例如想要将Transformer模型中的编码层替换为LightSeq的编码层，只需要提供一个编码层参数，用来初始化LightSeq编码层。然后就可以用它来替换原始的编码层，加速模型训练。详细代码如下（这里省略了部分配置参数）：</p>
@@ -560,7 +560,7 @@
 <p>这样NeurST就会自动识别LightSeq已经安装成功，调用<code>lightseq</code>库进行模型构建来加速训练，无需修改启动参数。运行命令详见NeurST提供的机器翻译样例 [6]。</p>
 <h2 id="性能测试"><a href="#性能测试" class="headerlink" title="性能测试"></a>性能测试</h2><p>在WMT14标准的英德翻译任务上，LightSeq做了评测实验。以当前流行的Fairseq训练库（基于PyTorch）和被广泛使用Apex工具库 [7]为基准，测试了LightSeq的训练性能。实验在NVIDIA Tesla V100 和 NVIDIA Ampere A100上进行，采用单机八卡数据并行训练和16位浮点数混合精度。</p>
 <p>在不同模型大小和批处理大小下，LightSeq对单步训练速度的提升结果如图2所示：</p>
-<p><img src="/2.png" alt="图2：A100和V100显卡下不同层数模型加速比"></p>
+<p><img src="2.png" alt="图2：A100和V100显卡下不同层数模型加速比"></p>
 <p>这里所有模型的词表大小为40k，编码层和解码层隐层维度是1024，注意力头数为16。e和d分别表示编码器和解码器的层数。加速比的计算采用了每秒训练有效单词数（real word per second）这一常见指标。</p>
 <p>可以发现：</p>
 <ol>
@@ -569,31 +569,31 @@
 <li>随着批处理大小的增加，LightSeq加速比逐渐降低。其原因是，经过LightSeq优化后，单步训练中矩阵乘法占比提高，显卡的计算吞吐成为训练速度的瓶颈。这表明LightSeq已经对计算资源做到了充分利用。也解释了为什么计算吞吐更高的A100，平均会取得比V100高15%左右的加速比。</li>
 </ol>
 <p>最后在WMT14英德翻译数据集上测试了图1中Transformer模型训练至收敛的时间，结果如图3所示：</p>
-<p><img src="/3.png" alt="图3：A100和V100显卡下不同模型训练总时间"></p>
+<p><img src="3.png" alt="图3：A100和V100显卡下不同模型训练总时间"></p>
 <p>由于LightSeq的计算优化是无损的，不会影响模型训练至收敛的训练步数，所以收敛时间的提升和单步训练时间的提升趋于一致。观察可以发现，LightSeq最多可将模型训练时间由8.5小时降低到3.8小时。</p>
 <h3 id="可视化分析"><a href="#可视化分析" class="headerlink" title="可视化分析"></a>可视化分析</h3><p>为了更清楚地展示LightSeq优化前后模型的运算情况，用Nsight Systems [8]可视化模型训练过程中单步的算子调用情况。</p>
 <p>首先是Fairseq+Apex的可视化，结果如图4所示。总耗时在288ms左右，三个红色框分别表示前向传播、反向传播、梯度同步与参数更新。可以看出前向传播的算子排列比较稀疏，存在很大的优化空间。</p>
-<p><img src="/4.png" alt="图4：Fairseq+Apex单步训练过程可视化"></p>
+<p><img src="4.png" alt="图4：Fairseq+Apex单步训练过程可视化"></p>
 <p>然后是Fairseq+LightSeq的可视化，结果如图5所示，总耗时降到了185ms左右。而且LightSeq的算子排列更加紧密，大大增加了显卡的利用率。</p>
-<p><img src="/5.png" alt="图5：Fairseq+LightSeq单步训练过程可视化"></p>
+<p><img src="5.png" alt="图5：Fairseq+LightSeq单步训练过程可视化"></p>
 <h3 id="CUDA-kernel性能"><a href="#CUDA-kernel性能" class="headerlink" title="CUDA kernel性能"></a>CUDA kernel性能</h3><p>此外还测试了LightSeq单卡情况下所有CUDA kernel的性能，对比了PyTorch、TensorFlow（XLA编译优化）、DeepSpeed和LightSeq四种实现方式。由于kernel太多，这里只列举了部分实验结果。</p>
 <p>首先对比了最常用的dropout，图6是V100显卡上16位和32位浮点数dropout不同实现的加速对比结果：</p>
-<p><img src="/6.png" alt="图6：dropout加速对比"></p>
+<p><img src="6.png" alt="图6：dropout加速对比"></p>
 <p>从图6中可以看出，LightSeq的实现要远远快于PyTorch和DeepSpeed。DeepSpeed在元素数量过百万之后逐渐不如PyTorch，而LightSeq始终比PyTorch快。随着元素数量的增加，LightSeq和DeepSpeed的速度都会有明显下降。TensorFlow在开启了XLA之后速度依然落后于PyTorch，且随着元素数量的增加差距逐渐缩小。</p>
 <p>然后对比了注意力机制中的softmax函数，测试了实际训练场景中批处理大小为8192情况下的加速比。图7是V100显卡上16位和32位浮点数softmax不同实现的加速对比结果，因为DeepSpeed只支持句子长度为8的整数倍，所以这里只测试了长度为32的整数倍的句子计算速度：</p>
-<p><img src="/7.png" alt="图7：softmax加速对比"></p>
+<p><img src="7.png" alt="图7：softmax加速对比"></p>
 <p>可以看出，LightSeq几乎在所有情况下远远快于DeepSpeed。且随着序列长度增加，LightSeq加速比逐渐增大。而DeepSpeed在16位浮点数情况下加速比会逐渐减小，在32位浮点数情况下甚至会出现比PyTorch还要慢的情况。TensorFlow即便使用XLA融合算子，运算速度也远远落后于其它三种实现。</p>
 <p>在其它多数kernel测试中，LightSeq都要快于其它三种实现。</p>
-<h2 id="关键技术"><a href="#关键技术" class="headerlink" title="关键技术"></a>关键技术</h2><p><img src="/8.png" alt="图8：模型训练过程"></p>
-<p>如图8所示，以2卡为例，一个完整的Transformer模型训练过程主要包括四个步骤：前向传播、后向传播、梯度同步和参数更新。其中前向传播和后向传播占模型训练总时间的70%多，包含了众多计算密集型和I&#x2F;O密集型操作，因此是优化的重点。而梯度同步虽然耗时相对较少，但是也可以通过和反向传播并行化等方法隐藏掉大部分延时。最后优化器更新参数方面也大有文章可做，可以从计算和I&#x2F;O两个方面减小延时。</p>
+<h2 id="关键技术"><a href="#关键技术" class="headerlink" title="关键技术"></a>关键技术</h2><p><img src="8.png" alt="图8：模型训练过程"></p>
+<p>如图8所示，以2卡为例，一个完整的Transformer模型训练过程主要包括四个步骤：前向传播、后向传播、梯度同步和参数更新。其中前向传播和后向传播占模型训练总时间的70%多，包含了众多计算密集型和I/O密集型操作，因此是优化的重点。而梯度同步虽然耗时相对较少，但是也可以通过和反向传播并行化等方法隐藏掉大部分延时。最后优化器更新参数方面也大有文章可做，可以从计算和I/O两个方面减小延时。</p>
 <p>下面详细介绍优化这四个步骤的几种技术：算子多运算融合、输入输出层融合、动态显存复用和参数连续化，最后介绍一下LightSeq提供的单元测试功能。</p>
 <h3 id="算子多运算融合"><a href="#算子多运算融合" class="headerlink" title="算子多运算融合"></a>算子多运算融合</h3><p>在大多数深度学习框架（例如TensorFlow和PyTorch）中，一个简单的运算通常都需要很多细粒度的核函数来实现。例如在TensorFlow中，一次层归一化（Layer Normalization）操作需要调用三次核函数以及两次中间显存读写，非常耗时。而基于CUDA，LightSeq定制化了一个层归一化专用的核函数，将两次中间结果的写入寄存器。从而实现一次核函数调用，同时没有中间结果显存读写，因此大大节省了计算开销。</p>
 <p>基于这个思路，LightSeq利用CUDA矩阵运算库cuBLAS [9]提供的矩阵乘法和自定义核函数实现了Transformer的编码器和解码器。以编码层为例，具体结构如图9所示：</p>
-<p><img src="/9.png" alt="图9：编码层计算过程"><br>蓝色部分是自定义核函数，黄色部分是矩阵乘法。可以发现，矩阵乘法之间的运算全部都用一个定制化核函数实现了，因此大大减少了核函数调用和显存读写，最终提升了运算速度。</p>
+<p><img src="9.png" alt="图9：编码层计算过程"><br>蓝色部分是自定义核函数，黄色部分是矩阵乘法。可以发现，矩阵乘法之间的运算全部都用一个定制化核函数实现了，因此大大减少了核函数调用和显存读写，最终提升了运算速度。</p>
 <p>LightSeq还优化了核函数的实现，采用float4数据类型来进行数据读写，大大增加了数据的吞吐量，减小了核函数执行的延时。LightSeq支持任意长度的序列输入，根据不同的序列长度选择最合适的核函数来调用执行。相比之下，DeepSpeed多数核函数只支持句子长度为8的整数倍，因此速度较慢，局限性较大。</p>
 <h3 id="输入输出层融合"><a href="#输入输出层融合" class="headerlink" title="输入输出层融合"></a>输入输出层融合</h3><p>此外LightSeq还实现了词嵌入层和损失函数层的算子融合。对于词嵌入层，LightSeq将词表查找与放缩、位置向量融合以及dropout操作都写成了一个核函数。对于损失函数层，将交叉熵损失融合成一个核函数。通过输入输出层的融合，进一步减小了模型训练的时间，增加了显卡利用率。</p>
 <p>以词嵌入层为例，图10展示了输入句子中单词id之后，词嵌入层进行的计算过程：</p>
-<p><img src="/10.png" alt="图10：词嵌入层计算过程"></p>
+<p><img src="10.png" alt="图10：词嵌入层计算过程"></p>
 <p>可以看出，在融合之前一个词嵌入层需要经过词向量查找与放缩、位置向量查找、两者相加、dropout五种运算，因此需要频繁调用核函数，非常耗时。而将这五个操作融合成一个核函数可以大大加快获取最终词表示的速度。</p>
 <h3 id="动态显存复用"><a href="#动态显存复用" class="headerlink" title="动态显存复用"></a>动态显存复用</h3><p>为了避免计算过程中的显存申请释放并节省显存占用，LightSeq首先对模型中所有动态的矩阵大小都定义了最大值（例如最大序列长度）。接着在模型初始化的时候，为计算过程中的每个中间计算结果按最大值分配显存，并对没有依赖的中间结果共用显存。</p>
 <h3 id="参数连续化"><a href="#参数连续化" class="headerlink" title="参数连续化"></a>参数连续化</h3><p>LightSeq将Transformer每一层中所有的参数都绑定在一起，做连续化处理。初始化模型某一层的时候只需要定义一个参数，参数量为原始模型该层总的参数量。在后续计算时，只需要从这个参数的对应位置处取出原始参数值即可。</p>
@@ -603,7 +603,7 @@
 <p>具体步骤上，首先用户需要构造随机数据，然后根据数据类型选择不同的CUDA核函数，最后分别实现自定义和基准的计算函数即可。这样就保证了用户可以基于自身场景进行更进一步的二次定制开发。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>LightSeq新版训练加速引擎全方面提升了Transformer模型的训练速度，打通了训练和推理部署全流程，使用灵活方便。大大缩减了科研工作者们训练模型的成本。可以期待未来像机器翻译、文本生成、摘要、对话生成、情感分析等大量NLP应用场景可以使用LightSeq来训练和推理。</p>
 <h2 id="传送门"><a href="#传送门" class="headerlink" title="传送门"></a>传送门</h2><p><strong>LightSeq地址：</strong><br><a href="https://github.com/bytedance/lightseq">https://github.com/bytedance/lightseq</a></p>
-<p><img src="/lightseq.png"></p>
+<p><img src="lightseq.png" alt=""></p>
 <h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p>[1] Transformer: “Attention is all you need”, NIPS (2017)<br>[2] DeepSpeed: <a href="https://github.com/microsoft/DeepSpeed">https://github.com/microsoft/DeepSpeed</a><br>[3] WMT14: <a href="http://www.statmt.org/wmt14/">http://www.statmt.org/wmt14/</a><br>[4] Fairseq: <a href="https://github.com/pytorch/fairseq">https://github.com/pytorch/fairseq</a><br>[5] NeurST: <a href="https://github.com/bytedance/neurst/tree/lightseq">https://github.com/bytedance/neurst/tree/lightseq</a><br>[6] NeurST机器翻译样例: <a href="https://github.com/bytedance/neurst/tree/lightseq/examples/translation">https://github.com/bytedance/neurst/tree/lightseq/examples/translation</a><br>[7] Apex: <a href="https://github.com/NVIDIA/apex">https://github.com/NVIDIA/apex</a><br>[8] Nsight Systems: <a href="https://developer.nvidia.com/nsight-systems">https://developer.nvidia.com/nsight-systems</a><br>[9] cuBLAS: <a href="https://docs.nvidia.com/cuda/cublas/index.html">https://docs.nvidia.com/cuda/cublas/index.html</a></p>
 
             </div>
@@ -1124,7 +1124,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

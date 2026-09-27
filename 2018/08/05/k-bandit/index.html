@@ -491,7 +491,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    776
+                    770
                 </div>
                 
 
@@ -517,10 +517,10 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h1><hr>
 <p>有$K$个赌博机，每个赌博机有一定概率$P$吐出硬币，但是我们不知道这个概率是多少，每个赌博机吐出的硬币价值$V$也是不一样的，现在有$T$次机会选择赌博机，怎么选才能使得到的硬币总价值最大？</p>
-<p>在下面的不同算法实现中，统一设定<br>\[\begin{array}{l}K &#x3D; 5 \ P &#x3D; [0.1,0.9,0.3,0.2,0.7] \ V &#x3D; [5,3,1,7,4] \ T &#x3D; 1000000\end{array}\]<br>可以计算出，这种情况下：</p>
+<p>在下面的不同算法实现中，统一设定<br>\[\begin{array}{l}K = 5 \ P = [0.1,0.9,0.3,0.2,0.7] \ V = [5,3,1,7,4] \ T = 1000000\end{array}\]<br>可以计算出，这种情况下：</p>
 <ol>
 <li>如果每次都选期望价值最高的4号赌博机，可以获得的最高总价值为2800000。</li>
 <li>如果每次都选期望价值最低的2号赌博机，可以获得的最低总价值为300000。</li>
@@ -538,7 +538,7 @@
 <h1 id="Softmax算法"><a href="#Softmax算法" class="headerlink" title="Softmax算法"></a>Softmax算法</h1><hr>
 <h2 id="原理-2"><a href="#原理-2" class="headerlink" title="原理"></a>原理</h2><h2 id="实现代码-2"><a href="#实现代码-2" class="headerlink" title="实现代码"></a>实现代码</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># -*- coding: UTF-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">softmax</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> np.exp(x) / np.<span class="built_in">sum</span>(np.exp(x))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">R</span>(<span class="params">k, P, V</span>):</span><br><span class="line">    <span class="keyword">if</span> random.random() &lt; P[k]:</span><br><span class="line">        <span class="keyword">return</span> V[k]</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">eplison_bandit</span>(<span class="params">K, P, V, R, T, tau=<span class="number">0.1</span></span>):</span><br><span class="line">    r = <span class="number">0</span></span><br><span class="line">    Q = np.zeros(K)</span><br><span class="line">    count = np.zeros(K)</span><br><span class="line">    <span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">range</span>(T):</span><br><span class="line">        p = softmax(Q / tau)</span><br><span class="line">        rand = random.random()</span><br><span class="line">        total = <span class="number">0.0</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(K):</span><br><span class="line">            total += p[i]</span><br><span class="line">            <span class="keyword">if</span> total &gt;= rand:</span><br><span class="line">                k = i</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">        v = R(k, P, V)</span><br><span class="line">        r += v</span><br><span class="line">        Q[k] += (v - Q[k]) / (count[k] + <span class="number">1</span>)</span><br><span class="line">        count[k] += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> r</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    K = <span class="number">5</span></span><br><span class="line">    P = np.array([<span class="number">0.1</span>, <span class="number">0.9</span>, <span class="number">0.3</span>, <span class="number">0.2</span>, <span class="number">0.7</span>])</span><br><span class="line">    V = np.array([<span class="number">5</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">7</span>, <span class="number">4</span>])</span><br><span class="line">    T = <span class="number">1000000</span></span><br><span class="line">    tau = <span class="number">0.1</span></span><br><span class="line">    <span class="built_in">print</span> eplison_bandit(K, P, V, R, T, tau)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
 
-<p>代码运行结果为：$tau&#x3D;0.01$时，获得总价值1397795。$tau&#x3D;0.1$时，获得总价值2798372。当然随机性很大，每次运行结果都会不同</p>
+<p>代码运行结果为：$tau=0.01$时，获得总价值1397795。$tau=0.1$时，获得总价值2798372。当然随机性很大，每次运行结果都会不同</p>
 
             </div>
             <hr />
@@ -1061,7 +1061,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

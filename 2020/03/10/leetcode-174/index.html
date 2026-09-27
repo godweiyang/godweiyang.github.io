@@ -14,7 +14,7 @@
 
 
 题目链接LeetCode 174. 地下城游戏
-题目描述一些恶魔抓住了公主（P）并将她关在了地下城的右下角。地下城是由 M x N 个房间组成的二维网格。我们英勇的骑士（K）最初被安置">
+题目描述一些恶魔抓住了公主（P）并将她关在了地下城的右下角。地下城是由 M x N 个房间组成的二维网格。我们英勇的骑士（K）最初被安置">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -521,9 +521,9 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <h2 id="题目链接"><a href="#题目链接" class="headerlink" title="题目链接"></a>题目链接</h2><p><a href="https://leetcode-cn.com/problems/dungeon-game/" title="LeetCode 174. 地下城游戏">LeetCode 174. 地下城游戏</a></p>
-<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>一些恶魔抓住了公主（P）并将她关在了地下城的右下角。地下城是由 M x N 个房间组成的二维网格。我们英勇的骑士（K）最初被安置在左上角的房间里，他必须穿过地下城并通过对抗恶魔来拯救公主。</p>
+<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>一些恶魔抓住了公主（P）并将她关在了地下城的右下角。地下城是由 M x N 个房间组成的二维网格。我们英勇的骑士（K）最初被安置在左上角的房间里，他必须穿过地下城并通过对抗恶魔来拯救公主。</p>
 <p>骑士的初始健康点数为一个正整数。如果他的健康点数在某一时刻降至 0 或以下，他会立即死亡。</p>
 <p>有些房间由恶魔守卫，因此骑士在进入这些房间时会失去健康点数（若房间里的值为负整数，则表示骑士将损失健康点数）；其他房间要么是空的（房间里的值为 0），要么包含增加骑士健康点数的魔法球（若房间里的值为正整数，则表示骑士将增加健康点数）。</p>
 <p>为了尽快到达公主，骑士决定每次只向右或向下移动一步。</p>
@@ -554,7 +554,7 @@
 <li>任何房间都可能对骑士的健康点数造成威胁，也可能增加骑士的健康点数，包括骑士进入的左上角房间以及公主被监禁的右下角房间。</li>
 </ul>
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><h3 id="错误解法"><a href="#错误解法" class="headerlink" title="错误解法"></a>错误解法</h3><p>首先我们肯定想到的是从左上到右下动态规划，那么对于 $(i, j)$ 这个格子来说，它有两个选择，可以从 $(i-1, j)$ 或者 $(i, j-1)$ 过来。</p>
-<p>我们令 $dp[i][j]$ 表示从左上角走到 $(i, j)$ 这个格子所需要的最小生命值，那么我们选择 $\min{{dp[i-1][j], dp[i][j-1]}}$ ，也就是两个<strong>来向</strong>中较小的那个走过来。但是考虑了当前格子的数值之后，路线上所需生命的最小值是可能增大的，而这时候可能选择两个来向中较大的那个反而更好（因为那个来向数值之和比较大），所以这里就产生了矛盾，无法求解。</p>
+<p>我们令 $dp[i][j]$ 表示从左上角走到 $(i, j)$ 这个格子所需要的最小生命值，那么我们选择 $\min{\{dp[i-1][j], dp[i][j-1]\}}$ ，也就是两个<strong>来向</strong>中较小的那个走过来。但是考虑了当前格子的数值之后，路线上所需生命的最小值是可能增大的，而这时候可能选择两个来向中较大的那个反而更好（因为那个来向数值之和比较大），所以这里就产生了矛盾，无法求解。</p>
 <p>举个简单的例子：</p>
 <table>
 <thead>
@@ -579,17 +579,29 @@
 <p>但是如果继续走到格子 $(2, 2)$ ，那么最优方向一定是从 $(1, 2)$ 过来（另一个方向负数太多）。但是到 $(1, 2)$ 的最优路线保存的是 下 -&gt; 右 -&gt; 右 这一条，走到终点总和是 -4 ，初始所需最小生命增大为 5 。而另一条原本不怎么好的路线 右 -&gt; 右 -&gt; 下 总和是 -2 ，初始所需最小生命 3 ，所以仍然保持不变。</p>
 <p>这样看来原本不好的路线在最后的结果里是可能会变好的，所以不好保存下来直接递推。</p>
 <h3 id="正确解法"><a href="#正确解法" class="headerlink" title="正确解法"></a>正确解法</h3><p>既然从左上到右下没法动态规划，我们不妨从右下到左上动态规划看看。</p>
-<p>我们令 $dp[i][j]$ 表示从 $(i, j)$ 这个格子走到右下角所需要的最小生命值，同样我们选择两个<strong>去向</strong>中的较小值 $\min{{dp[i+1][j], dp[i][j+1]}}$ 。然后考虑了格子 $(i, j)$ 之后， $dp[i][j]$ 就更新为：</p>
-<p>$$<br>dp[i][j] &#x3D; \max{{1, \min{{dp[i+1][j], dp[i][j+1]}} - dungeon[i][j]}}<br>$$</p>
+<p>我们令 $dp[i][j]$ 表示从 $(i, j)$ 这个格子走到右下角所需要的最小生命值，同样我们选择两个<strong>去向</strong>中的较小值 $\min{\{dp[i+1][j], dp[i][j+1]\}}$ 。然后考虑了格子 $(i, j)$ 之后， $dp[i][j]$ 就更新为：</p>
+$$
+dp[i][j] = \max{\{1, \min{\{dp[i+1][j], dp[i][j+1]\}} - dungeon[i][j]\}}
+$$
+
 <p>为什么这里选择两个去向中所需初始生命较小的那个就没问题了呢？</p>
-<h3 id="严格证明"><a href="#严格证明" class="headerlink" title="严格证明"></a>严格证明</h3><p><img src="/1.jpg"><br>考虑上图这种情况，这里我把 $(i, j)$ 抽象为了 $x$ ，右边一格抽象为了 $s$ ，右下角抽象为了 $t$ 。然后 $s \to t$ 走下面这条路所需初始生命值最小，路径上格子记为 $d$ ，另一条路径上格子记为 $d’$ 。</p>
+<h3 id="严格证明"><a href="#严格证明" class="headerlink" title="严格证明"></a>严格证明</h3><p><img src="1.jpg" alt=""><br>考虑上图这种情况，这里我把 $(i, j)$ 抽象为了 $x$ ，右边一格抽象为了 $s$ ，右下角抽象为了 $t$ 。然后 $s \to t$ 走下面这条路所需初始生命值最小，路径上格子记为 $d$ ，另一条路径上格子记为 $d'$ 。</p>
 <p>因为走路径 $d$ 所需的初始生命值更小，所以我们有：</p>
-<p>$$<br>\max{\left{ \max_k{\left{ -\sum_{i&#x3D;1}^k{d_i} \right}}, 1 \right}} &lt; \max{\left{ \max_k{\left{ -\sum_{i&#x3D;1}^k{d’_i} \right}}, 1 \right}}<br>$$</p>
+$$
+\max{\left\{ \max_k{\left\{ -\sum_{i=1}^k{d_i} \right\}}, 1 \right\}} < \max{\left\{ \max_k{\left\{ -\sum_{i=1}^k{d'_i} \right\}}, 1 \right\}}
+$$
+
 <p>等价于：</p>
-<p>$$<br>\max_k{\left{ -\sum_{i&#x3D;1}^k{d_i} \right}} &lt; \max_k{\left{ -\sum_{i&#x3D;1}^k{d’_i} \right}}<br>$$</p>
-<p>这时候我们在两边 $\max{{\cdot}}$ 里面同时加上 $-x$ ，大小关系是不会变的。</p>
-<p>而错误解法中，考虑下图这种情况：<br><img src="/2.jpg"><br>同样我们可以得到：</p>
-<p>$$<br>\max_k{\left{ -\sum_{i&#x3D;1}^k{d_i} \right}} &lt; \max_k{\left{ -\sum_{i&#x3D;1}^k{d’_i} \right}}<br>$$</p>
+$$
+\max_k{\left\{ -\sum_{i=1}^k{d_i} \right\}} < \max_k{\left\{ -\sum_{i=1}^k{d'_i} \right\}}
+$$
+
+<p>这时候我们在两边 $\max{\{\cdot\}}$ 里面同时加上 $-x$ ，大小关系是不会变的。</p>
+<p>而错误解法中，考虑下图这种情况：<br><img src="2.jpg" alt=""><br>同样我们可以得到：</p>
+$$
+\max_k{\left\{ -\sum_{i=1}^k{d_i} \right\}} < \max_k{\left\{ -\sum_{i=1}^k{d'_i} \right\}}
+$$
+
 <p>到这里为止和上面正确解法是一模一样的。但是，加上 $-x$ 之后，和上面正解的区别就是，<strong>正解求和里每一项都加了，所以大小关系不变，但是错解只有一项加了（就是所有值全加起来），大小关系无法确定</strong>。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="c"><a href="#c" class="headerlink" title="c++"></a>c++</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">calculateMinimumHP</span><span class="params">(vector&lt;vector&lt;<span class="type">int</span>&gt;&gt;&amp; dungeon)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = dungeon.<span class="built_in">size</span>(), m = dungeon[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line">        vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; <span class="built_in">dp</span>(n<span class="number">+1</span>, <span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;(m<span class="number">+1</span>, INT_MAX));</span><br><span class="line">        dp[n][m<span class="number">-1</span>] = dp[n<span class="number">-1</span>][m] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = n<span class="number">-1</span>; i &gt;= <span class="number">0</span>; --i) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> j = m<span class="number">-1</span>; j &gt;= <span class="number">0</span>; --j) &#123;</span><br><span class="line">                <span class="type">int</span> minn = <span class="built_in">min</span>(dp[i<span class="number">+1</span>][j], dp[i][j<span class="number">+1</span>]);</span><br><span class="line">                dp[i][j] = <span class="built_in">max</span>(<span class="number">1</span>, minn-dungeon[i][j]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
@@ -836,9 +848,9 @@
 
 
 题目链接LeetCode 面试题65. 不用加减乘除做加法
-题目描述写一个函数，求两个整数之和，要求在函数体内不得使用 $+,-,*,&#x2F;$ 四则运算符号。
+题目描述写一个函数，求两个整数之和，要求在函数体内不得使用 $+,-,*,/$ 四则运算符号。
 示例1
-输入：a 
+输入：a = 1, 
                         
                     </div>
                     <div class="publish-info">
@@ -895,7 +907,7 @@
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-题目描述有一个二维矩阵 $A$ 其中每个元素的值为 $0$ 或 $1$。
+题目描述有一个二维矩阵 $A$ 其中每个元素的值为 $0$ 或 $1$。
 移动是指选择任一行或列，并转换该行或列中的每一个值：将所有 $0$ 都更改为 $1$，将所有 $1$ 都更改为
                         
                     </div>
@@ -1113,7 +1125,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

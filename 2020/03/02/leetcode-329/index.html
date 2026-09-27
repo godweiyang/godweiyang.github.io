@@ -523,7 +523,7 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个整数矩阵，找出最长递增路径的长度。</p>
 <p>对于每个单元格，你可以往上，下，左，右四个方向移动。 你不能在对角线方向上移动或移动到边界外（即不允许环绕）。</p>
 <p><strong>示例1</strong></p>
@@ -533,7 +533,12 @@
 <figure class="highlight text"><table><tr><td class="code"><pre><span class="line">输入：</span><br><span class="line">nums =</span><br><span class="line">[</span><br><span class="line">  [3,4,5],</span><br><span class="line">  [3,2,6],</span><br><span class="line">  [2,2,1]</span><br><span class="line">]</span><br><span class="line">输出：</span><br><span class="line">4</span><br><span class="line">解释：</span><br><span class="line">最长递增路径是 [3, 4, 5, 6]。注意不允许在对角线方向上移动。</span><br></pre></td></tr></table></figure>
 
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><h3 id="DFS-记忆化搜索"><a href="#DFS-记忆化搜索" class="headerlink" title="DFS+记忆化搜索"></a>DFS+记忆化搜索</h3><p>对于点 $[x, y]$ 来说，以它为终点的最长递增路径一定会经过上下左右四个点其一。所以如果它四周的点小于 $[x, y]$ ，就递归遍历四周的点，然后以 $[x, y]$ 为终点的最长递增路径长度就是以四周小于它的点为终点的最长递增路径长度加 $1$ ：</p>
-<p>$$<br>dfs(x, y) &#x3D; \max{{dfs(x-1, y), dfs(x+1, y), dfs(x, y-1), dfs(x, y+1)}} + 1<br>$$</p>
+
+$$
+dfs(x, y) = \max{\{dfs(x-1, y), dfs(x+1, y), dfs(x, y-1), dfs(x, y+1)\}} + 1
+$$
+
+
 <p>注意这里四周的点首先不能超过边界，然后数值上必须小于 $[x, y]$ 。</p>
 <p>但是直接这样会有很多重复计算，所以我们必须用记忆化搜索，用 $dp[x][y]$ 保存搜索结果。如果发现已经计算过了，就不再递归，直接返回结果。</p>
 <p>最终每个格子最多遍历一遍，时间复杂度是 $O(nm)$ 。</p>
@@ -1067,7 +1072,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

@@ -523,7 +523,7 @@
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <blockquote>
 <p>本文的最终目的是将手机微信的聊天记录导出到电脑里，变成txt文本文件，然后对其进行分析。</p>
 </blockquote>
@@ -532,35 +532,35 @@
 <h1 id="导出手机微信数据库"><a href="#导出手机微信数据库" class="headerlink" title="导出手机微信数据库"></a>导出手机微信数据库</h1><p>首先要做的第一步就是将手机端的微信数据库<code>.db</code>文件导出到电脑上。</p>
 <h2 id="小米手机"><a href="#小米手机" class="headerlink" title="小米手机"></a>小米手机</h2><p>小米的话做法很简单，不需要进行root。</p>
 <ol>
-<li><p>首先进入手机的<code>设置-更多设置-备份和重置-本地备份</code>，输入密码，点击<code>新建备份</code>，把两个勾去掉，点击软件程序右边的尖括号，选择微信，点击确定，点击开始备份，等待完成就行了。<br><img src="/1.png"></p>
+<li><p>首先进入手机的<code>设置-更多设置-备份和重置-本地备份</code>，输入密码，点击<code>新建备份</code>，把两个勾去掉，点击软件程序右边的尖括号，选择微信，点击确定，点击开始备份，等待完成就行了。<br><img src="1.png" alt=""></p>
 </li>
-<li><p>然后将手机连接电脑，打开手机目录下的<code>MIUI/backup/AllBackup/yyyymmdd_xxxxxx/</code>文件夹，将<code>.bak</code>文件拷贝到电脑上，我这里重命名为了<code>com.tencent.mm.bak</code>。<br><img src="/2.jpg"></p>
+<li><p>然后将手机连接电脑，打开手机目录下的<code>MIUI/backup/AllBackup/yyyymmdd_xxxxxx/</code>文件夹，将<code>.bak</code>文件拷贝到电脑上，我这里重命名为了<code>com.tencent.mm.bak</code>。<br><img src="2.jpg" alt=""></p>
 </li>
-<li><p>然后用任意一种压缩包软件（我用的是7zip）打开这个<code>com.tencent.mm.bak</code>文件，并且将<code>apps\com.tencent.mm\r\MicroMsg\systemInfo.cfg</code>、<code>apps\com.tencent.mm\r\MicroMsg\CompatibleInfo.cfg</code>和<code>apps\com.tencent.mm\r\MicroMsg\xxxx\EnMicroMsg.db</code>三个文件解压到电脑上。这里xxxx是一串随机的字母，代表你的微信用户，每个人不一样，一般是最大的那个文件夹，我这里是下图所示文件夹：<br><img src="/3.jpg"></p>
+<li><p>然后用任意一种压缩包软件（我用的是7zip）打开这个<code>com.tencent.mm.bak</code>文件，并且将<code>apps\com.tencent.mm\r\MicroMsg\systemInfo.cfg</code>、<code>apps\com.tencent.mm\r\MicroMsg\CompatibleInfo.cfg</code>和<code>apps\com.tencent.mm\r\MicroMsg\xxxx\EnMicroMsg.db</code>三个文件解压到电脑上。这里xxxx是一串随机的字母，代表你的微信用户，每个人不一样，一般是最大的那个文件夹，我这里是下图所示文件夹：<br><img src="3.jpg" alt=""></p>
 </li>
 </ol>
 <h2 id="其他手机通用做法"><a href="#其他手机通用做法" class="headerlink" title="其他手机通用做法"></a>其他手机通用做法</h2><p>其他手机可能没有这么方便，一种办法是root之后去<code>/data/data/com.tencent.mm/MicroMsg</code>下面找这三个文件，但是很多人是不会去root的，所以介绍另一种方法。</p>
 <p>首先电脑上安装一款安卓模拟器，然后里面下载手机微信并登录，最重要的一步就是<strong>将手机端聊天记录备份到电脑端微信，然后将电脑端聊天记录恢复到安卓虚拟器里的微信</strong>，这个功能是微信自带的，应该没有什么难度。</p>
 <p>然后对安卓虚拟器进行root，这个也是设置里就有的，最后就能把三个文件都拷贝到电脑上了。</p>
 <h1 id="破解数据库密码"><a href="#破解数据库密码" class="headerlink" title="破解数据库密码"></a>破解数据库密码</h1><ol start="4">
-<li><p>将上面的所有文件全部放在一个目录下。<br><img src="/4.jpg"></p>
+<li><p>将上面的所有文件全部放在一个目录下。<br><img src="4.jpg" alt=""></p>
 </li>
 <li><p>然后命令行运行如下代码：</p>
 </li>
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">javac IMEI.java</span><br><span class="line">java IMEI systemInfo.cfg CompatibleInfo.cfg</span><br></pre></td></tr></table></figure>
 
-<p>第三行就是数据库的密码了。<br><img src="/5.jpg"></p>
+<p>第三行就是数据库的密码了。<br><img src="5.jpg" alt=""></p>
 <h1 id="导出聊天记录"><a href="#导出聊天记录" class="headerlink" title="导出聊天记录"></a>导出聊天记录</h1><ol start="6">
-<li><p>然后打开<code>sqlcipher.exe</code>软件，用它打开<code>EnMicroMsg.db</code>数据库，输入第五步得到的密码。<br><img src="/6.jpg"><br><img src="/7.jpg"></p>
+<li><p>然后打开<code>sqlcipher.exe</code>软件，用它打开<code>EnMicroMsg.db</code>数据库，输入第五步得到的密码。<br><img src="6.jpg" alt=""><br><img src="7.jpg" alt=""></p>
 </li>
-<li><p>这时候会显示出很多的表格，点击菜单栏的<code>File-Export-Table as CSV file</code>，选择<code>message</code>表，并导出。<br><img src="/8.jpg"></p>
+<li><p>这时候会显示出很多的表格，点击菜单栏的<code>File-Export-Table as CSV file</code>，选择<code>message</code>表，并导出。<br><img src="8.jpg" alt=""></p>
 </li>
-<li><p>如果直接用excel打开这个表格，可能会显示乱码。所以新建一个excel表格，点击<code>数据-来自文本</code>，然后导入这个<code>.csv</code>文件。<br><img src="/9.jpg"></p>
+<li><p>如果直接用excel打开这个表格，可能会显示乱码。所以新建一个excel表格，点击<code>数据-来自文本</code>，然后导入这个<code>.csv</code>文件。<br><img src="9.jpg" alt=""></p>
 </li>
-<li><p>弹出的框里，第一个下拉框选择<code>GB2312</code>，然后载入，这时候就不乱码了。<br><img src="/10.jpg"></p>
+<li><p>弹出的框里，第一个下拉框选择<code>GB2312</code>，然后载入，这时候就不乱码了。<br><img src="10.jpg" alt=""></p>
 </li>
-<li><p>然后在<code>talker</code>一列选择你想要筛选的聊天对象，单击<code>content</code>列并复制到<code>message.txt</code>文本中。<br><img src="/11.jpg"></p>
+<li><p>然后在<code>talker</code>一列选择你想要筛选的聊天对象，单击<code>content</code>列并复制到<code>message.txt</code>文本中。<br><img src="11.jpg" alt=""></p>
 </li>
 <li><p>最后命令行运行下面代码去除无效信息：</p>
 </li>
@@ -569,7 +569,7 @@
 
 <p>这时候会产生一个<code>__message.txt</code>，就是处理完的聊天记录了。</p>
 <h1 id="生成词云"><a href="#生成词云" class="headerlink" title="生成词云"></a>生成词云</h1><p>这个上一篇博客已经讲过了，可以去看看：<a href="https://godweiyang.com/2019/07/27/wordcloud/">地址</a></p>
-<p>最后的效果如图所示<br><img src="/12.png"></p>
+<p>最后的效果如图所示<br><img src="12.png" alt=""></p>
 
             </div>
             <hr />
@@ -1088,7 +1088,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

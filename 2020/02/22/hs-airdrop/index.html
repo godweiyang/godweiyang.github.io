@@ -538,7 +538,7 @@ The Handshake Org">
 <h2 id="找到你的-SSH-key-存放目录"><a href="#找到你的-SSH-key-存放目录" class="headerlink" title="找到你的 SSH key 存放目录"></a>找到你的 SSH key 存放目录</h2><p>如果你是 Linix ，存放目录一般是 <code>~/.ssh</code> 。如果你跟我一样是 Windows 10，存放目录一般是 <code>C:\Users\你的用户名\.ssh</code> 。</p>
 <p>然后在目录下找到你的 SSH key 文件，注意一定要是符合要求（2019 年 2 月 4 号之前）的那个。例如我的文件路径是 <code>C:\Users\godweiyang\.ssh\id_rsa</code> 。</p>
 <h2 id="生成你的握手币钱包地址"><a href="#生成你的握手币钱包地址" class="headerlink" title="生成你的握手币钱包地址"></a>生成你的握手币钱包地址</h2><p>打开 <a href="https://www.namebase.io/airdrop">https://www.namebase.io/airdrop</a>，跳转到第 4 步，点击 <code>Click To Show Your Handshake Wallet Address</code> ，然后就会生成出一串如下字符，就是你的钱包地址：</p>
-<p><img src="/1.jpg"></p>
+<p><img src="1.jpg" alt=""></p>
 <h2 id="生成加密证明"><a href="#生成加密证明" class="headerlink" title="生成加密证明"></a>生成加密证明</h2><p>直接运行如下命令：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">./bin/hs-airdrop &lt;path to key&gt; &lt;address&gt; &lt;fee&gt;</span><br></pre></td></tr></table></figure>
 
@@ -547,15 +547,15 @@ The Handshake Org">
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">./bin/hs-airdrop C:\Users\godweiyang\.ssh\id_rsa hs1qxxxxxxxxxxx 0.01</span><br></pre></td></tr></table></figure>
 
 <p>然后会让你输入 <code>Passphrase</code> ，一般都是空，直接回车就行了。</p>
-<p>运行成功了之后界面是这样的：<br><img src="/2.jpg"></p>
+<p>运行成功了之后界面是这样的：<br><img src="2.jpg" alt=""></p>
 <p><strong>报错解决 1 ：</strong><br>如果你是 Windows，你可能会遇到 <code>TypeError: stdin.setRawMode is not a function</code> 错误，不用担心，只需要将命令修改为下面这样：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">node bin/hs-airdrop &lt;path to key&gt; &lt;address&gt; &lt;fee&gt;</span><br></pre></td></tr></table></figure>
 
 <p>也就是前面加一个 <code>node</code> ，并且运行程序路径最前面去掉 <code>./</code> 就行了。</p>
 <p><strong>报错解决 2 ：</strong><br>可能运行了三四分钟之后，会弹出 <code>Error: read ECONNRESET</code> 错误，这是因为要下载一个 github 仓库，太大了下不下来。</p>
 <p>解决方法就是先下载 <a href="https://gitee.com/shidenggui/hs-tree-data">https://gitee.com/shidenggui/hs-tree-data</a> 这个仓库内容，然后将仓库内容复制到 <code>C:\Users\你的用户名\.hs-tree-data</code> 目录下。这样运行的时候就不需要下载了，直接就能运行。</p>
-<h2 id="复制-base64-代码"><a href="#复制-base64-代码" class="headerlink" title="复制 base64 代码"></a>复制 base64 代码</h2><p>等待三五分钟，如果成功了，你有资格，那么就会生成一串下面这样的 base64 代码：<br><img src="/4.png"></p>
-<p>将它复制到 <a href="https://www.namebase.io/airdrop">https://www.namebase.io/airdrop</a> 最后一步如下框框里（<strong>注意一定要去除 base64 代码中的换行符，让它只有一行！</strong>）：<br><img src="/3.jpg"></p>
+<h2 id="复制-base64-代码"><a href="#复制-base64-代码" class="headerlink" title="复制 base64 代码"></a>复制 base64 代码</h2><p>等待三五分钟，如果成功了，你有资格，那么就会生成一串下面这样的 base64 代码：<br><img src="4.png" alt=""></p>
+<p>将它复制到 <a href="https://www.namebase.io/airdrop">https://www.namebase.io/airdrop</a> 最后一步如下框框里（<strong>注意一定要去除 base64 代码中的换行符，让它只有一行！</strong>）：<br><img src="3.jpg" alt=""></p>
 <h2 id="到账后提现"><a href="#到账后提现" class="headerlink" title="到账后提现"></a>到账后提现</h2><p>到账时间不好说，至少需要 16 个小时，至多你就等着吧，到账的是 HNS 币，也就是握手币。</p>
 <p>然后打开 <a href="https://www.namebase.io/kyc/basic">https://www.namebase.io/kyc/basic</a> 进行实名认证（不然没法转成比特币），提供身份证、驾照或者护照都可以。</p>
 <p>打开 <a href="https://www.namebase.io/sell">https://www.namebase.io/sell</a> 将握手币兑换成比特币。</p>
@@ -1084,7 +1084,7 @@ The Handshake Org">
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>

@@ -497,7 +497,7 @@ LeetCode 5352. 生成每种字">
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    985
+                    984
                 </div>
                 
 
@@ -523,7 +523,7 @@ LeetCode 5352. 生成每种字">
                 <blockquote>
 <p>关注公众号【算法码上来】，每日算法干货马上就来！</p>
 </blockquote>
-<p><img src="/medias/contact.jpg"></p>
+<p><img src="/medias/contact.jpg" alt=""></p>
 <blockquote>
 <p>起床打开 leetcode，准备看看今天搞点啥题目水一水的，突然发现周赛还剩 1 小时整。看了眼题目也都挺简单的，就把 4 道题都做掉了。</p>
 </blockquote>
@@ -544,7 +544,7 @@ LeetCode 5352. 生成每种字">
 <h3 id="代码（c-）-1"><a href="#代码（c-）-1" class="headerlink" title="代码（c++）"></a>代码（c++）</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="type">static</span> <span class="type">const</span> <span class="type">int</span> N = <span class="number">100010</span>;</span><br><span class="line">    vector&lt;<span class="type">int</span>&gt; G[N];</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">numOfMinutes</span><span class="params">(<span class="type">int</span> n, <span class="type">int</span> headID, vector&lt;<span class="type">int</span>&gt;&amp; manager, vector&lt;<span class="type">int</span>&gt;&amp; informTime)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (manager[i] != <span class="number">-1</span>) &#123;</span><br><span class="line">                G[manager[i]].<span class="built_in">push_back</span>(i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">f</span>(headID, informTime);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">f</span><span class="params">(<span class="type">int</span> headID, vector&lt;<span class="type">int</span>&gt;&amp; informTime)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!informTime[headID]) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> maxx = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>, sz = G[headID].<span class="built_in">size</span>(); i &lt; sz; ++i) &#123;</span><br><span class="line">            maxx = <span class="built_in">max</span>(maxx, <span class="built_in">f</span>(G[headID][i], informTime));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> maxx+informTime[headID];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <h2 id="LeetCode-5355-T-秒后青蛙的位置"><a href="#LeetCode-5355-T-秒后青蛙的位置" class="headerlink" title="LeetCode 5355. T 秒后青蛙的位置"></a>LeetCode 5355. T 秒后青蛙的位置</h2><h3 id="题目链接-3"><a href="#题目链接-3" class="headerlink" title="题目链接"></a>题目链接</h3><p><a href="https://leetcode-cn.com/problems/frog-position-after-t-seconds/">https://leetcode-cn.com/problems/frog-position-after-t-seconds/</a></p>
-<h3 id="题解-3"><a href="#题解-3" class="headerlink" title="题解"></a>题解</h3><p>首先建图，然后从 $1$ 号结点开始，还是用 dfs 。每往下走一次，时间 $t$ 减 $1$ 。如果 $t &#x3D; 0$ 或者到了叶子结点了，就判断结点是否为 $target$ ，是就返回 $1$ ，不是就返回 $0$ 。每次概率除以当前结点的子结点个数，然后再乘上所有子结点 dfs 结果的最大值（因为结果不是 $0$ 就是正确概率）。</p>
+<h3 id="题解-3"><a href="#题解-3" class="headerlink" title="题解"></a>题解</h3><p>首先建图，然后从 $1$ 号结点开始，还是用 dfs 。每往下走一次，时间 $t$ 减 $1$ 。如果 $t = 0$ 或者到了叶子结点了，就判断结点是否为 $target$ ，是就返回 $1$ ，不是就返回 $0$ 。每次概率除以当前结点的子结点个数，然后再乘上所有子结点 dfs 结果的最大值（因为结果不是 $0$ 就是正确概率）。</p>
 <h3 id="代码（c-）-2"><a href="#代码（c-）-2" class="headerlink" title="代码（c++）"></a>代码（c++）</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">double</span> <span class="title">frogPosition</span><span class="params">(<span class="type">int</span> n, vector&lt;vector&lt;<span class="type">int</span>&gt;&gt;&amp; edges, <span class="type">int</span> t, <span class="type">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (n == <span class="number">1</span>) <span class="keyword">return</span> <span class="number">1.0</span>;</span><br><span class="line">        vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; <span class="built_in">G</span>(<span class="number">110</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n<span class="number">-1</span>; ++i) &#123;</span><br><span class="line">            <span class="type">int</span> u = edges[i][<span class="number">0</span>], v = edges[i][<span class="number">1</span>];</span><br><span class="line">            G[u].<span class="built_in">push_back</span>(v);</span><br><span class="line">            G[v].<span class="built_in">push_back</span>(u);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">dfs</span>(<span class="number">1</span>, <span class="number">0</span>, t, target, G);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">double</span> <span class="title">dfs</span><span class="params">(<span class="type">int</span> u, <span class="type">int</span> fa, <span class="type">int</span> t, <span class="type">int</span> target, vector&lt;vector&lt;<span class="type">int</span>&gt;&gt;&amp; G)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> sz = G[u].<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span> (!t || (fa &amp;&amp; sz == <span class="number">1</span>)) &#123;</span><br><span class="line">            <span class="keyword">if</span> (u == target) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">double</span> p = <span class="number">1.0</span> / (fa ? sz<span class="number">-1</span> : sz), maxx = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>, sz = G[u].<span class="built_in">size</span>(); i &lt; sz; ++i) &#123;</span><br><span class="line">            <span class="type">int</span> v = G[u][i];</span><br><span class="line">            <span class="keyword">if</span> (v == fa) <span class="keyword">continue</span>;</span><br><span class="line">            maxx = <span class="built_in">max</span>(maxx, <span class="built_in">dfs</span>(v, u, t<span class="number">-1</span>, target, G));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> p*maxx;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
             </div>
@@ -789,7 +789,7 @@ LeetCode 5352. 生成每种字">
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-题目描述有一个二维矩阵 $A$ 其中每个元素的值为 $0$ 或 $1$。
+题目描述有一个二维矩阵 $A$ 其中每个元素的值为 $0$ 或 $1$。
 移动是指选择任一行或列，并转换该行或列中的每一个值：将所有 $0$ 都更改为 $1$，将所有 $1$ 都更改为
                         
                     </div>
@@ -847,7 +847,7 @@ LeetCode 5352. 生成每种字">
 关注公众号【算法码上来】，每日算法干货马上就来！
 
 
-题目描述我们有一系列公交路线。每一条路线 $routes[i]$ 上都有一辆公交车在上面循环行驶。例如，有一条路线 $routes[0] &#x3D; [1, 5, 7]$，表示第一辆
+题目描述我们有一系列公交路线。每一条路线 $routes[i]$ 上都有一辆公交车在上面循环行驶。例如，有一条路线 $routes[0] = [1, 5, 7]$，表示第一辆（下标为 
                         
                     </div>
                     <div class="publish-info">
@@ -1064,7 +1064,7 @@ LeetCode 5352. 生成每种字">
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">371.5k</span>
+            <span class="white-color">369.3k</span>
             
 
             <br>
