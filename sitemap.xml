@@ -2,9 +2,58 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://godweiyang.com/restart/data/events-echo.json</loc>
+    
+    <lastmod>2026-09-27T11:01:55.646Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://godweiyang.com/restart/data/events-pro.json</loc>
+    
+    <lastmod>2026-09-27T10:57:58.848Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://godweiyang.com/restart/data/events-choices.json</loc>
     
-    <lastmod>2026-09-27T09:28:04.638Z</lastmod>
+    <lastmod>2026-09-27T10:57:58.846Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://godweiyang.com/restart/data/events-extra.json</loc>
+    
+    <lastmod>2026-09-27T10:57:58.844Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://godweiyang.com/restart/data/events-veteran.json</loc>
+    
+    <lastmod>2026-09-27T10:57:58.842Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://godweiyang.com/restart/data/events-prime.json</loc>
+    
+    <lastmod>2026-09-27T10:57:58.840Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://godweiyang.com/restart/data/events-teen.json</loc>
+    
+    <lastmod>2026-09-27T10:57:58.840Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://godweiyang.com/restart/data/events-child.json</loc>
+    
+    <lastmod>2026-09-27T10:57:58.839Z</lastmod>
     
   </url>
   
@@ -12,41 +61,6 @@
     <loc>https://godweiyang.com/restart/data/meta.json</loc>
     
     <lastmod>2026-09-27T07:42:52.875Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://godweiyang.com/restart/data/events-extra.json</loc>
-    
-    <lastmod>2026-09-27T07:29:34.602Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://godweiyang.com/restart/data/events-veteran.json</loc>
-    
-    <lastmod>2026-09-27T07:29:29.272Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://godweiyang.com/restart/data/events-prime.json</loc>
-    
-    <lastmod>2026-09-27T07:22:40.222Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://godweiyang.com/restart/data/events-teen.json</loc>
-    
-    <lastmod>2026-09-27T07:19:37.213Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://godweiyang.com/restart/data/events-child.json</loc>
-    
-    <lastmod>2026-09-27T07:17:01.661Z</lastmod>
     
   </url>
   

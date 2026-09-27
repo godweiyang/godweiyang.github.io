@@ -185,6 +185,13 @@
     if (!run.alive || run.ended) return [];
     run.age += 1;
 
+    // 情绪/疲劳/身体逐年自然平复（向 0 回归）；只有持续高压或主动作妖才会累积到暴毙
+    if (run.age > 6) {
+      if (run.vars.tilt > 0) run.vars.tilt -= 1;
+      if (run.vars.health > 0) run.vars.health -= 1;
+      if (run.age % 2 === 0 && run.vars.burnout > 0) run.vars.burnout -= 1;
+    }
+
     // 年龄自然衰减（25 岁起）
     if (run.age >= 25 && run.age % 2 === 1) {
       var decay = run.flags.healthy || run.flags.late_bloom ? 0 : 1;
@@ -348,7 +355,10 @@
     if (run.attrs.soc <= 0) { this._deathById(run, 'd_loner'); return; }
     if (run.attrs.fam <= 0 && run.vars.gacha >= 3) { this._deathById(run, 'd_broke'); return; }
     if (run.vars.hand >= 6) { this._deathById(run, 'd_hand'); return; }
-    if (run.vars.burnout >= 4) { this._deathById(run, 'd_burnout'); return; }
+    if (run.vars.burnout >= 5) { this._deathById(run, 'd_burnout'); return; }
+    if (run.vars.tilt >= 6) { this._deathById(run, 'd_tilt'); return; }
+    if (run.vars.health >= 5) { this._deathById(run, 'd_health'); return; }
+    if (run.vars.bond <= -4) { this._deathById(run, 'd_loner'); return; }
 
     if (run.age >= 35) this._finish(run);
   };
@@ -411,11 +421,13 @@
       else if (fl.afk_dad || fl.sneak_dad) ending = this._endingObj('n_dad');
       else if (fl.gaming_family || fl.passed_torch) ending = this._endingObj('n_company');
       else if (fl.became_coach || fl.game_company) ending = this._endingObj('n_company');
-      else if (fl.ritual_reunion || fl.kept_team) ending = this._endingObj('n_friends');
+      else if (fl.ritual_reunion || fl.kept_team || (run.vars.bond || 0) >= 5) ending = this._endingObj('n_friends');
       else if (fl.casual_forever) ending = this._endingObj('n_casual');
       else {
         var rk = this.rankAt(run.peakRp);
         if (rk.min >= 1500) ending = this._endingObj('n_emerald');
+        else if ((run.vars.fame || 0) >= 4) ending = this._endingObj('n_spectator');
+        else if (fl.solo_only || fl.loner) ending = this._endingObj('n_single');
         else if (fl.cameback || fl.veteran_grind) ending = this._endingObj('n_worker');
         else ending = this._endingObj('n_spectator');
       }
