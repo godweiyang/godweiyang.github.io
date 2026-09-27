@@ -188,7 +188,6 @@
     // 情绪/疲劳/身体逐年自然平复（向 0 回归）；只有持续高压或主动作妖才会累积到暴毙
     if (run.age > 6) {
       if (run.vars.tilt > 0) run.vars.tilt -= 1;
-      if (run.vars.health > 0) run.vars.health -= 1;
       if (run.age % 2 === 0 && run.vars.burnout > 0) run.vars.burnout -= 1;
     }
 
@@ -287,6 +286,7 @@
       var hp = 0;
       if (run.flags.couch_potato || run.flags.neglect_health) hp += 0.2;
       if ((run.flags.night_owl || run.flags.netcafe) && age <= 24) hp += 0.12;
+      if (run.flags.fit || run.flags.healthy) hp *= 0.5;
       if (hp && this.chance(run, hp)) run.vars.health = (run.vars.health || 0) + 1;
     }
     // 社恐/孤狼随年龄流失人缘
@@ -357,8 +357,9 @@
     if (run.vars.hand >= 6) { this._deathById(run, 'd_hand'); return; }
     if (run.vars.burnout >= 5) { this._deathById(run, 'd_burnout'); return; }
     if (run.vars.tilt >= 6) { this._deathById(run, 'd_tilt'); return; }
-    if (run.vars.health >= 5) { this._deathById(run, 'd_health'); return; }
+    if (run.vars.health >= 4) { this._deathById(run, 'd_health'); return; }
     if (run.vars.bond <= -4) { this._deathById(run, 'd_loner'); return; }
+    if ((run.vars.time_short || 0) >= 3) { this._deathById(run, 'd_adulting'); return; }
 
     if (run.age >= 35) this._finish(run);
   };
