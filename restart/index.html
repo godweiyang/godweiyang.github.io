@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>开黑重开模拟器</title>
+<meta name="description" content="抽天赋、做选择、经历你的开黑一生——暴毙是常态，上王者是意外。">
+<link rel="canonical" href="https://godweiyang.com/restart/">
+<style>
+:root{
+  --bg0:#0f0c29;--bg1:#302b63;--bg2:#24243e;--gold:#ffd200;--gold2:#f7971e;
+  --ink:#f3f1ff;--sub:#a79fd6;--mut:#7d74a8;
+  --goldc:#f5a623;--purplec:#9b59f0;--bluec:#5b7df0;--grayc:#8b87a8;
+  --win:#2fd27a;--lose:#ff5470;--card:rgba(255,255,255,.07);--line:rgba(255,255,255,.13);
+  --r:18px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
+  color:var(--ink);min-height:100vh;overflow-x:hidden;
+  background:
+   radial-gradient(800px 500px at 10% -8%,rgba(155,89,240,.35),transparent 60%),
+   radial-gradient(700px 480px at 95% 0%,rgba(247,151,30,.22),transparent 58%),
+   radial-gradient(900px 700px at 50% 110%,rgba(91,125,240,.28),transparent 60%),
+   linear-gradient(160deg,var(--bg0),var(--bg1) 55%,var(--bg2));
+  background-attachment:fixed;
+}
+.wrap{max-width:560px;margin:0 auto;padding:18px 16px 60px;min-height:100vh}
+button{font-family:inherit;cursor:pointer;border:none}
+.hidden{display:none!important}
+
+/* 顶部 */
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.brand{font-weight:800;letter-spacing:1px;font-size:15px;display:flex;align-items:center;gap:7px}
+.brand .dot{width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));box-shadow:0 0 12px var(--gold)}
+.top-actions{display:flex;gap:8px}
+.icon-btn{width:36px;height:36px;border-radius:12px;background:var(--card);border:1px solid var(--line);color:var(--ink);font-size:16px;
+  display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);transition:transform .15s,background .15s}
+.icon-btn:active{transform:scale(.9)}
+.icon-btn .badge{position:absolute;transform:translate(10px,-10px);background:var(--lose);color:#fff;font-size:10px;
+  min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 4px;font-weight:800}
+
+/* 通用卡片/按钮 */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;
+  backdrop-filter:blur(14px);box-shadow:0 18px 50px -22px rgba(0,0,0,.7)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border-radius:14px;padding:13px 22px;font-size:15px;font-weight:800;
+  color:#241a05;background:linear-gradient(135deg,var(--gold),var(--gold2));box-shadow:0 12px 26px -12px rgba(247,151,30,.7);
+  transition:transform .15s cubic-bezier(.34,1.56,.64,1),filter .15s;letter-spacing:1px}
+.btn:active{transform:scale(.95)}
+.btn.sec{background:rgba(255,255,255,.1);color:var(--ink);border:1px solid var(--line);box-shadow:none}
+.btn:disabled{opacity:.4;pointer-events:none}
+.btn.block{width:100%}
+
+/* 首页 */
+.hero{text-align:center;padding:34px 16px 10px;animation:fadeUp .6s ease both}
+.hero .logo{font-size:54px;line-height:1;filter:drop-shadow(0 6px 20px rgba(247,151,30,.5))}
+.hero h1{margin-top:14px;font-size:30px;font-weight:900;letter-spacing:2px;
+  background:linear-gradient(90deg,var(--gold2),var(--gold));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:var(--sub);font-size:13.5px;margin-top:10px;line-height:1.8}
+.home-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:22px 0}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 6px;text-align:center;backdrop-filter:blur(10px)}
+.stat b{display:block;font-size:20px;font-weight:900;color:var(--gold)}
+.stat span{font-size:11.5px;color:var(--sub)}
+.field{margin:13px 0}
+.field label{display:block;font-size:12.5px;color:var(--sub);margin-bottom:7px;font-weight:700}
+.field input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.25);color:var(--ink);font-size:14px;outline:none}
+.field input:focus{border-color:var(--gold)}
+.seg{display:flex;background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:12px;padding:4px;gap:4px}
+.seg button{flex:1;padding:9px;border-radius:9px;background:transparent;color:var(--sub);font-size:13.5px;font-weight:700;border:none}
+.seg button.on{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#241a05}
+.home-tips{font-size:11.5px;color:var(--mut);line-height:1.8;margin-top:14px;text-align:center}
+
+/* 抽天赋 */
+.screen{animation:fadeUp .45s ease both}
+.screen h2{font-size:19px;text-align:center;margin:6px 0 4px;letter-spacing:1px}
+.screen .sub{text-align:center;color:var(--sub);font-size:12.5px;margin-bottom:16px}
+.slot-bar{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px;font-size:13px;font-weight:700}
+.slot-dots{display:flex;gap:7px}
+.slot-dots i{width:22px;height:22px;border-radius:7px;border:2px solid var(--line);display:block}
+.slot-dots i.used{background:linear-gradient(135deg,var(--gold),var(--gold2));border-color:transparent}
+.draw-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.tcard{position:relative;border-radius:14px;padding:13px 12px;border:1.5px solid var(--line);background:rgba(0,0,0,.28);
+  cursor:pointer;transition:transform .18s cubic-bezier(.34,1.56,.64,1),box-shadow .18s,opacity .2s;overflow:hidden;animation:pop .45s ease both}
+.tcard:active{transform:scale(.96)}
+.tcard.gold{border-color:var(--goldc);box-shadow:0 0 0 1px rgba(245,166,35,.25),0 10px 26px -14px rgba(245,166,35,.8)}
+.tcard.purple{border-color:var(--purplec)}
+.tcard.blue{border-color:var(--bluec)}
+.tcard.gray{border-color:var(--grayc)}
+.tcard.sel{background:rgba(245,166,35,.14);box-shadow:0 0 0 2px var(--gold) inset,0 8px 22px -10px rgba(245,166,35,.7)}
+.tcard.disabled{opacity:.32;pointer-events:none}
+.tcard .rar{font-size:10.5px;font-weight:800;letter-spacing:1px}
+.tcard.gold .rar{color:var(--goldc)}.tcard.purple .rar{color:#c79bff}.tcard.blue .rar{color:#8fa8ff}.tcard.gray .rar{color:var(--grayc)}
+.tcard .nm{font-size:15px;font-weight:800;margin:4px 0 5px}
+.tcard .ds{font-size:11.5px;color:var(--sub);line-height:1.55;min-height:34px}
+.tcard .cost{position:absolute;top:8px;right:9px;font-size:10px;background:rgba(0,0,0,.5);border:1px solid var(--line);
+  border-radius:8px;padding:2px 7px;color:var(--gold);font-weight:800}
+.tcard .check{position:absolute;bottom:8px;right:9px;width:20px;height:20px;border-radius:50%;background:var(--gold);color:#241a05;
+  font-size:12px;display:none;align-items:center;justify-content:center;font-weight:900}
+.tcard.sel .check{display:flex}
+.draw-foot{margin-top:18px;display:flex;gap:10px}
+.draw-foot .btn{flex:1}
+
+/* 属性分配 */
+.attr-row{display:flex;align-items:center;gap:12px;background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:10px}
+.attr-row .an{width:42px;font-size:13.5px;font-weight:800}
+.attr-row .track{flex:1;height:9px;border-radius:5px;background:rgba(255,255,255,.1);overflow:hidden}
+.attr-row .fill{height:100%;border-radius:5px;background:linear-gradient(90deg,#8b5cf6,var(--gold));transition:width .3s}
+.attr-row .val{width:26px;text-align:center;font-weight:900;font-size:16px;color:var(--gold)}
+.stepper{display:flex;gap:6px}
+.stepper button{width:30px;height:30px;border-radius:9px;background:rgba(255,255,255,.1);border:1px solid var(--line);color:var(--ink);font-size:17px;font-weight:800;line-height:1}
+.stepper button:disabled{opacity:.3}
+.points-left{text-align:center;margin:12px 0 16px;font-size:14px;font-weight:800}
+.points-left b{color:var(--gold);font-size:18px}
+
+/* 人生回放 */
+.life-head{position:sticky;top:0;z-index:20;padding:12px 0;margin:-6px 0 10px;
+  background:linear-gradient(180deg,rgba(15,12,41,.95),rgba(15,12,41,.72) 70%,transparent);backdrop-filter:blur(6px)}
+.life-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
+.age-badge{font-size:15px;font-weight:900}
+.age-badge small{font-size:11px;color:var(--sub);font-weight:600;margin-left:6px}
+.life-tools{display:flex;gap:7px}
+.mini-btn{font-size:11.5px;padding:6px 11px;border-radius:9px;background:var(--card);border:1px solid var(--line);color:var(--sub);font-weight:700}
+.mini-btn.on{color:#241a05;background:linear-gradient(135deg,var(--gold),var(--gold2));border-color:transparent}
+.rank-track{height:8px;border-radius:4px;background:rgba(255,255,255,.1);overflow:hidden}
+.rank-fill{height:100%;background:linear-gradient(90deg,#5b4636,#d9a441,#5b7df0,#f5a623);border-radius:4px;transition:width .6s}
+.rank-label{display:flex;justify-content:space-between;font-size:11px;color:var(--sub);margin-top:5px}
+.mini-attrs{display:flex;gap:6px;margin-top:9px}
+.mini-attrs .ma{flex:1;text-align:center;background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:9px;padding:5px 2px;font-size:10.5px;color:var(--sub)}
+.mini-attrs .ma b{display:block;font-size:14px;color:var(--ink)}
+.mini-attrs .ma.danger b{color:var(--lose)}
+.log{padding-bottom:10px}
+.ev{background:var(--card);border:1px solid var(--line);border-left:3px solid #8b5cf6;border-radius:12px;padding:12px 14px;margin-bottom:10px;
+  animation:slideIn .45s ease both;backdrop-filter:blur(8px)}
+.ev .eage{font-size:11px;color:var(--gold);font-weight:800;margin-bottom:4px}
+.ev .etext{font-size:13.5px;line-height:1.7}
+.ev .delta{margin-top:6px;font-size:11.5px;font-weight:700;display:flex;flex-wrap:wrap;gap:8px}
+.ev .delta .up{color:var(--win)}.ev .delta .dn{color:var(--lose)}.ev .delta .rp{color:var(--gold)}
+.ev.special-h{border-left-color:var(--gold)}
+.ev.special-d{border-left-color:var(--lose)}
+.ev.death{border-left-color:var(--lose);background:rgba(255,84,112,.1);animation:shake .5s}
+.tap-hint{text-align:center;color:var(--mut);font-size:12px;padding:14px;animation:pulse 1.6s infinite}
+
+/* 选择弹层 */
+.mask{position:fixed;inset:0;background:rgba(8,6,22,.72);backdrop-filter:blur(6px);z-index:50;display:flex;align-items:flex-end;justify-content:center;
+  animation:fadeIn .25s}
+.mask.center{align-items:center;padding:20px}
+.sheet{width:100%;max-width:560px;background:linear-gradient(180deg,#2a2356,#1d1842);border:1px solid var(--line);border-radius:24px 24px 0 0;
+  padding:22px 18px calc(22px + env(safe-area-inset-bottom));animation:sheetUp .4s cubic-bezier(.34,1.4,.64,1)}
+.mask.center .sheet{border-radius:24px}
+.sheet h3{font-size:17px;line-height:1.6;margin-bottom:16px}
+.sheet h3 .qage{color:var(--gold);font-size:12.5px;display:block;margin-bottom:5px}
+.choice{display:block;width:100%;text-align:left;background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:14px;
+  padding:14px 15px;margin-bottom:10px;color:var(--ink);font-size:14px;line-height:1.6;transition:transform .15s,background .15s}
+.choice:active{transform:scale(.98)}
+.choice .rate{display:inline-block;font-size:11px;font-weight:800;border-radius:8px;padding:2px 8px;margin-left:8px;vertical-align:1px}
+.choice .rate.hi{background:rgba(47,210,122,.2);color:var(--win)}
+.choice .rate.mid{background:rgba(245,166,35,.2);color:var(--gold)}
+.choice .rate.lo{background:rgba(255,84,112,.2);color:var(--lose)}
+.choice .locked-tag{float:right;font-size:10.5px;color:var(--mut)}
+.branch{background:rgba(0,0,0,.3);border-radius:12px;padding:14px;margin-top:4px;font-size:13.5px;line-height:1.75;animation:fadeIn .4s}
+.branch.win{border:1px solid rgba(47,210,122,.4)}
+.branch.fail{border:1px solid rgba(255,84,112,.4)}
+.branch .res{font-weight:900;display:block;margin-bottom:6px}
+.dice{width:64px;height:64px;margin:6px auto 14px;border-radius:16px;background:linear-gradient(135deg,var(--gold),var(--gold2));
+  display:flex;align-items:center;justify-content:center;font-size:32px;color:#241a05;animation:roll 1s cubic-bezier(.34,1.56,.64,1)}
+
+/* 结局海报 */
+#poster{position:relative;border-radius:22px;padding:26px 22px;overflow:hidden;
+  background:radial-gradient(600px 300px at 50% -10%,rgba(247,151,30,.3),transparent 60%),linear-gradient(165deg,#1a1440,#2a1a4d 60%,#120e2e)}
+#poster.good{background:radial-gradient(600px 300px at 50% -10%,rgba(245,208,66,.4),transparent 60%),linear-gradient(165deg,#3a2a08,#2a1a4d 70%,#120e2e)}
+#poster.death{background:radial-gradient(600px 300px at 50% -10%,rgba(255,84,112,.28),transparent 60%),linear-gradient(165deg,#3a1020,#241033 60%,#120e2e)}
+.p-horse{text-align:center;margin-bottom:6px}
+.p-horse .badge{display:inline-block;font-size:12px;font-weight:900;letter-spacing:3px;padding:6px 18px;border-radius:999px;
+  border:1.5px solid var(--gold);color:var(--gold);background:rgba(245,166,35,.1)}
+.p-title{text-align:center;font-size:30px;font-weight:900;margin:14px 0 4px;letter-spacing:2px}
+.p-icon{text-align:center;font-size:46px;margin:6px 0}
+.p-line{text-align:center;font-size:14px;color:#ffe9b0;margin-bottom:4px;font-weight:700}
+.p-epitaph{text-align:center;font-size:12px;color:var(--sub);line-height:1.7;margin-bottom:16px}
+.p-rank{display:flex;justify-content:center;gap:20px;margin:14px 0}
+.p-rank div{text-align:center;font-size:11.5px;color:var(--sub)}
+.p-rank b{display:block;font-size:17px;color:var(--ink);margin-top:3px}
+.p-attrs{display:flex;justify-content:space-between;gap:8px;margin:16px 0}
+.pa{flex:1;text-align:center}
+.pa .lab{font-size:10.5px;color:var(--sub)}
+.pa .bar{height:6px;border-radius:3px;background:rgba(255,255,255,.12);margin:5px 3px;overflow:hidden}
+.pa .bar i{display:block;height:100%;background:linear-gradient(90deg,#8b5cf6,var(--gold));border-radius:3px}
+.pa b{font-size:12.5px}
+.p-moment{background:rgba(0,0,0,.28);border-radius:12px;padding:11px 13px;margin:8px 0;font-size:12.5px;line-height:1.65}
+.p-moment .mh{font-weight:900;font-size:11.5px;letter-spacing:1px;margin-bottom:4px}
+.p-moment.hi .mh{color:var(--gold)}.p-moment.lo .mh{color:var(--lose)}
+.p-foot{text-align:center;margin-top:16px;font-size:11px;color:var(--mut);letter-spacing:1px}
+.p-foot b{color:var(--sub)}
+.essence-pop{text-align:center;margin:16px 0 6px;font-size:14px}
+.essence-pop b{color:var(--gold);font-size:20px}
+.end-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.end-actions .wide{grid-column:1/3}
+
+/* 通用弹窗内列表 */
+.tabs{display:flex;gap:4px;background:rgba(0,0,0,.3);border-radius:12px;padding:4px;margin-bottom:16px}
+.tabs button{flex:1;padding:9px;border-radius:9px;background:transparent;color:var(--sub);font-size:13px;font-weight:700;border:none}
+.tabs button.on{background:rgba(255,255,255,.14);color:var(--ink)}
+.coll-list{max-height:58vh;overflow-y:auto;padding-right:4px}
+.coll-item{display:flex;align-items:center;gap:11px;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.coll-item.locked{opacity:.45}
+.coll-item .ci{font-size:22px;width:30px;text-align:center}
+.coll-item .cn{font-size:13.5px;font-weight:800}
+.coll-item .cd{font-size:11px;color:var(--sub);line-height:1.5}
+.coll-item .cstat{margin-left:auto;font-size:11px;color:var(--gold);font-weight:800;white-space:nowrap}
+.gacha-box{text-align:center;padding:10px 0}
+.gacha-box .big{font-size:44px;margin:10px 0;animation:pop .5s cubic-bezier(.34,1.56,.64,1)}
+.help-sec{font-size:13px;line-height:1.9;color:#cfc8f2;margin-bottom:10px}
+.help-sec b{color:var(--gold)}
+.toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:rgba(20,16,40,.92);border:1px solid var(--line);
+  color:var(--ink);padding:11px 20px;border-radius:999px;font-size:13px;font-weight:700;z-index:100;animation:fadeUp .3s;backdrop-filter:blur(8px)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideIn{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+@keyframes sheetUp{from{transform:translateY(100%)}to{transform:none}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+@keyframes roll{0%{transform:rotate(0) scale(1.3)}50%{transform:rotate(540deg) scale(.8)}100%{transform:rotate(720deg) scale(1)}}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+@media(min-width:600px){.mask{align-items:center}.sheet{border-radius:24px;max-width:480px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span>开黑重开模拟器</div>
+    <div class="top-actions">
+      <button class="icon-btn" id="btn-gacha" title="精萃抽天赋">🎁<span class="badge hidden" id="gacha-dot"></span></button>
+      <button class="icon-btn" id="btn-book" title="图鉴成就">📖</button>
+      <a class="icon-btn" href="/lol/" title="LOL战绩查询">🏆</a>
+    </div>
+  </div>
+
+  <!-- P0 首页 -->
+  <section id="s-home" class="screen">
+    <div class="hero">
+      <div class="logo">🎰</div>
+      <h1>开黑重开模拟器</h1>
+      <p>十连抽天赋，20 点属性构筑<br>从 6 岁偷玩电脑，打到 35 岁手残退役<br>暴毙是常态，上王者是意外</p>
+    </div>
+    <div class="home-stats">
+      <div class="stat"><b id="st-runs">0</b><span>重开次数</span></div>
+      <div class="stat"><b id="st-horse">—</b><span>最佳马型</span></div>
+      <div class="stat"><b id="st-ach">0/30</b><span>成就</span></div>
+    </div>
+    <div class="card">
+      <div class="field">
+        <label>召唤师昵称（选填，用于鉴定书）</label>
+        <input id="in-name" maxlength="10" placeholder="神秘召唤师">
+      </div>
+      <div class="field">
+        <label>命运种子（选填，相同种子+相同选择=相同人生，可与朋友 PK）</label>
+        <input id="in-seed" maxlength="20" placeholder="留空则随机，如 233 / godweiyang">
+      </div>
+      <div class="field">
+        <label>难度模式</label>
+        <div class="seg" id="seg-mode">
+          <button data-m="normal" class="on">标准 · 人间真实</button>
+          <button data-m="easy">轻松 · 少点毒打</button>
+        </div>
+      </div>
+      <button class="btn block" id="btn-start" style="margin-top:6px">开始重开 🎲</button>
+      <div class="home-tips" id="home-tip"></div>
+    </div>
+  </section>
+
+  <!-- P1 抽天赋 -->
+  <section id="s-draw" class="screen hidden">
+    <h2>天赋十连</h2>
+    <div class="sub">10 张里选 3 张带走 · 金色天赋占 2 槽 · 灰天赋送额外属性点</div>
+    <div class="slot-bar">
+      天赋槽 <span class="slot-dots" id="slot-dots"><i></i><i></i><i></i></span>
+      <span id="slot-text">0 / 3</span>
+    </div>
+    <div class="draw-grid" id="draw-grid"></div>
+    <div class="draw-foot">
+      <button class="btn sec" id="btn-redraw">换一批（-50精萃）</button>
+      <button class="btn" id="btn-draw-ok" disabled>确认天赋</button>
+    </div>
+  </section>
+
+  <!-- P2 属性分配 -->
+  <section id="s-alloc" class="screen hidden">
+    <h2>初始属性</h2>
+    <div class="sub">没有全能构筑 · 不同加点会看到不同的人生</div>
+    <div class="points-left">剩余可分配 <b id="pts-left">20</b> 点（每项 1~10）</div>
+    <div id="attr-list"></div>
+    <button class="btn block" id="btn-alloc-ok" style="margin-top:14px">就这样，开启人生 →</button>
+  </section>
+
+  <!-- P3 人生 -->
+  <section id="s-life" class="screen hidden">
+    <div class="life-head">
+      <div class="life-top">
+        <div class="age-badge"><span id="life-age">6</span> 岁<small id="life-mode"></small></div>
+        <div class="life-tools">
+          <button class="mini-btn" id="btn-speed">加速 ▶▶</button>
+          <button class="mini-btn" id="btn-skip">跳到选择/结局</button>
+        </div>
+      </div>
+      <div class="rank-track"><div class="rank-fill" id="rank-fill" style="width:2%"></div></div>
+      <div class="rank-label"><span id="rank-name">黑铁</span><span>巅峰 <span id="rank-peak">0</span></span></div>
+      <div class="mini-attrs" id="mini-attrs"></div>
+    </div>
+    <div class="log" id="log"></div>
+    <div class="tap-hint" id="tap-hint">点击屏幕可加速播放</div>
+  </section>
+
+  <!-- P4 结局 -->
+  <section id="s-end" class="screen hidden">
+    <div id="poster">
+      <div class="p-horse"><span class="badge" id="p-horse">上等马</span></div>
+      <div class="p-icon" id="p-icon">👑</div>
+      <div class="p-title" id="p-title"></div>
+      <div class="p-line" id="p-line"></div>
+      <div class="p-epitaph" id="p-epitaph"></div>
+      <div class="p-rank">
+        <div>终年 <b id="p-age">35</b> 岁</div>
+        <div>巅峰段位 <b id="p-peakrank">—</b></div>
+        <div>召唤师 <b id="p-name">神秘召唤师</b></div>
+      </div>
+      <div class="p-attrs" id="p-attrs"></div>
+      <div class="p-moment hi" id="p-hi"><div class="mh">🏅 高光一役</div><span id="p-hi-t"></span></div>
+      <div class="p-moment lo" id="p-lo"><div class="mh">💀 至暗时刻</div><span id="p-lo-t"></span></div>
+      <div class="p-foot"><b>godweiyang.com</b> · 开黑重开模拟器</div>
+    </div>
+    <div class="essence-pop">本局获得蓝色精萃 <b id="p-essence">0</b></div>
+    <div class="end-actions">
+      <button class="btn" id="btn-poster">保存海报 PNG</button>
+      <button class="btn sec" id="btn-copy">复制鉴定文案</button>
+      <button class="btn wide" id="btn-again">再来一把 🎲</button>
+      <button class="btn sec wide" id="btn-sameseed" style="display:none">用相同种子再战一局</button>
+    </div>
+  </section>
+</div>
+
+<!-- 选择支弹层 -->
+<div class="mask hidden" id="mask-choice">
+  <div class="sheet">
+    <h3><span class="qage" id="q-age"></span><span id="q-text"></span></h3>
+    <div id="q-options"></div>
+  </div>
+</div>
+
+<!-- 检定结果 -->
+<div class="mask center hidden" id="mask-check">
+  <div class="sheet" style="max-width:400px;text-align:center">
+    <div class="dice" id="check-dice">🎲</div>
+    <div class="branch" id="check-branch"></div>
+    <button class="btn block" id="btn-check-ok" style="margin-top:14px">继续</button>
+  </div>
+</div>
+
+<!-- 通用弹窗（图鉴/抽卡/帮助） -->
+<div class="mask center hidden" id="mask-modal">
+  <div class="sheet" style="max-width:480px">
+    <div class="tabs hidden" id="m-tabs">
+      <button data-t="talent" class="on">天赋</button>
+      <button data-t="ending">结局</button>
+      <button data-t="ach">成就</button>
+    </div>
+    <div id="m-body"></div>
+    <button class="btn sec block" style="margin-top:14px" onclick="document.getElementById('mask-modal').classList.add('hidden')">关闭</button>
+  </div>
+</div>
+
+<div id="toast-host"></div>
+
+<script src="vendor/html-to-image.min.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
