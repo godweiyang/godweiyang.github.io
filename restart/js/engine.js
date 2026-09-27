@@ -407,7 +407,7 @@
     var good = null;
     var fl = run.flags;
     if (run.peakRp >= 2500 && fl.made_peak) good = this._endingObj('g_champion');
-    else if (fl.pro_played && (fl.pro_bench || fl.became_coach)) good = this._endingObj('g_pro');
+    else if (fl.pro_played && fl.pro_start && fl.pro_lastdance) good = this._endingObj('g_pro');
     else if (fl.champion_coach) good = this._endingObj('g_coach');
     else if (fl.stream_growing && fl.stream_crossroads && run.attrs.soc >= 8) good = this._endingObj('g_streamer');
     else if (fl.happy_casual && fl.married) good = this._endingObj('g_couple');

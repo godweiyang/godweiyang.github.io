@@ -4,7 +4,21 @@
   <url>
     <loc>https://godweiyang.com/restart/data/events-veteran.json</loc>
     
-    <lastmod>2026-09-27T11:43:04.281Z</lastmod>
+    <lastmod>2026-09-27T12:03:53.152Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://godweiyang.com/restart/data/events-pro.json</loc>
+    
+    <lastmod>2026-09-27T12:03:53.149Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://godweiyang.com/restart/data/events-choices.json</loc>
+    
+    <lastmod>2026-09-27T12:03:53.148Z</lastmod>
     
   </url>
   
@@ -23,23 +37,9 @@
   </url>
   
   <url>
-    <loc>https://godweiyang.com/restart/data/events-choices.json</loc>
-    
-    <lastmod>2026-09-27T11:36:16.999Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://godweiyang.com/restart/data/events-echo.json</loc>
     
     <lastmod>2026-09-27T11:01:55.646Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://godweiyang.com/restart/data/events-pro.json</loc>
-    
-    <lastmod>2026-09-27T10:57:58.848Z</lastmod>
     
   </url>
   
