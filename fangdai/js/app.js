@@ -41,7 +41,7 @@
       '<div class="lc-top"><div class="lc-badge">' + d.name.charAt(0) + '</div><div class="lc-title">' + d.name + '</div></div>' +
       '<div class="grid">' +
         '<div class="field"><label>当前剩余本金</label><div class="control"><input type="number" class="lc-balance" value="' + d.balance + '" min="0" step="10000" placeholder="如 1000000"></div></div>' +
-        '<div class="field"><label>年利率</label><div class="control"><input type="number" class="lc-rate has-suffix" value="' + d.rate + '" min="0" step="0.01"><span class="suffix">%</span></div></div>' +
+        '<div class="field"><label>年利率</label><div class="control"><input type="number" class="lc-rate has-suffix" value="' + d.rate + '" min="0" step="0.1"><span class="suffix">%</span></div></div>' +
         '<div class="field"><label>还款方式</label><div class="control"><select class="lc-method">' +
           '<option value="equal_payment"' + (d.method === 'equal_payment' ? ' selected' : '') + '>等额本息</option>' +
           '<option value="equal_principal"' + (d.method === 'equal_payment' ? '' : ' selected') + '>等额本金</option>' +
@@ -126,7 +126,7 @@
         h += '<button type="button" data-m="' + i + '" class="' +
           (picker.viewY === picker.selY && i === picker.selM ? 'sel' : '') + '">' + (i + 1) + '月</button>';
       }
-      $('#ymYLab').innerHTML = picker.viewY + ' 年<span class="smallhint">点击选年</span>';
+      $('#ymYLab').textContent = picker.viewY + ' 年';
     } else {
       grid.className = 'ym-grid year-view';
       var base = Math.floor(picker.viewY / 12) * 12;
@@ -502,6 +502,37 @@
         btn.disabled = false;
         btn.innerHTML = '<svg class="svg-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>保存海报';
       });
+  });
+
+  // 一键复制海报到剪贴板（仿照 LOL 长图：ClipboardItem 写入，不支持时回退下载）
+  $('#posterCopy').addEventListener('click', async function () {
+    var node = $('#posterNode');
+    var btn = this, ot = btn.innerHTML;
+    btn.disabled = true; btn.textContent = '生成中…';
+    try {
+      var dataUrl = await htmlToImage.toPng(node, { pixelRatio: 2, cacheBust: false, backgroundColor: '#ffffff' });
+      var blob = await (await fetch(dataUrl)).blob();
+      var ok = false;
+      try {
+        if (navigator.clipboard && window.ClipboardItem && navigator.clipboard.write) {
+          await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+          ok = true;
+          toast('海报已复制，去聊天框或文档直接 Ctrl+V 粘贴即可');
+        }
+      } catch (err) { ok = false; }
+      if (!ok) {
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = '房贷还款概览_' + new Date().toISOString().slice(0, 10) + '.png';
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(function () { URL.revokeObjectURL(a.href); }, 5000);
+        toast('当前浏览器不支持直接复制，已改为下载海报');
+      }
+    } catch (e) {
+      toast('海报生成失败，请重试', true);
+    } finally {
+      btn.disabled = false; btn.innerHTML = ot;
+    }
   });
 
   /* ---------- 初始化 ---------- */
