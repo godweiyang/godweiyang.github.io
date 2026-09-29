@@ -155,6 +155,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -240,6 +249,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -334,7 +352,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/27.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -489,7 +507,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    519
+                    518
                 </div>
                 
 
@@ -516,12 +534,18 @@
 <p>我看了两分钟，给她发去了我的思路。然后学妹一眼就看懂了，立马秒过。<br><img src="1.jpg" alt=""></p>
 <p>那么这道题到底是怎么做的呢？</p>
 <p>题目要求将$n$个数切分成$k$块，求每块的序号乘上该块内数字之和的最大值。</p>
-<p>那么首先我们可以用$S_i$来表示前缀和，也就是$S_i = \sum_{j &lt; i}{a_j}$。</p>
+<p>那么首先我们可以用$S_i$来表示前缀和，也就是$S_i = \sum_{j < i}{a_j}$。</p>
 <p>然后假设$k$个子序列中，第$i$个子序列的末尾元素为$a_{d_i}$，其中$1 \le i \le k$。那么第$i$个子序列的元素和就可以用前缀和来表示为$S_{d_i} - S_{d_{i-1}}$。</p>
 <p>然后题目要求的最大值就可以表示为：</p>
-<p>$$<br>\sum_{1 \le i \le k}{i \cdot (S_{d_i} - S_{d_{i-1}})}<br>$$</p>
+$$
+\sum_{1 \le i \le k}{i \cdot (S_{d_i} - S_{d_{i-1}})}
+$$
+
 <p>展开并化简就可以得到：</p>
-<p>$$<br>-\sum_{0 \le i \le k-1}{S_{d_i}} + k \cdot S_{d_k}<br>$$</p>
+$$
+-\sum_{0 \le i \le k-1}{S_{d_i}} + k \cdot S_{d_k}
+$$
+
 <p>后面一项$k \cdot S_{d_k}$就是整个数组之和的$k$倍，是一个定值。所以要求这个式子的最大值，就是求$\sum_{0 \le i \le k-1}{S_{d_i}}$的最小值。</p>
 <p>又因为$S_{d_0} = 0$，所以就是求$\sum_{1 \le i \le k-1}{S_{d_i}}$的最小值。</p>
 <p>可以发现，这$k-1$个前缀和其实是互不干扰的，所以只需要对所有的前缀和进行排序，取最小的$k-1$个就行了。</p>
@@ -761,7 +785,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="【白话模型量化系列一】矩阵乘法量化">
+                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="【白话模型量化系列一】矩阵乘法量化">
                         
                         <span class="card-title">【白话模型量化系列一】矩阵乘法量化</span>
                     </div>
@@ -813,7 +837,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="cuBLAS矩阵乘法性能分析（附代码示例）">
+                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="cuBLAS矩阵乘法性能分析（附代码示例）">
                         
                         <span class="card-title">cuBLAS矩阵乘法性能分析（附代码示例）</span>
                     </div>
@@ -1038,7 +1062,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

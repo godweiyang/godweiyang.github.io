@@ -158,6 +158,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -243,6 +252,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -337,7 +355,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/20.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/22.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -541,11 +559,9 @@
 <li>如果 最后一步操作是替换得到的，那么问题就转化为了 $word1_{1:i-1}$ 转换成 $word2_{1:j-1}$ 所需要的最小步数。最后再将 $word1_{i}$ 替换为 $word2_{j}$ 就行了，答案就是 $dp[i-1][j-1] + 1$ 。</li>
 </ul>
 <p>综上，如果 $word1_{i} = word2_{j}$ ，那么 $dp[i][j] = dp[i-1][j-1]$ 。否则的话：</p>
-
 $$
 dp[i][j] = \min{\{dp[i][j-1], dp[i-1][j], dp[i-1][j-1]\}} + 1
 $$
-
 
 <p>初始化就是，所有的 $dp[0][i] = i$ ，因为需要插入 $i$ 次。所有的 $dp[i][0] = i$ ，因为需要删除 $i$ 次。</p>
 <p>总的时间复杂度就是 $O(nm)$ 。</p>
@@ -787,7 +803,7 @@ $$
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="【每日算法Day 93】不用额外空间，你会旋转一个矩阵吗？">
+                        <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="【每日算法Day 93】不用额外空间，你会旋转一个矩阵吗？">
                         
                         <span class="card-title">【每日算法Day 93】不用额外空间，你会旋转一个矩阵吗？</span>
                     </div>
@@ -844,7 +860,7 @@ $$
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="【每日算法Day 91】求解数组中出现次数超过1/3的那个数">
+                        <img src="/medias/featureimages/25.jpg" class="responsive-img" alt="【每日算法Day 91】求解数组中出现次数超过1/3的那个数">
                         
                         <span class="card-title">【每日算法Day 91】求解数组中出现次数超过1/3的那个数</span>
                     </div>
@@ -1073,7 +1089,7 @@ $$
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

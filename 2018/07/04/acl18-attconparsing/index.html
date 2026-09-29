@@ -157,6 +157,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -242,6 +251,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -336,7 +354,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/16.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/14.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -499,7 +517,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.5k
+                    2.4k
                 </div>
                 
 
@@ -593,23 +611,23 @@
 <li>tag embdding：$m_t$</li>
 <li>位置向量：$p_t$</li>
 </ul>
-<p>最终词向量为三部分的加和：<br>\[z_t = w_t + m_t + p_t\]</p>
+<p>最终词向量为三部分的加和：<br>&lt;!–swig￼5–&gt;</p>
 <h2 id="Self-Attentive"><a href="#Self-Attentive" class="headerlink" title="Self-Attentive"></a>Self-Attentive</h2><p>模型结构如下图所示：<br><img src="1.png" alt=""><br>这一部分是不同位置单词互相联系的唯一方式，采用谷歌<a href="https://arxiv.org/pdf/1706.03762.pdf">Attention Is All You Need</a>中的Self-Attentive模型。</p>
-<p>模型一共由8个SingleHead组成，每个SingleHead结构如下图：<br><img src="2.png" alt=""><br>计算方式如下：<br>\[{\rm{SingleHead}}(X) = \left[ { {\rm{Softmax}}\left( {\frac{ {Q{K^{\rm{T}}}}}{ {\sqrt { {d_k}} }}} \right)V} \right]{W_o}\]<br>其中$Q = X{W_Q};K = X{W_K};V = X{W_V}$，而$W_O$用来将输出映射到与输入相同的维度。</p>
+<p>模型一共由8个SingleHead组成，每个SingleHead结构如下图：<br><img src="2.png" alt=""><br>计算方式如下：<br>&lt;!–swig￼6–&gt;<br>其中$Q = X{W_Q};K = X{W_K};V = X{W_V}$，而$W_O$用来将输出映射到与输入相同的维度。</p>
 <p>详细分析一下计算过程，首先输入矩阵$X = [{z_1},{z_2}, \ldots ,{z_T}]$是由一个句子中所有词向量组成的矩阵，拼接在一起是为了并行，加快计算速度，$X \in {\mathbb{R}^{T \times {d_{ {model}}}}}$。</p>
 <p>然后将$X$映射为三个矩阵，query矩阵$Q$，key矩阵$K$，value矩阵$V$，其中$Q,K \in {\mathbb{R}^{ {d_{ {model}}} \times {d_k}}}$。</p>
-<p>我们想要计算单词$i$和单词$j$之间的Attention大小，可以用两者query向量和key向量元素乘得到：<br>\[p(i \to j) \propto \exp \left( {\frac{ { {q_i} \cdot {k_j}}}{ {\sqrt { {d_k}} }}} \right)\]<br>所有单词的value向量乘以单词$i$对它的Attention值，加权求和之后得到的结果就是单词$i$最后的向量表示：<br>\[{ {\bar v}_i} = \sum\nolimits_j {p(i \to j){v_j}} \]<br>最后乘以$W_O$映射到与输入$X$相同的维度。</p>
+<p>我们想要计算单词$i$和单词$j$之间的Attention大小，可以用两者query向量和key向量元素乘得到：<br>&lt;!–swig￼18–&gt;<br>所有单词的value向量乘以单词$i$对它的Attention值，加权求和之后得到的结果就是单词$i$最后的向量表示：<br>&lt;!–swig￼21–&gt;<br>最后乘以$W_O$映射到与输入$X$相同的维度。</p>
 <p>整个过程如果写成矩阵形式就是最开始的那个矩阵式子。注意到式子中$Q{K^{\rm{T}}} \in {\mathbb{R}^{ {\rm{T \times T}}}}$，矩阵中的每个元素恰好就是Attention值$p(i \to j)$。$\sqrt { {d_k}}$是归一化因子。</p>
-<p>最后将8个SingleHead的结果求和得到MultiHead结果，注意这8个SingleHead参数不共享：<br>\[{\rm{MultiHead(}}X) = \sum\limits_{i = 1}^8 { {\rm{SingleHea}}{ {\rm{d}}^{(i)}}(X)} \]</p>
+<p>最后将8个SingleHead的结果求和得到MultiHead结果，注意这8个SingleHead参数不共享：<br>&lt;!–swig￼27–&gt;</p>
 <p>注意到Attention模型有一个很严重的问题，就是无论单词的顺序是怎么样的，都不影响最终的结果。所以在输入中要添加位置向量$p_t$，否则之后会有实验表明，不加的话效果大大下降。</p>
-<p>图一中还有一个前馈神经网络的部分，使用的是一个双层前馈神经网络：<br>\[{\rm{FeedForward}}(x) = {W_2}{\rm{relu}}({W_1}x + {b_1}) + {b_2}\]</p>
-<h2 id="Span得分"><a href="#Span得分" class="headerlink" title="Span得分"></a>Span得分</h2><p>最终的span得分计算方式如下：<br>\[s(i,j, \cdot ) = {M_2}{\rm{relu}}({\rm{LayerNorm}}({M_1}v + {c_1})) + {c_2}\]<br>其中$v$就是短语的向量表示，由之前的每个单词的向量输出得到：<br>\[v = [{ {\vec y}_j} - { {\vec y}_i},{ {\mathord{\buildrel{\lower3pt\hbox{$\scriptscriptstyle\leftarrow$}} \over y} }<em>{j + 1}} - { {\mathord{\buildrel{\lower3pt\hbox{$\scriptscriptstyle\leftarrow$}} \over y} }</em>{i + 1}}]\]<br>在之前的LSTM模型中前向后向表示很容易得到，在这里只能通过将输出向量一分为二，一半作为前向表示，一半作为后向表示，实际实现中，偶数维度作为前向表示，奇数维度作为后向表示。</p>
+<p>图一中还有一个前馈神经网络的部分，使用的是一个双层前馈神经网络：<br>&lt;!–swig￼29–&gt;</p>
+<h2 id="Span得分"><a href="#Span得分" class="headerlink" title="Span得分"></a>Span得分</h2><p>最终的span得分计算方式如下：<br>&lt;!–swig￼30–&gt;<br>其中$v$就是短语的向量表示，由之前的每个单词的向量输出得到：<br>&lt;!–swig￼32–&gt;<br>在之前的LSTM模型中前向后向表示很容易得到，在这里只能通过将输出向量一分为二，一半作为前向表示，一半作为后向表示，实际实现中，偶数维度作为前向表示，奇数维度作为后向表示。</p>
 <h1 id="模型分析"><a href="#模型分析" class="headerlink" title="模型分析"></a>模型分析</h1><hr>
 <h2 id="Content-vs-Position-Attention"><a href="#Content-vs-Position-Attention" class="headerlink" title="Content vs Position Attention"></a>Content vs Position Attention</h2><p>之前的模型中，我们采用元素加将三个输入向量求和作为输入，期待模型自己训练出它们之间的权重，将它们很好地分开，但是实际上效果并不好。</p>
 <p>下面论文做了许多实验来探讨content和position的重要性。</p>
 <p>首先修改模型输入，令$Q=PW_Q,K=PW_K$，也就是丢弃了content信息，但是最后结果只下降了0.27个百分点，说明了content信息对模型影响不是很大。</p>
-<p>然后为了验证是不是元素加导致content和position信息混合在一起模型无法分开，实验将输入向量显示分开，输入改为<br>\[z_t=[w_t+m_t;p_t]\]<br>但是实验结果只下降了0.07个百分点，说明不是这个因素导致的。事实上元素加和拼接操作在高维度上面是相似的，特别是之后立即乘上了一个矩阵，这就会混合里面的信息。</p>
-<p>所以最好的解决办法就是将content和position向量分开计算attention，最后求和。这样attention矩阵就可以表示为：<br>\[QK^{\rm{T}} = {Q_c}K_c^{\rm{T}} + {Q_p}K_p^{\rm{T}}\]<br>这时的权重矩阵$W$就可以写为<br>\[W = \left[ {\begin{array}{*{20}{c}}{ {W_c}}&amp;0\0&amp;{ {W_p}}\end{array}} \right]\]</p>
+<p>然后为了验证是不是元素加导致content和position信息混合在一起模型无法分开，实验将输入向量显示分开，输入改为<br>&lt;!–swig￼34–&gt;<br>但是实验结果只下降了0.07个百分点，说明不是这个因素导致的。事实上元素加和拼接操作在高维度上面是相似的，特别是之后立即乘上了一个矩阵，这就会混合里面的信息。</p>
+<p>所以最好的解决办法就是将content和position向量分开计算attention，最后求和。这样attention矩阵就可以表示为：<br>&lt;!–swig￼35–&gt;<br>这时的权重矩阵$W$就可以写为<br>&lt;!–swig￼37–&gt;</p>
 <p>通过将content和position信息分开，模型的效果从92.67%提升到了93.15%，模型示意图如下：<br><img src="3.png" alt=""></p>
 <p>最后的实验在测试阶段的8层模型中，每一层手动选择采不采用content或者position attention，实验结果如下：<br><img src="4.png" alt=""><br>可以发现，不用position信息的话结果大大下降，接近传统的CKY算法，这也说明了普通的CKY算法是无法捕捉到全局的信息的。还有就是content信息主要作用在最后几层，这也说明了前面几层有点类似于扩张卷积网络。</p>
 <h2 id="窗口Attention"><a href="#窗口Attention" class="headerlink" title="窗口Attention"></a>窗口Attention</h2><p>这一部分也不是什么新鲜玩意了，谷歌的论文中也有提到，主要思想就是限制attention的范围，每个单词只与周围窗口大小内的单词进行计算。在本文中还提出一个relaxed变体，就是除了窗口大小范围外，再加入首尾各两个单词进行attention操作。</p>
@@ -862,7 +880,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/26.jpg" class="responsive-img" alt="Straight to the Tree： Constituency Parsing with Neural Syntactic Distance">
+                        <img src="/medias/featureimages/24.jpg" class="responsive-img" alt="Straight to the Tree： Constituency Parsing with Neural Syntactic Distance">
                         
                         <span class="card-title">Straight to the Tree： Constituency Parsing with Neural Syntactic Distance</span>
                     </div>
@@ -925,7 +943,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="What's Going On in Neural Constituency Parsers? An Analysis">
+                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="What's Going On in Neural Constituency Parsers? An Analysis">
                         
                         <span class="card-title">What's Going On in Neural Constituency Parsers? An Analysis</span>
                     </div>
@@ -1161,7 +1179,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

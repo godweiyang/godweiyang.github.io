@@ -157,6 +157,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -242,6 +251,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -336,7 +354,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/10.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -499,14 +517,14 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    3k
+                    2.9k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    11 分
+                    10 分
                 </div>
                 
                 
@@ -545,12 +563,12 @@
 <p>图1就是每个动作的状态变化过程，图2是判别式模型进行句法分析的示例：<br><img src="1.jpg" alt=""></p>
 <p>当然得给动作添加一些限制，首先记当前状态为三元组$(B, S, n)$，分别表示buffer、栈、当前栈里未归约的父结点数量，这个之前的博客没有提及过：</p>
 <ul>
-<li>NT(X)动作只有当buffer不为空并且$n &lt; 100$的时候才能进行。因为buffer空了的话就没有单词了，此时不可能移进新的非终结符了，并且要限制$n &lt; 100$防止一元产生式无限生成下去。</li>
+<li>NT(X)动作只有当buffer不为空并且$n < 100$的时候才能进行。因为buffer空了的话就没有单词了，此时不可能移进新的非终结符了，并且要限制$n < 100$防止一元产生式无限生成下去。</li>
 <li>SHIFT动作只有当buffer不为空并且$n \ge 1$时才能进行。前者不用解释了，后者的话因为是top-down的，所以栈里至少要有一个父结点才能移进新的单词。</li>
 <li>REDUCE只有当栈顶不是没有归约的父结点才能进行。</li>
 <li>REDUCE只有当$n \ge 2$或者buffer为空时才能进行。<strong>这里要解释一下为什么$n \ge 2$，因为如果buffer不为空同时$n = 1$，那么这时候如果REDUCE的话，栈里就只剩一个非终结符了，只可能是根节点S，而buffer里还有单词，所以这是不可能的。</strong></li>
 </ul>
-<p>记当前状态的可能动作集合为$\mathcal{A}_D(B, S, n)$。</p>
+<p>记当前状态的可能动作集合为$\mathcal{A}\_D(B, S, n)$。</p>
 <h2 id="生成式系统"><a href="#生成式系统" class="headerlink" title="生成式系统"></a>生成式系统</h2><p>将上面的top-down转移系统稍稍修改即可得到生成式系统。区别有两点：</p>
 <ul>
 <li>首先没有了输入的buffer，取而代之的是输出的buffer $T$。</li>
@@ -562,26 +580,30 @@
 <li>GEN(x)动作只有当$n \ge 1$时才能进行，上面SHIFT限制已经解释过了。</li>
 <li>REDUCE只有当$n \ge 1$或者buffer为空时才能进行。<strong>这里再次解释一下，上面判别式模型限制条件是$n \ge 2$，为什么这里就变成了$n \ge 1$？因为生成模型没有输入buffer，所以即使$n = 1$时REDUCE了，以后不要再GEN(x)即可，直接结束分析</strong></li>
 </ul>
-<p>记当前状态的可能动作集合为$\mathcal{A}_G(T, S, n)$。</p>
+<p>记当前状态的可能动作集合为$\mathcal{A}\_G(T, S, n)$。</p>
 <h2 id="转移序列"><a href="#转移序列" class="headerlink" title="转移序列"></a>转移序列</h2><p>因为一棵句法树的前序遍历是唯一的，所以不管用判别式模型还是生成式模型，得到的动作序列也都是唯一的。对于句子$x$和句法树$y$，记生成式模型动作序列为$a(x, y)$，判别式模型动作序列为$b(x, y)$。</p>
 <h1 id="生成式模型"><a href="#生成式模型" class="headerlink" title="生成式模型"></a>生成式模型</h1><hr>
-<p>本文最重要的就是上面提到的生成式模型，因为GEN(x)动作的存在，所以模型同时对句子$x$和句法树$y$的联合分布进行了建模。记当前状态的向量表示为$u_t$，那么联合分布可以表示为：<br>\[p(x,y) = \prod\limits_{t = 1}^{\left| {a(x,y)} \right|} {p({a_t}|{a_{ &lt; t}})} = \prod\limits_{t = 1}^{\left| {a(x,y)} \right|} {\frac{ {\exp r_{ {a_t}}^T{u_t} + {b_{ {a_t}}}}}{ {\sum\nolimits_{a’ \in {\mathcal{A}<em>G}({T_t},{S_t},{n_t})} {\exp r</em>{a’}^T{u_t} + {b_{a’}}} }}} \]<br>其中$r_a$表示动作$a$的向量表示，$b$表示偏移向量，都包含在了RNNG参数集合$\Theta$里面，通过训练得到。</p>
-<p>而当前状态的向量表示$u_t$由三部分得到，输出buffer的LSTM输出$o_t$、栈的LSTM输出$s_t$、历史动作序列的LSTM输出$h_t$，然后经过一个前馈神经网络得到：<br>\[u_t = \tanh (W[o_t; s_t; h_t] + c)\]<br>$W$和$c$同样也包含在了RNNG参数集合$\Theta$里面，下图是三个LSTM的示例图：<br><img src="3.jpg" alt=""></p>
+<p>本文最重要的就是上面提到的生成式模型，因为GEN(x)动作的存在，所以模型同时对句子$x$和句法树$y$的联合分布进行了建模。记当前状态的向量表示为$u_t$，那么联合分布可以表示为：<br>&lt;!–swig￼30–&gt;<br>其中$r_a$表示动作$a$的向量表示，$b$表示偏移向量，都包含在了RNNG参数集合$\Theta$里面，通过训练得到。</p>
+<p>而当前状态的向量表示$u_t$由三部分得到，输出buffer的LSTM输出$o_t$、栈的LSTM输出$s_t$、历史动作序列的LSTM输出$h_t$，然后经过一个前馈神经网络得到：<br>&lt;!–swig￼39–&gt;</p>
+$W$和$c$同样也包含在了RNNG参数集合$\Theta$里面，下图是三个LSTM的示例图：
+<p><img src="3.jpg" alt=""></p>
 <h2 id="句法成分组合"><a href="#句法成分组合" class="headerlink" title="句法成分组合"></a>句法成分组合</h2><p>在REDUCE操作时，需要将若干个子结点归约为一个父结点，为了得到父结点的向量表示，再次利用一个LSTM对子结点序列进行编码，同时在首尾加上父结点，结构图如下所示：<br><img src="4.jpg" alt=""></p>
 <h2 id="单词生成"><a href="#单词生成" class="headerlink" title="单词生成"></a>单词生成</h2><p>单词生成采用softmax寻找概率最大的单词，但是单词数量可能十分巨大，所以采用分层softmax的思想，首先预测当前动作是不是GEN，如果是GEN，记单词总数为${\left| { \sum  } \right|}$，再将单词平均分成${\sqrt {\left| \sum  \right|} }$个类别，用softmax预测属于哪个类别，然后在那个类别里再用softmax预测输出哪个单词。这样时间复杂度就从$O\left( {\left| \sum  \right|} \right)$降到了$O\left( {\sqrt {\left| \sum  \right|} } \right)$。</p>
 <h2 id="参数训练和判别式模型"><a href="#参数训练和判别式模型" class="headerlink" title="参数训练和判别式模型"></a>参数训练和判别式模型</h2><p>模型最终训练目的就是使得联合概率最大。</p>
 <p>而只需要将输出buffer改为输入buffer，GEN动作改为SHIFT动作，然后重新训练，就可以将模型变为判别式模型了，输出给定输入句子下概率最大的句法树。</p>
 <h1 id="通过重要性采样进行推理"><a href="#通过重要性采样进行推理" class="headerlink" title="通过重要性采样进行推理"></a>通过重要性采样进行推理</h1><hr>
-<p>本文的生成式模型另一大作用是训练语言模型$p(x)$，根据边际分布公式<br>\[p(x) = \sum\nolimits_{y \in \mathcal{Y}(x)} {p(x,y)} \]<br>可以直接得到$p(x)$，但是一句话的句法树可能性是指数级别的，不可能一一枚举，这时候就要用到重要性采样算法。</p>
+<p>本文的生成式模型另一大作用是训练语言模型$p(x)$，根据边际分布公式<br>&lt;!–swig￼48–&gt;<br>可以直接得到$p(x)$，但是一句话的句法树可能性是指数级别的，不可能一一枚举，这时候就要用到重要性采样算法。</p>
 <p>首先定义一个比较容易得到的条件分布$q(y | x)$，它满足如下性质：</p>
 <ul>
-<li>$p(y | x) &gt; 0$可以推出$q(y | x) &gt; 0$。</li>
+<li>$p(y | x) > 0$可以推出$q(y | x) > 0$。</li>
 <li>服从分布的样本很容易得到。</li>
-<li>$q(y | x)$可以直接计算得到。</li>
+<li>$q(y | x)$可以直接计算得到。
+
+</li>
 </ul>
 <p>可以发现，上面的判别式模型得到的条件分布符合上面的性质，所以这里直接用判别式模型来进行采样。</p>
-<p>这样$p(x)$就变为了：<br>\[p(x) = \sum\nolimits_{y \in \mathcal{Y}(x)} {p(x,y)} = \sum\nolimits_{y \in \mathcal{Y}(x)} {q(y|x)w(x,y)} = {E_{q(y|x)}}w(x,y)\]<br>其中重要性权重$w(x,y) = p(x,y)/q(y|x)$。</p>
-<p>最后如果根据分布$q(y | x)$采样得到了$N$个句法树样本，那么用蒙特卡罗方法就可以估计出$p(x)$了：<br>\[{E_{q(y|x)}}w(x,y) \approx \frac{1}{N}\sum\limits_{i = 1}^N {w(x,{y_i})} \]</p>
+<p>这样$p(x)$就变为了：<br>&lt;!–swig￼55–&gt;<br>其中重要性权重$w(x,y) = p(x,y)/q(y|x)$。</p>
+<p>最后如果根据分布$q(y | x)$采样得到了$N$个句法树样本，那么用蒙特卡罗方法就可以估计出$p(x)$了：<br>&lt;!–swig￼60–&gt;</p>
 <h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><hr>
 <p>实验部分主要说一下PTB上的句法分析和语言模型吧，下面两张图分别是句法分析和语言模型的结果：<br><img src="5.jpg" alt=""><br><img src="6.jpg" alt=""><br>句法分析方面可以看出，生成模型效果要远远好于判别模型，生成模型效果也接近了当时的最好结果。一个合理的解释是在小数据集上面，生成模型效果要更好，而在大数据集上，判别模型效果可以赶上生成模型。</p>
 <p><strong>这里要提到的一点是，判别式模型就是每一个状态直接贪心argmax找到概率最大的动作，然后生成句法树。而生成式模型是利用判别式模型采样出100个概率比较高的句法树，然后用生成式模型计算它们的联合概率，重排序选择概率最高的句法树。</strong></p>
@@ -823,7 +845,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/26.jpg" class="responsive-img" alt="成分句法分析综述">
+                        <img src="/medias/featureimages/24.jpg" class="responsive-img" alt="成分句法分析综述">
                         
                         <span class="card-title">成分句法分析综述</span>
                     </div>
@@ -876,7 +898,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/26.jpg" class="responsive-img" alt="In-Order Transition-based Constituent Parsing">
+                        <img src="/medias/featureimages/28.jpg" class="responsive-img" alt="In-Order Transition-based Constituent Parsing">
                         
                         <span class="card-title">In-Order Transition-based Constituent Parsing</span>
                     </div>
@@ -1110,7 +1132,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

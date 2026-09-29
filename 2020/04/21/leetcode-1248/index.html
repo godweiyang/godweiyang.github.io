@@ -156,6 +156,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -241,6 +250,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -335,7 +353,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/14.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -539,7 +557,10 @@
 <p>那么如何统计每个 <code>1</code> 前后 <code>0</code> 的个数呢？其实只需要记录一下每个 <code>1</code> 的位置，然后直接用相邻两个 <code>1</code> 的位置相减就可以得到中间 <code>0</code> 的个数加一了。</p>
 <p>所以直接记录每个 <code>1</code> 的位置，为了处理边界，我们还需要在最开始添加上虚拟位置 <code>-1</code> ，在最后添加虚拟位置 <code>n</code> 。</p>
 <p>然后对于第 $i$ 个 <code>1</code> 来说，如果将它作为子数组第一个 <code>1</code> ，那么最后一个 <code>1</code> 应该是第 $i+k-1$ 个 <code>1</code> 。所以直接计算两边 <code>0</code> 的数量，再加一相乘就行了：</p>
-<p>$$<br>(pos[i] - pos[i-1])\cdot(pos[i+k] - pos[i+k-1])<br>$$</p>
+$$
+(pos[i] - pos[i-1])\cdot(pos[i+k] - pos[i+k-1])
+$$
+
 <p>最后遍历所有的 <code>i</code> ，将第 $i$ 个 <code>1</code> 作为起点，然后累加答案就行了。</p>
 <p>时间复杂度 $O(n)$ ，空间复杂度 $O(n)$ 。</p>
 <h3 id="双指针"><a href="#双指针" class="headerlink" title="双指针"></a>双指针</h3><p>主要思想还是跟上面方法一样，但是不用直接计算 <strong>左边 <code>0</code> 的个数加一</strong> 乘上 <strong>右边 <code>0</code> 的个数加一</strong>。只需要计算 <strong>左边 <code>0</code> 的个数加一</strong> ，然后右指针如果指着 <code>0</code> ，就加上这个值，一直加到右指针为 <code>1</code> 为止。</p>
@@ -547,7 +568,7 @@
 <p>如果 <code>cnt = k</code> ，那就说明子数组中正好有 <code>k</code> 个 <code>1</code> 。那就右移 <code>l</code> ，直到遇到 <code>1</code> 为止，这样就能统计出左边有多少个 <code>0</code> ，记录在 <code>even</code> 中。然后 <code>l</code> 右移跳过这个 <code>1</code> ，同时 <code>cnt</code> 减一。</p>
 <p>如果 <code>cnt &lt; k</code> ，那就说明 <code>1</code> 的数量不够，<code>r</code> 继续右移就行了。同时每移动一次，答案都要加上 <code>even</code> 值，因为你之前 <code>cnt = k</code> 时记录了一下左边 <code>0</code> 的数量，现在右边每一个 <code>0</code> 都得加上它。其实除了初始阶段，其余时候 <code>cnt</code> 都是等于 <code>k-1</code> 的。而初始阶段 <code>even = 0</code> ，所以加上也没事，可以合并写。</p>
 <p>时间复杂度 $O(n)$ ，空间复杂度 $O(1)$ 。</p>
-<h3 id="前缀和"><a href="#前缀和" class="headerlink" title="前缀和"></a>前缀和</h3><p>遍历原数组中每个位置 $i$，如果 $i$ 之前（包含自身） <code>1</code> 的个数一共 <code>odd</code> 个（也就是前缀和），那么我们只需要看有多少个位置 $j &lt; i$ 满足 <code>1</code> 的前缀和等于 <code>odd-k</code> ，那么 $[j+1, i]$ 就是正好包含 <code>k</code> 个 <code>1</code> 的子数组。</p>
+<h3 id="前缀和"><a href="#前缀和" class="headerlink" title="前缀和"></a>前缀和</h3><p>遍历原数组中每个位置 $i$，如果 $i$ 之前（包含自身） <code>1</code> 的个数一共 <code>odd</code> 个（也就是前缀和），那么我们只需要看有多少个位置 $j < i$ 满足 <code>1</code> 的前缀和等于 <code>odd-k</code> ，那么 $[j+1, i]$ 就是正好包含 <code>k</code> 个 <code>1</code> 的子数组。</p>
 <p>所以我们只需要用一个计数数组来记录一下前缀和对应的出现次数就行了，然后每次取出 <code>odd-k</code> 的次数加到答案里就行了。</p>
 <p>时间复杂度 $O(n)$ ，空间复杂度 $O(n)$ 。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="统计奇数位置（c-）"><a href="#统计奇数位置（c-）" class="headerlink" title="统计奇数位置（c++）"></a>统计奇数位置（c++）</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">numberOfSubarrays</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = nums.<span class="built_in">size</span>();</span><br><span class="line">        vector&lt;<span class="type">int</span>&gt; pos;</span><br><span class="line">        pos.<span class="built_in">push_back</span>(<span class="number">-1</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (nums[i]&amp;<span class="number">1</span>) pos.<span class="built_in">push_back</span>(i);</span><br><span class="line">        &#125;</span><br><span class="line">        pos.<span class="built_in">push_back</span>(n);</span><br><span class="line">        <span class="type">int</span> res = <span class="number">0</span>, sz = pos.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i+k &lt; sz; ++i) &#123;</span><br><span class="line">            res += (pos[i] - pos[i<span class="number">-1</span>]) * (pos[i+k] - pos[i+k<span class="number">-1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
@@ -790,7 +811,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="【每日算法Day 108】一道简单的二叉树题目，写法还是挺多的。">
+                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="【每日算法Day 108】一道简单的二叉树题目，写法还是挺多的。">
                         
                         <span class="card-title">【每日算法Day 108】一道简单的二叉树题目，写法还是挺多的。</span>
                     </div>
@@ -846,7 +867,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/27.jpg" class="responsive-img" alt="【每日算法Day 106】打家劫舍系列最后一弹，撑住你就赢了！">
+                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="【每日算法Day 106】打家劫舍系列最后一弹，撑住你就赢了！">
                         
                         <span class="card-title">【每日算法Day 106】打家劫舍系列最后一弹，撑住你就赢了！</span>
                     </div>
@@ -1073,7 +1094,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

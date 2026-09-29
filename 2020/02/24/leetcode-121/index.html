@@ -158,6 +158,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -243,6 +252,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -337,7 +355,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/26.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/24.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -496,7 +514,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    504
+                    502
                 </div>
                 
 
@@ -536,7 +554,10 @@
 <p>这道题目要求只能买卖一次股票。所以最佳策略一定是挑一个最低的价格买入，再挑一个最高的价格卖出。但是还有另一个限制条件，那就是你得先买，然后才能卖出去。</p>
 <p>所以我们只需要枚举每个股票，把它当作卖出的那一只股票，然后只需要求出它之前价格最低的那一只股票就行了。价格最低的股票可以用一个变量来进行维护，然后枚举所有卖出的股票，减去它之前价格最低的那一只股票，然后和最优答案进行比较，最终就能得到最多能赚多少钱了。</p>
 <p>最终答案就是：</p>
-<p>$$<br>\max_{0 \le i &lt; n}{\left{price[i] - \min_{0 \le j &lt; i}{\left{price[j]\right}}\right}}<br>$$</p>
+$$
+\max_{0 \le i < n}{\left\{price[i] - \min_{0 \le j < i}{\left\{price[j]\right\}}\right\}}
+$$
+
 <p>时间复杂度是 $O(n)$ 。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="python"><a href="#python" class="headerlink" title="python"></a>python</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">maxProfit</span>(<span class="params">self, prices: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        n = <span class="built_in">len</span>(prices)</span><br><span class="line">        <span class="keyword">if</span> n == <span class="number">0</span>: <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">        minn, res = prices[<span class="number">0</span>], <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, n):</span><br><span class="line">            res = <span class="built_in">max</span>(res, prices[i]-minn)</span><br><span class="line">            minn = <span class="built_in">min</span>(minn, prices[i])</span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
 
@@ -770,7 +791,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="每日算法系列【LeetCode 122】买卖股票的最佳时机 II">
+                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="每日算法系列【LeetCode 122】买卖股票的最佳时机 II">
                         
                         <span class="card-title">每日算法系列【LeetCode 122】买卖股票的最佳时机 II</span>
                     </div>
@@ -829,7 +850,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="每日算法系列【LeetCode 面试题 17.05】字母与数字">
+                        <img src="/medias/featureimages/25.jpg" class="responsive-img" alt="每日算法系列【LeetCode 面试题 17.05】字母与数字">
                         
                         <span class="card-title">每日算法系列【LeetCode 面试题 17.05】字母与数字</span>
                     </div>
@@ -1061,7 +1082,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

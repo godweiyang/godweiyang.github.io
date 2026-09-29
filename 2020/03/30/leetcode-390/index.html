@@ -157,6 +157,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -242,6 +251,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -336,7 +354,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/10.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/8.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -536,14 +554,23 @@
 <p>接着就要从右往左递归地消除了，那我们从右往左给绿色数字重新编号为 $1$ 到 $k$ ，问题就转化为了 $k$ 个数字的情况下，最后剩余的数字是几了。</p>
 <p>假设我们用 $f(2k)$ 表示初始时 $n=2k$ 个数字最后剩下的编号，那么绿色部分重新编号后最后剩下的数字就是 $f(k)$ 。但是怎么将 $f(k)$ 重新映射回绿色的数字编号呢？</p>
 <p>通过观察我们可以发现，绿色数字整除 $2$ ，再加上蓝色的映射后的编号，结果一定等于 $k+1$ 。所以我们就得到了映射回去的公式：</p>
-<p>$$<br>f(2k) = 2(k+1-f(k))<br>$$</p>
+$$
+f(2k) = 2(k+1-f(k))
+$$
+
 <p>比如说你求出来 $f(k) = 2$ ，也就是蓝色部分最后剩下的数字是 $2$ ，那么映射成绿色的编号就是 $2k-2$ ，这就是最初的编号了。</p>
 <p><img src="2.jpg" alt=""></p>
 <p>如果 $n=2k+1$ ，那么如上图所示，只需要在后面加个橙色的 $2k+1$ 就行了。</p>
 <p>但是第一轮的时候它就被消除了，所以绿色的剩下的编号和之前偶数情况没有任何区别。所以最终的答案也是：</p>
-<p>$$<br>f(2k+1) = 2(k+1-f(k))<br>$$</p>
+$$
+f(2k+1) = 2(k+1-f(k))
+$$
+
 <p>最后发现奇偶情况下，公式其实可以统一起来，用 $n$ 来替换 $k$ 就得到了：</p>
-<p>$$<br>f(n) = 2\left(\left\lfloor\frac{n}{2}\right\rfloor-f\left(\left\lfloor\frac{n}{2}\right\rfloor\right)\right)<br>$$</p>
+$$
+f(n) = 2\left(\left\lfloor\frac{n}{2}\right\rfloor-f\left(\left\lfloor\frac{n}{2}\right\rfloor\right)\right)
+$$
+
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="c"><a href="#c" class="headerlink" title="c++"></a>c++</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">lastRemaining</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> n==<span class="number">1</span> ? <span class="number">1</span> : <span class="number">2</span>*(n/<span class="number">2</span><span class="number">+1</span>-<span class="built_in">lastRemaining</span>(n/<span class="number">2</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <h3 id="python"><a href="#python" class="headerlink" title="python"></a>python</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">lastRemaining</span>(<span class="params">self, n: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span> <span class="keyword">if</span> n==<span class="number">1</span> <span class="keyword">else</span> <span class="number">2</span>*(n//<span class="number">2</span>+<span class="number">1</span>-<span class="variable language_">self</span>.lastRemaining(n//<span class="number">2</span>))</span><br></pre></td></tr></table></figure>
@@ -778,7 +805,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="【每日算法Day 86】面试经典题：把数字翻译成字符串">
+                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="【每日算法Day 86】面试经典题：把数字翻译成字符串">
                         
                         <span class="card-title">【每日算法Day 86】面试经典题：把数字翻译成字符串</span>
                     </div>
@@ -836,7 +863,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="【每日算法Day 84】面试必考题：Trie（字典树/前缀树）的实现">
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="【每日算法Day 84】面试必考题：Trie（字典树/前缀树）的实现">
                         
                         <span class="card-title">【每日算法Day 84】面试必考题：Trie（字典树/前缀树）的实现</span>
                     </div>
@@ -1067,7 +1094,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

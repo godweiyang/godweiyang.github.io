@@ -155,6 +155,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -240,6 +249,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -334,7 +352,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/20.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/18.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -540,87 +558,67 @@
 <p>同时可以发现，这个序列满足另一种定义，也就是 $(d_i, i)$ <strong>一定是以 $i$ 作为右边界的最大的span</strong>，这用反证法可以轻易证明。</p>
 <p>最后就可以得到序列化后的数组 $d$，同时这个序列满足两个性质：</p>
 <ul>
-<li>一定满足 $d_i &lt; i$ ，因为 $(d_i, i)$ 是某个左孩子。</li>
-<li>对于任意的 $j &gt; i$，$d_j$ 一定不会在 $(d_i, i)$ 范围里，否则的话 $(d_j, j)$ 就和 $(d_i, i)$产生交叉了。</li>
+<li>一定满足 $d_i < i$ ，因为 $(d_i, i)$ 是某个左孩子。</li>
+<li>对于任意的 $j > i$，$d_j$ 一定不会在 $(d_i, i)$ 范围里，否则的话 $(d_j, j)$ 就和 $(d_i, i)$产生交叉了。</li>
 </ul>
 <p>同时可以证明，满足如上两个条件的任意非负整数序列都可以唯一还原成一棵句法树。序列化和反序列化伪代码如下：</p>
 <p><img src="2.jpg" alt="序列化和反序列化算法"></p>
 <p>注意这里的反序列化有个前提假设：$d$ 一定要是满足上面两个条件的合法序列！至于不合法的怎么办？下面会详细讲。</p>
 <h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p>模型方面没有什么新意，借鉴了依存句法分析模型bi-affine attention。</p>
 <p>输入是词向量、字向量、位置向量拼接：</p>
-
 $$
 x_i = [e_i; c_i; p_i].
 $$
 
-
 <p>然后用LSTM或者Transformer得到每个单词的隐层表示 $h_i$，为了区分span的左右边界表示，我采用了两套表示：</p>
-
 $$
 l_i = \text{MLP}_l(h_i),\quad r_i = \text{MLP}_r(h_i).
 $$
 
-
 <p>然后就可以用bi-affine attention计算两个边界的相关性了：</p>
-
 $$
 \alpha_{ij} = l_i^\top {\bf W} r_j + b_1^\top l_i + b_2^\top r_j,
 $$
 
-
 <p>接着对所有小于 $j$ 的attention做局部归一化，就得到了左边界为 $i$ 的概率：</p>
-
 $$
 P(i|j) = \text{Softmax}_{i}(\alpha_{ij}), \forall i < j.
 $$
 
-
 <p>最后取概率最高的左边界作为预测的序列值：</p>
-
 $$
 d_j = \mathop{\arg\max}_{i} {[P(i|j)]}, \forall i < j.
 $$
 
-
 <p>对于句法树的label，我没有直接用序列方法预测，而是先用序列 $d$ 反序列化得到句法结构，然后利用句法结构预测label，这样准确率会高很多：</p>
-
 $$
 P(\ell|i, j) = \text{Softmax}(\text{MLP}_{\text{label}}([l_i; r_j]))_{\ell}.
 $$
 
-
 <p>损失函数就是 $n$ 项结构损失加上 $2n-1$ 项label损失：</p>
-
 $$
 \mathcal{L} = -\frac{1}{n} (\sum_{i = 1}^{n}{\log P(d_i | i)} + \sum_{(i, j, \ell) \in \mathcal{T}}{\log P(\ell|i, j)}).
 $$
 
-
 <h3 id="反序列化"><a href="#反序列化" class="headerlink" title="反序列化"></a>反序列化</h3><p>之前提到过，如果预测出来的序列是非法的怎么办呢？其实之前的两个条件，第一个条件可以通过mask的方式保证满足，一般第二个条件无法满足，也就是会出现交叉的span。</p>
 <p>最优解是最小顶点覆盖问题，也就是对于预测出来的 $n$ 个左孩子，两两之间如果交叉了就连边，最后建了一张图。那么选取最少的点（非法span），使得它们的边涵盖了整张图，也就是修改它们使得序列合法。然而这是一个NP hard的问题，复杂度很高，因此我提出了几种近似求解的方法。</p>
 <p>第一种方法是CKY解码，我们直接从 $P(i|j)$ 出发，不解码出序列 $d$ ，也就是直接解码出使得所有左孩子得分之和最高的序列：</p>
-
 $$
 \mathcal{G}(i, j) = \max{\{P(i | k) \times \mathcal{G}(k, j) \mid i < k < j\}},
 $$
 
-
 <p>这种方法时间复杂度是 $O(n^3)$ ，是精确解码，但是复杂度太高意义不大。</p>
-<p>第二种方法是自顶向下解码，然后寻找 $(i, j)$ 的split时，将满足 $d_{k’} \leq i$ 且 $i &lt; k’ &lt; j$ 的所有 $k’$ 中最大的那个 $k’$ 作为split：</p>
-
+<p>第二种方法是自顶向下解码，然后寻找 $(i, j)$ 的split时，将满足 $d_{k'} \leq i$ 且 $i < k' < j$ 的所有 $k'$ 中最大的那个 $k'$ 作为split：</p>
 $$
 k \gets \max{\{k' \mid d_{k'} \le i, i < k' < j\}}.
 $$
 
-
 <p><img src="3.jpg" alt="方法二示例"></p>
 <p>看上图例子可能更好理解一些。这是一种贪心解码，渐进时间复杂度是 $O(n \log n)$ ，实测最后效果和最优解码没有区别。</p>
-<p>第三种方法和方法二类似，直接选取满足 $i &lt; k’ &lt; j$ 的最小的 $d_{k’}$ 就行了：</p>
-
+<p>第三种方法和方法二类似，直接选取满足 $i < k' < j$ 的最小的 $d_{k'}$ 就行了：</p>
 $$
 k \gets \mathop{\arg\min}_{k'}[d_{k'}].
 $$
-
 
 <p><img src="4.jpg" alt="方法三示例"></p>
 <p>这个方法效果也完全一样，实现起来可能方便一丢丢。</p>
@@ -871,7 +869,7 @@ $$
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="国庆碎碎念">
+                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="国庆碎碎念">
                         
                         <span class="card-title">国庆碎碎念</span>
                     </div>
@@ -925,7 +923,7 @@ $$
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="【NLP 算法岗】提前批暑期实习面（试）经（历）">
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="【NLP 算法岗】提前批暑期实习面（试）经（历）">
                         
                         <span class="card-title">【NLP 算法岗】提前批暑期实习面（试）经（历）</span>
                     </div>
@@ -1149,7 +1147,7 @@ $$
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

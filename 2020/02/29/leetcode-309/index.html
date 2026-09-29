@@ -158,6 +158,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -243,6 +252,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -337,7 +355,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/27.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -496,7 +514,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    500
+                    498
                 </div>
                 
 
@@ -532,7 +550,13 @@
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>这是 <strong>【买卖股票的最佳时机】</strong> 系列题目的第六题。</p>
 <p>这题其实就是在系列题目第二题基础上加了个限制条件，也就是每次卖了之后，隔一天才能继续买。</p>
 <p>模仿第五题，还是采用动态规划。令 $dp0[i]$ 为第 $i$ 只股票之前（包含）买卖（最后一次操作是买）可以获得的最大利润， $dp1[i]$ 为第 $i$ 只股票之前（包含）买卖（最后一次操作是卖）可以获得的最大利润。那么类似的有如下转移方程：</p>
-<p>$$<br>\begin{aligned}<br>dp0[i] &amp;= \max{\left{dp0[i-1], dp1[i-2] - price[i]\right}} \<br>dp1[i] &amp;= \max{\left{dp1[i-1], dp0[i-1] + price[i]\right}}<br>\end{aligned}<br>$$</p>
+$$
+\begin{aligned}
+dp0[i] &= \max{\left\{dp0[i-1], dp1[i-2] - price[i]\right\}} \\\
+dp1[i] &= \max{\left\{dp1[i-1], dp0[i-1] + price[i]\right\}}
+\end{aligned}
+$$
+
 <p>初始情况就是 $dp0[0] = -price[0]$ 和 $dp1[0] = 0$ 。</p>
 <p>和第二、五题区别就是 $dp0[i]$ 的转移方程中有个 $dp1[i-2]$ ，也就是得隔一项，去算前前一天之前（包含）的买卖最大利润。</p>
 <p>时间复杂度是 $O(n)$ 。</p>
@@ -768,7 +792,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="一个函数解决【LeetCode 买卖股票的最佳时机】系列所有题目！">
+                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="一个函数解决【LeetCode 买卖股票的最佳时机】系列所有题目！">
                         
                         <span class="card-title">一个函数解决【LeetCode 买卖股票的最佳时机】系列所有题目！</span>
                     </div>
@@ -826,7 +850,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="每日算法系列【LeetCode 714】买卖股票的最佳时机含手续费">
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="每日算法系列【LeetCode 714】买卖股票的最佳时机含手续费">
                         
                         <span class="card-title">每日算法系列【LeetCode 714】买卖股票的最佳时机含手续费</span>
                     </div>
@@ -1056,7 +1080,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

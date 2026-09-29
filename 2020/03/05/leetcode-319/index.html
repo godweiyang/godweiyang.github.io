@@ -156,6 +156,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -241,6 +250,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -335,7 +353,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/28.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -530,12 +548,21 @@
 <p>那么我们有一个定理：<strong>如果一个正整数有奇数个因数，那么它一定是完全平方数</strong>。</p>
 <p>最浅显的证明就是，一个数 $i$ 的因数按照从小到大排个序，首尾两两一对之积一定等于 $i$ 。而如果因数只有奇数个，最中间一个因数 $x$ 只会出现一次，那么 $i = x^2$ 。</p>
 <p>严格证明也不难，首先将 $i$ 质因数分解为：</p>
-<p>$$<br>i = p_1^{c_1}p_2^{c_2}\cdots p_k^{c_k}<br>$$</p>
+$$
+i = p_1^{c_1}p_2^{c_2}\cdots p_k^{c_k}
+$$
+
 <p>那么 $i$ 的因数个数就是：</p>
-<p>$$<br>(c_1+1)(c_2+1)\cdots (c_k+1)<br>$$</p>
+$$
+(c_1+1)(c_2+1)\cdots (c_k+1)
+$$
+
 <p>因为 $i$ 的因数个数是奇数，所以任意 $c_j + 1$ 必定是奇数，即任意 $c_j$ 必定是偶数。</p>
 <p>那么 $i$ 就可以写作：</p>
-<p>$$<br>i = (p_1^{c_1/2}p_2^{c_2/2}\cdots p_k^{c_k/2})^2<br>$$</p>
+$$
+i = (p_1^{c_1/2}p_2^{c_2/2}\cdots p_k^{c_k/2})^2
+$$
+
 <p>这就证明了 $i$ 一定是一个完全平方数。</p>
 <p>所以问题就转化为了<strong>求 $1$ 到 $n$ 之间有多少个完全平方数</strong>。答案就是 $\left\lfloor\sqrt{n}\right\rfloor$ 。</p>
 <p>在具体实现的时候，为了防止出现浮点数误差（比如 $\sqrt{9}$ 算出来是 $2.9999$ ，取整得到 $2$），我们可以计算 $\left\lfloor\sqrt{n+0.5}\right\rfloor$ 的结果。</p>
@@ -771,7 +798,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="【每日算法Day 61】LeetCode 672. 灯泡开关 Ⅱ">
+                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="【每日算法Day 61】LeetCode 672. 灯泡开关 Ⅱ">
                         
                         <span class="card-title">【每日算法Day 61】LeetCode 672. 灯泡开关 Ⅱ</span>
                     </div>
@@ -829,7 +856,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="每日算法系列【LeetCode 1363】形成三的最大倍数">
+                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="每日算法系列【LeetCode 1363】形成三的最大倍数">
                         
                         <span class="card-title">每日算法系列【LeetCode 1363】形成三的最大倍数</span>
                     </div>
@@ -1059,7 +1086,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

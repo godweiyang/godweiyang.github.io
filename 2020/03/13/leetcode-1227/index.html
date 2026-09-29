@@ -159,6 +159,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -244,6 +253,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -338,7 +356,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/20.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/18.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -548,13 +566,25 @@
 </ul>
 <p>对于第三种情况，我们可以换个角度看问题。现在面临的问题是，$i$ 号选择坐在哪？这时候还没入场的有 $i$ 到 $n$ 号乘客，而座位还剩 $1$ 和 $i+1$ 到 $n$ 号。那既然 $i$ 号乘客坐在 $1$ 号座位的话，后面的人都能坐回原位，那我们就把 $1$ 号座位当作是 $i$ 号乘客原本的座位就行了嘛，反正我最后又不要求 $i$ 号乘客坐回原位的概率，你坐哪都没事，只要别影响到其他人就行了。那么问题的规模就被缩小到了 $n-i+1$ ，我们递归求解就行了。</p>
 <p>令 $f(n)$ 表示 $n$ 个人的情况下，最后一个人坐回原位的概率，按照上面的分析，我们可以列出递推式：</p>
-<p>$$<br>f(n) = \frac{1}{n}\left(1 + \sum_{i=2}^{n-1}{f(n-i+1)}\right)<br>$$</p>
+$$
+f(n) = \frac{1}{n}\left(1 + \sum_{i=2}^{n-1}{f(n-i+1)}\right)
+$$
+
 <p>这个递推式想必大家高中就会求了，令 $n = n-1$再写出一项：</p>
-<p>$$<br>f(n-1) = \frac{1}{n-1}\left(1 + \sum_{i=2}^{n-2}{f(n-i)}\right)<br>$$</p>
+$$
+f(n-1) = \frac{1}{n-1}\left(1 + \sum_{i=2}^{n-2}{f(n-i)}\right)
+$$
+
 <p>然后两式相减得到：</p>
-<p>$$<br>nf(n) - (n-1)f(n-1) = f(n-1)<br>$$</p>
+$$
+nf(n) - (n-1)f(n-1) = f(n-1)
+$$
+
 <p>即：</p>
-<p>$$<br>f(n) = f(n-1) = \cdots = f(2)<br>$$</p>
+$$
+f(n) = f(n-1) = \cdots = f(2)
+$$
+
 <p>那么我们就可以得到最终的答案了，对任意的 $n \ge 2$ 都有 $f(n) = f(2) = 0.5$ 。</p>
 <p>还有一个特例就是 $f(1) = 1.0$ ，这样这题就证好了。</p>
 <p>这题最关键的一步就是 $1$ 号坐在了 $i$ 号座位后，$i$ 号何去何从？如果你能换个角度，把 $1$ 号座位给 $i$ 号（因为给他之后，对后面的乘客座位没有任何影响，那么就能把 $1$ 号座位看成就是 $i$ 号乘客的），那么问题就能递归下去了。题解区许多人这一步为什么能递归下去？根本没有讲清楚。</p>
@@ -792,7 +822,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="【每日算法Day 69】面试经典题：分发糖果问题">
+                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="【每日算法Day 69】面试经典题：分发糖果问题">
                         
                         <span class="card-title">【每日算法Day 69】面试经典题：分发糖果问题</span>
                     </div>
@@ -851,7 +881,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="【每日算法Day 67】经典面试题：手动开根号，你知道几种方法？">
+                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="【每日算法Day 67】经典面试题：手动开根号，你知道几种方法？">
                         
                         <span class="card-title">【每日算法Day 67】经典面试题：手动开根号，你知道几种方法？</span>
                     </div>
@@ -1083,7 +1113,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

@@ -158,6 +158,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -243,6 +252,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -337,7 +355,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/28.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -496,7 +514,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    691
+                    689
                 </div>
                 
 
@@ -538,7 +556,10 @@
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>这是 <strong>【买卖股票的最佳时机】</strong> 系列题目的第三题。</p>
 <p>本题中买卖次数变成了最多两次，那么我们可以照搬之前只能买卖一次的做法。首先如果我们假设第一只股票卖出去时价格是 $price[i]$ ，那么它之前的最优买入价格（也就是最低的价格）计算方法和第一题相同，只需要用一个变量存储就行了。而第二次买卖我们只需要知道 $price[i]$ 右边进行一次买卖最多能赚到多少钱就行了。这可以通过从右向左倒过来预处理处理，方法和第一题完全相同。</p>
 <p>记第 $i$ 只股票左边（包含）买卖一次最大利润为 $left[i]$ ，右边（包含）买卖一次最大利润为 $right[i]$ ，那么最终的答案就是：</p>
-<p>$$<br>\sum_{0 &lt; i &lt; n-2}{left[i] + right[i+1]}<br>$$</p>
+$$
+\sum_{0 < i < n-2}{left[i] + right[i+1]}
+$$
+
 <p>时间复杂度是 $O(n)$ 。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="python"><a href="#python" class="headerlink" title="python"></a>python</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">maxProfit</span>(<span class="params">self, prices: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        n = <span class="built_in">len</span>(prices)</span><br><span class="line">        <span class="keyword">if</span> n == <span class="number">0</span>: <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">        dp = [<span class="number">0</span>] * n</span><br><span class="line">        minn = prices[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, n):</span><br><span class="line">            dp[i] = <span class="built_in">max</span>(dp[i-<span class="number">1</span>], prices[i]-minn)</span><br><span class="line">            minn = <span class="built_in">min</span>(minn, prices[i])</span><br><span class="line">        maxx, maxp, res = prices[-<span class="number">1</span>], <span class="number">0</span>, <span class="built_in">max</span>(dp)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n-<span class="number">2</span>, <span class="number">0</span>, -<span class="number">1</span>):</span><br><span class="line">            maxp = <span class="built_in">max</span>(maxp, maxx-prices[i])</span><br><span class="line">            maxx = <span class="built_in">max</span>(maxx, prices[i])</span><br><span class="line">            res = <span class="built_in">max</span>(res, dp[i-<span class="number">1</span>]+maxp)</span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
 
@@ -772,7 +793,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="每日算法系列【LeetCode 188】买卖股票的最佳时机 IV">
+                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="每日算法系列【LeetCode 188】买卖股票的最佳时机 IV">
                         
                         <span class="card-title">每日算法系列【LeetCode 188】买卖股票的最佳时机 IV</span>
                     </div>
@@ -831,7 +852,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="每日算法系列【LeetCode 122】买卖股票的最佳时机 II">
+                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="每日算法系列【LeetCode 122】买卖股票的最佳时机 II">
                         
                         <span class="card-title">每日算法系列【LeetCode 122】买卖股票的最佳时机 II</span>
                     </div>
@@ -1062,7 +1083,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

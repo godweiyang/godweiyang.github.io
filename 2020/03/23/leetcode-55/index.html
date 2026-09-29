@@ -159,6 +159,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -244,6 +253,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -338,7 +356,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/21.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/19.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -545,7 +563,7 @@
 <p>最后看 $dp[0]$ 是否为 $1$ 就行了。</p>
 <p>时间复杂度 $O(n^2)$，空间复杂度 $O(n)$ 。</p>
 <h3 id="贪心-正推"><a href="#贪心-正推" class="headerlink" title="贪心+正推"></a>贪心+正推</h3><p>在上面的动态规划方法中，对于位置 $i$ ，我们需要把他能到达的位置全部做上标记。</p>
-<p>但是其实没有必要这么做，只需要记录一下能到的最远的那个位置 $maxx$ 就行了。如果遍历之后的位置 $j$ 时，发现 $maxx &lt; j$ ，那就说明之前的所有位置最远都无法到达 $j$ ，那就直接返回 <code>false</code> 。否则的话，比较一下当前能到达的最远位置，更新一下 $maxx$ 的值。</p>
+<p>但是其实没有必要这么做，只需要记录一下能到的最远的那个位置 $maxx$ 就行了。如果遍历之后的位置 $j$ 时，发现 $maxx < j$ ，那就说明之前的所有位置最远都无法到达 $j$ ，那就直接返回 <code>false</code> 。否则的话，比较一下当前能到达的最远位置，更新一下 $maxx$ 的值。</p>
 <p>时间复杂度 $O(n)$，空间复杂度 $O(1)$ 。</p>
 <h3 id="贪心-倒推"><a href="#贪心-倒推" class="headerlink" title="贪心+倒推"></a>贪心+倒推</h3><p>还是从上面的动态规划方法改变来的，上面动态规划在位置 $i$ ，需要遍历所有它能到达的位置，然后看有没有位置能够到达终点。</p>
 <p>其实只需要看能到的最远的那个位置就行了，我们用 $minn$ 表示后面的位置中最靠前的那个能够到达终点的位置。如果最远到达位置满足 $i+nums[i] \ge minn$，那就说明位置 $i$ 可以直接跳到 $minn$ ，那么就更新 $minn = i$ 。否则的话怎么跳都跳不到终点，因为 $i$ 和 $minn$ 之间的位置都是无法到达终点的。</p>
@@ -789,7 +807,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="【每日算法Day 79】所有人都会做的入门题，但是能看出你的代码能力！">
+                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="【每日算法Day 79】所有人都会做的入门题，但是能看出你的代码能力！">
                         
                         <span class="card-title">【每日算法Day 79】所有人都会做的入门题，但是能看出你的代码能力！</span>
                     </div>
@@ -849,7 +867,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="【每日算法Day 77】LeetCode 第 181 场周赛题解">
+                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="【每日算法Day 77】LeetCode 第 181 场周赛题解">
                         
                         <span class="card-title">【每日算法Day 77】LeetCode 第 181 场周赛题解</span>
                     </div>
@@ -1079,7 +1097,7 @@ LeetCode 5364. 按既定顺序创建目标数组题目链接https:/
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

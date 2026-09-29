@@ -156,6 +156,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -241,6 +250,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -335,7 +353,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/4.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/2.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -498,7 +516,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.2k
+                    1.1k
                 </div>
                 
 
@@ -532,10 +550,10 @@
 <h1 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h1><hr>
 <p>这个模型概括起来是这样的：首先用PCFG产生k-best句法树，比如产生概率最大的20棵句法树。然后对这k-best棵句法树每棵树都跑一遍SU-RNN，计算出每棵树的得分，然后综合PCFG得分和SU-RNN得分，对他们进行重排序，然后得到排名最高的句法树。</p>
 <p>那么怎么通过SU-RNN计算一棵树的得分呢？</p>
-<p>首先上一张图，看看SU-RNN是个什么结构：<br><img src="1.png" alt=""><br>可以看出，每个节点不仅含有它的类别表示，还有一个向量表示它的语义信息。而SU-RNN与之前提出过的RNN不一样的是，这里的每个节点的$W$权值矩阵全部是不同的，依赖于它的子节点的类别。<br>每个节点的语义表示向量计算方法如下：<br>\[{p^{(1)}} = f\left( { {W^{(B,C)}}\left[ {\begin{array}{*{20}{c}}b\c\end{array}} \right]} \right)\]而这个节点的得分表示为<br>\[s({p^{(1)}}) = {({v^{(B,C)}})^T}{p^{(1)}} + \log P({P_1} \to B{\rm{ }}C)\]最后一整棵树的得分就是<br>\[s(CVG(\theta ,x,\hat y)) = \sum\limits_{d \in N(\hat y)} {s({p^d})} \]这样就可以枚举所有的句法树，然后计算得到得分最高的那棵树就是最终的句法树了。</p>
+<p>首先上一张图，看看SU-RNN是个什么结构：<br><img src="1.png" alt=""><br>可以看出，每个节点不仅含有它的类别表示，还有一个向量表示它的语义信息。而SU-RNN与之前提出过的RNN不一样的是，这里的每个节点的$W$权值矩阵全部是不同的，依赖于它的子节点的类别。<br>每个节点的语义表示向量计算方法如下：<br>&lt;!–swig￼1–&gt;而这个节点的得分表示为<br>&lt;!–swig￼2–&gt;最后一整棵树的得分就是<br>&lt;!–swig￼3–&gt;这样就可以枚举所有的句法树，然后计算得到得分最高的那棵树就是最终的句法树了。</p>
 <p>但是这样枚举的话复杂度太高了，要知道一个长度为$n$的句子，可能的句法树有$Catalan(n)$种。而且是无法用动态规划算法来计算最优句法树的，因为SU-RNN破坏了上下文无关的独立性假设（因为反向传播？其实我也不是太懂。。。）。所以就要用到之前所说的先用PCFG得到k-best棵句法树，然后用SU-RNN重排序了。</p>
 <p>那么用SU-RNN计算完得到最优树之后，怎么计算它与gold-tree之间的差异，从而得到loss呢？</p>
-<p>本文计算两棵树差异的公式如下：<br>\[\Delta ({y_i},\hat y) = \sum\limits_{d \in N(\hat y)} {\kappa 1{ d \notin N({y_i})} } \]最终的损失函数定义为：<br>\[J(\theta ) = \frac{1}{m}\sum\limits_{i = 1}^m { {r_i}(\theta )} + \frac{\lambda }{2}{\left| \theta \right|^2}\]其中<br>\[{r_i}(\theta ) = \mathop {\max }\limits_{\hat y \in Y({x_i})} (s(CVG({x_i},\hat y)) + \Delta ({y_i},\hat y)) - s(CVG({x_i},{y_i}))\]也就是要尽量最大化标准树的得分，减小预测树的得分。</p>
+<p>本文计算两棵树差异的公式如下：<br>&lt;!–swig￼6–&gt;最终的损失函数定义为：<br>&lt;!–swig￼7–&gt;其中<br>&lt;!–swig￼8–&gt;也就是要尽量最大化标准树的得分，减小预测树的得分。</p>
 <h1 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h1><hr>
 <p><img src="2.png" alt=""><br>可以看出，SU-RNN结果比以往的结果都要好，但是没有最后两行的好。。。最后两个具体是啥我也没去细看。</p>
 <h1 id="我的毕设任务"><a href="#我的毕设任务" class="headerlink" title="我的毕设任务"></a>我的毕设任务</h1><hr>
@@ -772,7 +790,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/28.jpg" class="responsive-img" alt="Head-Lexicalized Bidirectional Tree LSTMs">
+                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="Head-Lexicalized Bidirectional Tree LSTMs">
                         
                         <span class="card-title">Head-Lexicalized Bidirectional Tree LSTMs</span>
                     </div>
@@ -829,7 +847,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="Empower Sequence Labeling with Task-Aware Neural Language Model">
+                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="Empower Sequence Labeling with Task-Aware Neural Language Model">
                         
                         <span class="card-title">Empower Sequence Labeling with Task-Aware Neural Language Model</span>
                     </div>
@@ -1066,7 +1084,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

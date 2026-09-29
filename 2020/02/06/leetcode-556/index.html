@@ -160,6 +160,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -245,6 +254,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -339,7 +357,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/28.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -498,7 +516,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    687
+                    685
                 </div>
                 
 
@@ -534,9 +552,9 @@
 
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>首先要发现一个性质，如果调换两个数位之后，整个数字变大了，那说明第一个数位的数字小于第二个数位的数。所以我们只需要找到一个顺序对，调换它俩顺序就行了。</p>
 <p>但是如果存在两个顺序对 $(i_1, j_1)$ 和 $(i_2, j_2)$ ，那我们就要找 $i$ 更大的那个，因为前面的尽量不动才会使调换后的数字最小。</p>
-<p>如果 $i$ 相同的话，就要在 $i$ 右边找最小的使得 $nums[j] &gt; nums[i]$ 的数，这样 $i$ 处的数字才是最小的，同时整体数字还会变大。</p>
+<p>如果 $i$ 相同的话，就要在 $i$ 右边找最小的使得 $nums[j] > nums[i]$ 的数，这样 $i$ 处的数字才是最小的，同时整体数字还会变大。</p>
 <p>最后因为 $i$ 处已经变大了，所以 $i$ 后面的数字全部都要升序排列，这样整体数字才是最小的。</p>
-<p>所以整体算法就有了，我们从右往左找，找到第一个上升的位置 $i$ ，也就是 $nums[i] &lt; nums[j]$ 。这样 $i$ 右边就是降序了，不存在顺序对。然后在 $i$ 右边的数字中二分查找最小的大于 $nums[i]$ 的数 $nums[j]$ ，调换它俩位置。最后把 $i$ 右边的数字变成升序即可。</p>
+<p>所以整体算法就有了，我们从右往左找，找到第一个上升的位置 $i$ ，也就是 $nums[i] < nums[j]$ 。这样 $i$ 右边就是降序了，不存在顺序对。然后在 $i$ 右边的数字中二分查找最小的大于 $nums[i]$ 的数 $nums[j]$ ，调换它俩位置。最后把 $i$ 右边的数字变成升序即可。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="c"><a href="#c" class="headerlink" title="c++"></a>c++</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">nextGreaterElement</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> a[<span class="number">11</span>], len = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (n &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            a[++len] = n % <span class="number">10</span>;</span><br><span class="line">            n /= <span class="number">10</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        a[<span class="number">0</span>] = INT_MIN;</span><br><span class="line">        <span class="type">int</span> ok = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= len; ++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (a[i] &lt; a[i<span class="number">-1</span>]) &#123;</span><br><span class="line">                <span class="type">int</span> idx = <span class="built_in">upper_bound</span>(a<span class="number">+1</span>, a+i, a[i]) - a;</span><br><span class="line">                <span class="built_in">swap</span>(a[idx], a[i]);</span><br><span class="line">                <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt;= (i<span class="number">-1</span>)/<span class="number">2</span>; ++j) &#123;</span><br><span class="line">                    <span class="built_in">swap</span>(a[j], a[i-j]);</span><br><span class="line">                &#125;</span><br><span class="line">                ok = <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (!ok) <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        <span class="type">long</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = len; i &gt; <span class="number">0</span>; --i) &#123;</span><br><span class="line">            res = res * <span class="number">10</span> + a[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res &gt; INT_MAX ? <span class="number">-1</span> : res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <h3 id="python"><a href="#python" class="headerlink" title="python"></a>python</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">nextGreaterElement</span>(<span class="params">self, n: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        s = <span class="built_in">str</span>(n)</span><br><span class="line">        n = <span class="built_in">len</span>(s)</span><br><span class="line">        res = <span class="string">&#x27;&#x27;</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n-<span class="number">1</span>, -<span class="number">1</span>, -<span class="number">1</span>):</span><br><span class="line">            res = s[i] + res</span><br><span class="line">            <span class="keyword">if</span> i &lt; n-<span class="number">1</span> <span class="keyword">and</span> res[<span class="number">0</span>] &lt; res[<span class="number">1</span>]:</span><br><span class="line">                res = <span class="string">&#x27;&#x27;</span>.join(<span class="built_in">sorted</span>(res))</span><br><span class="line">                <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(n-i):</span><br><span class="line">                    <span class="keyword">if</span> res[j] &gt; s[i]:</span><br><span class="line">                        res = res[j] + res[:j] + res[j+<span class="number">1</span>:]</span><br><span class="line">                        <span class="keyword">break</span></span><br><span class="line">                s = s[:i] + res</span><br><span class="line">                <span class="keyword">return</span> <span class="built_in">int</span>(s) <span class="keyword">if</span> <span class="built_in">int</span>(s) &lt; <span class="built_in">pow</span>(<span class="number">2</span>, <span class="number">31</span>) <span class="keyword">else</span> -<span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span></span><br></pre></td></tr></table></figure>
@@ -774,7 +792,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="每日算法系列【LeetCode 289】生命游戏">
+                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="每日算法系列【LeetCode 289】生命游戏">
                         
                         <span class="card-title">每日算法系列【LeetCode 289】生命游戏</span>
                     </div>
@@ -832,7 +850,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="每日算法系列【LeetCode 1039】多边形三角剖分的最低得分">
+                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="每日算法系列【LeetCode 1039】多边形三角剖分的最低得分">
                         
                         <span class="card-title">每日算法系列【LeetCode 1039】多边形三角剖分的最低得分</span>
                     </div>
@@ -1062,7 +1080,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

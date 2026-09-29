@@ -156,6 +156,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -241,6 +250,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -335,7 +353,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/15.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/13.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -494,7 +512,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    908
+                    907
                 </div>
                 
 
@@ -535,33 +553,51 @@
 <p><strong>提示</strong></p>
 <ul>
 <li>$1 \le N \le 10000$</li>
-<li>$-2^{31} \le answer \le 2^{31} - 1$ （答案保证符合 32 位整数。）</li>
+<li>$-2^{31} \le answer \le 2^{31} - 1$ （答案保证符合 32 位整数。）
+
+</li>
 </ul>
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>笨方法我就不写了，按照运算顺序模拟一遍，数量比较少的话，应该也不会超时。</p>
 <p>这道题可以用简单的数学计算来优化一下，首先笨阶乘数学形式是下面这样的：</p>
-<p>$$<br>clumsy(n) = \left\lfloor\frac{n(n-1)}{n-2}\right\rfloor + (n-3) - \left\lfloor\frac{(n-4)(n-5)}{n-6}\right\rfloor + \cdots<br>$$</p>
+$$
+clumsy(n) = \left\lfloor\frac{n(n-1)}{n-2}\right\rfloor + (n-3) - \left\lfloor\frac{(n-4)(n-5)}{n-6}\right\rfloor + \cdots
+$$
+
 <p>好像看不出什么东西，那么我们先去掉取整符号看看：</p>
-<p>$$<br>\left\lfloor\frac{n(n-1)}{n-2}\right\rfloor = \left\lfloor\frac{(n-2)(n-2)+3(n-2)+2}{n-2}\right\rfloor = \left\lfloor n+1+\frac{2}{n-2}\right\rfloor<br>$$</p>
+$$
+\left\lfloor\frac{n(n-1)}{n-2}\right\rfloor = \left\lfloor\frac{(n-2)(n-2)+3(n-2)+2}{n-2}\right\rfloor = \left\lfloor n+1+\frac{2}{n-2}\right\rfloor
+$$
+
 <p>所以当 $n \ge 5$ 时，取整符号可以直接去掉：</p>
-<p>$$<br>\left\lfloor\frac{n(n-1)}{n-2}\right\rfloor = n + 1<br>$$</p>
+$$
+\left\lfloor\frac{n(n-1)}{n-2}\right\rfloor = n + 1
+$$
+
 <p>所以我们就讨论 $n \ge 5$ 时的情况，笨函数可以写成：</p>
-<p>$$<br>clumsy(n) = n+1 + n-3 - (n-3) + \cdots = n+1 + d(n)<br>$$</p>
+$$
+clumsy(n) = n+1 + n-3 - (n-3) + \cdots = n+1 + d(n)
+$$
+
 <p>也就是第一个取整（$3$ 项）结果是 $n+1$ ，而后面每 $4$ 项结果是 0 ，最后还剩余不足 $4$ 项的结果 $d(n)$ 。</p>
 <p>那么 $d(n)$ 的取值有 $4$ 种情况：</p>
 <ul>
-<li>$n % 4 = 0$ ，也就是最后剩余 $1$ 项时，$d(n) = 1$ 。</li>
-<li>$n % 4 = 1$ ，也就是最后剩余 $2$ 项时，$d(n) = 2 - 1 = 1$ 。</li>
-<li>$n % 4 = 2$ ，也就是最后剩余 $3$ 项时，$d(n) = 3 - 2 \times 1 = 1$ 。</li>
-<li>$n % 4 = 3$ ，也就是最后剩余 $0$ 项时，$d(n) = 0$ 。</li>
+<li>$n \% 4 = 0$ ，也就是最后剩余 $1$ 项时，$d(n) = 1$ 。</li>
+<li>$n \% 4 = 1$ ，也就是最后剩余 $2$ 项时，$d(n) = 2 - 1 = 1$ 。</li>
+<li>$n \% 4 = 2$ ，也就是最后剩余 $3$ 项时，$d(n) = 3 - 2 \times 1 = 1$ 。</li>
+<li>$n \% 4 = 3$ ，也就是最后剩余 $0$ 项时，$d(n) = 0$ 。
+
+</li>
 </ul>
 <p>但是考虑到取整函数只有在 $n \ge 5$ 时才等于 $n+1$ ，也就是最后剩余的项数大于 $2$ 时才行。那么上面的 $4$ 种情况的 $1、4$ 两种，就要特殊处理一下前一个取整结果：</p>
 <ul>
-<li>$n % 4 = 0$ ，也就是最后剩余 $1$ 项时，$d(n) = 5 - 4 \times 3 / 2 + 1 = 0$ 。</li>
-<li>$n % 4 = 1$ ，也就是最后剩余 $2$ 项时，$d(n) = 2 - 1 = 1$ 。</li>
-<li>$n % 4 = 2$ ，也就是最后剩余 $3$ 项时，$d(n) = 3 - 2 \times 1 = 1$ 。</li>
-<li>$n % 4 = 3$ ，也就是最后剩余 $0$ 项时，$d(n) = 4 - 3 \times 2 / 1 = -2$ 。</li>
+<li>$n \% 4 = 0$ ，也就是最后剩余 $1$ 项时，$d(n) = 5 - 4 \times 3 / 2 + 1 = 0$ 。</li>
+<li>$n \% 4 = 1$ ，也就是最后剩余 $2$ 项时，$d(n) = 2 - 1 = 1$ 。</li>
+<li>$n \% 4 = 2$ ，也就是最后剩余 $3$ 项时，$d(n) = 3 - 2 \times 1 = 1$ 。</li>
+<li>$n \% 4 = 3$ ，也就是最后剩余 $0$ 项时，$d(n) = 4 - 3 \times 2 / 1 = -2$ 。
+
+</li>
 </ul>
-<p>综上，$n &lt; 5$ 时的结果直接算出来就行了，$n \ge 5$ 时结果就是 $n+1+d(n)$ 。</p>
+<p>综上，$n < 5$ 时的结果直接算出来就行了，$n \ge 5$ 时结果就是 $n+1+d(n)$ 。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="c"><a href="#c" class="headerlink" title="c++"></a>c++</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">clumsy</span><span class="params">(<span class="type">int</span> N)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> q = N &amp; <span class="number">3</span>;</span><br><span class="line">        <span class="type">int</span> a[<span class="number">5</span>] = &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">6</span>, <span class="number">7</span>&#125;;</span><br><span class="line">        <span class="type">int</span> d[<span class="number">4</span>] = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">-1</span>&#125;;</span><br><span class="line">        <span class="keyword">return</span> N&gt;=<span class="number">5</span> ? N+d[q] : a[N];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <h3 id="python"><a href="#python" class="headerlink" title="python"></a>python</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">clumsy</span>(<span class="params">self, N: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        q = N &amp; <span class="number">3</span></span><br><span class="line">        a = [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">6</span>, <span class="number">7</span>]</span><br><span class="line">        d = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, -<span class="number">1</span>]</span><br><span class="line">        <span class="keyword">return</span> N+d[q] <span class="keyword">if</span> N&gt;=<span class="number">5</span> <span class="keyword">else</span> a[N]</span><br></pre></td></tr></table></figure>
@@ -796,7 +832,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="每日算法系列【LeetCode 684】冗余连接">
+                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="每日算法系列【LeetCode 684】冗余连接">
                         
                         <span class="card-title">每日算法系列【LeetCode 684】冗余连接</span>
                     </div>
@@ -809,7 +845,7 @@
 
 
 题目描述在本问题中, 树指的是一个连通且无环的无向图。
-输入一个图，该图由一个有着 $N$ 个节点（节点值不重复 $1, 2, …, N$）的树及一条附加的边构成。附加的边的两个顶点包
+输入一个图，该图由一个有着 $N$ 个节点（节点值不重复 $1, 2, ..., N$）的树及一条附加的边构成。附加的边的两个顶
                         
                     </div>
                     <div class="publish-info">
@@ -854,7 +890,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/27.jpg" class="responsive-img" alt="每日算法系列【LeetCode 287】寻找重复数">
+                        <img src="/medias/featureimages/25.jpg" class="responsive-img" alt="每日算法系列【LeetCode 287】寻找重复数">
                         
                         <span class="card-title">每日算法系列【LeetCode 287】寻找重复数</span>
                     </div>
@@ -1083,7 +1119,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

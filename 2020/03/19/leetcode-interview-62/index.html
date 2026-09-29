@@ -157,6 +157,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -242,6 +251,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -336,7 +354,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/27.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -523,7 +541,8 @@
 </blockquote>
 <p><img src="/medias/contact.jpg" alt=""></p>
 <h2 id="题目链接"><a href="#题目链接" class="headerlink" title="题目链接"></a>题目链接</h2><p><a href="https://leetcode-cn.com/problems/yuan-quan-zhong-zui-hou-sheng-xia-de-shu-zi-lcof/" title="LeetCode 面试题62. 圆圈中最后剩下的数字">LeetCode 面试题62. 圆圈中最后剩下的数字</a></p>
-<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>$0,1,\ldots,n-1$ 这 $n$ 个数字排成一个圆圈，从数字 $0$ 开始，每次从这个圆圈里删除第 $m$ 个数字。求出这个圆圈里剩下的最后一个数字。</p>
+<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2>$0,1,\ldots,n-1$ 这 $n$ 个数字排成一个圆圈，从数字 $0$ 开始，每次从这个圆圈里删除第 $m$ 个数字。求出这个圆圈里剩下的最后一个数字。
+
 <p>例如，$0,1,2,3,4$ 这 $5$ 个数字组成一个圆圈，从数字 $0$ 开始每次删除第 $3$ 个数字，则删除的前 $4$ 个数字依次是 $2,0,4,1$，因此最后剩下的数字是 $3$。</p>
 <p><strong>示例1</strong></p>
 <figure class="highlight text"><table><tr><td class="code"><pre><span class="line">输入：</span><br><span class="line">n = 5, m = 3</span><br><span class="line">输出：</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
@@ -534,25 +553,33 @@
 <p><strong>说明：</strong></p>
 <ul>
 <li>$1 \le n \le 10^5$</li>
-<li>$1 \le m \le 10^6$</li>
+<li>$1 \le m \le 10^6$
+
+</li>
 </ul>
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><h3 id="循环链表"><a href="#循环链表" class="headerlink" title="循环链表"></a>循环链表</h3><p>用一个循环链表按顺序存储 $0$ 到 $n-1$ 中的数，然后每 $m$ 个数删除掉链表中的一个结点，最后剩下的数就是答案了。</p>
 <p>这种方法时间复杂度是 $O(nm)$ ，显然太高了，所以这里也不会给大家实现代码。</p>
-<h3 id="递推法"><a href="#递推法" class="headerlink" title="递推法"></a>递推法</h3><p>首先 $n$ 个人的编号依次是 $0,1,\ldots,n-1$ ，然后踢掉了编号为 $k = (m-1)%n$ 的人，这时候剩下的人编号为 $0,1,\ldots,k-1,k+1, \ldots,n-1$ 。</p>
+<h3 id="递推法"><a href="#递推法" class="headerlink" title="递推法"></a>递推法</h3><p>首先 $n$ 个人的编号依次是 $0,1,\ldots,n-1$ ，然后踢掉了编号为 $k = (m-1)\%n$ 的人，这时候剩下的人编号为 $0,1,\ldots,k-1,k+1, \ldots,n-1$ 。</p>
 <p>下一个踢掉的人就要从 $k+1$ 开始数了，所以我们把剩下的人编号从 $k+1$ 开始重新排个序，变成 $k+1, \ldots, n-1,0,\ldots,k-1$ 。这样编号又变成连续的了，而问题规模缩减成了 $n-1$ 个人。</p>
-<p>剩下的这 $n-1$ 个人的编号我们做一下映射，映射成 $0,1,\ldots,n-2$ ，这样就能递推下去求解了。映射的公式就是，映射后的编号为 $x$ ，那么映射之前的编号就是 $(x+k+1)%n = (x+m)%n$ 。</p>
-<p>也就是说，如果我们求出了 $n-1$ 个人最后剩下的人编号 $x$ ，那么 $n$ 个人最后剩下的人编号就是 $(x+m)%n$ 。</p>
+<p>剩下的这 $n-1$ 个人的编号我们做一下映射，映射成 $0,1,\ldots,n-2$ ，这样就能递推下去求解了。映射的公式就是，映射后的编号为 $x$ ，那么映射之前的编号就是 $(x+k+1)\%n = (x+m)\%n$ 。</p>
+<p>也就是说，如果我们求出了 $n-1$ 个人最后剩下的人编号 $x$ ，那么 $n$ 个人最后剩下的人编号就是 $(x+m)\%n$ 。</p>
 <p>用 $f(n)$ 表示 $n$ 个人最后剩下的人编号，那么就有：</p>
-<p>$$<br>f(n) = (f(n-1) + m) % n<br>$$</p>
+$$
+f(n) = (f(n-1) + m) \% n
+$$
+
 <p>这样的话时间复杂度就降到了 $O(n)$ 。</p>
 <blockquote>
 <p>对于本题这个方法已经够用了，但是如果 $n$ 非常大，比如 $n \le 10^{12}$ ，但是 $m$ 不是很大，比如 $m \le 1000$ ，那么这时候这种方法就会超时了。具体的题目请自行百度 HDU 3089 。</p>
 </blockquote>
-<h3 id="递推法加速"><a href="#递推法加速" class="headerlink" title="递推法加速"></a>递推法加速</h3><p>注意观察上面的递推式 $f(n) = (f(n-1) + m) % n$ ，如果 $m$ 很小，而 $n$ 很大的话，递推到后面要加很多次 $m$ 才会对 $n$ 求余。所以我们可以直接一下子加很多次 $m$ ，然后再求余，这样就能加速了。</p>
+<h3 id="递推法加速"><a href="#递推法加速" class="headerlink" title="递推法加速"></a>递推法加速</h3><p>注意观察上面的递推式 $f(n) = (f(n-1) + m) \% n$ ，如果 $m$ 很小，而 $n$ 很大的话，递推到后面要加很多次 $m$ 才会对 $n$ 求余。所以我们可以直接一下子加很多次 $m$ ，然后再求余，这样就能加速了。</p>
 <p>加了 $t$ 次 $m$ 之后，递推式变成了：</p>
-<p>$$<br>f(n+t-1) = (f(n-1)+tm)%(n+t-1)<br>$$</p>
+$$
+f(n+t-1) = (f(n-1)+tm)\%(n+t-1)
+$$
+
 <p>假设加了 $t$ 次 $m$ 之后才产生了取余，那么就有 $f(n-1) + tm \ge n+t-1$ ，即 $t \ge \frac{n-f(n-1)-1}{m-1}$ 。所以每次都可以加 $\left\lceil \frac{n-f(n-1)-1}{m-1} \right\rceil$ 个 $m$ ，代码实现时用下取整，也就是 $\left\lfloor \frac{n-f(n-1)+m-3}{m-1} \right\rfloor$ 。</p>
-<p>此外还需要注意，如果发现 $i-1+t &gt; n$ ，也就是后面都不需要取余了，那么就直接一步加到底，退出循环得到答案。</p>
+<p>此外还需要注意，如果发现 $i-1+t > n$ ，也就是后面都不需要取余了，那么就直接一步加到底，退出循环得到答案。</p>
 <p>这个方法时间复杂度不是很好分析，但应该也是对数级别的。</p>
 <h3 id="数学法"><a href="#数学法" class="headerlink" title="数学法"></a>数学法</h3><p>这个方法在我之前的文章中已经讲过了：<br><a href="https://godweiyang.com/2018/04/16/concrete-math-8/" title="韦阳的博客：具体数学-第8课（取整进阶）">韦阳的博客：具体数学-第8课（取整进阶）</a></p>
 <p><a href="https://zhuanlan.zhihu.com/p/35820332" title="知乎专栏：具体数学-第8课（取整进阶）">知乎专栏：具体数学-第8课（取整进阶）</a></p>
@@ -801,7 +828,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/26.jpg" class="responsive-img" alt="【每日算法Day 75】字节跳动面试题：手撕困难题，看过我Day 71的人都会做了！">
+                        <img src="/medias/featureimages/28.jpg" class="responsive-img" alt="【每日算法Day 75】字节跳动面试题：手撕困难题，看过我Day 71的人都会做了！">
                         
                         <span class="card-title">【每日算法Day 75】字节跳动面试题：手撕困难题，看过我Day 71的人都会做了！</span>
                     </div>
@@ -864,7 +891,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="【每日算法Day 73】学妹大半夜私聊我有空吗，然后竟然做出这种事！">
+                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="【每日算法Day 73】学妹大半夜私聊我有空吗，然后竟然做出这种事！">
                         
                         <span class="card-title">【每日算法Day 73】学妹大半夜私聊我有空吗，然后竟然做出这种事！</span>
                     </div>
@@ -1099,7 +1126,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

@@ -159,6 +159,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -244,6 +253,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -338,7 +356,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/21.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/19.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -537,17 +555,20 @@
 
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>这道题是动态规划入门题，我相信大家都会做，如果不会做，那就当我没说过这句话。</p>
 <p>令 $f[i]$ 为上 $i$ 个台阶的方案数，那么最后一步可以是跳 $1$ 步，或者跳 $2$ 步，或者跳 $3$ 步过去的，所以就有：</p>
-<p>$$<br>f[i] = f[i-1] + f[i-2] + f[i-3]<br>$$</p>
+$$
+f[i] = f[i-1] + f[i-2] + f[i-3]
+$$
+
 <p>初始情况就是 $f[1] = 1, f[2] = 2, f[3] = 4$ 。</p>
 <p>然后利用取模的加法公式，可以每算出一个 $f[i]$ 都取一下模。</p>
 <p>当然了这题太水了，我主要就是想看看大家会怎么实现呢？</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="定义长度为-n-的数组"><a href="#定义长度为-n-的数组" class="headerlink" title="定义长度为 $n$ 的数组"></a>定义长度为 $n$ 的数组</h3><p>最朴素的方法当然是定义长度为 $n$ 的数组，然后算就完事了，代码如下：</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="定义长度为-的数组"><a href="#定义长度为-的数组" class="headerlink" title="定义长度为  的数组"></a>定义长度为 $n$ 的数组</h3><p>最朴素的方法当然是定义长度为 $n$ 的数组，然后算就完事了，代码如下：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="type">long</span> <span class="type">long</span> ll;</span><br><span class="line"><span class="type">const</span> ll p = <span class="number">1e9</span><span class="number">+7</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">1e6</span><span class="number">+10</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    ll f[N] = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>&#125;;</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">waysToStep</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">3</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            f[i] = (f[i<span class="number">-1</span>] + f[i<span class="number">-2</span>] + f[i<span class="number">-3</span>]) % p;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> f[n<span class="number">-1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <h3 id="定义四个变量"><a href="#定义四个变量" class="headerlink" title="定义四个变量"></a>定义四个变量</h3><p>但是这样太费空间了啊，其实每次只需要用到之前的三个状态就行了，然后还要用个临时变量用来交换状态值，代码如下：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="type">long</span> <span class="type">long</span> ll;</span><br><span class="line"><span class="type">const</span> ll p = <span class="number">1e9</span><span class="number">+7</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">waysToStep</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (n == <span class="number">1</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (n == <span class="number">2</span>) <span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">if</span> (n == <span class="number">3</span>) <span class="keyword">return</span> <span class="number">4</span>;</span><br><span class="line">        ll a = <span class="number">1</span>, b = <span class="number">2</span>, c = <span class="number">4</span>, d;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">3</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            d = (a + b + c) % p;</span><br><span class="line">            a = b;</span><br><span class="line">            b = c;</span><br><span class="line">            c = d;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> d;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
-<h3 id="定义长度为-3-的数组"><a href="#定义长度为-3-的数组" class="headerlink" title="定义长度为 $3$ 的数组"></a>定义长度为 $3$ 的数组</h3><p>但是用 $4$ 个变量也太丑陋了，对于我这种处女座患者（对不起我是射手座）来说，完全无法忍受！</p>
+<h3 id="定义长度为-的数组-1"><a href="#定义长度为-的数组-1" class="headerlink" title="定义长度为  的数组"></a>定义长度为 $3$ 的数组</h3><p>但是用 $4$ 个变量也太丑陋了，对于我这种处女座患者（对不起我是射手座）来说，完全无法忍受！</p>
 <p>所以我直接定义了一个长度为 $3$ 的数组，然后下标对 $3$ 取模来实现循环数组，这样代码看起来就很舒服啦：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="type">long</span> <span class="type">long</span> ll;</span><br><span class="line"><span class="type">const</span> ll p = <span class="number">1e9</span><span class="number">+7</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">waysToStep</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">        ll f[<span class="number">3</span>] = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>&#125;;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">3</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            (f[i%<span class="number">3</span>] += f[(i<span class="number">-1</span>)%<span class="number">3</span>] + f[(i<span class="number">-2</span>)%<span class="number">3</span>]) %= p;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> f[(n<span class="number">-1</span>)%<span class="number">3</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
@@ -784,7 +805,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="【每日算法Day 80】所有人都会做的入门题，高级解法来了！">
+                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="【每日算法Day 80】所有人都会做的入门题，高级解法来了！">
                         
                         <span class="card-title">【每日算法Day 80】所有人都会做的入门题，高级解法来了！</span>
                     </div>
@@ -845,7 +866,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="【每日算法Day 78】面试经典题：能说出全部四种方法，不录用你都不可能！">
+                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="【每日算法Day 78】面试经典题：能说出全部四种方法，不录用你都不可能！">
                         
                         <span class="card-title">【每日算法Day 78】面试经典题：能说出全部四种方法，不录用你都不可能！</span>
                     </div>
@@ -1077,7 +1098,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

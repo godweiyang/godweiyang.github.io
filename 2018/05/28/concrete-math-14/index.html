@@ -14,7 +14,7 @@
 
 
 牛顿级数
-多项式函数的一般表示形式为：\[f(x) = {a_d}{x^d} + {a_{d - 1}}{x^{d - 1}} + \cdots + {a_1}{x^1} + {a_0">
+多项式函数的一般表示形式为：&amp;lt;!–swig￼0–&amp;gt;也可以将其表示为下降阶乘幂的形式：&amp;lt;!–swig￼1–&amp;gt;这种表示的好处是，求差分更加方便：&amp;lt;!">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -157,6 +157,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -242,6 +251,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -336,7 +354,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/26.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/28.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -491,14 +509,14 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.1k
+                    598
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    5 分
+                    2 分
                 </div>
                 
                 
@@ -519,14 +537,14 @@
 </blockquote>
 <p><img src="/medias/contact.jpg" alt=""></p>
 <h1 id="牛顿级数"><a href="#牛顿级数" class="headerlink" title="牛顿级数"></a>牛顿级数</h1><hr>
-<p>多项式函数的一般表示形式为：<br>\[f(x) = {a_d}{x^d} + {a_{d - 1}}{x^{d - 1}} + \cdots + {a_1}{x^1} + {a_0}{x^0}\]<br>也可以将其表示为下降阶乘幂的形式：<br>\[f(x) = {b_d}{x^\underline{d}} + {b_{d - 1}}{x^{\underline{d - 1}}} + \cdots + {b_1}{x^\underline{1}} + {b_0}{x^\underline{0}}\]<br>这种表示的好处是，求差分更加方便：<br>\[\Delta (f(x)) = {b_d}d{x^{\underline{d - 1}}} + {b_{d - 1}}(d - 1){x^{\underline {d - 2} }} + \cdots + {b_1}{x^\underline{0}}\]<br>因为有<br>\[\left( {\begin{array}{*{20}{c}}x\k\end{array}} \right) = \frac{ { {x^\underline{k}}}}{ {k!}}\]<br>所以多项式又可以表示为组合数的形式，也被叫做牛顿级数：<br>\[f(x) = {c_d}\left( {\begin{array}{*{20}{c}}x\d\end{array}} \right) + {c_{d - 1}}\left( {\begin{array}{*{20}{c}}x\{d - 1}\end{array}} \right) + \cdots + {c_1}\left( {\begin{array}{*{20}{c}}x\1\end{array}} \right) + {c_0}\left( {\begin{array}{*{20}{c}}x\0\end{array}} \right)\]<br>这种形式的差分也特别简单，因为有<br>\[\Delta \left( {\left( {\begin{array}{*{20}{c}}x\k\end{array}} \right)} \right) = \left( {\begin{array}{*{20}{c}}x\{k - 1}\end{array}} \right)\]<br>所以$n$阶差分可以写为：<br>\[{\Delta ^n}(f(x)) = {c_d}\left( {\begin{array}{*{20}{c}}x\{d - n}\end{array}} \right) + {c_{d - 1}}\left( {\begin{array}{*{20}{c}}x\{d - 1 - n}\end{array}} \right) + \cdots + {c_1}\left( {\begin{array}{*{20}{c}}x\{1 - n}\end{array}} \right) + {c_0}\left( {\begin{array}{*{20}{c}}x\{ - n}\end{array}} \right)\]<br>所以有：<br>\[{\Delta ^n}(f(0)) = \left{ {\begin{array}{*{20}{c}}{ {c_n},n \le d}\{0,n &gt; d}\end{array}} \right.\]<br>所以牛顿级数又可以写为：<br>\[f(x) = {\Delta ^d}(f(0))\left( {\begin{array}{*{20}{c}}x\d\end{array}} \right) + {\Delta ^{d - 1}}(f(0))\left( {\begin{array}{*{20}{c}}x\{d - 1}\end{array}} \right) + \cdots + \Delta (f(0))\left( {\begin{array}{*{20}{c}}x\1\end{array}} \right) + f(0){c_0}\left( {\begin{array}{*{20}{c}}x\0\end{array}} \right)\]<br>这个形式是不是很像泰勒展开？</p>
+<p>多项式函数的一般表示形式为：<br>&lt;!–swig￼0–&gt;<br>也可以将其表示为下降阶乘幂的形式：<br>&lt;!–swig￼1–&gt;<br>这种表示的好处是，求差分更加方便：<br>&lt;!–swig￼2–&gt;<br>因为有<br>&lt;!–swig￼3–&gt;<br>所以多项式又可以表示为组合数的形式，也被叫做牛顿级数：<br>&lt;!–swig￼4–&gt;<br>这种形式的差分也特别简单，因为有<br>&lt;!–swig￼5–&gt;<br>所以$n$阶差分可以写为：<br>&lt;!–swig￼7–&gt;<br>所以有：<br>&lt;!–swig￼8–&gt;<br>所以牛顿级数又可以写为：<br>&lt;!–swig￼9–&gt;<br>这个形式是不是很像泰勒展开？</p>
 <h1 id="生成函数"><a href="#生成函数" class="headerlink" title="生成函数"></a>生成函数</h1><hr>
-<p>对于无限序列$\left\langle { {a_0},{a_1},{a_2}, \ldots } \right\rangle $，定义它的生成函数为：<br>\[A(z) = {a_0} + {a_1}z + {a_2}{z^2} +  \cdots  = \sum\limits_{k \ge 0} { {a_k}{z^k}} \]<br>定义一个函数用来表示$z^n$的系数：<br>\[[{z^n}]A(z) = {a_n}\]<br>两个生成函数相乘的结果为：<br>\[A(z)B(z) = \sum\limits_{k \ge 0} {\sum\limits_{i = 0}^k { {a_i}{b_{k - i}}} {z^k}} \]<br>考虑下面的二项展开：<br>\[{(1 + z)^r} = \sum\limits_{k \ge 0} {\left( {\begin{array}{*{20}{c}}r\k\end{array}} \right){z^k}} \]<br>可以发现这就是序列$\left\langle {\left( {\begin{array}{*{20}{c}}r\0\end{array}} \right),\left( {\begin{array}{*{20}{c}}r\1\end{array}} \right),\left( {\begin{array}{*{20}{c}}r\2\end{array}} \right), \ldots } \right\rangle $的生成函数。<br>替换变量可以得到：<br>\[{(1 + z)^s} = \sum\limits_{k \ge 0} {\left( {\begin{array}{*{20}{c}}s\k\end{array}} \right){z^k}} \]<br>两个式子相乘可以得到：<br>\[{(1 + z)^r}{(1 + z)^s} = {(1 + z)^{r + s}}\]<br>等式两边$z^n$的系数相等，于是：<br>\[\sum\limits_{k = 0}^n {\left( {\begin{array}{*{20}{c}}r\k\end{array}} \right)\left( {\begin{array}{*{20}{c}}s\{n - k}\end{array}} \right)} = \left( {\begin{array}{*{20}{c}}{r + s}\n\end{array}} \right)\]<br>这和上节课讲到的范德蒙德卷积公式类似！这里是用生成函数证出来的。</p>
-<p>同理根据<br>\[{(1 + z)^r}{(1 - z)^r} = {(1 - {z^2})^r}\]<br>可以得到<br>\[\sum\limits<em>{k = 0}^n {\left( {\begin{array}{\</em>{20}{c}}r\k\end{array}} \right)\left( {\begin{array}{*{20}{c}}r\{n - k}\end{array}} \right)} {( - 1)^k} = {( - 1)^{n/2}}\left( {\begin{array}{*{20}{c}}r\{n/2}\end{array}} \right)[n是偶数]\]<br>下面是一个重要的生成函数：<br>\[\frac{1}{ {1 - z}} = 1 + z + {z^2} + {z^3} + \cdots = \sum\limits*{k \ge 0} { {z^k}} \]<br>它其实就是序列$\left\langle { {1},{1},{1}, \ldots } \right\rangle $的生成函数。</p>
+<p>对于无限序列$\left\langle { {a_0},{a_1},{a_2}, \ldots } \right\rangle $，定义它的生成函数为：<br>&lt;!–swig￼11–&gt;<br>定义一个函数用来表示$z^n$的系数：<br>&lt;!–swig￼13–&gt;<br>两个生成函数相乘的结果为：<br>&lt;!–swig￼14–&gt;<br>考虑下面的二项展开：<br>&lt;!–swig￼15–&gt;<br>可以发现这就是序列$\left\langle {\left( {\begin{array}{\*{20}{c}}r\\0\end{array}} \right),\left( {\begin{array}{\*{20}{c}}r\\1\end{array}} \right),\left( {\begin{array}{\*{20}{c}}r\\2\end{array}} \right), \ldots } \right\rangle $的生成函数。<br>替换变量可以得到：<br>&lt;!–swig￼17–&gt;<br>两个式子相乘可以得到：<br>&lt;!–swig￼18–&gt;<br>等式两边$z^n$的系数相等，于是：<br>&lt;!–swig￼20–&gt;<br>这和上节课讲到的范德蒙德卷积公式类似！这里是用生成函数证出来的。</p>
+<p>同理根据<br>&lt;!–swig￼21–&gt;<br>可以得到<br>&lt;!–swig￼22–&gt;<br>下面是一个重要的生成函数：<br>&lt;!–swig￼23–&gt;<br>它其实就是序列$\left\langle { {1},{1},{1}, \ldots } \right\rangle $的生成函数。</p>
 <h1 id="生成函数应用"><a href="#生成函数应用" class="headerlink" title="生成函数应用"></a>生成函数应用</h1><hr>
 <p>那么生成函数有什么应用呢？一个很重要的应用就是用来求解递归式。</p>
-<p>例如大家很熟悉的斐波那契数列：<br>\[\begin{array}{l}{g_0} = 0;{g_1} = 1\{g_n} = {g_{n - 1}} + {g_{n - 2}},n \ge 2\end{array}\]</p>
-<p>首先为了统一表示，将递归式改写为如下形式：<br>\[{g<em>n} = {g</em>{n - 1}} + {g<em>{n - 2}} + [n = 1]\]<br>然后两边同时乘以$z^n$，得到：<br>\[{g_n}{z^n} = {g</em>{n - 1}}{z^n} + {g_{n - 2}}{z^n} + [n = 1]{z^n}\]<br>两边对指标$n$同时求和，可以得到：<br>\[G(z) = zG(z) + {z^2}G(z) + z\]<br>所以<br>\[G(z) = \frac{z}{ {1 - z - {z^2}}}\]<br>最后只要将$\frac{z}{ {1 - z - {z^2}}}$表示成多项式的形式就行了，$[{z^n}]\frac{z}{ {1 - z - {z^2}}}$就是斐波那契数列的通项公式了。</p>
+<p>例如大家很熟悉的斐波那契数列：<br>&lt;!–swig￼25–&gt;</p>
+<p>首先为了统一表示，将递归式改写为如下形式：<br>&lt;!–swig￼26–&gt;<br>然后两边同时乘以$z^n$，得到：<br>&lt;!–swig￼28–&gt;<br>两边对指标$n$同时求和，可以得到：<br>&lt;!–swig￼30–&gt;<br>所以<br>&lt;!–swig￼31–&gt;<br>最后只要将$\frac{z}{ {1 - z - {z^2}}}$表示成多项式的形式就行了，$[{z^n}]\frac{z}{ {1 - z - {z^2}}}$就是斐波那契数列的通项公式了。</p>
 
             </div>
             <hr />
@@ -758,7 +776,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/28.jpg" class="responsive-img" alt="具体数学-第五章作业解答">
+                        <img src="/medias/featureimages/26.jpg" class="responsive-img" alt="具体数学-第五章作业解答">
                         
                         <span class="card-title">具体数学-第五章作业解答</span>
                     </div>
@@ -771,7 +789,7 @@
 
 
 4.
-题目：通过上指标翻转计算出$\left( {\begin{array}{*{20}{c}}{ - 1}\k\end{array}} \right)$。解答：如果$k \ge 0$
+题目：通过上指标翻转计算出$\left( {\begin{array}{\*{20}{c}}{ - 1}\\k\end{array}} \right)$。解答：如果$k \ge 
                         
                     </div>
                     <div class="publish-info">
@@ -812,7 +830,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="具体数学-第13课（组合数各种性质）">
+                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="具体数学-第13课（组合数各种性质）">
                         
                         <span class="card-title">具体数学-第13课（组合数各种性质）</span>
                     </div>
@@ -1040,7 +1058,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

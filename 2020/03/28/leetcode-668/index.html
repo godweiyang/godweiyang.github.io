@@ -158,6 +158,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -243,6 +252,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -337,7 +355,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/7.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/5.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -535,20 +553,31 @@
 <p><strong>说明：</strong></p>
 <ul>
 <li>$m$ 和 $n$ 的范围在 $[1, 30000]$ 之间。</li>
-<li>$k$ 的范围在 $[1, mn]$ 之间。</li>
+<li>$k$ 的范围在 $[1, mn]$ 之间。
+
+</li>
 </ul>
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><h3 id="二分法"><a href="#二分法" class="headerlink" title="二分法"></a>二分法</h3><p>因为 $mn$ 数量级是 $9 \times 10^8$ 级别的，所以显然不能直接枚举，要想一个对数级别的算法。</p>
 <p>对数级别首先想到的肯定是二分了，我们二分第 $k$ 小的数 $mid$ ，然后求出乘法表中小于等于 $mid$ 的数的数量 $cnt$ 。如果发现 $cnt \le mid$ ，那就说明这个答案太大了，还可以继续缩小。否则的话答案太小了，得增大一点。</p>
 <p>那么对于枚举的答案 $mid$ 来说，如何找到乘法表中有多少小于等于它的数呢？我们可以直接从 $1$ 开始枚举，和 $1$ 相乘并且结果小于等于 $mid$ 的数有 $mid$ 个，当然还有个 $n$ 的限制，所以是 $\min{(mid, n)}$ 个。然后和 $2$ 相乘并且结果小于等于 $mid$ 的数有 $\min{(\left\lfloor\frac{mid}{2}\right\rfloor, n)}$ 个。依此类推下去，最终和 $m$ 相乘并且结果小于等于 $mid$ 的数有 $\min{(\left\lfloor\frac{mid}{m}\right\rfloor, n)}$ 个。</p>
 <p>所以最终小于等于 $mid$ 的个数 $cnt$ 就可以计算为：</p>
-<p>$$<br>\sum_{i=1}^{m}{\min{\left(\left\lfloor\frac{mid}{i}\right\rfloor, n\right)}}<br>$$</p>
+$$
+\sum_{i=1}^{m}{\min{\left(\left\lfloor\frac{mid}{i}\right\rfloor, n\right)}}
+$$
+
 <h3 id="二分法-优化"><a href="#二分法-优化" class="headerlink" title="二分法+优化"></a>二分法+优化</h3><p>当然这题计算还可以进行一些优化。</p>
 <p>首先第 $k$ 小的数是一定小于等于 $k$ 的，所以我们的二分上界可以定为 $k$ 。</p>
-<p>其次注意到当 $i &gt; mid$ 之后，个数一定是 $0$，所以 $i$ 只需要枚举到 $\min{(mid, m)}$ 就行了。</p>
+<p>其次注意到当 $i > mid$ 之后，个数一定是 $0$，所以 $i$ 只需要枚举到 $\min{(mid, m)}$ 就行了。</p>
 <p>然后当 $i \le \left\lfloor\frac{mid}{n}\right\rfloor$ 时，有 $\min{\left(\left\lfloor\frac{mid}{i}\right\rfloor, n\right)} = n$，所以这部分的求和结果就是 $n\left\lfloor\frac{mid}{n}\right\rfloor$ 。所以 $cnt$ 又可以写为：</p>
-<p>$$<br>n\left\lfloor\frac{mid}{n}\right\rfloor + \sum_{i=\left\lfloor\frac{mid}{n}\right\rfloor+1}^{\min{(mid, m)}}{\left\lfloor\frac{mid}{i}\right\rfloor}<br>$$</p>
+$$
+n\left\lfloor\frac{mid}{n}\right\rfloor + \sum_{i=\left\lfloor\frac{mid}{n}\right\rfloor+1}^{\min{(mid, m)}}{\left\lfloor\frac{mid}{i}\right\rfloor}
+$$
+
 <p>最后，对于某个 $i = t$ ，我们会发现如果 $i$ 慢慢增大，某一段连续区间内 $\left\lfloor\frac{mid}{i}\right\rfloor$ 的值都是不会变的。而 $i$ 最大可以增大到 $\left\lfloor\frac{mid}{\left\lfloor\frac{mid}{t}\right\rfloor}\right\rfloor$，那么这一段区间内的求和就可以直接算出来：</p>
-<p>$$<br>\left\lfloor\frac{mid}{t}\right\rfloor \left(\left\lfloor\frac{mid}{\left\lfloor\frac{mid}{t}\right\rfloor}\right\rfloor-t+1\right)<br>$$</p>
+$$
+\left\lfloor\frac{mid}{t}\right\rfloor \left(\left\lfloor\frac{mid}{\left\lfloor\frac{mid}{t}\right\rfloor}\right\rfloor-t+1\right)
+$$
+
 <p>接着令 $i$ 直接跳转到 $\left\lfloor\frac{mid}{\left\lfloor\frac{mid}{t}\right\rfloor}\right\rfloor + 1$ 就可以了，这样就不用慢慢加 $1$ 计算了。要特别注意的是最后不能超过 $m$ 。</p>
 <p>理论上这样的计算复杂度是更低的，但是实际运行中速度还不如不加最后一步优化，可能原因是除法操作次数太多了，反而总的操作次数超过了直接遍历计算。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="二分法（c-）"><a href="#二分法（c-）" class="headerlink" title="二分法（c++）"></a>二分法（c++）</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">findKthNumber</span><span class="params">(<span class="type">int</span> m, <span class="type">int</span> n, <span class="type">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> l = <span class="number">1</span>, r = m*n;</span><br><span class="line">        <span class="keyword">while</span> (l &lt; r) &#123;</span><br><span class="line">            <span class="type">int</span> mid = l+((r-l)&gt;&gt;<span class="number">1</span>);</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">enough</span>(mid, m, n, k)) r = mid;</span><br><span class="line">            <span class="keyword">else</span> l = mid<span class="number">+1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> l;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">enough</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> m, <span class="type">int</span> n, <span class="type">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> cnt = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= m; ++i) &#123;</span><br><span class="line">            cnt += x/i&lt;n?x/i:n;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> cnt &gt;= k;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
@@ -789,7 +818,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="【每日算法Day 84】面试必考题：Trie（字典树/前缀树）的实现">
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="【每日算法Day 84】面试必考题：Trie（字典树/前缀树）的实现">
                         
                         <span class="card-title">【每日算法Day 84】面试必考题：Trie（字典树/前缀树）的实现</span>
                     </div>
@@ -848,7 +877,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="【每日算法Day 82】面试经典题：求第K大数，我写了11种实现，不来看看吗？">
+                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="【每日算法Day 82】面试经典题：求第K大数，我写了11种实现，不来看看吗？">
                         
                         <span class="card-title">【每日算法Day 82】面试经典题：求第K大数，我写了11种实现，不来看看吗？</span>
                     </div>
@@ -1078,7 +1107,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

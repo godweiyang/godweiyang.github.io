@@ -158,6 +158,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -243,6 +252,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -337,7 +355,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/7.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/9.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -496,7 +514,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    623
+                    621
                 </div>
                 
 
@@ -536,7 +554,10 @@
 <p>这题买卖次数变成了不限，但是仍然要求在买之前必须先卖掉股票。那么观察股票的价格曲线，最优策略就是在每一段单调上升的子区间里，区间开始时购买，区间结束时卖出。这样就能保证所有的上升区间全部充分利用到了。正确性证明也不难，假设买卖过程中包含了一段下降的子区间，那么去掉它，在下降区间开头卖出，在下降区间末尾买入，得到的利润一定大于包含这段下降区间。</p>
 <p>在具体实现时，我们可以计算相邻两个股票价格差，如果价格是上升的，那就在利润上加上它，否则就不用管。</p>
 <p>最终的答案就是：</p>
-<p>$$<br>\sum_{0 &lt; i &lt; n}{\max{\left{price[i] - price[i-1], 0\right}}}<br>$$</p>
+$$
+\sum_{0 < i < n}{\max{\left\{price[i] - price[i-1], 0\right\}}}
+$$
+
 <p>时间复杂度是 $O(n)$ 。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="python"><a href="#python" class="headerlink" title="python"></a>python</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">maxProfit</span>(<span class="params">self, prices: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        n, res = <span class="built_in">len</span>(prices), <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, n):</span><br><span class="line">            res += <span class="built_in">max</span>(prices[i]-prices[i-<span class="number">1</span>], <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
 
@@ -770,7 +791,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/28.jpg" class="responsive-img" alt="每日算法系列【LeetCode 123】买卖股票的最佳时机 III">
+                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="每日算法系列【LeetCode 123】买卖股票的最佳时机 III">
                         
                         <span class="card-title">每日算法系列【LeetCode 123】买卖股票的最佳时机 III</span>
                     </div>
@@ -829,7 +850,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/26.jpg" class="responsive-img" alt="每日算法系列【LeetCode 121】买卖股票的最佳时机">
+                        <img src="/medias/featureimages/24.jpg" class="responsive-img" alt="每日算法系列【LeetCode 121】买卖股票的最佳时机">
                         
                         <span class="card-title">每日算法系列【LeetCode 121】买卖股票的最佳时机</span>
                     </div>
@@ -1060,7 +1081,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

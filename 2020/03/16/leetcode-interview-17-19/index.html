@@ -157,6 +157,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -242,6 +251,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -336,7 +354,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/13.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/15.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -533,7 +551,9 @@
 
 <p><strong>提示：</strong></p>
 <ul>
-<li>$nums.length \le 30000$</li>
+<li>$nums.length \le 30000$
+
+</li>
 </ul>
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><h3 id="位运算"><a href="#位运算" class="headerlink" title="位运算"></a>位运算</h3><p>首先将数组里的数再加上 $1$ 到 $n$ 中所有的数构成一个更大的集合，那么问题就变成了<strong>一个数组里有两个数只出现了一次，其余数都出现了两次，求这两个数是多少？</strong></p>
 <p>是不是很熟悉？这其实就是 LeetCode 另一道位运算题目：<br><a href="https://leetcode-cn.com/problems/shu-zu-zhong-shu-zi-chu-xian-de-ci-shu-lcof/" title="LeetCode 面试题56 - I. 数组中数字出现的次数">LeetCode 面试题56 - I. 数组中数字出现的次数</a></p>
@@ -543,18 +563,33 @@
 <p>那么回到本题，有没有办法将这 $2n-2$ 个数拆分成两个集合，每个集合都满足上面这种最简单的条件（只有一个数出现了一次）呢？</p>
 <p>刚刚得到了两个只出现一次数字的异或值 $x$ ，那么 $x$ 中的 $1$ 就表示了这两个数那一位是不同的。那就很简单了啊，我们把所有 $2n-2$ 个数那一位是 $0$ 的归为一个集合，那一位是 $1$ 的归为一个集合，那么这两个只出现一次的数一定会分属两个不同的集合。而其他出现了两次的数，每个数字都会在同一个集合里。</p>
 <p>最后对两个集合分别求异或值，就得到了两个出现一次数的值了。</p>
-<p>这里有个关键点，就是按照 $x$ 某一位为 $1$ 来划分两个集合，其实取任意一位是 $1$ 的位都是可以的。但是最简单的方法就是取最低位 $1$ ，因为这样可以采用位运算 $x &amp; (-x)$ 直接得到。</p>
+<p>这里有个关键点，就是按照 $x$ 某一位为 $1$ 来划分两个集合，其实取任意一位是 $1$ 的位都是可以的。但是最简单的方法就是取最低位 $1$ ，因为这样可以采用位运算 $x \& (-x)$ 直接得到。</p>
 <p>位运算系列还有一个进阶版：<br><a href="https://leetcode-cn.com/problems/single-number-ii/" title="LeetCode 137. 只出现一次的数字 II">LeetCode 137. 只出现一次的数字 II</a></p>
 <p>这题就与本题无关了，我们留着下次继续讲。</p>
 <h3 id="数学法"><a href="#数学法" class="headerlink" title="数学法"></a>数学法</h3><p>首先假设缺失的两个数字为 $x, y$ 。</p>
 <p>令 $S_1$ 为 $nums$ 数组中的元素和，$S_2$ 为 $nums$ 数组中的元素平方和。</p>
 <p>再用 $1$ 到 $n$ 的元素和减去 $S_1$ 就得到了 $x+y$ 的值，记为 $a$。用 $1$ 到 $n$ 的元素平方和减去 $S_2$ 就得到了 $x^2+y^2$ 的值，记为 $b$。</p>
 <p>最后只要解出下面这个二元二次方程组就行了：</p>
-<p>$$<br>\begin{aligned}<br>&amp;x + y = a   \<br>&amp;x^2 + y^2 = b<br>\end{aligned}<br>$$</p>
+$$
+\begin{aligned}
+&x + y = a   \\\
+&x^2 + y^2 = b
+\end{aligned}
+$$
+
 <p>用求根公式可以解出两个解是：</p>
-<p>$$<br>\frac{a \pm \sqrt{2b-a^2}}{2}<br>$$</p>
+$$
+\frac{a \pm \sqrt{2b-a^2}}{2}
+$$
+
 <p>其中：</p>
-<p>$$<br>\begin{aligned}<br>&amp;a = \sum_{i=1}^n{i} - \sum_{i=0}^{n-3}{nums[i]} = \frac{n(n+1)}{2}  - \sum_{x \in nums}{x}  \<br>&amp;b = \sum_{i=1}^n{i^2} - \sum_{i=0}^{n-3}{(nums[i])^2} = \frac{n(n+1)(2n+1)}{6} - \sum_{x \in nums}{x^2}<br>\end{aligned}<br>$$</p>
+$$
+\begin{aligned}
+&a = \sum_{i=1}^n{i} - \sum_{i=0}^{n-3}{nums[i]} = \frac{n(n+1)}{2}  - \sum_{x \in nums}{x}  \\\
+&b = \sum_{i=1}^n{i^2} - \sum_{i=0}^{n-3}{(nums[i])^2} = \frac{n(n+1)(2n+1)}{6} - \sum_{x \in nums}{x^2}
+\end{aligned}
+$$
+
 <h3 id="下标哈希"><a href="#下标哈希" class="headerlink" title="下标哈希"></a>下标哈希</h3><p>一个很直觉的方法就是，我新开辟一个大小为 $n+1$ 的数组，然后把 $nums$ 数组中的元素都放在新数组中下标对应的位置，最后看哪两个位置没有数就行了。但是现在要用原地算法，不允许新开辟空间，那我们就只能直接放在原数组里面了。</p>
 <p>首先我们还是得把原数组扩展到大小为 $n+1$，也就是在末尾增加 $3$ 个空间，数字就放 $-1$。</p>
 <p>然后遍历数组，对于 $nums[i]$ 来说，它的位置上最后放的应该是数字 $i$ 才对，而 $nums[i]$ 应该被放在下标为 $nums[i]$ 的位置。所以我们把 $nums[i]$ 移动到下标为 $nums[i]$ 的位置上去，但是 $nums[i]$ 位置上的数字怎么办呢？不能直接覆盖，不然就再也无法访问了，所以我们把它移动到下标 $i$ 的位置就行了。也就是说交换下标 $i$ 和 $nums[i]$ 位置上的两个数。</p>
@@ -797,7 +832,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/26.jpg" class="responsive-img" alt="【每日算法Day 72】谷歌面试题：又双叒叕是位运算，最详细的自动机推导过程">
+                        <img src="/medias/featureimages/28.jpg" class="responsive-img" alt="【每日算法Day 72】谷歌面试题：又双叒叕是位运算，最详细的自动机推导过程">
                         
                         <span class="card-title">【每日算法Day 72】谷歌面试题：又双叒叕是位运算，最详细的自动机推导过程</span>
                     </div>
@@ -856,7 +891,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="【每日算法Day 70】图解算法：小学生都会的数块数问题，你会吗？">
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="【每日算法Day 70】图解算法：小学生都会的数块数问题，你会吗？">
                         
                         <span class="card-title">【每日算法Day 70】图解算法：小学生都会的数块数问题，你会吗？</span>
                     </div>
@@ -1086,7 +1121,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

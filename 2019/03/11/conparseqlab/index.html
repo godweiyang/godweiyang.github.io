@@ -159,6 +159,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -244,6 +253,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -338,7 +356,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/19.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/21.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -501,7 +519,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    3.2k
+                    3.1k
                 </div>
                 
 
@@ -559,8 +577,8 @@
 <h2 id="理论证明"><a href="#理论证明" class="headerlink" title="理论证明"></a>理论证明</h2><p>主要证明两个性质，一个就是充分性（即每个句法树都能映射为一个序列），另一个就是单射性（即每个序列只能唯一对应一个句法树）。</p>
 <p><strong>充分性：</strong><br>这个显而易见，对于每个句法树，相邻两个单词一定存在唯一的LCA，且它的label也是唯一的，所以充分性肯定能保证的。</p>
 <p><strong>单射性：</strong><br>为了简便，首先证明不包含非终结符的树结构映射的单射性，再证明加上非终结符也是单射的。</p>
-<p>如果用$(\bullet_i)$表示第$i$个叶子结点，那么句法树可以表示成如下的括号表达式：<br>\[<br>\alpha_0 (\bullet_1) \alpha_1 (\bullet_2) \ldots \alpha_{\left| w \right| - 1} (\bullet_{\left| w \right|}) \alpha_{\left| w \right|}<br>\]<br>更进一步，每个$\alpha_i$形式肯定是$[)]^*[(X]^*$，因为如果存在一个闭合的括号对，那么中间肯定还存在着一个叶子结点，这显然不可能。所以我们可以用$\alpha_{i)}$来替代$[)]^*$，用$\alpha_{i(}$来替代$[(X]^*$，将$\alpha_i$改写为$\alpha_{i)} \alpha_{i(}$，括号表达式可以重写为：<br>\[<br>\alpha_{0)} \alpha_{0(} (\bullet_1) \alpha_{1)} \alpha_{1(} (\bullet_2) \ldots (\bullet_{\left| w \right|}) \alpha_{\left| w \right|)} \alpha_{\left| w \right|(}<br>\]<br>注意到首尾两个元素一定是空的，接下来用$\beta_i$替换$\alpha_{i-1(}(\bullet_i)\alpha_{i)}$，得到序列：<br>\[<br>\beta_1 \beta_2 \ldots \beta_{\left| w \right|}<br>\]<br>更进一步，可以证明$\beta_i$一定只含有$[(X]^*(\bullet_i)$和$(\bullet_i)[)]^*$中的一个。因为如果两个都含有的话，说明存在$(X(\bullet_i))$这种一元产生式，但是因为一元产生式都提前处理过了，所以不可能存在。</p>
-<p>接下来可以给每个$\beta_i$分配一个值$\delta(\beta_i)$，如果$\beta_i$左右两边都没有括号，那这个值就是0，如果左边有$k$个括号，那值就是$+k$，如果右边有$k$个括号，那值就是$-k$。如果将这些值写成序列：<br>\[<br>\delta(\beta_1)\delta(\beta_2)\ldots\delta(\beta_{\left|w\right| - 1})<br>\]<br>这个序列正好对应了之前的第二种编码，也就是编码成LCA的个数之差。这是为什么呢？可以看出，一直到$\beta_i$结束，没有闭合的括号数量正好就是$w_i$和$w_{i+1}$的LCA数量。所以$\delta(\beta_i)$就是$w_i$和$w_{i+1}$的LCA数量与$w_{i-1}$和$w_{i}$的LCA数量的差值。</p>
+<p>如果用$(\bullet_i)$表示第$i$个叶子结点，那么句法树可以表示成如下的括号表达式：<br>&lt;!–swig￼58–&gt;<br>更进一步，每个$\alpha_i$形式肯定是$[)]^\*[(X]^\*$，因为如果存在一个闭合的括号对，那么中间肯定还存在着一个叶子结点，这显然不可能。所以我们可以用$\alpha_{i)}$来替代$[)]^\*$，用$\alpha_{i(}$来替代$[(X]^\*$，将$\alpha_i$改写为$\alpha_{i)} \alpha_{i(}$，括号表达式可以重写为：<br>&lt;!–swig￼67–&gt;<br>注意到首尾两个元素一定是空的，接下来用$\beta_i$替换$\alpha_{i-1(}(\bullet_i)\alpha_{i)}$，得到序列：<br>&lt;!–swig￼70–&gt;<br>更进一步，可以证明$\beta_i$一定只含有$[(X]^\*(\bullet_i)$和$(\bullet_i)[)]^\*$中的一个。因为如果两个都含有的话，说明存在$(X(\bullet_i))$这种一元产生式，但是因为一元产生式都提前处理过了，所以不可能存在。</p>
+<p>接下来可以给每个$\beta_i$分配一个值$\delta(\beta_i)$，如果$\beta_i$左右两边都没有括号，那这个值就是0，如果左边有$k$个括号，那值就是$+k$，如果右边有$k$个括号，那值就是$-k$。如果将这些值写成序列：<br>&lt;!–swig￼82–&gt;<br>这个序列正好对应了之前的第二种编码，也就是编码成LCA的个数之差。这是为什么呢？可以看出，一直到$\beta_i$结束，没有闭合的括号数量正好就是$w_i$和$w_{i+1}$的LCA数量。所以$\delta(\beta_i)$就是$w_i$和$w_{i+1}$的LCA数量与$w_{i-1}$和$w_{i}$的LCA数量的差值。</p>
 <p>最后这就验证了括号序列和之前的编码是一一对应的，单射性得证。解码的时候只需要将数字直接转化成对应的括号序列就行了。</p>
 <p>而加上了非终结符之后，单射性不会受到影响。因为虽然两棵相同结构但是拥有不同非终结符的句法树，转化成括号序列后是相同的。但是因为之前的定义中，还有一个变量$c_i$来表示这个非终结符了，所以还是能够唯一对应过去的。</p>
 <h2 id="限制"><a href="#限制" class="headerlink" title="限制"></a>限制</h2><p>上面定义的序列化函数有两个缺点：一是非满射，二是不能处理一元产生式，下面介绍一下解决方法。</p>
@@ -811,7 +829,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="Better, Faster, Stronger Sequence Tagging Constituent Parsers">
+                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="Better, Faster, Stronger Sequence Tagging Constituent Parsers">
                         
                         <span class="card-title">Better, Faster, Stronger Sequence Tagging Constituent Parsers</span>
                     </div>
@@ -875,7 +893,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="Latex撰写论文常用技巧总结">
+                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="Latex撰写论文常用技巧总结">
                         
                         <span class="card-title">Latex撰写论文常用技巧总结</span>
                     </div>
@@ -1102,7 +1120,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

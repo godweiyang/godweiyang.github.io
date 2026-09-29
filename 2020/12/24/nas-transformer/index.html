@@ -157,6 +157,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -242,6 +251,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -336,7 +354,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/27.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -532,7 +550,7 @@
 <h2 id="AMC"><a href="#AMC" class="headerlink" title="AMC"></a>AMC</h2><p><strong>[ECCV 18] AMC: AutoML for Model Compression and Acceleration on Mobile Devices</strong></p>
 <h3 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h3><p>以往的压缩策略或者说剪枝率都是人工调的，而本文提出了一直基于强化学习的剪枝方法，每层剪枝率可以单独调。</p>
 <h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><p><img src="1.png" alt=""><br>从最下面一层开始，编码整个网络的状态。然后用强化学习生成下一层的剪枝率，更新状态。最后的reward可以是压缩率、延时、FLOPs等等。actor用的是DDPG，action定义为(0, 1]之间的稀疏率。<br><img src="2.png" alt=""><br>上面是剪枝和状态更新过程。</p>
-<p>应用场景分为两种，一种是资源受限条件下寻找效果最高的模型，这种情况reward就直接定义为效果就行了，而资源的限制设定在了action空间里，就是上图伪代码做的事情。另一种是效果不变的情况下，压缩的尽量小，这种情况就要改reward，本文设定为了$R = -L \cdot \log(\text{Params})$，这里改成FLOPs也是可以的，因为参数量前面加了$\log$，所以参数量的下降产生的奖励非常小，这就能一定程度上防止效果下降过多。延时的话本文认为和FLOPs基本正相关，因此直接优化FLOPs就行了（其实很多地方不是这样，比如考虑到并行等）。</p>
+<p>应用场景分为两种，一种是资源受限条件下寻找效果最高的模型，这种情况reward就直接定义为效果就行了，而资源的限制设定在了action空间里，就是上图伪代码做的事情。另一种是效果不变的情况下，压缩的尽量小，这种情况就要改reward，本文设定为了$R = -L \cdot \log\(\text{Params}\)$，这里改成FLOPs也是可以的，因为参数量前面加了$\log$，所以参数量的下降产生的奖励非常小，这就能一定程度上防止效果下降过多。延时的话本文认为和FLOPs基本正相关，因此直接优化FLOPs就行了（其实很多地方不是这样，比如考虑到并行等）。</p>
 <h3 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h3><p><img src="3.png" alt=""><br>相同稀疏率情况下，效果更好。</p>
 <h3 id="评价"><a href="#评价" class="headerlink" title="评价"></a>评价</h3><p>可以针对不同设备，自动搜出最佳的压缩策略，对于平衡效果和压缩率/加速比非常友好。</p>
 <h2 id="TextNAS"><a href="#TextNAS" class="headerlink" title="TextNAS"></a>TextNAS</h2><p><strong>[AAAI 20] TextNAS: A Neural Architecture Search Space Tailored for Text Representation</strong></p>
@@ -795,7 +813,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="Python常用画图代码（折线图、柱状图、饼图）">
+                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="Python常用画图代码（折线图、柱状图、饼图）">
                         
                         <span class="card-title">Python常用画图代码（折线图、柱状图、饼图）</span>
                     </div>
@@ -855,7 +873,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/26.jpg" class="responsive-img" alt="一文看懂AutoML">
+                        <img src="/medias/featureimages/28.jpg" class="responsive-img" alt="一文看懂AutoML">
                         
                         <span class="card-title">一文看懂AutoML</span>
                     </div>
@@ -1086,7 +1104,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

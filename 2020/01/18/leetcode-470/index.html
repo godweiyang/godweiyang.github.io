@@ -157,6 +157,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -242,6 +251,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -336,7 +354,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/2.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -536,10 +554,18 @@
 
 <p>注意：每行下标代表第一个随机数 1 到 7 （r1 表示），每列下标代表第二个随机数 1 到 7 （r2 表示）。而转换后的随机数可以表示为 $(7 (r1 - 1) + r2 - 1) % 10 + 1$ ，注意到最后 9 个数没有用到，因为它们不足以表示 1 到 10 这 10 个数，如果表示了概率就不等了。</p>
 <p>那么如果根据上面式子算出来落在了最后 9 个数范围内怎么办呢？这时候我们就拒绝它，重新生成两个数就行了，直到落在前 40 个数范围里。这种方法的期望采样次数是多少呢？</p>
-<p>$$<br>    \begin{aligned}<br>        E &amp;= 2 + 2 \cdot \frac{9}{49} + 2 \cdot (\frac{9}{49})^2 + \cdots \<br>        &amp;= 2 \sum_{n=0}^{\infty}{(\frac{9}{49})^n} \<br>        &amp;= 2 \cdot \frac{1}{1-\frac{9}{49}} \<br>        &amp;=2.45<br>    \end{aligned}<br>$$</p>
+$$
+    \begin{aligned}
+        E &= 2 + 2 \cdot \frac{9}{49} + 2 \cdot (\frac{9}{49})^2 + \cdots \\
+        &= 2 \sum_{n=0}^{\infty}{(\frac{9}{49})^n} \\
+        &= 2 \cdot \frac{1}{1-\frac{9}{49}} \\
+        &=2.45
+    \end{aligned}
+$$
+
 <p>所以平均只需要 2.45 次就可以均匀的采样到 1 到 10 之间的整数啦。那么这背后的数学原理是什么呢？其实就是<strong>拒绝采样</strong>。</p>
 <p>蒙特卡洛方法大家应该都很熟悉了，就是采样来求分布，比如求一个直径为 1 的圆的概率，我们可以用一个边长为 1 的正方形包住它，然后随机往里面扔豆子，扔 10000 个，看最后有多少落在了圆里面，那么除以 10000 就是圆的面积了。</p>
-<p>而拒绝采样跟这类似，就是一个分布 $p(x)$ 形式比较复杂，累积分布函数不好求，所以不好采样。那么我们可以用一个标准分布 $q(x)$ 来近似它，并且用系数 $k$ 来控制 $q(x)$ 的大小，使得 $k \cdot q(x) \ge p(x)$ ，这就类似于上面的用正方形包住了圆形嘛。 然后 $q(x)$ 是好采样的嘛，所以根据 $q(x)$ 采样出一个 $x’$ ，然后再在 0 到 $k \cdot q(x’)$ 之间采样一个数 $t$，如果 $t$ 落在了 0 到 $p(x’)$ 之间，那就接受这个采样，否则就拒绝它，重新采样。这种方法采出来的 $x’$ 是服从分布 $p(x)$ 的，因为你采样得到 $x’$ 的概率是 $q(x’)$ ，而接受的概率是 $\frac{p(x’)}{k \cdot q(x’)}$ ，所以最终接受 $x’$ 的概率就是 $\frac{p(x’)}{k}$ 。因此 $k$ 要设置的尽量小，这样接受的概率才大，期望的采样次数才少。但是又不能设置太小，因为要满足 $k \cdot q(x) \ge p(x)$ 的前提条件才行。</p>
+<p>而拒绝采样跟这类似，就是一个分布 $p(x)$ 形式比较复杂，累积分布函数不好求，所以不好采样。那么我们可以用一个标准分布 $q(x)$ 来近似它，并且用系数 $k$ 来控制 $q(x)$ 的大小，使得 $k \cdot q(x) \ge p(x)$ ，这就类似于上面的用正方形包住了圆形嘛。 然后 $q(x)$ 是好采样的嘛，所以根据 $q(x)$ 采样出一个 $x'$ ，然后再在 0 到 $k \cdot q(x')$ 之间采样一个数 $t$，如果 $t$ 落在了 0 到 $p(x')$ 之间，那就接受这个采样，否则就拒绝它，重新采样。这种方法采出来的 $x'$ 是服从分布 $p(x)$ 的，因为你采样得到 $x'$ 的概率是 $q(x')$ ，而接受的概率是 $\frac{p(x')}{k \cdot q(x')}$ ，所以最终接受 $x'$ 的概率就是 $\frac{p(x')}{k}$ 。因此 $k$ 要设置的尽量小，这样接受的概率才大，期望的采样次数才少。但是又不能设置太小，因为要满足 $k \cdot q(x) \ge p(x)$ 的前提条件才行。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="c"><a href="#c" class="headerlink" title="c++"></a>c++</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// The rand7() API is already defined for you.</span></span><br><span class="line"><span class="comment">// int rand7();</span></span><br><span class="line"><span class="comment">// @return a random integer in the range 1 to 7</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">rand10</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> r1, r2, num;</span><br><span class="line">        <span class="keyword">do</span> &#123;</span><br><span class="line">            r1 = <span class="built_in">rand7</span>();</span><br><span class="line">            r2 = <span class="built_in">rand7</span>();</span><br><span class="line">            num = (r1 - <span class="number">1</span>) * <span class="number">7</span> + r2;</span><br><span class="line">        &#125; <span class="keyword">while</span> (num &gt; <span class="number">40</span>);</span><br><span class="line">        <span class="keyword">return</span> (num - <span class="number">1</span>) % <span class="number">10</span> + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>这题题目虽简单，背后的思想还是很有意思的，拒绝采样可以用在深度学习中的很多应用场景里，特别是你的分布很难进行采样的时候，就可以用拒绝采样来模拟。</p>
@@ -775,7 +801,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="每日算法系列【LeetCode 875】爱吃香蕉的珂珂">
+                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="每日算法系列【LeetCode 875】爱吃香蕉的珂珂">
                         
                         <span class="card-title">每日算法系列【LeetCode 875】爱吃香蕉的珂珂</span>
                     </div>
@@ -833,7 +859,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="每日算法系列【LeetCode 827】最大人工岛">
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="每日算法系列【LeetCode 827】最大人工岛">
                         
                         <span class="card-title">每日算法系列【LeetCode 827】最大人工岛</span>
                     </div>
@@ -1063,7 +1089,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

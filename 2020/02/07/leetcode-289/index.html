@@ -157,6 +157,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -242,6 +251,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -336,7 +354,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/4.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/2.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -542,7 +560,7 @@
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>这题要求你根据数组每个元素四周的状态来更新数组元素。如果使用一个辅助数组，遍历原数组，然后保存更新后的状态到辅助数组里。这样的话轻轻松松，没有任何难度。但是这题意思是让你不使用辅助数组，直接修改原数组元素，达到一样的目的。</p>
 <p>这样的话就不能直接修改原数组元素了，不然当你遍历下一个元素的时候，它周围的值都变掉了，还怎么看它要不要变呢？所以我们应该想办法把变化前变化后的元素都保存下来。</p>
 <p>因为这题只有两个状态 0 和 1 ，所以我们可以用两位二进制来表示变化前和后的状态，第一位表示变化后，第二位表示变化前。 00，10，01，11 分别表示 0 不变、0 变到 1 、1 变到 0 、1 不变四种变化情况。这样的话就算你直接修改了元素值，也能获取到它的原来的值。最后只需要进行第二遍扫描，取出变化后的值，也就是第一位就行了。</p>
-<p>判断和修改都可以通过位运算来完成。判断修改前是否为 1 可以通过 $x&amp;1$ 来看。用 m 表示修改（1）或者不修改（0），那么更新后元素就变成了 $x + (m &lt;&lt; 1)$ 。最后更新后的数组元素就是 $x &gt;&gt; 1$ 了。</p>
+<p>判断和修改都可以通过位运算来完成。判断修改前是否为 1 可以通过 $x\&1$ 来看。用 m 表示修改（1）或者不修改（0），那么更新后元素就变成了 $x + (m << 1)$ 。最后更新后的数组元素就是 $x >> 1$ 了。</p>
 <p>而边界问题很好处理，只需要判断一下有没有超出边界就行了。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="c"><a href="#c" class="headerlink" title="c++"></a>c++</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">gameOfLife</span><span class="params">(vector&lt;vector&lt;<span class="type">int</span>&gt;&gt;&amp; board)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> dx[] = &#123;<span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>&#125;;</span><br><span class="line">        <span class="type">int</span> dy[] = &#123;<span class="number">-1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">-1</span>, <span class="number">-1</span>&#125;;</span><br><span class="line">        <span class="type">int</span> n = board.<span class="built_in">size</span>(), m = board[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> x = <span class="number">0</span>; x &lt; n; ++x) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> y = <span class="number">0</span>; y &lt; m; ++y) &#123;</span><br><span class="line">                <span class="type">int</span> cnt = <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; ++i) &#123;</span><br><span class="line">                    <span class="type">int</span> nx = x + dx[i], ny = y + dy[i];</span><br><span class="line">                    <span class="keyword">if</span> (<span class="number">0</span> &lt;= nx &amp;&amp; nx &lt; n &amp;&amp; <span class="number">0</span> &lt;= ny &amp;&amp; ny &lt; m &amp;&amp; (board[nx][ny]&amp;<span class="number">1</span>)) &#123;</span><br><span class="line">                        cnt++;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (board[x][y] == <span class="number">1</span>) &#123;</span><br><span class="line">                    board[x][y] += ((cnt == <span class="number">2</span> || cnt == <span class="number">3</span>) &lt;&lt; <span class="number">1</span>);</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    board[x][y] += ((cnt == <span class="number">3</span>) &lt;&lt; <span class="number">1</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> x = <span class="number">0</span>; x &lt; n; ++x) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> y = <span class="number">0</span>; y &lt; m; ++y) &#123;</span><br><span class="line">                board[x][y] &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
@@ -778,7 +796,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="每日算法系列【LeetCode 719】找出第 k 小的距离对">
+                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="每日算法系列【LeetCode 719】找出第 k 小的距离对">
                         
                         <span class="card-title">每日算法系列【LeetCode 719】找出第 k 小的距离对</span>
                     </div>
@@ -837,7 +855,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="每日算法系列【LeetCode 556】下一个更大元素 III">
+                        <img src="/medias/featureimages/28.jpg" class="responsive-img" alt="每日算法系列【LeetCode 556】下一个更大元素 III">
                         
                         <span class="card-title">每日算法系列【LeetCode 556】下一个更大元素 III</span>
                     </div>
@@ -1070,7 +1088,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

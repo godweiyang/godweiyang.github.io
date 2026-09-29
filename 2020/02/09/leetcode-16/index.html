@@ -156,6 +156,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -241,6 +250,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -335,7 +353,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/8.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/10.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -494,7 +512,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    554
+                    552
                 </div>
                 
 
@@ -528,7 +546,7 @@
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>最暴力的方法就是直接枚举三个不同的数，然后求出差值最小的和，但是这样时间复杂度是 $O(n^3)$ ，太高了。</p>
 <p>那么我们先枚举一个数试试，并且假设它是最小的数，然后寻找比它大的两个数就行了，这就需要我们先对数组进行排序（假设排序后数组是 $a$ ）。</p>
 <p>如果枚举的数是 $a[i]$ ，那么我们只需要寻找和 $t - a[i]$ 差值最小的两个数之和就行了。</p>
-<p>如果用双指针的方法，初始时令 $l = i + 1$ ，同时 $r = n - 1$ 。那么如果 $a[i] + a[l] + a[r] &gt; t$ ，就说明 $r$ 太大了，需要左移。否则的话如果 $a[i] + a[l] + a[r] &lt; t$ ，就说明 $l$ 太小了，需要右移。在不断移动的过程中更新最小差值就行了，因为 $l$ 和 $r$ 最终一共只移动了 $O(n)$ 步，所以总的时间复杂度只有 $O(n \log n + n^2)$ ，忽略低阶项之后只有 $O(n^2)$ ，还是可以接受的。</p>
+<p>如果用双指针的方法，初始时令 $l = i + 1$ ，同时 $r = n - 1$ 。那么如果 $a[i] + a[l] + a[r] > t$ ，就说明 $r$ 太大了，需要左移。否则的话如果 $a[i] + a[l] + a[r] < t$ ，就说明 $l$ 太小了，需要右移。在不断移动的过程中更新最小差值就行了，因为 $l$ 和 $r$ 最终一共只移动了 $O(n)$ 步，所以总的时间复杂度只有 $O(n \log n + n^2)$ ，忽略低阶项之后只有 $O(n^2)$ ，还是可以接受的。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="c"><a href="#c" class="headerlink" title="c++"></a>c++</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">threeSumClosest</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = nums.<span class="built_in">size</span>(), res = <span class="number">10000000</span>;</span><br><span class="line">        <span class="built_in">sort</span>(nums.<span class="built_in">begin</span>(), nums.<span class="built_in">end</span>());</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n - <span class="number">2</span>; ++i) &#123;</span><br><span class="line">            <span class="type">int</span> l = i + <span class="number">1</span>, r = n - <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">while</span> (l &lt; r) &#123;</span><br><span class="line">                <span class="type">int</span> sum = nums[i] + nums[l] + nums[r];</span><br><span class="line">                <span class="keyword">if</span> (sum == target) <span class="keyword">return</span> sum;</span><br><span class="line">                <span class="keyword">if</span> (<span class="built_in">abs</span>(sum-target) &lt; <span class="built_in">abs</span>(res-target)) res = sum;</span><br><span class="line">                <span class="keyword">if</span> (sum &gt; target) r--;</span><br><span class="line">                <span class="keyword">else</span> l++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <h3 id="python"><a href="#python" class="headerlink" title="python"></a>python</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">threeSumClosest</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>], target: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        n, res = <span class="built_in">len</span>(nums), <span class="number">10000000</span></span><br><span class="line">        nums.sort()</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n-<span class="number">2</span>):</span><br><span class="line">            l, r = i+<span class="number">1</span>, n-<span class="number">1</span></span><br><span class="line">            <span class="keyword">while</span> l &lt; r:</span><br><span class="line">                s = nums[i] + nums[l] + nums[r]</span><br><span class="line">                <span class="keyword">if</span> s == target:</span><br><span class="line">                    <span class="keyword">return</span> s</span><br><span class="line">                <span class="keyword">if</span> <span class="built_in">abs</span>(s-target) &lt; <span class="built_in">abs</span>(res-target):</span><br><span class="line">                    res = s</span><br><span class="line">                <span class="keyword">if</span> s &gt; target:</span><br><span class="line">                    r -= <span class="number">1</span></span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    l += <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
@@ -763,7 +781,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/25.jpg" class="responsive-img" alt="每日算法系列【LeetCode 503】下一个更大元素 II">
+                        <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="每日算法系列【LeetCode 503】下一个更大元素 II">
                         
                         <span class="card-title">每日算法系列【LeetCode 503】下一个更大元素 II</span>
                     </div>
@@ -820,7 +838,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="每日算法系列【LeetCode 719】找出第 k 小的距离对">
+                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="每日算法系列【LeetCode 719】找出第 k 小的距离对">
                         
                         <span class="card-title">每日算法系列【LeetCode 719】找出第 k 小的距离对</span>
                     </div>
@@ -1051,7 +1069,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

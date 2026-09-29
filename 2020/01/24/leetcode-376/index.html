@@ -157,6 +157,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -242,6 +251,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -336,7 +354,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/14.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -537,20 +555,28 @@
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>这题题面说的啰里啰唆的，其实就一句话：给你一个序列，找出最长的一个子序列，其中子序列相邻两个数的大小是波形的（也就是大小大小大等等这样的）。</p>
 <h3 id="暴力法"><a href="#暴力法" class="headerlink" title="暴力法"></a>暴力法</h3><p>用 dfs 枚举所有可能的子序列，然后看最长的是多少，这种方法显然会超时。</p>
 <h3 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h3><p>其实看到这道题，我第一个想到了最长上升子序列，这不就变了个形式嘛，于是动态规划解法直接就有了。</p>
-<p>用 $dp[i][s]$ 表示以 $nums[i]$ 结尾的符合条件的最长子序列长度，其中 s 取 1 表示在 $nums[i]$ 处子序列上升，取 0 表示下降。那么我们只需要遍历之前的所有 j ，如果 $nums[j] &lt; nums[i]$ ，那么在 j 处必须是要下降的，更新：</p>
-<p>$$<br>dp[i][1] = \max_j<br>$$</p>
-<p>如果 $nums[j] &gt; nums[i]$ ，那么在 j 处必须是要上升的，更新：</p>
-<p>$$<br>dp[i][0] = \max_j<br>$$</p>
+<p>用 $dp[i][s]$ 表示以 $nums[i]$ 结尾的符合条件的最长子序列长度，其中 s 取 1 表示在 $nums[i]$ 处子序列上升，取 0 表示下降。那么我们只需要遍历之前的所有 j ，如果 $nums[j] < nums[i]$ ，那么在 j 处必须是要下降的，更新：</p>
+$$
+dp[i][1] = \max_j{\{dp[j][0]\}}
+$$
+
+<p>如果 $nums[j] > nums[i]$ ，那么在 j 处必须是要上升的，更新：</p>
+$$
+dp[i][0] = \max_j{\{dp[j][1]\}}
+$$
+
 <p>然后取数组中最大值就是答案了，时间复杂度 $O(n^2)$ 。</p>
 <h3 id="动态规划-时间优化"><a href="#动态规划-时间优化" class="headerlink" title="动态规划+时间优化"></a>动态规划+时间优化</h3><p>换个定义，用 $dp[i][s]$ 表示 $nums[i]$ 之前的最长子序列，注意和上面的区别就是不一定以 $nums[i]$ 结尾了。 s 取 1 表示最后两个数是上升的，取 0 表示最后两个数是下降的。</p>
 <p>这里分为几种情况：</p>
 <ul>
-<li>$nums[i-1] &lt; nums[i]$ :<ul>
+<li>$nums[i-1] < nums[i]$ :
+<ul>
 <li>考虑 $dp[i][0]$ ，也就是最后两个数下降的，那肯定不能取 $nums[i]$ ，因为 $nums[i-1]$ 比它更小、更优，所以直接更新为 $dp[i-1][0]$ 。</li>
-<li>考虑 $dp[i][1]$ ，也就是最后两个数上升的，那如果不取 $nums[i]$ ，那更新为 $dp[i-1][1]$ ；如果取的话，我们就要保证 i-1 之前最后两个数是下降的，并且之前的最后一个数小于 $nums[i]$ 。我们可以证明， i-1 之前的最后两个下降的数一定满足：第二个数 $nums[j]$ 是小于 $nums[i]$ 的，因为如果 $nums[j] &gt;= nums[i]$ ，那么 j 到 i 之间的数一定是单调下降的，否则存在更长的子序列，那么就和 $nums[i-1] &lt; nums[i]$ 矛盾了。综上，取的话 $dp[i][1]$ 更新为 $dp[i-1][0]+1$ 。</li>
+<li>考虑 $dp[i][1]$ ，也就是最后两个数上升的，那如果不取 $nums[i]$ ，那更新为 $dp[i-1][1]$ ；如果取的话，我们就要保证 i-1 之前最后两个数是下降的，并且之前的最后一个数小于 $nums[i]$ 。我们可以证明， i-1 之前的最后两个下降的数一定满足：第二个数 $nums[j]$ 是小于 $nums[i]$ 的，因为如果 $nums[j] >= nums[i]$ ，那么 j 到 i 之间的数一定是单调下降的，否则存在更长的子序列，那么就和 $nums[i-1] < nums[i]$ 矛盾了。综上，取的话 $dp[i][1]$ 更新为 $dp[i-1][0]+1$ 。</li>
 </ul>
 </li>
-<li>$nums[i-1] &gt; nums[i]$ :<br>同样考虑最后两个数上升还是下降，分析和上面一样。</li>
+<li>$nums[i-1] > nums[i]$ :
+同样考虑最后两个数上升还是下降，分析和上面一样。</li>
 </ul>
 <p>综上考虑，时间复杂度可以降为 $O(n)$ ，空间复杂度是 $O(n)$ 。</p>
 <h3 id="动态规划-空间优化"><a href="#动态规划-空间优化" class="headerlink" title="动态规划+空间优化"></a>动态规划+空间优化</h3><p>在上面优化的基础上，我们还可以观察到，每一次 $dp[i][s]$ 其实只会用到 $dp[i-1][s]$ ，所以我们只需要保存当前和前一时刻的状态就行了，空间复杂度可以降为 $O(1)$ 。</p>
@@ -798,7 +824,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="心有所鼠，鼠年快乐~">
+                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="心有所鼠，鼠年快乐~">
                         
                         <span class="card-title">心有所鼠，鼠年快乐~</span>
                     </div>
@@ -852,7 +878,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="每日算法系列【LeetCode 943】最短超级串">
+                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="每日算法系列【LeetCode 943】最短超级串">
                         
                         <span class="card-title">每日算法系列【LeetCode 943】最短超级串</span>
                     </div>
@@ -1084,7 +1110,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

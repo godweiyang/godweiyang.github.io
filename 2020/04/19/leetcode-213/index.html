@@ -154,6 +154,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -239,6 +248,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -333,7 +351,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/27.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -529,11 +547,9 @@
 <p>如果不偷第一个，那么问题就变成了在后 $n-1$ 个里面偷取的最大价值。</p>
 <p>如果不偷最后一个，那么问题就变成了在前 $n-1$ 个里面偷取的最大价值。</p>
 <p>而这两个转化后的问题就没有首尾连接的约束了，可以直接采用上一题的解法求解，转移方程还是：</p>
-
 $$
 dp[i] = \max{\{dp[i-1], dp[i-2]+p[i]\}}
 $$
-
 
 <p>最终取两种情况的较大值就行了。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="c"><a href="#c" class="headerlink" title="c++"></a>c++</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">rob1</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> l, <span class="type">int</span> r)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> prepre = <span class="number">0</span>, pre = <span class="number">0</span>, now = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = l; i &lt;= r; ++i) &#123;</span><br><span class="line">            now = <span class="built_in">max</span>(pre, prepre+nums[i]);</span><br><span class="line">            prepre = pre;</span><br><span class="line">            pre = now;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> now;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">rob</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span> (n == <span class="number">1</span>) <span class="keyword">return</span> nums[<span class="number">0</span>];</span><br><span class="line">        <span class="type">int</span> a = <span class="built_in">rob1</span>(nums, <span class="number">0</span>, n<span class="number">-2</span>);</span><br><span class="line">        <span class="type">int</span> b = <span class="built_in">rob1</span>(nums, <span class="number">1</span>, n<span class="number">-1</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">max</span>(a, b);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
@@ -772,7 +788,7 @@ $$
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/27.jpg" class="responsive-img" alt="【每日算法Day 106】打家劫舍系列最后一弹，撑住你就赢了！">
+                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="【每日算法Day 106】打家劫舍系列最后一弹，撑住你就赢了！">
                         
                         <span class="card-title">【每日算法Day 106】打家劫舍系列最后一弹，撑住你就赢了！</span>
                     </div>
@@ -827,7 +843,7 @@ $$
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="【每日算法Day 104】偷电瓶的周某今天放出来了，还不赶紧做这道题防范一下！">
+                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="【每日算法Day 104】偷电瓶的周某今天放出来了，还不赶紧做这道题防范一下！">
                         
                         <span class="card-title">【每日算法Day 104】偷电瓶的周某今天放出来了，还不赶紧做这道题防范一下！</span>
                     </div>
@@ -1057,7 +1073,7 @@ $$
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

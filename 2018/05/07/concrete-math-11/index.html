@@ -158,6 +158,15 @@ LR序列表示对于任意分数$\frac{a}{b}$，我们从$\frac{1}{1}$开始走�
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -243,6 +252,15 @@ LR序列表示对于任意分数$\frac{a}{b}$，我们从$\frac{1}{1}$开始走�
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -337,7 +355,7 @@ LR序列表示对于任意分数$\frac{a}{b}$，我们从$\frac{1}{1}$开始走�
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/17.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/19.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -492,14 +510,14 @@ LR序列表示对于任意分数$\frac{a}{b}$，我们从$\frac{1}{1}$开始走�
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.5k
+                    1.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    6 分
+                    4 分
                 </div>
                 
                 
@@ -527,30 +545,30 @@ LR序列表示对于任意分数$\frac{a}{b}$，我们从$\frac{1}{1}$开始走�
 <li>给定满足正整数$m$和$n$互素的分数$\frac{m}{n}$，它所对应的LR序列是什么？</li>
 <li>给定LR序列，它所表示的分数是什么？</li>
 </ol>
-<p>第二个问题看起来更好解决一点，我们先解决第二个问题。<br>我们定义<br>\[f(S) = 与S对应的分数\]<br>例如<br>\[f(LRRL) = \frac{5}{7}\]<br>如果用代码实现的话，对于每个L或者R，如果是L，那么就把右边界设为中间值，如果是R，那么就把左边界设为中间值。</p>
+<p>第二个问题看起来更好解决一点，我们先解决第二个问题。<br>我们定义<br>&lt;!–swig￼6–&gt;<br>例如<br>&lt;!–swig￼7–&gt;<br>如果用代码实现的话，对于每个L或者R，如果是L，那么就把右边界设为中间值，如果是R，那么就把左边界设为中间值。</p>
 <p>但是如何用数学式子来表达这一过程呢？</p>
-<p>我们建立一个2阶方阵：<br>\[M(S) = \left( {\begin{array}{*{20}{c}}n&amp;{n’}\m&amp;{m’}\end{array}} \right)\]<br>表示$f(S)$的两个祖先分数$\frac{m}{n}$和$\frac{m’}{n’}$</p>
-<p>那么初始状态就可以表示为<br>\[M(I) = \left( {\begin{array}{*{20}{c}}1&amp;0\0&amp;1\end{array}} \right)\]</p>
+<p>我们建立一个2阶方阵：<br>&lt;!–swig￼8–&gt;<br>表示$f(S)$的两个祖先分数$\frac{m}{n}$和$\frac{m'}{n'}$</p>
+<p>那么初始状态就可以表示为<br>&lt;!–swig￼12–&gt;</p>
 <p>如果遇到了向左符号L，那么</p>
-<p>\[M(SL) = \left( {\begin{array}{}n&amp;{n + n’}\m&amp;{m + m’}\end{array}} \right) = M(S)\left( {\begin{array}{}1&amp;1\0&amp;1\end{array}} \right)\]</p>
-<p>如果遇到了向右符号R，那么<br>\[M(SL) = \left( {\begin{array}{}{n + n’}&amp;{n’}\{m + m’}&amp;{m’}\end{array}} \right) = M(S)\left( {\begin{array}{}1&amp;0\1&amp;1\end{array}} \right)\]<br>所以我们将L和R定义成2阶方阵就行了：<br>\[L = \left( {\begin{array}{}1&amp;1\0&amp;1\end{array}} \right),R = \left( {\begin{array}{}1&amp;0\1&amp;1\end{array}} \right)\]<br>所以<br>\[\begin{array}{l}M(LRRL) = LRRL\ = \left( {\begin{array}{}1&amp;1\0&amp;1\end{array}} \right)\left( {\begin{array}{}1&amp;0\1&amp;1\end{array}} \right)\left( {\begin{array}{}1&amp;0\1&amp;1\end{array}} \right)\left( {\begin{array}{}1&amp;1\0&amp;1\end{array}} \right)\ = \left( {\begin{array}{}3&amp;4\2&amp;3\end{array}} \right)\end{array}\]<br>所以LRRL表示的分数为<br>\[\frac{ {2 + 3}}{ {3 + 4}} = \frac{5}{7}\]<br>那么第一个问题如何解决呢？<br>同样可以用类似二叉搜索的方法来求出LR序列，也可以用矩阵的方法来求解，根据上面的L和R的方阵，可以发现：<br>\[f(RS) = f(S) + 1\]<br>对于L也有类似的性质，所以我们得到了如下的求解算法：</p>
+<p>&lt;!–swig￼13–&gt;</p>
+<p>如果遇到了向右符号R，那么<br>&lt;!–swig￼14–&gt;<br>所以我们将L和R定义成2阶方阵就行了：<br>&lt;!–swig￼15–&gt;<br>所以<br>&lt;!–swig￼16–&gt;<br>所以LRRL表示的分数为<br>&lt;!–swig￼17–&gt;<br>那么第一个问题如何解决呢？<br>同样可以用类似二叉搜索的方法来求出LR序列，也可以用矩阵的方法来求解，根据上面的L和R的方阵，可以发现：<br>&lt;!–swig￼18–&gt;<br>对于L也有类似的性质，所以我们得到了如下的求解算法：</p>
 <ul>
-<li>如果$m &gt; n$，输出R，令$m = m - n$。</li>
-<li>如果$m &lt; n$，输出L，令$n = n - m$。</li>
+<li>如果$m > n$，输出R，令$m = m - n$。</li>
+<li>如果$m < n$，输出L，令$n = n - m$。</li>
 </ul>
 <h2 id="无理数近似表示"><a href="#无理数近似表示" class="headerlink" title="无理数近似表示"></a>无理数近似表示</h2><p>虽然说无理数不在Stern-Brocot树中，但是我们可以找到无限逼近它的分数。</p>
 <p>方法仍然使用二叉搜索，不同的是，搜索过程不会终止，除非得到了我们想要的精度或者我们人为终止。</p>
-<p>值得一提的是，无理数$e$的LR表示很有规律性：<br>\[e = R{L^0}RL{R^2}LR{L^4}RL{R^6}LR{L^8}RL{R^{10}}LR{L^{12}} \cdots \]</p>
+<p>值得一提的是，无理数$e$的LR表示很有规律性：<br>&lt;!–swig￼24–&gt;</p>
 <p>最后值得一提的是，欧几里得算法和有理数的Stern-Brocot树表示有密切的关系。给定$\alpha  = \frac{m}{n}$，根据之前的算法，它的LR表达式首先是$\left\lfloor {m/n} \right\rfloor $个R，然后是$\left\lfloor {n/(m\bmod n)} \right\rfloor $个L，依次下去，这些系数恰好就是求最大公因数的时候用到的系数。</p>
 <h1 id="同余关系"><a href="#同余关系" class="headerlink" title="同余关系"></a>同余关系</h1><hr>
-<p>同余定义为：<br>\[a \equiv b(\bmod m) \Leftrightarrow a\bmod m = b\bmod m\]<br>读作“a关于模m与b同余”，我们只讨论都是整数的情况。</p>
-<p>同样可以写作：<br>\[a \equiv b(\bmod m) \Leftrightarrow a - b是m的倍数\]</p>
-<p>同余是等价关系，满足自反律、对称律、传递律，即：<br>\[\begin{array}{l}a \equiv a\a \equiv b \Rightarrow b \equiv a\a \equiv b \equiv c \Rightarrow a \equiv c\end{array}\]<br>如果我们对同余两边的元素加减乘，同余仍然满足：<br>\[\begin{array}{l}a \equiv b,c \equiv d \Rightarrow a + c \equiv b + d(\bmod m)\a \equiv b,c \equiv d \Rightarrow a - c \equiv b - d(\bmod m)\a \equiv b,c \equiv d \Rightarrow ac \equiv bd(\bmod m)\end{array}\]<br>因此可以得到<br>\[a \equiv b \Rightarrow {a^n} \equiv {b^n}(\bmod m)\]</p>
-<p>然而对于除法同余并不总是成立，一些特殊条件下可能成立。<br>如果<br>\[ad \equiv bd(\bmod m)\]<br>当$d,m$互素的时候，我们可以得到<br>\[a \equiv b(\bmod m)\]<br>同样<br>\[ad \equiv bd(\bmod md) \Leftrightarrow a \equiv b(\bmod m)\]<br>更一般的情况下，我们有<br>\[ad \equiv bd(\bmod m) \Leftrightarrow a \equiv b(\bmod \frac{m}{ {\gcd (d,m)}})\]<br>还有许多性质我就直接列举了，不做证明了，证明很简单：<br>\[\begin{array}{l}a \equiv b(\bmod md) \Rightarrow a \equiv b(\bmod m)\a \equiv b(\bmod m),a \equiv b(\bmod n) \Leftrightarrow a \equiv b(\bmod lcm(m,n))\a \equiv b(\bmod mn),m \bot n \Leftrightarrow a \equiv b(\bmod m),a \equiv b(\bmod n)\a \equiv b(\bmod m) \Leftrightarrow \forall p,a \equiv b(\bmod {p^{ {m_p}}})\end{array}\]<br>其中$m = \prod\nolimits_p { {p^{ {m_p}}}} $是$m$的素因子分解。<br>第三条性质是中国剩余定理的特例，今后我们再做证明。</p>
+<p>同余定义为：<br>&lt;!–swig￼28–&gt;<br>读作“a关于模m与b同余”，我们只讨论都是整数的情况。</p>
+<p>同样可以写作：<br>&lt;!–swig￼29–&gt;</p>
+<p>同余是等价关系，满足自反律、对称律、传递律，即：<br>&lt;!–swig￼30–&gt;<br>如果我们对同余两边的元素加减乘，同余仍然满足：<br>&lt;!–swig￼31–&gt;<br>因此可以得到<br>&lt;!–swig￼32–&gt;</p>
+<p>然而对于除法同余并不总是成立，一些特殊条件下可能成立。<br>如果<br>&lt;!–swig￼33–&gt;<br>当$d,m$互素的时候，我们可以得到<br>&lt;!–swig￼35–&gt;<br>同样<br>&lt;!–swig￼36–&gt;<br>更一般的情况下，我们有<br>&lt;!–swig￼37–&gt;<br>还有许多性质我就直接列举了，不做证明了，证明很简单：<br>&lt;!–swig￼38–&gt;<br>其中$m = \prod\nolimits_p { {p^{ {m_p}}}} $是$m$的素因子分解。<br>第三条性质是中国剩余定理的特例，今后我们再做证明。</p>
 <h1 id="独立剩余"><a href="#独立剩余" class="headerlink" title="独立剩余"></a>独立剩余</h1><hr>
-<p>同余的应用之一就是剩余系，将整数$x$表示为一组互素的模的剩余（余数）序列：<br>\[(x\bmod {m_1}, \ldots ,x\bmod {m_r})\]<br>其中模$m$两两互素。</p>
+<p>同余的应用之一就是剩余系，将整数$x$表示为一组互素的模的剩余（余数）序列：<br>&lt;!–swig￼42–&gt;<br>其中模$m$两两互素。</p>
 <p>通过这个剩余序列可以确定出$x$的通解，其实可以看出来，这就是中国剩余定理的另一种表示形式。</p>
-<p>这种表示形式有很多好处，比如可以直接在每个维度上面进行加减乘法。例如对于$m_1 = 3, m_2 = 5$的剩余系，有如下表示：<br>\[13 = (1,3),7 = (1,2)\]<br>那么$13 \cdot 7,\bmod ,15$就可以这样计算：<br>\[(1 \cdot 1\bmod 3,3 \cdot 2\bmod 5) = (1,1)\]<br>所以<br>\[13 \cdot 7\bmod 15 = 1 \cdot 1\bmod 15 = 1\]</p>
+<p>这种表示形式有很多好处，比如可以直接在每个维度上面进行加减乘法。例如对于$m_1 = 3, m_2 = 5$的剩余系，有如下表示：<br>&lt;!–swig￼46–&gt;<br>那么$13 \cdot 7\,\bmod \,15$就可以这样计算：<br>&lt;!–swig￼48–&gt;<br>所以<br>&lt;!–swig￼49–&gt;</p>
 
             </div>
             <hr />
@@ -782,7 +800,7 @@ LR序列表示对于任意分数$\frac{a}{b}$，我们从$\frac{1}{1}$开始走�
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="具体数学-第12课（数论进阶与组合数入门）">
+                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="具体数学-第12课（数论进阶与组合数入门）">
                         
                         <span class="card-title">具体数学-第12课（数论进阶与组合数入门）</span>
                     </div>
@@ -839,7 +857,7 @@ LR序列表示对于任意分数$\frac{a}{b}$，我们从$\frac{1}{1}$开始走�
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="具体数学-第10课（素数和阶乘的有趣性质）">
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="具体数学-第10课（素数和阶乘的有趣性质）">
                         
                         <span class="card-title">具体数学-第10课（素数和阶乘的有趣性质）</span>
                     </div>
@@ -853,7 +871,7 @@ LR序列表示对于任意分数$\frac{a}{b}$，我们从$\frac{1}{1}$开始走�
 
 欧几里得数
 首先我们来证明一下，素数有无穷多个。
-假设素数只有$k$个，分别为$2,3, \ldots ,{P_k}$，那么我们构造下面的数字：\[M = 2 \cdot 3 \cdo
+假设素数只有$k$个，分别为$2,3, \ldots ,{P_k}$，那么我们构造下面的数字：&lt;!–swig￼2–&gt;显然$
                         
                     </div>
                     <div class="publish-info">
@@ -1066,7 +1084,7 @@ LR序列表示对于任意分数$\frac{a}{b}$，我们从$\frac{1}{1}$开始走�
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

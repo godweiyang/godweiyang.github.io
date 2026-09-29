@@ -157,6 +157,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -242,6 +251,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -336,7 +354,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/7.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/9.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -495,7 +513,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    654
+                    650
                 </div>
                 
 
@@ -529,13 +547,15 @@
 
 <p><strong>说明：</strong></p>
 <ul>
-<li>$0 \le num &lt; 2^{31}$</li>
+<li>$0 \le num < 2^{31}$
+
+</li>
 </ul>
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>显然这题就是个动态规划问题，我们令 $f[i]$ 表示 $num$ 到第 $i$ 位为止表示的方法数。</p>
-<p>那么我们观察 $num$ 的第 $i$ 位和第 $i-1$ 位，也就是最后两位，记为 $last$。如果 $10 \le last \le 25$，那么就可以把这两位合并成一个字母表示，同时也可以分成两个字母表示，所以 $f[i] = f[i-1] + f[i-2]$ 。但是如果 $last &gt; 25$ ，那就只能分成两个字母来表示了，所以 $f[i] = f[i-1]$ 。那如果 $last &lt; 10$ 会怎么样呢？那说明最后两位是 $0x$ 的形式，这种形式没有办法用一个字母表示，所以只能分成两个字母表示，所以 $f[i] = f[i-1]$ 。</p>
+<p>那么我们观察 $num$ 的第 $i$ 位和第 $i-1$ 位，也就是最后两位，记为 $last$。如果 $10 \le last \le 25$，那么就可以把这两位合并成一个字母表示，同时也可以分成两个字母表示，所以 $f[i] = f[i-1] + f[i-2]$ 。但是如果 $last > 25$ ，那就只能分成两个字母来表示了，所以 $f[i] = f[i-1]$ 。那如果 $last < 10$ 会怎么样呢？那说明最后两位是 $0x$ 的形式，这种形式没有办法用一个字母表示，所以只能分成两个字母表示，所以 $f[i] = f[i-1]$ 。</p>
 <p>综上，如果 $10 \le last \le 25$，就有 $f[i] = f[i-1] + f[i-2]$ ；否则的话就有 $f[i] = f[i-1]$ 。</p>
 <p>当然上面这是把 $num$ 拆成了数字形式的字符串来做的，其实这题也可以直接用递归，这样都不用转变成字符串形式了。</p>
-<p>我们直接令 $f(num)$ 表示数字 $num$ 的方法数。那么最后两位结果就是 $last = num % 100$ ，那么如果 $10 \le last \le 25$，就有 $f(num) = f(num/10) + f(num/100)$ ；否则的话就有 $f(num) = f(num/10)$ 。递归的终止条件就是，如果 $num &lt; 10$ ，那么只有一种表示方法。</p>
+<p>我们直接令 $f(num)$ 表示数字 $num$ 的方法数。那么最后两位结果就是 $last = num \% 100$ ，那么如果 $10 \le last \le 25$，就有 $f(num) = f(num/10) + f(num/100)$ ；否则的话就有 $f(num) = f(num/10)$ 。递归的终止条件就是，如果 $num < 10$ ，那么只有一种表示方法。</p>
 <p>当然这里递归有重复计算，可以采用记忆化搜索，但是因为复杂度太低了，没有必要。</p>
 <p>时间复杂度为 $O(\log_{10}{num})$，也就是 $num$ 的位数。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="c"><a href="#c" class="headerlink" title="c++"></a>c++</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">translateNum</span><span class="params">(<span class="type">int</span> num)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (num &lt; <span class="number">10</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        <span class="type">int</span> res = <span class="built_in">translateNum</span>(num/<span class="number">10</span>), last = num%<span class="number">100</span>;</span><br><span class="line">        <span class="keyword">if</span> (<span class="number">10</span> &lt;= last &amp;&amp; last &lt;= <span class="number">25</span>) res += <span class="built_in">translateNum</span>(num/<span class="number">100</span>);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
@@ -772,7 +792,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="【每日算法Day 87】今天我脱单了，所以大家不用做题了！">
+                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="【每日算法Day 87】今天我脱单了，所以大家不用做题了！">
                         
                         <span class="card-title">【每日算法Day 87】今天我脱单了，所以大家不用做题了！</span>
                     </div>
@@ -838,7 +858,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="【每日算法Day 85】图解算法：一行代码解决约瑟夫环的变体">
+                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="【每日算法Day 85】图解算法：一行代码解决约瑟夫环的变体">
                         
                         <span class="card-title">【每日算法Day 85】图解算法：一行代码解决约瑟夫环的变体</span>
                     </div>
@@ -1068,7 +1088,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

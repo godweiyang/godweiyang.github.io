@@ -156,6 +156,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -241,6 +250,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -335,7 +353,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/27.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/25.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -537,7 +555,7 @@
 
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><h3 id="二分法"><a href="#二分法" class="headerlink" title="二分法"></a>二分法</h3><p>根据抽屉原理，如果大小为 $m$ 的抽屉里放了大于 $m$ 个数，那么一定有一个抽屉里至少放了两个数。</p>
 <p>那我们不妨统计一下数组中有多少个数满足 $1 \le nums[i] \le m$ ，数量记为 $cnt$ 。</p>
-<p>如果 $cnt &gt; m$ ，那么根据抽屉原理，$1$ 到 $m$ 中一定有一个数出现了至少两次。</p>
+<p>如果 $cnt > m$ ，那么根据抽屉原理，$1$ 到 $m$ 中一定有一个数出现了至少两次。</p>
 <p>反之如果 $cnt \le m$ ，那么说明满足 $m+1 \le nums[i] \le n$ 的数的数量是 $n+1-cnt \ge n-m+1$ ，而抽屉大小是 $n-m$ ，所以根据抽屉原理，$m+1$ 到 $n$ 中一定有一个数出现了至少两次。</p>
 <p>综上，可以采用二分法，不断缩小 $m$ 的范围，最终得到这个出现至少两次的数的值。</p>
 <p>时间复杂度 $O(n \log n)$ 。</p>
@@ -551,7 +569,7 @@
 <p>假设如下图所示，链表中链的长度是 $m$ ，环的长度是 $n$ 。</p>
 <p><img src="4.jpg" alt=""></p>
 <p>假设慢指针和快指针第一次相遇时，慢指针移动的距离是 $x$ ，那么快指针移动距离就是 $2x$ 。</p>
-<p>可以列出等式 $2x - x = kn$ ，也就是两者距离差值一定是环长度的正整数 $k$ 倍，同时 $k$ 是使得 $x = kn \ge m$ 的最小正整数，即 $(k-1)n &lt; m \le kn$。这时候慢指针离入口的距离是 $n - (x - m) = m - (k - 1)n$ ，也就是说，慢指针只需要再多绕 $k-1$ 个环的长度，就能恰好和从头结点而来的指针相遇在入口处。</p>
+<p>可以列出等式 $2x - x = kn$ ，也就是两者距离差值一定是环长度的正整数 $k$ 倍，同时 $k$ 是使得 $x = kn \ge m$ 的最小正整数，即 $(k-1)n < m \le kn$。这时候慢指针离入口的距离是 $n - (x - m) = m - (k - 1)n$ ，也就是说，慢指针只需要再多绕 $k-1$ 个环的长度，就能恰好和从头结点而来的指针相遇在入口处。</p>
 <p>时间复杂度 $O(n)$ 。</p>
 <p><strong>扩展：</strong></p>
 <p>那有人可能会问了，那要是链最后回到了 $0$ ，不就没有链，只有环了吗？哪来的入口？这是对的，所以本题中限制了 $nums$ 数组里都是大于 $0$ 的，如果范围是 $0$ 到 $n-1$ 的话，不能直接用数值但下标索引了，不然会出现下面这种情况，也就是 $0$ 也在环里了。</p>
@@ -796,7 +814,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="每日算法系列【LeetCode 1006】笨阶乘">
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="每日算法系列【LeetCode 1006】笨阶乘">
                         
                         <span class="card-title">每日算法系列【LeetCode 1006】笨阶乘</span>
                     </div>
@@ -853,7 +871,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="每日算法系列【EOJ 3031】二进制倒置">
+                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="每日算法系列【EOJ 3031】二进制倒置">
                         
                         <span class="card-title">每日算法系列【EOJ 3031】二进制倒置</span>
                     </div>
@@ -1082,7 +1100,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

@@ -156,6 +156,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -241,6 +250,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -335,7 +353,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/20.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/22.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -529,17 +547,25 @@
 <ul>
 <li>$nums.length$ 的范围在[1, 20000]之间。</li>
 <li>$nums[i]$ 的范围在[1, 65535]之间。</li>
-<li>$k$ 的范围在 [1, floor(nums.legth / 3)]之间。</li>
+<li>$k$ 的范围在 [1, floor(nums.legth / 3)]之间。
+
+</li>
 </ul>
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>首先看数据范围，这题不能使用暴力，暴力时间复杂度是 $O(n^3)$ ，一定会超时，所以考虑使用动态规划求解。</p>
 <p>下面考虑一般情况，也就是求解划分成 $N$ 个不重叠数组的最大和。</p>
 <p>假设到第 $i$ 个元素为止，一共已经产生了 $j$ 个不重叠数组，那么令 $dp[i][j]$ 表示这$j$个不重叠数组的最大和。</p>
 <p>然后就要寻找状态转移方程。对于第 $i$ 个元素，分为两种情况，可取可不取。</p>
 <p>如果取，那就说明 $nums[i]$ 是第 $j$ 个子数组的最后一个元素，那么转移方程为：</p>
-<p>$$<br>    dp[i][j] = dp[i-k][j-1] + nums_{i-k+1:i}<br>$$</p>
+$$
+    dp[i][j] = dp[i-k][j-1] + nums_{i-k+1:i}
+$$
+
 <p>也就是说，从 $i-k+1$ 到 $i$ ，这 $k$ 个元素构成了第 $j$ 个子数组，那我们只需要求到第 $i-k$ 个元素为止，产生 $j-1$ 个不重叠数组的最大和即可。</p>
 <p>如果不取，那问题就变成了求到第 $i-1$ 个元素为止，产生 $j$ 个不重叠数组的最大和，那么转移方程为：</p>
-<p>$$<br>    dp[i][j] = dp[i-1][j]<br>$$</p>
+$$
+    dp[i][j] = dp[i-1][j]
+$$
+
 <p>当然这题还需要你还原出最大和的情况下，所有子数组的起始元素下标，所以需要另外用一个数组保存一下每一步的最优下标。</p>
 <p>同样，假设到第 $i$ 个元素为止，一共已经产生了 $j$ 个不重叠数组，用 $path[i][j]$ 表示第 $j$ 个子数组的末尾元素下标。</p>
 <p>那么按照上面的推断，如果取第 $i$ 个元素，那么 $path[i][j]=i$ ；否则的话 $path[i][j]=path[i-1][j]$ 。</p>
@@ -781,7 +807,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="分享一些自用软件，学妹们用了都说好用！">
+                        <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="分享一些自用软件，学妹们用了都说好用！">
                         
                         <span class="card-title">分享一些自用软件，学妹们用了都说好用！</span>
                     </div>
@@ -836,7 +862,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="论文赏析[EMNLP19]如何在Transformer中融入句法树信息？这里给出了一种解决方案">
+                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="论文赏析[EMNLP19]如何在Transformer中融入句法树信息？这里给出了一种解决方案">
                         
                         <span class="card-title">论文赏析[EMNLP19]如何在Transformer中融入句法树信息？这里给出了一种解决方案</span>
                     </div>
@@ -1070,7 +1096,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

@@ -159,6 +159,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -244,6 +253,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -338,7 +356,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/7.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/9.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -544,7 +562,7 @@
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>这题最暴力的方法就是枚举所有的数，然后判断每个数是否是 $n$ 倍数就行了，时间复杂度是 $O(10^{s.length} \cdot T)$ ，最大可以达到 $10^{13}$ 级别，无法接受！</p>
 <p>那么我们从 $s$ 的最低位（也就是第 0 位）开始考虑，假设当前已经考虑到了第 $i$ 位。我们用数组 $c[k]$ 表示前面 $i-1$ 位表示的所有数字中余数为 $k$ 可能有几种，初始的时候 $c[0] = 1$ ，其它都为 $0$ （因为一位都没有的话，就当作 $0$ 处理）。</p>
 <p>如果第 $i$ 位不是 $x$ ，那就说明第 $i$ 位上面已经有数字了。否则的话可以取 $0$ 到 $9$ 之间任意数（如果 $x$ 在最高位，排除掉 $0$）。</p>
-<p>假设第 $i$ 位取 $j$ ，那么第 $i$ 位上面的数字在整个数字中的大小就是 $j \cdot 10^i$ 。假设它对 $n$ 取模结果是 $q = (j \cdot 10^i) % n$ ，那么对于前 $i-1$ 位来说，余数为 $k$ 的答案有 $c[k]$ 种。加上第 $i$ 位之后，余数变成了 $(q+k)%n$ ，所以前 $i$ 位余数为 $(q+k)%n$ 的答案要加上 $c[k]$ 。</p>
+<p>假设第 $i$ 位取 $j$ ，那么第 $i$ 位上面的数字在整个数字中的大小就是 $j \cdot 10^i$ 。假设它对 $n$ 取模结果是 $q = (j \cdot 10^i) \% n$ ，那么对于前 $i-1$ 位来说，余数为 $k$ 的答案有 $c[k]$ 种。加上第 $i$ 位之后，余数变成了 $(q+k)\%n$ ，所以前 $i$ 位余数为 $(q+k)\%n$ 的答案要加上 $c[k]$ 。</p>
 <p>最后整个 $s$ 的可能情况种数就是 $c[0]$ 。</p>
 <p>时间复杂度为 $O(s.length \cdot 10 \cdot n \cdot T)$ ，极限情况下会达到 $9 \cdot 10^{7}$ 级别，还可以接受。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="c"><a href="#c" class="headerlink" title="c++"></a>c++</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    string s;</span><br><span class="line">    <span class="type">int</span> n;</span><br><span class="line">    <span class="keyword">while</span> (cin &gt;&gt; s) &#123;</span><br><span class="line">        cin &gt;&gt; n;</span><br><span class="line">        <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">c</span><span class="params">(n, <span class="number">0</span>)</span></span>;</span><br><span class="line">        c[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="type">int</span> pow = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = s.<span class="built_in">size</span>()<span class="number">-1</span>; i &gt;= <span class="number">0</span>; --i) &#123;</span><br><span class="line">            <span class="type">int</span> lb = <span class="number">0</span>, rb = <span class="number">9</span>;</span><br><span class="line">            <span class="keyword">if</span> (s[i] != <span class="string">&#x27;x&#x27;</span>) &#123;</span><br><span class="line">                lb = rb = s[i] - <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!i) &#123;</span><br><span class="line">                lb = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">tc</span><span class="params">(n, <span class="number">0</span>)</span></span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> j = lb; j &lt;= rb; ++j) &#123;</span><br><span class="line">                <span class="type">int</span> q = (j * pow) % n;</span><br><span class="line">                <span class="keyword">for</span> (<span class="type">int</span> k = <span class="number">0</span>; k &lt; n; ++k) &#123;</span><br><span class="line">                    tc[(q+k)%n] += c[k];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            c = tc;</span><br><span class="line">            pow *= <span class="number">10</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        cout &lt;&lt; c[<span class="number">0</span>] &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -792,7 +810,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/26.jpg" class="responsive-img" alt="每日算法系列【LeetCode 329】矩阵中的最长递增路径">
+                        <img src="/medias/featureimages/24.jpg" class="responsive-img" alt="每日算法系列【LeetCode 329】矩阵中的最长递增路径">
                         
                         <span class="card-title">每日算法系列【LeetCode 329】矩阵中的最长递增路径</span>
                     </div>
@@ -852,7 +870,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="一个函数解决【LeetCode 买卖股票的最佳时机】系列所有题目！">
+                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="一个函数解决【LeetCode 买卖股票的最佳时机】系列所有题目！">
                         
                         <span class="card-title">一个函数解决【LeetCode 买卖股票的最佳时机】系列所有题目！</span>
                     </div>
@@ -1082,7 +1100,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

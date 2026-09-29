@@ -158,6 +158,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -243,6 +252,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -337,7 +355,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/9.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/7.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -496,7 +514,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.1k
+                    1k
                 </div>
                 
 
@@ -535,11 +553,11 @@
 <p>这部分大部分代码是自己写的，也有一部分是从CKY算法代码修改得到的。</p>
 <p>首先将数据集中出现的所有单词和词向量数组下标一一映射，词性类别也做一个映射吧。</p>
 <p>然后初始化神经网络的各个参数，要训练的权值矩阵一共有两个，$W$和$d$，接下来就是训练了。</p>
-<p>训练过程是这样的，采用了动态规划的思想，用三个维度$i$，$j$，$A$来表示这个句子从第$i$个位置到第$j$个位置且类别为$A$的信息。<br>用$e(i,j,A)$作为每个结点的向量表示，然后对他的儿子的所有情况进行遍历：<br>\[e(i,j,A) = \tanh (W \cdot [e(i,k,B),e(k,j,C)]) + type[A]\]<br>然后计算这个节点的分数：<br>\[s(i,j,A) = d \cdot e(i,j,A)\]<br>找出能使得分数最大的那个分割点和对应的类别，保存下来。</p>
+<p>训练过程是这样的，采用了动态规划的思想，用三个维度$i$，$j$，$A$来表示这个句子从第$i$个位置到第$j$个位置且类别为$A$的信息。<br>用$e(i,j,A)$作为每个结点的向量表示，然后对他的儿子的所有情况进行遍历：<br>&lt;!–swig￼9–&gt;<br>然后计算这个节点的分数：<br>&lt;!–swig￼10–&gt;<br>找出能使得分数最大的那个分割点和对应的类别，保存下来。</p>
 <p>这样动态规划做好之后一棵树实际上就已经建好了，再回溯生成这棵树就好了。</p>
 <p>但是这棵树很不准确的，刚开始就是随意生成的，所以要和标准树进行对比，计算出损失函数进行反向传播。</p>
 <p>所以接下来用当前的权值矩阵计算出标准树的分数，然后对刚刚生成的结果和这个标准括号序列进行对比，我就直接粗暴统计出两个字符串有多少位置不同，记为$cnt$。</p>
-<p>总的损失函数就是：<br>\[\left| {result - gold + cnt} \right|\]<br>然后进行反向传播就行了。</p>
+<p>总的损失函数就是：<br>&lt;!–swig￼12–&gt;<br>然后进行反向传播就行了。</p>
 <h1 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h1><hr>
 <p>在测试集上面直接照搬训练过程代码就行了，按照动态规划生成一棵树就行了。</p>
 <p>然后用现成的代码和标准结果进行对比，得出F1值。</p>
@@ -782,7 +800,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="具体数学-第1课（递归求解实际问题）">
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="具体数学-第1课（递归求解实际问题）">
                         
                         <span class="card-title">具体数学-第1课（递归求解实际问题）</span>
                     </div>
@@ -838,7 +856,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="二零一七年终总结">
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="二零一七年终总结">
                         
                         <span class="card-title">二零一七年终总结</span>
                     </div>
@@ -1059,7 +1077,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

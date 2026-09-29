@@ -14,7 +14,7 @@
 
 
 今天讲了一种将递归式转化为求和的方法。
-考虑如下递归式：\[{a_n}{T_n} = {b_n}{T_{n - 1}} + {c_n}\]两边同时乘以$s_n$得到：\[{s_n}{a">
+考虑如下递归式：&amp;lt;!–swig￼0–&amp;gt;两边同时乘以$s_n$得到：&amp;lt;!–swig￼2–&amp;gt;要想转化成可以求和的递归式，那么">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -157,6 +157,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -242,6 +251,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -336,7 +354,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/24.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/22.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -491,14 +509,14 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    747
+                    426
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    3 分
+                    1 分
                 </div>
                 
                 
@@ -519,15 +537,15 @@
 </blockquote>
 <p><img src="/medias/contact.jpg" alt=""></p>
 <p>今天讲了一种将递归式转化为求和的方法。</p>
-<p>考虑如下递归式：<br>\[{a_n}{T_n} = {b_n}{T_{n - 1}} + {c_n}\]<br>两边同时乘以$s_n$得到：<br>\[{s_n}{a_n}{T_n} = {s_n}{b_n}{T_{n - 1}} + {s_n}{c_n}\]<br>要想转化成可以求和的递归式，那么必须有：<br>\[{s_n}{b_n} = {s_{n - 1}}{a_{n - 1}}\]<br>也就是：<br>\[{s_n} = \frac { { {a_{n - 1}}{a_{n - 2}} \cdots {a_1}}}{ { {b_n}{b_{n - 1}} \cdots {b_2}}}\]<br>这时令<br>\[{S_n} = {s_n}{a_n}{T_n}\]<br>得到：<br>\[{S_n} = {S_{n - 1}} + {s_n}{c_n}\]<br>这时就可以转化为求和了，解出：<br>\[{S_n} = {s_0}{a_0}{T_0} + \sum\limits_{k = 1}^n { {s_k}{c_k}} \]<br>所以<br>\[{T_n} = \frac{1}{ { {s_n}{a_n}}}({s_0}{a_0}{T_0} + \sum\limits_{k = 1}^n { {s_k}{c_k}} )\]</p>
+<p>考虑如下递归式：<br>&lt;!–swig￼0–&gt;<br>两边同时乘以$s_n$得到：<br>&lt;!–swig￼2–&gt;<br>要想转化成可以求和的递归式，那么必须有：<br>&lt;!–swig￼3–&gt;<br>也就是：<br>&lt;!–swig￼4–&gt;<br>这时令<br>&lt;!–swig￼5–&gt;<br>得到：<br>&lt;!–swig￼6–&gt;<br>这时就可以转化为求和了，解出：<br>&lt;!–swig￼7–&gt;<br>所以<br>&lt;!–swig￼8–&gt;</p>
 <h1 id="例题1"><a href="#例题1" class="headerlink" title="例题1"></a>例题1</h1><hr>
-<p>设$n$个数快速排序的操作次数为$C_n$，那么有<br>\[\begin{array}{l}{C_0} = 0\{C_n} = n + 1 + \frac{2}{n}\sum\limits_{k = 0}^{n - 1} { {C_k}} ,n &gt; 0\end{array}\]<br>用$n-1$取代$n$可以得到<br>\[{C_{n - 1}} = n + \frac{2}{ {n - 1}}\sum\limits_{k = 0}^{n - 2} { {C_k}} ,n &gt; 1\]<br>两式相减可以得到<br>\[\begin{array}{l}{C_0} = 0\n{C_n} = (n + 1){C_{n - 1}} + 2n,n &gt; 0\end{array}\]<br>由上面方法可以得到<br>\[{a_n} = n,{b_n} = n + 1,{c_n} = 2n\]<br>所以<br>\[{s_n} = \frac{2}{ {n(n + 1)}}\]<br>进而可以求出<br>\[{C_n} = 2(n + 1)\sum\limits_{k = 1}^n {\frac{1}{ {k + 1}}} \]<br>这里介绍一个概念叫做调和级数：<br>\[{H_n} = 1 + \frac{1}{2} + \cdots + \frac{1}{n} = \sum\limits_{k = 1}^n {\frac{1}{k}} \]<br>所以<br>\[{C_n} = 2(n + 1){H_n} - 2n\]</p>
+<p>设$n$个数快速排序的操作次数为$C_n$，那么有<br>&lt;!–swig￼11–&gt;<br>用$n-1$取代$n$可以得到<br>&lt;!–swig￼14–&gt;<br>两式相减可以得到<br>&lt;!–swig￼15–&gt;<br>由上面方法可以得到<br>&lt;!–swig￼16–&gt;<br>所以<br>&lt;!–swig￼17–&gt;<br>进而可以求出<br>&lt;!–swig￼18–&gt;<br>这里介绍一个概念叫做调和级数：<br>&lt;!–swig￼19–&gt;<br>所以<br>&lt;!–swig￼20–&gt;</p>
 <h1 id="求和三大定律"><a href="#求和三大定律" class="headerlink" title="求和三大定律"></a>求和三大定律</h1><hr>
 <p>结合律、分配率、交换律。这里就不展开说了，相信你们都知道的。<br>来两题简单的例题说明一下。</p>
 <h1 id="例题2"><a href="#例题2" class="headerlink" title="例题2"></a>例题2</h1><hr>
-<p>求<br>\[S = \sum\limits_{0 \le k \le n} {(a + bk)} \]<br>普通的方法每个人应该都会，等差数列嘛。这里用求和定律来做一做。<br>用$n-k$取代$k$，得到<br>\[S = \sum\limits_{0 \le n - k \le n} {(a + b(n - k))} \]<br>即<br>\[S = \sum\limits_{0 \le k \le n} {(a + b(n - k))} \]<br>两式相加得到<br>\[2S = \sum\limits_{0 \le k \le n} {(2a + bn)} = (2a + bn)\sum\limits_{0 \le k \le n} 1 = (2a + bn)(n + 1)\]<br>所以<br>\[S = (2a + bn)(n + 1)/2\]</p>
+<p>求<br>&lt;!–swig￼21–&gt;<br>普通的方法每个人应该都会，等差数列嘛。这里用求和定律来做一做。<br>用$n-k$取代$k$，得到<br>&lt;!–swig￼24–&gt;<br>即<br>&lt;!–swig￼25–&gt;<br>两式相加得到<br>&lt;!–swig￼26–&gt;<br>所以<br>&lt;!–swig￼27–&gt;</p>
 <h1 id="例题3"><a href="#例题3" class="headerlink" title="例题3"></a>例题3</h1><hr>
-<p>求<br>\[S = \sum\limits_{0 \le k \le n} {k{x^k}} \]<br>这里用到另一种求和的方法。<br>两边同时加上第$n+1$项，得到<br>\[\begin{array}{l}S + (n + 1){x^{n + 1}}\ = \sum\limits_{0 \le k \le n + 1} {k{x^k}} \ = \sum\limits_{1 \le k \le n + 1} {k{x^k}} \ = \sum\limits_{0 \le k \le n} {(k + 1){x^{k + 1}}} \ = x\sum\limits_{0 \le k \le n} {(k{x^k} + {x^k})} \ = xS + x\sum\limits_{0 \le k \le n} { {x^k}} \ = xS + x\frac{ {1 - {x^{n + 1}}}}{ {1 - x}}\end{array}\]<br>所以<br>\[S = \frac{ {x - (n + 1){x^{n + 1}} + n{x^{n + 2}}}}{ { { {(1 - x)}^2}}}\]<br>这里介绍另一种方法来求解。<br>令<br>\[f(x) = \sum\limits_{0 \le k \le n} { {x^k}} = \frac{ {1 - {x^{n + 1}}}}{ {1 - x}}\]<br>求导得到<br>\[f’(x) = \sum\limits_{0 \le k \le n} {k{x^{k - 1}}} = \frac{1}{x}S\]<br>所以<br>\[\frac{1}{x}S = \frac{ {\partial f}}{ {\partial x}}(\frac{ {1 - {x^{n + 1}}}}{ {1 - x}}) = \frac{ {1 - (n + 1){x^n} + n{x^{n + 1}}}}{ { { {(1 - x)}^2}}}\]<br>同样可以得到<br>\[S = \frac{ {x - (n + 1){x^{n + 1}} + n{x^{n + 2}}}}{ { { {(1 - x)}^2}}}\]</p>
+<p>求<br>&lt;!–swig￼28–&gt;<br>这里用到另一种求和的方法。<br>两边同时加上第$n+1$项，得到<br>&lt;!–swig￼30–&gt;<br>所以<br>&lt;!–swig￼31–&gt;<br>这里介绍另一种方法来求解。<br>令<br>&lt;!–swig￼32–&gt;<br>求导得到<br>&lt;!–swig￼33–&gt;<br>所以<br>&lt;!–swig￼34–&gt;<br>同样可以得到<br>&lt;!–swig￼35–&gt;</p>
 
             </div>
             <hr />
@@ -759,7 +777,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="毕业论文相关细节记录">
+                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="毕业论文相关细节记录">
                         
                         <span class="card-title">毕业论文相关细节记录</span>
                     </div>
@@ -819,7 +837,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="Ubuntu16.04下Nvidia+Cuda8.0+Dynet安装教程">
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="Ubuntu16.04下Nvidia+Cuda8.0+Dynet安装教程">
                         
                         <span class="card-title">Ubuntu16.04下Nvidia+Cuda8.0+Dynet安装教程</span>
                     </div>
@@ -1053,7 +1071,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

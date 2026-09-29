@@ -158,6 +158,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -243,6 +252,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -337,7 +355,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/21.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/19.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -496,7 +514,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    748
+                    747
                 </div>
                 
 
@@ -534,7 +552,7 @@
 <figure class="highlight text"><table><tr><td class="code"><pre><span class="line">输入：</span><br><span class="line">[1,2], 2</span><br><span class="line">输出：</span><br><span class="line">3</span><br><span class="line">解释：</span><br><span class="line">在第 1 秒开始时，提莫开始对艾希进行攻击并使其立即中毒。中毒状态会维持 2 秒钟，直到第 2 秒钟结束。</span><br><span class="line">但是在第 2 秒开始时，提莫再次攻击了已经处于中毒状态的艾希。</span><br><span class="line">由于中毒状态不可叠加，提莫在第 2 秒开始时的这次攻击会在第 3 秒钟结束。</span><br><span class="line">所以最终输出 3。</span><br></pre></td></tr></table></figure>
 
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>因为数组是时间序列，所以是给你排好序的，不需要你自己排序。</p>
-<p>那么对于 $t[i]$ 来说，如果 $t[i-1]+d \le t[i]$ 的话，就说明前一时刻的中毒效果已经过去了，那么当前时刻的中毒效果持续时间都是属于当前时刻的，答案加上 $d$ 就行了。但是如果 $t[i-1]+d &gt; t[i]$ ，那么前一时刻的中毒效果还在，等前一时刻的中毒效果过去了，剩下的中毒时间才能算是当前时刻的，而扣除掉上一时刻剩余的时间为 $t[i] - t[i-1]$ 。所以最后属于当前时刻的中毒时间只要取 $t[i] - t[i-1]$ 和 $d$ 的最小值就行了。</p>
+<p>那么对于 $t[i]$ 来说，如果 $t[i-1]+d \le t[i]$ 的话，就说明前一时刻的中毒效果已经过去了，那么当前时刻的中毒效果持续时间都是属于当前时刻的，答案加上 $d$ 就行了。但是如果 $t[i-1]+d > t[i]$ ，那么前一时刻的中毒效果还在，等前一时刻的中毒效果过去了，剩下的中毒时间才能算是当前时刻的，而扣除掉上一时刻剩余的时间为 $t[i] - t[i-1]$ 。所以最后属于当前时刻的中毒时间只要取 $t[i] - t[i-1]$ 和 $d$ 的最小值就行了。</p>
 <p>最终时间复杂度为 $O(n)$ ，空间复杂度为 $O(1)$ 。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="c"><a href="#c" class="headerlink" title="c++"></a>c++</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">findPoisonedDuration</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; timeSeries, <span class="type">int</span> duration)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = timeSeries.<span class="built_in">size</span>();</span><br><span class="line">        <span class="type">int</span> res = n ? duration : <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            res += <span class="built_in">min</span>(timeSeries[i]-timeSeries[i<span class="number">-1</span>], duration);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
@@ -773,7 +791,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="每日算法系列【LeetCode 1039】多边形三角剖分的最低得分">
+                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="每日算法系列【LeetCode 1039】多边形三角剖分的最低得分">
                         
                         <span class="card-title">每日算法系列【LeetCode 1039】多边形三角剖分的最低得分</span>
                     </div>
@@ -831,7 +849,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="收藏！编码器中如何融入结构信息？这几篇论文一定不要错过">
+                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="收藏！编码器中如何融入结构信息？这几篇论文一定不要错过">
                         
                         <span class="card-title">收藏！编码器中如何融入结构信息？这几篇论文一定不要错过</span>
                     </div>
@@ -1056,7 +1074,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

@@ -15,7 +15,7 @@
 
 题3
 题目求$\left\lfloor {nx} \right\rfloor = n\left\lfloor x \right\rfloor $的充要条件。解答因为
-\[x = \le">
+&amp;lt;!–swi">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -158,6 +158,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -243,6 +252,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -337,7 +355,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/23.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/21.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -492,14 +510,14 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    526
+                    353
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    2 分
+                    1 分
                 </div>
                 
                 
@@ -521,24 +539,26 @@
 <p><img src="/medias/contact.jpg" alt=""></p>
 <h1 id="题3"><a href="#题3" class="headerlink" title="题3"></a>题3</h1><hr>
 <p><strong>题目</strong><br>求$\left\lfloor {nx} \right\rfloor = n\left\lfloor x \right\rfloor $的充要条件。<br><strong>解答</strong><br>因为</p>
-<p>\[<br>x = \left\lfloor x \right\rfloor + { x}<br>\]<br>所以</p>
-<p>\[<br>\left\lfloor {nx} \right\rfloor = \left\lfloor {n(\left\lfloor x \right\rfloor + { x} )} \right\rfloor = n\left\lfloor x \right\rfloor + \left\lfloor {n{ x} } \right\rfloor<br>\]<br>要使得$\left\lfloor {nx} \right\rfloor  = n\left\lfloor x \right\rfloor$，就必须有</p>
-<p>\[<br>\left\lfloor {n{ x} } \right\rfloor = 0<br>\]<br>所以</p>
-<p>\[<br>n{ x} &lt; 1<br>\]<br>即</p>
-<p>\[<br>{ x} &lt; \frac{1}{n}<br>\]</p>
+<p>&lt;!–swig￼1–&gt;<br>所以</p>
+<p>&lt;!–swig￼2–&gt;<br>要使得$\left\lfloor {nx} \right\rfloor  = n\left\lfloor x \right\rfloor$，就必须有</p>
+<p>&lt;!–swig￼4–&gt;<br>所以</p>
+<p>&lt;!–swig￼5–&gt;<br>即</p>
+<p>&lt;!–swig￼6–&gt;</p>
 <h1 id="题7"><a href="#题7" class="headerlink" title="题7"></a>题7</h1><hr>
-<p><strong>题目</strong><br>求下列递推式<br>\[\begin{array}{l}{X_n} = n,0 \le n &lt; m\{X_n} = {X_{n - m}} + 1,n \ge m\end{array}\]<br><strong>解答</strong><br>因为</p>
-<p>\[<br>n - \left\lfloor {\frac{n}{m}} \right\rfloor m = n\bmod m &lt; m<br>\]<br>所以</p>
-<p>\[<br>\begin{array}{l}{X_n} = {X_{n - m}} + 1 = {X_{n - 2m}} + 2 = \cdots \ = {X_{n - \left\lfloor {\frac{n}{m}} \right\rfloor m}} + \left\lfloor {\frac{n}{m}} \right\rfloor = n - \left\lfloor {\frac{n}{m}} \right\rfloor m + \left\lfloor {\frac{n}{m}} \right\rfloor \ = n,\bmod ,m + \left\lfloor {\frac{n}{m}} \right\rfloor \end{array}<br>\]</p>
+<p><strong>题目</strong><br>求下列递推式<br>&lt;!–swig￼7–&gt;<br><strong>解答</strong><br>因为</p>
+<p>&lt;!–swig￼8–&gt;<br>所以</p>
+<p>&lt;!–swig￼9–&gt;</p>
 <h1 id="题8"><a href="#题8" class="headerlink" title="题8"></a>题8</h1><hr>
-<p><strong>题目</strong><br>$n$个物品放到$m$个盒子中，求证至少有一个盒子物品数大于等于$\left\lceil {\frac{n}{m}} \right\rceil$，至少有一个盒子物品数小于等于$\left\lfloor {\frac{n}{m}} \right\rfloor$。<br><strong>解答</strong><br>假设所有的盒子物品数都小于$\left\lceil {\frac{n}{m}} \right\rceil$，那么总物品数$S$满足</p>
-<p>\[<br>S \le m(\left\lceil {\frac{n}{m}} \right\rceil - 1)<br>\]<br>令$n = qm + r,0 \le r &lt; m$，那么有</p>
-<p>\[<br>S \le m(\left\lceil {q + \frac{r}{m}} \right\rceil - 1) = qm - m + m\left\lceil {\frac{r}{m}} \right\rceil<br>\]<br>如果$r=0$，那么有</p>
-<p>\[<br>S \le qm - m &lt; n<br>\]<br>如果$r&gt;0$，那么有</p>
-<p>\[<br>S \le qm &lt; n<br>\]<br>这与$S=n$矛盾！所以至少有一个盒子物品数大于等于$\left\lceil {\frac{n}{m}} \right\rceil$。</p>
+<p><strong>题目</strong></p>
+$n$个物品放到$m$个盒子中，求证至少有一个盒子物品数大于等于$\left\lceil {\frac{n}{m}} \right\rceil$，至少有一个盒子物品数小于等于$\left\lfloor {\frac{n}{m}} \right\rfloor$。
+<p><strong>解答</strong><br>假设所有的盒子物品数都小于$\left\lceil {\frac{n}{m}} \right\rceil$，那么总物品数$S$满足</p>
+<p>&lt;!–swig￼16–&gt;<br>令$n = qm + r,0 \le r < m$，那么有</p>
+<p>&lt;!–swig￼18–&gt;<br>如果$r=0$，那么有</p>
+<p>&lt;!–swig￼20–&gt;<br>如果$r>0$，那么有</p>
+<p>&lt;!–swig￼22–&gt;<br>这与$S=n$矛盾！所以至少有一个盒子物品数大于等于$\left\lceil {\frac{n}{m}} \right\rceil$。</p>
 <p>假设所有的盒子物品数都大于$\left\lfloor {\frac{n}{m}} \right\rfloor$，那么总物品数$S$满足</p>
-<p>\[<br>S \ge m(\left\lfloor {\frac{n}{m}} \right\rfloor + 1)<br>\]<br>令$n = qm + r,0 \le r &lt; m$，那么有</p>
-<p>\[<br>S \ge m(\left\lfloor {q + \frac{r}{m}} \right\rfloor + 1) = qm + m + m\left\lfloor {\frac{r}{m}} \right\rfloor = qm + m &gt; qm + r = n<br>\]<br>这与$S=n$矛盾！所以至少有一个盒子物品数小于等于$\left\lfloor {\frac{n}{m}} \right\rfloor$。</p>
+<p>&lt;!–swig￼27–&gt;<br>令$n = qm + r,0 \le r < m$，那么有</p>
+<p>&lt;!–swig￼29–&gt;<br>这与$S=n$矛盾！所以至少有一个盒子物品数小于等于$\left\lfloor {\frac{n}{m}} \right\rfloor$。</p>
 
             </div>
             <hr />
@@ -770,7 +790,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="具体数学-第9课（取整进阶与数论入门）">
+                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="具体数学-第9课（取整进阶与数论入门）">
                         
                         <span class="card-title">具体数学-第9课（取整进阶与数论入门）</span>
                     </div>
@@ -785,7 +805,8 @@
 今天讲完了取整的最后一部分知识，并给第四章数论开了个头。
 首先还是以一道例题开始我们今天的课程。
 例题1
-求和：\[\sum\limits_{0 \le k &lt; n} {\lef
+求和：&lt;!–swig￼0–&gt;
+方法1首先令$m = \left\l
                         
                     </div>
                     <div class="publish-info">
@@ -826,7 +847,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="Inside-outside Algorithm in PCFG">
+                        <img src="/medias/featureimages/24.jpg" class="responsive-img" alt="Inside-outside Algorithm in PCFG">
                         
                         <span class="card-title">Inside-outside Algorithm in PCFG</span>
                     </div>
@@ -1055,7 +1076,7 @@ inside-outside算法是用来预测一棵句法分析树的概率的算法，算
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

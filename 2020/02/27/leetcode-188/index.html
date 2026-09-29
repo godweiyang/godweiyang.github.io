@@ -158,6 +158,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -243,6 +252,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -337,7 +355,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/23.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/21.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -496,7 +514,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    846
+                    844
                 </div>
                 
 
@@ -537,16 +555,26 @@
 <p>令 $dp0[i][j]$ 为第 $i$ 只股票之前（包含）买卖 $j$ 次（且最后一次操作为<strong>买入</strong>）可以获得的最大利润，$dp1[i][j]$ 为第 $i$ 只股票之前（包含）买卖 $j$ 次（且最后一次操作为<strong>卖出</strong>）可以获得的最大利润。</p>
 <p>那么对于 $dp0[i][j]$ 来说，最后一次操作是买入，所以分为两种情况。</p>
 <ul>
-<li>一种是不买第 $i$ 只股票，那么最大利润就是前 $i-1$ 只股票买卖 $j$ 次（且最后一次操作为买入）的最大利润：<br>$$dp0[i][j] = dp0[i-1][j]$$</li>
-<li>一种是买第 $i$ 只股票，那么最大利润就是前 $i-1$ 只股票买卖 $j-1$ 次（且最后一次操作为卖出）的最大利润：<br>$$dp0[i][j] = dp1[i-1][j-1] - price[i]$$</li>
+<li>一种是不买第 $i$ 只股票，那么最大利润就是前 $i-1$ 只股票买卖 $j$ 次（且最后一次操作为买入）的最大利润：$$dp0[i][j] = dp0[i-1][j]$$</li>
+<li>一种是买第 $i$ 只股票，那么最大利润就是前 $i-1$ 只股票买卖 $j-1$ 次（且最后一次操作为卖出）的最大利润：$$dp0[i][j] = dp1[i-1][j-1] - price[i]$$
+
+</li>
 </ul>
 <p>而对于 $dp1[i][j]$ 来说，最后一次操作是卖出，所以分为两种情况。</p>
 <ul>
-<li>一种是不卖第 $i$ 只股票，那么最大利润就是前 $i-1$ 只股票买卖 $j$ 次（且最后一次操作为卖出）的最大利润：<br>$$dp1[i][j] = dp1[i-1][j]$$</li>
-<li>一种是卖第 $i$ 只股票，那么最大利润就是前 $i-1$ 只股票买卖 $j$ 次（且最后一次操作为买入）的最大利润：<br>$$dp1[i][j] = dp0[i-1][j] + price[i]$$</li>
+<li>一种是不卖第 $i$ 只股票，那么最大利润就是前 $i-1$ 只股票买卖 $j$ 次（且最后一次操作为卖出）的最大利润：$$dp1[i][j] = dp1[i-1][j]$$</li>
+<li>一种是卖第 $i$ 只股票，那么最大利润就是前 $i-1$ 只股票买卖 $j$ 次（且最后一次操作为买入）的最大利润：$$dp1[i][j] = dp0[i-1][j] + price[i]$$
+
+</li>
 </ul>
 <p>综上转移方程就是：</p>
-<p>$$<br>\begin{aligned}<br>dp0[i][j] &amp;= \max{\left{dp0[i-1][j], dp1[i-1][j-1] - price[i]\right}} \<br>dp1[i][j] &amp;= \max{\left{dp1[i-1][j], dp0[i-1][j] + price[i]\right}}<br>\end{aligned}<br>$$</p>
+$$
+\begin{aligned}
+dp0[i][j] &= \max{\left\{dp0[i-1][j], dp1[i-1][j-1] - price[i]\right\}} \\\
+dp1[i][j] &= \max{\left\{dp1[i-1][j], dp0[i-1][j] + price[i]\right\}}
+\end{aligned}
+$$
+
 <p>初始情况就是 $n = 0$ 和 $k = 0$ 时，单独计算一下就行了。</p>
 <p>此外本题还可以优化成一维数组，就不展开介绍了，大家可以参考代码。</p>
 <p>时间复杂度是 $O(nk)$ 。</p>
@@ -782,7 +810,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="每日算法系列【LeetCode 714】买卖股票的最佳时机含手续费">
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="每日算法系列【LeetCode 714】买卖股票的最佳时机含手续费">
                         
                         <span class="card-title">每日算法系列【LeetCode 714】买卖股票的最佳时机含手续费</span>
                     </div>
@@ -840,7 +868,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/28.jpg" class="responsive-img" alt="每日算法系列【LeetCode 123】买卖股票的最佳时机 III">
+                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="每日算法系列【LeetCode 123】买卖股票的最佳时机 III">
                         
                         <span class="card-title">每日算法系列【LeetCode 123】买卖股票的最佳时机 III</span>
                     </div>
@@ -1071,7 +1099,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>房贷还款计算器 · 月供 / 提前还款 / 结清测算</title>
+<meta name="description" content="填写贷款、利率与提前还款信息，自动生成逐月还款计划，可导出 Excel、一键生成核心概览海报。">
+<link rel="canonical" href="https://godweiyang.com/fangdai/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%230f3b5d'/%3E%3Cpath d='M5 16V8l7 5 7-5v8' fill='none' stroke='%23fff' stroke-width='1.8' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+:root{
+  --navy:#0f3b5d; --navy2:#14547a; --blue:#2f7fb8; --blue-soft:#eaf3fa;
+  --ink:#1c2b36; --sub:#5c6b77; --line:#e2e8ee; --bg:#f4f7fa;
+  --green:#0e9d76; --green-soft:#e6f6f1; --amber:#c8881b; --amber-soft:#fbf2e0;
+  --red:#d2554b; --red-soft:#fbecea; --card:#ffffff; --r:16px; --shadow:0 10px 34px -16px rgba(15,59,93,.28);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  color:var(--ink);background:var(--bg);line-height:1.55;font-size:15px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 18px 70px}
+button{font-family:inherit;cursor:pointer;border:none}
+input,select{font-family:inherit;font-size:14px;color:var(--ink)}
+.hidden{display:none!important}
+
+/* ===== 顶部 ===== */
+.hero{background:linear-gradient(135deg,var(--navy),var(--navy2) 70%);color:#fff;padding:46px 0 64px;margin-bottom:-38px}
+.hero .wrap{padding-bottom:0}
+.hero h1{font-size:30px;font-weight:800;letter-spacing:.5px;margin-bottom:10px}
+.hero p{color:#cfe2f0;max-width:680px;font-size:15px}
+.hero .tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.hero .tags span{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);padding:5px 12px;border-radius:999px;font-size:12.5px}
+
+/* ===== 卡片/分区 ===== */
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);
+  padding:24px;margin-bottom:22px}
+.panel-head{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.panel-num{width:30px;height:30px;border-radius:9px;background:var(--navy);color:#fff;font-weight:800;
+  display:flex;align-items:center;justify-content:center;font-size:15px;flex:none}
+.panel-head h2{font-size:17px;font-weight:800}
+.panel-head .hint{font-size:12.5px;color:var(--sub);font-weight:400;margin-left:4px}
+
+/* 表单 */
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px 16px}
+.field{grid-column:span 4;display:flex;flex-direction:column;gap:6px}
+.field.wide{grid-column:span 6}.field.full{grid-column:span 12}.field.narrow{grid-column:span 3}
+.field label{font-size:13px;color:var(--sub);font-weight:600}
+.field label b{color:var(--navy);font-weight:700}
+.field .control{position:relative}
+.field input,.field select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fbfdfe;
+  transition:border-color .15s,box-shadow .15s;appearance:none}
+.field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' fill='none' stroke='%235c6b77' stroke-width='2.4'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+.field input:focus,.field select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(47,127,184,.14);background:#fff}
+.field .suffix{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--sub);font-size:13px;pointer-events:none}
+.field input.has-suffix{padding-right:34px}
+.field .note{font-size:11.5px;color:#93a1ac}
+
+/* 贷款卡片 */
+.loan-card{border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:16px;background:#fcfdfe;position:relative}
+.loan-card .lc-top{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.loan-card .lc-badge{width:26px;height:26px;border-radius:8px;background:var(--blue-soft);color:var(--navy);font-weight:800;
+  display:flex;align-items:center;justify-content:center;font-size:13px;flex:none}
+.loan-card input.lc-name{font-weight:700;font-size:15px;border:none;background:transparent;padding:0;width:auto;flex:1;min-width:120px}
+.loan-card input.lc-name:focus{outline:none}
+.loan-card .lc-del{background:var(--red-soft);color:var(--red);font-size:12.5px;font-weight:700;padding:7px 12px;border-radius:9px}
+.loan-card .grid{gap:12px 14px}
+.loan-card .field{grid-column:span 4}
+.loan-card .field.narrow{grid-column:span 3}
+
+.add-loan{width:100%;padding:13px;border:1.5px dashed #b9cfdd;border-radius:12px;background:#fbfdfe;color:var(--navy2);
+  font-weight:700;font-size:14px;transition:background .15s}
+.add-loan:hover{background:var(--blue-soft)}
+
+/* 开关 */
+.switch-row{display:flex;align-items:center;gap:10px;margin-bottom:16px;cursor:pointer;user-select:none}
+.switch{width:42px;height:24px;border-radius:999px;background:#c4d0d9;position:relative;transition:background .18s;flex:none}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left .18s;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.switch-row.on .switch{background:var(--green)}
+.switch-row.on .switch::after{left:21px}
+.switch-row .sw-label{font-weight:700;font-size:14.5px}
+.switch-row .sw-sub{font-size:12.5px;color:var(--sub)}
+
+/* 月份选择 */
+.month-toggles{display:flex;flex-wrap:wrap;gap:7px}
+.month-toggles button{width:42px;height:34px;border-radius:9px;border:1px solid var(--line);background:#fbfdfe;color:var(--sub);
+  font-size:13px;font-weight:600;transition:all .13s}
+.month-toggles button.active{background:var(--navy);border-color:var(--navy);color:#fff}
+
+/* 单选(方式) */
+.seg{display:flex;gap:10px;flex-wrap:wrap}
+.seg .opt{flex:1;min-width:200px;border:1px solid var(--line);border-radius:12px;padding:13px 15px;cursor:pointer;transition:all .15s;background:#fbfdfe}
+.seg .opt.active{border-color:var(--blue);background:var(--blue-soft)}
+.seg .opt .t{font-weight:700;font-size:14px;display:block;margin-bottom:3px}
+.seg .opt .d{font-size:12px;color:var(--sub)}
+.seg .opt input{display:none}
+
+/* 主操作按钮 */
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:4px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:12px;padding:13px 24px;font-size:15px;font-weight:700;transition:transform .14s,box-shadow .15s,filter .15s}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;box-shadow:0 12px 26px -12px rgba(15,59,93,.7)}
+.btn-excel{background:var(--green);color:#fff;box-shadow:0 12px 26px -14px rgba(14,157,118,.7)}
+.btn-poster{background:#fff;color:var(--navy);border:1.5px solid var(--navy)}
+.btn:disabled{opacity:.5;cursor:not-allowed;filter:grayscale(.3)}
+.svg-ico{width:17px;height:17px;flex:none}
+
+/* ===== 结果区 ===== */
+.result-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.rcard{border:1px solid var(--line);border-radius:14px;padding:16px;background:#fff}
+.rcard .lab{font-size:12.5px;color:var(--sub);margin-bottom:7px}
+.rcard .val{font-size:21px;font-weight:800;color:var(--navy);line-height:1.2}
+.rcard .val.small{font-size:16px}
+.rcard .sub2{font-size:11.5px;color:#93a1ac;margin-top:5px}
+.rcard.accent{background:linear-gradient(135deg,var(--navy),var(--navy2));border:none}
+.rcard.accent .lab,.rcard.accent .sub2{color:#bcd4e6}.rcard.accent .val{color:#fff}
+.rcard.green{background:var(--green-soft);border-color:#bfe6da}
+.rcard.green .val{color:var(--green)}
+
+.loan-results{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:20px}
+.lres{border:1px solid var(--line);border-radius:14px;padding:16px;background:#fff}
+.lres h3{font-size:14.5px;font-weight:800;margin-bottom:11px;display:flex;align-items:center;gap:8px}
+.lres h3 .dot{width:9px;height:9px;border-radius:50%;background:var(--blue)}
+.lres .kv{display:flex;justify-content:space-between;font-size:13.5px;padding:6px 0;border-top:1px dashed var(--line)}
+.lres .kv:first-of-type{border-top:none}
+.lres .kv b{font-weight:700}
+
+.table-tools{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:10px;flex-wrap:wrap}
+.table-tools h3{font-size:15px;font-weight:800}
+.table-tools .filter{display:flex;gap:6px}
+.table-tools .filter button{padding:6px 13px;border-radius:8px;font-size:12.5px;font-weight:600;border:1px solid var(--line);background:#fff;color:var(--sub)}
+.table-tools .filter button.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.tbl-scroll{overflow:auto;border:1px solid var(--line);border-radius:12px;max-height:560px}
+table{border-collapse:collapse;width:100%;font-size:13px;white-space:nowrap}
+thead th{position:sticky;top:0;background:var(--navy);color:#fff;font-weight:700;padding:10px 12px;text-align:right;z-index:2}
+thead th.lft{text-align:center}
+tbody td{padding:9px 12px;border-top:1px solid var(--line);text-align:right}
+tbody td.lft{text-align:center;font-weight:600;color:var(--navy)}
+tbody tr:nth-child(even){background:#f8faf c}
+tbody tr:nth-child(even){background:#f8fafc}
+tbody tr.prepay-row{background:var(--amber-soft)}
+tbody tr.payoff-row{background:var(--green-soft)}
+td .z{color:#b6c2cb}
+.pos{color:var(--green);font-weight:700}
+
+.note-box{background:var(--blue-soft);border:1px solid #cfe3f0;border-radius:12px;padding:14px 16px;font-size:13px;color:#33505f;margin-top:16px}
+.note-box b{color:var(--navy)}
+
+/* ===== 海报弹窗 ===== */
+.modal-mask{position:fixed;inset:0;background:rgba(12,30,45,.62);display:flex;align-items:center;justify-content:center;z-index:100;padding:24px;backdrop-filter:blur(3px)}
+.modal{max-width:520px;width:100%;max-height:92vh;overflow:auto;background:#fff;border-radius:18px}
+.poster{padding:0;border-radius:18px;overflow:hidden;background:#fff}
+.poster .p-hero{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:26px 26px 22px}
+.poster .p-hero .kicker{font-size:12px;letter-spacing:3px;color:#a9cbe0;text-transform:uppercase}
+.poster .p-hero h3{font-size:23px;font-weight:800;margin:6px 0 2px}
+.poster .p-hero .date{font-size:12.5px;color:#bcd4e6}
+.poster .p-big{display:flex;gap:10px;padding:20px 26px 6px}
+.poster .p-big .pb{flex:1;background:var(--blue-soft);border-radius:13px;padding:14px;text-align:center}
+.poster .p-big .pb .l{font-size:11.5px;color:var(--sub)}
+.poster .p-big .pb .v{font-size:18px;font-weight:800;color:var(--navy);margin-top:4px}
+.poster .p-rows{padding:14px 26px 8px}
+.poster .pr{display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;border-top:1px dashed var(--line);font-size:13.5px}
+.poster .pr:first-child{border-top:none}
+.poster .pr .k{color:var(--sub)}
+.poster .pr .v{font-weight:800;color:var(--ink)}
+.poster .p-loans{padding:6px 26px 4px}
+.poster .p-loan{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:9px}
+.poster .p-loan .lt{font-weight:800;font-size:13.5px;margin-bottom:7px;display:flex;justify-content:space-between}
+.poster .p-loan .lt .off{color:var(--green);font-size:12.5px}
+.poster .p-loan .lk{display:flex;justify-content:space-between;font-size:12px;color:var(--sub);padding:3px 0}
+.poster .p-loan .lk b{color:var(--ink)}
+.poster .p-foot{padding:14px 26px 22px;text-align:center}
+.poster .p-foot .tip{font-size:12px;color:#8a98a3;line-height:1.6}
+.poster .p-foot .brand{font-size:12px;font-weight:800;color:var(--navy);margin-bottom:5px;letter-spacing:1px}
+.modal-foot{display:flex;gap:10px;padding:14px 20px 20px}
+.modal-foot .btn{flex:1;padding:12px}
+.btn-ghost{background:#eef2f5;color:var(--sub)}
+
+.toast{position:fixed;left:50%;bottom:34px;transform:translateX(-50%);background:var(--navy);color:#fff;padding:11px 20px;border-radius:10px;
+  font-size:13.5px;z-index:200;box-shadow:0 12px 30px -10px rgba(0,0,0,.4);opacity:0;pointer-events:none;transition:opacity .2s,bottom .2s}
+.toast.show{opacity:1;bottom:44px}
+.toast.err{background:var(--red)}
+
+footer.site{text-align:center;color:#93a1ac;font-size:12.5px;padding:20px}
+
+/* ===== 响应式 ===== */
+@media (max-width:860px){
+  .field,.loan-card .field{grid-column:span 6}
+  .field.narrow,.loan-card .field.narrow{grid-column:span 6}
+  .result-cards{grid-template-columns:repeat(2,1fr)}
+  .hero h1{font-size:24px}
+}
+@media (max-width:520px){
+  .panel{padding:18px}
+  .field,.loan-card .field,.field.wide{grid-column:span 12}
+  .field.narrow,.loan-card .field.narrow{grid-column:span 12}
+  .loan-results{grid-template-columns:1fr}
+  .seg .opt{min-width:100%}
+  .btn{flex:1}
+  .poster .p-big{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== 顶部 ===== -->
+<header class="hero">
+  <div class="wrap">
+    <h1>房贷还款计算器</h1>
+    <p>填写贷款本金、利率与提前还款安排，自动生成你未来每个月的月供、本金与利息明细；可导出 Excel 长期保存，也能一键生成核心概览海报。</p>
+    <div class="tags">
+      <span>等额本息 / 等额本金</span><span>提前还款测算</span><span>逐月明细</span><span>导出 Excel</span><span>概览海报</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" style="margin-top:0">
+
+  <!-- ===== 分区1：贷款信息 ===== -->
+  <section class="panel" style="margin-top:52px">
+    <div class="panel-head">
+      <div class="panel-num">1</div>
+      <h2>贷款信息<span class="hint">可同时填写多笔，如商业贷款 + 公积金贷款</span></h2>
+    </div>
+
+    <div class="grid" style="margin-bottom:18px">
+      <div class="field narrow">
+        <label>测算起始月份</label>
+        <div class="control"><input type="month" id="startMonth" value="2026-10"></div>
+        <div class="note">从该月开始生成还款计划</div>
+      </div>
+    </div>
+
+    <div id="loanList"></div>
+    <button type="button" class="add-loan" id="addLoan">＋ 再添加一笔贷款</button>
+  </section>
+
+  <!-- ===== 分区2：提前还款 ===== -->
+  <section class="panel">
+    <div class="panel-head"><div class="panel-num">2</div><h2>提前还款设置<span class="hint">选填</span></h2></div>
+
+    <div class="switch-row" id="prepaySwitch">
+      <div class="switch"></div>
+      <div><div class="sw-label">我有提前还款计划</div><div class="sw-sub">开启后可设置每年固定月份提前偿还本金</div></div>
+    </div>
+
+    <div id="prepayBody" class="hidden">
+      <div class="grid">
+        <div class="field narrow">
+          <label>每次提前还款金额</label>
+          <div class="control"><input type="number" id="ppAmount" class="has-suffix" value="200000" min="0" step="10000"><span class="suffix">元</span></div>
+        </div>
+        <div class="field">
+          <label>冲抵哪笔贷款</label>
+          <div class="control"><select id="ppTarget"></select></div>
+          <div class="note">利率高的贷款优先冲抵通常更省利息</div>
+        </div>
+        <div class="field full">
+          <label>提前还款月份（可多选，如每年 4 月、10 月）</label>
+          <div class="month-toggles" id="monthToggles"></div>
+        </div>
+        <div class="field full">
+          <label>提前还款方式</label>
+          <div class="seg" id="ppModeSeg">
+            <label class="opt active"><input type="radio" name="ppmode" value="shorten" checked>
+              <span class="t">缩短期限，月供不变</span><span class="d">每月还款额不变，贷款提前结清，通常更省利息</span></label>
+            <label class="opt"><input type="radio" name="ppmode" value="reduce">
+              <span class="t">减少月供，期限不变</span><span class="d">每月月供下降，贷款仍按原到期日结清</span></label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 分区3：收入与存款 ===== -->
+  <section class="panel">
+    <div class="panel-head"><div class="panel-num">3</div><h2>收入与存款<span class="hint">选填，用于测算“最快何时能一次性结清”</span></h2></div>
+
+    <div class="switch-row" id="incomeSwitch">
+      <div class="switch"></div>
+      <div><div class="sw-label">同时测算存款与最快结清时点</div><div class="sw-sub">开启后按你的收入、支出与存款，推算哪个月能一次性还清</div></div>
+    </div>
+
+    <div id="incomeBody" class="hidden">
+      <div class="grid">
+        <div class="field narrow">
+          <label>当前已有存款</label>
+          <div class="control"><input type="number" id="inSavings" class="has-suffix" value="0" min="0" step="10000"><span class="suffix">元</span></div>
+        </div>
+        <div class="field narrow">
+          <label>税后年收入（不含公积金）</label>
+          <div class="control"><input type="number" id="inIncome" class="has-suffix" value="1000000" min="0" step="10000"><span class="suffix">元</span></div>
+        </div>
+        <div class="field narrow">
+          <label>年生活支出</label>
+          <div class="control"><input type="number" id="inLiving" class="has-suffix" value="150000" min="0" step="10000"><span class="suffix">元</span></div>
+        </div>
+        <div class="field full">
+          <label style="display:flex;align-items:center;gap:9px;cursor:pointer;font-weight:600;color:var(--sub)">
+            <input type="checkbox" id="inFundCovers" checked style="width:17px;height:17px;accent-color:var(--green)">
+            每月月供由公积金（缴存/账户余额）全额覆盖，不动用这份现金收入
+          </label>
+          <div class="note">若月供需要从这份收入里现金支付，请取消勾选</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 操作按钮 ===== -->
+  <div class="actions">
+    <button class="btn btn-primary" id="btnCalc">
+      <svg class="svg-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+      开始测算
+    </button>
+    <button class="btn btn-excel" id="btnExcel" disabled>
+      <svg class="svg-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13l6 6M15 13l-6 6"/></svg>
+      导出 Excel 表格
+    </button>
+    <button class="btn btn-poster" id="btnPoster" disabled>
+      <svg class="svg-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M4 18l5-4 4 3 3-2 4 3"/></svg>
+      一键生成概览海报
+    </button>
+  </div>
+
+  <!-- ===== 结果区 ===== -->
+  <section id="resultArea" class="hidden" style="margin-top:26px">
+    <div class="result-cards" id="resultCards"></div>
+    <div class="loan-results" id="loanResults"></div>
+
+    <div class="panel" style="padding:18px">
+      <div class="table-tools">
+        <h3>逐月还款明细</h3>
+        <div class="filter" id="tableFilter">
+          <button data-f="all" class="active">全部</button>
+          <button data-f="prepay">提前还款月</button>
+          <button data-f="annual">仅每年12月</button>
+        </div>
+      </div>
+      <div class="tbl-scroll">
+        <table id="schedTable">
+          <thead><tr>
+            <th class="lft">月份</th>
+            <th>商贷月供</th><th>商贷利息</th><th>商贷还本</th><th>提前还本</th><th>商贷剩余本金</th>
+            <th>公积金月供</th><th>公积金利息</th><th>公积金还本</th><th>公积金剩余本金</th>
+            <th>当月还款合计</th><th>剩余本金合计</th><th>累计利息</th>
+          </tr></thead>
+          <tbody id="schedBody"></tbody>
+        </table>
+      </div>
+      <div class="note-box" id="resultNote"></div>
+    </div>
+  </section>
+
+  <footer class="site">房贷还款计算器 · 所有计算在你的浏览器本地完成，不会上传任何数据 · 实际金额以银行/公积金中心账单为准</footer>
+</main>
+
+<!-- ===== 海报弹窗 ===== -->
+<div class="modal-mask hidden" id="posterModal">
+  <div class="modal">
+    <div class="poster" id="posterNode"></div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" id="posterClose">关闭</button>
+      <button class="btn btn-primary" id="posterDownload">
+        <svg class="svg-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
+        保存海报
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="vendor/xlsx.full.min.js"></script>
+<script src="vendor/html-to-image.min.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

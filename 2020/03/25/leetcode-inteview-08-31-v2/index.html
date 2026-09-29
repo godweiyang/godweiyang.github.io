@@ -160,6 +160,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -245,6 +254,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -339,7 +357,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/13.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/15.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -539,20 +557,45 @@
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>昨天的题解地址：<br><a href="https://godweiyang.com/2020/03/24/leetcode-inteview-08-01/" title="韦阳的博客：【每日算法Day 79】所有人都会做的入门题，但是能看出你的代码能力！">韦阳的博客：【每日算法Day 79】所有人都会做的入门题，但是能看出你的代码能力！</a></p>
 <p><a href="https://zhuanlan.zhihu.com/p/115799226" title="知乎专栏：【每日算法Day 79】所有人都会做的入门题，但是能看出你的代码能力！">知乎专栏：【每日算法Day 79】所有人都会做的入门题，但是能看出你的代码能力！</a></p>
 <p>昨天是通过动态规划来解决的，转移方程为：</p>
-<p>$$<br>f[i] = f[i-1] + f[i-2] + f[i-3]<br>$$</p>
+$$
+f[i] = f[i-1] + f[i-2] + f[i-3]
+$$
+
 <p>初始情况是 $f[1] = 1, f[2] = 2, f[3] = 4$ 。</p>
 <p>如果通过递推的方式来求解的话，时间复杂度是 $O(n)$ ，但是我们还可以用矩阵快速幂的方法加速到 $O(\log n)$ 。</p>
 <p>相信大家快速幂一定听说过（没听说过当我没说），如果让你求 $a^n$，那么可以分两种情况。如果 $n$ 是偶数，那么可以计算 $a^{n/2}$，然后求它的平方 $(a^{n/2})^2$ 就行了。如果 $n$ 是奇数，那么可以计算 $a^{(n-1)/2}$，然后求它的平方 $a \cdot (a^{(n-1)/2})^2$ 就行了。这样只需要用 $O(\log n)$ 的复杂度就可以计算出 $a^n$ 了。</p>
 <p>类似的，如果我们要计算一个矩阵的幂 $A^n$，也可以将其拆分成两半，然后计算一半再平方就行了。</p>
 <p>那么这题跟矩阵有什么关系呢？如果我们把转移方程右边三项写成向量形式：</p>
-<p>$$<br>\begin{bmatrix}<br>    f_{i-3} &amp; f_{i-2} &amp; f_{i-1}<br>\end{bmatrix}<br>$$</p>
+$$
+\begin{bmatrix}
+    f_{i-3} & f_{i-2} & f_{i-1}
+\end{bmatrix}
+$$
+
 <p>那么给它右边乘上一个矩阵 $A$：</p>
-<p>$$<br>\begin{bmatrix}<br>    0 &amp; 0 &amp; 1 \<br>    1 &amp; 0 &amp; 1 \<br>    0 &amp; 1 &amp; 1<br>\end{bmatrix}<br>$$</p>
+$$
+\begin{bmatrix}
+    0 & 0 & 1 \\\
+    1 & 0 & 1 \\\
+    0 & 1 & 1
+\end{bmatrix}
+$$
+
 <p>那么就会得到向量：</p>
-<p>$$<br>\begin{bmatrix}<br>    f_{i-2} &amp; f_{i-1} &amp; f_{i-1}+f_{i-2}+f_{i-3}<br>\end{bmatrix}<br>$$</p>
+$$
+\begin{bmatrix}
+    f_{i-2} & f_{i-1} & f_{i-1}+f_{i-2}+f_{i-3}
+\end{bmatrix}
+$$
+
 <p>即：</p>
-<p>$$<br>\begin{bmatrix}<br>    f_{i-2} &amp; f_{i-1} &amp; f_{i}<br>\end{bmatrix}<br>$$</p>
-<p>所以乘一次矩阵 $A$ 就可以得到下一个 $f$ 值，那么从初始的向量 $\begin{bmatrix}1 &amp; 2 &amp; 4\end{bmatrix}$ 开始，乘上 $A^{n-3}$ 就可以得到 $\begin{bmatrix}f_{n-2} &amp; f_{n-1} &amp; f_{n}\end{bmatrix}$ 了。</p>
+$$
+\begin{bmatrix}
+    f_{i-2} & f_{i-1} & f_{i}
+\end{bmatrix}
+$$
+
+<p>所以乘一次矩阵 $A$ 就可以得到下一个 $f$ 值，那么从初始的向量 $\begin{bmatrix}1 & 2 & 4\end{bmatrix}$ 开始，乘上 $A^{n-3}$ 就可以得到 $\begin{bmatrix}f_{n-2} & f_{n-1} & f_{n}\end{bmatrix}$ 了。</p>
 <p>而这里的 $A^{n-3}$ 就可以通过矩阵快速幂来计算得到。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="c"><a href="#c" class="headerlink" title="c++"></a>c++</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="type">long</span> <span class="type">long</span> ll;</span><br><span class="line"><span class="keyword">typedef</span> vector&lt;vector&lt;ll&gt;&gt; vvl;</span><br><span class="line"><span class="keyword">typedef</span> vector&lt;ll&gt; vl;</span><br><span class="line"><span class="type">const</span> ll p = <span class="number">1e9</span><span class="number">+7</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vvl <span class="title">mat_mul</span><span class="params">(vvl&amp; A, vvl&amp; B)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> a = A.<span class="built_in">size</span>(), b = B.<span class="built_in">size</span>(), c = B[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line">        <span class="function">vvl <span class="title">C</span><span class="params">(a, vl(c, <span class="number">0</span>))</span></span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; a; ++i) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; c; ++j) &#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="type">int</span> k = <span class="number">0</span>; k &lt; b; ++k) &#123;</span><br><span class="line">                    (C[i][j] += A[i][k] * B[k][j]) %= p;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> C;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">vvl <span class="title">mat_pow</span><span class="params">(vvl&amp; A, <span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> m = A.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function">vvl <span class="title">B</span><span class="params">(m, vl(m, <span class="number">0</span>))</span></span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; m; ++i) B[i][i] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (n &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (n&amp;<span class="number">1</span>) B = <span class="built_in">mat_mul</span>(B, A);</span><br><span class="line">            A = <span class="built_in">mat_mul</span>(A, A);</span><br><span class="line">            n &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> B;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">vvl <span class="title">mat_pow_rec</span><span class="params">(vvl&amp; A, <span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (n == <span class="number">1</span>) <span class="keyword">return</span> A;</span><br><span class="line">        vvl B = <span class="built_in">mat_pow_rec</span>(A, n/<span class="number">2</span>);</span><br><span class="line">        B = <span class="built_in">mat_mul</span>(B, B);</span><br><span class="line">        <span class="keyword">if</span> (n&amp;<span class="number">1</span>) <span class="keyword">return</span> <span class="built_in">mat_mul</span>(A, B);</span><br><span class="line">        <span class="keyword">return</span> B;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">waysToStep</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">        vl f = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>&#125;;</span><br><span class="line">        <span class="keyword">if</span> (n &lt;= <span class="number">3</span>) <span class="keyword">return</span> f[n<span class="number">-1</span>];</span><br><span class="line">        vvl A = &#123;&#123;<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>&#125;, &#123;<span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>&#125;, &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>&#125;&#125;;</span><br><span class="line">        vvl B = <span class="built_in">mat_pow</span>(A, n<span class="number">-3</span>);</span><br><span class="line">        ll res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; ++i) &#123;</span><br><span class="line">            (res += f[i] * B[i][<span class="number">2</span>]) %= p;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
@@ -788,7 +831,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="【每日算法Day 81】面试经典题：关于丑数，你真的理解为什么这么算吗？">
+                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="【每日算法Day 81】面试经典题：关于丑数，你真的理解为什么这么算吗？">
                         
                         <span class="card-title">【每日算法Day 81】面试经典题：关于丑数，你真的理解为什么这么算吗？</span>
                     </div>
@@ -846,7 +889,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="【每日算法Day 79】所有人都会做的入门题，但是能看出你的代码能力！">
+                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="【每日算法Day 79】所有人都会做的入门题，但是能看出你的代码能力！">
                         
                         <span class="card-title">【每日算法Day 79】所有人都会做的入门题，但是能看出你的代码能力！</span>
                     </div>
@@ -1078,7 +1121,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

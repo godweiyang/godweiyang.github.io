@@ -153,6 +153,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -238,6 +247,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -332,7 +350,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/7.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/5.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -495,7 +513,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    944
+                    923
                 </div>
                 
 
@@ -520,25 +538,81 @@
             <div id="articleContent">
                 <p>交叉熵（CrossEntropy）是常见的损失函数，本文详细推导一下它的梯度，面试大厂或者工程实践中都可能会用到。</p>
 <h1 id="前向传播"><a href="#前向传播" class="headerlink" title="前向传播"></a>前向传播</h1><p>假设分类任务类别数是$V$，隐层输出是$V$维向量$\mathbf{h}$，标准的one-hot向量是$\mathbf{y}$，正确的类别是$k$。那么交叉熵损失可以定义为：</p>
-<p>$$<br>\mathcal{L}(\mathbf p, \mathbf q) = -\sum_i \mathbf{p}_i \log(\mathbf{q}_i)<br>$$</p>
-<p>其中$\mathbf p = (1 - \alpha)  \mathbf y + \frac{\alpha}{V}\cdot \mathbf 1$，$\mathbf q = \mathrm{Softmax}(\mathbf h)$，$0\le \alpha\le 1$是平滑参数。Softmax函数大家都很熟悉了，具体形式为：$\mathbf{q}<em>i = \frac{e^{\mathbf{h}_i}}{\sum</em>{j}{e^{\mathbf{h}_j}}}$。</p>
-<h1 id="反向传播"><a href="#反向传播" class="headerlink" title="反向传播"></a>反向传播</h1><p>$\mathcal{L}$对$\mathbf{h}_i$的梯度要分两种情况：</p>
-<p>$$<br>\frac{\partial{\mathcal{L}}}{\partial{\mathbf{h}_i}} = \left{<br>\begin{array}{ll}<br>   \mathbf{q}_i -\frac{\alpha}{V}  - 1 + \alpha &amp; i = k \<br>   \mathbf{q}_i -\frac{\alpha}{V} &amp; i\neq k<br>\end{array}  \right.<br>$$</p>
+$$
+\mathcal{L}(\mathbf p, \mathbf q) = -\sum_i \mathbf{p}_i \log(\mathbf{q}_i)
+$$
+
+<p>其中$\mathbf p = (1 - \alpha)  \mathbf y + \frac{\alpha}{V}\cdot \mathbf 1$，$\mathbf q = \mathrm{Softmax}(\mathbf h)$，$0\le \alpha\le 1$是平滑参数。Softmax函数大家都很熟悉了，具体形式为：$\mathbf{q}_i = \frac{e^{\mathbf{h}_i}}{\sum_{j}{e^{\mathbf{h}_j}}}$。</p>
+<h1 id="反向传播"><a href="#反向传播" class="headerlink" title="反向传播"></a>反向传播</h1>$\mathcal{L}$对$\mathbf{h}_i$的梯度要分两种情况：
+
+$$
+\frac{\partial{\mathcal{L}}}{\partial{\mathbf{h}_i}} = \left\{
+\begin{array}{ll}
+   \mathbf{q}_i -\frac{\alpha}{V}  - 1 + \alpha & i = k \\\
+   \mathbf{q}_i -\frac{\alpha}{V} & i\neq k
+\end{array}  \right.
+$$
+
 <h2 id="推导过程"><a href="#推导过程" class="headerlink" title="推导过程"></a>推导过程</h2><p>根据求导法则有：</p>
-<p>$$<br>\frac{\partial \mathcal{L}}{\partial \mathbf{h}<em>i} = -\sum</em>{j}{\frac{\partial{\mathcal{L}}}{\partial{\mathbf{q}<em>j}} \cdot \frac{\partial{\mathbf{q}_j}}{\partial{\mathbf{h}_i}}} = -\sum</em>{j}{\frac{\mathbf{p}_j}{\mathbf{q}_j} \cdot \frac{\partial{\mathbf{q}_j}}{\partial{\mathbf{h}_i}}}<br>$$</p>
+$$
+\frac{\partial \mathcal{L}}{\partial \mathbf{h}_i} = -\sum_{j}{\frac{\partial{\mathcal{L}}}{\partial{\mathbf{q}_j}} \cdot \frac{\partial{\mathbf{q}_j}}{\partial{\mathbf{h}_i}}} = -\sum_{j}{\frac{\mathbf{p}_j}{\mathbf{q}_j} \cdot \frac{\partial{\mathbf{q}_j}}{\partial{\mathbf{h}_i}}}
+$$
+
 <p>其中$\frac{\partial{\mathbf{q}_j}}{\partial{\mathbf{h}_i}}$就是Softmax函数的梯度（这个推导比较简单，放在了文末）：</p>
-<p>$$<br>\frac{\partial{\mathbf{q}_j}}{\partial{\mathbf{h}_i}} = \left{<br>\begin{array}{ll}<br>   \mathbf{q}_i (1 - \mathbf{q}_i)  &amp; j = i \<br>    -\mathbf{q}_i \mathbf{q}_j &amp; j\neq i<br>\end{array}  \right.<br>$$</p>
+$$
+\frac{\partial{\mathbf{q}_j}}{\partial{\mathbf{h}_i}} = \left\{
+\begin{array}{ll}
+   \mathbf{q}_i (1 - \mathbf{q}_i)  & j = i \\\
+    -\mathbf{q}_i \mathbf{q}_j & j\neq i
+\end{array}  \right.
+$$
+
 <p>下面分两种情况讨论：</p>
 <ol>
-<li>当$i = k$时：<br>$$<br>\begin{aligned}<br>\frac{\partial \mathcal{L}}{\partial \mathbf{h}<em>i} &amp;= -\sum</em>{j}{\frac{\partial{\mathcal{L}}}{\partial{\mathbf{q}<em>j}} \cdot \frac{\partial{\mathbf{q}_j}}{\partial{\mathbf{h}_i}}} = -\sum</em>{j}{\frac{\mathbf{p}<em>j}{\mathbf{q}_j} \cdot \frac{\partial{\mathbf{q}_j}}{\partial{\mathbf{h}_i}}} \<br>&amp;= -\frac{\mathbf{p}_k}{\mathbf{q}_k} \cdot \frac{\partial{\mathbf{q}_k}}{\partial{\mathbf{h}_i}} -\sum</em>{j \neq k}{\frac{\mathbf{p}<em>j}{\mathbf{q}_j} \cdot \frac{\partial{\mathbf{q}_j}}{\partial{\mathbf{h}_i}}} \<br>&amp;= -\frac{\mathbf{p}_k}{\mathbf{q}_k} \cdot \mathbf{q}_k (1 - \mathbf{q}_k) -\sum</em>{j \neq k}{\frac{\mathbf{p}<em>j}{\mathbf{q}_j} \cdot (-\mathbf{q}_i \mathbf{q}_j)} \<br>&amp;= \mathbf{p}_k (\mathbf{q}_k - 1)  + \mathbf{q}_i\sum</em>{j \neq k}{\mathbf{p}_j} \<br>&amp;= (1 - \alpha + \frac{\alpha}{V})(\mathbf{q}_k - 1) +  (V - 1) \cdot \frac{\alpha}{V}\cdot \mathbf{q}_i \<br>&amp;= \mathbf{q}_i -\frac{\alpha}{V}  - 1 + \alpha<br>\end{aligned}<br>$$</li>
-<li>当$i \neq k$时：<br>$$<br>\begin{aligned}<br>\frac{\partial \mathcal{L}}{\partial \mathbf{h}<em>i} &amp;= -\sum</em>{j}{\frac{\partial{\mathcal{L}}}{\partial{\mathbf{q}<em>j}} \cdot \frac{\partial{\mathbf{q}_j}}{\partial{\mathbf{h}_i}}} = -\sum</em>{j}{\frac{\mathbf{p}<em>j}{\mathbf{q}_j} \cdot \frac{\partial{\mathbf{q}_j}}{\partial{\mathbf{h}_i}}} \<br>&amp;= -\frac{\mathbf{p}_k}{\mathbf{q}_k} \cdot \frac{\partial{\mathbf{q}_k}}{\partial{\mathbf{h}_i}} -\frac{\mathbf{p}_i}{\mathbf{q}_i} \cdot \frac{\partial{\mathbf{q}_i}}{\partial{\mathbf{h}_i}} -\sum</em>{j \neq k, j \neq i}{\frac{\mathbf{p}<em>j}{\mathbf{q}_j} \cdot \frac{\partial{\mathbf{q}_j}}{\partial{\mathbf{h}_i}}} \<br>&amp;= -\frac{\mathbf{p}_k}{\mathbf{q}_k} \cdot (-\mathbf{q}_k\mathbf{q}_i) -\frac{\mathbf{p}_i}{\mathbf{q}_i} \cdot \mathbf{q}_i (1 - \mathbf{q}_i) -\sum</em>{j \neq k, j \neq i}{\frac{\mathbf{p}<em>j}{\mathbf{q}_j} \cdot (-\mathbf{q}_i \mathbf{q}_j)} \<br>&amp;= \mathbf{p}_k \mathbf{q}_i - \mathbf{p}_i (1 - \mathbf{q}_i) + \mathbf{q}_i\sum</em>{j \neq k, j \neq i}{\mathbf{p}_j} \<br>&amp;= (1 - \alpha + \frac{\alpha}{V})\cdot\mathbf{q}_i - \frac{\alpha}{V} \cdot (1 - \mathbf{q}_i) + (V - 2) \cdot \frac{\alpha}{V}\cdot\mathbf{q}_i \<br>&amp;= \mathbf{q}_i -\frac{\alpha}{V}<br>\end{aligned}<br>$$</li>
+<li>当$i = k$时：$$
+   \begin{aligned}
+   \frac{\partial \mathcal{L}}{\partial \mathbf{h}_i} &= -\sum_{j}{\frac{\partial{\mathcal{L}}}{\partial{\mathbf{q}_j}} \cdot \frac{\partial{\mathbf{q}_j}}{\partial{\mathbf{h}_i}}} = -\sum_{j}{\frac{\mathbf{p}_j}{\mathbf{q}_j} \cdot \frac{\partial{\mathbf{q}_j}}{\partial{\mathbf{h}_i}}} \\\
+   &= -\frac{\mathbf{p}_k}{\mathbf{q}_k} \cdot \frac{\partial{\mathbf{q}_k}}{\partial{\mathbf{h}_i}} -\sum_{j \neq k}{\frac{\mathbf{p}_j}{\mathbf{q}_j} \cdot \frac{\partial{\mathbf{q}_j}}{\partial{\mathbf{h}_i}}} \\\
+   &= -\frac{\mathbf{p}_k}{\mathbf{q}_k} \cdot \mathbf{q}_k (1 - \mathbf{q}_k) -\sum_{j \neq k}{\frac{\mathbf{p}_j}{\mathbf{q}_j} \cdot (-\mathbf{q}_i \mathbf{q}_j)} \\\
+   &= \mathbf{p}_k (\mathbf{q}_k - 1)  + \mathbf{q}_i\sum_{j \neq k}{\mathbf{p}_j} \\\
+   &= (1 - \alpha + \frac{\alpha}{V})(\mathbf{q}_k - 1) +  (V - 1) \cdot \frac{\alpha}{V}\cdot \mathbf{q}_i \\\
+   &= \mathbf{q}_i -\frac{\alpha}{V}  - 1 + \alpha
+   \end{aligned}
+   $$</li>
+<li>当$i \neq k$时：$$
+   \begin{aligned}
+   \frac{\partial \mathcal{L}}{\partial \mathbf{h}_i} &= -\sum_{j}{\frac{\partial{\mathcal{L}}}{\partial{\mathbf{q}_j}} \cdot \frac{\partial{\mathbf{q}_j}}{\partial{\mathbf{h}_i}}} = -\sum_{j}{\frac{\mathbf{p}_j}{\mathbf{q}_j} \cdot \frac{\partial{\mathbf{q}_j}}{\partial{\mathbf{h}_i}}} \\\
+   &= -\frac{\mathbf{p}_k}{\mathbf{q}_k} \cdot \frac{\partial{\mathbf{q}_k}}{\partial{\mathbf{h}_i}} -\frac{\mathbf{p}_i}{\mathbf{q}_i} \cdot \frac{\partial{\mathbf{q}_i}}{\partial{\mathbf{h}_i}} -\sum_{j \neq k, j \neq i}{\frac{\mathbf{p}_j}{\mathbf{q}_j} \cdot \frac{\partial{\mathbf{q}_j}}{\partial{\mathbf{h}_i}}} \\\
+   &= -\frac{\mathbf{p}_k}{\mathbf{q}_k} \cdot (-\mathbf{q}_k\mathbf{q}_i) -\frac{\mathbf{p}_i}{\mathbf{q}_i} \cdot \mathbf{q}_i (1 - \mathbf{q}_i) -\sum_{j \neq k, j \neq i}{\frac{\mathbf{p}_j}{\mathbf{q}_j} \cdot (-\mathbf{q}_i \mathbf{q}_j)} \\\
+   &= \mathbf{p}_k \mathbf{q}_i - \mathbf{p}_i (1 - \mathbf{q}_i) + \mathbf{q}_i\sum_{j \neq k, j \neq i}{\mathbf{p}_j} \\\
+   &= (1 - \alpha + \frac{\alpha}{V})\cdot\mathbf{q}_i - \frac{\alpha}{V} \cdot (1 - \mathbf{q}_i) + (V - 2) \cdot \frac{\alpha}{V}\cdot\mathbf{q}_i \\\
+   &= \mathbf{q}_i -\frac{\alpha}{V}
+   \end{aligned}
+   $$
+
+</li>
 </ol>
 <h2 id="Softmax梯度"><a href="#Softmax梯度" class="headerlink" title="Softmax梯度"></a>Softmax梯度</h2><p>回顾Softmax函数的形式：</p>
-<p>$$<br>\mathbf{q}<em>j = \frac{e^{\mathbf{h}_j}}{\sum</em>{l}{e^{\mathbf{h}<em>l}}} = \frac{e^{\mathbf{h}_j}}{e^{\mathbf{h}_i} + \sum</em>{l \neq i}{e^{\mathbf{h}_l}}}<br>$$</p>
+$$
+\mathbf{q}_j = \frac{e^{\mathbf{h}_j}}{\sum_{l}{e^{\mathbf{h}_l}}} = \frac{e^{\mathbf{h}_j}}{e^{\mathbf{h}_i} + \sum_{l \neq i}{e^{\mathbf{h}_l}}}
+$$
+
 <p>这里也分两种情况讨论：</p>
 <ol>
-<li>当$j = i$时：<br>$$<br>\begin{aligned}<br>\frac{\partial{\mathbf{q}<em>j}}{\partial{\mathbf{h}_i}} &amp;= \frac{e^{\mathbf{h}_j}}{e^{\mathbf{h}_i} + \sum</em>{l \neq i}{e^{\mathbf{h}<em>l}}} - \frac{e^{\mathbf{h}_j} \cdot e^{\mathbf{h}_j}}{\left(e^{\mathbf{h}_i} + \sum</em>{l \neq i}{e^{\mathbf{h}_l}}\right)^2} \<br>&amp;= \mathbf{q}_j - \mathbf{q}_j\mathbf{q}_j \<br>&amp;= \mathbf{q}_j (1 - \mathbf{q}_j)<br>\end{aligned}<br>$$</li>
-<li>当$j \neq i$时：<br>$$<br>\begin{aligned}<br>\frac{\partial{\mathbf{q}<em>j}}{\partial{\mathbf{h}_i}} &amp;= - \frac{e^{\mathbf{h}_j} \cdot e^{\mathbf{h}_i}}{\left(e^{\mathbf{h}_i} + \sum</em>{l \neq i}{e^{\mathbf{h}_l}}\right)^2} \<br>&amp;= -\mathbf{q}_j\mathbf{q}_i<br>\end{aligned}<br>$$</li>
+<li>当$j = i$时：$$
+   \begin{aligned}
+   \frac{\partial{\mathbf{q}_j}}{\partial{\mathbf{h}_i}} &= \frac{e^{\mathbf{h}_j}}{e^{\mathbf{h}_i} + \sum_{l \neq i}{e^{\mathbf{h}_l}}} - \frac{e^{\mathbf{h}_j} \cdot e^{\mathbf{h}_j}}{\left(e^{\mathbf{h}_i} + \sum_{l \neq i}{e^{\mathbf{h}_l}}\right)^2} \\\
+   &= \mathbf{q}_j - \mathbf{q}_j\mathbf{q}_j \\\
+   &= \mathbf{q}_j (1 - \mathbf{q}_j)
+   \end{aligned}
+   $$</li>
+<li>当$j \neq i$时：$$
+   \begin{aligned}
+   \frac{\partial{\mathbf{q}_j}}{\partial{\mathbf{h}_i}} &= - \frac{e^{\mathbf{h}_j} \cdot e^{\mathbf{h}_i}}{\left(e^{\mathbf{h}_i} + \sum_{l \neq i}{e^{\mathbf{h}_l}}\right)^2} \\\
+   &= -\mathbf{q}_j\mathbf{q}_i
+   \end{aligned}
+   $$
+</li>
 </ol>
 
             </div>
@@ -771,7 +845,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="手推公式之“层归一化”梯度">
+                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="手推公式之“层归一化”梯度">
                         
                         <span class="card-title">手推公式之“层归一化”梯度</span>
                     </div>
@@ -829,7 +903,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="拼图还能这么玩？">
+                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="拼图还能这么玩？">
                         
                         <span class="card-title">拼图还能这么玩？</span>
                     </div>
@@ -1056,7 +1130,7 @@ Mac微信的头像保存在：
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

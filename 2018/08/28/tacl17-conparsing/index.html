@@ -157,6 +157,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -242,6 +251,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -336,7 +354,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/26.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/28.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -499,14 +517,14 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.4k
+                    2.3k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    9 分
+                    8 分
                 </div>
                 
                 
@@ -622,12 +640,16 @@
 <p>该转移系统还有很多变体。对于短语(S, a, b, c, d)，可以令它在栈中S结点之前的子结点个数为$k$，例如对于上面的中序转移系统，栈里存放顺序是“a S b c d”，那么$k = 1$，如果栈里存放顺序是“a b S c d”，那么$k = 2$。而对于自底向上的转移系统，$k$就是正无穷，对于自顶向下的转移系统，$k$就是0。</p>
 <h1 id="句法分析模型"><a href="#句法分析模型" class="headerlink" title="句法分析模型"></a>句法分析模型</h1><hr>
 <p>对于每一个状态，模型采用三个LSTM来预测当前步动作，结构如下图所示：<br><img src="8.jpg" alt=""><br>一个LSTM用来对栈顶元素进行编码，一个LSTM用来对buffer中所有元素进行编码，一个LSTM用来对之前预测完毕的所有动作进行编码。</p>
-<h2 id="单词表示"><a href="#单词表示" class="headerlink" title="单词表示"></a>单词表示</h2><p>对于每个单词，用预训练词向量、随机初始化词向量、POS向量拼接起来，然后经过一个前馈神经网络来作为最终的单词表示：<br>\[{x<em>i} = f({W</em>{input}}[{e_{ {p_i}}};{\bar e_{ {w_i}}};{e_{ {w_i}}}] + {b<em>{input}})\]<br>其中${e</em>{ {p<em>i}}}$表示POS为$p_i$的向量，${\bar e</em>{ {w<em>i}}}$表示单词$w_i$的预训练词向量，${e</em>{ {w_i}}}$表示单词$w_i$的随机初始化词向量。$f$函数通常取ReLU。</p>
-<h2 id="栈里的短语表示"><a href="#栈里的短语表示" class="headerlink" title="栈里的短语表示"></a>栈里的短语表示</h2><p>对于自顶向下和in-order的转移系统，由于不需要二叉化，所以采用如下图所示的LSTM来对栈里的短语进行编码：<br><img src="9.jpg" alt=""><br>具体的短语表示为：<br>\[{s<em>{comp}} = (LST{M_f}[{e</em>{nt}},{s<em>0}, \ldots ,{s_m}];LST{M_b}[{e</em>{nt}},{s<em>m}, \ldots ,{s_0}])\]<br>其中${e</em>{nt}}$是父结点的向量表示，其他都是子结点的短语表示。</p>
+<h2 id="单词表示"><a href="#单词表示" class="headerlink" title="单词表示"></a>单词表示</h2><p>对于每个单词，用预训练词向量、随机初始化词向量、POS向量拼接起来，然后经过一个前馈神经网络来作为最终的单词表示：<br>&lt;!–swig￼7–&gt;<br>其中${e*{ {p*i}}}$表示POS为$p_i$的向量，${\bar e*{ {w*i}}}$表示单词$w_i$的预训练词向量，${e*{ {w_i}}}$表示单词$w_i$的随机初始化词向量。$f$函数通常取ReLU。</p>
+<h2 id="栈里的短语表示"><a href="#栈里的短语表示" class="headerlink" title="栈里的短语表示"></a>栈里的短语表示</h2><p>对于自顶向下和in-order的转移系统，由于不需要二叉化，所以采用如下图所示的LSTM来对栈里的短语进行编码：<br><img src="9.jpg" alt=""><br>具体的短语表示为：<br>&lt;!–swig￼15–&gt;<br>其中${e*{nt}}$是父结点的向量表示，其他都是子结点的短语表示。</p>
 <p>而作为对比实验，自底向上的转移系统因为是二叉树，所以LSTM略有不同，结构图如下所示：<br><img src="12.jpg" alt=""><br>唯一的区别就是不管你短语的单词顺序如何，都要把中心词也就是头结点放在前面。</p>
 <h2 id="贪心动作预测"><a href="#贪心动作预测" class="headerlink" title="贪心动作预测"></a>贪心动作预测</h2><p>上面的两个小节将buffer和栈里的元素都进行了编码，最后就要对当前状态进行动作预测了。</p>
-<p>假设第$k$个状态为$[{s_j}, \ldots ,{s_0},i,false]$，那么当前状态每个动作的概率为：<br>\[p = SOFTMAX(W[{h_{stk}};{h_{buf}};{h_{ah}}] + b)\]<br>其中${h_{stk}}$是栈里的LSTM编码结果：<br>\[{h<em>{stk}} = LSTM[{s_0}, \ldots ,{s_j}]\]<br>${h</em>{buf}}$是buffer里的LSTM编码结果：<br>\[{h_{buf}} = LSTM[{x_i}, \ldots ,{x_n}]\]<br>${h<em>{ah}}$是之前动作序列的LSTM编码结果：<br>\[{h</em>{ah}} = LSTM[{e_{ac{t_k}}}, \ldots ,{e_{ac{t_0}}}]\]</p>
-<p>最终的损失函数采用交叉熵：<br>\[L(\theta ) = - \sum\limits_i {\sum\limits_j {\log {p_{ {a_{ij}}}}} } + \frac{\lambda }{2}{\Vert \theta \Vert ^2}\]</p>
+<p>假设第$k$个状态为$[{s_j}, \ldots ,{s_0},i,false]$，那么当前状态每个动作的概率为：<br>&lt;!–swig￼19–&gt;<br>其中${h_{stk}}$是栈里的LSTM编码结果：<br>&lt;!–swig￼21–&gt;</p>
+${h*{buf}}$是buffer里的LSTM编码结果：
+<p>&lt;!–swig￼23–&gt;</p>
+${h*{ah}}$是之前动作序列的LSTM编码结果：
+<p>&lt;!–swig￼25–&gt;</p>
+<p>最终的损失函数采用交叉熵：<br>&lt;!–swig￼26–&gt;</p>
 <h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><hr>
 <p>实验的超参数设置如下：<br><img src="10.jpg" alt=""><br>经过对比实验可以发现，结果比自底向上和自顶向下的转移系统都要略高一点，就算加上了重排序，还是略高一点。单模型的话，和2017年之前的结果相比的确是最高的，但是91.8的F1值现在看来不是特别高了，毕竟伯克利基于CKY算法的chart-parser都已经到了92多甚至93了。</p>
 <p>详细结果如下表：<br><img src="11.jpg" alt=""><br>模型在依存句法分析和CTB上的表现也都很不错。</p>
@@ -869,7 +891,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="Recurrent Neural Network Grammars">
+                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="Recurrent Neural Network Grammars">
                         
                         <span class="card-title">Recurrent Neural Network Grammars</span>
                     </div>
@@ -931,7 +953,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="K-bandit Algorithm">
+                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="K-bandit Algorithm">
                         
                         <span class="card-title">K-bandit Algorithm</span>
                     </div>
@@ -1157,7 +1179,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

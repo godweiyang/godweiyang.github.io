@@ -14,7 +14,7 @@
 
 
 题意
-给定$n$个点和每个点在$x$轴上面的位置和每个点的权值，求出点对之间的费用总和。其中某两个点$i$，$j$之间的费用定义为$ | p_i - p_j | \times max{">
+给定$n$个点和每个点在$x$轴上面的位置和每个点的权值，求出点对之间的费用总和。其中某两个点$i$，$j$之间的费用定义为$ | p_i - p_j | \times max\">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -157,6 +157,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -242,6 +251,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -336,7 +354,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/18.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/20.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -495,7 +513,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    794
+                    786
                 </div>
                 
 
@@ -523,9 +541,9 @@
 </blockquote>
 <p><img src="/medias/contact.jpg" alt=""></p>
 <h1 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h1><hr>
-<p>给定$n$个点和每个点在$x$轴上面的位置和每个点的权值，求出点对之间的费用总和。其中某两个点$i$，$j$之间的费用定义为$ | p_i - p_j | \times max{v_i, v_j} $。</p>
+<p>给定$n$个点和每个点在$x$轴上面的位置和每个点的权值，求出点对之间的费用总和。其中某两个点$i$，$j$之间的费用定义为$ | p_i - p_j | \times max\{v_i, v_j\} $。</p>
 <h1 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h1><hr>
-<p>对于每个点，计算它左边权值小于它的点与它点对费用之和：\[{v_i}\sum\limits_j {({p_i} - {p_j})} = k{v_i}{p_i} - {v_i}\sum\limits_j {p_j} \]其中$k$是左边权值小于它的点的数量，$\sum\limits_j {p_j}$是它们的权值之和，可以用两个树状数组统计。右边同理。<br>首先按照$p$从小到大排序。对于每个点用树状数组分别统计出左右两边$v$比它小的$v$之和与数量，然后直接计算结果即可。</p>
+<p>对于每个点，计算它左边权值小于它的点与它点对费用之和：&lt;!–swig￼6–&gt;其中$k$是左边权值小于它的点的数量，$\sum\limits_j {p_j}$是它们的权值之和，可以用两个树状数组统计。右边同理。<br>首先按照$p$从小到大排序。对于每个点用树状数组分别统计出左右两边$v$比它小的$v$之和与数量，然后直接计算结果即可。</p>
 <h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><hr>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;functional&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iterator&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;numeric&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iomanip&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;climits&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;utility&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;complex&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cassert&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cctype&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bitset&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cmath&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;ctime&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;deque&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stack&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;queue&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;deque&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;list&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;new&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;map&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;set&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="comment">//#pragma comment(linker, &quot;/STACK:102400000,102400000&quot;)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="type">long</span> <span class="type">long</span> LL;</span><br><span class="line"><span class="keyword">typedef</span> pair&lt;<span class="type">int</span>, <span class="type">int</span>&gt; PII;</span><br><span class="line"><span class="keyword">typedef</span> pair&lt;PII, <span class="type">int</span>&gt; PIII;</span><br><span class="line"><span class="keyword">typedef</span> vector&lt;<span class="type">int</span>&gt; vec;</span><br><span class="line"><span class="keyword">typedef</span> vector&lt;vec&gt; mat;</span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PB push_back</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MP(a, b) make_pair(a, b)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FI first</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SE second</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> gcd(x, y) __gcd(x, y)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> gcd3(x, y, z) __gcd(__gcd(x, y), z)</span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">double</span> EPS = <span class="number">1e-15</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">double</span> PI = <span class="built_in">acos</span>(<span class="number">-1.0</span>);</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> INF = <span class="number">0x3f3f3f3f</span>;</span><br><span class="line"><span class="type">const</span> LL INFL = <span class="number">0x3f3f3f3f3f3f3f3fLL</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> MAXN = <span class="number">200000</span> + <span class="number">10</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> MOD = <span class="number">1000000007</span>;</span><br><span class="line"></span><br><span class="line">LL bit[MAXN], bit1[MAXN], n;</span><br><span class="line"></span><br><span class="line"><span class="function">LL <span class="title">sum</span><span class="params">(<span class="type">int</span> i)</span> </span>&#123;</span><br><span class="line">    LL s = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (i &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        (s += bit[i]) %= MOD;</span><br><span class="line">        i -= i &amp; -i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> s;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">add</span><span class="params">(<span class="type">int</span> i, LL x)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (i &lt;= <span class="number">10000</span>) &#123;</span><br><span class="line">        (bit[i] += x) %= MOD;</span><br><span class="line">        i += i &amp; -i;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">LL <span class="title">sum1</span><span class="params">(<span class="type">int</span> i)</span> </span>&#123;</span><br><span class="line">    LL s = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (i &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        (s += bit1[i]) %= MOD;</span><br><span class="line">        i -= i &amp; -i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> s;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">add1</span><span class="params">(<span class="type">int</span> i, LL x)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (i &lt;= <span class="number">10000</span>) &#123;</span><br><span class="line">        (bit1[i] += x) %= MOD;</span><br><span class="line">        i += i &amp; -i;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">node</span> &#123;</span><br><span class="line">    LL p, v;</span><br><span class="line">    <span class="type">bool</span> <span class="keyword">operator</span> &lt; (<span class="type">const</span> node&amp; rhs) <span class="type">const</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> p &lt; rhs.p;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">node a[MAXN];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    cin &gt;&gt; n;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%lld&quot;</span>, &amp;a[i].p);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%lld&quot;</span>, &amp;a[i].v);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">sort</span>(a, a + n);</span><br><span class="line">    LL ans = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">        LL cnt = <span class="built_in">sum</span>(a[i].v);</span><br><span class="line">        LL s = <span class="built_in">sum1</span>(a[i].v);</span><br><span class="line">        (ans += (((cnt * a[i].p - s) % MOD + MOD) % MOD) * a[i].v) %= MOD;</span><br><span class="line">        <span class="built_in">add</span>(a[i].v, <span class="number">1</span>);</span><br><span class="line">        <span class="built_in">add1</span>(a[i].v, a[i].p);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">memset</span>(bit, <span class="number">0</span>, <span class="keyword">sizeof</span> bit);</span><br><span class="line">    <span class="built_in">memset</span>(bit1, <span class="number">0</span>, <span class="keyword">sizeof</span> bit1);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = n - <span class="number">1</span>; i &gt;= <span class="number">0</span>; --i) &#123;</span><br><span class="line">        LL cnt = <span class="built_in">sum</span>(a[i].v);</span><br><span class="line">        LL s = <span class="built_in">sum1</span>(a[i].v);</span><br><span class="line">        (ans += (((s - cnt * a[i].p) % MOD + MOD) % MOD) * a[i].v) %= MOD;</span><br><span class="line">        <span class="built_in">add</span>(a[i].v, <span class="number">1</span>);</span><br><span class="line">        <span class="built_in">add1</span>(a[i].v, a[i].p);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">memset</span>(bit, <span class="number">0</span>, <span class="keyword">sizeof</span> bit);</span><br><span class="line">    <span class="built_in">memset</span>(bit1, <span class="number">0</span>, <span class="keyword">sizeof</span> bit1);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = n - <span class="number">1</span>; i &gt;= <span class="number">0</span>; --i) &#123;</span><br><span class="line">        LL cnt = <span class="built_in">sum</span>(a[i].v) - <span class="built_in">sum</span>(a[i].v - <span class="number">1</span>);</span><br><span class="line">        LL s = ((<span class="built_in">sum1</span>(a[i].v) - <span class="built_in">sum1</span>(a[i].v - <span class="number">1</span>)) % MOD + MOD) % MOD;</span><br><span class="line">        (ans -= (((s - cnt * a[i].p) % MOD + MOD) % MOD) * a[i].v) %= MOD;</span><br><span class="line">        <span class="built_in">add</span>(a[i].v, <span class="number">1</span>);</span><br><span class="line">        <span class="built_in">add1</span>(a[i].v, a[i].p);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%lld\n&quot;</span>, (ans % MOD + MOD) % MOD);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -759,7 +777,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="一位长者关于保研的一些人生经验">
+                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="一位长者关于保研的一些人生经验">
                         
                         <span class="card-title">一位长者关于保研的一些人生经验</span>
                     </div>
@@ -815,7 +833,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="EOJ3328. 时空交织的代价">
+                        <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="EOJ3328. 时空交织的代价">
                         
                         <span class="card-title">EOJ3328. 时空交织的代价</span>
                     </div>
@@ -828,7 +846,7 @@
 
 
 题意
-给定$n$个点和每个点在$x$轴上面的位置和每个点的权值，求出点对之间的费用总和。其中某两个点$i$，$j$之间的费用定义为$ | p_i - p_j | \times max{
+给定$n$个点和每个点在$x$轴上面的位置和每个点的权值，求出点对之间的费用总和。其中某两个点$i$，$j$之间的费用定义为$ | p_i - p_j | \times max\
                         
                     </div>
                     <div class="publish-info">
@@ -1046,7 +1064,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

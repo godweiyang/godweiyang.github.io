@@ -158,6 +158,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -243,6 +252,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -337,7 +355,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/25.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/27.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -500,14 +518,14 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.8k
+                    2.6k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    10 分
+                    9 分
                 </div>
                 
                 
@@ -540,9 +558,9 @@
 <li>最后将它们应用到监督序列标注模型中。</li>
 </ul>
 <p>具体的结构如下图所示：<br><img src="2.jpg" alt=""></p>
-<h3 id="2-2-基本的序列标注模型"><a href="#2-2-基本的序列标注模型" class="headerlink" title="2.2 基本的序列标注模型"></a>2.2 基本的序列标注模型</h3><p>我们用到的基本的序列标注模型是一个分层的神经序列标注模型，如上图左半部分所示。<br>给定一个句子$({t_1},{t_2}, \ldots ,{t_N})$，首先对于每个单词${t_k}$产生一个表示${x_k}$，其中${x_k}$是由这个单词基于字符的表示${c_k}$和词向量表示${w_k}$连接而成：<br>\[\begin{array}{l}{c<em>k} = C({t_k};{\theta _c})\{w_k} = E({t_k};{\theta _w})\{x_k} = [{c_k};{w_k}]\end{array}\]字符表示${c_k}$捕获的是这个单词的形态信息，可以用CNN或者RNN来实现。<br>词向量表示${w_k}$是从预训练的词向量表中直接提取的。<br>为了学习到上下文相关的表示，我们采用多层双向RNN。<br>对于每个单词${x_k}$，第${i}$层隐含层${h</em>{k,i}}$是由前向隐含层状态${ {\vec h}<em>{k,i}}$和后向隐含层状态${ {\mathord{\buildrel{\lower3pt\hbox{$\scriptscriptstyle\leftarrow$}} \over h} }</em>{k,i}}$连接而成。<br>对于第一层隐含层，${h<em>{k,1}}$由${x_k}$经过如下运算获得：<br>\[\begin{array}{l}{ {\vec h}</em>{k,1}} = { {\vec R}<em>1}({x_k},{ {\vec h}</em>{k - 1,1}};{\theta <em>{ { {\vec R}_1}}})\{ {\mathord{\buildrel{\lower3pt\hbox{$\scriptscriptstyle\leftarrow$}} \over h} }</em>{k,1}} = { {\mathord{\buildrel{\lower3pt\hbox{$\scriptscriptstyle\leftarrow$}} \over R} }<em>1}({x_k},{ {\mathord{\buildrel{\lower3pt\hbox{$\scriptscriptstyle\leftarrow$}} \over h} }</em>{k + 1,1}};{\theta <em>{ { {\mathord{\buildrel{\lower3pt\hbox{$\scriptscriptstyle\leftarrow$}} \over R} }_1}}})\{h</em>{k,1}} = [{ {\vec h}<em>{k,1}};{ {\mathord{\buildrel{\lower3pt\hbox{$\scriptscriptstyle\leftarrow$}} \over h} }</em>{k,1}}]\end{array}\]这个实验中我们使用2层隐含层，并且使用GRU或者LSTM作为双向RNN。<br>最后，最后一层隐含层的输出${h_{k,L}}$被输出到一个稠密层，用来预测每个标签的评分。<br>由于在我们的序列标注任务中，连续的标签之间是有依赖性的，所以联合起来预测一整个句子的标签比单独预测每个单词的标签更好。<br>因此，我们增加了额外的一层来计算相邻两个标签之间的条件随机场损失，然后用Viterbi算法来寻找概率最大的标签序列。</p>
-<h3 id="2-3-双向语言模型"><a href="#2-3-双向语言模型" class="headerlink" title="2.3 双向语言模型"></a>2.3 双向语言模型</h3><p>一个语言模型是用来计算一个句子$({t_1},{t_2}, \ldots ,{t_N})$的概率：<br>\[p({t_1},{t_2}, \ldots ,{t_N}) = \prod\limits_{k - 1}^N {p({t_k}|{t_1},{t_2}, \ldots ,{t_{k - 1}})} \]之前的研究将每个单词的字符表示或者词向量表示送到多层LSTM中，用$({t_1},{t_2}, \ldots ,{t_k})$来求出隐含层${ {\vec h}^{LM}}<em>k$，这就是第$k$个单词的前向语言模型表示，同时也是语言模型LSTM层最顶端的输出。最后用softmax层来预测${t</em>{k + 1}}$的概率。<br>当然再加上一个后向语言模型表示效果就更好了：<br>\[p({t_1},{t_2}, \ldots ,{t_N}) = \prod\limits_{k - 1}^N {p({t_k}|{t_{k + 1}},{t_{k + 2}}, \ldots ,{t_N})} \]后向语言模型表示实现方式和前向相似，产生输出${ {\mathord{\buildrel{\lower3pt\hbox{$\scriptscriptstyle\leftarrow$}} \over h} }^{LM}}_k$<br>注意到在这个模型中，前向后向语言模型是独立的，不共享任何参数。</p>
-<h3 id="2-4-结合语言模型和序列模型"><a href="#2-4-结合语言模型和序列模型" class="headerlink" title="2.4 结合语言模型和序列模型"></a>2.4 结合语言模型和序列模型</h3><p>我们结合的模型TagLM是将语言模型的词表示当作额外的输入传送到序列标注模型中。<br>在实验中，我们发现将语言模型表示和序列模型第一层隐含层输出结合效果最好。表示如下：<br>\[{h<em>{k,1}} = [{ {\vec h}</em>{k,1}};{ {\mathord{\buildrel{\lower3pt\hbox{$\scriptscriptstyle\leftarrow$}} \over h} }<em>{k,1}};{h_k}^{LM}]\]有许多方法可以结合语言模型表示和序列模型第一层隐含层输出，比如用一个非线性函数来结合：<br>\[{h</em>{k,1}} = f([{ {\vec h}<em>{k,1}};{ {\mathord{\buildrel{\lower3pt\hbox{$\scriptscriptstyle\leftarrow$}} \over h} }</em>{k,1}};{h_k}^{LM}])\]另一种可能的方法是用类似注意力模型的机制，给每个单词的语言模型表示加上权重，然后再加进序列模型中。<br>本次实验中直接结合效果已经很好了，所以没有尝试其他方法。</p>
+<h3 id="2-2-基本的序列标注模型"><a href="#2-2-基本的序列标注模型" class="headerlink" title="2.2 基本的序列标注模型"></a>2.2 基本的序列标注模型</h3><p>我们用到的基本的序列标注模型是一个分层的神经序列标注模型，如上图左半部分所示。<br>给定一个句子$({t_1},{t_2}, \ldots ,{t_N})$，首先对于每个单词${t_k}$产生一个表示${x_k}$，其中${x_k}$是由这个单词基于字符的表示${c_k}$和词向量表示${w_k}$连接而成：<br>&lt;!–swig￼6–&gt;字符表示${c_k}$捕获的是这个单词的形态信息，可以用CNN或者RNN来实现。<br>词向量表示${w_k}$是从预训练的词向量表中直接提取的。<br>为了学习到上下文相关的表示，我们采用多层双向RNN。<br>对于每个单词${x_k}$，第${i}$层隐含层${h*{k,i}}$是由前向隐含层状态${ {\vec h}_{k,i}}$和后向隐含层状态${ {\mathord{\buildrel{\lower3pt\hbox{$\scriptscriptstyle\leftarrow$}} \over h} }_{k,i}}$连接而成。<br>对于第一层隐含层，${h*{k,1}}$由${x_k}$经过如下运算获得：<br>&lt;!–swig￼17–&gt;这个实验中我们使用2层隐含层，并且使用GRU或者LSTM作为双向RNN。<br>最后，最后一层隐含层的输出${h_{k,L}}$被输出到一个稠密层，用来预测每个标签的评分。<br>由于在我们的序列标注任务中，连续的标签之间是有依赖性的，所以联合起来预测一整个句子的标签比单独预测每个单词的标签更好。<br>因此，我们增加了额外的一层来计算相邻两个标签之间的条件随机场损失，然后用Viterbi算法来寻找概率最大的标签序列。</p>
+<h3 id="2-3-双向语言模型"><a href="#2-3-双向语言模型" class="headerlink" title="2.3 双向语言模型"></a>2.3 双向语言模型</h3><p>一个语言模型是用来计算一个句子$({t_1},{t_2}, \ldots ,{t_N})$的概率：<br>&lt;!–swig￼20–&gt;之前的研究将每个单词的字符表示或者词向量表示送到多层LSTM中，用$({t_1},{t_2}, \ldots ,{t_k})$来求出隐含层${ {\vec h}^{LM}}_k$，这就是第$k$个单词的前向语言模型表示，同时也是语言模型LSTM层最顶端的输出。最后用softmax层来预测${t_{k + 1}}$的概率。<br>当然再加上一个后向语言模型表示效果就更好了：<br>&lt;!–swig￼25–&gt;后向语言模型表示实现方式和前向相似，产生输出${ {\mathord{\buildrel{\lower3pt\hbox{$\scriptscriptstyle\leftarrow$}} \over h} }^{LM}}_k$<br>注意到在这个模型中，前向后向语言模型是独立的，不共享任何参数。</p>
+<h3 id="2-4-结合语言模型和序列模型"><a href="#2-4-结合语言模型和序列模型" class="headerlink" title="2.4 结合语言模型和序列模型"></a>2.4 结合语言模型和序列模型</h3><p>我们结合的模型TagLM是将语言模型的词表示当作额外的输入传送到序列标注模型中。<br>在实验中，我们发现将语言模型表示和序列模型第一层隐含层输出结合效果最好。表示如下：<br>&lt;!–swig￼28–&gt;有许多方法可以结合语言模型表示和序列模型第一层隐含层输出，比如用一个非线性函数来结合：<br>&lt;!–swig￼29–&gt;另一种可能的方法是用类似注意力模型的机制，给每个单词的语言模型表示加上权重，然后再加进序列模型中。<br>本次实验中直接结合效果已经很好了，所以没有尝试其他方法。</p>
 <h1 id="3-实验"><a href="#3-实验" class="headerlink" title="3 实验"></a>3 实验</h1><hr>
 <p>我们在两个NLP任务上做实验：NER和chunking，使用F1评价指标和BIOES标注体系。<br>我们对数据做了预处理，对所有字母小写处理，将所有数字替换成0。</p>
 <h4 id="CoNLL-2003-NER"><a href="#CoNLL-2003-NER" class="headerlink" title="CoNLL 2003 NER"></a>CoNLL 2003 NER</h4><p>CoNLL 2003 NER任务包含了路透社RCV1语料库，它是由4种不同的实体类型标注的：PER、LOC、ORG、MISC，包含了标准的训练集、验证集和测试集。<br>我们的序列模型的字符表示使用了80个隐含层和25维字符表示的双向GRU。上面的序列层使用了两个300个隐含层的双向GRU。为了正则化，每个GRU的输入都添加了25%的dropout。</p>
@@ -556,9 +574,9 @@
 <h3 id="3-2-分析"><a href="#3-2-分析" class="headerlink" title="3.2 分析"></a>3.2 分析</h3><p>为了解释我们的TagLM的特性，我们在CoNLL 2003 NER上做了许多额外的实验。</p>
 <h4 id="怎样使用语言模型表示？"><a href="#怎样使用语言模型表示？" class="headerlink" title="怎样使用语言模型表示？"></a>怎样使用语言模型表示？</h4><p>在这个实验中，我们将语言模型产生的表示连接到序列模型的不同位置：</p>
 <ul>
-<li>连接到第一个RNN的输入层：<br>\[{x_k} = [{c_k};{w_k};{h_k}^{LM}]\]</li>
-<li>连接到第一个RNN的输出层：<br>\[{h<em>{k,1}} = [{ {\vec h}</em>{k,1}};{ {\mathord{\buildrel{\lower3pt\hbox{$\scriptscriptstyle\leftarrow$}} \over h} }_{k,1}};{h_k}^{LM}]\]</li>
-<li>连接到第二个RNN的输出层：<br>\[{h<em>{k,2}} = [{ {\vec h}</em>{k,2}};{ {\mathord{\buildrel{\lower3pt\hbox{$\scriptscriptstyle\leftarrow$}} \over h} }_{k,2}};{h_k}^{LM}]\]</li>
+<li>连接到第一个RNN的输入层：<br>&lt;!–swig￼30–&gt;</li>
+<li>连接到第一个RNN的输出层：<br>&lt;!–swig￼31–&gt;</li>
+<li>连接到第二个RNN的输出层：<br>&lt;!–swig￼32–&gt;</li>
 </ul>
 <p>表5显示出第二种位置是效果最好的，我们猜测原因可能是因为第二层RNN可以捕获第一层RNN产生的任务特定的上下文和语言模型产生的通用的上下文之间的互相联系。<br><img src="5.jpg" alt=""></p>
 <h4 id="用哪一种语言模型重要吗？"><a href="#用哪一种语言模型重要吗？" class="headerlink" title="用哪一种语言模型重要吗？"></a>用哪一种语言模型重要吗？</h4><p>从表6可以看出，前向传播使用CNN-BIG-LSTM，后向传播使用LSTM-2048-512效果是最好的，但是我们没有测试后向也是CNN-BIG-LSTM的，那样效果估计会更好。<br><img src="6.jpg" alt=""></p>
@@ -810,7 +828,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="Implicitly-Defined Neural Networks for Sequence Labeling">
+                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="Implicitly-Defined Neural Networks for Sequence Labeling">
                         
                         <span class="card-title">Implicitly-Defined Neural Networks for Sequence Labeling</span>
                     </div>
@@ -875,7 +893,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="Sublime Text安装与配置教程">
+                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="Sublime Text安装与配置教程">
                         
                         <span class="card-title">Sublime Text安装与配置教程</span>
                     </div>
@@ -1100,7 +1118,7 @@ Sublime Text是我一直使用的代码编辑器，我喜爱它的原因就是�
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

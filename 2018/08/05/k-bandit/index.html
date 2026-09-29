@@ -157,6 +157,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -242,6 +251,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -336,7 +354,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/7.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/9.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -491,7 +509,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    770
+                    748
                 </div>
                 
 
@@ -520,7 +538,7 @@
 <p><img src="/medias/contact.jpg" alt=""></p>
 <h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h1><hr>
 <p>有$K$个赌博机，每个赌博机有一定概率$P$吐出硬币，但是我们不知道这个概率是多少，每个赌博机吐出的硬币价值$V$也是不一样的，现在有$T$次机会选择赌博机，怎么选才能使得到的硬币总价值最大？</p>
-<p>在下面的不同算法实现中，统一设定<br>\[\begin{array}{l}K = 5 \ P = [0.1,0.9,0.3,0.2,0.7] \ V = [5,3,1,7,4] \ T = 1000000\end{array}\]<br>可以计算出，这种情况下：</p>
+<p>在下面的不同算法实现中，统一设定<br>&lt;!–swig￼7–&gt;<br>可以计算出，这种情况下：</p>
 <ol>
 <li>如果每次都选期望价值最高的4号赌博机，可以获得的最高总价值为2800000。</li>
 <li>如果每次都选期望价值最低的2号赌博机，可以获得的最低总价值为300000。</li>
@@ -531,7 +549,7 @@
 <h2 id="实现代码"><a href="#实现代码" class="headerlink" title="实现代码"></a>实现代码</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># -*- coding: UTF-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">R</span>(<span class="params">k, P, V</span>):</span><br><span class="line">    <span class="keyword">if</span> random.random() &lt; P[k]:</span><br><span class="line">        <span class="keyword">return</span> V[k]</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">exploration_bandit</span>(<span class="params">K, P, V, R, T</span>):</span><br><span class="line">    r = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">range</span>(T):</span><br><span class="line">        k = random.randint(<span class="number">0</span>, K - <span class="number">1</span>)</span><br><span class="line">        v = R(k, P, V)</span><br><span class="line">        r += v</span><br><span class="line">    <span class="keyword">return</span> r</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    K = <span class="number">5</span></span><br><span class="line">    P = np.array([<span class="number">0.1</span>, <span class="number">0.9</span>, <span class="number">0.3</span>, <span class="number">0.2</span>, <span class="number">0.7</span>])</span><br><span class="line">    V = np.array([<span class="number">5</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">7</span>, <span class="number">4</span>])</span><br><span class="line">    T = <span class="number">1000000</span></span><br><span class="line">    <span class="built_in">print</span> exploration_bandit(K, P, V, R, T)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
 
 <p>代码运行结果为：获得总价值1538893。</p>
-<h1 id="varepsilon-贪心算法"><a href="#varepsilon-贪心算法" class="headerlink" title="$\varepsilon $贪心算法"></a>$\varepsilon $贪心算法</h1><hr>
+<h1 id="贪心算法"><a href="#贪心算法" class="headerlink" title="贪心算法"></a>$\varepsilon $贪心算法</h1><hr>
 <h2 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h2><h2 id="实现代码-1"><a href="#实现代码-1" class="headerlink" title="实现代码"></a>实现代码</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># -*- coding: UTF-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">R</span>(<span class="params">k, P, V</span>):</span><br><span class="line">    <span class="keyword">if</span> random.random() &lt; P[k]:</span><br><span class="line">        <span class="keyword">return</span> V[k]</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">eplison_bandit</span>(<span class="params">K, P, V, R, T</span>):</span><br><span class="line">    r = <span class="number">0</span></span><br><span class="line">    Q = np.zeros(K)</span><br><span class="line">    count = np.zeros(K)</span><br><span class="line">    <span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">range</span>(T):</span><br><span class="line">        eplison = <span class="number">1.</span> / np.sqrt(t + <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">if</span> random.random() &lt; eplison:</span><br><span class="line">            k = random.randint(<span class="number">0</span>, K - <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            k = np.argmax(Q)</span><br><span class="line">        v = R(k, P, V)</span><br><span class="line">        r += v</span><br><span class="line">        Q[k] += (v - Q[k]) / (count[k] + <span class="number">1</span>)</span><br><span class="line">        count[k] += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> r</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    K = <span class="number">5</span></span><br><span class="line">    P = np.array([<span class="number">0.1</span>, <span class="number">0.9</span>, <span class="number">0.3</span>, <span class="number">0.2</span>, <span class="number">0.7</span>])</span><br><span class="line">    V = np.array([<span class="number">5</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">7</span>, <span class="number">4</span>])</span><br><span class="line">    T = <span class="number">1000000</span></span><br><span class="line">    <span class="built_in">print</span> eplison_bandit(K, P, V, R, T)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
 
 <p>代码运行结果为：获得总价值2795546。</p>
@@ -770,7 +788,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/26.jpg" class="responsive-img" alt="In-Order Transition-based Constituent Parsing">
+                        <img src="/medias/featureimages/28.jpg" class="responsive-img" alt="In-Order Transition-based Constituent Parsing">
                         
                         <span class="card-title">In-Order Transition-based Constituent Parsing</span>
                     </div>
@@ -832,7 +850,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="Deep Understanding of Dynamic Oracle in Constituent Parsing">
+                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="Deep Understanding of Dynamic Oracle in Constituent Parsing">
                         
                         <span class="card-title">Deep Understanding of Dynamic Oracle in Constituent Parsing</span>
                     </div>
@@ -1061,7 +1079,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

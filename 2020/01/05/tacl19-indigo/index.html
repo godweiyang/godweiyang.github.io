@@ -157,6 +157,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -242,6 +251,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -336,7 +354,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/13.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/11.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -499,14 +517,14 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.3k
+                    2.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    8 分
+                    7 分
                 </div>
                 
                 
@@ -529,27 +547,29 @@
 <p><strong>论文地址：</strong><a href="https://arxiv.org/abs/1902.01370">Insertion-based Decoding with automatically Inferred Generation Order</a></p>
 <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>大多数的生成模型（例如seq2seq模型），生成句子的顺序都是从左向右的，但是这不一定是最优的生成顺序。<br>可能有人要说，反正最终都是生成一个句子，跟生成顺序有啥关系？<br>但是大量实验确实表明了从左向右生成不一定是最好的，比如先生成句子中的核心词（出现词频最高的词，或者动词等）可能效果会更好。</p>
 <p>于是这篇论文就提出了自动推测最佳的生成顺序，考虑所有顺序的概率，优化概率之和。<br>但是对于任意一个生成顺序，如何还原原本的句子呢？<br>本文又提出了一个相对位置编码的方案，并且融合到了Transformer里。</p>
-<h1 id="传统序列生成模型"><a href="#传统序列生成模型" class="headerlink" title="传统序列生成模型"></a>传统序列生成模型</h1><p>给定一个输入句子$x$，生成的句子$y$的概率可以被建模为：<br>\[<br>p_{\theta}(y | x) = \prod_{t=0}^{T}{p_{\theta}(y_{t+1}|y_{0:t}, x_{1:T’})}<br>\]<br>其中规定输出句子的首尾单词$y_{0}$和$y_{T+1}$是特殊记号。</p>
+<h1 id="传统序列生成模型"><a href="#传统序列生成模型" class="headerlink" title="传统序列生成模型"></a>传统序列生成模型</h1><p>给定一个输入句子$x$，生成的句子$y$的概率可以被建模为：<br>&lt;!–swig￼2–&gt;<br>其中规定输出句子的首尾单词$y_{0}$和$y_{T+1}$是特殊记号。</p>
 <p>那么模型最大化正确输出的概率就行了。<br>解码的时候在每个时刻取概率最大的输出单词就行了，当然也可以加上beam search等方法提高性能。</p>
-<h1 id="InDIGO"><a href="#InDIGO" class="headerlink" title="InDIGO"></a>InDIGO</h1><p>本文将生成顺序看作隐变量$\pi$，那么对于一个输出句子$y$，他的隐变量可能取值是阶乘级别的。<br>我们取所有顺序的概率之和，作为输出$y$的概率：<br>\[<br>p_{\theta}(y|x) = \sum_{\pi \in \mathcal{P}<em>{T}}{p</em>{\theta}(y_{\pi}|x)}<br>\]<br>而每个生成顺序的概率被定义为：<br>\[<br>p_{\theta}(y_{\pi}|x) = p_{\theta}(y_{T+2}|y_{0:T+1}, z_{0:T+1}, x_{1:T’}) \cdot \prod_{t=1}^T{p_{\theta}(y_{t+1}, z_{t+1}|y_{0:t}, z_{0:t}, x_{1:T’})}<br>\]<br>这里多了一个变量$z$，用来表示生成的单词在原句子中的绝对位置。<br>还多了一项$y_{T+2}$，表示句子生成结束。<br>为什么要用这一项呢？因为原来的结束符号&lt; /s&gt;被当作第二项输入进序列了。</p>
+<h1 id="InDIGO"><a href="#InDIGO" class="headerlink" title="InDIGO"></a>InDIGO</h1><p>本文将生成顺序看作隐变量$\pi$，那么对于一个输出句子$y$，他的隐变量可能取值是阶乘级别的。<br>我们取所有顺序的概率之和，作为输出$y$的概率：<br>&lt;!–swig￼8–&gt;<br>而每个生成顺序的概率被定义为：<br>&lt;!–swig￼9–&gt;<br>这里多了一个变量$z$，用来表示生成的单词在原句子中的绝对位置。<br>还多了一项$y_{T+2}$，表示句子生成结束。<br>为什么要用这一项呢？因为原来的结束符号&lt; /s&gt;被当作第二项输入进序列了。</p>
 <p>这里就会出现一个问题，在每一步预测的时候，都不知道最终句子长度是多少。<br>那么怎么知道绝对位置$z$是多少呢？所以要用相对位置$r$来进行编码。</p>
-<p>假设在$t$时刻，对于第$i$个单词$w_i$，采用一个向量来表示它的相对位置，每个维度取值只有-1，0和1三种。<br>$r_{i,j}$定义为：如果$w_i$绝对位置在$w_j$的左边，就取-1；如果是一个词，就取0；如果在右边，就取1。<br>可以观察到这个时刻向量长度其实只有$t+1$，而且下个时刻长度就会加1。<br>将这些向量拼接成一个矩阵$R$，每一列表示一个单词的位置向量，这个矩阵关于主对角线对称的元素其实是相反数。</p>
+<p>假设在$t$时刻，对于第$i$个单词$w_i$，采用一个向量来表示它的相对位置，每个维度取值只有-1，0和1三种。</p>
+$r_{i,j}$定义为：如果$w_i$绝对位置在$w_j$的左边，就取-1；如果是一个词，就取0；如果在右边，就取1。
+<p>可以观察到这个时刻向量长度其实只有$t+1$，而且下个时刻长度就会加1。<br>将这些向量拼接成一个矩阵$R$，每一列表示一个单词的位置向量，这个矩阵关于主对角线对称的元素其实是相反数。</p>
 <p>那么下一个时刻是不是这个矩阵得重算呢？不需要。<br>因为下一个单词无论插在哪里，都不会影响之前的单词的相对顺序，所以只要给这个矩阵$R$新增一行一列即可：<br><img src="1.jpg" alt=""></p>
 <p>但是$r_{t+1}$不能随便取值，不然可能是非法的，没办法还原到绝对位置。<br>所以这里定义$r_{t+1,j}$这么算：<br>首先预测一个单词$y_{k}$，然后预测$y_{t+1}$插入到它的左边还是右边。<br>如果$j = k$，那么如果插入到左边，值取-1，插入到右边取1。<br>如果$j \neq k$，那么$y_{t+1}$和前面单词的相对顺序其实是和$y_k$和他们的相对顺序完全相同的，那么直接取$r_{k, j}$就行了。</p>
 <p>伪代码如下：<br><img src="2.jpg" alt=""></p>
-<p>最后得到了相对位置之后，怎么还原为绝对位置呢？<br>只需要用下面式子就行了：<br>\[<br>z_i = \sum_{j}{\max{0, r_{i, j}}}<br>\]<br>也就是看每个单词前面有多少单词。</p>
+<p>最后得到了相对位置之后，怎么还原为绝对位置呢？<br>只需要用下面式子就行了：<br>&lt;!–swig￼32–&gt;<br>也就是看每个单词前面有多少单词。</p>
 <h1 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h1><p>本文只修改了Transformer的解码器部分，因为对于随机的生成顺序，解码的时候绝对位置未知，所以传统的绝对位置编码行不通。</p>
-<p>稍稍修改attention的计算方式：<br>\[<br>e<em>{i, j} = \frac{(u_i^{\top}Q)\cdot(u_j^{\top}K + A</em>{[r_{i,j}+1]})^{\top}}{\sqrt{d_{\text{model}}}}<br>\]<br>其中$u$是输出的隐层表示，$Q, K, A$是参数，$A$根据相对位置不同分为三个向量表示。</p>
-<p>经过attention计算之后，得到了当前已预测词的表示矩阵$H$，那么下一个词和对应相对位置概率为：<br>\[<br>p(y_{t+1}, r_{t+1}|H) = p(y_{t+1}|H)\cdot p(r_{t+1}|y_{t+1}, H)<br>\]<br>也就是先预测下一个单词是什么，再预测它的相对位置。当然也可以倒过来，只是实验效果不如这个。</p>
-<p>预测单词的概率：<br>\[<br>p_{\text{word}}(y|H) = \text{softmax}((h_t^{\top}F)\cdot W^{\top})<br>\]</p>
-<p>预测下一个词应该插在哪个位置：<br>\[<br>p<em>{\text{pointer}}(k|y</em>{t+1}, H) = \text{softmax}((h<em>t^{\top}E + W</em>{[y_{t+1}]})\cdot [H^{\top}C; H^{\top}D]^{\top})<br>\]<br>注意到这里不仅拼接上了下一个词的词向量，还区分了每个词左边和右边的隐层表示。</p>
+<p>稍稍修改attention的计算方式：<br>&lt;!–swig￼33–&gt;<br>其中$u$是输出的隐层表示，$Q, K, A$是参数，$A$根据相对位置不同分为三个向量表示。</p>
+<p>经过attention计算之后，得到了当前已预测词的表示矩阵$H$，那么下一个词和对应相对位置概率为：<br>&lt;!–swig￼38–&gt;<br>也就是先预测下一个单词是什么，再预测它的相对位置。当然也可以倒过来，只是实验效果不如这个。</p>
+<p>预测单词的概率：<br>&lt;!–swig￼39–&gt;</p>
+<p>预测下一个词应该插在哪个位置：<br>&lt;!–swig￼40–&gt;<br>注意到这里不仅拼接上了下一个词的词向量，还区分了每个词左边和右边的隐层表示。</p>
 <blockquote>
 <p>其实这里有个问题，一个词在$w_i$的右边不就等价于在$w_{i+1}$的左边吗？那其实这两个预测结果都是对的。虽然最后的$r$向量都是一样的。</p>
 </blockquote>
 <h1 id="目标函数"><a href="#目标函数" class="headerlink" title="目标函数"></a>目标函数</h1><p>因为一个句子的可能排列顺序太多了，不可能一一枚举，所以这里最大化ELBO来代替最开始的概率之和。<br>对于输入$x$和生成$y$，首先定义一个生成顺序$\pi$的近似后验$q(\pi|x, y)$。<br>然后ELBO可以表示为：<br><img src="4.jpg" alt=""><br>注意这里如果近似后验训练中固定不变的话，第二项可以忽略。</p>
 <p>然后就可以根据近似后验来进行采样，优化这个函数了，那么这个近似后验怎么定义呢？</p>
 <p>第一种方法是定义为一个常见的确定的顺序，比如从左向右、从右向左等等，详见下表：<br><img src="5.jpg" alt=""><br>这种情况下，模型其实就变成了和普通的序列生成模型差不多了，只用最大化一个生成顺序的概率就行了，区别就是多了相对位置编码。</p>
-<p>第二种方法是用beam search，这里称作Searched Adaptive Order (SAO)。<br>传统的序列生成模型其实也有beam search，不过那是在每个时刻解码概率最大那些子序列。<br>而这里的beam search空间更大，搜索的是整个排列的空间。<br>也就是在每个时刻，遍历所有的下一个单词和它的相对位置，找出最大的$B$个子序列。<br>最后的目标函数变为了：<br>\[<br>\mathcal{L}<em>{\text{SAO}} = \frac{1}{B} \sum</em>{\pi \in \mathcal{B}}{\log{p_{\theta}(y_{\pi}|x)}}<br>\]<br>这里近似后验被定义为了：如果$\pi$在$\mathcal{B}$中，概率为$\frac{1}{B}$，否则为0。</p>
+<p>第二种方法是用beam search，这里称作Searched Adaptive Order (SAO)。<br>传统的序列生成模型其实也有beam search，不过那是在每个时刻解码概率最大那些子序列。<br>而这里的beam search空间更大，搜索的是整个排列的空间。<br>也就是在每个时刻，遍历所有的下一个单词和它的相对位置，找出最大的$B$个子序列。<br>最后的目标函数变为了：<br>&lt;!–swig￼49–&gt;<br>这里近似后验被定义为了：如果$\pi$在$\mathcal{B}$中，概率为$\frac{1}{B}$，否则为0。</p>
 <p>还有一些小trick，比如beam search加入噪声，这样可能采样到概率比较小的那些排列。<br>还有位置预测模块收敛的比单词预测模块更快，这就会导致模型最后总是先预测出高频词或功能词（大雾。。。）。<br>解决方法是先用给定的顺序（例如从左向右）预训练一遍模型，然后再训练beam search模型。</p>
 <p>最终解码还是用上面的伪代码，只是加入了beam search。<br>但是这里是先预测的单词，再预测的位置，和训练时的beam search略有不同。</p>
 <h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><p>实验主要做了几组机器翻译、词序还原、代码生成和图像标签生成，这里就简单看一下机器翻译结果，其他的详见论文。</p>
@@ -789,7 +809,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="论文赏析[EMNLP19]如何在Transformer中融入句法树信息？这里给出了一种解决方案">
+                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="论文赏析[EMNLP19]如何在Transformer中融入句法树信息？这里给出了一种解决方案">
                         
                         <span class="card-title">论文赏析[EMNLP19]如何在Transformer中融入句法树信息？这里给出了一种解决方案</span>
                     </div>
@@ -851,7 +871,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/28.jpg" class="responsive-img" alt="微信聊天记录深度分析，看看这一年你和谁最亲密">
+                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="微信聊天记录深度分析，看看这一年你和谁最亲密">
                         
                         <span class="card-title">微信聊天记录深度分析，看看这一年你和谁最亲密</span>
                     </div>
@@ -1081,7 +1101,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

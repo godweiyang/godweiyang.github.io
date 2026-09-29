@@ -157,6 +157,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -242,6 +251,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -336,7 +354,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/4.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/6.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -546,9 +564,9 @@
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>首先要知道一个小学生都知道的定理：<strong>如果一个数可以被 $3$ 整除，那么它的每一位上的数之和也可以被 $3$ 整除，反之也成立。</strong></p>
 <p>那么问题就转化为了挑选出最多的数，使得和是 $3$ 的倍数。我们可以先求出所有数之和，记为 $sum$ ，然后有如下三种情况：</p>
 <ul>
-<li>如果 $sum % 3 = 0$ ，那么所有数都选中就行了。</li>
-<li>如果 $sum % 3 = 1$ ，那么必须删掉一个模 $3$ 余 $1$ 的数（按照从小到大顺序删除 1、4、7）。如果这三个数都没有，那就要删除两个模 $3$ 余 $2$ 的数（按照从小到大顺序删除 2、5、8，删除两次）。</li>
-<li>如果 $sum % 3 = 2$ ，那么必须删掉一个模 $3$ 余 $2$ 的数（按照从小到大顺序删除 2、5、8）。如果这三个数都没有，那就要删除两个模 $3$ 余 $1$ 的数（按照从小到大顺序删除 1、4、7，删除两次）。</li>
+<li>如果 $sum \% 3 = 0$ ，那么所有数都选中就行了。</li>
+<li>如果 $sum \% 3 = 1$ ，那么必须删掉一个模 $3$ 余 $1$ 的数（按照从小到大顺序删除 1、4、7）。如果这三个数都没有，那就要删除两个模 $3$ 余 $2$ 的数（按照从小到大顺序删除 2、5、8，删除两次）。</li>
+<li>如果 $sum \% 3 = 2$ ，那么必须删掉一个模 $3$ 余 $2$ 的数（按照从小到大顺序删除 2、5、8）。如果这三个数都没有，那就要删除两个模 $3$ 余 $1$ 的数（按照从小到大顺序删除 1、4、7，删除两次）。</li>
 </ul>
 <p>最终将剩下的数按照从小到大顺序排序，拼接在一起就行了。</p>
 <p>注意如果有前导 $0$ ，就说明答案就是 $0$ 。</p>
@@ -785,7 +803,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="每日算法系列【LeetCode 319】灯泡开关">
+                        <img src="/medias/featureimages/28.jpg" class="responsive-img" alt="每日算法系列【LeetCode 319】灯泡开关">
                         
                         <span class="card-title">每日算法系列【LeetCode 319】灯泡开关</span>
                     </div>
@@ -842,7 +860,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="每日算法系列【LeetCode 128】最长连续序列">
+                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="每日算法系列【LeetCode 128】最长连续序列">
                         
                         <span class="card-title">每日算法系列【LeetCode 128】最长连续序列</span>
                     </div>
@@ -1074,7 +1092,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

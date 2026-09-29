@@ -157,6 +157,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -242,6 +251,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -336,7 +354,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/23.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/21.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -530,23 +548,44 @@
 <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>之前其实有很多工作将句法信息融入到了RNN中，例如ON-LSTM和PRPN，用来隐式建模句法结构信息，同时提升语言模型的准确率。本文尝试将句法信息融入到Transformer中，用来赋予attention更好的解释性。同时可以无监督的预测出句子的句法树，并且相比于一般的Transformer，语言模型的性能有所提高。</p>
 <h1 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h1><p><img src="1.jpg" alt=""><br>上面这张是模型结构，最主要的区别就是在multi-head attention操作基础上新增了一个成分的attention，用来表示一段span能否构成一个短语。<br>比如上图中，“cute dog”构成一个短语，所以第0层中这两个单词的attention较大。<br>而“the cute dog”构成了一个更大的短语，所以第1层中“the”和“dog”的attention较大。</p>
 <p>回顾self-attention的操作，主要是计算两个单词的向量点积：</p>
-<p>$$<br>    E = \text{softmax}(\frac{QK^{\top}}{d})<br>$$</p>
+$$
+    E = \text{softmax}(\frac{QK^{\top}}{d})
+$$
+
 <p>这里$d$一般取$\sqrt{d_k}$。但是在本文中，新增加了一个成分先验$C$，其中$C_{i,j}$表示$w_i$和$w_j$在一个短语内的概率。<br>然后与原来的self-attention做元素乘即可：</p>
-<p>$$<br>    E = C \odot \text{softmax}(\frac{QK^{\top}}{d})<br>$$</p>
+$$
+    E = C \odot \text{softmax}(\frac{QK^{\top}}{d})
+$$
+
 <p>注意不同的head之间共享$C$。</p>
 <p>那么这个成分先验$C$怎么算呢？<br>这里把它拆成若干相邻单词在同一短语内概率的乘积。<br>也就是定义$a_i$为单词$w_i$和$w_{i+1}$在同一短语内的概率，那么$C_{i,j}$就可以表示为：</p>
-<p>$$<br>    C_{i, j} = \prod_{k=i}^{j-1}{a_k}<br>$$</p>
+$$
+    C_{i, j} = \prod_{k=i}^{j-1}{a_k}
+$$
+
 <p>这样只有$w_i$到$w_j$中所有单词都有较大概率在同一短语中，$C_{i, j}$取值才比较大。<br>当然在实现中会取对数，来避免数值太小。</p>
 <p>那么问题又来了，$a$怎么算？<br>首先类似self-attention，计算相邻两个单词属于同一短语的得分：</p>
-<p>$$<br>    s_{i, i+1} = \frac{q_i \cdot k_{i+1}}{d}<br>$$</p>
+$$
+    s_{i, i+1} = \frac{q_i \cdot k_{i+1}}{d}
+$$
+
 <p>这里$d$取$\frac{h \cdot d_k}{2}$，$h$是head数。</p>
 <p>注意这里区分了方向，也就是还存在得分$s_{i+1, i}$，并且两者虽然意义是一样的，但是分数不一定相同。<br>为了防止出现一种问题，也就是所有得分全部相同，然后算出来概率全是1，那就没有意义了，所以要给得分加上限制，也就是归一化。<br>这里选择归一化一个单词和左右邻居两者的得分：</p>
-<p>$$<br>    p_{i,i+1}, p_{i, i-1} = \text{softmax}(s_{i,i+1}, s_{i, i-1})<br>$$</p>
+$$
+    p_{i,i+1}, p_{i, i-1} = \text{softmax}(s_{i,i+1}, s_{i, i-1})
+$$
+
 <p>然后由于$p_{i, i+1}$和$p_{i+1, i}$值不一样，所以取平均：</p>
-<p>$$<br>    \hat{a}<em>i = \sqrt{p</em>{i, i+1} \times p_{i+1, i}}<br>$$</p>
+$$
+    \hat{a}_i = \sqrt{p_{i, i+1} \times p_{i+1, i}}
+$$
+
 <p>这样的话，如果两个相邻单词互相之间连接的概率很大，就会导致$\hat{a}_i$很大，也就说明了这两个单词大概率属于同一个短语。</p>
 <p>从第一张模型图中可以看到，成分attention不只计算了一层。<br>低层可以用来表示两两相邻单词之间属于同一短语的概率，而高层可以表示属于更大的短语的概率。<br>注意还得满足一个性质，也就是如果两个单词在低层大概率属于同一个短语，那他们高层肯定更大概率属于一个更大的短语。<br>所以计算方式如下：</p>
-<p>$$<br>    a_i^l = a_i^{l-1} + (1 - a_i^{l-1})\hat{a}_i^l<br>$$</p>
+$$
+    a_i^l = a_i^{l-1} + (1 - a_i^{l-1})\hat{a}_i^l
+$$
+
 <p>初始化的时候$a_i^{-1}$都设为0。这样对于每一层都可以得到一个成分先验$C^l$。</p>
 <h1 id="无监督句法分析"><a href="#无监督句法分析" class="headerlink" title="无监督句法分析"></a>无监督句法分析</h1><p><img src="2.jpg" alt=""><br>上图是句法树解码算法，类似于句法距离那篇论文的解码算法。<br>因为$a^l$表示的是相邻两个单词属于同一个短语的概率，所以首先找最小的$a_k^l$，然后从这里将短语划分为两个子短语，然后递归划分下去。<br>但是这样效果可能不是很好，因为单个一层表示的短语范围其实是有限的，并不能很好的囊括所有的短语。<br>所以像上图一样，从最高层开始递归开始解码。<br>首先找到最小值$a_b^l$，如果$a_b^l$大于阈值（实验中为0.8），那说明这个分割点不可信。<br>如果这时候已经到了第$m$层（实验中设为3），那没办法了，说明了这些单词没有分割点，全当作一个短语就行了。<br>如果还没到第$m$层，那就继续往下一层找分割点。<br>而如果小于阈值，说明分割点可信，那就这么划分下去好了。</p>
 <h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><p>首先是在WSJ测试集上的无监督句法分析结果：<br><img src="3.jpg" alt=""><br>可以看到Tree-Transformer效果还是好于之前的ON-LSTM和PRPN的，虽然比在NLI上训练的DIORA略差，但也情有可原，毕竟人家训练集大，而且是全局解码，<br>甚至还达到了URNNG的效果。而层数选择10层是效果最好的。</p>
@@ -788,7 +827,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="每日算法系列【LeetCode 689】三个无重叠子数组的最大和">
+                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="每日算法系列【LeetCode 689】三个无重叠子数组的最大和">
                         
                         <span class="card-title">每日算法系列【LeetCode 689】三个无重叠子数组的最大和</span>
                     </div>
@@ -845,7 +884,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="论文赏析[TACL19]生成模型还在用自左向右的顺序？这篇论文教你如何自动推测最佳生成顺序">
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="论文赏析[TACL19]生成模型还在用自左向右的顺序？这篇论文教你如何自动推测最佳生成顺序">
                         
                         <span class="card-title">论文赏析[TACL19]生成模型还在用自左向右的顺序？这篇论文教你如何自动推测最佳生成顺序</span>
                     </div>
@@ -1079,7 +1118,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

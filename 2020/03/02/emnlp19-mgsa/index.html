@@ -157,6 +157,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -242,6 +251,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -336,7 +354,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/17.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/19.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -531,30 +549,57 @@
 <p>此外，统计机器翻译的研究也表明了，对短语的翻译效果可能要好于对单个单词的翻译，所以本文将一些 head 用来建模短语（比如 2-gram 或者 3-gram）。</p>
 <p>最后本文在两个翻译任务（WMT14 英译德和 NIST 中译英）上做了实验，效果都要好于普通的 Transformer ，但是运行速度上慢了许多。</p>
 <h2 id="多粒度自注意力机制（MG-SA）"><a href="#多粒度自注意力机制（MG-SA）" class="headerlink" title="多粒度自注意力机制（MG-SA）"></a>多粒度自注意力机制（MG-SA）</h2><h3 id="整体框架"><a href="#整体框架" class="headerlink" title="整体框架"></a>整体框架</h3><p>首先将单词级别的输入 $H = h_1, \ldots, h_n \in \mathbb{R}^{n \times d}$ 映射为短语级别的表示 $H_g \in \mathbb{R}^{p \times d_g}$：</p>
-<p>$$<br>H_g = F_h(H)<br>$$</p>
+$$
+H_g = F_h(H)
+$$
+
 <p>其中 $F_h$ 是第 $h$ 个 head 对应的映射函数，针对不同的短语粒度有不同的映射函数。而 $p$ 是短语的个数，不同粒度个数也是不同的。</p>
 <p>然后对于第 $h$ 个 head 来说，将 $H, H_g, H_g$ 分别做线性变换，得到自注意力机制的 query、key 和 value：</p>
-<p>$$<br>Q^h, K^h, V^h = HW^h_Q, H_gW^h_K, H_gW^h_V<br>$$</p>
+$$
+Q^h, K^h, V^h = HW^h_Q, H_gW^h_K, H_gW^h_V
+$$
+
 <p>这样三种向量都被映射到了相同的维度：$Q_h \in \mathbb{R}^{n \times d_h}, K_h \in \mathbb{R}^{p \times d_h}, V_h \in \mathbb{R}^{p \times d_h}$ 。</p>
 <p>接着做 self-attention 得到每个单词的输出：</p>
-<p>$$<br>O^h = \text{ATT}(Q^h, K^h)V^h<br>$$</p>
+$$
+O^h = \text{ATT}(Q^h, K^h)V^h
+$$
+
 <p>最后将 $N$ 个 head 输出拼接起来得到了最后的输出：</p>
-<p>$$<br>\text{MG-SA}(H) = [O^1, \ldots, O^N]<br>$$</p>
+$$
+\text{MG-SA}(H) = [O^1, \ldots, O^N]
+$$
+
 <h3 id="短语划分"><a href="#短语划分" class="headerlink" title="短语划分"></a>短语划分</h3><p>短语划分有两种方式，一种是 n-gram ，一种是根据句法树划分。n-gram 划分方式就是将句子 $x$ 等分为 $M$ 个短语得到 $P_x = (p_1, \ldots. p_M)$ 。而句法树划分就是按照句法树的不同层次得到不同粒度的短语，如下图所示：<br><img src="1.png" alt=""><br>绿色框是第一层，有 2 个短语，粒度比较大。红色框是第二层，有 4 个短语，粒度小一点。</p>
 <h3 id="短语组合"><a href="#短语组合" class="headerlink" title="短语组合"></a>短语组合</h3><p>每个短语 $p_m$ 的表示可以用不同的网络来得到：</p>
-<p>$$<br>g_m = \text{COM}(p_m)<br>$$</p>
+$$
+g_m = \text{COM}(p_m)
+$$
+
 <p>这里 $\text{COM}$ 函数可以用 CNN、LSTM 或者自注意力网络（SAN）。</p>
 <p>最后所有短语的表示记为 $G_x = (g_1, \ldots, g_M)$ 。</p>
 <h3 id="短语交互"><a href="#短语交互" class="headerlink" title="短语交互"></a>短语交互</h3><p>这些短语之间也像单词一样做一下上下文表示，效果可能会更好：</p>
-<p>$$<br>H_g = \text{REC}(G_x)<br>$$</p>
+$$
+H_g = \text{REC}(G_x)
+$$
+
 <p>这里 $\text{REC}$ 可以选择 LSTM 或者编码结构能力好的 <a href="http://arxiv.org/abs/1810.09536" title="Ordered Neurons: Integrating Tree Structures into Recurrent Neural Networks">ON-LSTM</a> 。</p>
 <p>最后如下图所示，通过<strong>短语划分</strong>、<strong>短语组合</strong>、<strong>短语交互</strong>，模型得到了不同粒度的各个短语表示：<br><img src="2.png" alt=""></p>
 <h3 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h3><p>这里添加了一个辅助任务用来增强效果：短语标签预测。也就是对于 $G_x = (g_1, \ldots, g_M)$ 而言，在句法树中对应着 $M$ 个短语标签 $T_x = (t_1, \ldots, t_M)$ 。然后用一个线性变换接 softmax 来预测标签的概率：</p>
-<p>$$<br>p = softmax(W_t g_i + b_t)<br>$$</p>
+$$
+p = softmax(W_t g_i + b_t)
+$$
+
 <p>最后标签预测的损失函数就是：</p>
-<p>$$<br>\mathcal{L}<em>{tag} = -\sum</em>{i=1}^M{t_i \log p(t_i)}<br>$$</p>
+$$
+\mathcal{L}_{tag} = -\sum_{i=1}^M{t_i \log p(t_i)}
+$$
+
 <p>最终的损失函数还得再加上机器翻译的损失：</p>
-<p>$$<br>\mathcal{L} = -\sum_{i=1}^L{y_i \log P(y_i)} + \lambda \mathcal{L}_{tag}<br>$$</p>
+$$
+\mathcal{L} = -\sum_{i=1}^L{y_i \log P(y_i)} + \lambda \mathcal{L}_{tag}
+$$
+
 <p>这里的 $y_i$ 就是机器翻译的输出单词，$\lambda$ 在实验中设置为了 $0.001$。</p>
 <h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><p>模型是在 Transformer 基础上修改的，把四分之一的 head 还用来做单词级别的 self-attention 。对于 n-gram 划分来说，四分之三的 head 分别用来做 2-gram、3-gram 和 4-gram 短语的 self-attention 。对于句法树短语划分来说，四分之三的 head 正好对应了最高的三层短语的 self-attention 。</p>
 <p>实验主要得出了三点结论，如果不想看细节的，可以只看结论了：</p>
@@ -811,7 +856,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="每日算法系列【LeetCode 128】最长连续序列">
+                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="每日算法系列【LeetCode 128】最长连续序列">
                         
                         <span class="card-title">每日算法系列【LeetCode 128】最长连续序列</span>
                     </div>
@@ -871,7 +916,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/26.jpg" class="responsive-img" alt="每日算法系列【LeetCode 329】矩阵中的最长递增路径">
+                        <img src="/medias/featureimages/24.jpg" class="responsive-img" alt="每日算法系列【LeetCode 329】矩阵中的最长递增路径">
                         
                         <span class="card-title">每日算法系列【LeetCode 329】矩阵中的最长递增路径</span>
                     </div>
@@ -1103,7 +1148,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

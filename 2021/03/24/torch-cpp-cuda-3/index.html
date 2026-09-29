@@ -153,6 +153,15 @@ https://godweiyang.com/2021/03/18/torch-cpp-cud">
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -238,6 +247,15 @@ https://godweiyang.com/2021/03/18/torch-cpp-cud">
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -332,7 +350,7 @@ https://godweiyang.com/2021/03/18/torch-cpp-cud">
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/10.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/8.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -535,7 +553,9 @@ https://godweiyang.com/2021/03/18/torch-cpp-cud">
 <p>这个类继承的是<code>torch.autograd.Function</code>类，我们可以用它来实现一下无法自动求导的操作，比如<code>argmax</code>这种不可导的函数。</p>
 <p>我们需要实现两个函数，<code>forward</code>和<code>backward</code>，分别用来前向和反向传播，注意都得声明成静态函数。</p>
 <p>前向传播接收多个参数，第一个固定为<code>ctx</code>，用来存储反向传播中可能会用到的一些上下文，比如<code>input</code>和一些前向过程中的中间变量等等，其他参数随你定。然后我们根据上一教程中调用cuda算子的方法计算得到求和结果，进行返回。</p>
-<p>反向传播接收两个参数，第一个同样是<code>ctx</code>，里面存着前向过程中保存的一些上下文变量信息。第二个是<code>grad_output</code>，也就是最终的损失函数对前向传播的返回值求导的结果。在我们这里的模型中，令<br>$$a2 = a^2, b2 = b^2, s = a2 + b2, \mathcal{L} = s$$<br>那么自定义cuda算子实现的就是$s = a2 + b2$这一步，而<code>grad_output</code>就是$\frac{\partial \mathcal{L}}{\partial s}$。我们自定义的cuda算子反向传播的导数就是$\frac{\partial s}{\partial a2}$和$\frac{\partial s}{\partial b2}$，然后根据链式求导法则就可以得到损失函数对每个参数的导数了。</p>
+<p>反向传播接收两个参数，第一个同样是<code>ctx</code>，里面存着前向过程中保存的一些上下文变量信息。第二个是<code>grad_output</code>，也就是最终的损失函数对前向传播的返回值求导的结果。在我们这里的模型中，令</p>
+$$a2 = a^2, b2 = b^2, s = a2 + b2, \mathcal{L} = s$$
+<p>那么自定义cuda算子实现的就是$s = a2 + b2$这一步，而<code>grad_output</code>就是$\frac{\partial \mathcal{L}}{\partial s}$。我们自定义的cuda算子反向传播的导数就是$\frac{\partial s}{\partial a2}$和$\frac{\partial s}{\partial b2}$，然后根据链式求导法则就可以得到损失函数对每个参数的导数了。</p>
 <p>反向传播返回值表示损失函数对前向传播每一个参数的梯度，所以个数必须等于前向传播除了<code>ctx</code>以外的其他参数个数，并且顺序也要一一对应。因为$\frac{\partial s}{\partial a2} = \frac{\partial s}{\partial b2} = 1$，所以返回值就是<code>grad_output</code>，<code>grad_output</code>和<code>None</code>，因为对常数$n$不需要求导，所以直接返回空即可。</p>
 <h2 id="训练流程"><a href="#训练流程" class="headerlink" title="训练流程"></a>训练流程</h2><p>最终训练流程和平常一样：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 定义模型</span></span><br><span class="line">model = AddModel(n)</span><br><span class="line"><span class="comment"># 将模型中所有参数拷贝到GPU端</span></span><br><span class="line">model.to(device=<span class="string">&quot;cuda:0&quot;</span>)</span><br><span class="line"><span class="comment"># 定义优化器</span></span><br><span class="line">opt = torch.optim.SGD(model.parameters(), lr=<span class="number">0.01</span>)</span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">500</span>):</span><br><span class="line">    <span class="comment"># 清空优化器缓存</span></span><br><span class="line">    opt.zero_grad()</span><br><span class="line">    <span class="comment"># 前向传播</span></span><br><span class="line">    output = model()</span><br><span class="line">    <span class="comment"># 求loss</span></span><br><span class="line">    loss = output.<span class="built_in">sum</span>()</span><br><span class="line">    <span class="comment"># 反向传播</span></span><br><span class="line">    loss.backward()</span><br><span class="line">    <span class="comment"># 更新参数</span></span><br><span class="line">    opt.step()</span><br><span class="line">    <span class="keyword">if</span> epoch % <span class="number">25</span> == <span class="number">0</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;epoch &#123;:&gt;3d&#125;: loss = &#123;:&gt;8.3f&#125;&quot;</span>.<span class="built_in">format</span>(epoch, loss))</span><br></pre></td></tr></table></figure>
@@ -776,7 +796,7 @@ https://godweiyang.com/2021/03/18/torch-cpp-cud">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="熬了几个通宵，我写了份CUDA新手入门代码">
+                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="熬了几个通宵，我写了份CUDA新手入门代码">
                         
                         <span class="card-title">熬了几个通宵，我写了份CUDA新手入门代码</span>
                     </div>
@@ -841,7 +861,7 @@ https://godweiyang.com/2021/03/18/torch-cpp-cud">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="详解PyTorch编译并调用自定义CUDA算子的三种方式">
+                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="详解PyTorch编译并调用自定义CUDA算子的三种方式">
                         
                         <span class="card-title">详解PyTorch编译并调用自定义CUDA算子的三种方式</span>
                     </div>
@@ -1071,7 +1091,7 @@ https://godweiyang.com/2021/03/18/torch-cpp-cud">
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

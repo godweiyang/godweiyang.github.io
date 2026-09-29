@@ -157,6 +157,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -242,6 +251,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -336,7 +354,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/28.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -522,11 +540,11 @@
 <p>大佬就不用往下看了，这篇文章没有任何逻辑，没有任何进阶的指导意义，纯粹为了应付各种机试（夏令营机试、保研机试、程序设计实践考试等等），对正经编程竞赛没有任何帮助。我就想到哪写到哪了，不定期想到新的在更新。</p>
 </blockquote>
 <h1 id="暴力打表法"><a href="#暴力打表法" class="headerlink" title="暴力打表法"></a>暴力打表法</h1><h2 id="题目1"><a href="#题目1" class="headerlink" title="题目1"></a>题目1</h2><p>给定$n$个数字$1, 2, \ldots, n$，求任意取一个排列，任意第$i$个位置上的元素都不等于$i$的概率是多少？</p>
-<p>如果知道结论的话，这就是一道普通的错位排列题，常规做法是求出递推式<br>\[f(n) = (n-1)(f(n-1)+f(n-2))\]<br>然后除以全排列的数量$n!$就行了，这里就不讲怎么求的了，百度有很多。这里讲讲如果不会求怎么办？</p>
+<p>如果知道结论的话，这就是一道普通的错位排列题，常规做法是求出递推式<br>&lt;!–swig￼11–&gt;<br>然后除以全排列的数量$n!$就行了，这里就不讲怎么求的了，百度有很多。这里讲讲如果不会求怎么办？</p>
 <p>首先想到的暴力方法就是暴力枚举所有排列，然后看看有多少排列满足题目中的错位的条件。C++中的库函数<code>next_permutation</code>正好可以帮助我们枚举全排列，代码如下：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="type">long</span> <span class="type">long</span> LL;</span><br><span class="line"></span><br><span class="line">LL a[<span class="number">30</span>] = &#123;<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>&#125;;</span><br><span class="line"><span class="type">int</span> b[<span class="number">30</span>];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> n = <span class="number">3</span>; n &lt;= <span class="number">20</span>; ++n) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; ++i) &#123;</span><br><span class="line">            b[i] = i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> cnt = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">do</span> &#123;</span><br><span class="line">            <span class="type">int</span> flag = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; ++i) &#123;</span><br><span class="line">                <span class="keyword">if</span> (b[i] == i) &#123;</span><br><span class="line">                    flag = <span class="number">0</span>;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            cnt += flag;</span><br><span class="line">        &#125; <span class="keyword">while</span> (<span class="built_in">next_permutation</span>(b + <span class="number">1</span>, b + n + <span class="number">1</span>));</span><br><span class="line">        a[n] = cnt;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d, &quot;</span>, cnt);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>然后就可以跑出$n \le 12$的结果，但是再大就跑不出来了，因为全排列数量太多了，跑得太慢了。但是不用管，因为题目要求的不是错位排列的数量，而是除以全排列数量之后的概率，巧的是，$n &gt; 12$之后概率保留两位小数的结果是完全相同的，所以直接取$n = 12$的概率就行了，代码如下：</p>
+<p>然后就可以跑出$n \le 12$的结果，但是再大就跑不出来了，因为全排列数量太多了，跑得太慢了。但是不用管，因为题目要求的不是错位排列的数量，而是除以全排列数量之后的概率，巧的是，$n > 12$之后概率保留两位小数的结果是完全相同的，所以直接取$n = 12$的概率就行了，代码如下：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="type">long</span> <span class="type">long</span> LL;</span><br><span class="line"></span><br><span class="line">LL p[<span class="number">30</span>] = &#123;<span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>&#125;;</span><br><span class="line">LL a[<span class="number">30</span>] = &#123;<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">9</span>, <span class="number">44</span>, <span class="number">265</span>, <span class="number">1854</span>, <span class="number">14833</span>, <span class="number">133496</span>, <span class="number">1334961</span>, <span class="number">14684570</span>, <span class="number">176214841</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">3</span>; i &lt; <span class="number">30</span>; ++i) &#123;</span><br><span class="line">        p[i] = p[i - <span class="number">1</span>] * (LL)i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> T;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;T);</span><br><span class="line">    <span class="keyword">while</span> (T--) &#123;</span><br><span class="line">        <span class="type">int</span> n;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n);</span><br><span class="line">        <span class="keyword">if</span> (n &gt; <span class="number">12</span>)</span><br><span class="line">            n = <span class="number">12</span>;</span><br><span class="line">        <span class="type">double</span> res = (<span class="type">double</span>)a[n] / p[n] * <span class="number">100.0</span>;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%.2f%%\n&quot;</span>, res);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>这样即使你完全不会计算，也可以100分通过这题啦。</p>
@@ -782,7 +800,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="Unsupervised Latent Tree Induction with Deep Inside-Outside Recursive Autoencoders">
+                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="Unsupervised Latent Tree Induction with Deep Inside-Outside Recursive Autoencoders">
                         
                         <span class="card-title">Unsupervised Latent Tree Induction with Deep Inside-Outside Recursive Autoencoders</span>
                     </div>
@@ -843,7 +861,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="Unsupervised Recurrent Neural Network Grammars">
+                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="Unsupervised Recurrent Neural Network Grammars">
                         
                         <span class="card-title">Unsupervised Recurrent Neural Network Grammars</span>
                     </div>
@@ -1078,7 +1096,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

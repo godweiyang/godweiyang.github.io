@@ -158,6 +158,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -243,6 +252,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -337,7 +355,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/21.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/19.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -529,12 +547,24 @@
 <p>经过一番努力，我尝试出了一共两种精确解法和一种近似解法，但都超出了小学生的理解范畴。</p>
 <p>首先我们把图左右翻转一下，方便建立坐标系，如下图所示：<br><img src="2.png" alt=""></p>
 <h2 id="积分方法"><a href="#积分方法" class="headerlink" title="积分方法"></a>积分方法</h2><p>首先联立半圆和对角线的方程：</p>
-<p>$$<br>\begin{aligned}<br>x^2+(y-4)^2-16&amp;=0 \<br>x+2y-4&amp;=0<br>\end{aligned}<br>$$</p>
+$$
+\begin{aligned}
+x^2+(y-4)^2-16&=0 \\\
+x+2y-4&=0
+\end{aligned}
+$$
+
 <p>解出交点E的坐标是$(\frac{12}{5}, \frac{4}{5})$</p>
 <p>所以可以直接求下面积分，得到要求的阴影面积：</p>
-<p>$$<br>\int_{0}^{\frac{12}{5}}{\left(\sqrt{16-x^2}+4\right)}dx + \int_{\frac{12}{5}}^{4}{\left(2-\frac{1}{2}x\right)}dx<br>$$</p>
+$$
+\int_{0}^{\frac{12}{5}}{\left(\sqrt{16-x^2}+4\right)}dx + \int_{\frac{12}{5}}^{4}{\left(2-\frac{1}{2}x\right)}dx
+$$
+
 <p>利用简单的高等数学知识，可以解出答案是下面这样的，约等于1.252。</p>
-<p>$$<br>\frac{32}{5} - 8 \arcsin{\frac{3}{5}}<br>$$</p>
+$$
+\frac{32}{5} - 8 \arcsin{\frac{3}{5}}
+$$
+
 <p>但是小学生肯定不会积分呀，就算高中生大多数都不会！</p>
 <h2 id="间接计算"><a href="#间接计算" class="headerlink" title="间接计算"></a>间接计算</h2><p>既然我们不方便算这个不规则图形的面积，我们可以计算其他规则图形的面积，然后加减之后间接得到答案。</p>
 <p>图中阴影部分面积其实等价于三角形ACE+梯形BOCE-扇形BOE，而这三部分其实都非常好算。</p>
@@ -555,9 +585,15 @@
 <p>很容易证明，辅助线将三角形ACD划分出来的5个小三角形是全等的。</p>
 <p>那么阴影面积就等于正方形AOBD减去四分之一圆BOD，再减去最右侧的弧边三角形ADE。而弧边三角形ADE面积等于三角形ACD减去三角形BCE，再减去扇形BDE。</p>
 <p>所以问题的关键就是求角DBE的大小，因为小三角形的边长可以轻易求出，所以最终答案很好算：</p>
-<p>$$<br>\frac{32}{5}-4\pi+16 \arctan{\frac{1}{2}}<br>$$</p>
+$$
+\frac{32}{5}-4\pi+16 \arctan{\frac{1}{2}}
+$$
+
 <p>可以发现和之前高等数学得到的结果形式并不同，其实数值是一样的，所以我们得到了一个等式：</p>
-<p>$$<br>4\arctan{\frac{1}{2}}+2\arcsin{\frac{3}{5}}=\pi<br>$$</p>
+$$
+4\arctan{\frac{1}{2}}+2\arcsin{\frac{3}{5}}=\pi
+$$
+
 <p>这个可能看起来不是那么直观，但确实是成立的，根据反三角函数恒等式$2\arctan x = \arctan \frac{2x}{1-x^2}$，可以推出等号左边等于$2(\arctan \frac{4}{3} + \arcsin \frac{3}{5})$。构造一个边长3、4、5的直角三角形，显然答案就是$\pi$。</p>
 <h2 id="总结与拓展"><a href="#总结与拓展" class="headerlink" title="总结与拓展"></a>总结与拓展</h2><p>其实这道题小学生也没几个人能做出来，就算给我们做也得费老鼻子劲，还不一定算的对。</p>
 <p>最近还看到了很多类似的趣图，这里分享给大家，闲暇时间可以做了玩玩。</p>
@@ -795,7 +831,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="当年如果有这个，语文就不会不及格了">
+                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="当年如果有这个，语文就不会不及格了">
                         
                         <span class="card-title">当年如果有这个，语文就不会不及格了</span>
                     </div>
@@ -853,7 +889,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/26.jpg" class="responsive-img" alt="二零二一年终总结">
+                        <img src="/medias/featureimages/24.jpg" class="responsive-img" alt="二零二一年终总结">
                         
                         <span class="card-title">二零二一年终总结</span>
                     </div>
@@ -1080,7 +1116,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

@@ -156,6 +156,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -241,6 +250,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -335,7 +353,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/10.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -498,14 +516,14 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.4k
+                    2.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    9 分
+                    7 分
                 </div>
                 
                 
@@ -536,16 +554,16 @@
 <p>为了理解这篇论文，推荐先去看一下inside-outside算法：<a href="https://godweiyang.com/2018/04/19/inside-outside/">传送门</a>。</p>
 <h1 id="DIORA"><a href="#DIORA" class="headerlink" title="DIORA"></a>DIORA</h1><p>这篇论文的符号定义有点奇怪，以往都是用span的左右边界$(i, j)$来表示的，但是这篇论文只用几个数字$i$来表示，顺序是按照chart表自底向上，从左向右。也就是按照span长度从小到大排序，相同长度的按照左边界从小到大排序，然后依次给上标号。</p>
 <p>首先给定长度为$T$的句子$x_0, x_1, \ldots, x_{T-1}$，每个单词$x_i$都有一个预训练的词向量$v_i$。本文中只讨论二叉树，所以预先将句法树进行了二叉化。</p>
-<p>对于短语$k$，定义它的inside向量为$\bar a(k)$，outside向量为$\bar b(k)$，inside分数为$\bar e(k)$，outside分数为$\bar f(k)$。定义它的儿子结点对的短语集合为${k}$，例如$i, j$两个短语可以结合成短语$k$，那么$i, j \in {k}$。</p>
-<h2 id="Inside过程"><a href="#Inside过程" class="headerlink" title="Inside过程"></a>Inside过程</h2><p>首先对于叶子结点，用一个线性变换算出它的向量表示和得分：<br>\[<br>\begin{align}<br>\left[ \begin{array}{c} x \ o \ u \end{array} \right] &amp;= \left[ \begin{array}{c} \sigma \ \sigma \ \tanh \end{array} \right] (U_{\psi}v_k + b) \<br> \bar a(k) &amp;= o + \tanh (x \odot u) \<br> \bar e(k) &amp;= 0<br>\end{align}<br>\]<br>其实这就类似于Tree-LSTM的结点函数，因为叶子结点肯定存在的，所以所有叶子结点得分都初始化为0。</p>
-<p>然后对于任意一个高层的结点$k$，它的儿子结点对的集合为${k}$。对于其中的任意一对结点$i, j$，定义它俩组合的分数为：<br>\[<br>\hat e(i, j) = \phi (\bar a(i), \bar a(j); S_{\alpha})+ \bar e(i) + \bar e(j)<br>\]<br>其中$\phi$函数是一个双线性函数：<br>\[<br>\phi (u, v; W) = u^T Wv<br>\]<br>然后用<code>softmax</code>函数算出每一对$i, j$的权重：<br>\[<br>e(i, j) = \frac{\exp(\hat e(i, j))}{\sum_{\hat i, \hat j \in {k}} {\exp(\hat e (\hat i, \hat j))}}<br>\]<br>最后加权求和求出短语$k$的inside得分：<br>\[<br>\bar e(k) = \sum_{i, j \in {k}} {e(i, j)\hat e(i, j)}<br>\]</p>
-<p>下面就是计算短语$k$的inside向量了，首先用TreeLSTM或者两层MLP算出结点对$i, j$的向量表示：<br>\[<br>a(i, j) = {\rm Compose}<em>{\alpha} (\bar a(i), \bar a(j))<br>\]<br>然后根据刚刚算出的权重进行加权求和得到inside向量表示：<br>\[<br>\bar a(k) = \sum</em>{i, j \in {k}} {e(i, j) a(i, j)}<br>\]</p>
+<p>对于短语$k$，定义它的inside向量为$\bar a(k)$，outside向量为$\bar b(k)$，inside分数为$\bar e(k)$，outside分数为$\bar f(k)$。定义它的儿子结点对的短语集合为$\{k\}$，例如$i, j$两个短语可以结合成短语$k$，那么$i, j \in \{k\}$。</p>
+<h2 id="Inside过程"><a href="#Inside过程" class="headerlink" title="Inside过程"></a>Inside过程</h2><p>首先对于叶子结点，用一个线性变换算出它的向量表示和得分：<br>&lt;!–swig￼15–&gt;<br>其实这就类似于Tree-LSTM的结点函数，因为叶子结点肯定存在的，所以所有叶子结点得分都初始化为0。</p>
+<p>然后对于任意一个高层的结点$k$，它的儿子结点对的集合为$\{k\}$。对于其中的任意一对结点$i, j$，定义它俩组合的分数为：<br>&lt;!–swig￼19–&gt;<br>其中$\phi$函数是一个双线性函数：<br>&lt;!–swig￼21–&gt;<br>然后用<code>softmax</code>函数算出每一对$i, j$的权重：<br>&lt;!–swig￼23–&gt;<br>最后加权求和求出短语$k$的inside得分：<br>&lt;!–swig￼25–&gt;</p>
+<p>下面就是计算短语$k$的inside向量了，首先用TreeLSTM或者两层MLP算出结点对$i, j$的向量表示：<br>&lt;!–swig￼28–&gt;<br>然后根据刚刚算出的权重进行加权求和得到inside向量表示：<br>&lt;!–swig￼29–&gt;</p>
 <h2 id="Outside过程"><a href="#Outside过程" class="headerlink" title="Outside过程"></a>Outside过程</h2><p>outside其实计算方法和inside很类似，只是不是通过短语$k$的两个儿子来计算了，而是通过它的父亲结点和兄弟结点计算。</p>
 <p>首先看一下下面这张模型图：<br><img src="1.jpg" alt="左边是inside过程，右边是outside过程"><br>左半部分inside过程很好理解，右半部分注意的是$k$表示的是当前要求的结点，$j$表示的是它的父结点，$i$表示的是它的兄弟结点。</p>
-<p>类比inside过程，首先初始化根结点，注意本文中根节点并没有用inside得到的根结点表示，而是随机初始化的。然后对于下层的结点$k$，计算它的某个父结点$j$和兄弟结点$i$的配对得分：<br>\[<br>\hat f(i, j) = \phi (\bar a(i), \bar b(j); S_{\beta})+ \bar e(i) + \bar f(j)<br>\]<br>然后还是用<code>softmax</code>函数算出每一对$i, j$的权重：<br>\[<br>f(i, j) = \frac{\exp(\hat f(i, j))}{\sum_{\hat i, \hat j \in {k}} {\exp(\hat f (\hat i, \hat j))}}<br>\]<br>注意这里的${k}$其实表示的是短语$k$的父结点和兄弟结点配对的集合了，和inside过程不一样，但是论文里并没有说。</p>
-<p>然后加权求和求出短语$k$的outside得分：<br>\[<br>\bar f(k) = \sum_{i, j \in {k}} {f(i, j)\hat f(i, j)}<br>\]<br>下面和inside过程一样，计算向量表示了：<br>\[<br>\begin{align}<br>b(i, j) &amp;= {\rm Compose}<em>{\beta} (\bar a(i), \bar b(j)) \<br>\bar b(k) &amp;= \sum</em>{i, j \in {k}} {f(i, j) b(i, j)}<br>\end{align}<br>\]</p>
+<p>类比inside过程，首先初始化根结点，注意本文中根节点并没有用inside得到的根结点表示，而是随机初始化的。然后对于下层的结点$k$，计算它的某个父结点$j$和兄弟结点$i$的配对得分：<br>&lt;!–swig￼37–&gt;<br>然后还是用<code>softmax</code>函数算出每一对$i, j$的权重：<br>&lt;!–swig￼39–&gt;<br>注意这里的$\{k\}$其实表示的是短语$k$的父结点和兄弟结点配对的集合了，和inside过程不一样，但是论文里并没有说。</p>
+<p>然后加权求和求出短语$k$的outside得分：<br>&lt;!–swig￼43–&gt;<br>下面和inside过程一样，计算向量表示了：<br>&lt;!–swig￼44–&gt;</p>
 <p>在本文中这个${\rm Compose}$函数和inside过程中的是用的同一套参数。</p>
-<h2 id="目标函数"><a href="#目标函数" class="headerlink" title="目标函数"></a>目标函数</h2><p>因为是无监督语料，所以最后的监督只能回到每个单词上面来，用语言模型来训练。对于单词$x_i$，用$\bar b(i) \cdot \bar a(i)$来表示包含这个单词的所有可能的句法树的得分总和。这里采用margin-loss来作为损失函数：<br>\[<br>L_x = \sum_{i=0}^{T-1}\sum_{i^*=0}^{N-1} {\max(0, 1-\bar b(i)\cdot \bar a(i) + \bar b(i)\cdot \bar a(i^*))}<br>\]<br>其中$N$是采样的负样本数量，当然这里符号写的感觉也有一点小问题，首先没有写出$i^* \neq i$，其次$i^*$是随机采样的，并不是从0到$N-1$，范围其实也在0到$T-1$。不过意思懂了就行，采样是根据词频。</p>
+<h2 id="目标函数"><a href="#目标函数" class="headerlink" title="目标函数"></a>目标函数</h2><p>因为是无监督语料，所以最后的监督只能回到每个单词上面来，用语言模型来训练。对于单词$x_i$，用$\bar b(i) \cdot \bar a(i)$来表示包含这个单词的所有可能的句法树的得分总和。这里采用margin-loss来作为损失函数：<br>&lt;!–swig￼48–&gt;<br>其中$N$是采样的负样本数量，当然这里符号写的感觉也有一点小问题，首先没有写出$i^\* \neq i$，其次$i^\*$是随机采样的，并不是从0到$N-1$，范围其实也在0到$T-1$。不过意思懂了就行，采样是根据词频。</p>
 <h2 id="解码过程"><a href="#解码过程" class="headerlink" title="解码过程"></a>解码过程</h2><p>预测阶段要解码出句法树，这就很简单了，用的是传统的CKY算法，只需要使用到inside得分$e(i, j)$就行了，下面是伪代码：<br><img src="2.jpg" alt="CKY解码算法"></p>
 <h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><h2 id="无监督成分句法分析"><a href="#无监督成分句法分析" class="headerlink" title="无监督成分句法分析"></a>无监督成分句法分析</h2><p>首先是在<strong>二叉化后的PTB</strong>和<strong>MultiNLI</strong>数据集上的结果：<br><img src="3.jpg" alt="PTB测试集结果"><br><img src="4.jpg" alt="MultiNLI结果"><br>+PP表示做了后处理，也就是预测的时候去掉标点，最后直接把标点连接到根结点，这样效果会好很多。</p>
 <p>从PTB数据集结果可以看出，DIORA+PP的提升是最大的（ON-LSTM由于论文发表时没有出代码，所以没有实现），而其他几个模型提升很小甚至还有下降（PRPN-LM）。</p>
@@ -793,7 +811,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/25.jpg" class="responsive-img" alt="python生成词云教程（附带QQ聊天记录生成词云实战）">
+                        <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="python生成词云教程（附带QQ聊天记录生成词云实战）">
                         
                         <span class="card-title">python生成词云教程（附带QQ聊天记录生成词云实战）</span>
                     </div>
@@ -851,7 +869,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/28.jpg" class="responsive-img" alt="算法编程小白机试指南（大佬勿进）">
+                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="算法编程小白机试指南（大佬勿进）">
                         
                         <span class="card-title">算法编程小白机试指南（大佬勿进）</span>
                     </div>
@@ -1077,7 +1095,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

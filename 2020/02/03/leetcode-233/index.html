@@ -158,6 +158,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -243,6 +252,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -337,7 +355,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/27.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -532,9 +550,12 @@
 <p>例如从右向左数第 i = 2 位（数字 3 ），如果这一位取 1 ，那么左边 2 位如果取 0-11 ，那么右边 2 位就没有任何限制，从 0 取到 99 都行。如果左边 2 位如果取 12 ，那么就得考虑 n 中第 i 位是几了，如果大于 1 ，那么右边 2 位还是没有限制；如果等于 1 ，那么右边 2 位只能取 0-45 ；如果等于 0 ，那就没得取了。</p>
 <p>下面这张图是我打的草稿，看的更清楚一点：</p>
 <p><img src="1.jpg" alt=""></p>
-<p>一般化描述就是，考虑从右往左数第 i 位是 1 的数字数量。那么 n 中第 i 位左边部分的数字是 $\left\lfloor \frac{n}{10^{i+1}} \right\rfloor$ ，而右边可以取的数量是 $10^i$ ，相乘就是总的数量 $\left\lfloor \frac{n}{10^{i+1}} \right\rfloor \cdot 10^i$ 。如果左边直接取最大值，那么就要考虑第 i 位数字是几了，计算可以得到第 i 位数字为 $\left\lfloor \frac{n}{10^{i}} \right\rfloor % 10$ ，记为 x 。如果 $x &gt; 1$ ，那么右边无限制，有 $10^i$ 种取法；如果 $x = 1$ ，那么右边有 $n % 10^i + 1$ 种取法；如果 $x = 0$ ，那么右边无法取，因为第 i 位都没法取 1 。</p>
-<p>综上，令 $x = \left\lfloor \frac{n}{10^{i}} \right\rfloor % 10$ ，那么答案就是：</p>
-<p>$$<br>\left\lfloor \frac{n}{10^{i+1}} \right\rfloor \cdot 10^i + 10^i \cdot [x &gt; 1] + (n % 10^i + 1) \cdot [x = 1]<br>$$</p>
+<p>一般化描述就是，考虑从右往左数第 i 位是 1 的数字数量。那么 n 中第 i 位左边部分的数字是 $\left\lfloor \frac{n}{10^{i+1}} \right\rfloor$ ，而右边可以取的数量是 $10^i$ ，相乘就是总的数量 $\left\lfloor \frac{n}{10^{i+1}} \right\rfloor \cdot 10^i$ 。如果左边直接取最大值，那么就要考虑第 i 位数字是几了，计算可以得到第 i 位数字为 $\left\lfloor \frac{n}{10^{i}} \right\rfloor \% 10$ ，记为 x 。如果 $x > 1$ ，那么右边无限制，有 $10^i$ 种取法；如果 $x = 1$ ，那么右边有 $n \% 10^i + 1$ 种取法；如果 $x = 0$ ，那么右边无法取，因为第 i 位都没法取 1 。</p>
+<p>综上，令 $x = \left\lfloor \frac{n}{10^{i}} \right\rfloor \% 10$ ，那么答案就是：</p>
+$$
+\left\lfloor \frac{n}{10^{i+1}} \right\rfloor \cdot 10^i + 10^i \cdot [x > 1] + (n \% 10^i + 1) \cdot [x = 1]
+$$
+
 <h3 id="数位dp"><a href="#数位dp" class="headerlink" title="数位dp"></a>数位dp</h3><p>数位 dp 就麻烦许多了，不想看的可以直接跳过了。</p>
 <p>首先我们从最高位开始往右递归计算，用 pos, count, limit 来表示计算到第 pos 位（从左往右，和数学方法不一样）时，已经出现了 count 个 1 ，并且之后的数字有无限制（也就是能否取遍 0-9 ），这种状态之下方法数是多少。</p>
 <p>那么第 pos 位我们可以取的数字有哪些呢？如果 limit = 1 也就是有限制，那么只能取 0-n中第pos位，如果没有限制那就取 0-9 。</p>
@@ -778,7 +799,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="收藏！编码器中如何融入结构信息？这几篇论文一定不要错过">
+                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="收藏！编码器中如何融入结构信息？这几篇论文一定不要错过">
                         
                         <span class="card-title">收藏！编码器中如何融入结构信息？这几篇论文一定不要错过</span>
                     </div>
@@ -831,7 +852,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="每日算法系列【LeetCode 523】连续的子数组和">
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="每日算法系列【LeetCode 523】连续的子数组和">
                         
                         <span class="card-title">每日算法系列【LeetCode 523】连续的子数组和</span>
                     </div>
@@ -1061,7 +1082,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

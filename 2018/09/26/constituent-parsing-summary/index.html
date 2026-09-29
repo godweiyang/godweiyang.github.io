@@ -158,6 +158,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -243,6 +252,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -337,7 +355,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/26.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/24.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -496,14 +514,14 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    7.9k
+                    7.6k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    28 分
+                    27 分
                 </div>
                 
                 
@@ -565,7 +583,7 @@
 <p><strong>生成模型RNNG</strong><br>RNNG是2016年提出的一种文法，全称叫做“Recurrent Neural Network Grammar”，是一种生成式模型。RNNG本质上就是自顶向下的转移系统，动作定义和之前介绍的基本一致。只是之前介绍的自顶向下的转移系统是判别式模型，每次SHIFT的单词都是buffer中给定的。而RNNG每次SHIFT的单词需要通过动作GEN(x)预测得出，最终模型对预测出来的句子分析出句法树。</p>
 <p>正式一点就是，对于句子$x$和对应的句法树$y$，判别式模型是对条件概率$p(y | x)$进行建模，而生成式模型是对联合概率$p(x, y)$进行建模。</p>
 <p>而RNNG的另一个重要应用是语言模型（language model），也就是建模$p(x)$。因为$p(x) = \sum\nolimits_{y \in \mathcal{Y}(x)} {p(x,y)}$，所以只需要枚举出所有可能的句法树$y$即可，但是这是指数级别的，显然不现实，这时候就需要用到“重要性采样（importance sampling）”。</p>
-<p>令$q(y | x)$为RNNG作为判别式模型的时候产生句子$y$的条件概率，那么$p(x)$可以改写为<br>\[p(x) = \sum\nolimits_{y \in \mathcal{Y}(x)} {p(x,y)} = \sum\nolimits_{y \in \mathcal{Y}(x)} {q(y|x)w(x,y)} = {E_{q(y|x)}}w(x,y)\]<br>然后就可以采用蒙特卡罗方法进行采样了，从分布$q(y | x)$中采样$N$个样本：<br>\[{y^{(i)}} \sim q(y|x),i = 1,2, \ldots ,N\]<br>那么$p(x)$就可以近似表示为：<br>\[p(x) = {E_{q(y|x)}}w(x,y)\mathop \approx \limits^{MC} \frac{1}{N}\sum\limits_{i = 1}^N {w(x,{y^{(i)}})} \]</p>
+<p>令$q(y | x)$为RNNG作为判别式模型的时候产生句子$y$的条件概率，那么$p(x)$可以改写为<br>&lt;!–swig￼23–&gt;<br>然后就可以采用蒙特卡罗方法进行采样了，从分布$q(y | x)$中采样$N$个样本：<br>&lt;!–swig￼26–&gt;<br>那么$p(x)$就可以近似表示为：<br>&lt;!–swig￼28–&gt;</p>
 <p><strong>Dynamic Oracle</strong><br>文章开头提到了一个转移系统会遇到的问题：“exposure bias问题”，这个问题意思就是训练的时候转移系统的每个时刻都是按照标准的action来进行训练的，但是如果测试的时候遇到了一个训练时从来没有遇见过的状态，这时候该怎么预测？如果预测错了，那么之后的时刻可能错的越来越离谱，偏差越来越大。</p>
 <p>解决的方法就是采用Dynamic Oracle技术，在预测错误的时候，按照标准树的结构指导转移系统向着错误尽可能小的状态进行转移。但是比较麻烦的是，对于每一个转移系统，可能大家定义的状态都不尽相同，所以Dynamic Oracle要针对特定的转移系统单独设计，一个解决方法就是之后要提到的Policy Gradient方法。</p>
 <p>这里举一个针对上面的“基于span的自底向上的转移系统”的Dynamic Oracle例子。</p>
@@ -574,9 +592,9 @@
 <p>但是如果直接按照这个Dynamic Oracle来实现代码的话，效果不会有什么提升，原因就是训练的时候遇到的错误情形还是太少了，不足以应付所有的测试阶段遇到的未知情形。所以要在训练阶段加上exploration操作，也就是转移的每一个时刻，不要总是预测概率最大的action，而是以一定的概率随机选择一个action，诱导系统进入一个错误的状态，这样系统就能学到更多错误状态下的回正技巧了。</p>
 <p><strong>Policy Gradient</strong><br>序列预测存在着两个问题：一个就是之前提到的exposure bias问题，另一个就是loss mismatch问题，意思就是在每一个状态的loss累和得到最终整个序列的loss，但是因为是贪心解码，并没有考虑到之后的结果，所以某一个状态的loss其实并不能代表整个序列的loss。</p>
 <p>Dynamic Oracle可以解决第一个问题，如果修改一下也可以解决第二个问题，但是Dynamic Oracle需要针对特定的转移系统单独设计，不能通用，所以这里引入了强化学习中的Policy Gradient来解决这个问题。</p>
-<p>首先用风险函数（risk objective）代替原来的损失函数：<br>\[\mathcal{R}(\theta ) = \sum\limits_{i = 1}^N {\sum\limits_y {p(y|{x^{(i)}};\theta )\Delta (y,{y^{(i)}})} } \]<br>其中$(x^{(i)}, y^{(i)})$是训练集中的标准数据。可以看出，风险函数其实就是所有可能的句法树和标准树的差异${\Delta (y,{y^{(i)}})}$的期望，训练的目的就是最小化所有句法树和标准树的差异，这样就消除了之前提到的两个问题。</p>
+<p>首先用风险函数（risk objective）代替原来的损失函数：<br>&lt;!–swig￼36–&gt;<br>其中$(x^{(i)}, y^{(i)})$是训练集中的标准数据。可以看出，风险函数其实就是所有可能的句法树和标准树的差异${\Delta (y,{y^{(i)}})}$的期望，训练的目的就是最小化所有句法树和标准树的差异，这样就消除了之前提到的两个问题。</p>
 <p>但是可以发现，显然不可能枚举所有可能的句法树，这时候想到了之前用到的重要性采样方法。</p>
-<p>但是不能直接对风险函数进行重要性采样，不然就会发现采样后的函数$\theta$消失了！那就没办法求导了。所以先对风险函数求导：<br>\[\begin{array}{l}\nabla \mathcal{R}(\theta ) = \sum\limits_{i = 1}^N {\sum\limits_y {p(y|{x^{(i)}})\Delta (y,{y^{(i)}})\nabla \log p(y|{x^{(i)}};\theta )} } \ \approx \sum\limits_{i = 1}^N {\sum\limits_{y \in \mathcal{Y}({x^{(i)}})} {\Delta (y,{y^{(i)}})\nabla \log p(y|{x^{(i)}};\theta )} } \end{array}\]<br>这里的$y$是根据分布${p(y|{x^{(i)}})}$采样得到的结果。实验中可以将标准树也加入到采样结果中，可以提升准确率。<br>至于$\log$项是怎么来的，可以如下推导得来：<br>\[\nabla p(y|{x^{(i)}};\theta ) = p(y|{x^{(i)}})\frac{ {\nabla p(y|{x^{(i)}};\theta )}}{ {p(y|{x^{(i)}};\theta )}} = p(y|{x^{(i)}})\nabla \log p(y|{x^{(i)}};\theta )\]</p>
+<p>但是不能直接对风险函数进行重要性采样，不然就会发现采样后的函数$\theta$消失了！那就没办法求导了。所以先对风险函数求导：<br>&lt;!–swig￼40–&gt;<br>这里的$y$是根据分布${p(y|{x^{(i)}})}$采样得到的结果。实验中可以将标准树也加入到采样结果中，可以提升准确率。<br>至于$\log$项是怎么来的，可以如下推导得来：<br>&lt;!–swig￼44–&gt;</p>
 <h1 id="编码解码模型"><a href="#编码解码模型" class="headerlink" title="编码解码模型"></a>编码解码模型</h1><hr>
 <p>上面介绍完了基于转移的句法分析系统，下面开始介绍编码解码（Encoder-Decoder）模型。</p>
 <p>模型的大致框架如下图所示：<br><img src="chart_based.png" alt=""><br>首先通过编码器将句子编码成向量，然后用解码器对向量操作，解码出句法树。</p>
@@ -584,15 +602,15 @@
 <p>编码器主要有两种，一种是简单的双向LSTM编码，下图是一个用双向LSTM对句子进行编码的示例：<br><img src="bi_lstm.jpg" alt=""><br>例如要编码“played soccer in”这个短语，那么就用“in”处的前向LSTM输出减去“She”处的前向LSTM输出，得到了短语的前向LSTM表示。类似的，用“played”处的反向LSTM输出减去“the”处的反向LSTM输出，得到了短语的反向LSTM表示。</p>
 <p>另一种是multi-headed self-attention编码。Attention是谷歌在“Attention is all you need”中提出的一种方法，严格来说它并不能算作一种模型，只能说是一种机制。具体原理在这里就不细讲了，可以直接去看一下原文。</p>
 <p>大体框架就是，每个单词的词向量经过三个不同的$W$矩阵变换之后得到了三个不同的向量表示$q, k, v$，分别拼接起来组成了矩阵$Q, K, V$，其中$Q, K$相乘就得到了任意两个单词之间的相似度矩阵，然后对矩阵每一行进行softmax就得到了每一个单词对于其他所有单词的权重。再乘上矩阵$V$就得到了它对其他所有单词的加权求和，以此来作为它的向量表示。</p>
-<p>下图就是self-attention的框架图：<br><img src="single_attention.jpg" alt=""><br>形式化定义就是：<br>\[S(X) = \left[ { {\rm{softmax}}\left( {\frac{ {Q{K^{\rm{T}}}}}{ {\sqrt { {d_k}} }}} \right)V} \right]{W_O}\]<br>其中$Q = XW_Q, K = XW_K, V = XW_V$，$d_k$是向量$q, k$的维度，用它作为分母是为了防止数值太大溢出。最后的矩阵$W_O$是为了将输出映射到与输入相同的维度。</p>
-<p>而multi-headed self-attention就是将刚刚的attention计算8次，并且相加：<br>\[M(X) = \sum\limits_{i = 1}^8 {S(X)} \]<br>注意这8个attention的参数矩阵是不共享的，也可以不相加，改为直接拼接。</p>
+<p>下图就是self-attention的框架图：<br><img src="single_attention.jpg" alt=""><br>形式化定义就是：<br>&lt;!–swig￼50–&gt;<br>其中$Q = XW_Q, K = XW_K, V = XW_V$，$d_k$是向量$q, k$的维度，用它作为分母是为了防止数值太大溢出。最后的矩阵$W_O$是为了将输出映射到与输入相同的维度。</p>
+<p>而multi-headed self-attention就是将刚刚的attention计算8次，并且相加：<br>&lt;!–swig￼55–&gt;<br>注意这8个attention的参数矩阵是不共享的，也可以不相加，改为直接拼接。</p>
 <p>最终的编码器模型如下图所示：<br><img src="multi_headed_attention.jpg" alt=""><br>也就是说，将刚刚的multi-headed self-attention经过一层layernorm之后再经过一层前馈神经网络，最后再经过一层layernorm得到输出。将上述模型复制8份，首尾拼接，即前面的输出作为后面的输入，即可得到编码器最终的输出，也就是每个单词最终的向量表示。</p>
 <p>至于每个短语的表示，和双向LSTM编码一样，用短语边界两个单词向量的差值作为短语的表示。只是这里没有前向后向的概念，所以要将每个单词向量一分为二，前一半作为前向向量，后一半作为后向向量。当然在实际实现中，将单数维度提取出来作为前向表示，双数维度提取出来作为后向表示。</p>
 <h2 id="解码器（Decoder）"><a href="#解码器（Decoder）" class="headerlink" title="解码器（Decoder）"></a>解码器（Decoder）</h2><p>得到了每个短语的向量表示之后，就需要对它们进行解码，得到最终的句法树，解码的方法主要有两种。<br><strong>基于动态规划解码的模型</strong><br>这种方法在论文中被叫做“chart-based model”，正如其名，就是利用一个数组来进行动态规划，求出每个span的最优split和最优label。</p>
-<p>定义一棵句法树的分数为所有子结点的label分数之和，即：<br>\[{s_{tree}}(T) = \sum\limits_{(l,(i,j)) \in T} { {s_{label}}(i,j,l)} \]<br>其实原本论文中的定义还多了一项span的分数，但是由于具体实现中去掉这一项并没有什么影响，所以为了简便我就只算label分数了。</p>
-<p>要使得句法树分数最大，不可能枚举所有的句法树，那就只能用动态规划算法求解了。对于任意一个$span(i, j)$，我们将它通过编码器产生的表示$s_{ij}$输入到前馈神经网络中，直接取得分最高的那一维作为最优label，即：<br>\[s<em>{label}(i, j, l) = [Vg(Ws</em>{ij}+b)]_l\]<br>而对于split，遍历所有的split，取两个子结点与自己结点得分之和最高的那个split即可：<br>\[s_{split}(i, j, k) = s_{label}(i, j, l_{ij}) + s_{label}(i, k, l_{ik}) + s_{label}(k, j, l_{kj})\]</p>
-<p>最后的训练过程和以往一样，采用max-margin训练方法，即使得标准树的得分比预测树的得分至少高一个margin，在这里margin大小定义为两棵树不同短语的数量，最终的损失函数定义为：<br>\[\mathcal{L}(\theta ) = \max \left( {0,\Delta (\hat T,T) - {s_{tree}}(T) + {s_{tree}}(\hat T)} \right)\]</p>
-<p><strong>基于自顶向下贪心解码的模型</strong><br>基于动态规划的解码算法时间复杂度为$O(n^3)$，对于长度大一点的句子来说还是有点不可接受的。但是如果采用自顶向下、贪心地去选择每一个span的最优split和最优label，那么时间复杂度将降到$O(n^2)$。具体操作过程如下，首先从根节点也就是$span(0, n)$开始，选择一个split，使得两个子结点与自己结点得分之和最高，而label还是向之前那样直接通过短语的向量计算得出。具体公式为：<br>\[\begin{array}{l}\hat l = \mathop {\arg \max }\limits<em>l [{s</em>{label}}(i,j,l)]\\hat k = \mathop {\arg \max }\limits<em>k [{s</em>{split}}(i,k,l)]\end{array}\]<br>而由于贪心解码和转移系统action预测一样，在预测阶段可能会遇到训练阶段没有碰到过的状态，所以也需要用到Dynamic Oracle。同样也需要用到exploration，来增加训练阶段遇到的错误状态数。</p>
+<p>定义一棵句法树的分数为所有子结点的label分数之和，即：<br>&lt;!–swig￼56–&gt;<br>其实原本论文中的定义还多了一项span的分数，但是由于具体实现中去掉这一项并没有什么影响，所以为了简便我就只算label分数了。</p>
+<p>要使得句法树分数最大，不可能枚举所有的句法树，那就只能用动态规划算法求解了。对于任意一个$span(i, j)$，我们将它通过编码器产生的表示$s_{ij}$输入到前馈神经网络中，直接取得分最高的那一维作为最优label，即：<br>&lt;!–swig￼59–&gt;<br>而对于split，遍历所有的split，取两个子结点与自己结点得分之和最高的那个split即可：<br>&lt;!–swig￼60–&gt;</p>
+<p>最后的训练过程和以往一样，采用max-margin训练方法，即使得标准树的得分比预测树的得分至少高一个margin，在这里margin大小定义为两棵树不同短语的数量，最终的损失函数定义为：<br>&lt;!–swig￼61–&gt;</p>
+<p><strong>基于自顶向下贪心解码的模型</strong><br>基于动态规划的解码算法时间复杂度为$O(n^3)$，对于长度大一点的句子来说还是有点不可接受的。但是如果采用自顶向下、贪心地去选择每一个span的最优split和最优label，那么时间复杂度将降到$O(n^2)$。具体操作过程如下，首先从根节点也就是$span(0, n)$开始，选择一个split，使得两个子结点与自己结点得分之和最高，而label还是向之前那样直接通过短语的向量计算得出。具体公式为：<br>&lt;!–swig￼65–&gt;<br>而由于贪心解码和转移系统action预测一样，在预测阶段可能会遇到训练阶段没有碰到过的状态，所以也需要用到Dynamic Oracle。同样也需要用到exploration，来增加训练阶段遇到的错误状态数。</p>
 <h1 id="Sequence-to-Sequence模型"><a href="#Sequence-to-Sequence模型" class="headerlink" title="Sequence to Sequence模型"></a>Sequence to Sequence模型</h1><hr>
 <p>上面最主流的两大模型：转移系统和编码解码模型都已经介绍完了，下面介绍几种比较新颖的方法。</p>
 <p>大家都知道句法树和某些序列存在一一对应关系，句法树可以唯一转换成序列，序列也可以唯一转换成句法树，所以预测句法树的问题就转变为了预测序列问题，下面几种方法都是将句法树转换为了某种序列来进行预测。</p>
@@ -840,7 +858,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="给python新手的一些建议">
+                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="给python新手的一些建议">
                         
                         <span class="card-title">给python新手的一些建议</span>
                     </div>
@@ -898,7 +916,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="Recurrent Neural Network Grammars">
+                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="Recurrent Neural Network Grammars">
                         
                         <span class="card-title">Recurrent Neural Network Grammars</span>
                     </div>
@@ -1132,7 +1150,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

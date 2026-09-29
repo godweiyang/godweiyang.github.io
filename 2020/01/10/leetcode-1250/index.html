@@ -157,6 +157,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -242,6 +251,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -336,7 +354,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/23.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/21.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -541,9 +559,15 @@
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>这题名义上是困难难度，实际上只要知道一些数学知识，就非常的简单。</p>
 <p>首先题目中要求挑选出一些数，然后给每个数分配整数系数，加权求和等于 1 。<br>仔细想一想就不对劲，全选不是一样嘛？有些数系数分配 0 就行了。</p>
 <p>假设系数分别是 $x_1, x_2, \ldots, x_n$ ，那么问题就变成了求解下面的多元一次方程有整数解的条件：</p>
-<p>$$<br>    a_1 x_1 + a_2 x_2 + \dots + a_n x_n = 1<br>$$</p>
+$$
+    a_1 x_1 + a_2 x_2 + \dots + a_n x_n = 1
+$$
+
 <p>如果你数学基础不错的话，一眼就会发现条件就是<strong>所有非零数的最大公约数为 1</strong> ：</p>
-<p>$$<br>    gcd(a_1, a_2, \ldots, a_n) = 1, a_i \neq 0<br>$$</p>
+$$
+    gcd(a_1, a_2, \ldots, a_n) = 1, a_i \neq 0
+$$
+
 <p>证明参见 n 个数的<a href="https://en.wikipedia.org/wiki/B%C3%A9zout%27s_identity," title="维基百科：裴蜀定理">裴蜀定理</a></p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">isGoodArray</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> x = nums[<span class="number">0</span>], n = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (nums[i]) x = <span class="built_in">gcd</span>(x, nums[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> x == <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">gcd</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> x%y ? <span class="built_in">gcd</span>(y, x%y) : y;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
@@ -779,7 +803,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="每日算法系列【LeetCode 992】K个不同整数的子数组">
+                        <img src="/medias/featureimages/24.jpg" class="responsive-img" alt="每日算法系列【LeetCode 992】K个不同整数的子数组">
                         
                         <span class="card-title">每日算法系列【LeetCode 992】K个不同整数的子数组</span>
                     </div>
@@ -836,7 +860,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="每日算法系列【LeetCode 1004】最大连续1的个数 III">
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="每日算法系列【LeetCode 1004】最大连续1的个数 III">
                         
                         <span class="card-title">每日算法系列【LeetCode 1004】最大连续1的个数 III</span>
                     </div>
@@ -1068,7 +1092,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

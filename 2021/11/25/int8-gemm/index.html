@@ -155,6 +155,15 @@
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -240,6 +249,15 @@
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -334,7 +352,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/17.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/19.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -538,8 +556,16 @@
 <p>这样矩阵乘法可以改写为$C = \frac{c_1c_2}{2s^2}A_I B_I + \frac{c_1c_2}{2s}\textbf{1}B_I$。其中第二项因子可以用$B = \frac{c_2}{s}B_I$来进一步简化，最终得到$C = \frac{c_1c_2}{2s^2}A_I B_I + \frac{c_1}{2}\textbf{1}B$。</p>
 <p>第一项因子和之前一样，先算整数矩阵乘法$A_I B_I$，再乘上系数，只不过系数变成了$\frac{c_1c_2}{2s^2}$。</p>
 <p>第二项因子$\textbf{1}B$的维度和$C$相同，并且它的矩阵元素等于$B$中同一列的元素之和。那么问题就很简单了，我们只需要提前计算出矩阵$B$每一列的元素和，再乘上系数$\frac{c_1}{2}$，结果存下来。最后在计算完$\frac{c_1c_2}{2s^2}A_I B_I$整数矩阵乘法结果之后，加上这个列元素之和就行了，你可以将其理解为残差项。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>如果矩阵乘法两个输入的范围都是关于零点对称的，那么计算公式为：<br><strong>量化：</strong><br>$$A_I = int(\frac{s}{c_1}A), B_I = int(\frac{s}{c_2}B)$$<br><strong>反量化：</strong><br>$$C = \frac{c_1c_2}{s^2}A_I B_I$$</p>
-<p>如果矩阵乘法其中一个输入是relu的结果，那么计算公式为：<br><strong>量化：</strong><br>$$A_I = int(\frac{2s}{c_1}(A - s \textbf{1})), B_I = int(\frac{s}{c_2}B)$$<br><strong>反量化：</strong><br>$$C = \frac{c_1c_2}{2s^2}A_I B_I + \frac{c_1}{2}\textbf{1}B$$</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>如果矩阵乘法两个输入的范围都是关于零点对称的，那么计算公式为：<br><strong>量化：</strong>  </p>
+$$A_I = int(\frac{s}{c_1}A), B_I = int(\frac{s}{c_2}B)$$
+<p><strong>反量化：</strong>  </p>
+$$C = \frac{c_1c_2}{s^2}A_I B_I$$
+
+<p>如果矩阵乘法其中一个输入是relu的结果，那么计算公式为：<br><strong>量化：</strong>  </p>
+$$A_I = int(\frac{2s}{c_1}(A - s \textbf{1})), B_I = int(\frac{s}{c_2}B)$$
+<p><strong>反量化：</strong>  </p>
+$$C = \frac{c_1c_2}{2s^2}A_I B_I + \frac{c_1}{2}\textbf{1}B$$
+
 <p>当然还有很多其他情况，例如softmax的输出范围一定是$[0, 1]$，那么attention中的矩阵乘法公式还得改写。</p>
 <p>此外为了减小量化的损失，还需要在模型结构中插入伪量化节点，然后进行量化感知训练（QAT）。接着还需要将finetune后的模型存储为int8格式。然后还需要开发加载int8模型的推理加速库代码。最后就是本文讲到的整数矩阵乘法了。整个流程比较繁琐，这部分内容今后我会慢慢给大家分享。网上关于量化的优秀教程非常多，我不会讲太多理论上的量化知识，只会从实践的角度来白话一下我们在Transformer模型量化过程中做的一些尝试。</p>
 
@@ -773,7 +799,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/26.jpg" class="responsive-img" alt="二零二一年终总结">
+                        <img src="/medias/featureimages/24.jpg" class="responsive-img" alt="二零二一年终总结">
                         
                         <span class="card-title">二零二一年终总结</span>
                     </div>
@@ -828,7 +854,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="昨晚学妹参加了B站秋招笔试，还想考考我？">
+                        <img src="/medias/featureimages/27.jpg" class="responsive-img" alt="昨晚学妹参加了B站秋招笔试，还想考考我？">
                         
                         <span class="card-title">昨晚学妹参加了B站秋招笔试，还想考考我？</span>
                     </div>
@@ -1052,7 +1078,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>

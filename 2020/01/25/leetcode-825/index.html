@@ -159,6 +159,15 @@ age">
         </a>
     </li>
     
+    <li class="hide-on-med-and-down">
+        <a href="/fangdai" class="waves-effect waves-light">
+            
+            <i class="fa fa-calculator"></i>
+            
+            <span>Loan</span>
+        </a>
+    </li>
+    
     <li>
         <a href="#searchModal" class="modal-trigger waves-effect waves-light">
             <i id="searchIcon" class="fa fa-search" title="搜索"></i>
@@ -244,6 +253,15 @@ age">
                 <i class="fa fa-fw fa-comments"></i>
                 
                 留言板
+            </a>
+        </li>
+        
+        <li>
+            <a href="/fangdai" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-calculator"></i>
+                
+                Loan
             </a>
         </li>
         
@@ -338,7 +356,7 @@ age">
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/26.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/24.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -497,7 +515,7 @@ age">
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    991
+                    989
                 </div>
                 
 
@@ -552,15 +570,26 @@ age">
 <ul>
 <li>$a \le 2b-15$</li>
 <li>$a \ge b$</li>
-<li>$a \ge 100 || b \le 100$</li>
+<li>$a \ge 100 || b \le 100$
+
+</li>
 </ul>
 <p>可以发现，如果满足了条件 2 ，那么一定会满足条件 3 ，所以最终只需要满足 $b \le a \le 2b-15$ 就行了。</p>
 <h3 id="暴力法"><a href="#暴力法" class="headerlink" title="暴力法"></a>暴力法</h3><p>这题最暴力的方法显然就是遍历任意数对 a 和 b ，看两个数是否符合这个条件，但是时间复杂度太高，不可行。</p>
 <h3 id="二分法"><a href="#二分法" class="headerlink" title="二分法"></a>二分法</h3><p>另一个方法是先对数组进行排序，然后遍历每一个数作为 b ，然后二分寻找 $2b-15$ 在哪就行了，中间的数字都可以作为 a ，这样最终的时间复杂度是 $O(n \log n)$ 。</p>
 <h3 id="计数法"><a href="#计数法" class="headerlink" title="计数法"></a>计数法</h3><p>有没有更好的办法呢？注意到年龄的范围最大只有 120 ，那么我们可以统计每个年龄出现的人数，用 $c[i]$ 来表示 i 岁的人数。那么 b 岁的人数就有 $c[b]$ 个，而符合条件的 a 在 $[b, 2b-15]$ 之间。其中 $a = b$ 需要单独讨论，因为包含了自己邀请自己的情况，这种情况邀请的数量是 $c[b] \cdot (c[b] - 1)$ 。而 a 在 $[b+1, 2b-15]$ 范围内的话，数量是 $\sum_{b+1 \le a \le 2b-15}{c[b] \cdot c[a]}$ 。所以最终的总数量就是：</p>
-<p>$$<br>\begin{aligned}<br>S_b &amp;= \sum_{b+1 \le a \le 2b-15}{c[b] \cdot c[a]} + c[b] \cdot (c[b] - 1)    \<br>&amp;= c[b] \cdot (\sum_{b \le a \le 2b-15}{c[a]} - 1)<br>\end{aligned}<br>$$</p>
+$$
+\begin{aligned}
+S_b &= \sum_{b+1 \le a \le 2b-15}{c[b] \cdot c[a]} + c[b] \cdot (c[b] - 1)    \\\
+&= c[b] \cdot (\sum_{b \le a \le 2b-15}{c[a]} - 1)
+\end{aligned}
+$$
+
 <p>如果用前缀和 $sum$ 来预处理 $c$ 数组的话，可以进一步简化为：</p>
-<p>$$<br>S_b = c[b] \cdot (sum[2b-15] - sum[b-1] - 1)<br>$$</p>
+$$
+S_b = c[b] \cdot (sum[2b-15] - sum[b-1] - 1)
+$$
+
 <p>考虑到 $2b-15$ 可能会大于数组中年龄的最大值，所以我们设置一个阈值来截断它。最终的总数量就是 $\sum_{b}{S_b}$ ，这里 b 的取值范围是有讲究的。因为不等式需要满足 $b \le 2b-15$ ，所以 $b \ge 15$ 。这样最终的时间复杂度降到了 $O(MA)$ ，其中 MA 表示年龄的最大值。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="c"><a href="#c" class="headerlink" title="c++"></a>c++</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">numFriendRequests</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; ages)</span> </span>&#123;</span><br><span class="line">        <span class="type">const</span> <span class="type">int</span> MA = <span class="number">120</span>;</span><br><span class="line">        <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">count</span><span class="params">(MA<span class="number">+1</span>, <span class="number">0</span>)</span>, <span class="title">sum</span><span class="params">(MA<span class="number">+1</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">        <span class="type">int</span> n = ages.<span class="built_in">size</span>(), res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            count[ages[i]]++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= MA; ++i) &#123;</span><br><span class="line">            sum[i] = sum[i<span class="number">-1</span>] + count[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> b = <span class="number">15</span>; b &lt;= MA; ++b) &#123;</span><br><span class="line">            res += count[b] * (sum[<span class="built_in">min</span>(MA, <span class="number">2</span>*b<span class="number">-15</span>)] - sum[b<span class="number">-1</span>] - <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
@@ -796,7 +825,7 @@ age">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="每日算法系列【LeetCode 386】字典序排数">
+                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="每日算法系列【LeetCode 386】字典序排数">
                         
                         <span class="card-title">每日算法系列【LeetCode 386】字典序排数</span>
                     </div>
@@ -855,7 +884,7 @@ age">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="心有所鼠，鼠年快乐~">
+                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="心有所鼠，鼠年快乐~">
                         
                         <span class="card-title">心有所鼠，鼠年快乐~</span>
                     </div>
@@ -1081,7 +1110,7 @@ age">
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">369.3k</span>
+            <span class="white-color">355.1k</span>
             
 
             <br>
