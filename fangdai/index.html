@@ -140,7 +140,8 @@ input,select{font-family:inherit;font-size:14px;color:var(--ink)}
 .svg-ico{width:17px;height:17px;flex:none}
 
 /* ===== 结果区 ===== */
-.result-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.result-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:18px}
+.poster4{padding:18px 26px 4px;margin-bottom:0}
 .rcard{border:1px solid var(--line);border-radius:14px;padding:16px;background:#fff}
 .rcard .lab{font-size:12.5px;color:var(--sub);margin-bottom:7px}
 .rcard .val{font-size:21px;font-weight:800;color:var(--navy);line-height:1.2}
@@ -151,13 +152,23 @@ input,select{font-family:inherit;font-size:14px;color:var(--ink)}
 .rcard.green{background:var(--green-soft);border-color:#bfe6da}
 .rcard.green .val{color:var(--green)}
 
-/* 大号倒计时（主页 accent 卡）：渐变发光数字 */
-.rcard.accent .cd-wrap{display:flex;align-items:baseline;flex-wrap:wrap;margin-top:3px}
-.rcard.accent .cd-n{font-size:32px;font-weight:900;line-height:1;letter-spacing:.5px;
-  background:linear-gradient(180deg,#fff,#bfe0f5);-webkit-background-clip:text;background-clip:text;
-  -webkit-text-fill-color:transparent;color:transparent}
-.rcard.accent .cd-u{font-size:13px;font-weight:800;color:#cfe2f0;margin:0 6px 0 2px}
-.rcard.accent .cd-now{font-size:24px;font-weight:900;color:#fff}
+/* 普通倒计时（还需多久，正常字号） */
+.rcard .cd-wrap{display:flex;align-items:baseline;flex-wrap:wrap;margin-top:2px}
+.rcard .cd-n{font-size:22px;font-weight:900;color:var(--navy);line-height:1.1}
+.rcard .cd-u{font-size:12px;font-weight:800;color:var(--sub);margin:0 5px 0 1px}
+.rcard .cd-now{font-size:19px;font-weight:900;color:var(--navy)}
+/* 突出：最快一次性结清（绿色实心渐变，倒计时更大更亮） */
+.rcard.cd-fast{background:linear-gradient(135deg,#0c8a68,#16b987);border:none;position:relative;overflow:hidden;
+  box-shadow:0 16px 30px -16px rgba(14,157,118,.75)}
+.rcard.cd-fast::after{content:"";position:absolute;right:-34px;top:-42px;width:120px;height:120px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.22),transparent 70%);pointer-events:none}
+.rcard.cd-fast .lab,.rcard.cd-fast .sub2{color:#d8f3ea;position:relative}
+.rcard.cd-fast .cd-wrap{position:relative}
+.rcard.cd-fast .cd-n{font-size:30px;font-weight:900;line-height:1;letter-spacing:.5px;
+  background:linear-gradient(180deg,#fff,#c7f4e7);-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;text-shadow:0 3px 14px rgba(255,255,255,.32)}
+.rcard.cd-fast .cd-u{font-size:13px;font-weight:800;color:#e4f9f2;margin:0 6px 0 2px}
+.rcard.cd-fast .cd-now{font-size:26px;font-weight:900;color:#fff}
 .kv-cd{color:var(--green)!important}
 
 .loan-results{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:20px}

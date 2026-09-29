@@ -326,18 +326,26 @@
 
     var overallYM = parseYM(latestPayoff(res));
     var overallParts = overallYM ? remainParts(cfg, overallYM) : null;
+    var baseCard = { cls: '', lab: '还需多久全部结清',
+      countdown: overallParts ? countdownHtml(overallParts) : '—',
+      sub2: latestPayoff(res) + ' 全部结清' };
+    var fastCard;
+    if (cfg.income.enabled) {
+      var e0 = res.earliest;
+      var fparts = e0 ? remainParts(cfg, { y: e0.y, m: e0.m }) : null;
+      fastCard = { cls: 'cd-fast', lab: '最快一次性结清',
+        countdown: fparts ? countdownHtml(fparts) : '收入不足',
+        sub2: e0 ? e0.label + ' 可结清' : '' };
+    } else {
+      fastCard = { cls: '', lab: '当前剩余本金合计',
+        val: fmt(cfg.loans.reduce(function (a, l) { return a + l.balance; }, 0)) };
+    }
     var cards = [
-      { cls: 'accent', lab: '还需多久全部结清', countdown: overallParts ? countdownHtml(overallParts) : '—',
-        sub2: latestPayoff(res) + ' 全部结清' },
+      baseCard,
+      fastCard,
       { cls: '', lab: '未来应付利息合计', val: fmt(res.totalInterest) },
       { cls: '', lab: '提前还款本金合计', val: fmt(res.totalPrepay) }
     ];
-    if (cfg.income.enabled) {
-      cards.push({ cls: 'green', lab: '最快可一次性结清', val: res.earliest ? res.earliest.label : '收入不足', small: true,
-        sub2: res.earliest ? '当月需约 ' + fmt(res.earliest.needed) + ' 元' : '' });
-    } else {
-      cards.push({ cls: '', lab: '当前剩余本金合计', val: fmt(cfg.loans.reduce(function (a, l) { return a + l.balance; }, 0)) });
-    }
     $('#resultCards').innerHTML = cards.map(function (c) {
       var main = c.countdown !== undefined
         ? '<div class="cd-wrap">' + c.countdown + '</div>'
@@ -517,25 +525,32 @@
         '<div class="lk"><span>提前偿还本金</span><b>' + fmt(s.totalPrepay) + '</b></div></div>';
     }).join('');
 
+    // 四个核心框（2×2，桌面/手机一致）：还需多久、最快一次性结清、未来利息、提前还款
+    var p4 = '';
+    p4 += '<div class="rcard"><div class="lab">还需多久全部结清</div>' +
+      '<div class="cd-wrap">' + (pParts ? countdownHtml(pParts) : '—') + '</div>' +
+      '<div class="sub2">' + latestPayoff(res) + ' 全部结清</div></div>';
+    if (cfg.income.enabled) {
+      var e = res.earliest, ep = e ? remainParts(cfg, { y: e.y, m: e.m }) : null;
+      p4 += '<div class="rcard cd-fast"><div class="lab">最快一次性结清</div>' +
+        '<div class="cd-wrap">' + (ep ? countdownHtml(ep) : '收入不足') + '</div>' +
+        (e ? '<div class="sub2">' + e.label + ' 可结清</div>' : '') + '</div>';
+    } else {
+      p4 += '<div class="rcard"><div class="lab">当前剩余本金合计</div><div class="val">' + fmt(totalPrincipal) + '</div></div>';
+    }
+    p4 += '<div class="rcard"><div class="lab">未来利息合计</div><div class="val">' + fmt(res.totalInterest) + '</div></div>';
+    p4 += '<div class="rcard"><div class="lab">提前还款合计</div><div class="val">' + fmt(res.totalPrepay) + '</div></div>';
+
     $('#posterNode').innerHTML =
       '<div class="p-hero">' +
         '<div class="kicker">Loan Repayment Overview</div>' +
         '<h3>房贷还款核心概览</h3>' +
         '<div class="date">测算起始 ' + cfg.startYear + '-' + String(cfg.startMonth + 1).padStart(2, '0') + ' · 生成于 ' + now.toLocaleDateString('zh-CN') + '</div>' +
       '</div>' +
-      '<div class="p-cd">' +
-        '<div class="pcd-lab">还需多久全部结清</div>' +
-        '<div class="pcd-main">' + (pParts ? countdownHtml(pParts) : '—') + '</div>' +
-        '<div class="pcd-date">将于 ' + latestPayoff(res) + ' 全部结清</div>' +
-      '</div>' +
-      '<div class="p-big">' +
-        '<div class="pb"><div class="l">未来利息合计</div><div class="v">' + fmt(res.totalInterest) + '</div></div>' +
-        '<div class="pb"><div class="l">提前还款合计</div><div class="v">' + fmt(res.totalPrepay) + '</div></div>' +
-      '</div>' +
+      '<div class="result-cards poster4">' + p4 + '</div>' +
       '<div class="p-rows">' +
         '<div class="pr"><span class="k">当前剩余本金合计</span><span class="v">' + fmt(totalPrincipal) + '</span></div>' +
         (cfg.income.enabled && cfg.income.monthlyFund > 0 ? '<div class="pr"><span class="k">每月公积金</span><span class="v">' + fmt(cfg.income.monthlyFund) + '</span></div>' : '') +
-        (res.earliest ? '<div class="pr"><span class="k">最快可一次性结清</span><span class="v" style="color:var(--green)">' + res.earliest.label + '</span></div>' : '') +
       '</div>' +
       '<div class="p-loans">' + loansHtml + '</div>' +
       '<div class="p-foot">' +
