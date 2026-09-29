@@ -202,8 +202,9 @@ td .z{color:#b6c2cb}
 
 /* ===== 海报弹窗 ===== */
 .modal-mask{position:fixed;inset:0;background:rgba(12,30,45,.62);display:flex;align-items:center;justify-content:center;z-index:100;padding:24px;backdrop-filter:blur(3px)}
-.modal{max-width:520px;width:100%;max-height:92vh;overflow:auto;background:#fff;border-radius:18px}
-.poster{padding:0;border-radius:18px;overflow:hidden;background:#fff}
+.modal{max-width:600px;width:100%;max-height:92vh;overflow:auto;background:#fff;border-radius:18px}
+.poster{padding:0;border-radius:18px;overflow:hidden;background:#fff;width:560px;max-width:none;position:absolute;left:0;top:0}
+.poster-stage{position:relative;margin:0 auto}
 .poster .p-hero{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:26px 26px 22px}
 .poster .p-hero .kicker{font-size:12px;letter-spacing:3px;color:#a9cbe0;text-transform:uppercase}
 .poster .p-hero h3{font-size:23px;font-weight:800;margin:6px 0 2px}
@@ -233,8 +234,8 @@ td .z{color:#b6c2cb}
 .poster .pr:first-child{border-top:none}
 .poster .pr .k{color:var(--sub)}
 .poster .pr .v{font-weight:800;color:var(--ink)}
-.poster .p-loans{padding:6px 26px 4px}
-.poster .p-loan{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:9px}
+.poster .p-loans{padding:6px 26px 4px;display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:10px;align-items:stretch}
+.poster .p-loan{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:0}
 .poster .p-loan .lt{font-weight:800;font-size:13.5px;margin-bottom:7px;display:flex;justify-content:space-between}
 .poster .p-loan .lt .off{color:var(--green);font-size:12.5px}
 .poster .p-loan .lk{display:flex;justify-content:space-between;font-size:12px;color:var(--sub);padding:3px 0}
@@ -271,7 +272,6 @@ footer.site{text-align:center;color:#93a1ac;font-size:12.5px;padding:20px}
   .loan-results{grid-template-columns:1fr}
   .seg .opt{min-width:100%}
   .btn{flex:1}
-  .poster .p-big{flex-direction:column}
 }
 </style>
 </head>
@@ -449,7 +449,7 @@ footer.site{text-align:center;color:#93a1ac;font-size:12.5px;padding:20px}
 <!-- ===== 海报弹窗 ===== -->
 <div class="modal-mask hidden" id="posterModal">
   <div class="modal">
-    <div class="poster" id="posterNode"></div>
+    <div class="poster-stage" id="posterStage"><div class="poster" id="posterNode"></div></div>
     <div class="modal-foot">
       <button class="btn btn-ghost" id="posterClose">关闭</button>
       <button class="btn btn-ghost" id="posterDownload">

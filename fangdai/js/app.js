@@ -568,6 +568,21 @@
     } catch (e) {}
   }
 
+  // 海报固定 560px 渲染；窄屏仅等比缩放“预览”，截图始终用原始尺寸，保证各端比例一致
+  var POSTER_W = 560;
+  function fitPoster() {
+    var stage = $('#posterStage'), node = $('#posterNode');
+    if (!stage || !node) return;
+    var modal = $('#posterModal .modal');
+    var avail = modal.clientWidth;
+    var scale = Math.min(1, avail / POSTER_W);
+    var h = node.offsetHeight;
+    node.style.transformOrigin = 'top left';
+    node.style.transform = scale < 1 ? ('scale(' + scale + ')') : '';
+    stage.style.width = Math.round(POSTER_W * scale) + 'px';
+    stage.style.height = Math.round(h * scale) + 'px';
+  }
+
   async function openPoster() {
     if (!lastResult) return;
     var pb = $('#btnPoster'), pot = pb.innerHTML;
@@ -579,9 +594,12 @@
     pb.disabled = false; pb.innerHTML = pot;
     buildPoster(lastCfg, lastResult);
     $('#posterModal').classList.remove('hidden');
+    requestAnimationFrame(function () { requestAnimationFrame(fitPoster); });
     loadLib(LIBS.h2i).catch(function () {}); // 顺手预加载，便于马上保存/复制
   }
   $('#btnPoster').addEventListener('click', openPoster);
+  window.addEventListener('resize', function () { if (!$('#posterModal').classList.contains('hidden')) fitPoster(); });
+  window.addEventListener('orientationchange', function () { setTimeout(fitPoster, 220); });
   $('#posterClose').addEventListener('click', function () { $('#posterModal').classList.add('hidden'); });
   $('#posterModal').addEventListener('click', function (e) {
     if (e.target === this) $('#posterModal').classList.add('hidden');
@@ -598,6 +616,7 @@
       return;
     }
     btn.textContent = '生成中…';
+    var prevT = node.style.transform; node.style.transform = '';
     htmlToImage.toPng(node, { pixelRatio: 2, cacheBust: false, backgroundColor: '#ffffff' })
       .then(function (dataUrl) {
         var a = document.createElement('a');
@@ -608,6 +627,7 @@
       })
       .catch(function () { toast('海报生成失败，请重试', true); })
       .finally(function () {
+        node.style.transform = prevT;
         btn.disabled = false;
         btn.innerHTML = '<svg class="svg-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>保存海报';
       });
@@ -623,6 +643,7 @@
       btn.disabled = false; btn.innerHTML = ot; return;
     }
     btn.textContent = '生成中…';
+    var prevTc = node.style.transform; node.style.transform = '';
     try {
       var dataUrl = await htmlToImage.toPng(node, { pixelRatio: 2, cacheBust: false, backgroundColor: '#ffffff' });
       var blob = await (await fetch(dataUrl)).blob();
@@ -645,6 +666,7 @@
     } catch (e) {
       toast('海报生成失败，请重试', true);
     } finally {
+      node.style.transform = prevTc;
       btn.disabled = false; btn.innerHTML = ot;
     }
   });
