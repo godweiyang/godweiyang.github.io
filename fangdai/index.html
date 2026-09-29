@@ -56,6 +56,37 @@ input,select{font-family:inherit;font-size:14px;color:var(--ink)}
 .field input.has-suffix{padding-right:34px}
 .field .note{font-size:11.5px;color:#93a1ac}
 
+/* ===== 自定义年月选择器 ===== */
+.ym-picker{position:relative}
+.ym-display{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fbfdfe;
+  font-size:14px;font-weight:700;color:var(--navy);transition:border-color .15s,box-shadow .15s}
+.ym-display:hover{border-color:var(--blue)}
+.ym-picker.open .ym-display{border-color:var(--blue);box-shadow:0 0 0 3px rgba(47,127,184,.14);background:#fff}
+.ym-display .ym-caret{color:var(--sub);transition:transform .18s;flex:none}
+.ym-picker.open .ym-caret{transform:rotate(180deg)}
+.ym-pop{position:absolute;z-index:60;top:calc(100% + 6px);left:0;width:288px;max-width:88vw;
+  background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 22px 50px -18px rgba(15,59,93,.42);
+  padding:12px;animation:ymIn .16s ease}
+@keyframes ymIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.ym-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.ym-nav{width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:#fbfdfe;color:var(--navy2);
+  font-size:16px;font-weight:800;display:flex;align-items:center;justify-content:center;line-height:1}
+.ym-nav:hover{background:var(--blue-soft)}
+.ym-ylab{font-size:14.5px;font-weight:800;color:var(--navy);cursor:pointer;padding:5px 10px;border-radius:8px;white-space:nowrap}
+.ym-ylab:hover{background:var(--blue-soft)}
+.ym-ylab .smallhint{font-size:10.5px;color:var(--sub);font-weight:600;margin-left:4px}
+.ym-grid{display:grid;gap:6px}
+.ym-grid.month-view{grid-template-columns:repeat(4,1fr)}
+.ym-grid.year-view{grid-template-columns:repeat(3,1fr)}
+.ym-grid button{border-radius:9px;border:1px solid var(--line);background:#fbfdfe;color:var(--sub);
+  font-weight:700;transition:all .12s}
+.ym-grid.month-view button{height:38px;font-size:13px}
+.ym-grid.year-view button{height:42px;font-size:13.5px}
+.ym-grid button:hover{border-color:var(--blue);color:var(--navy)}
+.ym-grid.month-view button.sel{background:var(--navy);border-color:var(--navy);color:#fff}
+.ym-grid.year-view button.cur{background:var(--blue-soft);border-color:var(--blue);color:var(--navy)}
+
 /* 贷款卡片 */
 .loan-card{border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:16px;background:#fcfdfe;position:relative}
 .loan-card .lc-top{display:flex;align-items:center;gap:10px;margin-bottom:14px}
@@ -229,7 +260,20 @@ footer.site{text-align:center;color:#93a1ac;font-size:12.5px;padding:20px}
     <div class="grid" style="margin-bottom:6px">
       <div class="field narrow">
         <label>测算起始月份</label>
-        <div class="control"><input type="month" id="startMonth" value="2026-10"></div>
+        <div class="ym-picker" id="startPicker">
+          <button type="button" class="ym-display" id="ymDisplay">
+            <span id="ymText">2026年10月</span>
+            <svg class="ym-caret" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="ym-pop hidden" id="ymPop">
+            <div class="ym-head">
+              <button type="button" class="ym-nav" id="ymPrev" aria-label="上一个">&#8249;</button>
+              <div class="ym-ylab" id="ymYLab">2026 年<span class="smallhint">点击选年</span></div>
+              <button type="button" class="ym-nav" id="ymNext" aria-label="下一个">&#8250;</button>
+            </div>
+            <div class="ym-grid month-view" id="ymGrid"></div>
+          </div>
+        </div>
         <div class="note">从该月开始生成还款计划</div>
       </div>
       <div class="field full">
@@ -308,12 +352,12 @@ footer.site{text-align:center;color:#93a1ac;font-size:12.5px;padding:20px}
           <label>年生活支出</label>
           <div class="control"><input type="number" id="inLiving" class="has-suffix" value="" placeholder="如 100000" min="0" step="10000"><span class="suffix">元</span></div>
         </div>
+        <div class="field narrow">
+          <label>每月公积金缴存额</label>
+          <div class="control"><input type="number" id="inFund" class="has-suffix" value="" placeholder="如 5000" min="0" step="100"><span class="suffix">元</span></div>
+        </div>
         <div class="field full">
-          <label style="display:flex;align-items:center;gap:9px;cursor:pointer;font-weight:600;color:var(--sub)">
-            <input type="checkbox" id="inFundCovers" style="width:17px;height:17px;accent-color:var(--green)">
-            每月月供由公积金（缴存/账户余额）全额覆盖，不动用这份现金收入
-          </label>
-          <div class="note">若月供需要从这份收入里现金支付，请取消勾选</div>
+          <div class="note">公积金每月默认先用于偿还月供：有富余自动计入存款，不足部分从到手收入中扣除；没有公积金可留空。</div>
         </div>
       </div>
     </div>

@@ -3,11 +3,15 @@
  * 支持：多笔贷款、等额本息/等额本金、固定/浮动利率(按当前利率测算)、
  *       提前还款(缩短期限月供不变 / 减少月供期限不变)、
  *       收入-存款视角的最快一次性结清时点
+ * 口径：所有金额一律精确到“元”（四舍五入取整，无小数）；
+ *       月供统一由本金/利率/期数自动计算，无需手填；
+ *       月公积金默认先用于偿还月供，不足从到手收入扣，富余计入存款。
  * ========================================================= */
 (function (global) {
   'use strict';
 
-  function round2(x) { return Math.round((x + Number.EPSILON) * 100) / 100; }
+  // 金额精确到“元”：四舍五入取整
+  function R(x) { return Math.round(x + Number.EPSILON); }
 
   // 等额本息每期还款（r=期利率, n=期数, pv=本金），返回正值
   function pmt(r, n, pv) {
@@ -26,9 +30,9 @@
    * cfg = {
    *   startYear, startMonth(0-based),
    *   loans: [{ name, balance, annualRate, method:'equal_payment'|'equal_principal',
-   *             remainingMonths, currentPayment(可选), paymentDay }],
+   *             remainingMonths, paymentDay }],
    *   prepay: { enabled, amount, months:[4,10], target: 索引 或 'highest', mode:'shorten'|'reduce' },
-   *   income: { enabled, startingSavings, annualIncome, annualLiving, fundCovers:Boolean }
+   *   income: { enabled, startingSavings, annualIncome, annualLiving, monthlyFund }
    * }
    */
   function buildSchedule(cfg) {
@@ -41,15 +45,16 @@
         name: L.name,
         method: L.method,
         mr: mr,
-        bal: round2(L.balance),
+        bal: R(L.balance),
         nRem: L.remainingMonths,           // 合同剩余期数（reduce 模式用，逐月递减）
         fixedPay: 0, fixedPrin: 0,
         payoff: null, totalInterest: 0, totalPrepay: 0
       };
       if (L.method === 'equal_payment') {
-        st.fixedPay = (L.currentPayment > 0) ? L.currentPayment : pmt(mr, L.remainingMonths, L.balance);
+        // 月供统一自动计算（精确到元），不再接受手填，避免与公式不一致
+        st.fixedPay = R(pmt(mr, L.remainingMonths, L.balance));
       } else {
-        st.fixedPrin = L.balance / L.remainingMonths;
+        st.fixedPrin = R(L.balance / L.remainingMonths);
       }
       return st;
     });
@@ -70,7 +75,7 @@
 
     var rows = [];
     var y = cfg.startYear, m = cfg.startMonth;
-    var savings = income.enabled ? (income.startingSavings || 0) : 0;
+    var savings = income.enabled ? R(income.startingSavings || 0) : 0;
     var earliest = null;
     var maxMonths = 600, guard = 0;
 
@@ -81,7 +86,7 @@
       var perLoan = states.map(function (s) {
         var begin = s.bal, interest = 0, regPay = 0, regPrin = 0, extra = 0, end = begin;
         if (begin > 0) {
-          interest = round2(begin * s.mr);
+          interest = R(begin * s.mr);
           if (s.method === 'equal_payment') {
             var pay;
             if (prepay.mode === 'reduce') {
@@ -89,8 +94,8 @@
             } else {
               pay = s.fixedPay;
             }
-            regPay = Math.min(round2(pay), round2(begin + interest));
-            regPrin = round2(regPay - interest);
+            regPay = Math.min(R(pay), R(begin + interest));
+            regPrin = R(regPay - interest);
           } else { // 等额本金
             var prin;
             if (prepay.mode === 'reduce') {
@@ -98,10 +103,10 @@
             } else {
               prin = s.fixedPrin;
             }
-            regPrin = Math.min(round2(prin), begin);
-            regPay = round2(regPrin + interest);
+            regPrin = Math.min(R(prin), begin);
+            regPay = R(regPrin + interest);
           }
-          end = round2(begin - regPrin);
+          end = R(begin - regPrin);
         }
         return { begin: begin, interest: interest, regPay: regPay, regPrin: regPrin, extra: extra, end: end };
       });
@@ -111,18 +116,18 @@
       // “按利率自动分配”：按利率从高到低跨贷款溢出。
       var prepayTotal = 0;
       if (isPrepayMonth) {
-        var pool = round2(prepay.amount);
+        var pool = R(prepay.amount);
         var cascade = prepay.target === 'highest';
         var lim = cascade ? order.length : 1;
         for (var oi = 0; oi < lim && pool > 0; oi++) {
           var li = order[oi];
-          var avail = round2(perLoan[li].end); // 正常月供后剩余本金
-          var take = round2(Math.min(pool, avail));
+          var avail = R(perLoan[li].end); // 正常月供后剩余本金
+          var take = R(Math.min(pool, avail));
           if (take > 0) {
             perLoan[li].extra = take;
-            perLoan[li].end = round2(perLoan[li].end - take);
-            pool = round2(pool - take);
-            prepayTotal = round2(prepayTotal + take);
+            perLoan[li].end = R(perLoan[li].end - take);
+            pool = R(pool - take);
+            prepayTotal = R(prepayTotal + take);
           }
         }
       }
@@ -130,11 +135,11 @@
       // 汇总行
       var beginTotal = 0, interestTotal = 0, regPayTotal = 0, regPrinTotal = 0, endTotal = 0;
       perLoan.forEach(function (p) {
-        beginTotal = round2(beginTotal + p.begin);
-        interestTotal = round2(interestTotal + p.interest);
-        regPayTotal = round2(regPayTotal + p.regPay);
-        regPrinTotal = round2(regPrinTotal + p.regPrin);
-        endTotal = round2(endTotal + p.end);
+        beginTotal = R(beginTotal + p.begin);
+        interestTotal = R(interestTotal + p.interest);
+        regPayTotal = R(regPayTotal + p.regPay);
+        regPrinTotal = R(regPrinTotal + p.regPrin);
+        endTotal = R(endTotal + p.end);
       });
 
       // 存款 / 最快结清（在支付提前还款之前判断：全额结清即替代提前还款）
@@ -142,14 +147,21 @@
       if (income.enabled) {
         var monthIncome = income.annualIncome / 12;
         var monthLiving = income.annualLiving / 12;
-        var forced = monthLiving + (income.fundCovers ? 0 : regPayTotal);
-        var liquid = round2(savings + monthIncome - forced); // 当月可动用现金（未付提前还款）
-        var needed = round2(beginTotal + interestTotal);    // 还款日一次性结清≈本金+当月利息
+        var monthlyFund = income.monthlyFund || 0;
+        // 公积金默认先用于偿还月供：
+        //   netFund>0 公积金有富余 → 计入存款；netFund<0 月供有缺口 → 从到手收入扣
+        var netFund = monthlyFund - regPayTotal;
+        var fundToPay = R(Math.min(monthlyFund, regPayTotal)); // 公积金实际用于月供
+        var fundSurplus = R(Math.max(0, netFund));             // 公积金富余（并入存款）
+        var payGap = R(Math.max(0, -netFund));                 // 月供现金缺口（从收入扣）
+        var liquid = R(savings + monthIncome - monthLiving + netFund); // 当月可动用现金（未付提前还款）
+        var needed = R(beginTotal + interestTotal);            // 还款日一次性结清≈本金+当月利息
         if (liquid >= needed && !earliest && beginTotal > 0) {
           earliest = { y: y, m: m, liquid: liquid, needed: needed };
         }
-        savings = round2(liquid - prepayTotal);
-        settleInfo = { liquid: liquid, needed: needed, savingsAfter: savings };
+        savings = R(liquid - prepayTotal);
+        settleInfo = { liquid: liquid, needed: needed, savingsAfter: savings,
+          fundToPay: fundToPay, fundSurplus: fundSurplus, payGap: payGap };
       }
 
       rows.push({
@@ -158,7 +170,7 @@
         beginTotal: beginTotal, interestTotal: interestTotal,
         regPayTotal: regPayTotal, regPrinTotal: regPrinTotal,
         prepayTotal: prepayTotal, endTotal: endTotal,
-        cashOut: round2(regPayTotal + prepayTotal),
+        cashOut: R(regPayTotal + prepayTotal),
         settle: settleInfo
       });
 
@@ -166,8 +178,8 @@
       states.forEach(function (s, i) {
         var p = perLoan[i];
         s.bal = p.end;
-        s.totalInterest = round2(s.totalInterest + p.interest);
-        s.totalPrepay = round2(s.totalPrepay + p.extra);
+        s.totalInterest = R(s.totalInterest + p.interest);
+        s.totalPrepay = R(s.totalPrepay + p.extra);
         if (s.nRem > 0) s.nRem -= 1;
         if (p.end <= 0 && s.payoff === null && (p.regPay > 0 || p.extra > 0)) {
           s.payoff = { y: y, m: m };
@@ -179,7 +191,7 @@
 
     // 累计利息列
     var cum = 0;
-    rows.forEach(function (r) { cum = round2(cum + r.interestTotal); r.cumInterest = cum; });
+    rows.forEach(function (r) { cum = R(cum + r.interestTotal); r.cumInterest = cum; });
 
     // 年度汇总
     var annualMap = {};
@@ -188,17 +200,17 @@
       var a = annualMap[k] || (annualMap[k] = {
         year: k, interest: 0, prepay: 0, principal: 0, regPay: 0, endBalance: 0, cashOut: 0
       });
-      a.interest = round2(a.interest + r.interestTotal);
-      a.prepay = round2(a.prepay + r.prepayTotal);
-      a.principal = round2(a.principal + r.regPrinTotal + r.prepayTotal);
-      a.regPay = round2(a.regPay + r.regPayTotal);
+      a.interest = R(a.interest + r.interestTotal);
+      a.prepay = R(a.prepay + r.prepayTotal);
+      a.principal = R(a.principal + r.regPrinTotal + r.prepayTotal);
+      a.regPay = R(a.regPay + r.regPayTotal);
       a.endBalance = r.endTotal;
-      a.cashOut = round2(a.cashOut + r.cashOut);
+      a.cashOut = R(a.cashOut + r.cashOut);
     });
     var annual = Object.keys(annualMap).map(function (k) { return annualMap[k]; })
       .sort(function (a, b) { return a.year - b.year; });
 
-    var loanSummary = states.map(function (s, i) {
+    var loanSummary = states.map(function (s) {
       return {
         name: s.name,
         payoff: s.payoff ? fmtYM(s.payoff.y, s.payoff.m) : '—',
@@ -211,12 +223,12 @@
       rows: rows,
       annual: annual,
       loanSummary: loanSummary,
-      totalInterest: round2(states.reduce(function (a, s) { return a + s.totalInterest; }, 0)),
-      totalPrepay: round2(states.reduce(function (a, s) { return a + s.totalPrepay; }, 0)),
+      totalInterest: R(states.reduce(function (a, s) { return a + s.totalInterest; }, 0)),
+      totalPrepay: R(states.reduce(function (a, s) { return a + s.totalPrepay; }, 0)),
       earliest: earliest ? { label: fmtYM(earliest.y, earliest.m), y: earliest.y, m: earliest.m,
         liquid: earliest.liquid, needed: earliest.needed } : null
     };
   }
 
-  global.LoanEngine = { buildSchedule: buildSchedule, pmt: pmt, round2: round2 };
+  global.LoanEngine = { buildSchedule: buildSchedule, pmt: pmt, round0: R };
 })(window);
