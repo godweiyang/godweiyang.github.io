@@ -22,22 +22,25 @@
     toastTimer = setTimeout(function () { t.className = 'toast'; }, 2600);
   }
 
-  /* ---------- 贷款卡片 ---------- */
-  var DEFAULTS = [
-    { name: '商业贷款', balance: 2026233.84, rate: 3.2, method: 'equal_payment', months: 243, payment: 11340.54, day: 20 },
-    { name: '公积金贷款', balance: 232827.88, rate: 2.6, method: 'equal_payment', months: 109, payment: 2400.49, day: 20 }
-  ];
+  /* ---------- 贷款数据（金额一律留空，仅保留利率/期数/还款日等非金额默认） ---------- */
+  var LOAN_DATA = {
+    commercial: { name: '商业贷款', rate: 3.2, balance: '', method: 'equal_payment', months: 360, payment: '', day: 20 },
+    fund:       { name: '公积金贷款', rate: 2.6, balance: '', method: 'equal_payment', months: 360, payment: '', day: 20 }
+  };
+  var loanType = 'commercial'; // commercial | fund | combo
 
-  function loanCardHtml(d, i) {
+  function activeLoans() {
+    if (loanType === 'combo') return [LOAN_DATA.commercial, LOAN_DATA.fund];
+    if (loanType === 'fund') return [LOAN_DATA.fund];
+    return [LOAN_DATA.commercial];
+  }
+
+  function loanCardHtml(d) {
     return '' +
-    '<div class="loan-card" data-idx="' + i + '">' +
-      '<div class="lc-top">' +
-        '<div class="lc-badge">' + (i + 1) + '</div>' +
-        '<input class="lc-name" value="' + d.name + '" maxlength="20">' +
-        '<button type="button" class="lc-del">删除</button>' +
-      '</div>' +
+    '<div class="loan-card" data-name="' + d.name + '">' +
+      '<div class="lc-top"><div class="lc-badge">' + d.name.charAt(0) + '</div><div class="lc-title">' + d.name + '</div></div>' +
       '<div class="grid">' +
-        '<div class="field"><label>当前剩余本金</label><div class="control"><input type="number" class="lc-balance" value="' + d.balance + '" min="0" step="0.01"></div></div>' +
+        '<div class="field"><label>当前剩余本金</label><div class="control"><input type="number" class="lc-balance" value="' + d.balance + '" min="0" step="0.01" placeholder="如 1000000"></div></div>' +
         '<div class="field"><label>年利率</label><div class="control"><input type="number" class="lc-rate has-suffix" value="' + d.rate + '" min="0" step="0.01"><span class="suffix">%</span></div></div>' +
         '<div class="field"><label>还款方式</label><div class="control"><select class="lc-method">' +
           '<option value="equal_payment"' + (d.method === 'equal_payment' ? ' selected' : '') + '>等额本息</option>' +
@@ -50,41 +53,48 @@
     '</div>';
   }
 
+  function syncCard(card) {
+    var key = card.getAttribute('data-name') === '公积金贷款' ? 'fund' : 'commercial';
+    var d = LOAN_DATA[key];
+    d.balance = $('.lc-balance', card).value;
+    d.rate = parseFloat($('.lc-rate', card).value) || 0;
+    d.method = $('.lc-method', card).value;
+    d.months = parseInt($('.lc-months', card).value, 10) || 360;
+    d.payment = $('.lc-payment', card).value;
+    d.day = parseInt($('.lc-day', card).value, 10) || 20;
+  }
+
   function renderLoans() {
-    var list = $('#loanList');
-    list.innerHTML = DEFAULTS.map(loanCardHtml).join('');
+    $('#loanList').innerHTML = activeLoans().map(loanCardHtml).join('');
     rebuildTargetOptions();
   }
 
   function rebuildTargetOptions() {
     var sel = $('#ppTarget');
-    var n = $all('.loan-card').length;
-    var html = '';
-    for (var i = 0; i < n; i++) {
-      var name = $('.loan-card[data-idx="' + i + '"] .lc-name').value;
-      html += '<option value="' + i + '">全部冲抵：' + name + '</option>';
-    }
-    html += '<option value="highest">按利率从高到低自动分配</option>';
+    var loans = activeLoans();
+    var html = loans.map(function (l, i) { return '<option value="' + i + '">全部冲抵：' + l.name + '</option>'; }).join('');
+    if (loans.length > 1) html += '<option value="highest">按利率从高到低自动分配</option>';
     sel.innerHTML = html;
   }
 
-  $('#addLoan').addEventListener('click', function () {
-    var n = DEFAULTS.push({ name: '贷款' + (DEFAULTS.length + 1), balance: 500000, rate: 3.5, method: 'equal_payment', months: 240, payment: '', day: 20 });
-    $('#loanList').insertAdjacentHTML('beforeend', loanCardHtml(DEFAULTS[n - 1], n - 1));
-    rebuildTargetOptions();
+  // 卡片输入实时回写（切换贷款类型时不丢已填内容）
+  $('#loanList').addEventListener('input', function (e) {
+    var card = e.target.closest('.loan-card');
+    if (card) syncCard(card);
+  });
+  $('#loanList').addEventListener('change', function (e) {
+    var card = e.target.closest('.loan-card');
+    if (card) syncCard(card);
   });
 
-  $('#loanList').addEventListener('click', function (e) {
-    var btn = e.target.closest('.lc-del');
-    if (!btn) return;
-    var card = btn.closest('.loan-card');
-    var idx = Number(card.getAttribute('data-idx'));
-    if ($all('.loan-card').length <= 1) { toast('至少保留一笔贷款', true); return; }
-    DEFAULTS.splice(idx, 1);
+  // 贷款类型切换
+  $('#loanTypeSeg').addEventListener('click', function (e) {
+    var opt = e.target.closest('.opt');
+    if (!opt) return;
+    $all('.opt', this).forEach(function (o) { o.classList.remove('active'); });
+    opt.classList.add('active');
+    loanType = opt.getAttribute('data-type');
     renderLoans();
-  });
-  $('#loanList').addEventListener('input', function (e) {
-    if (e.target.classList.contains('lc-name')) rebuildTargetOptions();
   });
 
   /* ---------- 月份多选 ---------- */
@@ -101,17 +111,17 @@
     });
   })();
 
-  /* ---------- 开关 / 方式 ---------- */
-  function bindSwitch(swId, bodyId) {
+  /* ---------- 开关 ---------- */
+  function bindSwitch(swId, bodyId, onByDefault) {
     var sw = $('#' + swId), body = $('#' + bodyId);
+    if (onByDefault) { sw.classList.add('on'); body.classList.remove('hidden'); }
     sw.addEventListener('click', function () {
       sw.classList.toggle('on');
       body.classList.toggle('hidden', !sw.classList.contains('on'));
     });
   }
-  bindSwitch('prepaySwitch', 'prepayBody');
-  bindSwitch('incomeSwitch', 'incomeBody');
-  $('#prepaySwitch').classList.add('on'); $('#prepayBody').classList.remove('hidden'); // 默认展示提前还款区
+  bindSwitch('prepaySwitch', 'prepayBody', true);
+  bindSwitch('incomeSwitch', 'incomeBody', false);
 
   $('#ppModeSeg').addEventListener('click', function (e) {
     var opt = e.target.closest('.opt');
@@ -127,7 +137,7 @@
     var loans = $all('.loan-card').map(function (card) {
       function v(cls) { var el = $('.' + cls, card); return el ? el.value : ''; }
       return {
-        name: v('lc-name'),
+        name: card.getAttribute('data-name'),
         balance: parseFloat(v('lc-balance')) || 0,
         annualRate: (parseFloat(v('lc-rate')) || 0) / 100,
         method: v('lc-method'),
@@ -161,7 +171,7 @@
   }
 
   function validate(cfg) {
-    if (!cfg.loans.some(function (l) { return l.balance > 0; })) return '请至少填写一笔贷款的剩余本金';
+    if (!cfg.loans.some(function (l) { return l.balance > 0; })) return '请填写剩余本金';
     for (var i = 0; i < cfg.loans.length; i++) {
       var l = cfg.loans[i];
       if (!l.remainingMonths) return '请填写「' + l.name + '」的剩余期数';
@@ -171,7 +181,10 @@
       if (cfg.prepay.amount <= 0) return '请填写每次提前还款金额';
       if (!cfg.prepay.months.length) return '请至少选择一个提前还款月份';
     }
-    if (cfg.income.enabled && cfg.income.annualIncome <= 0) return '请填写税后年收入';
+    if (cfg.income.enabled) {
+      if (cfg.income.annualIncome <= 0) return '请填写税后年收入';
+      if (cfg.income.annualLiving < 0) return '年生活支出不能为负';
+    }
     return null;
   }
 
@@ -180,13 +193,13 @@
 
   function latestPayoff(res) {
     var labels = res.loanSummary.map(function (l) { return l.payoff; }).filter(function (p) { return p !== '—'; });
-    return labels.sort().slice(-1)[0] || '—';
+    labels.sort();
+    return labels[labels.length - 1] || '—';
   }
 
   function renderResult(cfg, res) {
     $('#resultArea').classList.remove('hidden');
 
-    // 顶部卡片
     var cards = [
       { cls: 'accent', lab: '全部贷款结清时间', val: latestPayoff(res), small: true },
       { cls: '', lab: '未来应付利息合计', val: fmt(res.totalInterest) },
@@ -204,7 +217,6 @@
         (c.sub2 ? '<div class="sub2">' + c.sub2 + '</div>' : '') + '</div>';
     }).join('');
 
-    // 每笔贷款结果
     $('#loanResults').innerHTML = res.loanSummary.map(function (l, i) {
       var loan = cfg.loans[i];
       return '<div class="lres"><h3><span class="dot"></span>' + loan.name + '</h3>' +
@@ -213,19 +225,16 @@
         '<div class="kv"><span>提前偿还本金</span><b>' + fmt(l.totalPrepay) + '</b></div></div>';
     }).join('');
 
-    // 表头按贷款名
-    var ths = $all('#schedTable thead th');
-    var n1 = cfg.loans[0] ? cfg.loans[0].name : '贷款1';
-    var n2 = cfg.loans[1] ? cfg.loans[1].name : '';
-    function setTh(i, t) { ths[i].textContent = t; }
-    setTh(1, n1 + '月供'); setTh(2, n1 + '利息'); setTh(3, n1 + '还本'); setTh(5, n1 + '剩余本金');
-    if (cfg.loans[1]) {
-      setTh(6, n2 + '月供'); setTh(7, n2 + '利息'); setTh(8, n2 + '还本'); setTh(9, n2 + '剩余本金');
-    } else { [6, 7, 8, 9].forEach(function (i) { setTh(i, ''); }); }
+    // 动态表头
+    var cols = ['月份'];
+    cfg.loans.forEach(function (l) { cols.push(l.name + '月供', l.name + '利息', l.name + '还本', l.name + '剩余本金'); });
+    cols.push('提前还本', '当月还款合计', '剩余本金合计', '累计利息');
+    $('#schedHead').innerHTML = '<tr>' + cols.map(function (c, i) {
+      return '<th class="' + (i === 0 ? 'lft' : '') + '">' + c + '</th>';
+    }).join('') + '</tr>';
 
     drawTable(res, 'all');
 
-    // 说明
     var notes = [];
     notes.push('<b>怎么看一次性结清要准备多少钱：</b>「剩余本金合计」列是当月还款后还欠的本金；提前结清只按实际占用天数计息，后续未产生的利息无需支付，结清额 ≈ 当月期初本金 + 当月利息。');
     if (cfg.prepay.enabled) {
@@ -242,23 +251,22 @@
     return fmt(v);
   }
 
+  function rowHtml(r) {
+    var cls = '';
+    if (r.endTotal === 0) cls = 'payoff-row';
+    else if (r.prepayTotal > 0) cls = 'prepay-row';
+    var tds = '<td class="lft">' + r.label + '</td>';
+    r.perLoan.forEach(function (p) {
+      tds += '<td>' + cell(p.regPay) + '</td><td>' + cell(p.interest) + '</td><td>' + cell(p.regPrin) + '</td><td>' + cell(p.end, true) + '</td>';
+    });
+    tds += '<td>' + (r.prepayTotal ? '<span class="pos">' + fmt(r.prepayTotal) + '</span>' : '<span class="z">-</span>') + '</td>';
+    tds += '<td>' + fmt(r.cashOut) + '</td><td>' + fmt(r.endTotal) + '</td><td>' + fmt(r.cumInterest) + '</td>';
+    return '<tr class="' + cls + '" data-prepay="' + (r.prepayTotal > 0 ? 1 : 0) + '" data-month="' + r.m + '">' + tds + '</tr>';
+  }
+
   function drawTable(res, mode) {
-    var body = $('#schedBody');
-    body.innerHTML = res.rows.map(function (r) {
-      var p1 = r.perLoan[0] || { regPay: 0, interest: 0, regPrin: 0, end: 0 };
-      var p2 = r.perLoan[1] || { regPay: 0, interest: 0, regPrin: 0, end: 0 };
-      var cls = '';
-      if (r.endTotal === 0) cls = 'payoff-row';
-      else if (r.prepayTotal > 0) cls = 'prepay-row';
-      return { html: '' +
-        '<tr class="' + cls + '" data-prepay="' + (r.prepayTotal > 0 ? 1 : 0) + '" data-month="' + r.m + '">' +
-        '<td class="lft">' + r.label + '</td>' +
-        '<td>' + cell(p1.regPay) + '</td><td>' + cell(p1.interest) + '</td><td>' + cell(p1.regPrin) + '</td>' +
-        '<td>' + (r.prepayTotal ? '<span class="pos">' + fmt(r.prepayTotal) + '</span>' : '<span class="z">-</span>') + '</td>' +
-        '<td>' + cell(p1.end, true) + '</td>' +
-        '<td>' + cell(p2.regPay) + '</td><td>' + cell(p2.interest) + '</td><td>' + cell(p2.regPrin) + '</td><td>' + cell(p2.end, true) + '</td>' +
-        '<td>' + fmt(r.cashOut) + '</td><td>' + fmt(r.endTotal) + '</td><td>' + fmt(r.cumInterest) + '</td>' +
-        '</tr>', prepay: r.prepayTotal > 0, month: r.m };
+    $('#schedBody').innerHTML = res.rows.map(function (r) {
+      return { html: rowHtml(r), prepay: r.prepayTotal > 0, month: r.m };
     }).filter(function (d) {
       if (mode === 'prepay') return d.prepay;
       if (mode === 'annual') return d.month === 11;
@@ -289,7 +297,7 @@
     $('#resultArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 
-  /* ---------- 导出 Excel ---------- */
+  /* ---------- 导出 Excel（列随贷款笔数动态生成） ---------- */
   $('#btnExcel').addEventListener('click', function () {
     if (!lastResult) return;
     var cfg = lastCfg, res = lastResult;
@@ -306,6 +314,7 @@
       overview.push(['  当前剩余本金', l.balance]);
       overview.push(['  年利率', (l.annualRate * 100).toFixed(2) + '%']);
       overview.push(['  还款方式', l.method === 'equal_payment' ? '等额本息' : '等额本金']);
+      overview.push(['  剩余期数', l.remainingMonths]);
       overview.push(['  结清时间', s.payoff]);
       overview.push(['  未来利息', s.totalInterest]);
       overview.push(['  提前偿还本金', s.totalPrepay]);
@@ -315,13 +324,15 @@
     overview.push(['提前还款本金合计', res.totalPrepay]);
     if (res.earliest) overview.push(['最快可一次性结清', res.earliest.label, '当月需约 ' + Math.round(res.earliest.needed) + ' 元']);
 
-    var detailHead = ['月份', '贷款1月供', '贷款1利息', '贷款1还本', '提前还本', '贷款1剩余本金',
-      '贷款2月供', '贷款2利息', '贷款2还本', '贷款2剩余本金', '当月还款合计', '剩余本金合计', '累计利息'];
-    var detail = [detailHead];
+    var head = ['月份'];
+    cfg.loans.forEach(function (l) { head.push(l.name + '月供', l.name + '利息', l.name + '还本', l.name + '剩余本金'); });
+    head.push('提前还本', '当月还款合计', '剩余本金合计', '累计利息');
+    var detail = [head];
     res.rows.forEach(function (r) {
-      var p1 = r.perLoan[0] || {}, p2 = r.perLoan[1] || {};
-      detail.push([r.label, p1.regPay || 0, p1.interest || 0, p1.regPrin || 0, r.prepayTotal || 0, p1.end || 0,
-        p2.regPay || 0, p2.interest || 0, p2.regPrin || 0, p2.end || 0, r.cashOut, r.endTotal, r.cumInterest]);
+      var row = [r.label];
+      r.perLoan.forEach(function (p) { row.push(p.regPay || 0, p.interest || 0, p.regPrin || 0, p.end || 0); });
+      row.push(r.prepayTotal || 0, r.cashOut, r.endTotal, r.cumInterest);
+      detail.push(row);
     });
 
     var annual = [['年份', '当年利息', '提前还款', '偿还本金合计', '正常月供合计', '年末剩余本金', '当年现金流出']];
@@ -334,7 +345,7 @@
     var s2 = XLSX.utils.aoa_to_sheet(detail);
     var s3 = XLSX.utils.aoa_to_sheet(annual);
     s1['!cols'] = [{ wch: 22 }, { wch: 20 }, { wch: 26 }];
-    s2['!cols'] = detailHead.map(function () { return { wch: 14 }; });
+    s2['!cols'] = head.map(function () { return { wch: 14 }; });
     s3['!cols'] = annual[0].map(function () { return { wch: 15 }; });
     XLSX.utils.book_append_sheet(wb, s1, '总览');
     XLSX.utils.book_append_sheet(wb, s2, '逐月明细');

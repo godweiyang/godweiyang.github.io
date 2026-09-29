@@ -63,6 +63,7 @@ input,select{font-family:inherit;font-size:14px;color:var(--ink)}
   display:flex;align-items:center;justify-content:center;font-size:13px;flex:none}
 .loan-card input.lc-name{font-weight:700;font-size:15px;border:none;background:transparent;padding:0;width:auto;flex:1;min-width:120px}
 .loan-card input.lc-name:focus{outline:none}
+.loan-card .lc-title{font-weight:700;font-size:15px;color:var(--navy)}
 .loan-card .lc-del{background:var(--red-soft);color:var(--red);font-size:12.5px;font-weight:700;padding:7px 12px;border-radius:9px}
 .loan-card .grid{gap:12px 14px}
 .loan-card .field{grid-column:span 4}
@@ -90,6 +91,8 @@ input,select{font-family:inherit;font-size:14px;color:var(--ink)}
 /* 单选(方式) */
 .seg{display:flex;gap:10px;flex-wrap:wrap}
 .seg .opt{flex:1;min-width:200px;border:1px solid var(--line);border-radius:12px;padding:13px 15px;cursor:pointer;transition:all .15s;background:#fbfdfe}
+.type-seg .opt{min-width:0;padding:15px 12px;text-align:center}
+.type-seg .opt .t{margin-bottom:2px}
 .seg .opt.active{border-color:var(--blue);background:var(--blue-soft)}
 .seg .opt .t{font-weight:700;font-size:14px;display:block;margin-bottom:3px}
 .seg .opt .d{font-size:12px;color:var(--sub)}
@@ -220,19 +223,29 @@ footer.site{text-align:center;color:#93a1ac;font-size:12.5px;padding:20px}
   <section class="panel" style="margin-top:52px">
     <div class="panel-head">
       <div class="panel-num">1</div>
-      <h2>贷款信息<span class="hint">可同时填写多笔，如商业贷款 + 公积金贷款</span></h2>
+      <h2>贷款信息<span class="hint">选择贷款类型，填写对应信息</span></h2>
     </div>
 
-    <div class="grid" style="margin-bottom:18px">
+    <div class="grid" style="margin-bottom:6px">
       <div class="field narrow">
         <label>测算起始月份</label>
         <div class="control"><input type="month" id="startMonth" value="2026-10"></div>
         <div class="note">从该月开始生成还款计划</div>
       </div>
+      <div class="field full">
+        <label>贷款类型</label>
+        <div class="seg type-seg" id="loanTypeSeg">
+          <label class="opt active" data-type="commercial"><input type="radio" name="loantype" value="commercial" checked>
+            <span class="t">商业贷款</span><span class="d">银行商业住房贷款</span></label>
+          <label class="opt" data-type="fund"><input type="radio" name="loantype" value="fund">
+            <span class="t">公积金贷款</span><span class="d">住房公积金贷款</span></label>
+          <label class="opt" data-type="combo"><input type="radio" name="loantype" value="combo">
+            <span class="t">组合贷款</span><span class="d">商业贷款 + 公积金贷款</span></label>
+        </div>
+      </div>
     </div>
 
     <div id="loanList"></div>
-    <button type="button" class="add-loan" id="addLoan">＋ 再添加一笔贷款</button>
   </section>
 
   <!-- ===== 分区2：提前还款 ===== -->
@@ -248,7 +261,7 @@ footer.site{text-align:center;color:#93a1ac;font-size:12.5px;padding:20px}
       <div class="grid">
         <div class="field narrow">
           <label>每次提前还款金额</label>
-          <div class="control"><input type="number" id="ppAmount" class="has-suffix" value="200000" min="0" step="10000"><span class="suffix">元</span></div>
+          <div class="control"><input type="number" id="ppAmount" class="has-suffix" value="" placeholder="如 200000" min="0" step="10000"><span class="suffix">元</span></div>
         </div>
         <div class="field">
           <label>冲抵哪笔贷款</label>
@@ -289,15 +302,15 @@ footer.site{text-align:center;color:#93a1ac;font-size:12.5px;padding:20px}
         </div>
         <div class="field narrow">
           <label>税后年收入（不含公积金）</label>
-          <div class="control"><input type="number" id="inIncome" class="has-suffix" value="1000000" min="0" step="10000"><span class="suffix">元</span></div>
+          <div class="control"><input type="number" id="inIncome" class="has-suffix" value="" placeholder="如 300000" min="0" step="10000"><span class="suffix">元</span></div>
         </div>
         <div class="field narrow">
           <label>年生活支出</label>
-          <div class="control"><input type="number" id="inLiving" class="has-suffix" value="150000" min="0" step="10000"><span class="suffix">元</span></div>
+          <div class="control"><input type="number" id="inLiving" class="has-suffix" value="" placeholder="如 100000" min="0" step="10000"><span class="suffix">元</span></div>
         </div>
         <div class="field full">
           <label style="display:flex;align-items:center;gap:9px;cursor:pointer;font-weight:600;color:var(--sub)">
-            <input type="checkbox" id="inFundCovers" checked style="width:17px;height:17px;accent-color:var(--green)">
+            <input type="checkbox" id="inFundCovers" style="width:17px;height:17px;accent-color:var(--green)">
             每月月供由公积金（缴存/账户余额）全额覆盖，不动用这份现金收入
           </label>
           <div class="note">若月供需要从这份收入里现金支付，请取消勾选</div>
@@ -338,12 +351,7 @@ footer.site{text-align:center;color:#93a1ac;font-size:12.5px;padding:20px}
       </div>
       <div class="tbl-scroll">
         <table id="schedTable">
-          <thead><tr>
-            <th class="lft">月份</th>
-            <th>商贷月供</th><th>商贷利息</th><th>商贷还本</th><th>提前还本</th><th>商贷剩余本金</th>
-            <th>公积金月供</th><th>公积金利息</th><th>公积金还本</th><th>公积金剩余本金</th>
-            <th>当月还款合计</th><th>剩余本金合计</th><th>累计利息</th>
-          </tr></thead>
+          <thead id="schedHead"></thead>
           <tbody id="schedBody"></tbody>
         </table>
       </div>
