@@ -616,7 +616,7 @@
     }
     btn.textContent = '生成中…';
     var prevT = node.style.transform; node.style.transform = '';
-    htmlToImage.toPng(node, { pixelRatio: 2, cacheBust: false, backgroundColor: '#ffffff' })
+    htmlToImage.toPng(node, { pixelRatio: 2, cacheBust: false })
       .then(function (dataUrl) {
         var a = document.createElement('a');
         a.download = '房贷还款概览_' + new Date().toISOString().slice(0,10) + '.png';
@@ -644,7 +644,7 @@
     btn.textContent = '生成中…';
     var prevTc = node.style.transform; node.style.transform = '';
     try {
-      var dataUrl = await htmlToImage.toPng(node, { pixelRatio: 2, cacheBust: false, backgroundColor: '#ffffff' });
+      var dataUrl = await htmlToImage.toPng(node, { pixelRatio: 2, cacheBust: false });
       var blob = await (await fetch(dataUrl)).blob();
       var ok = false;
       try {
