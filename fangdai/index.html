@@ -151,6 +151,15 @@ input,select{font-family:inherit;font-size:14px;color:var(--ink)}
 .rcard.green{background:var(--green-soft);border-color:#bfe6da}
 .rcard.green .val{color:var(--green)}
 
+/* 大号倒计时（主页 accent 卡）：渐变发光数字 */
+.rcard.accent .cd-wrap{display:flex;align-items:baseline;flex-wrap:wrap;margin-top:3px}
+.rcard.accent .cd-n{font-size:32px;font-weight:900;line-height:1;letter-spacing:.5px;
+  background:linear-gradient(180deg,#fff,#bfe0f5);-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent}
+.rcard.accent .cd-u{font-size:13px;font-weight:800;color:#cfe2f0;margin:0 6px 0 2px}
+.rcard.accent .cd-now{font-size:24px;font-weight:900;color:#fff}
+.kv-cd{color:var(--green)!important}
+
 .loan-results{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:20px}
 .lres{border:1px solid var(--line);border-radius:14px;padding:16px;background:#fff}
 .lres h3{font-size:14.5px;font-weight:800;margin-bottom:11px;display:flex;align-items:center;gap:8px}
@@ -189,6 +198,22 @@ td .z{color:#b6c2cb}
 .poster .p-hero h3{font-size:23px;font-weight:800;margin:6px 0 2px}
 .poster .p-hero .date{font-size:12.5px;color:#bcd4e6}
 .poster .p-big{display:flex;gap:10px;padding:20px 26px 6px}
+/* 全宽倒计时横幅 */
+.poster .p-cd{margin:18px 26px 4px;border-radius:15px;padding:20px 22px 17px;text-align:center;color:#fff;
+  position:relative;overflow:hidden;background:linear-gradient(135deg,var(--navy),var(--navy2));
+  box-shadow:0 18px 32px -18px rgba(15,59,93,.65)}
+.poster .p-cd::before{content:"";position:absolute;right:-46px;top:-56px;width:170px;height:170px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.18),transparent 70%);pointer-events:none}
+.poster .p-cd::after{content:"";position:absolute;left:-40px;bottom:-60px;width:150px;height:150px;border-radius:50%;
+  background:radial-gradient(circle,rgba(94,174,220,.22),transparent 70%);pointer-events:none}
+.poster .pcd-lab{font-size:11.5px;letter-spacing:2.5px;color:#bcd4e6;position:relative}
+.poster .pcd-main{margin:7px 0 5px;display:flex;justify-content:center;align-items:baseline;position:relative}
+.poster .pcd-main .cd-n{font-size:44px;font-weight:900;line-height:1;letter-spacing:.5px;
+  background:linear-gradient(180deg,#fff,#b9dff3);-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;text-shadow:0 4px 18px rgba(120,190,235,.35)}
+.poster .pcd-main .cd-u{font-size:16px;font-weight:800;color:#cfe2f0;margin:0 8px 0 3px}
+.poster .pcd-main .cd-now{font-size:34px;font-weight:900;color:#fff}
+.poster .pcd-date{font-size:12px;color:#a9cbe0;position:relative}
 .poster .p-big .pb{flex:1;background:var(--blue-soft);border-radius:13px;padding:14px;text-align:center}
 .poster .p-big .pb .l{font-size:11.5px;color:var(--sub)}
 .poster .p-big .pb .v{font-size:18px;font-weight:800;color:var(--navy);margin-top:4px}

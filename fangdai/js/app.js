@@ -294,11 +294,41 @@
     return labels[labels.length - 1] || '—';
   }
 
+  /* ---------- “还剩几年几个月”倒计时 ---------- */
+  function parseYM(s) {
+    var mt = /(\d+)年(\d+)月/.exec(s || '');
+    return mt ? { y: Number(mt[1]), m: Number(mt[2]) - 1 } : null;
+  }
+  function remainParts(cfg, ym) {
+    var diff = (ym.y - cfg.startYear) * 12 + (ym.m - cfg.startMonth);
+    if (diff < 0) diff = 0;
+    return { y: Math.floor(diff / 12), m: diff % 12, total: diff };
+  }
+  // 大号炫酷倒计时：超大数字 + 小单位
+  function countdownHtml(p) {
+    if (p.total <= 0) return '<span class="cd-now">当月结清</span>';
+    var h = '';
+    if (p.y > 0) h += '<span class="cd-n">' + p.y + '</span><span class="cd-u">年</span>';
+    if (p.m > 0) h += '<span class="cd-n">' + p.m + '</span><span class="cd-u">个月</span>';
+    return h;
+  }
+  // 紧凑文本（用于每笔贷款小字处）
+  function shortRemain(p) {
+    if (p.total <= 0) return '当月';
+    var s = '';
+    if (p.y > 0) s += p.y + '年';
+    if (p.m > 0) s += p.m + '个月';
+    return s;
+  }
+
   function renderResult(cfg, res) {
     $('#resultArea').classList.remove('hidden');
 
+    var overallYM = parseYM(latestPayoff(res));
+    var overallParts = overallYM ? remainParts(cfg, overallYM) : null;
     var cards = [
-      { cls: 'accent', lab: '全部贷款结清时间', val: latestPayoff(res), small: true },
+      { cls: 'accent', lab: '还需多久全部结清', countdown: overallParts ? countdownHtml(overallParts) : '—',
+        sub2: latestPayoff(res) + ' 全部结清' },
       { cls: '', lab: '未来应付利息合计', val: fmt(res.totalInterest) },
       { cls: '', lab: '提前还款本金合计', val: fmt(res.totalPrepay) }
     ];
@@ -309,15 +339,19 @@
       cards.push({ cls: '', lab: '当前剩余本金合计', val: fmt(cfg.loans.reduce(function (a, l) { return a + l.balance; }, 0)) });
     }
     $('#resultCards').innerHTML = cards.map(function (c) {
+      var main = c.countdown !== undefined
+        ? '<div class="cd-wrap">' + c.countdown + '</div>'
+        : '<div class="val' + (c.small ? ' small' : '') + '">' + c.val + '</div>';
       return '<div class="rcard ' + c.cls + '"><div class="lab">' + c.lab + '</div>' +
-        '<div class="val' + (c.small ? ' small' : '') + '">' + c.val + '</div>' +
-        (c.sub2 ? '<div class="sub2">' + c.sub2 + '</div>' : '') + '</div>';
+        main + (c.sub2 ? '<div class="sub2">' + c.sub2 + '</div>' : '') + '</div>';
     }).join('');
 
     $('#loanResults').innerHTML = res.loanSummary.map(function (l, i) {
       var loan = cfg.loans[i];
+      var pym = parseYM(l.payoff), pp = pym ? remainParts(cfg, pym) : null;
       return '<div class="lres"><h3><span class="dot"></span>' + loan.name + '</h3>' +
-        '<div class="kv"><span>结清时间</span><b>' + l.payoff + '</b></div>' +
+        '<div class="kv"><span>还需多久</span><b class="kv-cd">' + (pp ? shortRemain(pp) : '—') + '</b></div>' +
+        '<div class="kv"><span>结清于</span><b>' + l.payoff + '</b></div>' +
         '<div class="kv"><span>未来利息</span><b>' + fmt(l.totalInterest) + '</b></div>' +
         '<div class="kv"><span>提前偿还本金</span><b>' + fmt(l.totalPrepay) + '</b></div></div>';
     }).join('');
@@ -471,10 +505,14 @@
   function buildPoster(cfg, res) {
     var now = new Date();
     var totalPrincipal = cfg.loans.reduce(function (a, l) { return a + l.balance; }, 0);
+    var pYM = parseYM(latestPayoff(res));
+    var pParts = pYM ? remainParts(cfg, pYM) : null;
     var loansHtml = res.loanSummary.map(function (s, i) {
       var l = cfg.loans[i];
-      return '<div class="p-loan"><div class="lt"><span>' + l.name + '</span><span class="off">' + s.payoff + ' 结清</span></div>' +
-        '<div class="lk"><span>年利率 ' + (l.annualRate * 100).toFixed(2) + '% · ' + (l.method === 'equal_payment' ? '等额本息' : '等额本金') + '</span></div>' +
+      var lpym = parseYM(s.payoff), lpp = lpym ? remainParts(cfg, lpym) : null;
+      return '<div class="p-loan"><div class="lt"><span>' + l.name + '</span><span class="off">还剩 ' + (lpp ? shortRemain(lpp) : '—') + '</span></div>' +
+        '<div class="lk"><span>年利率 ' + (l.annualRate * 100).toFixed(1) + '% · ' + (l.method === 'equal_payment' ? '等额本息' : '等额本金') + '</span></div>' +
+        '<div class="lk"><span>结清于</span><b>' + s.payoff + '</b></div>' +
         '<div class="lk"><span>未来利息</span><b>' + fmt(s.totalInterest) + '</b></div>' +
         '<div class="lk"><span>提前偿还本金</span><b>' + fmt(s.totalPrepay) + '</b></div></div>';
     }).join('');
@@ -485,8 +523,12 @@
         '<h3>房贷还款核心概览</h3>' +
         '<div class="date">测算起始 ' + cfg.startYear + '-' + String(cfg.startMonth + 1).padStart(2, '0') + ' · 生成于 ' + now.toLocaleDateString('zh-CN') + '</div>' +
       '</div>' +
+      '<div class="p-cd">' +
+        '<div class="pcd-lab">还需多久全部结清</div>' +
+        '<div class="pcd-main">' + (pParts ? countdownHtml(pParts) : '—') + '</div>' +
+        '<div class="pcd-date">将于 ' + latestPayoff(res) + ' 全部结清</div>' +
+      '</div>' +
       '<div class="p-big">' +
-        '<div class="pb"><div class="l">全部贷款结清</div><div class="v">' + latestPayoff(res) + '</div></div>' +
         '<div class="pb"><div class="l">未来利息合计</div><div class="v">' + fmt(res.totalInterest) + '</div></div>' +
         '<div class="pb"><div class="l">提前还款合计</div><div class="v">' + fmt(res.totalPrepay) + '</div></div>' +
       '</div>' +
