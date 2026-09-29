@@ -535,7 +535,109 @@
     }
   });
 
+  /* ---------- 本地缓存：刷新 / 重开后保留已填信息 ---------- */
+  var STORE_KEY = 'fangdai_calc_state_v1';
+
+  function applySwitch(swId, bodyId, on) {
+    $('#' + swId).classList.toggle('on', on);
+    $('#' + bodyId).classList.toggle('hidden', !on);
+  }
+  function loanPart(k) {
+    var d = LOAN_DATA[k];
+    return { balance: d.balance, rate: d.rate, method: d.method, months: d.months, day: d.day };
+  }
+  function collectState() {
+    return {
+      loanType: loanType,
+      sy: picker.selY, sm: picker.selM,
+      pp: {
+        on: $('#prepaySwitch').classList.contains('on'),
+        amount: $('#ppAmount').value,
+        months: $all('#monthToggles button.active').map(function (b) { return Number(b.getAttribute('data-m')); }),
+        target: $('#ppTarget').value,
+        mode: ($all('input[name="ppmode"]').filter(function (i) { return i.checked; })[0] || {}).value
+      },
+      inc: {
+        on: $('#incomeSwitch').classList.contains('on'),
+        savings: $('#inSavings').value,
+        income: $('#inIncome').value,
+        living: $('#inLiving').value,
+        fund: $('#inFund').value
+      },
+      cards: { commercial: loanPart('commercial'), fund: loanPart('fund') },
+      hasResult: !$('#resultArea').classList.contains('hidden')
+    };
+  }
+  function saveState() {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(collectState())); } catch (e) {}
+  }
+  function restoreState(st) {
+    if (!st) return;
+    if (st.cards) {
+      ['commercial', 'fund'].forEach(function (k) {
+        var c = st.cards[k]; if (!c) return;
+        var d = LOAN_DATA[k];
+        if (c.balance !== undefined) d.balance = c.balance;
+        if (c.rate !== undefined && c.rate !== '') d.rate = Number(c.rate);
+        if (c.method) d.method = c.method;
+        if (c.months !== undefined && c.months !== '') d.months = Number(c.months);
+        if (c.day !== undefined && c.day !== '') d.day = Number(c.day);
+      });
+    }
+    if (st.loanType) loanType = st.loanType;
+    $all('#loanTypeSeg .opt').forEach(function (o) {
+      o.classList.toggle('active', o.getAttribute('data-type') === loanType);
+    });
+    renderLoans();
+
+    if (st.sy !== undefined) {
+      picker.selY = Number(st.sy); picker.selM = Number(st.sm);
+      $('#ymText').textContent = ymText();
+    }
+
+    if (st.pp) {
+      var pp = st.pp;
+      applySwitch('prepaySwitch', 'prepayBody', !!pp.on);
+      $('#ppAmount').value = pp.amount || '';
+      $all('#monthToggles button').forEach(function (b) {
+        b.classList.toggle('active', (pp.months || []).indexOf(Number(b.getAttribute('data-m'))) >= 0);
+      });
+      if (pp.target) $('#ppTarget').value = pp.target;
+      if (pp.mode) {
+        $all('input[name="ppmode"]').forEach(function (i) { i.checked = (i.value === pp.mode); });
+        $all('#ppModeSeg .opt').forEach(function (o) {
+          o.classList.toggle('active', o.querySelector('input').checked);
+        });
+      }
+    }
+
+    if (st.inc) {
+      var inc = st.inc;
+      applySwitch('incomeSwitch', 'incomeBody', !!inc.on);
+      $('#inSavings').value = inc.savings !== undefined ? inc.savings : '0';
+      $('#inIncome').value = inc.income || '';
+      $('#inLiving').value = inc.living || '';
+      $('#inFund').value = inc.fund || '';
+    }
+
+    $all('.loan-card').forEach(updateAutoPay);
+    if (st.hasResult) setTimeout(function () { $('#btnCalc').click(); }, 60);
+  }
+
   /* ---------- 初始化 ---------- */
   $('#ymText').textContent = ymText();
   renderLoans();
+  var savedState = null;
+  try { savedState = JSON.parse(localStorage.getItem(STORE_KEY) || 'null'); } catch (e) {}
+  restoreState(savedState);
+
+  // 任意输入 / 选择 / 点击后，防抖写入本地缓存
+  var saveTimer = null;
+  function scheduleSave() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveState, 250);
+  }
+  document.addEventListener('input', scheduleSave);
+  document.addEventListener('change', scheduleSave);
+  document.addEventListener('click', scheduleSave);
 })();
