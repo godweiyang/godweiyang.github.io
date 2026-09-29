@@ -22,6 +22,25 @@
     toastTimer = setTimeout(function () { t.className = 'toast'; }, 2600);
   }
 
+  /* ---------- 第三方库按需懒加载：首屏不下载，保证页面打开即可点 ---------- */
+  var LIBS = {
+    xlsx: 'vendor/xlsx.full.min.js',
+    h2i: 'vendor/html-to-image.min.js',
+    qr: 'vendor/qrcode.min.js'
+  };
+  var libPromise = {};
+  function loadLib(src) {
+    if (libPromise[src]) return libPromise[src];
+    libPromise[src] = new Promise(function (resolve, reject) {
+      var el = document.createElement('script');
+      el.src = src; el.async = true;
+      el.onload = function () { resolve(); };
+      el.onerror = function () { delete libPromise[src]; reject(new Error('load fail')); };
+      document.head.appendChild(el);
+    });
+    return libPromise[src];
+  }
+
   /* ---------- 贷款数据（金额一律留空，仅保留利率/期数/还款日等非金额默认） ---------- */
   var LOAN_DATA = {
     commercial: { name: '商业贷款', rate: 3.2, balance: '', method: 'equal_payment', months: 360, day: 20 },
@@ -380,8 +399,15 @@
   });
 
   /* ---------- 导出 Excel（列随贷款笔数动态生成） ---------- */
-  $('#btnExcel').addEventListener('click', function () {
+  $('#btnExcel').addEventListener('click', async function () {
     if (!lastResult) return;
+    var xb = this, xot = xb.innerHTML;
+    xb.disabled = true; xb.textContent = '组件加载中…';
+    try { await loadLib(LIBS.xlsx); } catch (e) {
+      toast('Excel 组件加载失败，请检查网络后重试', true);
+      xb.disabled = false; xb.innerHTML = xot; return;
+    }
+    xb.disabled = false; xb.innerHTML = xot;
     var cfg = lastCfg, res = lastResult;
 
     var overview = [
@@ -485,10 +511,18 @@
     } catch (e) {}
   }
 
-  function openPoster() {
+  async function openPoster() {
     if (!lastResult) return;
+    var pb = $('#btnPoster'), pot = pb.innerHTML;
+    pb.disabled = true; pb.textContent = '组件加载中…';
+    try { await loadLib(LIBS.qr); } catch (e) {
+      toast('海报组件加载失败，请检查网络后重试', true);
+      pb.disabled = false; pb.innerHTML = pot; return;
+    }
+    pb.disabled = false; pb.innerHTML = pot;
     buildPoster(lastCfg, lastResult);
     $('#posterModal').classList.remove('hidden');
+    loadLib(LIBS.h2i).catch(function () {}); // 顺手预加载，便于马上保存/复制
   }
   $('#btnPoster').addEventListener('click', openPoster);
   $('#posterClose').addEventListener('click', function () { $('#posterModal').classList.add('hidden'); });
@@ -496,10 +530,17 @@
     if (e.target === this) $('#posterModal').classList.add('hidden');
   });
 
-  $('#posterDownload').addEventListener('click', function () {
+  $('#posterDownload').addEventListener('click', async function () {
     var node = $('#posterNode');
     var btn = this;
-    btn.disabled = true; btn.textContent = '生成中…';
+    btn.disabled = true; btn.textContent = '组件加载中…';
+    try { await loadLib(LIBS.h2i); } catch (e) {
+      toast('海报组件加载失败，请检查网络后重试', true);
+      btn.disabled = false;
+      btn.innerHTML = '<svg class="svg-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>保存海报';
+      return;
+    }
+    btn.textContent = '生成中…';
     htmlToImage.toPng(node, { pixelRatio: 2, cacheBust: false, backgroundColor: '#ffffff' })
       .then(function (dataUrl) {
         var a = document.createElement('a');
@@ -519,7 +560,12 @@
   $('#posterCopy').addEventListener('click', async function () {
     var node = $('#posterNode');
     var btn = this, ot = btn.innerHTML;
-    btn.disabled = true; btn.textContent = '生成中…';
+    btn.disabled = true; btn.textContent = '组件加载中…';
+    try { await loadLib(LIBS.h2i); } catch (e) {
+      toast('海报组件加载失败，请检查网络后重试', true);
+      btn.disabled = false; btn.innerHTML = ot; return;
+    }
+    btn.textContent = '生成中…';
     try {
       var dataUrl = await htmlToImage.toPng(node, { pixelRatio: 2, cacheBust: false, backgroundColor: '#ffffff' });
       var blob = await (await fetch(dataUrl)).blob();
