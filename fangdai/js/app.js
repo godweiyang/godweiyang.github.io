@@ -470,8 +470,19 @@
         (res.earliest ? '<div class="pr"><span class="k">最快可一次性结清</span><span class="v" style="color:var(--green)">' + res.earliest.label + '</span></div>' : '') +
       '</div>' +
       '<div class="p-loans">' + loansHtml + '</div>' +
-      '<div class="p-foot"><div class="brand">房贷还款计算器</div>' +
-        '<div class="tip">提前结清仅按实际占用天数计息，未产生利息无需支付<br>本概览仅供参考，实际金额以银行 / 公积金中心账单为准</div></div>';
+      '<div class="p-foot">' +
+        '<div class="pf-left"><div class="brand">房贷还款计算器</div>' +
+          '<div class="tip">提前结清仅按实际占用天数计息，未产生利息无需支付<br>本概览仅供参考，实际金额以银行 / 公积金中心账单为准</div></div>' +
+        '<div class="pf-qr"><img id="pQrImg" width="78" height="78" alt="二维码"><div class="pf-qr-t">扫码再算一次</div></div>' +
+      '</div>';
+
+    // 右下角二维码：扫码直接打开房贷计算器
+    try {
+      var qr = qrcode(0, 'M');
+      qr.addData('https://godweiyang.com/fangdai/');
+      qr.make();
+      $('#pQrImg').src = qr.createDataURL(5, 2);
+    } catch (e) {}
   }
 
   function openPoster() {

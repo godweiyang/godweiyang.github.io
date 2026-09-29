@@ -203,9 +203,13 @@ td .z{color:#b6c2cb}
 .poster .p-loan .lt .off{color:var(--green);font-size:12.5px}
 .poster .p-loan .lk{display:flex;justify-content:space-between;font-size:12px;color:var(--sub);padding:3px 0}
 .poster .p-loan .lk b{color:var(--ink)}
-.poster .p-foot{padding:14px 26px 22px;text-align:center}
-.poster .p-foot .tip{font-size:12px;color:#8a98a3;line-height:1.6}
-.poster .p-foot .brand{font-size:12px;font-weight:800;color:var(--navy);margin-bottom:5px;letter-spacing:1px}
+.poster .p-foot{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 26px 22px}
+.poster .pf-left{text-align:left;min-width:0}
+.poster .pf-left .tip{font-size:11px;color:#8a98a3;line-height:1.6}
+.poster .pf-left .brand{font-size:12px;font-weight:800;color:var(--navy);margin-bottom:5px;letter-spacing:1px}
+.poster .pf-qr{flex:none;text-align:center}
+.poster .pf-qr img{width:78px;height:78px;border-radius:9px;background:#fff;padding:5px;box-sizing:border-box;display:block;box-shadow:0 2px 8px rgba(15,59,93,.12)}
+.poster .pf-qr-t{font-size:10px;color:#8a98a3;margin-top:4px}
 .modal-foot{display:flex;gap:10px;padding:14px 20px 20px}
 .modal-foot .btn{flex:1;padding:12px}
 .btn-ghost{background:#eef2f5;color:var(--sub)}
@@ -428,6 +432,7 @@ footer.site{text-align:center;color:#93a1ac;font-size:12.5px;padding:20px}
 
 <script src="vendor/xlsx.full.min.js"></script>
 <script src="vendor/html-to-image.min.js"></script>
+<script src="vendor/qrcode.min.js"></script>
 <script src="js/engine.js"></script>
 <script src="js/app.js"></script>
 </body>
