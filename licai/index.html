@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>提前还贷 vs 理财对比 · 房贷计算器</title>
+<meta name="description" content="把每一笔计划提前还款、一次性结清的钱与拿去理财做同一时点净资产对比，数据来自房贷计算器。">
+<link rel="canonical" href="https://godweiyang.com/licai/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%230f3b5d'/%3E%3Cpath d='M12 3v18M5 7h14M5 7l-2.5 6h5zM19 7l-2.5 6h5z' fill='none' stroke='%23fff' stroke-width='1.6' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+:root{
+  --navy:#0f3b5d; --navy2:#14547a; --blue:#2f7fb8; --blue-soft:#eaf3fa;
+  --ink:#1c2b36; --sub:#5c6b77; --line:#e2e8ee; --bg:#f4f7fa;
+  --green:#0e9d76; --green-soft:#e6f6f1; --amber:#c8881b; --amber-soft:#fbf2e0;
+  --orange:#e08a2e; --orange-soft:#fdf1e1;
+  --red:#d2554b; --red-soft:#fbecea; --card:#ffffff; --r:16px; --shadow:0 10px 34px -16px rgba(15,59,93,.28);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  color:var(--ink);background:var(--bg);line-height:1.55;font-size:15px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 18px 70px}
+button{font-family:inherit;cursor:pointer;border:none}
+input{font-family:inherit;font-size:14px;color:var(--ink)}
+.hidden{display:none!important}
+a{text-decoration:none}
+
+/* ===== 顶部 ===== */
+.hero{background:linear-gradient(135deg,var(--navy),var(--navy2) 70%);color:#fff;padding:46px 0 58px}
+.hero h1{font-size:29px;font-weight:800;letter-spacing:.5px;margin-bottom:10px}
+.hero p{color:#cfe2f0;max-width:720px;font-size:15px}
+
+/* ===== 来源条 ===== */
+.srcbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  margin:-30px 0 20px;position:relative}
+.srcbar .back{background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px 15px;
+  font-size:13.5px;font-weight:700;color:var(--navy);box-shadow:var(--shadow)}
+.srcbar .srcinfo{font-size:12.5px;color:var(--sub);background:#fff;border:1px solid var(--line);
+  border-radius:10px;padding:9px 14px;box-shadow:var(--shadow)}
+.srcbar .srcinfo b{color:var(--navy)}
+
+/* ===== 卡片/面板 ===== */
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);
+  padding:22px;margin-bottom:20px}
+.block-h{font-size:15.5px;font-weight:800;margin-bottom:14px}
+
+/* ===== 空状态 ===== */
+.empty-state{text-align:center;padding:54px 26px;margin-top:8px}
+.es-ico{width:64px;height:64px;margin:0 auto 18px;border-radius:16px;background:var(--blue-soft);
+  display:flex;align-items:center;justify-content:center;color:var(--navy)}
+.empty-state h2{font-size:19px;font-weight:800;margin-bottom:10px}
+.empty-state p{color:var(--sub);font-size:14px;max-width:480px;margin:0 auto 22px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:12px;
+  padding:13px 26px;font-size:15px;font-weight:700;transition:transform .14s,box-shadow .15s,filter .15s}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;box-shadow:0 12px 26px -12px rgba(15,59,93,.7)}
+
+/* ===== 控制区 ===== */
+.controls{padding:18px 22px}
+.ctl-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:8px 0}
+.ctl-row+.ctl-row{border-top:1px dashed var(--line)}
+.ctl-lab{font-size:13.5px;font-weight:800;color:var(--sub);min-width:84px}
+.mode-tabs{display:flex;gap:8px;flex-wrap:wrap}
+.mode-tabs button{padding:9px 16px;border-radius:10px;border:1px solid var(--line);background:#fbfdfe;
+  color:var(--sub);font-size:13.5px;font-weight:700;transition:all .14s}
+.mode-tabs button.active{background:var(--navy);border-color:var(--navy);color:#fff}
+.rate-presets{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.rate-presets>button{padding:8px 13px;border-radius:999px;border:1px solid var(--line);background:#fbfdfe;
+  color:var(--sub);font-size:13px;font-weight:700;transition:all .14s}
+.rate-presets>button.active{background:var(--green);border-color:var(--green);color:#fff}
+.rate-presets .custom{font-size:13px;color:var(--sub);font-weight:700;display:inline-flex;align-items:center;gap:5px}
+.rate-presets .custom input{width:62px;padding:7px 8px;border:1px solid var(--line);border-radius:9px;
+  background:#fbfdfe;text-align:right;font-weight:700;color:var(--navy)}
+.rate-presets .custom input:focus{outline:none;border-color:var(--blue)}
+
+/* 提示条 */
+.warn-bar{background:var(--amber-soft);border:1px solid #efd9b0;color:#8a5e16;border-radius:12px;
+  padding:12px 16px;font-size:13px;margin-bottom:18px;line-height:1.5}
+
+/* ===== 结论横幅 ===== */
+.verdict{border-radius:16px;padding:20px 24px;margin-bottom:18px;display:flex;gap:16px;align-items:center}
+.verdict.invest{background:linear-gradient(135deg,#0c8a68,#16b987);color:#fff;box-shadow:0 18px 34px -18px rgba(14,157,118,.7)}
+.verdict.loan{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;box-shadow:0 18px 34px -18px rgba(15,59,93,.7)}
+.verdict.tie{background:var(--blue-soft);border:1px solid #cfe3f0;color:var(--navy)}
+.verdict .v-ico{flex:none;width:46px;height:46px;border-radius:12px;background:rgba(255,255,255,.16);
+  display:flex;align-items:center;justify-content:center}
+.verdict.tie .v-ico{background:#fff}
+.verdict h3{font-size:18px;font-weight:800;margin-bottom:4px}
+.verdict p{font-size:13.5px;line-height:1.5;opacity:.95}
+
+/* ===== 核心卡 ===== */
+.rcards{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:20px}
+.rcard{border:1px solid var(--line);border-radius:14px;padding:16px;background:#fff}
+.rcard .lab{font-size:12.5px;color:var(--sub);margin-bottom:8px;font-weight:600}
+.rcard .val{font-size:23px;font-weight:800;color:var(--navy);line-height:1.15;word-break:break-all}
+.rcard .sub2{font-size:11.5px;color:#93a1ac;margin-top:7px;line-height:1.4}
+.rcard.pos{background:var(--green-soft);border-color:#bfe6da}
+.rcard.pos .val{color:var(--green)}
+.rcard.neg{background:var(--red-soft);border-color:#f0d2ce}
+.rcard.neg .val{color:var(--red)}
+
+/* ===== 图表 ===== */
+.chart-box{width:100%;overflow-x:auto}
+.chart-box svg{display:block;width:100%;height:auto;min-width:560px}
+.chart-legend{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:12px;font-size:13px;color:var(--sub);font-weight:700}
+.chart-legend .lg{display:inline-flex;align-items:center;gap:7px}
+.chart-legend .sw{width:20px;height:4px;border-radius:2px;flex:none}
+.chart-legend .dot{width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid var(--orange);flex:none}
+
+/* ===== 表格 ===== */
+.sens-scroll,.detail-scroll{overflow:auto;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;font-size:13px;white-space:nowrap}
+thead th{background:var(--navy);color:#fff;font-weight:700;padding:10px 13px;text-align:right}
+thead th.lft{text-align:left}
+tbody td{padding:9px 13px;border-top:1px solid var(--line);text-align:right}
+tbody td.lft{text-align:left;font-weight:700;color:var(--navy)}
+tbody tr:nth-child(even){background:#f8fafc}
+tbody tr.hl{background:var(--green-soft)!important}
+.pos{color:var(--green);font-weight:700}
+.neg{color:var(--red);font-weight:700}
+.detail-panel{margin-top:0}
+
+/* ===== 风险提示 ===== */
+.tips{background:var(--blue-soft);border:1px solid #cfe3f0;border-radius:14px;padding:16px 20px;
+  font-size:12.5px;color:#46606e;line-height:1.7;margin-top:4px}
+.tips b{color:var(--navy)}
+
+footer.site{text-align:center;color:#93a1ac;font-size:12.5px;padding:20px}
+
+/* ===== 响应式 ===== */
+@media (max-width:860px){
+  .rcards{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:520px){
+  .hero{padding:36px 0 50px}
+  .hero h1{font-size:23px}
+  .panel{padding:17px}
+  .srcbar{margin-top:-26px}
+  .ctl-lab{min-width:100%}
+  .rcards{grid-template-columns:repeat(2,1fr);gap:10px}
+  .rcard .val{font-size:19px}
+  .verdict{padding:17px 18px;gap:12px}
+  .verdict h3{font-size:16px}
+  .mode-tabs button{padding:8px 12px;font-size:12.5px;flex:1}
+  .rate-presets>button{padding:7px 11px;font-size:12px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== 顶部 ===== -->
+<header class="hero">
+  <div class="wrap">
+    <h1>提前还贷 vs 理财对比</h1>
+    <p>数据来自你的房贷测算：把每一笔计划提前还款、一次性结清的钱，和「不提前还、拿去理财」做同一时点的净资产对比，看哪条路最终更有钱。</p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ===== 来源条 ===== -->
+  <div class="srcbar">
+    <a class="back" href="../fangdai/">‹ 返回房贷计算器</a>
+    <div class="srcinfo" id="srcinfo"></div>
+  </div>
+
+  <!-- ===== 空状态 ===== -->
+  <section class="panel empty-state" id="emptyState">
+    <div class="es-ico">
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M12 3v18M5 7h14M5 7l-2.5 6h5zM19 7l-2.5 6h5zM8.5 21h7"/></svg>
+    </div>
+    <h2>还没有可对比的房贷数据</h2>
+    <p>这个页面是房贷计算器的对比工具，不能单独填写。请先在房贷计算器填写信息并点击「开始测算」，再在结果上方点击「对比理财」。</p>
+    <a class="btn btn-primary" href="../fangdai/">去填写房贷信息</a>
+  </section>
+
+  <!-- ===== 结果内容 ===== -->
+  <div id="content" class="hidden">
+
+    <section class="panel controls">
+      <div class="ctl-row" id="modeTabsWrap">
+        <span class="ctl-lab">对比口径</span>
+        <div class="mode-tabs" id="modeTabs">
+          <button type="button" data-mode="fast">最快一次性结清</button>
+          <button type="button" data-mode="plan">仅按年提前还款</button>
+        </div>
+      </div>
+      <div class="ctl-row">
+        <span class="ctl-lab">理财预期年化</span>
+        <div class="rate-presets" id="ratePresets">
+          <button type="button" data-r="0.012">活期 1.2%</button>
+          <button type="button" data-r="0.02">国债 2.0%</button>
+          <button type="button" data-r="0.03" class="active">稳健 3.0%</button>
+          <button type="button" data-r="0.045">偏股 4.5%</button>
+          <button type="button" data-r="0.07">股票 7.0%</button>
+          <span class="custom">自定义<input type="number" id="customRate" value="3.0" step="0.1" min="0" max="30">%</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="warn-bar hidden" id="warnBar"></div>
+
+    <div class="verdict" id="verdict"></div>
+    <div class="rcards" id="rcards"></div>
+
+    <section class="panel">
+      <div class="chart-box" id="chartBox"></div>
+    </section>
+
+    <section class="panel">
+      <h3 class="block-h">敏感性：不同理财年化下，到对比时点的结果</h3>
+      <div class="sens-scroll">
+        <table>
+          <thead><tr>
+            <th class="lft">理财年化</th><th>理财侧（预期）</th><th>还贷侧（确定）</th><th>净差额</th><th class="lft">结论</th>
+          </tr></thead>
+          <tbody id="sensBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel detail-panel">
+      <h3 class="block-h" id="detailTitle"></h3>
+      <div class="detail-scroll">
+        <table id="detailTable">
+          <thead id="detailHead"></thead>
+          <tbody id="detailBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="tips" id="tips"></div>
+  </div>
+
+  <footer class="site">提前还贷 vs 理财对比 · 所有计算在你的浏览器本地完成 · 理财收益为预期、不保本，实际以银行 / 机构为准</footer>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script src="../fangdai/js/engine.js"></script>
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+  function R(x) { return Math.round(x); }
+  function fmt(n) { return R(n).toLocaleString('zh-CN'); }
+  function fmtWan(v) { return Math.round(v / 10000) + '万'; }
+  function labYM(y, m) { return y + '年' + (m + 1) + '月'; }
+  function ymShort(k) { return Math.floor(k / 12) + '/' + (k % 12 + 1); }
+  function k2ym(k) { return { y: Math.floor(k / 12), m: k % 12 }; }
+
+  var PAYLOAD_KEY = 'fangdai_compare_payload_v1';
+  var ORANGE = '#e08a2e', BLUE = '#2f7fb8';
+  var S = { cfg: null, res: null, mode: 'fast', rInv: 0.03, model: null, V: null };
+
+  /* ---------- 构造对比模型：cf 为「纯本金、各带该笔确定贷款利率」，与理财年化无关 ---------- */
+  function buildModel() {
+    var cfg = S.cfg, res = S.res;
+    var sy = cfg.startYear, sm = cfg.startMonth, startK = sy * 12 + sm;
+    var cf = [], T = null, kind = 'plan';
+
+    if (S.mode === 'fast' && res.earliest) {
+      kind = 'fast';
+      var e = res.earliest, Tk = e.y * 12 + e.m;
+      res.rows.forEach(function (r) {
+        var k = r.y * 12 + r.m;
+        if (k < Tk) {
+          r.perLoan.forEach(function (pl, i) {
+            if (pl.extra > 0) cf.push({ y: r.y, m: r.m, p: R(pl.extra), rLoan: cfg.loans[i].annualRate, kd: 'plan' });
+          });
+        } else if (k === Tk) {
+          // 一次性结清替代当月月供与当月提前还款：每笔贷款取「月供后、提前还款前」剩余本金
+          r.perLoan.forEach(function (pl, i) {
+            var p = R(pl.begin - pl.regPrin);
+            if (p > 0) cf.push({ y: e.y, m: e.m, p: p, rLoan: cfg.loans[i].annualRate, kd: 'settle' });
+          });
+        }
+      });
+      T = { y: e.y, m: e.m };
+    } else {
+      var anyExtra = false, lastK = startK;
+      res.rows.forEach(function (r) {
+        r.perLoan.forEach(function (pl, i) {
+          if (pl.extra > 0) {
+            cf.push({ y: r.y, m: r.m, p: R(pl.extra), rLoan: cfg.loans[i].annualRate, kd: 'plan' });
+            anyExtra = true; lastK = r.y * 12 + r.m;
+          }
+        });
+      });
+      if (anyExtra) {
+        kind = 'plan';
+        T = k2ym(lastK + 60); // 展示终点：最后一笔提前还款后 5 年（胜负与终点无关）
+      } else {
+        kind = 'none';
+        var r0 = res.rows[0];
+        if (r0) r0.perLoan.forEach(function (pl, i) {
+          if (pl.begin > 0) cf.push({ y: sy, m: sm, p: R(pl.begin), rLoan: cfg.loans[i].annualRate, kd: 'now' });
+        });
+        T = k2ym(startK + 60);
+      }
+    }
+    S.model = { cf: cf, T: T, kind: kind, startK: startK, Tk: T.y * 12 + T.m };
+  }
+
+  /* ---------- 同一时点 k：理财侧（预期）vs 提前还贷侧（确定）价值 ---------- */
+  function valueAt(cf, rInv, k) {
+    var f = 0, a = 0;
+    cf.forEach(function (it) {
+      var ck = it.y * 12 + it.m;
+      if (ck <= k) {
+        f += it.p * Math.pow(1 + rInv, (k - ck) / 12);
+        a += it.p * Math.pow(1 + it.rLoan, (k - ck) / 12);
+      }
+    });
+    return { F: R(f), A: R(a) };
+  }
+
+  function computeValues() {
+    var m = S.model, points = [];
+    for (var k = m.startK; k <= m.Tk; k++) {
+      var v = valueAt(m.cf, S.rInv, k);
+      points.push({ k: k, F: v.F, A: v.A });
+    }
+    var end = points[points.length - 1];
+    var F = end.F, A = end.A, delta = F - A;
+    var totalP = m.cf.reduce(function (s, it) { return s + it.p; }, 0);
+    // 打平年化：二分 r 使理财侧 = 还贷侧
+    var be = null, lo = 0, hi = 0.2;
+    function fAt(r) { return valueAt(m.cf, r, m.Tk).F; }
+    if (fAt(lo) <= A && fAt(hi) >= A) {
+      for (var i = 0; i < 64; i++) { var mid = (lo + hi) / 2; if (fAt(mid) < A) lo = mid; else hi = mid; }
+      be = (lo + hi) / 2 * 100;
+    } else if (fAt(lo) > A) { be = 0; }
+    S.V = { points: points, F: F, A: A, delta: delta, totalP: totalP, be: be };
+  }
+
+  /* ---------- 结论横幅 ---------- */
+  function icoUp() { return '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l6-6 4 4 6-7"/><path d="M15 8h5v5"/></svg>'; }
+  function icoHome() { return '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v9h14v-9"/></svg>'; }
+  function icoTie() { return '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0f3b5d" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M5 7h14M5 7l-2.5 6h5zM19 7l-2.5 6h5zM8.5 21h7"/></svg>'; }
+
+  function renderVerdict() {
+    var V = S.V, Tl = labYM(S.model.T.y, S.model.T.m);
+    var beTxt = V.be != null ? Number(V.be).toFixed(1) : '—';
+    var cls, title, desc;
+    if (V.delta > V.totalP * 0.003) {
+      cls = 'invest';
+      title = '拿去理财，预计最终更有钱';
+      desc = '到 ' + Tl + '，这笔钱若理财预计约 ' + fmt(V.F) + ' 元，比提前还贷的确定价值 ' + fmt(V.A) + ' 元多约 ' + fmt(V.delta) + ' 元。前提是长期年化稳定达到 ' + (S.rInv * 100).toFixed(1) + '% 且中途不亏损。';
+    } else if (V.delta < -V.totalP * 0.003) {
+      cls = 'loan';
+      title = '提前还贷，确定且更划算';
+      desc = '到 ' + Tl + '，若理财预计约 ' + fmt(V.F) + ' 元，比提前还贷的确定价值 ' + fmt(V.A) + ' 元少约 ' + fmt(-V.delta) + ' 元。理财需长期年化超过 ' + beTxt + '% 才更划算，否则提前还贷更稳。';
+    } else {
+      cls = 'tie';
+      title = '两者基本打平';
+      desc = '到 ' + Tl + ' 净差额约 ' + fmt(V.delta) + ' 元，打平年化约 ' + beTxt + '%。求确定、图省心就提前还贷；愿承担波动且能长期超过打平线，可选择理财。';
+    }
+    $('verdict').className = 'verdict ' + cls;
+    $('verdict').innerHTML = '<div class="v-ico">' + (cls === 'invest' ? icoUp() : cls === 'loan' ? icoHome() : icoTie()) + '</div><div><h3>' + title + '</h3><p>' + desc + '</p></div>';
+  }
+
+  /* ---------- 4 张核心卡 ---------- */
+  function renderCards() {
+    var V = S.V, m = S.model, Tl = labYM(m.T.y, m.T.m);
+    var beTxt = V.be != null ? Number(V.be).toFixed(1) : '—';
+    var kindSub = m.kind === 'fast' ? '提前还款 + 一次性结清的本金' : m.kind === 'plan' ? '各次提前还款本金' : '假设现在全额结清的本金';
+    var rows = [
+      { lab: '计划投入本金（不含月供）', val: fmt(V.totalP), sub: kindSub },
+      { lab: Tl + ' 理财账户（预期）', val: fmt(V.F), sub: '按 ' + (S.rInv * 100).toFixed(1) + '% 年复利，不保本' },
+      { lab: Tl + ' 提前还贷价值（确定）', val: fmt(V.A), sub: '等于这笔钱确定省下的贷款本息' },
+      { lab: '净差额（理财−还贷）', val: (V.delta >= 0 ? '+' : '') + fmt(V.delta), cls: V.delta >= 0 ? 'pos' : 'neg', sub: '打平年化约 ' + beTxt + '%' }
+    ];
+    $('rcards').innerHTML = rows.map(function (r) {
+      return '<div class="rcard ' + (r.cls || '') + '"><div class="lab">' + r.lab + '</div><div class="val">' + r.val + '</div><div class="sub2">' + r.sub + '</div></div>';
+    }).join('');
+  }
+
+  /* ---------- 主图：两条价值曲线 + 投入点 + 终点线 ---------- */
+  function renderChart() {
+    var m = S.model, V = S.V, pts = V.points;
+    var W = 780, H = 400, padL = 62, padR = 26, padT = 30, padB = 42;
+    var plotW = W - padL - padR, plotH = H - padT - padB;
+    var n = pts.length - 1;
+    var maxV = 0; pts.forEach(function (p) { maxV = Math.max(maxV, p.F, p.A); });
+    maxV = maxV * 1.04 || 1;
+    function X(k) { return padL + (k - m.startK) / Math.max(n, 1) * plotW; }
+    function Y(v) { return padT + (1 - v / maxV) * plotH; }
+    function path(g) { return pts.map(function (p, i) { return (i === 0 ? 'M' : 'L') + X(p.k).toFixed(1) + ' ' + Y(g(p)).toFixed(1); }).join(' '); }
+
+    var g = '';
+    // Y 轴网格 + 刻度
+    for (var t = 0; t <= 5; t++) {
+      var v = maxV * t / 5, yy = Y(v);
+      g += '<line x1="' + padL + '" y1="' + yy.toFixed(1) + '" x2="' + (W - padR) + '" y2="' + yy.toFixed(1) + '" stroke="#eef2f6"/>';
+      g += '<text x="' + (padL - 8) + '" y="' + (yy + 4).toFixed(1) + '" text-anchor="end" font-size="11" fill="#93a1ac">' + fmtWan(v) + '</text>';
+    }
+    // X 轴时间标签
+    var idxs = [0, Math.floor(n / 3), Math.floor(2 * n / 3), n].filter(function (v, i, a) { return a.indexOf(v) === i; });
+    idxs.forEach(function (ix) {
+      g += '<text x="' + X(pts[ix].k).toFixed(1) + '" y="' + (H - 18) + '" text-anchor="middle" font-size="11" fill="#93a1ac">' + ymShort(pts[ix].k) + '</text>';
+    });
+    // 终点竖虚线
+    var XT = X(m.Tk);
+    g += '<line x1="' + XT.toFixed(1) + '" y1="' + padT + '" x2="' + XT.toFixed(1) + '" y2="' + (padT + plotH) + '" stroke="#b6c2cb" stroke-width="1.4" stroke-dasharray="5 4"/>';
+    g += '<text x="' + XT.toFixed(1) + '" y="' + (padT - 9) + '" text-anchor="middle" font-size="11" font-weight="700" fill="#8a98a3">' + (m.kind === 'fast' ? '一次性结清时点' : '对比时点（5 年）') + '</text>';
+    // 两条曲线：值更大（结论方）的线最后画，保证接近 / 重合时结论色在上可见
+    var lineA = '<path d="' + path(function (p) { return p.A; }) + '" fill="none" stroke="' + BLUE + '" stroke-width="2.6" stroke-linejoin="round"/>';
+    var lineF = '<path d="' + path(function (p) { return p.F; }) + '" fill="none" stroke="' + ORANGE + '" stroke-width="2.6" stroke-linejoin="round"/>';
+    g += (V.delta >= 0) ? (lineA + lineF) : (lineF + lineA);
+    // 资金投入点（按投入月去重，跳过终点月——终点已单独标注）
+    var mark = {};
+    m.cf.forEach(function (it) { var ck = it.y * 12 + it.m; if (ck !== m.Tk) mark[ck] = it.kd; });
+    Object.keys(mark).forEach(function (kk) {
+      kk = +kk;
+      var pt = pts.filter(function (p) { return p.k === kk; })[0]; if (!pt) return;
+      var r = mark[kk] === 'plan' ? 3.2 : 4.6;
+      g += '<circle cx="' + X(kk).toFixed(1) + '" cy="' + Y(pt.F).toFixed(1) + '" r="' + r + '" fill="#fff" stroke="' + ORANGE + '" stroke-width="2"/>';
+    });
+    // 终点数值：上方值标签在点上方，下方值标签在点下方（避免接近时重叠）
+    var up, down;
+    if (V.F >= V.A) { up = { v: V.F, c: ORANGE }; down = { v: V.A, c: BLUE }; }
+    else { up = { v: V.A, c: BLUE }; down = { v: V.F, c: ORANGE }; }
+    g += '<circle cx="' + XT.toFixed(1) + '" cy="' + Y(up.v).toFixed(1) + '" r="4.2" fill="' + up.c + '"/>';
+    g += '<text x="' + (XT - 7) + '" y="' + (Y(up.v) - 8).toFixed(1) + '" text-anchor="end" font-size="12.5" font-weight="800" fill="' + up.c + '">' + fmt(up.v) + '</text>';
+    g += '<circle cx="' + XT.toFixed(1) + '" cy="' + Y(down.v).toFixed(1) + '" r="4.2" fill="' + down.c + '"/>';
+    g += '<text x="' + (XT - 7) + '" y="' + (Y(down.v) + 17).toFixed(1) + '" text-anchor="end" font-size="12.5" font-weight="800" fill="' + down.c + '">' + fmt(down.v) + '</text>';
+
+    var legend = '<div class="chart-legend">'
+      + '<span class="lg"><span class="sw" style="background:' + ORANGE + '"></span>若拿去理财（预期）</span>'
+      + '<span class="lg"><span class="sw" style="background:' + BLUE + '"></span>若提前还贷（确定）</span>'
+      + '<span class="lg"><span class="dot"></span>资金投入时点</span></div>';
+    $('chartBox').innerHTML = legend + '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="提前还贷与理财价值对比曲线">' + g + '</svg>';
+  }
+
+  /* ---------- 敏感性表 ---------- */
+  function renderSens() {
+    var m = S.model, rates = [0.012, 0.02, 0.026, 0.03, 0.032, 0.04, 0.045, 0.06];
+    $('sensBody').innerHTML = rates.map(function (r) {
+      var v = valueAt(m.cf, r, m.Tk), d = v.F - v.A;
+      var concl = d > v.A * 0.003 ? '<span class="pos">理财更划算</span>' : d < -v.A * 0.003 ? '<span class="neg">还贷更划算</span>' : '基本打平';
+      var hl = Math.abs(r - S.rInv) < 0.0006 ? ' class="hl"' : '';
+      return '<tr' + hl + '><td class="lft">' + (r * 100).toFixed(1) + '%</td><td>' + fmt(v.F) + '</td><td>' + fmt(v.A) + '</td><td class="' + (d >= 0 ? 'pos' : 'neg') + '">' + (d >= 0 ? '+' : '') + fmt(d) + '</td><td class="lft">' + concl + '</td></tr>';
+    }).join('');
+  }
+
+  /* ---------- 现金流明细表 ---------- */
+  function renderDetail() {
+    var m = S.model, V = S.V, Tk = m.Tk;
+    $('detailTitle').textContent = m.kind === 'fast' ? '现金流明细：提前还款 + 一次性结清' : m.kind === 'plan' ? '现金流明细：各次提前还款' : '现金流明细：假设现在全额结清';
+    $('detailHead').innerHTML = '<tr><th class="lft">时间</th><th class="lft">类型</th><th>本金</th><th>确定年化</th><th>若理财到终点</th><th>若还贷到终点</th><th>差额</th></tr>';
+    var rows = m.cf.map(function (it) {
+      var ck = it.y * 12 + it.m;
+      var fi = R(it.p * Math.pow(1 + S.rInv, (Tk - ck) / 12));
+      var li = R(it.p * Math.pow(1 + it.rLoan, (Tk - ck) / 12));
+      var d = fi - li;
+      var typ = it.kd === 'plan' ? '提前还款' : it.kd === 'settle' ? '一次性结清' : '现在结清';
+      return '<tr><td class="lft">' + labYM(it.y, it.m) + '</td><td class="lft">' + typ + '</td><td>' + fmt(it.p) + '</td><td>' + (it.rLoan * 100).toFixed(1) + '%</td><td>' + fmt(fi) + '</td><td>' + fmt(li) + '</td><td class="' + (d >= 0 ? 'pos' : 'neg') + '">' + (d >= 0 ? '+' : '') + fmt(d) + '</td></tr>';
+    });
+    rows.push('<tr style="font-weight:800"><td class="lft" colspan="2">合计</td><td>' + fmt(V.totalP) + '</td><td></td><td>' + fmt(V.F) + '</td><td>' + fmt(V.A) + '</td><td class="' + (V.delta >= 0 ? 'pos' : 'neg') + '">' + (V.delta >= 0 ? '+' : '') + fmt(V.delta) + '</td></tr>');
+    $('detailBody').innerHTML = rows.join('');
+  }
+
+  /* ---------- 提示条 / 风险说明 ---------- */
+  function renderWarn() {
+    var w = $('warnBar'), kd = S.model.kind;
+    if (kd === 'none') {
+      w.classList.remove('hidden');
+      w.textContent = '你还没有设置提前还款或一次性结清计划，这里按「现在把全部剩余本金结清 vs 拿去理财」测算（对比 5 年）。返回房贷计算器开启提前还款，可得到更贴合你计划的结果。';
+    } else if (kd === 'plan') {
+      w.classList.remove('hidden');
+      w.textContent = '图与卡片对比到最后一笔提前还款之后 5 年，仅用于展示复利随时间拉开；哪条路更划算只取决于理财年化是否超过贷款利率，与对比终点无关。';
+    } else { w.classList.add('hidden'); }
+  }
+
+  function refreshAll() {
+    buildModel(); computeValues();
+    renderVerdict(); renderCards(); renderChart(); renderSens(); renderDetail(); renderWarn();
+  }
+
+  /* ---------- 载入房贷页传来的数据 ---------- */
+  function loadPayload() {
+    var raw = null;
+    try { raw = localStorage.getItem(PAYLOAD_KEY); } catch (e) {}
+    if (!raw) return false;
+    var data; try { data = JSON.parse(raw); } catch (e) { return false; }
+    if (!data || !data.cfg) return false;
+    var cfg = data.cfg, res;
+    try { res = LoanEngine.buildSchedule(cfg); } catch (e) { return false; }
+    if (!res || !res.rows || !res.rows.length || !res.rows[0].beginTotal) return false;
+    S.cfg = cfg; S.res = res;
+    S.mode = res.earliest ? 'fast' : 'plan';
+    return true;
+  }
+
+  function init() {
+    if (!loadPayload()) {
+      $('emptyState').classList.remove('hidden');
+      $('content').classList.add('hidden');
+      return;
+    }
+    $('content').classList.remove('hidden');
+    $('emptyState').classList.add('hidden');
+    var cfg = S.cfg;
+    $('srcinfo').innerHTML = '已载入房贷测算：起始 <b>' + labYM(cfg.startYear, cfg.startMonth) + '</b> · ' + cfg.loans.length + ' 笔贷款 · 当前剩余本金约 <b>' + fmt(S.res.rows[0].beginTotal) + '</b> 元';
+    if (S.res.earliest) $('modeTabsWrap').classList.remove('hidden');
+
+    $('modeTabs').addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b) return;
+      S.mode = b.getAttribute('data-mode');
+      Array.prototype.forEach.call(this.children, function (c) { c.classList.toggle('active', c === b); });
+      refreshAll();
+    });
+    $('ratePresets').addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b) return;
+      S.rInv = parseFloat(b.getAttribute('data-r'));
+      Array.prototype.forEach.call(this.querySelectorAll('button'), function (c) { c.classList.toggle('active', c === b); });
+      $('customRate').value = (S.rInv * 100).toFixed(1);
+      refreshAll();
+    });
+    $('customRate').addEventListener('input', function () {
+      var v = parseFloat(this.value);
+      if (!isNaN(v)) {
+        S.rInv = v / 100;
+        Array.prototype.forEach.call($('ratePresets').querySelectorAll('button'), function (c) {
+          c.classList.toggle('active', Math.abs(parseFloat(c.getAttribute('data-r')) - S.rInv) < 0.0006);
+        });
+        refreshAll();
+      }
+    });
+
+    $('tips').innerHTML =
+      '<b>怎么看这个结果</b><br>'
+      + '1. 提前还贷是<b>确定、无风险</b>的，它的“年化收益”就等于你冲抵的那笔贷款利率（公积金约 2.6%、商贷约 3.2%）；还进去的钱<b>拿不回来</b>，要先留足应急资金，部分银行还有违约金 / 次数限制。<br>'
+      + '2. 理财收益是<b>预期、不保本</b>，可能达不到甚至亏损；本表按固定年复利估算，未计手续费、税费与申赎限制。<br>'
+      + '3. 公积金贷款利率最低，通常最不着急还；商贷利率越高，提前还贷的“确定收益”越高。<br>'
+      + '4. 月供与生活开支在两种安排下相同，不参与本对比，这里只比较“额外提前还的钱”。实际金额以银行 / 公积金中心 / 理财机构为准。';
+
+    // 初始激活对应口径的 tab 样式
+    Array.prototype.forEach.call($('modeTabs').children, function (c) {
+      c.classList.toggle('active', c.getAttribute('data-mode') === S.mode);
+    });
+    refreshAll();
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+})();
+</script>
+</body>
+</html>
