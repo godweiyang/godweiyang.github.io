@@ -140,7 +140,29 @@ input,select{font-family:inherit;font-size:14px;color:var(--ink)}
 .svg-ico{width:17px;height:17px;flex:none}
 
 /* ===== 结果区 ===== */
-.result-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:18px}
+.result-cards{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:18px}
+.result-cards .c2{grid-column:span 2}.result-cards .c6{grid-column:span 6}
+/* 时间合并卡：按计划全部结清 + 最快一次性结清（一张卡内左右两栏，紧凑对比） */
+.rcard.time-card{padding:12px;display:flex;gap:10px;align-items:stretch}
+.tc-col{flex:1;border-radius:12px;padding:14px 16px;min-width:0}
+.tc-col.plan{background:var(--blue-soft)}
+.tc-col.fast{background:linear-gradient(135deg,#0c8a68,#16b987);color:#fff;position:relative;overflow:hidden;
+  box-shadow:0 14px 26px -16px rgba(14,157,118,.7)}
+.tc-col.fast::after{content:"";position:absolute;right:-30px;top:-38px;width:108px;height:108px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.22),transparent 70%);pointer-events:none}
+.tc-lab{font-size:12px;font-weight:800;letter-spacing:.3px;position:relative}
+.plan .tc-lab{color:var(--sub)}.fast .tc-lab{color:#d8f3ea}
+.tc-cd{display:flex;align-items:baseline;flex-wrap:wrap;margin-top:7px;position:relative}
+.plan .tc-cd .cd-n{font-size:26px;font-weight:900;color:var(--navy);line-height:1.05}
+.plan .tc-cd .cd-u{font-size:12.5px;font-weight:800;color:var(--sub);margin:0 5px 0 1px}
+.plan .tc-cd .cd-now{font-size:22px;font-weight:900;color:var(--navy)}
+.fast .tc-cd .cd-n{font-size:26px;font-weight:900;line-height:1.05;letter-spacing:.3px;
+  background:linear-gradient(180deg,#fff,#c7f4e7);-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;text-shadow:0 3px 12px rgba(255,255,255,.3)}
+.fast .tc-cd .cd-u{font-size:12.5px;font-weight:800;color:#e4f9f2;margin:0 5px 0 1px}
+.fast .tc-cd .cd-now{font-size:22px;font-weight:900;color:#fff}
+.tc-sub{font-size:11.5px;margin-top:6px;position:relative;line-height:1.4}
+.plan .tc-sub{color:#8a98a3}.fast .tc-sub{color:#d8f3ea}
 .poster4{padding:18px 26px 4px;margin-bottom:0}
 .rcard{border:1px solid var(--line);border-radius:14px;padding:16px;background:#fff}
 .rcard .lab{font-size:12.5px;color:var(--sub);margin-bottom:7px}
@@ -262,7 +284,7 @@ footer.site{text-align:center;color:#93a1ac;font-size:12.5px;padding:20px}
 @media (max-width:860px){
   .field,.loan-card .field{grid-column:span 6}
   .field.narrow,.loan-card .field.narrow{grid-column:span 6}
-  .result-cards{grid-template-columns:repeat(2,1fr)}
+  .result-cards .c2{grid-column:span 6}
   .hero h1{font-size:24px}
 }
 @media (max-width:520px){

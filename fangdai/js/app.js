@@ -326,33 +326,27 @@
 
     var overallYM = parseYM(latestPayoff(res));
     var overallParts = overallYM ? remainParts(cfg, overallYM) : null;
-    var baseCard = { cls: '', lab: '还需多久全部结清',
-      countdown: overallParts ? countdownHtml(overallParts) : '—',
-      sub2: latestPayoff(res) + ' 全部结清' };
-    var fastCard;
+    var totalPrincipal = cfg.loans.reduce(function (a, l) { return a + l.balance; }, 0);
+
+    // 卡1：时间合并卡（左=按计划逐期结清[非一次性]，右=最快一次性结清[绿色突出]）
+    var cardsHtml = '<div class="rcard time-card c6"><div class="tc-col plan">' +
+      '<div class="tc-lab">按计划全部结清</div>' +
+      '<div class="tc-cd">' + (overallParts ? countdownHtml(overallParts) : '—') + '</div>' +
+      '<div class="tc-sub">' + latestPayoff(res) + ' 按月供逐期结清（非一次性）</div></div>';
     if (cfg.income.enabled) {
       var e0 = res.earliest;
       var fparts = e0 ? remainParts(cfg, { y: e0.y, m: e0.m }) : null;
-      fastCard = { cls: 'cd-fast', lab: '最快一次性结清',
-        countdown: fparts ? countdownHtml(fparts) : '收入不足',
-        sub2: e0 ? e0.label + ' 可结清' : '' };
-    } else {
-      fastCard = { cls: '', lab: '当前剩余本金合计',
-        val: fmt(cfg.loans.reduce(function (a, l) { return a + l.balance; }, 0)) };
+      cardsHtml += '<div class="tc-col fast">' +
+        '<div class="tc-lab">最快一次性结清</div>' +
+        '<div class="tc-cd">' + (fparts ? countdownHtml(fparts) : '收入不足以提前结清') + '</div>' +
+        (e0 ? '<div class="tc-sub">' + e0.label + ' 可一次性结清</div>' : '') + '</div>';
     }
-    var cards = [
-      baseCard,
-      fastCard,
-      { cls: '', lab: '未来应付利息合计', val: fmt(res.totalInterest) },
-      { cls: '', lab: '提前还款本金合计', val: fmt(res.totalPrepay) }
-    ];
-    $('#resultCards').innerHTML = cards.map(function (c) {
-      var main = c.countdown !== undefined
-        ? '<div class="cd-wrap">' + c.countdown + '</div>'
-        : '<div class="val' + (c.small ? ' small' : '') + '">' + c.val + '</div>';
-      return '<div class="rcard ' + c.cls + '"><div class="lab">' + c.lab + '</div>' +
-        main + (c.sub2 ? '<div class="sub2">' + c.sub2 + '</div>' : '') + '</div>';
-    }).join('');
+    cardsHtml += '</div>';
+    // 卡2-4：当前剩余本金 / 未来利息 / 提前还款
+    cardsHtml += '<div class="rcard c2"><div class="lab">当前剩余本金</div><div class="val">' + fmt(totalPrincipal) + '</div></div>';
+    cardsHtml += '<div class="rcard c2"><div class="lab">未来应付利息合计</div><div class="val">' + fmt(res.totalInterest) + '</div></div>';
+    cardsHtml += '<div class="rcard c2"><div class="lab">提前还款本金合计</div><div class="val">' + fmt(res.totalPrepay) + '</div></div>';
+    $('#resultCards').innerHTML = cardsHtml;
 
     $('#loanResults').innerHTML = res.loanSummary.map(function (l, i) {
       var loan = cfg.loans[i];
@@ -525,21 +519,22 @@
         '<div class="lk"><span>提前偿还本金</span><b>' + fmt(s.totalPrepay) + '</b></div></div>';
     }).join('');
 
-    // 四个核心框（2×2，桌面/手机一致）：还需多久、最快一次性结清、未来利息、提前还款
-    var p4 = '';
-    p4 += '<div class="rcard"><div class="lab">还需多久全部结清</div>' +
-      '<div class="cd-wrap">' + (pParts ? countdownHtml(pParts) : '—') + '</div>' +
-      '<div class="sub2">' + latestPayoff(res) + ' 全部结清</div></div>';
+    // 卡1：时间合并卡（左=按计划逐期结清[非一次性]，右=最快一次性结清[绿色突出]）
+    var p4 = '<div class="rcard time-card c6"><div class="tc-col plan">' +
+      '<div class="tc-lab">按计划全部结清</div>' +
+      '<div class="tc-cd">' + (pParts ? countdownHtml(pParts) : '—') + '</div>' +
+      '<div class="tc-sub">' + latestPayoff(res) + ' 按月供逐期结清（非一次性）</div></div>';
     if (cfg.income.enabled) {
       var e = res.earliest, ep = e ? remainParts(cfg, { y: e.y, m: e.m }) : null;
-      p4 += '<div class="rcard cd-fast"><div class="lab">最快一次性结清</div>' +
-        '<div class="cd-wrap">' + (ep ? countdownHtml(ep) : '收入不足') + '</div>' +
-        (e ? '<div class="sub2">' + e.label + ' 可结清</div>' : '') + '</div>';
-    } else {
-      p4 += '<div class="rcard"><div class="lab">当前剩余本金合计</div><div class="val">' + fmt(totalPrincipal) + '</div></div>';
+      p4 += '<div class="tc-col fast">' +
+        '<div class="tc-lab">最快一次性结清</div>' +
+        '<div class="tc-cd">' + (ep ? countdownHtml(ep) : '收入不足以提前结清') + '</div>' +
+        (e ? '<div class="tc-sub">' + e.label + ' 可一次性结清</div>' : '') + '</div>';
     }
-    p4 += '<div class="rcard"><div class="lab">未来利息合计</div><div class="val">' + fmt(res.totalInterest) + '</div></div>';
-    p4 += '<div class="rcard"><div class="lab">提前还款合计</div><div class="val">' + fmt(res.totalPrepay) + '</div></div>';
+    p4 += '</div>';
+    p4 += '<div class="rcard c2"><div class="lab">当前剩余本金</div><div class="val">' + fmt(totalPrincipal) + '</div></div>';
+    p4 += '<div class="rcard c2"><div class="lab">未来利息合计</div><div class="val">' + fmt(res.totalInterest) + '</div></div>';
+    p4 += '<div class="rcard c2"><div class="lab">提前还款合计</div><div class="val">' + fmt(res.totalPrepay) + '</div></div>';
 
     $('#posterNode').innerHTML =
       '<div class="p-hero">' +
@@ -548,9 +543,6 @@
         '<div class="date">测算起始 ' + cfg.startYear + '-' + String(cfg.startMonth + 1).padStart(2, '0') + ' · 生成于 ' + now.toLocaleDateString('zh-CN') + '</div>' +
       '</div>' +
       '<div class="result-cards poster4">' + p4 + '</div>' +
-      '<div class="p-rows">' +
-        '<div class="pr"><span class="k">当前剩余本金合计</span><span class="v">' + fmt(totalPrincipal) + '</span></div>' +
-      '</div>' +
       '<div class="p-loans">' + loansHtml + '</div>' +
       '<div class="p-foot">' +
         '<div class="pf-left"><div class="brand">房贷还款计算器</div>' +
