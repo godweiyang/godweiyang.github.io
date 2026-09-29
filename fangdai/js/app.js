@@ -550,7 +550,6 @@
       '<div class="result-cards poster4">' + p4 + '</div>' +
       '<div class="p-rows">' +
         '<div class="pr"><span class="k">当前剩余本金合计</span><span class="v">' + fmt(totalPrincipal) + '</span></div>' +
-        (cfg.income.enabled && cfg.income.monthlyFund > 0 ? '<div class="pr"><span class="k">每月公积金</span><span class="v">' + fmt(cfg.income.monthlyFund) + '</span></div>' : '') +
       '</div>' +
       '<div class="p-loans">' + loansHtml + '</div>' +
       '<div class="p-foot">' +
