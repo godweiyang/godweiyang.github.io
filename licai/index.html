@@ -143,6 +143,8 @@ footer.site{text-align:center;color:#93a1ac;font-size:12.5px;padding:20px}
   .verdict h3{font-size:16px}
   .mode-tabs button{padding:8px 12px;font-size:12.5px;flex:1}
   .rate-presets>button{padding:7px 11px;font-size:12px}
+  .chart-box{overflow-x:visible}
+  .chart-box svg{min-width:0}
 }
 </style>
 </head>
@@ -379,34 +381,42 @@ footer.site{text-align:center;color:#93a1ac;font-size:12.5px;padding:20px}
   /* ---------- 主图：两条价值曲线 + 投入点 + 终点线 ---------- */
   function renderChart() {
     var m = S.model, V = S.V, pts = V.points;
-    var W = 780, H = 400, padL = 62, padR = 26, padT = 30, padB = 42;
+    var cw = $('chartBox').clientWidth || 780;
+    var narrow = cw < 560;
+    var W = narrow ? 360 : 780, H = narrow ? 300 : 400;
+    var padL = narrow ? 44 : 62, padR = narrow ? 12 : 26, padT = 30, padB = narrow ? 32 : 42;
     var plotW = W - padL - padR, plotH = H - padT - padB;
     var n = pts.length - 1;
     var maxV = 0; pts.forEach(function (p) { maxV = Math.max(maxV, p.F, p.A); });
     maxV = maxV * 1.04 || 1;
     function X(k) { return padL + (k - m.startK) / Math.max(n, 1) * plotW; }
     function Y(v) { return padT + (1 - v / maxV) * plotH; }
-    function path(g) { return pts.map(function (p, i) { return (i === 0 ? 'M' : 'L') + X(p.k).toFixed(1) + ' ' + Y(g(p)).toFixed(1); }).join(' '); }
+    function path(gf) { return pts.map(function (p, i) { return (i === 0 ? 'M' : 'L') + X(p.k).toFixed(1) + ' ' + Y(gf(p)).toFixed(1); }).join(' '); }
 
+    var fsAxis = 11, fsEnd = 12.5;
     var g = '';
     // Y 轴网格 + 刻度
     for (var t = 0; t <= 5; t++) {
       var v = maxV * t / 5, yy = Y(v);
       g += '<line x1="' + padL + '" y1="' + yy.toFixed(1) + '" x2="' + (W - padR) + '" y2="' + yy.toFixed(1) + '" stroke="#eef2f6"/>';
-      g += '<text x="' + (padL - 8) + '" y="' + (yy + 4).toFixed(1) + '" text-anchor="end" font-size="11" fill="#93a1ac">' + fmtWan(v) + '</text>';
+      g += '<text x="' + (padL - 6) + '" y="' + (yy + 3.5).toFixed(1) + '" text-anchor="end" font-size="' + fsAxis + '" fill="#93a1ac">' + fmtWan(v) + '</text>';
     }
-    // X 轴时间标签
-    var idxs = [0, Math.floor(n / 3), Math.floor(2 * n / 3), n].filter(function (v, i, a) { return a.indexOf(v) === i; });
+    // X 轴时间标签：手机端只标首 / 中 / 末
+    var idxs = narrow ? [0, Math.round(n / 2), n]
+      : [0, Math.floor(n / 3), Math.floor(2 * n / 3), n];
+    idxs = idxs.filter(function (v, i, a) { return a.indexOf(v) === i; });
     idxs.forEach(function (ix) {
-      g += '<text x="' + X(pts[ix].k).toFixed(1) + '" y="' + (H - 18) + '" text-anchor="middle" font-size="11" fill="#93a1ac">' + ymShort(pts[ix].k) + '</text>';
+      g += '<text x="' + X(pts[ix].k).toFixed(1) + '" y="' + (H - 12) + '" text-anchor="middle" font-size="' + fsAxis + '" fill="#93a1ac">' + ymShort(pts[ix].k) + '</text>';
     });
     // 终点竖虚线
     var XT = X(m.Tk);
     g += '<line x1="' + XT.toFixed(1) + '" y1="' + padT + '" x2="' + XT.toFixed(1) + '" y2="' + (padT + plotH) + '" stroke="#b6c2cb" stroke-width="1.4" stroke-dasharray="5 4"/>';
-    g += '<text x="' + XT.toFixed(1) + '" y="' + (padT - 9) + '" text-anchor="middle" font-size="11" font-weight="700" fill="#8a98a3">' + (m.kind === 'fast' ? '一次性结清时点' : '对比时点（5 年）') + '</text>';
+    var tlab = m.kind === 'fast' ? (narrow ? '结清时点' : '一次性结清时点') : (narrow ? '对比时点' : '对比时点（5 年）');
+    g += '<text x="' + XT.toFixed(1) + '" y="' + (padT - 10) + '" text-anchor="middle" font-size="' + (narrow ? 10 : 11) + '" font-weight="700" fill="#8a98a3">' + tlab + '</text>';
     // 两条曲线：值更大（结论方）的线最后画，保证接近 / 重合时结论色在上可见
-    var lineA = '<path d="' + path(function (p) { return p.A; }) + '" fill="none" stroke="' + BLUE + '" stroke-width="2.6" stroke-linejoin="round"/>';
-    var lineF = '<path d="' + path(function (p) { return p.F; }) + '" fill="none" stroke="' + ORANGE + '" stroke-width="2.6" stroke-linejoin="round"/>';
+    var lw = narrow ? 2.2 : 2.6;
+    var lineA = '<path d="' + path(function (p) { return p.A; }) + '" fill="none" stroke="' + BLUE + '" stroke-width="' + lw + '" stroke-linejoin="round"/>';
+    var lineF = '<path d="' + path(function (p) { return p.F; }) + '" fill="none" stroke="' + ORANGE + '" stroke-width="' + lw + '" stroke-linejoin="round"/>';
     g += (V.delta >= 0) ? (lineA + lineF) : (lineF + lineA);
     // 资金投入点（按投入月去重，跳过终点月——终点已单独标注）
     var mark = {};
@@ -414,17 +424,20 @@ footer.site{text-align:center;color:#93a1ac;font-size:12.5px;padding:20px}
     Object.keys(mark).forEach(function (kk) {
       kk = +kk;
       var pt = pts.filter(function (p) { return p.k === kk; })[0]; if (!pt) return;
-      var r = mark[kk] === 'plan' ? 3.2 : 4.6;
+      var r = mark[kk] === 'plan' ? (narrow ? 2.8 : 3.2) : (narrow ? 4 : 4.6);
       g += '<circle cx="' + X(kk).toFixed(1) + '" cy="' + Y(pt.F).toFixed(1) + '" r="' + r + '" fill="#fff" stroke="' + ORANGE + '" stroke-width="2"/>';
     });
-    // 终点数值：上方值标签在点上方，下方值标签在点下方（避免接近时重叠）
+    // 终点圆点；数值标签仅桌面端绘制（手机端数字见上方卡片，避免窄屏重叠遮挡）
     var up, down;
     if (V.F >= V.A) { up = { v: V.F, c: ORANGE }; down = { v: V.A, c: BLUE }; }
     else { up = { v: V.A, c: BLUE }; down = { v: V.F, c: ORANGE }; }
-    g += '<circle cx="' + XT.toFixed(1) + '" cy="' + Y(up.v).toFixed(1) + '" r="4.2" fill="' + up.c + '"/>';
-    g += '<text x="' + (XT - 7) + '" y="' + (Y(up.v) - 8).toFixed(1) + '" text-anchor="end" font-size="12.5" font-weight="800" fill="' + up.c + '">' + fmt(up.v) + '</text>';
-    g += '<circle cx="' + XT.toFixed(1) + '" cy="' + Y(down.v).toFixed(1) + '" r="4.2" fill="' + down.c + '"/>';
-    g += '<text x="' + (XT - 7) + '" y="' + (Y(down.v) + 17).toFixed(1) + '" text-anchor="end" font-size="12.5" font-weight="800" fill="' + down.c + '">' + fmt(down.v) + '</text>';
+    var er = narrow ? 3.6 : 4.2;
+    g += '<circle cx="' + XT.toFixed(1) + '" cy="' + Y(up.v).toFixed(1) + '" r="' + er + '" fill="' + up.c + '"/>';
+    g += '<circle cx="' + XT.toFixed(1) + '" cy="' + Y(down.v).toFixed(1) + '" r="' + er + '" fill="' + down.c + '"/>';
+    if (!narrow) {
+      g += '<text x="' + (XT - 7) + '" y="' + (Y(up.v) - 8).toFixed(1) + '" text-anchor="end" font-size="' + fsEnd + '" font-weight="800" fill="' + up.c + '">' + fmt(up.v) + '</text>';
+      g += '<text x="' + (XT - 7) + '" y="' + (Y(down.v) + 17).toFixed(1) + '" text-anchor="end" font-size="' + fsEnd + '" font-weight="800" fill="' + down.c + '">' + fmt(down.v) + '</text>';
+    }
 
     var legend = '<div class="chart-legend">'
       + '<span class="lg"><span class="sw" style="background:' + ORANGE + '"></span>若拿去理财（预期）</span>'

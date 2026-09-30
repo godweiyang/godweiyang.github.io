@@ -102,9 +102,9 @@
       '<div class="field"><label>当前剩余本金</label><div class="control"><input type="number" class="lc-balance" value="' +
       d.balance +
       '" min="0" step="10000" placeholder="如 1000000"></div></div>' +
-      '<div class="field"><label>年利率</label><div class="control"><input type="number" class="lc-rate has-suffix" value="' +
-      d.rate +
-      '" min="0" step="0.1"><span class="suffix">%</span></div></div>' +
+      '<div class="field"><label>年利率</label><div class="control"><input type="text" inputmode="decimal" class="lc-rate has-suffix" value="' +
+      Number(d.rate).toFixed(2) +
+      '"><span class="suffix">%</span></div></div>' +
       '<div class="field"><label>还款方式</label><div class="control"><select class="lc-method">' +
       '<option value="equal_payment"' +
       (d.method === 'equal_payment' ? ' selected' : '') +
@@ -180,7 +180,13 @@
   })
   $('#loanList').addEventListener('change', function (e) {
     var card = e.target.closest('.loan-card')
-    if (card) syncCard(card)
+    if (!card) return
+    // 年利率失焦后固定显示两位小数（如 3.20%）
+    if (e.target.classList.contains('lc-rate')) {
+      var rv = parseFloat(e.target.value)
+      e.target.value = (isNaN(rv) ? 0 : rv).toFixed(2)
+    }
+    syncCard(card)
   })
 
   // 贷款类型切换
@@ -781,7 +787,7 @@
           (lpp ? shortRemain(lpp) : '—') +
           '</span></div>' +
           '<div class="lk"><span>年利率 ' +
-          (l.annualRate * 100).toFixed(1) +
+          (l.annualRate * 100).toFixed(2) +
           '% · ' +
           (l.method === 'equal_payment' ? '等额本息' : '等额本金') +
           '</span></div>' +

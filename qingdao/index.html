@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>青岛国庆 7 日游 · 行程路线</title>
+<style>
+:root{
+  --sea:#0b4f6c;--sea-2:#12718f;--sea-3:#1b8aa8;
+  --ink:#17323f;--ink-2:#2c4f60;--sub:#6b8291;
+  --walk:#1f6fb2;--metro:#d64545;--bus:#2e9e5b;--bike:#ee9b22;--trail:#8a7a5a;
+  --card:#fff;--line:rgba(11,79,108,.10);
+  --sh:0 8px 26px -12px rgba(11,79,108,.22);
+  --glass:rgba(255,255,255,.72);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;color:var(--ink);
+  font:15px/1.65 -apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  background:
+    radial-gradient(1000px 640px at 4% -8%,rgba(64,150,190,.28),transparent 60%),
+    radial-gradient(900px 600px at 100% 0%,rgba(120,200,220,.24),transparent 58%),
+    linear-gradient(180deg,#eef5f7,#e7f0f4 55%,#e4eef2);
+  background-attachment:fixed;min-height:100vh;
+}
+img{display:block}
+.wrap{max-width:1680px;margin:0 auto;padding:26px 22px 70px}
+@media(min-width:1900px){.wrap{max-width:1820px}}
+
+/* ===== Hero ===== */
+.hero{
+  position:relative;overflow:hidden;border-radius:26px;color:#fff;
+  background:linear-gradient(135deg,#08405a 0%,var(--sea) 48%,var(--sea-3) 100%);
+  padding:44px 48px 38px;box-shadow:0 24px 60px -26px rgba(8,64,90,.65);
+}
+.hero::after{content:"";position:absolute;right:-90px;top:-90px;width:340px;height:340px;
+  border-radius:50%;background:rgba(255,255,255,.08)}
+.hero::before{content:"";position:absolute;right:150px;bottom:-130px;width:260px;height:260px;
+  border-radius:50%;background:rgba(255,255,255,.07)}
+.hero h1{margin:0;font-size:clamp(26px,3.6vw,46px);font-weight:800;letter-spacing:2px}
+.hero .meta{margin-top:14px;font-size:clamp(14px,1.5vw,19px);opacity:.95;line-height:1.9}
+.legend{margin-top:20px;display:flex;gap:22px;flex-wrap:wrap;font-size:clamp(12.5px,1.3vw,16px)}
+.legend .k{display:inline-flex;align-items:center;gap:9px}
+.kl{width:34px;height:7px;border-radius:4px}
+
+/* ===== Sticky day nav ===== */
+.daynav{
+  position:sticky;top:10px;z-index:50;margin:18px 0 4px;
+  display:flex;gap:10px;overflow-x:auto;padding:10px 12px;scrollbar-width:none;
+  background:var(--glass);border:1px solid rgba(255,255,255,.9);border-radius:999px;
+  -webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);
+  box-shadow:0 10px 30px -16px rgba(11,79,108,.4);
+}
+.daynav::-webkit-scrollbar{display:none}
+.daynav a{
+  flex:0 0 auto;text-decoration:none;color:var(--sea);font-weight:700;font-size:13.5px;
+  padding:7px 16px;border-radius:999px;transition:background .15s,color .15s;
+}
+.daynav a:hover{background:rgba(11,79,108,.1)}
+.daynav a b{font-weight:800}
+
+/* ===== Day card ===== */
+.day{
+  margin-top:22px;background:var(--card);border-radius:24px;overflow:hidden;
+  box-shadow:var(--sh);border:1px solid rgba(255,255,255,.7);
+  display:grid;grid-template-columns:clamp(330px,27%,470px) 1fr;
+}
+.info{padding:28px 30px 22px;display:flex;flex-direction:column;min-width:0}
+.dtop{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.ddate{
+  flex:0 0 auto;background:var(--sea);color:#fff;font-weight:800;border-radius:14px;
+  padding:8px 16px;font-size:21px;text-align:center;line-height:1.25;
+}
+.ddate small{display:block;font-size:13px;font-weight:500;opacity:.85}
+.dtheme{font-size:clamp(19px,1.9vw,27px);font-weight:800;flex:1;min-width:120px}
+.dtime{flex:0 0 auto;font-size:13.5px;color:#b3541e;background:#fdeee2;border-radius:999px;
+  padding:6px 14px;font-weight:700;white-space:nowrap}
+.tl{margin-top:16px;flex:1}
+.ti{display:flex;gap:13px;align-items:flex-start;padding:5px 0}
+.n{
+  flex:0 0 32px;width:32px;height:32px;border-radius:50%;margin-top:2px;color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;
+  background:var(--walk);border:2.5px solid #fff;box-shadow:0 0 0 2px #b7d2e4;
+}
+.n.start{background:#e8533f;box-shadow:0 0 0 2px #f0b3a8}
+.n.end{background:var(--bike);box-shadow:0 0 0 2px #f3d3a0}
+.txt{font-size:clamp(14px,1.35vw,18px);line-height:1.45;color:var(--ink-2);padding-top:4px}
+.txt b{color:var(--sea);font-weight:700}
+.txt .mut{color:var(--sub);font-size:.92em}
+.tags{margin-top:14px;display:flex;gap:9px;flex-wrap:wrap}
+.tag{font-size:13px;color:var(--sea);background:#e2f0f5;border-radius:8px;padding:5px 12px;font-weight:700}
+.tag.alt{color:#7a5a12;background:#f7efd8}
+
+.mapwrap{position:relative;min-height:540px;background:#dfe9ee}
+.amap{width:100%;height:100%}
+.mapbadge{
+  position:absolute;left:14px;bottom:14px;z-index:5;pointer-events:none;
+  background:rgba(255,255,255,.85);border-radius:999px;padding:6px 14px;
+  font-size:12.5px;font-weight:700;color:var(--sea);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  box-shadow:0 6px 18px -8px rgba(11,79,108,.5);
+}
+
+/* ===== Tips ===== */
+.tips{
+  margin-top:24px;background:#fff8e9;border:1.5px solid #f2ddb0;border-radius:24px;padding:26px 32px;
+}
+.tips h3{margin:0;font-size:19px;font-weight:800;color:#8a5a12}
+.tips ul{margin:12px 0 0;padding:0}
+.tips li{list-style:none;font-size:14.5px;line-height:1.8;color:#5f4a23;padding-left:30px;position:relative}
+.tips li::before{content:"";position:absolute;left:5px;top:13px;width:12px;height:12px;border-radius:50%;background:#e8a33c}
+.foot{text-align:center;color:#5a7184;font-size:13.5px;margin-top:26px}
+
+/* ===== Mobile ===== */
+@media(max-width:900px){
+  .wrap{padding:14px 12px 50px}
+  .hero{padding:30px 24px 26px;border-radius:20px}
+  .legend{gap:12px 18px}
+  .daynav{top:6px;border-radius:16px;flex-wrap:nowrap}
+  .day{grid-template-columns:1fr;border-radius:20px;margin-top:16px}
+  .info{padding:22px 20px 16px}
+  .mapwrap{min-height:0;height:clamp(400px,58vh,540px);order:2}
+  .n{flex-basis:30px;width:30px;height:30px;font-size:15px}
+  .tips{border-radius:20px;padding:22px 22px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <h1>青岛国庆 7 日游 · 行程路线</h1>
+    <div class="meta">
+      2026.10.01 — 10.07　|　住：福润里·世御酒店（栈桥中山路地铁站店）<br>
+      地铁 + 步行为主，轻松不赶路；10.6 与同学同游市区精华
+    </div>
+    <div class="legend">
+      <span class="k"><span class="kl" style="background:var(--walk)"></span>步行</span>
+      <span class="k"><span class="kl" style="background:var(--metro)"></span>地铁</span>
+      <span class="k"><span class="kl" style="background:var(--bus)"></span>景区观光车</span>
+      <span class="k"><span class="kl" style="background:var(--bike)"></span>骑行</span>
+      <span class="k"><span class="kl" style="background:repeating-linear-gradient(90deg,#8a7a5a 0 8px,transparent 8px 15px)"></span>园内步道</span>
+    </div>
+  </header>
+
+  <nav class="daynav" id="daynav"></nav>
+
+  <main id="days"></main>
+
+  <section class="tips">
+    <h3>出行小贴士</h3>
+    <ul>
+      <li>啤酒博物馆、海军博物馆（提前 7 天放票）、崂山南线联票，均需在官方公众号/小程序提前预约。</li>
+      <li>国庆青岛约 13–23℃，早晚和海边风大，记得带薄外套，穿舒适的鞋。</li>
+      <li>10 月初海水已凉，浴场踩水即可，不建议下海游泳。</li>
+      <li>地铁可用支付宝/微信搜索“青岛地铁”领取乘车码。</li>
+    </ul>
+  </section>
+
+  <div class="foot">祝旅途愉快，青岛见 🌊</div>
+</div>
+
+<script>window._AMapSecurityConfig = { securityJsCode:'4c53a95cbc45792efebe0d3031509cc9' };</script>
+<script src="https://webapi.amap.com/maps?v=2.0&key=8b70196f1df4360442eb5d475c5d0c2e&plugin=AMap.Walking,AMap.Driving"></script>
+<script>
+const DAYS = [
+{ date:'10.1', week:'周四', theme:'抵达 · 栈桥夜色', time:'16:00 出门',
+  center:[120.32,36.066], fit:[1,2,3,4],
+  tags:[['地铁1号线 + 步行',0]],
+  items:[
+    ['s','15:01 抵达 <b>青岛北站</b>'],
+    ['','地铁1号线至<b>酒店</b>，约16:00 放行李'],
+    ['','<b>栈桥</b>看日落<span class="mut">（约17:43）</span>'],
+    ['','<b>中山路</b>晚餐'],
+    ['e','<b>天主教堂</b>看夜景<span class="mut">（外观）</span>']
+  ],
+  stops:[
+    {pos:[120.375693,36.168977],mode:'metro'},
+    {pos:[120.319068,36.070717],mode:'walk'},
+    {pos:[120.319300,36.061736],mode:'walk'},
+    {pos:[120.318781,36.069402],mode:'walk'},
+    {pos:[120.320588,36.068143]}
+  ]},
+{ date:'10.2', week:'周五', theme:'老城慢游 City Walk', time:'9:30 出门',
+  center:[120.328,36.061], fit:null,
+  tags:[['全程步行',0]],
+  items:[
+    ['s','<b>天主教堂</b><span class="mut">（白天入内）</span>'],
+    ['','<b>信号山公园</b>俯瞰红瓦绿树'],
+    ['','<b>大学路</b>午餐'],
+    ['','<b>青岛网红墙</b>'],
+    ['','<b>小鱼山</b>看汇泉湾全景'],
+    ['','<b>鲁迅公园</b>红礁松林'],
+    ['','<b>琴屿路</b> S弯<span class="mut">（孤独的树）</span>'],
+    ['e','<b>小青岛</b>看灯塔晚霞']
+  ],
+  stops:[
+    {pos:[120.320588,36.068143],mode:'walk'},
+    {pos:[120.331561,36.066446],gate:[120.328800,36.063000],mode:'walk'},
+    {pos:[120.334802,36.063732],mode:'walk'},
+    {pos:[120.331631,36.061402],mode:'walk'},
+    {pos:[120.336558,36.058765],gate:[120.335800,36.057900],mode:'walk'},
+    {pos:[120.333117,36.055007],mode:'walk'},
+    {pos:[120.329000,36.053800],mode:'walk'},
+    {pos:[120.323783,36.053098],gate:[120.325500,36.052800]}
+  ]},
+{ date:'10.3', week:'周六', theme:'西海岸 · 金沙滩', time:'10:00 出门',
+  center:[120.22,35.95], fit:[1,2,3,4],
+  tags:[['地铁1号线 + 骑行',0],['遇雨与10.4对调',1]],
+  items:[
+    ['s','<b>酒店</b>出发，地铁1号线过海'],
+    ['','<b>天目山路站</b>，换骑行约10分钟'],
+    ['','<b>金沙滩</b>踏浪漫步'],
+    ['','啤酒城午餐'],
+    ['e','骑行/公交到<b>唐岛湾景区</b>，看晚霞后返程']
+  ],
+  stops:[
+    {pos:[120.319068,36.070717],mode:'metro'},
+    {pos:[120.228082,35.964965],mode:'bike'},
+    {pos:[120.245130,35.957210],mode:'bike'},
+    {pos:[120.236450,35.955451],mode:'bike'},
+    {pos:[120.199437,35.926987]}
+  ]},
+{ date:'10.4', week:'周日', theme:'八大关 · 东部海岸', time:'10:00 出门',
+  center:[120.39,36.058], fit:[1,2,3,4,5,6,7],
+  tags:[['地铁3/2号线 + 步行',0]],
+  items:[
+    ['s','<b>酒店</b>出发，地铁至中山公园'],
+    ['','<b>中山公园</b>'],
+    ['','<b>八大关</b>：公主楼'],
+    ['','<b>八大关</b>：花石楼<span class="mut">（二浴堤坝路过）</span>'],
+    ['','<b>太平角</b>'],
+    ['','<b>第三海水浴场</b>看浮山湾天际线'],
+    ['','<b>燕儿岛智慧公园</b>悬崖栈道'],
+    ['e','<b>小麦岛</b>看日落，麦岛晚餐']
+  ],
+  stops:[
+    {pos:[120.319068,36.070717],mode:'metro'},
+    {pos:[120.350415,36.064394],mode:'walk'},
+    {pos:[120.349532,36.052506],mode:'walk'},
+    {pos:[120.353492,36.050238],mode:'walk'},
+    {pos:[120.360265,36.053038],mode:'walk'},
+    {pos:[120.365486,36.050451],mode:'walk'},
+    {pos:[120.396421,36.053777],mode:'walk'},
+    {pos:[120.431045,36.054245]}
+  ]},
+{ date:'10.5', week:'周一', theme:'崂山南线一日', time:'8:00 出门 · 7:00 起',
+  center:[120.66,36.18], fit:[1,2,3,4,5,6],
+  tags:[['地铁1/3/4号线 + 景区观光车',0]],
+  items:[
+    ['s','<b>酒店</b>出发，乘地铁前往崂山'],
+    ['','<b>大河东游客中心</b>，换乘景区观光车'],
+    ['','<b>八水河龙潭瀑</b>'],
+    ['','<b>太清宫</b>'],
+    ['','<b>青山渔村牌坊</b>，农家宴午餐'],
+    ['','<b>华严寺</b>'],
+    ['e','<b>仰口</b>索道上山看山海全景，返程']
+  ],
+  stops:[
+    {pos:[120.319068,36.070717],mode:'metro'},
+    {pos:[120.586939,36.132571],mode:'bus',manual:[
+      [120.586939,36.132571],[120.59325,36.12581],[120.60420,36.12497],
+      [120.61430,36.12553],[120.62187,36.12722],[120.62861,36.12665],
+      [120.63534,36.12553],[120.64124,36.12525],[120.64881,36.12665],
+      [120.657228,36.128064]
+    ]},
+    {pos:[120.657228,36.128064],mode:'bus'},
+    {pos:[120.676304,36.140167],mode:'bus'},
+    {pos:[120.683696,36.145928],mode:'bus'},
+    {pos:[120.681093,36.206242],mode:'bus'},
+    {pos:[120.669296,36.238224]}
+  ]},
+{ date:'10.6', week:'周二', theme:'和同学 · 市区精华日', time:'8:45 出门',
+  center:[120.36,36.07], fit:[1,2,3,4,5,6],
+  tags:[['地铁1/3号线 + 步行',0]],
+  items:[
+    ['s','<b>酒店</b>出发，地铁到台东'],
+    ['','<b>台东</b>下车，步行到啤酒博物馆'],
+    ['','<b>青岛啤酒博物馆</b>品酒<span class="mut">（返回台东午餐）</span>'],
+    ['','<b>海军博物馆</b><span class="mut">（主展馆+战舰，核潜艇入馆后抢约）</span>'],
+    ['','<b>五四广场</b>看日落'],
+    ['','<b>奥帆中心</b>'],
+    ['e','<b>情人坝</b>看灯光秀夜景']
+  ],
+  stops:[
+    {pos:[120.319068,36.070717],mode:'metro'},
+    {pos:[120.354123,36.083505],mode:'walk'},
+    {pos:[120.347318,36.079106],mode:'metro'},
+    {pos:[120.327714,36.054786],mode:'metro'},
+    {pos:[120.384576,36.062740],mode:'walk'},
+    {pos:[120.395063,36.054643],mode:'walk'},
+    {pos:[120.390288,36.052388]}
+  ]},
+{ date:'10.7', week:'周三', theme:'返程', time:'8:25 出门',
+  center:[120.316,36.067], fit:null,
+  tags:[['步行 / 地铁1号线',0]],
+  items:[
+    ['s','<b>酒店</b>早餐退房'],
+    ['e','<b>青岛站</b><span class="mut">（步行15分钟或地铁1站，8:40前到站）</span><br>09:22 G988 返沪，16:10 到虹桥']
+  ],
+  stops:[
+    {pos:[120.319068,36.070717],mode:'walk'},
+    {pos:[120.312786,36.064812]}
+  ]}
+];
+
+/* ===== Render DOM ===== */
+const daysEl = document.getElementById('days');
+const navEl = document.getElementById('daynav');
+DAYS.forEach((d,i)=>{
+  navEl.insertAdjacentHTML('beforeend',
+    `<a href="#day${i}"><b>${d.date}</b> ${d.theme.split(' · ')[0]}</a>`);
+
+  const items = d.items.map((it,k)=>{
+    const cls = it[0]==='s' ? 'n start' : it[0]==='e' ? 'n end' : 'n';
+    return `<div class="ti"><span class="${cls}">${k+1}</span><span class="txt">${it[1]}</span></div>`;
+  }).join('');
+  const tags = d.tags.map(t=>`<span class="tag${t[1]?' alt':''}">${t[0]}</span>`).join('');
+
+  daysEl.insertAdjacentHTML('beforeend', `
+  <section class="day" id="day${i}">
+    <div class="info">
+      <div class="dtop">
+        <span class="ddate">${d.date}<small>${d.week}</small></span>
+        <span class="dtheme">${d.theme}</span>
+        <span class="dtime">${d.time}</span>
+      </div>
+      <div class="tl">${items}</div>
+      <div class="tags">${tags}</div>
+    </div>
+    <div class="mapwrap"><div class="amap" id="map${i}"></div>
+      <span class="mapbadge">${d.date} 路线图</span>
+    </div>
+  </section>`);
+});
+
+/* ===== Lazy map init ===== */
+const COLOR = { walk:'#1f6fb2', bike:'#ee9b22' };
+
+function initDay(i){
+  const cfg = DAYS[i];
+  const map = new AMap.Map('map'+i, { zoom:12, center:cfg.center, viewMode:'2D' });
+  const walking = new AMap.Walking({});
+  const driving = new AMap.Driving({});
+  const markers = [];
+
+  function draw(path,color,dashed,arrows){
+    map.add(new AMap.Polyline({path,strokeColor:color,strokeWeight:6,strokeOpacity:.92,
+      lineJoin:'round',lineCap:'round',showDir:!!arrows,
+      strokeStyle:dashed?'dashed':'solid'}));
+  }
+
+  cfg.stops.forEach((s,k)=>{
+    let bg = k===0 ? '#e8533f' : (k===cfg.stops.length-1 ? '#ee9b22' : '#1f6fb2');
+    const mk = new AMap.Marker({position:s.pos, anchor:'center', zIndex:120,
+      content:'<div style="width:30px;height:30px;border-radius:50%;background:'+bg+
+      ';border:2.5px solid #fff;box-sizing:border-box;box-shadow:0 1px 6px rgba(0,0,0,.35);'+
+      'display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700">'+
+      (k+1)+'</div>'});
+    map.add(mk); markers.push(mk);
+  });
+
+  function enginePath(eng,o,d){
+    return new Promise(res=>{
+      eng.search(o,d,(status,result)=>{
+        let seg=null;
+        if(status==='complete'&&result.routes&&result.routes.length){
+          seg=[];
+          result.routes[0].steps.forEach(st=>{
+            if(st.path) st.path.forEach(p=>seg.push([p.lng,p.lat]));
+          });
+        }
+        res(seg&&seg.length?seg:null);
+      });
+    });
+  }
+
+  async function plan(k){
+    if(k>=cfg.stops.length-1){ finish(); return; }
+    const a=cfg.stops[k], b=cfg.stops[k+1];
+    const o=a.gate||a.pos, d=b.gate||b.pos, mode=a.mode;
+    if(mode==='metro'){
+      draw([o,d],'#d64545',true,false);
+    } else if(mode==='bus'){
+      if(a.manual){ draw(a.manual,'#2e9e5b',false,false); }
+      else {
+        let seg=await enginePath(driving,o,d);
+        draw(seg||[o,d],'#2e9e5b',false,false);
+      }
+    } else {
+      let seg=await enginePath(walking,o,d);
+      if(!seg) seg=await enginePath(driving,o,d);
+      draw(seg||[o,d],COLOR[mode]||'#1f6fb2',false,mode==='walk');
+    }
+    setTimeout(()=>plan(k+1),140);
+  }
+
+  function finish(){
+    cfg.stops.forEach(s=>{
+      if(s.gate && (s.gate[0]!==s.pos[0]||s.gate[1]!==s.pos[1])){
+        draw([s.gate,s.pos],'#8a7a5a',true,false);
+      }
+    });
+    const fitM = cfg.fit ? cfg.fit.map(k=>markers[k]) : markers;
+    map.setFitView(fitM,false,[50,50,50,50],16);
+  }
+
+  map.on('complete',()=>plan(0));
+}
+
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const i = +e.target.id.replace('day','');
+      initDay(i);
+      io.unobserve(e.target);
+    }
+  });
+},{rootMargin:'300px 0px',threshold:.02});
+
+DAYS.forEach((_,i)=>io.observe(document.getElementById('day'+i)));
+</script>
+</body>
+</html>
