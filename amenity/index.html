@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -254,8 +254,14 @@ const AM_CATS=[
  {key:'market', kws:['超市','便利店'],
   m:t=>(t[1]==='超级市场'&&t[2]==='超市')||t[1]==='便民商店/便利店',
   tier:t=>t[1]==='超级市场'?1:.6},
- {key:'park', kws:['公园'],
-  m:t=>t[1]==='公园广场'&&t[2]==='公园', tier:()=>1},
+ {key:'park', kws:['公园','绿地'],
+  m:(t,n)=>t[1]==='公园广场'&&(/公园|绿地|广场/.test(t[2])||/公园|绿地/.test(n)),
+  tier:(t,n)=>{
+   if(/森林|湿地|世纪公园|地质公园|海滨|遗址公园|风景名胜/.test(n))return 1;
+   if(/中心绿地|中央公园/.test(n))return .9;
+   if(/绿地|小游园|口袋|街园|广场/.test(n))return .6;
+   return .9;
+  }},
  {key:'kindergarten', kws:['幼儿园'],
   m:t=>t[1]==='学校'&&t[2]==='幼儿园', tier:()=>1},
  {key:'primary', kws:['小学'],
@@ -264,8 +270,12 @@ const AM_CATS=[
   m:t=>t[1]==='学校'&&t[2]==='中学', tier:()=>1},
  {key:'vege', kws:['菜市场','农贸市场'],
   m:t=>t[1]==='综合市场'&&/蔬菜市场|农副产品市场|水产海鲜市场|果品市场/.test(t[2]), tier:()=>1},
- {key:'noise', kws:['高架桥','高架路','立交桥','快速路'],
-  m:(t,n)=>t[0]==='交通设施服务'&&/高架|立交|快速路/.test(n), tier:()=>1},
+ {key:'noise', kws:['高架','立交桥','快速路','工厂','垃圾站','变电站','殡仪馆','加油站','污水处理'],
+  m:(t,n)=>{
+   if(t[0]==='交通设施服务'&&/高架|立交|快速路/.test(n))return true;
+   if(/印刷工厂|工厂店|工厂直销|工厂直营|工厂价|工厂特卖|垃圾厢房|垃圾箱房|建筑垃圾|垃圾收集点|单位垃圾/.test(n))return false;
+   return /化工厂|垃圾处理|垃圾转运|垃圾场|垃圾站|变电站|殡仪馆|污水处理|加油站|加气站|工厂/.test(n);
+  }, tier:()=>1},
 ];
 // ============ 八大维度（权重合计100）============
 const DIMS=[
@@ -359,8 +369,8 @@ async function gatherCat(cat,c){
 }
 function factorOf(cat,arr){
  if(cat.key==='noise'){
-  const d0=arr.length?arr[0].d:99999;
-  return d0<=200?0 : d0<=500?.5 : 1;
+  const d0=arr.length?Math.min.apply(null,arr.map(x=>x.d)):99999; // 最近的厌恶性设施距离：越远越好
+  return d0<=150?.1 : d0<=400?.45 : d0<=900?.75 : d0<=1600?.9 : 1;
  }
  const items=arr.map(x=>Object.assign(x,{q:x.tier*distFactor(x.d,radius)}))
   .sort((a,b)=>b.q-a.q);
@@ -521,7 +531,7 @@ function resolveByName(kw,i){
 }
 // ---- 本地缓存（手机上填写不丢失）----
 function saveCache(){
- try{localStorage.setItem('amenity-form',JSON.stringify(comms.slice(0,commCount).map(c=>({
+ try{localStorage.setItem('amenity-form-v3',JSON.stringify(comms.slice(0,commCount).map(c=>({
   name:c.name,city:c.city,lng:c.lnglat?c.lnglat.getLng():null,la:c.lnglat?c.lnglat.getLat():null,manual:c.manual,
   // 持久化已完成的分析结果（精简字段），刷新页面后无需重新请求高德
   am:c.am?{__radius:c.am.__radius,__failed:c.am.__failed,
@@ -531,7 +541,7 @@ function saveCache(){
 }
 function loadCache(){
  try{
-  const a=JSON.parse(localStorage.getItem('amenity-form')||'null');if(!a||!a.length)return;
+  const a=JSON.parse(localStorage.getItem('amenity-form-v3')||'null');if(!a||!a.length)return;
   commCount=a.length;
   a.forEach((x,i)=>{
    let am=null;
