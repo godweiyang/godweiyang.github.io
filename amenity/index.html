@@ -35,7 +35,10 @@ body{background:#eef2f5;font-family:"PingFang SC","Microsoft YaHei","Segoe UI",s
 .comm-del{flex:none;width:32px;height:32px;border:0;border-radius:8px;background:transparent;color:#8a97a4;
   cursor:pointer;display:flex;align-items:center;justify-content:center}
 .comm-del:hover{background:#fdecea;color:#c62828}
-.sumgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px}
+.sumgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;padding:14px 18px 18px}
+.card h3{padding:18px 18px 0;font-size:16.5px}
+#radarChart{padding:0 8px}
+.card .radar-note{padding:0 18px 14px}
 .sumcell{border:1.5px solid #e7edf3;border-radius:12px;padding:12px;text-align:center;background:#fbfdfe}
 .sumcell .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-bottom:6px}
 .sum-name{font-size:12.5px;font-weight:700;color:#33414f;min-height:34px;display:flex;align-items:center;justify-content:center}
@@ -243,7 +246,7 @@ const AM_CATS=[
   m:t=>t[1]==='商场',
   tier:(t,n)=>{
    // 区域连锁/知名商场优先按品牌识别（高德小类有时错分南北座）
-   if(/万达|万象|印象城|印象汇|大悦城|恒隆|太古|国金|IFS|IFC|ITC|国贸汇|环贸|iapm|美罗|荟聚|吾悦|银泰|合生汇|正大|龙之梦|百联|爱琴海|环球港|万科广场|龙湖|天街|花园城|来福士|K11|嘉里|海岸城|壹方城|大融城|阳光天地|悠方|新光天地|SKP|德基|金鹰|世茂|领展|环宇城|宝龙城|宝龙一城|卓悦|天环|仁恒|缤纷城/.test(n))return 1;
+   if(/万达|万象|印象城|印象汇|大悦城|恒隆|太古|国金|IFS|IFC|ITC|国贸汇|环贸|iapm|美罗|荟聚|吾悦|银泰|合生汇|正大|龙之梦|百联|爱琴海|环球港|万科广场|龙湖|天街|花园城|来福士|K11|嘉里|海岸城|壹方城|大融城|阳光天地|悠方|新光天地|SKP|德基|金鹰|世茂|领展|环宇城|宝龙城|宝龙一城|卓悦|天环|仁恒|缤纷城|金茂/i.test(n))return 1;
    if(t[2]==='购物中心')return .7;
    if(t[2]==='百货商场'||/百货/.test(n))return .75;
    return .5;
@@ -300,11 +303,15 @@ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 let lastReqAt=0;
 function rawSearch(kw,ll,r,page){
  return new Promise(res=>{
+  let done=false;
+  const fin=x=>{if(!done){done=true;res(x);}};
+  const timer=setTimeout(()=>fin({ok:false,info:'timeout'}),12000); // 回调丢失保护，避免整体挂死
   const ps=new AMap.PlaceSearch({pageSize:PAGE_SIZE,pageIndex:page,extensions:'all'});
   ps.searchNearBy(kw,ll,r,(status,result)=>{
-   if(status==='complete')res({ok:true,pois:(result.poiList&&result.poiList.pois)||[]});
-   else if(status==='no_data')res({ok:true,pois:[]});
-   else res({ok:false,info:result?(''+(result.info||result)):status});
+   clearTimeout(timer);
+   if(status==='complete')fin({ok:true,pois:(result.poiList&&result.poiList.pois)||[]});
+   else if(status==='no_data')fin({ok:true,pois:[]});
+   else fin({ok:false,info:result?(''+(result.info||result)):status});
   });
  });
 }
@@ -325,9 +332,9 @@ function meters(c,ll){
  const dx=(ll.lng-c.lng)*Math.PI/180*Math.cos((la1+la2)/2)*6371000;
  return Math.round(Math.hypot(dx,(la2-la1)*6371000));
 }
-// 距离衰减：越近分越高
+// 距离衰减：连续曲线，越近分越高，避免粗分档导致同分
 function distFactor(d,R){
- return d<=R*.2?1 : d<=R*.45?.8 : d<=R*.75?.55 : .35;
+ return Math.max(.3,1-.85*Math.pow(d/R,.8));
 }
 // 采集一个类别的全部候选 POI；返回 {arr} 或 {fail:true}
 async function gatherCat(cat,c){
@@ -359,7 +366,7 @@ function factorOf(cat,arr){
   .sort((a,b)=>b.q-a.q);
  let f=0;
  items.forEach((it,k)=>{
-  f+= k===0? it.q : .06*it.q*Math.pow(.55,k-1); // 同类多点位边际递减
+  f+= k===0? it.q : .12*it.q*Math.pow(.6,k-1); // 同类多点位：选项多也是优势，边际递减
  });
  return Math.min(1,f);
 }
@@ -673,7 +680,7 @@ function renderResults(valid){
   const radar=document.createElement('div');radar.className='card';
   radar.innerHTML=`<h3>八维度雷达对比</h3>
    <div id="radarChart" style="width:100%;height:380px"></div>
-   <div style="color:#8A94A3;font-size:11.5px;margin-top:4px">各轴为该维度得分率（0–100）；未填本体信息的维度按 0 显示</div>`;
+   <div class="radar-note" style="color:#8A94A3;font-size:11.5px;margin-top:4px">各轴为该维度得分率（0–100）；未填本体信息的维度按 0 显示</div>`;
   box.appendChild(radar);
   setTimeout(()=>drawRadar(scored),60);
  }
