@@ -603,7 +603,7 @@ function loadCache(){
 // ---- 打分 ----
 function scoreComm(c){
  const f={};
- if(c.am)AM_CATS.forEach(k=>f[k.key]=c.am[k.key].f);
+ if(c.am)AM_CATS.forEach(k=>{if(!c.am[k.key].fail)f[k.key]=c.am[k.key].f;});
  const m=c.manual;
  if(m.year){const age=new Date().getFullYear()-m.year;
   f.year=age<=5?1:age<=10?.9:age<=20?.7:age<=30?.5:.35;}
