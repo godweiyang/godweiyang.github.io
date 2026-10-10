@@ -66,6 +66,30 @@ body{background:#eef2f5;font-family:"PingFang SC","Microsoft YaHei","Segoe UI",s
 .go:disabled{opacity:.55;cursor:wait}
 .hint{font-size:11.5px;color:#8a97a3;margin-top:10px;line-height:1.6}
 
+/* 分析进度弹窗 */
+.modal-mask{position:fixed;inset:0;background:rgba(22,33,43,.45);display:none;align-items:center;
+ justify-content:center;z-index:900;padding:20px}
+.modal-mask.show{display:flex}
+.prog-dialog{width:100%;max-width:430px}
+.prog-dialog h3{padding:18px 20px 4px;font-size:16px}
+.prog-sub{padding:0 20px 12px;color:#8a97a3;font-size:12px}
+#progList{padding:0 20px;display:flex;flex-direction:column;gap:13px}
+.prog-row .pr-top{display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:6px}
+.prog-row .pr-dot{width:9px;height:9px;border-radius:50%;flex:none}
+.prog-row .pr-name{flex:1;font-weight:600;color:#37474f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prog-row .pr-num{color:#8a97a3;font-size:11.5px;flex:none}
+.prog-row .ptrack{height:7px;background:#edf1f4;border-radius:4px;overflow:hidden}
+.prog-row .ptrack i{display:block;height:100%;border-radius:4px;width:0;transition:width .3s}
+.prog-overall{padding:16px 20px 4px}
+.prog-overall .po-top{display:flex;justify-content:space-between;font-size:12px;color:#5d6b77;margin-bottom:6px}
+.prog-overall .ptrack{height:9px;background:#e6ecf1;border-radius:5px;overflow:hidden}
+.prog-overall .ptrack i{display:block;height:100%;width:0;border-radius:5px;
+ background:linear-gradient(90deg,#14688f,#1e88b5);transition:width .3s}
+.prog-actions{display:flex;justify-content:flex-end;gap:10px;padding:14px 20px 18px}
+.prog-actions button{height:36px;padding:0 20px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer}
+.prog-cancel{border:1.5px solid #d6dee4;background:#fff;color:#5d6b77}
+.prog-cancel:active{background:#f3f6f8}
+
 /* 地图 */
 #map{height:440px;width:100%;background:#e8eef2}
 .map-legend{display:flex;flex-wrap:wrap;gap:4px 12px;padding:10px 16px;border-top:1px solid #eef2f5}
@@ -211,6 +235,22 @@ table.cmp tfoot td{font-size:15px;font-weight:900;border-bottom:0}
   <!-- 结果 -->
   <div id="results"></div>
   <div id="compare"></div>
+
+  <!-- 分析进度弹窗 -->
+  <div class="modal-mask" id="progMask">
+    <div class="card prog-dialog">
+      <h3>正在分析周边配套</h3>
+      <div class="prog-sub">高德地图实时检索，每个小区 12 类配套</div>
+      <div id="progList"></div>
+      <div class="prog-overall">
+        <div class="po-top"><span>总进度</span><b id="progPct">0%</b></div>
+        <div class="ptrack"><i id="progOverallBar"></i></div>
+      </div>
+      <div class="prog-actions">
+        <button type="button" class="prog-cancel" id="progCancel">取消分析</button>
+      </div>
+    </div>
+  </div>
 
   <!-- 规则卡片 -->
   <div class="card">
@@ -380,9 +420,10 @@ function factorOf(cat,arr){
  });
  return Math.min(1,f);
 }
-async function amAnalyze(c,onCat){
+async function amAnalyze(c,onCat,shouldCancel){
  const out={}, failed=[];
  for(const cat of AM_CATS){
+  if(shouldCancel&&shouldCancel())return null;
   const g=await gatherCat(cat,c);
   if(g.fail){
    out[cat.key]={arr:[],f:0,fail:true};failed.push(cat.key);
@@ -392,11 +433,15 @@ async function amAnalyze(c,onCat){
   if(onCat)onCat(cat.key,out[cat.key]);
  }
  // 失败的类别冷却后整体补跑一轮
- if(failed.length)await sleep(2600);
- for(const key of failed){
-  const cat=AM_CATS.find(x=>x.key===key);
-  const g=await gatherCat(cat,c);
-  if(!g.fail)out[key]={arr:g.arr,f:factorOf(cat,g.arr),fail:false};
+ if(failed.length){
+  if(shouldCancel&&shouldCancel())return null;
+  await sleep(2600);
+  for(const key of failed){
+   if(shouldCancel&&shouldCancel())return null;
+   const cat=AM_CATS.find(x=>x.key===key);
+   const g=await gatherCat(cat,c);
+   if(!g.fail)out[key]={arr:g.arr,f:factorOf(cat,g.arr),fail:false};
+  }
  }
  out.__failed=Object.keys(out).filter(k=>k!=='__failed'&&out[k].fail);
  return out;
@@ -590,6 +635,32 @@ function scoreComm(c){
  return {total:Math.round(earned/covered*100),groups,f};
 }
 // ---- 执行 ----
+let analyzeCancelled=false;
+function openProgModal(todo){
+ const list=document.getElementById('progList');
+ list.innerHTML=todo.map(t=>`
+  <div class="prog-row" data-i="${t.i}">
+   <div class="pr-top"><span class="pr-dot" style="background:${t.col}"></span>
+    <span class="pr-name">${t.c.name}</span>
+    <span class="pr-num">0/${AM_CATS.length}</span></div>
+   <div class="ptrack"><i style="background:${t.col}"></i></div>
+  </div>`).join('');
+ document.getElementById('progPct').textContent='0%';
+ document.getElementById('progOverallBar').style.width='0%';
+ document.getElementById('progCancel').textContent='取消分析';
+ document.getElementById('progMask').classList.add('show');
+}
+function updateProg(i,done,totalUnits,finished){
+ const row=document.querySelector('.prog-row[data-i="'+i+'"]');
+ if(row){
+  row.querySelector('.pr-num').textContent=done+'/'+AM_CATS.length;
+  row.querySelector('.ptrack i').style.width=(done/AM_CATS.length*100)+'%';
+ }
+ const pct=Math.round(finished/totalUnits*100);
+ document.getElementById('progPct').textContent=pct+'%';
+ document.getElementById('progOverallBar').style.width=pct+'%';
+}
+function closeProgModal(){document.getElementById('progMask').classList.remove('show');}
 async function runAll(){
  // 已填名称但没从下拉选中定位的小区：明确提示，不静默跳过
  const unlocated=[];
@@ -601,28 +672,52 @@ async function runAll(){
  const valid=comms.slice(0,commCount).filter(c=>c.lnglat);
  if(!valid.length){alert('请先输入并选择小区');return;}
  const btn=document.getElementById('btnGo');btn.disabled=true;
+ const cols=['#1565C0','#EF6C00','#2E7D32'];
+ const todo=[];
  for(const c of valid){
   const i=comms.indexOf(c);
   const total0=c.am?AM_CATS.reduce((s,cat)=>s+c.am[cat.key].arr.length,0):0;
   // 增量分析：已分析过、半径没变且无失败类别的小区直接复用结果
   if(c.am&&c.am.__radius===radius&&!c.am.__failed.length){
    setStatus(i,'已复用上次分析结果（'+total0+' 个点位）；改统计半径会自动重新分析','ok');
-   continue;
-  }
-  let done=0;
-  setStatus(i,'高德 POI 分析中（0/'+AM_CATS.length+'）…');
-  c.am=await amAnalyze(c,()=>{done++;setStatus(i,'高德 POI 分析中（'+done+'/'+AM_CATS.length+'）…');});
-  c.am.__radius=radius;
-  const total=AM_CATS.reduce((s,cat)=>s+c.am[cat.key].arr.length,0);
-  if(c.am.__failed.length){
-   setStatus(i,'部分类别（'+c.am.__failed.join('、')+'）因限流获取失败，请再点一次「开始综合打分」只重试本小区；其余 '+total+' 个点位已统计','warn');
-  }else setStatus(i,'周边配套统计完成，共 '+total+' 个点位','ok');
-  saveCache();
+  }else todo.push({c,i,col:cols[i]});
  }
+ let cancelled=false;
+ if(todo.length){
+  analyzeCancelled=false;
+  document.getElementById('results').innerHTML='';
+  document.getElementById('compare').innerHTML='';
+  openProgModal(todo);
+  const totalUnits=todo.length*AM_CATS.length;
+  let finished=0;
+  for(const t of todo){
+   let done=0;
+   setStatus(t.i,'高德 POI 分析中（0/'+AM_CATS.length+'）…');
+   updateProg(t.i,0,totalUnits,finished);
+   const out=await amAnalyze(t.c,()=>{
+    done++;finished++;
+    setStatus(t.i,'高德 POI 分析中（'+done+'/'+AM_CATS.length+'）…');
+    updateProg(t.i,done,totalUnits,finished);
+   },()=>analyzeCancelled);
+   if(out===null){cancelled=true;break;}
+   t.c.am=out;t.c.am.__radius=radius;
+   const total=AM_CATS.reduce((s,cat)=>s+out[cat.key].arr.length,0);
+   if(out.__failed.length){
+    setStatus(t.i,'部分类别（'+out.__failed.join('、')+'）因限流获取失败，请再点一次「开始综合打分」只重试本小区；其余 '+total+' 个点位已统计','warn');
+   }else setStatus(t.i,'周边配套统计完成，共 '+total+' 个点位','ok');
+   saveCache();
+  }
+  closeProgModal();
+ }
+ btn.disabled=false;
+ if(cancelled)return;
  drawMap(valid);
  renderResults(valid);
- btn.disabled=false;
 }
+document.getElementById('progCancel').addEventListener('click',()=>{
+ analyzeCancelled=true;
+ document.getElementById('progCancel').textContent='正在取消…';
+});
 function drawMap(valid){
  map.remove([...Object.values(catMarkers)].flat());Object.values(catMarkers).length=0;
  map.remove(homeOverlays);map.remove(circleOverlays);homeOverlays=[];circleOverlays=[];
