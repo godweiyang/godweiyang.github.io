@@ -110,6 +110,7 @@ table.cmp tfoot td{font-size:15px;font-weight:900;border-bottom:0}
 /* 新：状态/候选/手动补录 */
 .comm-status{padding:8px 14px 2px;font-size:12.5px;color:#5d6b77;line-height:1.6}
 .comm-status.ok{color:#2e7d32}
+.comm-status.warn{color:#ef6c00}
 .comm-status.bad{color:#c62828}
 .home-pin{width:22px;height:22px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);
  color:#fff;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;
@@ -229,7 +230,7 @@ const AM_CATS=[
  {key:'primary', kws:['小学']},
  {key:'middle', kws:['中学']},
  {key:'vege', kws:['菜市场','农贸市场']},
- {key:'noise', kws:['立交桥','高架桥','快速路']},
+ {key:'noise', kws:['立交桥','高架桥','高架路','快速路']},
 ];
 // ============ 八大维度（权重合计100）============
 const DIMS=[
@@ -242,7 +243,7 @@ const DIMS=[
  {key:'layout', name:'户型', weight:7, subs:[['layout',7]]},
  {key:'value', name:'性价比', weight:8, subs:[['value',8]]},
 ];
-const PAGE_SIZE=25, MAX_PAGES=5;
+const PAGE_SIZE=25, MAX_PAGES=3, REQ_GAP=240;
 let radius=2000;
 const COLORS={subway:'#E53935',bus:'#FB8C00',hospital:'#8E24AA',pharmacy:'#F06292',
  mall:'#3949AB',market:'#00897B',park:'#43A047',kindergarten:'#7E57C2',primary:'#1E88E5',
@@ -263,32 +264,51 @@ map.on('click',e=>{
 });
 
 // ---- 高德 POI 检索 ----
-function searchPage(kw,ll,r,page){
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+let lastReqAt=0;
+function rawSearch(kw,ll,r,page){
  return new Promise(res=>{
   const ps=new AMap.PlaceSearch({pageSize:PAGE_SIZE,pageIndex:page,extensions:'base'});
   ps.searchNearBy(kw,ll,r,(status,result)=>{
-   if(status==='complete'&&result&&result.poiList)res(result.poiList.pois||[]);else res([]);
+   if(status==='complete')res({ok:true,pois:(result.poiList&&result.poiList.pois)||[]});
+   else if(status==='no_data')res({ok:true,pois:[]});
+   else res({ok:false,info:result?(''+(result.info||result)):status});
   });
  });
+}
+async function searchPage(kw,ll,r,page){
+ for(let attempt=0;attempt<5;attempt++){
+  const gap=Math.max(0,REQ_GAP-(Date.now()-lastReqAt));
+  if(gap)await sleep(gap);
+  lastReqAt=Date.now();
+  const got=await rawSearch(kw,ll,r,page);
+  if(got.ok)return got.pois;
+  // 限流/网络类错误：指数退避后重试
+  await sleep(450*Math.pow(2,attempt)+Math.random()*300);
+ }
+ return null;
 }
 function meters(c,ll){
  const la1=c.lat*Math.PI/180, la2=ll.lat*Math.PI/180;
  const dx=(ll.lng-c.lng)*Math.PI/180*Math.cos((la1+la2)/2)*6371000;
  return Math.round(Math.hypot(dx,(la2-la1)*6371000));
 }
-async function amAnalyze(c){
- const out={};
+async function amAnalyze(c,onCat){
+ const out={}, failed=[];
  for(const cat of AM_CATS){
-  const seen=new Map();
+  const seen=new Map(); let catFail=false;
   for(const kw of cat.kws){
    for(let p=1;p<=MAX_PAGES;p++){
     const pois=await searchPage(kw,c.lnglat,radius,p);
+    if(pois===null){catFail=true;break;}
     pois.forEach(x=>{if(x.location&&!seen.has(x.id))seen.set(x.id,x);});
     if(pois.length<PAGE_SIZE)break;
    }
+   if(catFail)break;
   }
   let arr=[...seen.values()].map(x=>({name:x.name,ll:x.location,d:meters(c.lnglat,x.location)}))
-   .filter(x=>x.d<=radius).sort((a,b)=>a.d-b.d);
+   .filter(x=>x.d<=radius && (cat.key!=='noise' || /高架|立交|快速路/.test(x.name)))
+   .sort((a,b)=>a.d-b.d);
   let f=0;
   if(cat.key==='noise'){
    const d0=arr.length?arr[0].d:99999;
@@ -298,8 +318,39 @@ async function amAnalyze(c){
    f=d0<=radius*.35?1:d0<=radius*.7?.75:.5;
    f=Math.min(1,f+Math.min(.25,(arr.length-1)*.05));
   }
-  out[cat.key]={arr,f};
+  out[cat.key]={arr,f,fail:catFail};
+  if(catFail)failed.push(cat.key);
+  if(onCat)onCat(cat.key,out[cat.key]);
  }
+ // 失败的类别整体补跑一轮（先冷却，避开限流窗口）
+ await sleep(2600);
+ for(const key of failed){
+  const cat=AM_CATS.find(x=>x.key===key);
+  const seen=new Map(); let stillFail=false;
+  for(const kw of cat.kws){
+   for(let p=1;p<=MAX_PAGES;p++){
+    const pois=await searchPage(kw,c.lnglat,radius,p);
+    if(pois===null){stillFail=true;break;}
+    pois.forEach(x=>{if(x.location&&!seen.has(x.id))seen.set(x.id,x);});
+    if(pois.length<PAGE_SIZE)break;
+   }
+   if(stillFail)break;
+  }
+  if(!stillFail){
+   let arr=[...seen.values()].map(x=>({name:x.name,ll:x.location,d:meters(c.lnglat,x.location)}))
+    .filter(x=>x.d<=radius && (cat.key!=='noise' || /高架|立交|快速路/.test(x.name)))
+    .sort((a,b)=>a.d-b.d);
+   let f=0;
+   if(cat.key==='noise'){const d0=arr.length?arr[0].d:99999;f=d0<=200?0:d0<=500?.5:1;}
+   else if(arr.length){
+    const d0=arr[0].d;
+    f=d0<=radius*.35?1:d0<=radius*.7?.75:.5;
+    f=Math.min(1,f+Math.min(.25,(arr.length-1)*.05));
+   }
+   out[key]={arr,f,fail:false};
+  }
+ }
+ out.__failed=Object.keys(out).filter(k=>k!=='__failed'&&out[k].fail);
  return out;
 }
 // ---- 小区输入卡 ----
@@ -428,9 +479,13 @@ async function runAll(){
  const btn=document.getElementById('btnGo');btn.disabled=true;
  for(const c of valid){
   const i=comms.indexOf(c);
-  setStatus(i,'高德 POI 分析中…');
-  c.am=await amAnalyze(c);
-  setStatus(i,'周边配套统计完成','ok');
+  let done=0;
+  setStatus(i,'高德 POI 分析中（0/'+AM_CATS.length+'）…');
+  c.am=await amAnalyze(c,()=>{done++;setStatus(i,'高德 POI 分析中（'+done+'/'+AM_CATS.length+'）…');});
+  const total=AM_CATS.reduce((s,cat)=>s+c.am[cat.key].arr.length,0);
+  if(c.am.__failed.length){
+   setStatus(i,'部分类别（'+c.am.__failed.join('、')+'）因限流获取失败，请稍后再点一次「开始综合打分」重试；其余 '+total+' 个点位已统计','warn');
+  }else setStatus(i,'周边配套统计完成，共 '+total+' 个点位','ok');
  }
  drawMap(valid);
  renderResults(valid);
