@@ -435,11 +435,21 @@ function bindBlocks(){
   const i=+el.dataset.i,inp=el.querySelector('.comm-inp');
   new AMap.AutoComplete({input:inp,city:'全国'},(status,r)=>{
    if(status==='complete'&&r.tips&&r.tips.length){
-    const t=r.tips[0];
-    if(t.location)fillComm(i,{name:t.name,city:t.district?(t.city||t.province):'',lnglat:t.location});
+    // tips[0] 可能是无坐标的文本项：只在有坐标的提示里挑，优先与输入同名
+    const withLoc=r.tips.filter(t=>t.location);
+    const base=inp.value.replace(/[（(].*$/,'');
+    const t=withLoc.find(x=>x.name===inp.value)||withLoc.find(x=>x.name===base)||withLoc[0];
+    if(t)fillComm(i,{name:t.name,city:t.district?(t.city||t.province):'',lnglat:t.location});
    }
   });
   inp.addEventListener('change',()=>{comms[i].name=inp.value;saveCache();});
+  // 兜底：失焦时若有名称但没定位（个别手机下拉选择回调异常），用 PlaceSearch 解析
+  inp.addEventListener('blur',()=>{
+   setTimeout(()=>{
+    const kw=inp.value.trim();
+    if(kw&&!comms[i].lnglat)resolveByName(kw,i);
+   },300);
+  });
   el.querySelectorAll('.manual input,.manual select').forEach(x=>{
    x.addEventListener('input',()=>{comms[i].manual[x.dataset.k]=x.value;saveCache();});
   });
@@ -485,6 +495,17 @@ function fillComm(i,d){
  el.querySelector('.comm-inp').value=d.name;
  setStatus(i,'已定位：'+d.name+'，开始分析后统计周边配套…');
  tryCost(comms[i],i);saveCache();
+}
+// 兜底解析：按名称用 PlaceSearch 找住宅小区 POI
+function resolveByName(kw,i){
+ const ps=new AMap.PlaceSearch({extensions:'all',pageSize:10,city:'全国'});
+ ps.search(kw,(status,r)=>{
+  if(status!=='complete'||!r.poiList)return;
+  const base=kw.replace(/[（(].*$/,'');
+  const pois=r.poiList.pois.filter(p=>p.location);
+  const hit=pois.find(p=>p.name===kw)||pois.find(p=>p.name===base)||pois[0];
+  if(hit)fillComm(i,{name:hit.name,city:hit.district?(hit.city||hit.province):'',lnglat:hit.location});
+ });
 }
 // ---- 本地缓存（手机上填写不丢失）----
 function saveCache(){
