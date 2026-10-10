@@ -207,7 +207,7 @@ table.cmp tfoot td{font-size:15px;font-weight:900;border-bottom:0}
 </head>
 <body>
 <div class="top">
-  <h1>小区综合打分 <span class="ver-badge">v5</span></h1>
+  <h1>小区综合打分 <span class="ver-badge">v6</span></h1>
   <div class="r">输入小区，自动统计周边配套并结合小区本体属性<br>交通 / 商业 / 医疗 / 教育 / 环境 / 品质 / 户型 / 性价比，支持多小区对比</div>
 </div>
 <div class="wrap">
@@ -266,7 +266,7 @@ table.cmp tfoot td{font-size:15px;font-weight:900;border-bottom:0}
       <b>手动维度：</b>房龄（≤5/10/20/30 年分档）、容积率（1.5/2.5/3.5/5 分档）、绿化率（40/30/25% 分档）、户型评价；未填项不参与，权重按已填维度归一。<br>
       <b>性价比：</b>配套得分与挂牌均价综合，价格越低、配套越好得分越高。<br>
       <b>等级：</b>90+ 极佳，75–89 优秀，60–74 良好，45–59 一般，&lt;45 不便。教育维度只测学校距离，不代表学区划分与质量；本工具不预测房价走势。
-      <div class="ver-tag">算法版本 v5（看到此标记即为新版，每次打分实时检索）</div>
+      <div class="ver-tag">算法版本 v6（看到此标记即为新版，每次打分实时检索）</div>
     </div>
   </div>
 </div>
@@ -282,7 +282,7 @@ const AM_CATS=[
   m:t=>t[1]==='地铁站', tier:()=>1},
  {key:'bus', kws:['公交站','公交车站'],
   m:t=>t[1]==='公交车站', tier:()=>.9},
- {key:'hospital', kws:['医院'],
+ {key:'hospital', kws:['医院','综合医院','医疗中心'],
   m:t=>t[1]==='综合医院',
   tier:(t,n)=>t[2]==='卫生院'?.3 : /康复医院|护理院/.test(n)?.6 : 1},
  {key:'pharmacy', kws:['药店'],
@@ -427,9 +427,22 @@ function factorOf(cat,arr){
 }
 async function amAnalyze(c,onCat,shouldCancel){
  const out={}, failed=[];
+ // 稀疏判据：这些类别在城区正常应有结果，若异常稀疏说明响应被限流截断，需重试
+ const sparseOf={
+  subway:a=>!a.length,
+  hospital:a=>!a.some(p=>p.tier>=.6),
+  mall:a=>!a.some(p=>p.tier>=.7)
+ };
  for(const cat of AM_CATS){
   if(shouldCancel&&shouldCancel())return null;
-  const g=await gatherCat(cat,c);
+  let g=await gatherCat(cat,c);
+  if(!g.fail&&sparseOf[cat.key]&&sparseOf[cat.key](g.arr)){
+   // 疑似被截断：冷却后重试一次
+   await sleep(2200);
+   if(shouldCancel&&shouldCancel())return null;
+   const g2=await gatherCat(cat,c);
+   if(!g2.fail&&g2.arr.length>=g.arr.length)g=g2;
+  }
   if(g.fail){
    out[cat.key]={arr:[],f:0,fail:true};failed.push(cat.key);
   }else{
@@ -437,15 +450,16 @@ async function amAnalyze(c,onCat,shouldCancel){
   }
   if(onCat)onCat(cat.key,out[cat.key]);
  }
- // 失败的类别冷却后整体补跑一轮
- if(failed.length){
+ // 失败的类别冷却后补跑（最多两轮）
+ for(let round=0;round<2&&failed.length;round++){
   if(shouldCancel&&shouldCancel())return null;
   await sleep(2600);
-  for(const key of failed){
+  for(const key of failed.slice()){
    if(shouldCancel&&shouldCancel())return null;
    const cat=AM_CATS.find(x=>x.key===key);
    const g=await gatherCat(cat,c);
-   if(!g.fail)out[key]={arr:g.arr,f:factorOf(cat,g.arr),fail:false};
+   if(!g.fail){out[key]={arr:g.arr,f:factorOf(cat,g.arr),fail:false};
+    failed.splice(failed.indexOf(key),1);}
   }
  }
  out.__failed=Object.keys(out).filter(k=>k!=='__failed'&&out[k].fail);
