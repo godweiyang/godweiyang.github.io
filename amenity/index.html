@@ -218,19 +218,41 @@ table.cmp tfoot td{font-size:15px;font-weight:900;border-bottom:0}
 <script src="https://webapi.amap.com/maps?v=2.0&key=8b70196f1df4360442eb5d475c5d0c2e&plugin=AMap.AutoComplete,AMap.PlaceSearch,AMap.Geocoder"></script>
 <script>
 // ============ 高德自动采集的子指标 ============
+// t = p.type.split(';')；t[0]大类 t[1]中类 t[2]小类（小类可能带 '|多类' 后缀）
 const AM_CATS=[
- {key:'subway', kws:['地铁站']},
- {key:'bus', kws:['公交站']},
- {key:'hospital', kws:['医院','社区卫生服务中心']},
- {key:'pharmacy', kws:['药店']},
- {key:'mall', kws:['商场','购物中心']},
- {key:'market', kws:['超市','便利店']},
- {key:'park', kws:['公园']},
- {key:'kindergarten', kws:['幼儿园']},
- {key:'primary', kws:['小学']},
- {key:'middle', kws:['中学']},
- {key:'vege', kws:['菜市场','农贸市场']},
- {key:'noise', kws:['立交桥','高架桥','高架路','快速路']},
+ {key:'subway', kws:['地铁站'],
+  m:t=>t[1]==='地铁站', tier:()=>1},
+ {key:'bus', kws:['公交站','公交车站'],
+  m:t=>t[1]==='公交车站', tier:()=>.9},
+ {key:'hospital', kws:['医院'],
+  m:t=>t[1]==='综合医院',
+  tier:(t,n)=>t[2]==='卫生院'?.3 : /康复医院|护理院/.test(n)?.6 : 1},
+ {key:'pharmacy', kws:['药店'],
+  m:t=>t[1]==='医药保健销售店'&&t[2]==='药房', tier:()=>1},
+ {key:'mall', kws:['购物中心','商场','百货'],
+  m:t=>t[1]==='商场',
+  tier:(t,n)=>{
+   // 区域连锁/知名商场优先按品牌识别（高德小类有时错分南北座）
+   if(/万达|万象|印象城|印象汇|大悦城|恒隆|太古|国金|IFS|IFC|ITC|国贸汇|环贸|iapm|美罗|荟聚|吾悦|银泰|合生汇|正大|龙之梦|百联|爱琴海|环球港|万科广场|龙湖|天街|花园城|来福士|K11|嘉里|海岸城|壹方城|大融城|阳光天地|悠方|新光天地|SKP|德基|金鹰|世茂|领展|环宇城|宝龙城|宝龙一城|卓悦|天环|仁恒|缤纷城/.test(n))return 1;
+   if(t[2]==='购物中心')return .7;
+   if(t[2]==='百货商场'||/百货/.test(n))return .75;
+   return .5;
+  }},
+ {key:'market', kws:['超市','便利店'],
+  m:t=>(t[1]==='超级市场'&&t[2]==='超市')||t[1]==='便民商店/便利店',
+  tier:t=>t[1]==='超级市场'?1:.6},
+ {key:'park', kws:['公园'],
+  m:t=>t[1]==='公园广场'&&t[2]==='公园', tier:()=>1},
+ {key:'kindergarten', kws:['幼儿园'],
+  m:t=>t[1]==='学校'&&t[2]==='幼儿园', tier:()=>1},
+ {key:'primary', kws:['小学'],
+  m:t=>t[1]==='学校'&&t[2]==='小学', tier:()=>1},
+ {key:'middle', kws:['中学'],
+  m:t=>t[1]==='学校'&&t[2]==='中学', tier:()=>1},
+ {key:'vege', kws:['菜市场','农贸市场'],
+  m:t=>t[1]==='综合市场'&&/蔬菜市场|农副产品市场|水产海鲜市场|果品市场/.test(t[2]), tier:()=>1},
+ {key:'noise', kws:['高架桥','高架路','立交桥','快速路'],
+  m:(t,n)=>t[0]==='交通设施服务'&&/高架|立交|快速路/.test(n), tier:()=>1},
 ];
 // ============ 八大维度（权重合计100）============
 const DIMS=[
@@ -268,7 +290,7 @@ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 let lastReqAt=0;
 function rawSearch(kw,ll,r,page){
  return new Promise(res=>{
-  const ps=new AMap.PlaceSearch({pageSize:PAGE_SIZE,pageIndex:page,extensions:'base'});
+  const ps=new AMap.PlaceSearch({pageSize:PAGE_SIZE,pageIndex:page,extensions:'all'});
   ps.searchNearBy(kw,ll,r,(status,result)=>{
    if(status==='complete')res({ok:true,pois:(result.poiList&&result.poiList.pois)||[]});
    else if(status==='no_data')res({ok:true,pois:[]});
@@ -293,62 +315,61 @@ function meters(c,ll){
  const dx=(ll.lng-c.lng)*Math.PI/180*Math.cos((la1+la2)/2)*6371000;
  return Math.round(Math.hypot(dx,(la2-la1)*6371000));
 }
+// 距离衰减：越近分越高
+function distFactor(d,R){
+ return d<=R*.2?1 : d<=R*.45?.8 : d<=R*.75?.55 : .35;
+}
+// 采集一个类别的全部候选 POI；返回 {arr} 或 {fail:true}
+async function gatherCat(cat,c){
+ const seen=new Map();
+ for(const kw of cat.kws){
+  for(let p=1;p<=MAX_PAGES;p++){
+   const pois=await searchPage(kw,c.lnglat,radius,p);
+   if(pois===null)return {fail:true};
+   pois.forEach(x=>{if(x.location&&x.type&&!seen.has(x.id))seen.set(x.id,x);});
+   if(pois.length<PAGE_SIZE)break;
+  }
+ }
+ const arr=[];
+ for(const x of seen.values()){
+  const t=x.type.split(';').map(s=>s.split('|')[0]);
+  if(!cat.m(t,x.name))continue;
+  const d=meters(c.lnglat,x.location);
+  if(d>radius)continue;
+  arr.push({name:x.name,ll:x.location,d,tier:cat.tier(t,x.name)});
+ }
+ return {arr};
+}
+function factorOf(cat,arr){
+ if(cat.key==='noise'){
+  const d0=arr.length?arr[0].d:99999;
+  return d0<=200?0 : d0<=500?.5 : 1;
+ }
+ const items=arr.map(x=>Object.assign(x,{q:x.tier*distFactor(x.d,radius)}))
+  .sort((a,b)=>b.q-a.q);
+ let f=0;
+ items.forEach((it,k)=>{
+  f+= k===0? it.q : .06*it.q*Math.pow(.55,k-1); // 同类多点位边际递减
+ });
+ return Math.min(1,f);
+}
 async function amAnalyze(c,onCat){
  const out={}, failed=[];
  for(const cat of AM_CATS){
-  const seen=new Map(); let catFail=false;
-  for(const kw of cat.kws){
-   for(let p=1;p<=MAX_PAGES;p++){
-    const pois=await searchPage(kw,c.lnglat,radius,p);
-    if(pois===null){catFail=true;break;}
-    pois.forEach(x=>{if(x.location&&!seen.has(x.id))seen.set(x.id,x);});
-    if(pois.length<PAGE_SIZE)break;
-   }
-   if(catFail)break;
+  const g=await gatherCat(cat,c);
+  if(g.fail){
+   out[cat.key]={arr:[],f:0,fail:true};failed.push(cat.key);
+  }else{
+   out[cat.key]={arr:g.arr,f:factorOf(cat,g.arr),fail:false};
   }
-  let arr=[...seen.values()].map(x=>({name:x.name,ll:x.location,d:meters(c.lnglat,x.location)}))
-   .filter(x=>x.d<=radius && (cat.key!=='noise' || /高架|立交|快速路/.test(x.name)))
-   .sort((a,b)=>a.d-b.d);
-  let f=0;
-  if(cat.key==='noise'){
-   const d0=arr.length?arr[0].d:99999;
-   f=d0<=200?0:d0<=500?.5:1;
-  }else if(arr.length){
-   const d0=arr[0].d;
-   f=d0<=radius*.35?1:d0<=radius*.7?.75:.5;
-   f=Math.min(1,f+Math.min(.25,(arr.length-1)*.05));
-  }
-  out[cat.key]={arr,f,fail:catFail};
-  if(catFail)failed.push(cat.key);
   if(onCat)onCat(cat.key,out[cat.key]);
  }
- // 失败的类别整体补跑一轮（先冷却，避开限流窗口）
- await sleep(2600);
+ // 失败的类别冷却后整体补跑一轮
+ if(failed.length)await sleep(2600);
  for(const key of failed){
   const cat=AM_CATS.find(x=>x.key===key);
-  const seen=new Map(); let stillFail=false;
-  for(const kw of cat.kws){
-   for(let p=1;p<=MAX_PAGES;p++){
-    const pois=await searchPage(kw,c.lnglat,radius,p);
-    if(pois===null){stillFail=true;break;}
-    pois.forEach(x=>{if(x.location&&!seen.has(x.id))seen.set(x.id,x);});
-    if(pois.length<PAGE_SIZE)break;
-   }
-   if(stillFail)break;
-  }
-  if(!stillFail){
-   let arr=[...seen.values()].map(x=>({name:x.name,ll:x.location,d:meters(c.lnglat,x.location)}))
-    .filter(x=>x.d<=radius && (cat.key!=='noise' || /高架|立交|快速路/.test(x.name)))
-    .sort((a,b)=>a.d-b.d);
-   let f=0;
-   if(cat.key==='noise'){const d0=arr.length?arr[0].d:99999;f=d0<=200?0:d0<=500?.5:1;}
-   else if(arr.length){
-    const d0=arr[0].d;
-    f=d0<=radius*.35?1:d0<=radius*.7?.75:.5;
-    f=Math.min(1,f+Math.min(.25,(arr.length-1)*.05));
-   }
-   out[key]={arr,f,fail:false};
-  }
+  const g=await gatherCat(cat,c);
+  if(!g.fail)out[key]={arr:g.arr,f:factorOf(cat,g.arr),fail:false};
  }
  out.__failed=Object.keys(out).filter(k=>k!=='__failed'&&out[k].fail);
  return out;
@@ -459,7 +480,8 @@ function scoreComm(c){
   const p=Math.max(10000,Math.min(100000,+m.price));
   const priceF=1-(Math.log(p)-Math.log(10000))/(Math.log(100000)-Math.log(10000));
   f.value=amenityPct==null?priceF:.5*amenityPct+.5*priceF;
- }else if(amenityPct!=null)f.value=amenityPct;
+ }
+ // 没填均价时性价比维度留空，不参与打分
  // 汇总
  const groups=[];let earned=0,covered=0;
  for(const d of DIMS){
@@ -506,7 +528,7 @@ function drawMap(valid){
   catMarkers[cat.key]=[];
   valid.forEach(c=>{
    c.am[cat.key].arr.slice(0,25).forEach(p=>{
-    const m=new AMap.CircleMarker({center:p.ll,radius:4,strokeColor:'#fff',strokeWeight:1,
+    const m=new AMap.CircleMarker({center:p.ll,radius:3+Math.round((p.tier||1)*1.6),strokeColor:'#fff',strokeWeight:1,
      fillColor:COLORS[cat.key]||'#888',fillOpacity:.85,zIndex:60,clickable:true});
     m.on('click',()=>{infoWin.setContent(p.name+' · '+p.d+'m');map.openOn(infoWin,p.ll);});
     catMarkers[cat.key].push(m);
@@ -532,10 +554,12 @@ function renderResults(valid){
  const box=document.getElementById('results');box.innerHTML='';
  valid.forEach((c,i)=>{
   const r=scoreComm(c),col=['#1565C0','#EF6C00','#2E7D32'][i];
+  const covered=r.groups.filter(d=>d.score!=null).length;
   const card=document.createElement('div');card.className='card result';
   card.innerHTML=`
    <div class="rhead"><span class="dot" style="background:${col}"></span><b>${c.name}</b>
     <span style="color:#8A94A3;font-size:12px">${c.manual.price?Number(c.manual.price).toLocaleString()+' 元/㎡':''}</span></div>
+   <div style="color:#8A94A3;font-size:12px;margin:2px 0 8px">已覆盖 ${covered}/8 个维度${covered<8?'，补全小区本体信息后更准':''}</div>
    <div class="rtop">${ringSVG(r.total)}
     <div class="dims">${r.groups.map(d=>`
       <div class="dimrow"><span>${d.name}</span>
