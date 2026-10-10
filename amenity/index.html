@@ -443,11 +443,13 @@ function bindBlocks(){
    }
   });
   inp.addEventListener('change',()=>{comms[i].name=inp.value;saveCache();});
-  // 兜底：失焦时若有名称但没定位（个别手机下拉选择回调异常），用 PlaceSearch 解析
+  // 兜底：失焦时若名称没定位、或输入文字与已定位名称不符，自动按文字解析
   inp.addEventListener('blur',()=>{
    setTimeout(()=>{
-    const kw=inp.value.trim();
-    if(kw&&!comms[i].lnglat)resolveByName(kw,i);
+    const kw=inp.value.trim();if(!kw)return;
+    const c=comms[i];
+    const base=c.name?c.name.replace(/[（(].*$/,''):'';
+    if(!c.lnglat||(base&&kw.replace(/[（(].*$/,'')!==base))resolveByName(kw,i);
    },300);
   });
   el.querySelectorAll('.manual input,.manual select').forEach(x=>{
@@ -490,6 +492,9 @@ function tryCost(c,i){
  });
 }
 function fillComm(i,d){
+ // 重新选了不同的定位：旧的周边分析结果作废，避免点查询时复用错数据
+ const old=comms[i].lnglat;
+ if(old&&d.lnglat&&(old.getLng()!==d.lnglat.getLng()||old.getLat()!==d.lnglat.getLat()))comms[i].am=null;
  Object.assign(comms[i],d);
  const el=document.querySelector(`.comm[data-i="${i}"]`);
  el.querySelector('.comm-inp').value=d.name;
