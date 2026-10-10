@@ -2,6 +2,8 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>小区综合打分 · 买房对比工具</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2314688f'/%3E%3Cpath d='M18 44V26l14-10 14 10v18H36V34H28v10z' fill='white'/%3E%3C/svg%3E">
@@ -13,6 +15,7 @@ body{background:#eef2f5;font-family:"PingFang SC","Microsoft YaHei","Segoe UI",s
 .top{min-height:86px;background:linear-gradient(90deg,#0f3d57,#14688f 60%,#1e88b5);color:#fff;
   display:flex;align-items:center;padding:0 30px;justify-content:space-between;flex-wrap:wrap;gap:6px}
 .top h1{margin:0;font-size:26px;letter-spacing:1px}
+.ver-badge{display:inline-block;vertical-align:middle;font-size:11px;font-weight:600;color:#fff;background:#0f766e;border-radius:10px;padding:2px 8px;letter-spacing:0}
 .top .r{font-size:13px;opacity:.92;text-align:right;line-height:1.7}
 .wrap{padding:12px;display:flex;flex-direction:column;gap:12px;max-width:1500px;margin:0 auto}
 .card{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 3px 14px rgba(20,50,70,.1)}
@@ -204,7 +207,7 @@ table.cmp tfoot td{font-size:15px;font-weight:900;border-bottom:0}
 </head>
 <body>
 <div class="top">
-  <h1>小区综合打分</h1>
+  <h1>小区综合打分 <span class="ver-badge">v5</span></h1>
   <div class="r">输入小区，自动统计周边配套并结合小区本体属性<br>交通 / 商业 / 医疗 / 教育 / 环境 / 品质 / 户型 / 性价比，支持多小区对比</div>
 </div>
 <div class="wrap">
