@@ -263,7 +263,7 @@ table.cmp tfoot td{font-size:15px;font-weight:900;border-bottom:0}
       <b>手动维度：</b>房龄（≤5/10/20/30 年分档）、容积率（1.5/2.5/3.5/5 分档）、绿化率（40/30/25% 分档）、户型评价；未填项不参与，权重按已填维度归一。<br>
       <b>性价比：</b>配套得分与挂牌均价综合，价格越低、配套越好得分越高。<br>
       <b>等级：</b>90+ 极佳，75–89 优秀，60–74 良好，45–59 一般，&lt;45 不便。教育维度只测学校距离，不代表学区划分与质量；本工具不预测房价走势。
-      <div class="ver-tag">算法版本 v4（看到此标记即为新版）</div>
+      <div class="ver-tag">算法版本 v5（看到此标记即为新版，每次打分实时检索）</div>
     </div>
   </div>
 </div>
@@ -576,35 +576,24 @@ function resolveByName(kw,i){
   if(hit)fillComm(i,{name:hit.name,city:hit.district?(hit.city||hit.province):'',lnglat:hit.location});
  });
 }
-// ---- 本地缓存（手机上填写不丢失）----
+// ---- 本地缓存（只缓存表单与定位，分析结果不缓存，每次重新检索）----
 function saveCache(){
  try{localStorage.setItem('amenity-form-v4',JSON.stringify(comms.slice(0,commCount).map(c=>({
-  name:c.name,city:c.city,lng:c.lnglat?c.lnglat.getLng():null,la:c.lnglat?c.lnglat.getLat():null,manual:c.manual,
-  // 持久化已完成的分析结果（精简字段），刷新页面后无需重新请求高德
-  am:c.am?{__radius:c.am.__radius,__failed:c.am.__failed,
-   cats:AM_CATS.map(cat=>[cat.key,c.am[cat.key].f,c.am[cat.key].fail,
-    c.am[cat.key].arr.map(p=>[p.name,p.d,p.tier,[p.ll.lng,p.ll.lat]])])}:null
+  name:c.name,city:c.city,lng:c.lnglat?c.lnglat.getLng():null,la:c.lnglat?c.lnglat.getLat():null,manual:c.manual
  }))));}catch(e){}
 }
 function loadCache(){
  try{
   let a=JSON.parse(localStorage.getItem('amenity-form-v4')||'null');
   if(!a){
-   // 旧版本缓存：保留已填表单与定位，但丢弃旧算法的分析结果，强制按新算法重算
+   // 旧版本缓存：只迁移表单与定位，分析结果一律丢弃
    const old=JSON.parse(localStorage.getItem('amenity-form-v3')||'null');
-   if(old&&old.length)a=old.map(x=>({name:x.name,city:x.city,lng:x.lng,la:x.la,manual:x.manual,am:null}));
+   if(old&&old.length)a=old.map(x=>({name:x.name,city:x.city,lng:x.lng,la:x.la,manual:x.manual}));
   }
   if(!a||!a.length)return;
   commCount=a.length;
   a.forEach((x,i)=>{
-   let am=null;
-   if(x.am){
-    am={__radius:x.am.__radius,__failed:x.am.__failed||[]};
-    x.am.cats.forEach(([k,fv,fail,arr])=>{
-     am[k]={f:fv,fail,arr:arr.map(p=>({name:p[0],d:p[1],tier:p[2],ll:new AMap.LngLat(p[3][0],p[3][1])}))};
-    });
-   }
-   comms[i]={name:x.name,city:x.city,lnglat:x.lng?new AMap.LngLat(x.lng,x.la):null,am,manual:x.manual||{}};
+   comms[i]={name:x.name,city:x.city,lnglat:x.lng?new AMap.LngLat(x.lng,x.la):null,am:null,manual:x.manual||{}};
   });
  }catch(e){}
 }
@@ -684,11 +673,8 @@ async function runAll(){
  const todo=[];
  for(const c of valid){
   const i=comms.indexOf(c);
-  const total0=c.am?AM_CATS.reduce((s,cat)=>s+c.am[cat.key].arr.length,0):0;
-  // 增量分析：已分析过、半径没变且无失败类别的小区直接复用结果
-  if(c.am&&c.am.__radius===radius&&!c.am.__failed.length){
-   setStatus(i,'已复用上次分析结果（'+total0+' 个点位）；改统计半径会自动重新分析','ok');
-  }else todo.push({c,i,col:cols[i]});
+  // 不缓存分析结果：每次都重新检索
+  todo.push({c,i,col:cols[i]});
  }
  let cancelled=false;
  if(todo.length){
