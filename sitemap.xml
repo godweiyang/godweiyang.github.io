@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://godweiyang.com/amenity/index.html</loc>
+    
+    <lastmod>2026-10-10T13:26:37.902Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://godweiyang.com/restart/data/talents.json</loc>
     
     <lastmod>2026-09-30T14:53:45.964Z</lastmod>
