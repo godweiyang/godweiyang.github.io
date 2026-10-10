@@ -32,6 +32,15 @@ body{background:#eef2f5;font-family:"PingFang SC","Microsoft YaHei","Segoe UI",s
 .comm-head input:focus{border-color:#1e88b5}
 .comm-head .price{font-size:12px;color:#5d6b77;flex:none}
 .comm-head .price b{color:#c0562f;font-size:14px}
+.comm-del{flex:none;width:32px;height:32px;border:0;border-radius:8px;background:transparent;color:#8a97a4;
+  cursor:pointer;display:flex;align-items:center;justify-content:center}
+.comm-del:hover{background:#fdecea;color:#c62828}
+.sumgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px}
+.sumcell{border:1.5px solid #e7edf3;border-radius:12px;padding:12px;text-align:center;background:#fbfdfe}
+.sumcell .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-bottom:6px}
+.sum-name{font-size:12.5px;font-weight:700;color:#33414f;min-height:34px;display:flex;align-items:center;justify-content:center}
+.sum-total{font-size:30px;font-weight:800;line-height:1.15}
+.sum-grade{font-size:11.5px;color:#8a97a4;margin-top:2px}
 .mini-link{border:0;background:transparent;color:#1e88b5;font-size:12px;font-weight:700;cursor:pointer;padding:6px}
 .manual{padding:2px 14px 14px}
 .manual-t{font-size:12.5px;font-weight:700;color:#37474f;margin:6px 0 8px}
@@ -216,6 +225,7 @@ table.cmp tfoot td{font-size:15px;font-weight:900;border-bottom:0}
 
 <script>window._AMapSecurityConfig={securityJsCode:'4c53a95cbc45792efebe0d3031509cc9'};</script>
 <script src="https://webapi.amap.com/maps?v=2.0&key=8b70196f1df4360442eb5d475c5d0c2e&plugin=AMap.AutoComplete,AMap.PlaceSearch,AMap.Geocoder"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 <script>
 // ============ 高德自动采集的子指标 ============
 // t = p.type.split(';')；t[0]大类 t[1]中类 t[2]小类（小类可能带 '|多类' 后缀）
@@ -386,6 +396,9 @@ function renderBlocks(){
    <div class="comm-head">
     <span class="badge" style="background:${['#1565C0','#EF6C00','#2E7D32'][i]}">${['A','B','C'][i]}</span>
     <input class="comm-inp" placeholder="输入小区名，或在地图上点选">
+    <button type="button" class="comm-del" title="删除该小区" data-del="${i}">
+     <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M9 3h6l1 2h4v2H4V5h4l1-2zm-3 6h12l-1 12H7L6 9zm4 2v8h2v-8h-2zm4 0v8h2v-8h-2z"/></svg>
+    </button>
    </div>
    <div class="comm-status"></div>
    <div class="manual">
@@ -404,6 +417,14 @@ function renderBlocks(){
   box.appendChild(el);
  }
  bindBlocks();
+ // 重建 DOM 后恢复已填的小区名与本体信息
+ comms.forEach((c,i)=>{
+  const el=box.querySelector(`.comm[data-i="${i}"]`);if(!el)return;
+  el.querySelector('.comm-inp').value=c.name||'';
+  el.querySelectorAll('.manual input,.manual select').forEach(x=>{
+   if(c.manual[x.dataset.k]!=null)x.value=c.manual[x.dataset.k];
+  });
+ });
 }
 function setStatus(i,html,cls){
  const el=document.querySelector(`.comm[data-i="${i}"] .comm-status`);
@@ -422,7 +443,26 @@ function bindBlocks(){
   el.querySelectorAll('.manual input,.manual select').forEach(x=>{
    x.addEventListener('input',()=>{comms[i].manual[x.dataset.k]=x.value;saveCache();});
   });
+  el.querySelector('.comm-del').addEventListener('click',()=>removeComm(i));
  });
+}
+function removeComm(i){
+ if(commCount<=1){ // 只剩一个时清空，不保留空卡片堆叠
+  Object.assign(comms[0],{name:'',city:'',lnglat:null,am:null,manual:{}});
+  commCount=1;
+ }else{
+  comms.splice(i,1);commCount--;
+ }
+ renderBlocks();saveCache();
+ const valid=comms.slice(0,commCount).filter(c=>c.lnglat&&c.am);
+ document.getElementById('compare').innerHTML='';
+ if(valid.length){drawMap(valid);renderResults(valid);}
+ else{
+  document.getElementById('results').innerHTML='';
+  map.remove([...Object.values(catMarkers)].flat());
+  map.remove(homeOverlays);map.remove(circleOverlays);
+  homeOverlays=[];circleOverlays=[];
+ }
 }
 // 尝试用高德详情中的 cost 参考均价自动填充
 function tryCost(c,i){
@@ -449,14 +489,26 @@ function fillComm(i,d){
 // ---- 本地缓存（手机上填写不丢失）----
 function saveCache(){
  try{localStorage.setItem('amenity-form',JSON.stringify(comms.slice(0,commCount).map(c=>({
-  name:c.name,city:c.city,lng:c.lnglat?c.lnglat.getLng():null,la:c.lnglat?c.lnglat.getLat():null,manual:c.manual}))));}catch(e){}
+  name:c.name,city:c.city,lng:c.lnglat?c.lnglat.getLng():null,la:c.lnglat?c.lnglat.getLat():null,manual:c.manual,
+  // 持久化已完成的分析结果（精简字段），刷新页面后无需重新请求高德
+  am:c.am?{__radius:c.am.__radius,__failed:c.am.__failed,
+   cats:AM_CATS.map(cat=>[cat.key,c.am[cat.key].f,c.am[cat.key].fail,
+    c.am[cat.key].arr.map(p=>[p.name,p.d,p.tier,[p.ll.lng,p.ll.lat]])])}:null
+ }))));}catch(e){}
 }
 function loadCache(){
  try{
   const a=JSON.parse(localStorage.getItem('amenity-form')||'null');if(!a||!a.length)return;
   commCount=a.length;
   a.forEach((x,i)=>{
-   comms[i]={name:x.name,city:x.city,lnglat:x.lng?new AMap.LngLat(x.lng,x.la):null,am:null,manual:x.manual||{}};
+   let am=null;
+   if(x.am){
+    am={__radius:x.am.__radius,__failed:x.am.__failed||[]};
+    x.am.cats.forEach(([k,fv,fail,arr])=>{
+     am[k]={f:fv,fail,arr:arr.map(p=>({name:p[0],d:p[1],tier:p[2],ll:new AMap.LngLat(p[3][0],p[3][1])}))};
+    });
+   }
+   comms[i]={name:x.name,city:x.city,lnglat:x.lng?new AMap.LngLat(x.lng,x.la):null,am,manual:x.manual||{}};
   });
  }catch(e){}
 }
@@ -496,18 +548,33 @@ function scoreComm(c){
 }
 // ---- 执行 ----
 async function runAll(){
+ // 已填名称但没从下拉选中定位的小区：明确提示，不静默跳过
+ const unlocated=[];
+ for(let i=0;i<commCount;i++){
+  const c=comms[i];
+  if(c&&c.name&&c.name.trim()&&!c.lnglat)unlocated.push(['A','B','C'][i]);
+ }
+ if(unlocated.length){alert('小区 '+unlocated.join('、')+' 还没完成定位：请点击输入框，在下方弹出的匹配列表里点选对应小区');return;}
  const valid=comms.slice(0,commCount).filter(c=>c.lnglat);
  if(!valid.length){alert('请先输入并选择小区');return;}
  const btn=document.getElementById('btnGo');btn.disabled=true;
  for(const c of valid){
   const i=comms.indexOf(c);
+  const total0=c.am?AM_CATS.reduce((s,cat)=>s+c.am[cat.key].arr.length,0):0;
+  // 增量分析：已分析过、半径没变且无失败类别的小区直接复用结果
+  if(c.am&&c.am.__radius===radius&&!c.am.__failed.length){
+   setStatus(i,'已复用上次分析结果（'+total0+' 个点位）；改统计半径会自动重新分析','ok');
+   continue;
+  }
   let done=0;
   setStatus(i,'高德 POI 分析中（0/'+AM_CATS.length+'）…');
   c.am=await amAnalyze(c,()=>{done++;setStatus(i,'高德 POI 分析中（'+done+'/'+AM_CATS.length+'）…');});
+  c.am.__radius=radius;
   const total=AM_CATS.reduce((s,cat)=>s+c.am[cat.key].arr.length,0);
   if(c.am.__failed.length){
-   setStatus(i,'部分类别（'+c.am.__failed.join('、')+'）因限流获取失败，请稍后再点一次「开始综合打分」重试；其余 '+total+' 个点位已统计','warn');
+   setStatus(i,'部分类别（'+c.am.__failed.join('、')+'）因限流获取失败，请再点一次「开始综合打分」只重试本小区；其余 '+total+' 个点位已统计','warn');
   }else setStatus(i,'周边配套统计完成，共 '+total+' 个点位','ok');
+  saveCache();
  }
  drawMap(valid);
  renderResults(valid);
@@ -552,8 +619,8 @@ function ringSVG(p){
 }
 function renderResults(valid){
  const box=document.getElementById('results');box.innerHTML='';
- valid.forEach((c,i)=>{
-  const r=scoreComm(c),col=['#1565C0','#EF6C00','#2E7D32'][i];
+ if(valid.length===1){
+  const c=valid[0],r=scoreComm(c),col='#1565C0';
   const covered=r.groups.filter(d=>d.score!=null).length;
   const card=document.createElement('div');card.className='card result';
   card.innerHTML=`
@@ -566,9 +633,42 @@ function renderResults(valid){
        <div class="track"><i style="width:${d.factor==null?0:d.factor*100}%;background:${col}"></i></div>
        <b>${d.score==null?'—':d.score}</b></div>`).join('')}</div></div>`;
   box.appendChild(card);
- });
+ }else{
+  // 多小区：一张汇总卡（总分横向对比）+ 一张雷达图，差距一目了然
+  const scored=valid.map((c,i)=>({c,i,r:scoreComm(c),col:['#1565C0','#EF6C00','#2E7D32'][i]}));
+  const sum=document.createElement('div');sum.className='card';
+  sum.innerHTML=`<h3>综合得分对比</h3><div class="sumgrid">${scored.map(x=>{
+   const [g]=grade(x.r.total);
+   return `<div class="sumcell"><span class="dot" style="background:${x.col}"></span>
+    <div class="sum-name">${x.c.name}</div>
+    <div class="sum-total" style="color:${x.col}">${x.r.total}</div>
+    <div class="sum-grade">${g}</div></div>`;}).join('')}</div>`;
+  box.appendChild(sum);
+  const radar=document.createElement('div');radar.className='card';
+  radar.innerHTML=`<h3>八维度雷达对比</h3>
+   <div id="radarChart" style="width:100%;height:380px"></div>
+   <div style="color:#8A94A3;font-size:11.5px;margin-top:4px">各轴为该维度得分率（0–100）；未填本体信息的维度按 0 显示</div>`;
+  box.appendChild(radar);
+  setTimeout(()=>drawRadar(scored),60);
+ }
  if(valid.length>1)renderCompare(valid);
  document.getElementById('results').scrollIntoView({behavior:'smooth'});
+}
+let radarInst=null;
+function drawRadar(scored){
+ const el=document.getElementById('radarChart');if(!el)return;
+ if(radarInst)radarInst.dispose();
+ radarInst=echarts.init(el);
+ radarInst.setOption({
+  color:scored.map(x=>x.col),
+  legend:{bottom:0,data:scored.map(x=>x.c.name),textStyle:{fontSize:12},type:'scroll'},
+  radar:{indicator:DIMS.map(d=>({name:d.name,max:100})),radius:'62%',center:['50%','48%'],
+   axisName:{color:'#455566',fontSize:11.5},splitArea:{areaStyle:{color:['#f7fafc','#eef3f8']}}},
+  series:[{type:'radar',symbolSize:4,areaStyle:{opacity:.08},lineStyle:{width:2},
+   data:scored.map(x=>({name:x.c.name,
+    value:DIMS.map(d=>{const g=x.r.groups.find(z=>z.key===d.key);return g.factor==null?0:Math.round(g.factor*100);})}))}]
+ });
+ window.addEventListener('resize',()=>radarInst&&radarInst.resize());
 }
 function renderCompare(valid){
  const t=document.getElementById('compare');
@@ -599,7 +699,10 @@ comms.forEach((c,i)=>{
  el.querySelectorAll('.manual input,.manual select').forEach(x=>{
   if(c.manual[x.dataset.k]!=null)x.value=c.manual[x.dataset.k];
  });
- if(c.lnglat)setStatus(i,'已恢复上次填写：'+c.name,'ok');
+ if(c.lnglat){
+  const n=c.am?AM_CATS.reduce((s,cat)=>s+c.am[cat.key].arr.length,0):0;
+  setStatus(i,c.am?'已恢复上次分析结果（'+n+' 个点位），点「开始综合打分」直接出分':'已恢复上次填写：'+c.name,'ok');
+ }
 });
 document.getElementById('ruleGrid').innerHTML=DIMS.map(d=>`<div>${d.name}（权重 ${d.weight}）</div>`).join('');
 document.querySelectorAll('.seg button').forEach(b=>b.addEventListener('click',()=>{
