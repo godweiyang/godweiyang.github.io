@@ -576,7 +576,7 @@ function resolveByName(kw,i){
 }
 // ---- 本地缓存（手机上填写不丢失）----
 function saveCache(){
- try{localStorage.setItem('amenity-form-v3',JSON.stringify(comms.slice(0,commCount).map(c=>({
+ try{localStorage.setItem('amenity-form-v4',JSON.stringify(comms.slice(0,commCount).map(c=>({
   name:c.name,city:c.city,lng:c.lnglat?c.lnglat.getLng():null,la:c.lnglat?c.lnglat.getLat():null,manual:c.manual,
   // 持久化已完成的分析结果（精简字段），刷新页面后无需重新请求高德
   am:c.am?{__radius:c.am.__radius,__failed:c.am.__failed,
@@ -586,7 +586,13 @@ function saveCache(){
 }
 function loadCache(){
  try{
-  const a=JSON.parse(localStorage.getItem('amenity-form-v3')||'null');if(!a||!a.length)return;
+  let a=JSON.parse(localStorage.getItem('amenity-form-v4')||'null');
+  if(!a){
+   // 旧版本缓存：保留已填表单与定位，但丢弃旧算法的分析结果，强制按新算法重算
+   const old=JSON.parse(localStorage.getItem('amenity-form-v3')||'null');
+   if(old&&old.length)a=old.map(x=>({name:x.name,city:x.city,lng:x.lng,la:x.la,manual:x.manual,am:null}));
+  }
+  if(!a||!a.length)return;
   commCount=a.length;
   a.forEach((x,i)=>{
    let am=null;
