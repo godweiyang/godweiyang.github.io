@@ -207,7 +207,7 @@ table.cmp tfoot td{font-size:15px;font-weight:900;border-bottom:0}
 </head>
 <body>
 <div class="top">
-  <h1>小区综合打分 <span class="ver-badge">v6</span></h1>
+  <h1>小区综合打分 <span class="ver-badge">v7</span></h1>
   <div class="r">输入小区，自动统计周边配套并结合小区本体属性<br>交通 / 商业 / 医疗 / 教育 / 环境 / 品质 / 户型 / 性价比，支持多小区对比</div>
 </div>
 <div class="wrap">
@@ -266,7 +266,7 @@ table.cmp tfoot td{font-size:15px;font-weight:900;border-bottom:0}
       <b>手动维度：</b>房龄（≤5/10/20/30 年分档）、容积率（1.5/2.5/3.5/5 分档）、绿化率（40/30/25% 分档）、户型评价；未填项不参与，权重按已填维度归一。<br>
       <b>性价比：</b>配套得分与挂牌均价综合，价格越低、配套越好得分越高。<br>
       <b>等级：</b>90+ 极佳，75–89 优秀，60–74 良好，45–59 一般，&lt;45 不便。教育维度只测学校距离，不代表学区划分与质量；本工具不预测房价走势。
-      <div class="ver-tag">算法版本 v6（看到此标记即为新版，每次打分实时检索）</div>
+      <div class="ver-tag">算法版本 v7（看到此标记即为新版，每次打分实时检索）</div>
     </div>
   </div>
 </div>
@@ -329,7 +329,7 @@ const DIMS=[
  {key:'medical', name:'医疗', weight:10, subs:[['hospital',7],['pharmacy',3]]},
  {key:'edu', name:'教育', weight:12, subs:[['kindergarten',3],['primary',5],['middle',4]]},
  {key:'env', name:'环境', weight:12, subs:[['park',7],['noise',5]]},
- {key:'quality', name:'小区品质', weight:17, subs:[['year',6],['far',5],['green',6]]},
+ {key:'quality', name:'小区品质', weight:17, subs:[['year',5],['far',4],['green',4],['property',4]]},
  {key:'layout', name:'户型', weight:7, subs:[['layout',7]]},
  {key:'value', name:'性价比', weight:8, subs:[['value',8]]},
 ];
@@ -623,6 +623,9 @@ function scoreComm(c){
   f.year=age<=5?1:age<=10?.9:age<=20?.7:age<=30?.5:.35;}
  if(m.far)f.far=m.far<=1.5?1:m.far<=2.5?.9:m.far<=3.5?.7:m.far<=5?.5:.35;
  if(m.green)f.green=m.green>=40?1:m.green>=30?.85:m.green>=25?.7:.5;
+ // 物业费：高物业费通常对应高端物业与维护水平，纳入品质
+ if(m.property){const pf=+m.property;
+  f.property=pf>=6?1:pf>=4?.9:pf>=2.5?.75:pf>=1.2?.6:.45;}
  if(m.layout)f.layout=+m.layout;
  // 性价比
  const autoKeys=AM_CATS.map(x=>x.key).filter(k=>f[k]!=null);
