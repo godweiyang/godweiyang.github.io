@@ -187,12 +187,13 @@ body{background:var(--paper);color:var(--text)}
               <circle id="ringArc" cx="48" cy="48" r="42" fill="none" stroke="#d9655c" stroke-width="8"
                 stroke-linecap="round" stroke-dasharray="263.9" stroke-dashoffset="263.9"/>
             </svg>
-            <div class="num"><b id="totalNum">--</b><span>严格颜值分</span></div>
+            <div class="num"><b id="totalNum">--</b><span>颜值指数</span></div>
           </div>
           <div>
-            <div class="score-eyebrow">综合评价</div>
+            <div class="score-eyebrow">综合评价 <span id="fusionBadge" style="display:none;font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:6px"></span></div>
             <div class="grade" id="grade">--</div>
             <div class="grade-sub" id="gradeSub"></div>
+            <div id="intervalBox" style="display:none;margin-top:6px;font-size:12px;color:#8a97a4"></div>
           </div>
         </div>
         <div class="sec-head"><div class="sec-t">六项颜值特征</div><div class="sec-note">特征指数用于计算，不等同于总分</div></div>
@@ -239,6 +240,10 @@ body{background:var(--paper);color:var(--text)}
 
 <!-- MediaPipe（IIFE 隔离，导出 window.__MP__） -->
 <script src="assets/vision_bundle_browser.js"></script>
+<script src="assets/cvResizeArea.js?v=20261016a"></script>
+<!-- 冻结 HistGB 几何模型 -->
+<script src="model/model_histgb.js?v=20261016a"></script>
+<script src="model/geo_extract_contract.js?v=20261016a"></script>
 <script>
 /* ============================================================
    颜值打分主逻辑（方案 A · 几何规则）
@@ -246,6 +251,7 @@ body{background:var(--paper);color:var(--text)}
 const { FaceLandmarker, FilesetResolver } = window.__MP__;
 const MP_VERSION = "0.10.14";
 const WASM_URL = new URL("assets/wasm", location.href).href.replace(/\/$/,"");
+const DEBUG = new URLSearchParams(location.search).has('debug');
 
 /* 关键点索引 */
 const I = {
@@ -284,22 +290,167 @@ function faceShapeName(fr){
 let landmarker=null, landmarkerPromise=null, busy=false;
 const $ = id => document.getElementById(id);
 
+/* ==== ORT INT8 深度模型 + 融合 + ECDF percentile ==== */
+let ortSession=null, fusionParams=null, calibrationData=null, percentileData=null, ortProvider='wasm', ortLoading=null;
+function ensureOrtLib(){
+  if (window.ort) return Promise.resolve();
+  if (ortLoading) return ortLoading;
+  ortLoading = new Promise((resolve,reject)=>{
+    const s=document.createElement('script'); s.src='assets/ort/ort.min.js';
+    s.onload=resolve; s.onerror=()=>{ortLoading=null;reject(new Error('ORT runtime load failed'));};
+    document.head.appendChild(s);
+  });
+  return ortLoading;
+}
+async function ensureOrtSession(){
+  if (ortSession) return ortSession;
+  await ensureOrtLib();
+  try {
+    ortSession = await ort.InferenceSession.create('model/beauty_resnet18_fp32.onnx?v=20261016a', {
+      executionProviders: ['wasm'],
+      graphOptimizationLevel: 'all'
+    });
+    ortProvider = 'wasm';
+  } catch(e) {
+    console.warn('ORT session failed:', e.message);
+    throw e;
+  }
+  return ortSession;
+}
+async function loadFusionParams(){
+  if (fusionParams) return fusionParams;
+  fusionParams = await fetch('model/fusion_params.web.json?v=20261016a').then(r=>r.json());
+  return fusionParams;
+}
+async function loadCalibration(){
+  if (calibrationData) return calibrationData;
+  calibrationData = await fetch('model/calibration_lookup.json?v=20261016a').then(r=>r.json());
+  return calibrationData;
+}
+async function loadPercentile(){
+  if (percentileData) return percentileData;
+  percentileData = await fetch('model/percentile_lookup.json?v=20261016a').then(r=>r.json());
+  return percentileData;
+}
+/* ECDF percentile (0-100) from native 1-5, monotonic interpolation on frozen 5500 OOF grid */
+function percentileScore(nativeScore){
+  if (!percentileData || !percentileData.grid) return 50;
+  const grid = percentileData.grid;
+  const x = Math.max(1.0, Math.min(5.0, nativeScore));
+  let lo=0, hi=grid.length-1;
+  if (x<=grid[0].native) return grid[0].percentile;
+  if (x>=grid[grid.length-1].native) return grid[grid.length-1].percentile;
+  while(hi-lo>1){ const mid=(lo+hi)>>1; if(grid[mid].native<=x) lo=mid; else hi=mid; }
+  const t=(x-grid[lo].native)/(grid[hi].native-grid[lo].native||1);
+  return grid[lo].percentile+t*(grid[hi].percentile-grid[lo].percentile);
+}
+function calibrateScore(nativeScore){
+  if (!calibrationData || !calibrationData.grid) return Math.max(0, Math.min(93.75, (nativeScore-1)/4*100));
+  const grid = calibrationData.grid;
+  const x = Math.max(1.0, Math.min(5.0, nativeScore));
+  let lo=0, hi=grid.length-1;
+  if (x<=grid[0].native) return grid[0].user_calibrated;
+  if (x>=grid[grid.length-1].native) return grid[grid.length-1].user_calibrated;
+  while(hi-lo>1){ const mid=(lo+hi)>>1; if(grid[mid].native<=x) lo=mid; else hi=mid; }
+  const t=(x-grid[lo].native)/(grid[hi].native-grid[lo].native||1);
+  return Math.max(0, Math.min(93.75, grid[lo].user_calibrated+t*(grid[hi].user_calibrated-grid[lo].user_calibrated)));
+}
+/* ==== 冻结 HistGB 几何模型特征提取器（移植 train_v3.py feat86_from_mp） ==== */
+function computeGeoFeats(norm, natW, natH){
+  // Frozen geo contract (geo_extract_contract.js, verified by recovery agent)
+  return window.GeoContract.computeGeoFeats(norm, natW, natH);
+}
+async function runDeepInference(imgEl, landmarks){
+  const session = await ensureOrtSession();
+  const natW = imgEl.naturalWidth, natH = imgEl.naturalHeight;
+  // Compute bbox from normalized landmarks (0-1) → pixel coords
+  let xsMin=1, xsMax=0, ysMin=1, ysMax=0;
+  for (const lm of landmarks) {
+    if (lm.x<xsMin) xsMin=lm.x; if (lm.x>xsMax) xsMax=lm.x;
+    if (lm.y<ysMin) ysMin=lm.y; if (lm.y>ysMax) ysMax=lm.y;
+  }
+  // 30% padding, Python int() semantics: all coords Math.floor
+  const pw = (xsMax-xsMin)*0.3, ph = (ysMax-ysMin)*0.3;
+  let x1 = Math.max(0, Math.floor((xsMin-pw)*natW));
+  let y1 = Math.max(0, Math.floor((ysMin-ph)*natH));
+  let x2 = Math.min(natW, Math.floor((xsMax+pw)*natW));
+  let y2 = Math.min(natH, Math.floor((ysMax+ph)*natH));
+  const cropW = x2-x1, cropH = y2-y1;
+  // Crop source pixels
+  const c = document.createElement('canvas');
+  c.width = cropW; c.height = cropH;
+  const ctx = c.getContext('2d');
+  ctx.drawImage(imgEl, x1, y1, cropW, cropH, 0, 0, cropW, cropH);
+  const cropData = ctx.getImageData(0, 0, cropW, cropH).data;
+  // Build RGB8 source buffer (drop alpha)
+  const srcRGB = new Uint8Array(cropW * cropH * 3);
+  for (let i = 0, j = 0; i < cropData.length; i += 4, j += 3) {
+    srcRGB[j] = cropData[i]; srcRGB[j+1] = cropData[i+1]; srcRGB[j+2] = cropData[i+2];
+  }
+  // cvResizeArea: byte-accurate INTER_AREA downsample to 224x224
+  const resized224 = window.cvResizeArea ? window.cvResizeArea.resizeArea224(srcRGB, cropW, cropH) : null;
+  if (!resized224) throw new Error('cvResizeArea not loaded');
+  const mean = [0.485, 0.456, 0.406], std = [0.229, 0.224, 0.225];
+  const input = new Float32Array(3*224*224);
+  let sum0=0,sum1=0,sum2=0;
+  for (let y=0; y<224; y++) for (let x=0; x<224; x++) {
+    const i = (y*224+x)*3;
+    input[0*224*224 + y*224 + x] = (resized224[i]/255 - mean[0]) / std[0];
+    input[1*224*224 + y*224 + x] = (resized224[i+1]/255 - mean[1]) / std[1];
+    input[2*224*224 + y*224 + x] = (resized224[i+2]/255 - mean[2]) / std[2];
+    sum0 += input[0*224*224 + y*224 + x];
+    sum1 += input[1*224*224 + y*224 + x];
+    sum2 += input[2*224*224 + y*224 + x];
+  }
+  const tensor = new ort.Tensor('float32', input, [1,3,224,224]);
+  const results = await session.run({[session.inputNames[0]]: tensor});
+  const out = results[session.outputNames[0]].data;
+  window.__debugDeep = { bbox:[x1,y1,x2,y2], cropW, cropH, tensorMean:[sum0/(224*224),sum1/(224*224),sum2/(224*224)], pred:out[0] };
+  return out[0];
+}
+function fuseScores(predDeep, predGeo, qConf, yawRatio, qBlur, tier, warnings, qExpression, qCloseup){
+  const fp = fusionParams;
+  if (!fp || !fp.dynamic_fuser) return { finalScore: predDeep, mode: 'deep-only', quality: 0.5, qConf, tier:'low', warnings:[], interval90: fp?.conformal?.half_width_90 || 0.4788 };
+  const dc = fp.dynamic_fuser;
+  // Quality metadata (not gate): uses yawRatio
+  const quality = (qConf/100) * Math.exp(-Math.abs(yawRatio)/45) * (1 - qBlur);
+  // Frozen tier gate: high=dynamic, medium/low=deep-only (matches blind22)
+  if (tier !== 'high') return { finalScore: predDeep, mode: 'deep-only', quality, qConf, tier, warnings:warnings||[], interval90: fp.conformal.half_width_90 };
+  // AUDIT19: q_expression/q_closeup computed from normalized landmarks (passed in)
+  const raw = {
+    pred_deep: predDeep,
+    pred_geo: predGeo,
+    q_conf: qConf/100,
+    q_yaw_deg: yawRatio,
+    q_expression: qExpression,
+    q_closeup: qCloseup,
+    q_blur: qBlur,
+    deep_x_conf: predDeep * qConf/100,
+    geo_x_1mconf: predGeo * (1 - qConf/100)
+  };
+  const fo = dc.feature_order;
+  if (!fo || fo.length !== dc.coef.length) throw new Error('fusion feature_order/coef length mismatch');
+  let fused = dc.intercept;
+  for (let i = 0; i < fo.length; i++) {
+    const name = fo[i];
+    const v = raw[name];
+    if (v === undefined || !isFinite(v)) throw new Error('missing/infinite feature: ' + name);
+    fused += dc.coef[i] * (v - dc.scaler_mean[i]) / dc.scaler_scale[i];
+  }
+  if (!isFinite(fused)) throw new Error('fusion output NaN');
+  return { finalScore: fused, mode: 'dynamic', quality, qConf, tier:'high', warnings:[], interval90: fp.conformal.half_width_90 };
+}
+
 async function ensureLandmarker(){
   if(landmarker) return landmarker;
   if(landmarkerPromise) return landmarkerPromise;
   landmarkerPromise=(async()=>{
     const fileset=await FilesetResolver.forVisionTasks(WASM_URL);
-    const baseOptions={modelAssetPath:"assets/face_landmarker.task"};
-    try{
-      landmarker=await FaceLandmarker.createFromOptions(fileset,{
-        baseOptions:{...baseOptions,delegate:"GPU"},runningMode:"IMAGE",numFaces:1
-      });
-    }catch(gpuError){
-      console.warn("GPU 初始化失败，自动切换 CPU",gpuError);
-      landmarker=await FaceLandmarker.createFromOptions(fileset,{
-        baseOptions,runningMode:"IMAGE",numFaces:1
-      });
-    }
+    // Fixed CPU delegate: deterministic output, matches training pipeline
+    landmarker=await FaceLandmarker.createFromOptions(fileset,{
+      baseOptions:{modelAssetPath:"assets/face_landmarker.task",delegate:"CPU"},
+      runningMode:"IMAGE",numFaces:1
+    });
     return landmarker;
   })();
   try{return await landmarkerPromise;}catch(e){landmarkerPromise=null;throw e;}
@@ -325,27 +476,35 @@ function handleFile(file){
   }
   if(file.size>35*1024*1024){setStatus("图片超过 35MB，请压缩或截屏后再上传","err");return;}
   const url=URL.createObjectURL(file);
-  img.onload=()=>{URL.revokeObjectURL(url);runAnalysis(file);};
+  img.onload=()=>{runAnalysis();};
   img.onerror=()=>{URL.revokeObjectURL(url);setStatus("图片解码失败，请改用 JPG / PNG / WebP，或将原图截屏后上传","err");};
   setStatus("正在读取图片…");
   img.src=url;
 }
 
 async function createAnalysisImage(){
-  const maxSide=1600,nw=img.naturalWidth,nh=img.naturalHeight;
-  if(Math.max(nw,nh)<=maxSide) return img;
-  const scale=maxSide/Math.max(nw,nh),canvas=document.createElement("canvas");
-  canvas.width=Math.max(1,Math.round(nw*scale));canvas.height=Math.max(1,Math.round(nh*scale));
-  const cx=canvas.getContext("2d",{alpha:false});cx.drawImage(img,0,0,canvas.width,canvas.height);
-  return canvas;
+  // Full resolution detection: draw image to canvas for MediaPipe
+  const c = document.createElement('canvas');
+  c.width = img.naturalWidth; c.height = img.naturalHeight;
+  c.getContext('2d', {alpha:false}).drawImage(img, 0, 0);
+  return c;
 }
 
 /* ---------- 检测主流程 ---------- */
 async function runAnalysis(){
   busy=true;
+  const runId=Date.now();
+  window.__debugGeo={runId, ts:new Date().toISOString(), loaded:null, featCount:null, finite:null, rawReturn:null, assignedPredGeo:null, fuseInputPredGeo:null, error:null};
+  window.__lastData=null;
   try{
-    setStatus("首次分析正在加载约 13MB 人脸模型，加载后浏览器会缓存…");
-    const lm=await ensureLandmarker();
+    setStatus("首次分析正在加载模型（约 45MB FP32），加载后浏览器会缓存…");
+    await Promise.all([ensureLandmarker(), loadFusionParams(), loadCalibration(), loadPercentile()]);
+    // Startup self-check: verify frozen modules loaded correctly
+    if (typeof predictRaw !== 'function') throw new Error('model_histgb.js not loaded');
+    if (!window.GeoContract || typeof window.GeoContract.computeGeoFeats !== 'function') throw new Error('geo_extract_contract.js not loaded');
+    if (!window.cvResizeArea || typeof window.cvResizeArea.resizeArea224 !== 'function') throw new Error('cvResizeArea.js not loaded');
+    if (!fusionParams || !fusionParams.dynamic_fuser) throw new Error('fusion_params.web.json not loaded');
+    const lm = await ensureLandmarker();
     setStatus("正在优化图片并检测人脸关键点…");
     await new Promise(r=>requestAnimationFrame(r));
     const analysisImage=await createAnalysisImage();
@@ -361,6 +520,60 @@ async function runAnalysis(){
     const P=P0.map(p=>rotatePt(p,cx,cy,roll));
     const data=measure(P,P0,natW,natH,norm,roll);
     data.roll=roll;data.rotCx=cx;data.rotCy=cy;
+    /* 冻结 HistGB 几何模型：predictRaw 必须成功，禁止静默回退规则版 */
+    try {
+      const geoFeats=computeGeoFeats(norm,natW,natH);
+      const geoFeatCount=Object.keys(geoFeats).length;
+      const geoLoaded=(typeof predictRaw==='function');
+      if(!geoLoaded) throw new Error('predictRaw not defined');
+      const geoRaw=predictRaw(geoFeats);
+      if(!isFinite(geoRaw)||geoRaw<1||geoRaw>5) throw new Error('geoRaw out of range: '+geoRaw);
+      data.predGeo=geoRaw;
+      window.__debugGeo={runId, ts:new Date().toISOString(), loaded:geoLoaded, featCount:geoFeatCount, finite:isFinite(geoRaw), rawReturn:geoRaw, assignedPredGeo:data.predGeo, fuseInputPredGeo:data.predGeo, error:null};
+      if(DEBUG){
+        const FEATS = window.GeoContract.FEATURES || [];
+        window.__debugGeo.featsArr = FEATS.map(k => geoFeats[k] !== undefined ? geoFeats[k] : null);
+        window.__debugGeo.keyFeatures = {mouth_open:geoFeats.mouth_open, pose_yaw:geoFeats.pose_yaw, geom_conf:geoFeats.geom_conf, face_scale:geoFeats.face_scale, mp_face_w:geoFeats.mp_face_w, mp_face_h:geoFeats.mp_face_h};
+        (async () => {
+          try {
+            const str = JSON.stringify(window.__debugGeo.featsArr);
+            const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+            window.__debugGeo.featsSha256 = Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+          } catch(e) { window.__debugGeo.featsSha256 = 'error:'+e.message; }
+        })();
+      }
+    } catch(e) {
+      window.__debugGeo.error=e.message+'\n'+(e.stack||'');
+      setStatus("冻结几何模型加载失败："+e.message,"err");busy=false;return;
+    }
+    /* 深度模型推理 + 融合 + 校准 */
+    setStatus("正在运行深度模型推理…");
+    let predDeep=null, fusion=null;
+    try {
+      predDeep = await runDeepInference(img, norm);
+      window.__debugGeo.fuseInputPredGeo = data.predGeo;
+      // AUDIT19: q_expression/q_closeup from original normalized landmarks
+      const lm13 = norm[13], lm14 = norm[14], lm234 = norm[234], lm454 = norm[454];
+      const mouth_open_norm = Math.sqrt((lm13.x-lm14.x)**2 + (lm13.y-lm14.y)**2 + (lm13.z-lm14.z)**2);
+      const face_w_norm = Math.sqrt((lm234.x-lm454.x)**2 + (lm234.y-lm454.y)**2 + (lm234.z-lm454.z)**2);
+      const qExpression = Math.min(1, Math.max(0, mouth_open_norm * 10));
+      const qCloseup = Math.min(1, Math.max(0, (face_w_norm - 0.4) / 0.4));
+      fusion = fuseScores(predDeep, data.predGeo, 100, data.vals.yawRatio, 0, data.tier, data.warnings, qExpression, qCloseup);
+      window.__debugFusion = { qConf:100, yawRatio:data.vals.yawRatio, yawDeg:data.vals.yawDeg, tier:data.tier, warnings:data.warnings, quality:fusion.quality, mode:fusion.mode, finalScore:fusion.finalScore };
+    } catch(e) {
+      console.warn('Deep/fusion fallback:', e.message);
+      if (predDeep !== null && isFinite(predDeep)) {
+        fusion = { finalScore: predDeep, mode: 'deep-only-fallback', quality: 0.5, qConf: data.scores.q, interval90: 0.4788, reason: e.message };
+      } else {
+        // Deep inference failed entirely: use predGeo as last resort, not hardcoded 2.5
+        fusion = { finalScore: data.predGeo, mode: 'geo-only', quality: 0.3, qConf: data.scores.q, interval90: 0.4788, reason: 'deep inference failed: ' + e.message };
+      }
+    }
+    data.predDeep = predDeep;
+    data.fusion = fusion;
+    data.percentile = Math.round(percentileScore(fusion.finalScore));
+    data.labelCal = calibrateScore(fusion.finalScore);
+    data.total = data.percentile;
     window.__lastData=data;
     /* 先显示结果以拿到真实显示尺寸，再绘制测量线 */
     setStatus("分析完成","ok");
@@ -407,7 +620,8 @@ function faceLuminance(norm){
 function measure(P,P0,natW,natH,norm,roll){
   /* 偏航角 yaw */
   const dl=P[I.lin].x-P[I.fl].x, dr=P[I.fr].x-P[I.rin].x;
-  const yawDeg=clamp((dl-dr)/((dl+dr)/2)*55,-60,60);
+  const yawRatio=(dl-dr)/((dl+dr)/2); // normalized, for fuser quality
+  const yawDeg=clamp(yawRatio*55,-60,60); // degrees, UI only
   /* 对称度：各对称点的中点应落在同一条（可倾斜的）中线上，
      用线性回归拟合中线，衡量中点的横向离散度（对侧脸角度鲁棒） */
   const _faceW=P[I.fr].x-P[I.fl].x;
@@ -517,12 +731,22 @@ function measure(P,P0,natW,natH,norm,roll){
     }
   }
   const total=Math.round(clamp(calibrated,0,100));
+  const predGeo=1+total/100*4; // 0-100 -> 1-5 native scale
 
   const tSum=thirds.reduce((a,b)=>a+b,0);
+  // Frozen tier gate: high=dynamic, medium/low=deep-only
+  const rollDeg=roll*180/Math.PI;
+  let warnings=[];
+  if(Math.abs(yawDeg)>20) warnings.push("large_yaw");
+  if(Math.abs(rollDeg)>10) warnings.push("large_roll");
+  if(Math.abs(yawDeg)>30) warnings.push("low_confidence");
+  let tier="high";
+  if(warnings.includes("low_confidence")||warnings.includes("large_roll")) tier="low";
+  else if(warnings.includes("large_yaw")) tier="medium";
   return {
-    P,P0,natW,natH,scores,total,
+    P,P0,natW,natH,scores,total,predGeo,warnings,tier,
     vals:{
-      yawDeg, roll:roll*180/Math.PI,
+      yawDeg, yawRatio, roll:rollDeg,
       thirdPct:thirds.map(t=>t/tSum),
       segPct:segs.map(s=>s/faceW),
       eyeRatio, tilt, noseRatio, mouthRatio,
@@ -674,7 +898,23 @@ function render(data){
   }));
   $("totalNum").textContent=total;
   const [g,gs]=gradeInfo(total);
-  $("grade").textContent=g; $("gradeSub").textContent=vals.beautyStyle+" · "+gs;
+  $("grade").textContent=g; $("gradeSub").textContent="超过约"+total+"%的SCUT同数据集样本 · "+gs;
+  // Fusion badge + percentile interval
+  const badge=$("fusionBadge"), ib=$("intervalBox");
+  if(data.fusion){
+    badge.style.display='inline-block';
+    if(data.fusion.mode==='dynamic'){
+      badge.textContent='动态融合'; badge.style.background='#0f766e'; badge.style.color='#fff';
+      ib.style.display='none';
+    } else {
+      const tierLabel = data.fusion.tier==='low'?'低可信':data.fusion.tier==='medium'?'中等可信':'纯深度';
+      badge.textContent=tierLabel; badge.style.background='#c62828'; badge.style.color='#fff';
+      const lo=Math.round(percentileScore(data.fusion.finalScore-data.fusion.interval90));
+      const hi=Math.round(percentileScore(data.fusion.finalScore+data.fusion.interval90));
+      ib.style.display='block';
+      ib.textContent='90%相对位置区间: '+lo+' ~ '+hi+' · 建议正脸重拍';
+    }
+  }
 
   const m=$("metrics"); m.innerHTML="";
   METRIC_LABELS.forEach(([k,label,desc])=>{
@@ -705,6 +945,21 @@ function render(data){
     c.innerHTML='<div class="k">'+k+'</div><div class="v">'+v+'</div><div class="d">'+d+'</div>';
     r.appendChild(c);
   });
+  // 模型分详情（小字，非主指数）
+  if(data.fusion){
+    const detail=document.createElement("div");
+    detail.style.cssText="grid-column:1/-1;font-size:11px;color:#8a97a4;border-top:1px solid #edf1f4;padding-top:8px;margin-top:4px;line-height:1.7";
+    const loCal=calibrateScore(data.fusion.finalScore-data.fusion.interval90).toFixed(1);
+    const hiCal=calibrateScore(data.fusion.finalScore+data.fusion.interval90).toFixed(1);
+    detail.innerHTML='<b style="color:#5d6b77">模型分详情（非主颜值指数）：</b>'+
+      'native='+data.fusion.finalScore.toFixed(2)+'/5 · '+
+      'label-calibrated='+data.labelCal.toFixed(1)+'/93.75';
+    if(data.fusion.mode==='deep-only'){
+      detail.innerHTML+=' · 低可信label-cal区间='+loCal+'~'+hiCal;
+    }
+    detail.innerHTML+=' · 主环为SCUT人群百分位相对排名';
+    r.appendChild(detail);
+  }
   buildComments(data);
 }
 
@@ -746,7 +1001,7 @@ async function drawPoster(){
 
   roundedRect(ctx,52,892,976,452,30);ctx.fillStyle="#fffdf8";ctx.fill();
   ctx.fillStyle="#173b38";ctx.font='900 118px "Microsoft YaHei",sans-serif';ctx.fillText(String(data.total),82,1034);
-  ctx.fillStyle="#74817d";ctx.font='600 22px "Microsoft YaHei",sans-serif';ctx.fillText("严格颜值分 / 100",88,1070);
+  ctx.fillStyle="#74817d";ctx.font='600 22px "Microsoft YaHei",sans-serif';ctx.fillText("颜值指数 / 100",88,1070);
   const grade=gradeInfo(data.total)[0];
   ctx.fillStyle="#d9655c";ctx.font='900 42px "Microsoft YaHei",sans-serif';ctx.fillText(grade,330,972);
   ctx.fillStyle="#173b38";ctx.font='700 28px "Microsoft YaHei",sans-serif';ctx.fillText(data.vals.beautyStyle,330,1018);
@@ -820,6 +1075,14 @@ document.addEventListener("keydown",e=>{
   if(posterModal.classList.contains("show"))closePoster();
   if($("wxSaveModal").classList.contains("show"))closeWxSaver();
 });
+/* Service Worker 缓存 */
+if('serviceWorker' in navigator && location.protocol !== 'file:'){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('sw.js').catch(e=>console.warn('SW failed:',e));
+  });
+}
+window.addEventListener('offline',()=>setStatus('当前离线：模型已缓存时可继续分析，否则请联网后刷新','err'));
+window.addEventListener('online',()=>setStatus('网络已恢复','ok'));
 </script>
 </body>
 </html>
