@@ -28,92 +28,96 @@
  * @returns {Uint8Array}     224*224*3 row-major RGB8
  */
 function resizeArea224(src, srcW, srcH) {
-  if (!(src instanceof Uint8Array)) throw new TypeError("src must be Uint8Array");
-  if (srcW <= 0 || srcH <= 0) throw new RangeError("bad src dims");
-  if (src.length !== srcW * srcH * 3) throw new RangeError("src length mismatch");
+  if (!(src instanceof Uint8Array)) throw new TypeError('src must be Uint8Array')
+  if (srcW <= 0 || srcH <= 0) throw new RangeError('bad src dims')
+  if (src.length !== srcW * srcH * 3) throw new RangeError('src length mismatch')
 
-  const D = 224;
-  const out = new Uint8Array(D * D * 3);
+  const D = 224
+  const out = new Uint8Array(D * D * 3)
 
   // Precompute 1-D area coefficients for one axis.
   // Returns array of length dstLen; each entry is a flat [i0,w0, i1,w1, ...] list.
   const buildAxis = (srcLen, dstLen) => {
-    const scale = srcLen / dstLen;
-    const coeffs = new Array(dstLen);
+    const scale = srcLen / dstLen
+    const coeffs = new Array(dstLen)
     for (let k = 0; k < dstLen; k++) {
-      const L = k * scale;
-      const R = (k + 1) * scale;
-      const iStart = Math.floor(L);
-      const iEnd = Math.floor(R); // inclusive
-      const list = [];
+      const L = k * scale
+      const R = (k + 1) * scale
+      const iStart = Math.floor(L)
+      const iEnd = Math.floor(R) // inclusive
+      const list = []
       for (let i = iStart; i <= iEnd; i++) {
-        if (i < 0 || i >= srcLen) continue; // zero-weight / out-of-bounds
-        const lo = L > i ? L : i;
-        const hi = R < i + 1 ? R : i + 1;
-        const w = hi - lo;
-        if (w > 0) list.push(i, w);
+        if (i < 0 || i >= srcLen) continue // zero-weight / out-of-bounds
+        const lo = L > i ? L : i
+        const hi = R < i + 1 ? R : i + 1
+        const w = hi - lo
+        if (w > 0) list.push(i, w)
       }
-      coeffs[k] = list;
+      coeffs[k] = list
     }
-    return { scale, coeffs };
-  };
+    return { scale, coeffs }
+  }
 
-  const x = buildAxis(srcW, D);
-  const y = buildAxis(srcH, D);
+  const x = buildAxis(srcW, D)
+  const y = buildAxis(srcH, D)
 
   // Horizontal pass: src (srcH x srcW x 3) -> tmp (srcH x D x 3) Float64.
-  const tmp = new Float64Array(srcH * D * 3);
+  const tmp = new Float64Array(srcH * D * 3)
   for (let r = 0; r < srcH; r++) {
-    const srcRowOff = r * srcW * 3;
-    const tmpRowOff = r * D * 3;
+    const srcRowOff = r * srcW * 3
+    const tmpRowOff = r * D * 3
     for (let dx = 0; dx < D; dx++) {
-      const c = x.coeffs[dx];
-      let s0 = 0, s1 = 0, s2 = 0;
+      const c = x.coeffs[dx]
+      let s0 = 0,
+        s1 = 0,
+        s2 = 0
       for (let p = 0; p < c.length; p += 2) {
-        const i = c[p];
-        const w = c[p + 1];
-        const off = srcRowOff + i * 3;
-        s0 += w * src[off];
-        s1 += w * src[off + 1];
-        s2 += w * src[off + 2];
+        const i = c[p]
+        const w = c[p + 1]
+        const off = srcRowOff + i * 3
+        s0 += w * src[off]
+        s1 += w * src[off + 1]
+        s2 += w * src[off + 2]
       }
-      const o = tmpRowOff + dx * 3;
-      tmp[o]     = s0 / x.scale;
-      tmp[o + 1] = s1 / x.scale;
-      tmp[o + 2] = s2 / x.scale;
+      const o = tmpRowOff + dx * 3
+      tmp[o] = s0 / x.scale
+      tmp[o + 1] = s1 / x.scale
+      tmp[o + 2] = s2 / x.scale
     }
   }
 
   // Vertical pass: tmp (srcH x D x 3) -> out (D x D x 3) uint8.
   for (let dy = 0; dy < D; dy++) {
-    const c = y.coeffs[dy];
-    const outRowOff = dy * D * 3;
+    const c = y.coeffs[dy]
+    const outRowOff = dy * D * 3
     for (let dx = 0; dx < D; dx++) {
-      let s0 = 0, s1 = 0, s2 = 0;
+      let s0 = 0,
+        s1 = 0,
+        s2 = 0
       for (let p = 0; p < c.length; p += 2) {
-        const j = c[p];
-        const w = c[p + 1];
-        const off = j * D * 3 + dx * 3;
-        s0 += w * tmp[off];
-        s1 += w * tmp[off + 1];
-        s2 += w * tmp[off + 2];
+        const j = c[p]
+        const w = c[p + 1]
+        const off = j * D * 3 + dx * 3
+        s0 += w * tmp[off]
+        s1 += w * tmp[off + 1]
+        s2 += w * tmp[off + 2]
       }
-      const o = outRowOff + dx * 3;
-      out[o]     = clampRound(s0 / y.scale);
-      out[o + 1] = clampRound(s1 / y.scale);
-      out[o + 2] = clampRound(s2 / y.scale);
+      const o = outRowOff + dx * 3
+      out[o] = clampRound(s0 / y.scale)
+      out[o + 1] = clampRound(s1 / y.scale)
+      out[o + 2] = clampRound(s2 / y.scale)
     }
   }
 
-  return out;
+  return out
 }
 
 // saturate_cast<uchar>: floor(v + 0.5) clamped to [0,255].
 function clampRound(v) {
-  v = v + 0.5;
-  v = v > 0 ? Math.floor(v) : 0;
-  return v > 255 ? 255 : v;
+  v = v + 0.5
+  v = v > 0 ? Math.floor(v) : 0
+  return v > 255 ? 255 : v
 }
 
 // Global mount for non-module script tag
-window.cvResizeArea = { resizeArea224: resizeArea224 };
+window.cvResizeArea = { resizeArea224: resizeArea224 }
