@@ -132,6 +132,7 @@ body{background:var(--paper);color:var(--text)}
 .poster-preview{background:#e8e2d8;padding:14px;overflow:auto;min-height:0}.poster-preview canvas{display:block;width:100%;height:auto;background:#fff;box-shadow:0 6px 24px rgba(35,52,48,.14)}
 .poster-actions{padding:14px 16px;display:grid;grid-template-columns:1fr 1fr;gap:10px;border-top:1px solid var(--line)}
 .poster-action.primary{background:var(--ink);color:#fff}.poster-action.secondary{background:var(--coral-soft);color:#8d3f39}.poster-tip{grid-column:1/-1;min-height:18px;text-align:center;font-size:12px;color:var(--muted)}
+.wx-save{position:fixed;inset:0;z-index:120;background:rgba(16,30,28,.78);display:none;align-items:center;justify-content:center;padding:12px}.wx-save.show{display:flex}.wx-card{width:min(460px,100%);max-height:96vh;overflow:auto;background:var(--surface);border-radius:16px;padding:14px;text-align:center}.wx-tip{background:#f1f6f3;color:#23604f;font-weight:800;font-size:15px;border-radius:11px;padding:11px;margin-bottom:12px}.wx-poster-img{display:block;width:100%;height:auto;border-radius:10px;-webkit-touch-callout:default;user-select:auto}.wx-back{width:100%;min-height:46px;margin-top:12px;border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--ink);font-weight:800;font-size:14px}
 @media(max-width:500px){.share-wrap{justify-content:stretch}.share-btn{width:100%}.poster-modal{padding:8px}.poster-dialog{max-height:97vh;border-radius:14px}.poster-actions{padding:10px;gap:8px}.poster-action{padding:0 12px;font-size:13px}}
 </style>
 </head>
@@ -139,10 +140,10 @@ body{background:var(--paper);color:var(--text)}
 <header class="top">
   <div>
     <h1>颜值实验室</h1>
-    <span class="ptag">本地人脸几何分析 · 照片不离开浏览器</span>
+    <span class="ptag">照片仅在你的设备上分析，不会上传服务器</span>
   </div>
   <div class="r">
-    <span class="ver-badge">本地模型 · v7</span>
+    <span class="ver-badge">微信分享优化 · v8</span>
   </div>
 </header>
 
@@ -159,7 +160,7 @@ body{background:var(--paper);color:var(--text)}
             <line x1="12" y1="3" x2="12" y2="15"/>
           </svg>
           <p>点击或拖拽，上传一张正脸照片</p>
-          <p class="sub">支持手机拍照 / JPG / PNG / WebP；大图自动优化，模型全程站内加载</p>
+          <p class="sub">支持 JPG / PNG / WebP；首次分析会自动加载约 13MB 模型，加载后浏览器会缓存</p>
         </div>
       </div>
       <input type="file" id="file" accept="image/*" hidden>
@@ -224,8 +225,16 @@ body{background:var(--paper);color:var(--text)}
   </div>
 </div>
 
+<div class="wx-save" id="wxSaveModal">
+  <div class="wx-card">
+    <div class="wx-tip">长按下方海报，选择“保存图片”即可存入相册</div>
+    <img class="wx-poster-img" id="wxPosterImg" alt="颜值分析分享海报">
+    <button class="wx-back" id="wxSaveClose" type="button">返回</button>
+  </div>
+</div>
+
 <footer class="foot">
-  <b>说明：</b>本工具基于 MediaPipe 478 个人脸关键点与双审美通道几何规则计算，照片全程在浏览器本地处理、不上传。算法会在<b>精致柔和型</b>与<b>英气硬朗型</b>中自动选择更匹配的通道，并使用不依赖发际线的纵向比例、下颌收束度和五官集中度。采用<b>严格颜值标尺</b>：40–50 为大众脸、60 已属好看、70 小美、80 顶美、90 明星级。拍摄角度、光线等不直接扣颜值，仅影响测量可信度。结果为<b>娱乐性质的美学参考</b>，并非科学或专业评价；极端侧脸、广角和夸张表情仍建议用正脸照复核。请仅上传本人或已获授权的照片。
+  <b>说明：</b>照片仅在你的设备上分析，<b>不会上传服务器</b>。首次分析会自动加载约 13MB 的站内人脸模型和运行组件，不会弹出下载文件窗口，加载后通常会由浏览器缓存。算法基于 MediaPipe 478 个人脸关键点与双审美通道几何规则，会在<b>精致柔和型</b>与<b>英气硬朗型</b>中自动选择更匹配的通道。采用<b>严格颜值标尺</b>：40–50 为大众脸、60 已属好看、70 小美、80 顶美、90 明星级。结果为娱乐性质美学参考；极端侧脸、广角和夸张表情建议用正脸照复核。请仅上传本人或已获授权的照片。
 </footer>
 
 <!-- MediaPipe（IIFE 隔离，导出 window.__MP__） -->
@@ -335,7 +344,7 @@ async function createAnalysisImage(){
 async function runAnalysis(){
   busy=true;
   try{
-    setStatus("正在加载本地人脸模型（首次约需数秒）…");
+    setStatus("首次分析正在加载约 13MB 人脸模型，加载后浏览器会缓存…");
     const lm=await ensureLandmarker();
     setStatus("正在优化图片并检测人脸关键点…");
     await new Promise(r=>requestAnimationFrame(r));
@@ -700,7 +709,19 @@ function render(data){
 }
 
 /* ---------- 分享海报 ---------- */
-const posterModal=$("posterModal"), posterCanvas=$("posterCanvas"), posterTip=$("posterTip");
+const posterModal=$("posterModal"),posterCanvas=$("posterCanvas"),posterTip=$("posterTip");
+const isWechat=/MicroMessenger/i.test(navigator.userAgent);
+let qrLibPromise=null;
+function ensureQrLib(){
+  if(window.qrcode) return Promise.resolve();
+  if(qrLibPromise) return qrLibPromise;
+  qrLibPromise=new Promise((resolve,reject)=>{
+    const s=document.createElement("script");s.src="vendor/qrcode.min.js";s.async=true;
+    s.onload=resolve;s.onerror=()=>{qrLibPromise=null;reject(new Error("二维码组件加载失败"));};document.head.appendChild(s);
+  });
+  return qrLibPromise;
+}
+function loadCanvasImage(src){return new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>resolve(im);im.onerror=reject;im.src=src;});}
 function roundedRect(ctx,x,y,w,h,r){
   r=Math.min(r,w/2,h/2);ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();
 }
@@ -708,15 +729,15 @@ function fitInside(sw,sh,x,y,w,h){
   const scale=Math.min(w/sw,h/sh), dw=sw*scale, dh=sh*scale;
   return {x:x+(w-dw)/2,y:y+(h-dh)/2,w:dw,h:dh};
 }
-function drawPoster(){
-  const data=window.__lastData;if(!data) return false;
-  const ctx=posterCanvas.getContext("2d"), W=1080,H=1440;
+async function drawPoster(){
+  const data=window.__lastData;if(!data)return false;
+  const ctx=posterCanvas.getContext("2d"),W=1080,H=1540;
   posterCanvas.width=W;posterCanvas.height=H;
   ctx.fillStyle="#f5f1ea";ctx.fillRect(0,0,W,H);
   ctx.fillStyle="#173b38";ctx.fillRect(0,0,W,132);
   ctx.fillStyle="#d9655c";ctx.fillRect(0,132,W,8);
   ctx.fillStyle="#ffffff";ctx.font='800 48px "Microsoft YaHei",sans-serif';ctx.fillText("颜值实验室",64,76);
-  ctx.fillStyle="#d8e4df";ctx.font='400 22px "Microsoft YaHei",sans-serif';ctx.fillText("本地几何分析 · 照片不离开浏览器",64,112);
+  ctx.fillStyle="#d8e4df";ctx.font='400 22px "Microsoft YaHei",sans-serif';ctx.fillText("照片仅在你的设备上分析，不会上传服务器",64,112);
 
   /* 原图完整等比呈现 */
   roundedRect(ctx,52,180,976,676,30);ctx.fillStyle="#e8e2d8";ctx.fill();ctx.save();roundedRect(ctx,52,180,976,676,30);ctx.clip();
@@ -740,16 +761,40 @@ function drawPoster(){
     ctx.fillStyle="#e6dfd6";ctx.fillRect(x,y+50,168,6);
     ctx.fillStyle="#d9655c";ctx.fillRect(x,y+50,168*clamp(value,0,100)/100,6);
   });
-  ctx.fillStyle="#a09a90";ctx.font='500 19px "Microsoft YaHei",sans-serif';ctx.fillText("godweiyang.com/yanzhi",82,1392);
-  ctx.textAlign="right";ctx.fillText("娱乐性质美学参考",998,1392);ctx.textAlign="left";
+  /* 页脚与二维码 */
+  ctx.fillStyle="#a09a90";ctx.font='500 19px "Microsoft YaHei",sans-serif';
+  ctx.fillText("godweiyang.com/yanzhi",82,1432);
+  ctx.fillText("娱乐性质美学参考",82,1470);
+  try{
+    await ensureQrLib();
+    const qr=window.qrcode(0,"M");qr.addData("https://godweiyang.com/yanzhi/");qr.make();
+    const qrImg=await loadCanvasImage(qr.createDataURL(8,4));
+    roundedRect(ctx,850,1360,168,168,16);ctx.fillStyle="#ffffff";ctx.fill();
+    ctx.imageSmoothingEnabled=false;ctx.drawImage(qrImg,864,1374,140,140);ctx.imageSmoothingEnabled=true;
+    ctx.fillStyle="#74817d";ctx.font='600 16px "Microsoft YaHei",sans-serif';ctx.textAlign="center";
+    ctx.fillText("扫码测测你的颜值",934,1532);ctx.textAlign="left";
+  }catch(e){
+    console.warn("二维码生成失败，保留普通海报",e);
+  }
   return true;
 }
-function openPoster(){
-  if(!drawPoster()) return;
-  posterTip.textContent="PNG 海报包含原图与本次分析结果";
-  posterModal.classList.add("show");document.body.style.overflow="hidden";
+async function openPoster(){
+  const btn=$("shareBtn"),old=btn.innerHTML;btn.disabled=true;btn.textContent="正在生成海报…";
+  try{
+    if(!await drawPoster())return;
+    if(isWechat){
+      $("wxPosterImg").src=posterCanvas.toDataURL("image/png",1);
+      $("wxSaveModal").classList.add("show");document.body.style.overflow="hidden";
+    }else{
+      posterTip.textContent="PNG 海报包含原图、分析结果和扫码入口";
+      posterModal.classList.add("show");document.body.style.overflow="hidden";
+    }
+  }catch(e){
+    posterTip.textContent=e.message||"海报生成失败，请重试";
+  }finally{btn.disabled=false;btn.innerHTML=old;}
 }
 function closePoster(){posterModal.classList.remove("show");document.body.style.overflow="";}
+function closeWxSaver(){$("wxSaveModal").classList.remove("show");document.body.style.overflow="";}
 function posterBlob(){return new Promise((resolve,reject)=>posterCanvas.toBlob(b=>b?resolve(b):reject(new Error("海报生成失败")),"image/png",1));}
 async function savePosterImage(){
   try{
@@ -768,7 +813,13 @@ async function copyPosterImage(){
 $("shareBtn").addEventListener("click",openPoster);$("posterClose").addEventListener("click",closePoster);
 $("savePoster").addEventListener("click",savePosterImage);$("copyPoster").addEventListener("click",copyPosterImage);
 posterModal.addEventListener("click",e=>{if(e.target===posterModal)closePoster();});
-document.addEventListener("keydown",e=>{if(e.key==="Escape"&&posterModal.classList.contains("show"))closePoster();});
+$("wxSaveClose").addEventListener("click",closeWxSaver);
+$("wxSaveModal").addEventListener("click",e=>{if(e.target===$("wxSaveModal"))closeWxSaver();});
+document.addEventListener("keydown",e=>{
+  if(e.key!=="Escape")return;
+  if(posterModal.classList.contains("show"))closePoster();
+  if($("wxSaveModal").classList.contains("show"))closeWxSaver();
+});
 </script>
 </body>
 </html>
