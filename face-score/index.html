@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>AI 颜值打分 · 人脸美学分析</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2314688f'/%3E%3Ccircle cx='32' cy='26' r='13' fill='none' stroke='white' stroke-width='4'/%3E%3Cpath d='M18 50c4-8 24-8 28 0' fill='none' stroke='white' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+button,input,select{font-family:inherit}
+body{background:#eef2f5;font-family:"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;color:#1c2b36}
+.top{min-height:86px;background:linear-gradient(90deg,#0f3d57,#14688f 60%,#1e88b5);color:#fff;
+  display:flex;align-items:center;padding:0 30px;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.top h1{margin:0;font-size:24px;letter-spacing:1px}
+.top .ptag{display:block;margin-top:5px;font-size:12px;opacity:.92;font-weight:400}
+.top .r{font-size:12px;opacity:.92;text-align:right;line-height:1.7}
+.ver-badge{display:inline-block;font-size:11px;font-weight:600;color:#fff;background:#0f766e;border-radius:10px;padding:2px 8px}
+.wrap{padding:12px;display:flex;flex-direction:column;gap:12px;max-width:1300px;margin:0 auto}
+.card{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 3px 14px rgba(20,50,70,.1)}
+.ct{min-height:42px;display:flex;align-items:center;gap:10px;padding:9px 16px;color:#fff;
+  font-size:15px;font-weight:800;flex-wrap:wrap;background:linear-gradient(90deg,#0f3d57,#17688f)}
+.ct small{font-weight:400;font-size:11px;opacity:.9}
+.cbody{padding:16px}
+
+/* 上传 */
+.drop{border:2px dashed #bcd2dd;border-radius:12px;background:#f8fbfc;cursor:pointer;
+  transition:border-color .15s,background .15s}
+.drop:hover,.drop.over{border-color:#1e88b5;background:#f0f8fb}
+.drop-inner{padding:34px 18px;text-align:center}
+.drop-inner svg{width:52px;height:52px;color:#1e88b5}
+.drop-inner p{margin:12px 0 4px;font-size:15px;font-weight:700;color:#33414f}
+.drop-inner .sub{font-size:12px;color:#8a97a4;font-weight:400;margin:0}
+.status{margin-top:12px;font-size:13px;color:#5d6b77;min-height:18px}
+.status.err{color:#c62828}
+.status.ok{color:#0f766e}
+.spin{display:inline-block;width:13px;height:13px;border:2px solid #bcd2dd;border-top-color:#1e88b5;
+  border-radius:50%;vertical-align:-2px;margin-right:7px;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* 结果布局 */
+.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.photo-col{padding:16px;border-right:1px solid #edf1f4}
+.report-col{padding:16px}
+.canvas-wrap{position:relative;width:100%;border-radius:10px;overflow:hidden;background:#11232e;line-height:0}
+.canvas-wrap img{max-width:100%;height:auto;display:block;margin:0 auto}
+.canvas-wrap canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.layers{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}
+.lyr{border:1.5px solid #d5dee5;background:#fff;color:#5d6b77;font-size:11.5px;font-weight:700;
+  border-radius:20px;padding:5px 12px;cursor:pointer}
+.lyr .ld{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:1px}
+.lyr.on{border-color:#1e88b5;color:#17688f;background:#f0f8fb}
+.rebtn{margin-left:auto;border:1.5px solid #d5dee5;background:#fff;color:#5d6b77;font-size:12px;font-weight:700;
+  border-radius:8px;padding:6px 14px;cursor:pointer}
+.rebtn:hover{background:#f3f7f9}
+
+/* 总分 */
+.total-box{display:flex;align-items:center;gap:16px;padding:6px 4px 14px;border-bottom:1px solid #eef2f5}
+.ring{position:relative;width:96px;height:96px;flex:none}
+.ring svg{transform:rotate(-90deg)}
+.ring .num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring .num b{font-size:28px;font-weight:900;line-height:1;color:#17688f}
+.ring .num span{font-size:10px;color:#8a97a4;margin-top:3px}
+.grade{font-size:19px;font-weight:900;color:#1c2b36}
+.grade-sub{font-size:12px;color:#8a97a4;margin-top:5px;line-height:1.6}
+
+/* 分项 */
+.metrics{padding:12px 2px 6px;display:flex;flex-direction:column;gap:11px}
+.mt .mt-top{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px}
+.mt .mt-name{font-weight:700;color:#33414f}
+.mt .mt-val{color:#8a97a4;font-weight:700}
+.mt .bar{height:8px;background:#edf1f4;border-radius:5px;overflow:hidden}
+.mt .bar i{display:block;height:100%;border-radius:5px;
+  background:linear-gradient(90deg,#14688f,#1e88b5);width:0;transition:width .6s ease}
+
+/* 读数 */
+.sec-t{font-size:13px;font-weight:800;color:#33414f;margin:16px 2px 8px}
+.readouts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rd{border:1.5px solid #e7edf3;border-radius:9px;padding:9px 10px;background:#fbfdfe}
+.rd .k{font-size:10.5px;color:#8a97a4;font-weight:700}
+.rd .v{font-size:14px;font-weight:800;color:#17688f;margin-top:3px}
+.rd .d{font-size:10px;color:#9aa7b2;margin-top:2px}
+
+/* 评语 */
+.comments{margin-top:6px;display:flex;flex-direction:column;gap:8px}
+.cm{display:flex;gap:9px;font-size:12.5px;line-height:1.6;color:#37474f;
+  background:#f5f9fb;border-radius:9px;padding:9px 11px;border-left:3px solid #1e88b5}
+.cm .cm-ico{flex:none;width:17px;height:17px;color:#1e88b5;margin-top:1px}
+.cm.warn{background:#fdf6ec;border-left-color:#e8a13c}
+.cm.warn .cm-ico{color:#e8a13c}
+
+.foot{max-width:1300px;margin:0 auto;padding:6px 16px 22px;font-size:11px;color:#93a1ad;line-height:1.7}
+.foot b{color:#7a8a96}
+
+@media (max-width:820px){
+  .result-grid{grid-template-columns:1fr}
+  .photo-col{border-right:0;border-bottom:1px solid #edf1f4}
+  .top{padding:14px 18px}
+  .top h1{font-size:20px}
+  .top .r{text-align:left}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div>
+    <h1>AI 颜值打分 · 人脸美学分析</h1>
+    <span class="ptag">照片全程本地处理，不上传、不保存</span>
+  </div>
+  <div class="r">
+    <span class="ver-badge">方案 A · 严格标尺 v3</span>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- 上传 -->
+  <section class="card" id="uploadCard">
+    <div class="ct">上传照片</div>
+    <div class="cbody">
+      <div class="drop" id="drop">
+        <div class="drop-inner">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+          <p>点击或拖拽，上传一张正脸照片</p>
+          <p class="sub">支持手机拍照 / JPG / PNG；建议自然光、平视、五官清晰</p>
+        </div>
+      </div>
+      <input type="file" id="file" accept="image/*" hidden>
+      <div class="status" id="status"></div>
+    </div>
+  </section>
+
+  <!-- 结果 -->
+  <section class="card" id="resultCard" style="display:none">
+    <div class="ct">分析结果 <small>测量线为几何参考，非专业医学结论</small></div>
+    <div class="result-grid">
+      <div class="photo-col">
+        <div class="canvas-wrap" id="canvasWrap">
+          <img id="img" alt="人脸照片">
+          <canvas id="draw"></canvas>
+        </div>
+        <div class="layers" id="layers"></div>
+      </div>
+      <div class="report-col">
+        <div class="total-box">
+          <div class="ring">
+            <svg width="96" height="96" viewBox="0 0 96 96">
+              <circle cx="48" cy="48" r="42" fill="none" stroke="#edf1f4" stroke-width="8"/>
+              <circle id="ringArc" cx="48" cy="48" r="42" fill="none" stroke="#1e88b5" stroke-width="8"
+                stroke-linecap="round" stroke-dasharray="263.9" stroke-dashoffset="263.9"/>
+            </svg>
+            <div class="num"><b id="totalNum">--</b><span>满分 100</span></div>
+          </div>
+          <div>
+            <div class="grade" id="grade">--</div>
+            <div class="grade-sub" id="gradeSub"></div>
+          </div>
+        </div>
+        <div class="sec-t">特征指数 <span style="font-weight:500;color:#8a97a4">（用于计算，不等于颜值分）</span></div>
+        <div class="metrics" id="metrics"></div>
+        <div class="sec-t">关键测量</div>
+        <div class="readouts" id="readouts"></div>
+        <div class="sec-t">分析评语</div>
+        <div class="comments" id="comments"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <b>说明：</b>本工具为方案 A，基于 MediaPipe 478 个人脸关键点与几何规则（大眼、小脸、鼻小巧、对称度、三庭五眼等）计算，照片全程在浏览器本地处理、不上传。采用<b>严格颜值标尺</b>：40–50 为大众脸、60 已属好看、70 小美、80 顶美、90 明星级，满分极少出现。颜值分聚焦五官本身，拍摄角度、光线等照片质量问题<b>不直接扣分</b>，仅作为测量可信度提示。结果为<b>娱乐性质的美学参考</b>，并非科学或专业评价；几何法对夸张表情、侧脸与广角镜头仍较敏感，正脸平视照片最准确。请仅上传本人或已获授权的照片。
+</footer>
+
+<!-- MediaPipe（IIFE 隔离，导出 window.__MP__） -->
+<script src="assets/vision_bundle_browser.js"></script>
+<script>
+/* ============================================================
+   颜值打分主逻辑（方案 A · 几何规则）
+   ============================================================ */
+const { FaceLandmarker, FilesetResolver } = window.__MP__;
+const MP_VERSION = "0.10.14";
+const WASM_URL = "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@" + MP_VERSION + "/wasm";
+
+/* 关键点索引 */
+const I = {
+  hair:10, chin:152, glabella:9, nasion:168,
+  ntip:1, nbase:2, nbridge:6,
+  lin:133, lout:33, ltop:159, lbot:145, liris:468,
+  rin:362, rout:263, rtop:386, rbot:374, riris:473,
+  lbrow:105, rbrow:334,
+  ml:61, mr:291, mtop:0, mbot:14,
+  nl:48, nr:278,
+  fl:234, fr:454,
+  jl:172, jr:397,
+  cl:116, cr:345
+};
+const OVAL = [10,338,297,332,284,251,389,356,454,323,361,288,397,365,379,378,400,377,152,148,176,149,150,136,172,58,132,93,234,127,162,21,54,103,67,109];
+const SYM_PAIRS = [
+  [133,362],[33,263],[468,473],[105,334],[61,291],[48,278],[172,397],[234,454],[116,345]
+];
+
+const clamp = (x,a,b) => Math.max(a, Math.min(b, x));
+const dist = (a,b) => Math.hypot(a.x-b.x, a.y-b.y);
+function mean(a){ return a.reduce((s,x)=>s+x,0)/a.length; }
+function std(a){ const m=mean(a); return Math.sqrt(mean(a.map(x=>(x-m)*(x-m)))); }
+function rotatePt(p,cx,cy,ang){
+  const c=Math.cos(ang), s=Math.sin(ang), x=p.x-cx, y=p.y-cy;
+  return { x:cx+x*c-y*s, y:cy+x*s+y*c, z:p.z };
+}
+function faceShapeName(fr){
+  if(fr>0.90) return "圆形/方形脸";
+  if(fr>0.82) return "方圆脸";
+  if(fr>0.74) return "鹅蛋脸";
+  if(fr>0.66) return "瓜子/椭圆脸";
+  return "长形脸";
+}
+
+let landmarker=null, busy=false;
+const $ = id => document.getElementById(id);
+
+async function ensureLandmarker(){
+  if(landmarker) return landmarker;
+  const fileset = await FilesetResolver.forVisionTasks(WASM_URL);
+  landmarker = await FaceLandmarker.createFromOptions(fileset, {
+    baseOptions:{ modelAssetPath:"assets/face_landmarker.task", delegate:"GPU" },
+    runningMode:"IMAGE", numFaces:1
+  });
+  return landmarker;
+}
+
+/* ---------- 上传交互 ---------- */
+const drop=$("drop"), fileInput=$("file"), status=$("status"), img=$("img");
+drop.addEventListener("click", ()=>fileInput.click());
+fileInput.addEventListener("change", e=>{ if(e.target.files[0]) handleFile(e.target.files[0]); });
+["dragover","dragenter"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add("over");}));
+["dragleave"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove("over");}));
+drop.addEventListener("drop", e=>{
+  e.preventDefault(); drop.classList.remove("over");
+  if(e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+});
+function setStatus(msg,cls){ status.textContent=msg||""; status.className="status"+(cls?" "+cls:""); }
+function handleFile(file){
+  if(busy) return;
+  if(!file.type.startsWith("image/")){ setStatus("请选择图片文件（JPG/PNG）","err"); return; }
+  const url=URL.createObjectURL(file);
+  img.onload=()=>{ URL.revokeObjectURL(url); runAnalysis(file); };
+  img.onerror=()=>setStatus("图片加载失败","err");
+  setStatus("正在加载图片…");
+  img.src=url;
+}
+
+/* ---------- 检测主流程 ---------- */
+async function runAnalysis(){
+  busy=true;
+  try{
+    setStatus("正在加载人脸检测模型（首次约需数秒）…");
+    const lm=await ensureLandmarker();
+    setStatus("正在检测人脸关键点…");
+    await new Promise(r=>requestAnimationFrame(r));
+    const res=lm.detect(img);
+    if(!res.faceLandmarks || !res.faceLandmarks.length){
+      setStatus("没有检测到人脸，请换一张正脸、五官清晰的照片","err"); busy=false; return;
+    }
+    const norm=res.faceLandmarks[0];
+    const natW=img.naturalWidth, natH=img.naturalHeight;
+    const P0=norm.map(l=>({x:l.x*natW, y:l.y*natH, z:l.z}));
+    const roll=Math.atan2(P0[I.chin].x-P0[I.hair].x, P0[I.chin].y-P0[I.hair].y);
+    const cx=P0[I.ntip].x, cy=P0[I.ntip].y;
+    const P=P0.map(p=>rotatePt(p,cx,cy,roll));
+    const data=measure(P,P0,natW,natH,norm,roll);
+    window.__lastData=data;
+    /* 先显示结果以拿到真实显示尺寸，再绘制测量线 */
+    setStatus("分析完成","ok");
+    $("resultCard").style.display="block";
+    await new Promise(r=>requestAnimationFrame(r));
+    await new Promise(r=>requestAnimationFrame(r));
+    const cw=img.clientWidth, ch=img.clientHeight;
+    const canvas=$("draw"); canvas.width=cw; canvas.height=ch;
+    data.cw=cw; data.ch=ch;
+    buildLayers();
+    drawLines(data);
+    render(data);
+    $("resultCard").scrollIntoView({behavior:"smooth"});
+  }catch(e){
+    console.error(e);
+    setStatus("分析失败："+(e&&e.message?e.message:e),"err");
+  }finally{ busy=false; }
+}
+
+/* ---------- 人脸区域亮度 ---------- */
+function faceLuminance(norm){
+  const nw=img.naturalWidth, nh=img.naturalHeight;
+  const c=document.createElement("canvas");
+  const sc=Math.min(1, 480/Math.max(nw,nh));
+  c.width=Math.max(1,Math.round(nw*sc)); c.height=Math.max(1,Math.round(nh*sc));
+  const cx=c.getContext("2d");
+  cx.drawImage(img,0,0,c.width,c.height);
+  let x0=1,y0=1,x1=0,y1=0;
+  OVAL.forEach(k=>{x0=Math.min(x0,norm[k].x);y0=Math.min(y0,norm[k].y);
+    x1=Math.max(x1,norm[k].x);y1=Math.max(y1,norm[k].y);});
+  const w=Math.max(1,Math.round((x1-x0)*c.width)), h=Math.max(1,Math.round((y1-y0)*c.height));
+  const px=cx.getImageData(Math.round(x0*c.width),Math.round(y0*c.height),w,h).data;
+  let sum=0,n=0;
+  for(let i=0;i<px.length;i+=4){ sum+=(0.299*px[i]+0.587*px[i+1]+0.114*px[i+2])/255; n++; }
+  return sum/n;
+}
+
+/* ---------- 几何测量与评分 ---------- */
+function measure(P,P0,natW,natH,norm,roll){
+  /* 偏航角 yaw */
+  const dl=P[I.lin].x-P[I.fl].x, dr=P[I.fr].x-P[I.rin].x;
+  const yawDeg=clamp((dl-dr)/((dl+dr)/2)*55,-60,60);
+  /* 对称度：各对称点的中点应落在同一条（可倾斜的）中线上，
+     用线性回归拟合中线，衡量中点的横向离散度（对侧脸角度鲁棒） */
+  const _faceW=P[I.fr].x-P[I.fl].x;
+  const mids=SYM_PAIRS.map(([a,b])=>({x:(P[a].x+P[b].x)/2, y:(P[a].y+P[b].y)/2}));
+  const mX=mean(mids.map(m=>m.x)), mY=mean(mids.map(m=>m.y));
+  let bNum=0,bDen=0;
+  mids.forEach(m=>{ bNum+=(m.y-mY)*(m.x-mX); bDen+=(m.y-mY)*(m.y-mY); });
+  const b=bDen>0?bNum/bDen:0, a=mX-b*mY;
+  const asym=mean(mids.map(m=>Math.abs(m.x-(a+b*m.y))))/_faceW;
+  /* 三庭（以鼻根 nasion 为分界） */
+  const yHair=P[I.hair].y, yBrow=P[I.nasion].y;
+  const yNose=P[I.nbase].y, yChin=P[I.chin].y;
+  const thirds=[yBrow-yHair,yNose-yBrow,yChin-yNose];
+  const tCv=std(thirds)/mean(thirds);
+  /* 五眼 */
+  const fL=P[I.fl].x, fR=P[I.fr].x, faceW=fR-fL;
+  const segs=[
+    P[I.lout].x-fL,
+    P[I.lin].x-P[I.lout].x,
+    P[I.rin].x-P[I.lin].x,
+    P[I.rout].x-P[I.rin].x,
+    fR-P[I.rout].x
+  ];
+  const ideal=faceW/5;
+  const fErr=mean(segs.map(s=>Math.abs(s-ideal)))/ideal;
+  /* 眼睛 */
+  const lEyeW=dist(P[I.lin],P[I.lout]), rEyeW=dist(P[I.rin],P[I.rout]);
+  const lEyeH=dist(P[I.ltop],P[I.lbot]), rEyeH=dist(P[I.rtop],P[I.rbot]);
+  const eyeW=(lEyeW+rEyeW)/2, eyeH=(lEyeH+rEyeH)/2;
+  const eyeRatio=eyeW/eyeH;
+  const eyeSize=eyeW/faceW, eyeOpen=eyeH/faceW;
+  const tiltL=Math.atan2(P[I.lin].y-P[I.lout].y,Math.abs(P[I.lout].x-P[I.lin].x))*180/Math.PI;
+  const tiltR=Math.atan2(P[I.rin].y-P[I.rout].y,Math.abs(P[I.rout].x-P[I.rin].x))*180/Math.PI;
+  const tilt=(tiltL+tiltR)/2;
+  /* 鼻/嘴 */
+  const noseRatio=dist(P[I.nl],P[I.nr])/dist(P[I.lin],P[I.rin]);
+  const mouthRatio=dist(P[I.ml],P[I.mr])/dist(P[I.liris],P[I.riris]);
+  /* 脸型/下颌 */
+  const faceH=dist(P[I.hair],P[I.chin]);
+  const faceRatio=faceW/faceH;
+  const jlL=dist(P[I.jl],P[I.chin]), jlR=dist(P[I.jr],P[I.chin]);
+  const jawSym=Math.abs(jlL-jlR)/((jlL+jlR)/2);
+  const upperH=Math.abs(P[I.nasion].y-P[I.mtop].y);
+  const fwhr=faceW/upperH;
+  /* 亮度 */
+  const lum=faceLuminance(norm);
+  const faceSize=faceW/natW;
+
+  /* ===== 子项分数 =====
+     设计原则：
+     1) 照片质量(角度/广角/光线/脸占比)不参与颜值，只作为可信度提示；
+     2) 基础规整项(对称/三庭/五眼)为及格线，分数压缩，避免“端正即高分”；
+     3) 亮点项(大眼/鹅蛋小脸/鼻小巧)拉开颜值差距。 */
+  /* 基础项：只对明显缺陷扣分，正常即给及格分 */
+  const sSym=clamp(82-asym*140,60,84);
+  const sThird=clamp(82-Math.max(0,tCv-0.08)*380,60,84);
+  const sFifth=clamp(82-Math.max(0,fErr-0.12)*140,60,84);
+  /* 眼睛：眼大 + 眼形 + 眼角 */
+  const sEyeOpen=clamp(56+(Math.min(eyeOpen,0.102)-0.065)*1000,50,96);
+  const sEyeShape=clamp(94-Math.max(0,2.08-eyeRatio)*140,50,94);
+  const sEyeTilt=clamp(93-Math.max(0,6-tilt)*7-Math.max(0,tilt-13)*7,55,95);
+  const sEye=0.6*sEyeOpen+0.18*sEyeShape+0.22*sEyeTilt;
+  /* 鼻/嘴：鼻小巧 + 唇形 */
+  const sNose=clamp(89-Math.max(0,noseRatio-0.95)*180-Math.max(0,0.82-noseRatio)*100,50,94);
+  const sMouth=clamp(86-Math.abs(mouthRatio-0.78)*75,55,94);
+  const sFeat=0.68*sNose+0.32*sMouth;
+  /* 脸型：鹅蛋小脸 + 下颌对称 */
+  const sShape=clamp(60+(0.93-faceRatio)*250,55,94);
+  const sJawSym=clamp(80-jawSym*150,52,86);
+  const sJaw=0.28*sJawSym+0.72*sShape;
+  /* 照片质量（不计入颜值，仅可信度） */
+  const qYaw=clamp(100-Math.abs(yawDeg)*3,30,100);
+  const qSize=clamp(100-Math.abs(faceSize-0.6)*130,40,100);
+  const qLight=clamp(100-Math.abs(lum-0.55)*160,30,100);
+  const sQ=0.4*qYaw+0.3*qSize+0.3*qLight;
+
+  const scores={sym:sSym,third:sThird,fifth:sFifth,eye:sEye,feat:sFeat,jaw:sJaw,q:sQ};
+  /* 颜值权重：亮点(眼/脸/鼻)占 70，基础(对称/三庭/五眼)占 30，照片质量不参与 */
+  const W={sym:10,third:10,fifth:10,eye:26,feat:20,jaw:24,q:0};
+  const baseTotal=(scores.sym*W.sym+scores.third*W.third+scores.fifth*W.fifth+
+    scores.eye*W.eye+scores.feat*W.feat+scores.jaw*W.jaw)/100;
+  /* 少女感加成：眼大且脸小（五官精致度的非线性综合） */
+  const bonus=clamp((sEye-75)*0.6,0,10)+clamp((sJaw-80)*0.2,0,4);
+  const rawBeauty=clamp(baseTotal+bonus,0,100);
+  /* 严格颜值标尺：大众脸集中在 40–50，60 已属好看，90 为明星级。
+     分段单调映射只校准分布，不改变原始审美指数的排序。 */
+  const anchors=[[0,0],[60,18],[70,30],[78,42],[80,48],[82,56],[85,72],[87,90],[94,96],[100,100]];
+  let calibrated=0;
+  for(let i=1;i<anchors.length;i++){
+    if(rawBeauty<=anchors[i][0]){
+      const [x0,y0]=anchors[i-1], [x1,y1]=anchors[i];
+      calibrated=y0+(rawBeauty-x0)*(y1-y0)/(x1-x0);
+      break;
+    }
+  }
+  const total=Math.round(clamp(calibrated,0,100));
+
+  const tSum=thirds.reduce((a,b)=>a+b,0);
+  return {
+    P,P0,natW,natH,scores,total,
+    vals:{
+      yawDeg, roll:roll*180/Math.PI,
+      thirdPct:thirds.map(t=>t/tSum),
+      segPct:segs.map(s=>s/faceW),
+      eyeRatio, tilt, noseRatio, mouthRatio,
+      faceRatio, faceShape:faceShapeName(faceRatio),
+      fwhr, lum, faceSize,
+      asym, eyeSize, eyeOpen
+    }
+  };
+}
+/* ---------- 测量线 ---------- */
+const LAYER_COLORS={oval:"#67e8f9",mid:"#ffd43b",third:"#51cf66",fifth:"#cc5de8",
+  eye:"#22d3ee",feat:"#ffa94d",sym:"#ff5d8f"};
+let layerState={oval:true,mid:true,third:true,fifth:true,eye:true,feat:true,sym:true};
+let lastData=null;
+
+function buildLayers(){
+  const defs=[["oval","轮廓"],["mid","中线"],["third","三庭"],["fifth","五眼"],
+    ["eye","眼睛"],["feat","鼻嘴"],["sym","对称"]];
+  const box=$("layers"); box.innerHTML="";
+  defs.forEach(([k,name])=>{
+    const b=document.createElement("button");
+    b.className="lyr"+(layerState[k]?" on":"");
+    b.innerHTML='<span class="ld" style="background:'+LAYER_COLORS[k]+'"></span>'+name;
+    b.onclick=()=>{ layerState[k]=!layerState[k]; b.classList.toggle("on"); drawLines(lastData); };
+    box.appendChild(b);
+  });
+  const re=document.createElement("button");
+  re.className="rebtn"; re.textContent="重新上传";
+  re.onclick=()=>{
+    $("resultCard").style.display="none"; fileInput.value="";
+    window.scrollTo({top:0,behavior:"smooth"});
+    setTimeout(()=>fileInput.click(),350);
+  };
+  box.appendChild(re);
+}
+
+function drawLines(data){
+  lastData=data;
+  const {P,cw,ch,natW,natH}=data;
+  const sx=cw/natW, sy=ch/natH;
+  const X=p=>p.x*sx, Y=p=>p.y*sy;
+  const ctx=$("draw").getContext("2d");
+  ctx.clearRect(0,0,cw,ch);
+  ctx.lineCap="round"; ctx.lineJoin="round";
+  const on=k=>layerState[k];
+
+  if(on("oval")){
+    ctx.strokeStyle=LAYER_COLORS.oval; ctx.lineWidth=2.5; ctx.beginPath();
+    OVAL.forEach((k,i)=>{ const p=P[k]; if(i===0) ctx.moveTo(X(p),Y(p)); else ctx.lineTo(X(p),Y(p)); });
+    ctx.closePath(); ctx.stroke();
+  }
+  if(on("mid")){
+    ctx.strokeStyle=LAYER_COLORS.mid; ctx.lineWidth=2; ctx.setLineDash([7,6]);
+    ctx.beginPath(); ctx.moveTo(X(P[I.hair]),Y(P[I.hair]));
+    ctx.lineTo(X(P[I.chin]),Y(P[I.chin])); ctx.stroke(); ctx.setLineDash([]);
+  }
+  if(on("third")){
+    ctx.strokeStyle=LAYER_COLORS.third; ctx.lineWidth=2.5;
+    const yBrow=P[I.nasion].y, yNose=P[I.nbase].y;
+    [yBrow,yNose].forEach(y=>{
+      ctx.beginPath();
+      ctx.moveTo(X(P[I.fl])+8,y*sy);
+      ctx.lineTo(X(P[I.fr])-8,y*sy);
+      ctx.stroke();
+    });
+  }
+  if(on("fifth")){
+    ctx.strokeStyle=LAYER_COLORS.fifth; ctx.lineWidth=2.5;
+    const xs=[P[I.fl].x,P[I.lout].x,P[I.lin].x,P[I.rin].x,P[I.rout].x,P[I.fr].x];
+    const y0=P[I.lbot].y+10, y1=y0+13;
+    xs.forEach(x=>{ ctx.beginPath(); ctx.moveTo(x*sx,y0*sy); ctx.lineTo(x*sx,y1*sy); ctx.stroke(); });
+    ctx.beginPath(); ctx.moveTo(xs[0]*sx,(y0+6)*sy); ctx.lineTo(xs[5]*sx,(y0+6)*sy); ctx.stroke();
+  }
+  if(on("eye")){
+    ctx.strokeStyle=LAYER_COLORS.eye; ctx.lineWidth=2.5;
+    [[I.lin,I.lout],[I.rin,I.rout]].forEach(([a,b])=>{
+      ctx.beginPath(); ctx.moveTo(X(P[a]),Y(P[a])); ctx.lineTo(X(P[b]),Y(P[b])); ctx.stroke();
+    });
+    [I.liris,I.riris].forEach(k=>{
+      ctx.fillStyle=LAYER_COLORS.eye; ctx.beginPath();
+      ctx.arc(X(P[k]),Y(P[k]),3.5,0,7); ctx.fill();
+    });
+  }
+  if(on("feat")){
+    ctx.strokeStyle=LAYER_COLORS.feat; ctx.lineWidth=2.5;
+    ctx.beginPath(); ctx.moveTo(X(P[I.nl]),Y(P[I.nl])); ctx.lineTo(X(P[I.nr]),Y(P[I.nr])); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(X(P[I.ml]),Y(P[I.ml])); ctx.lineTo(X(P[I.mr]),Y(P[I.mr])); ctx.stroke();
+  }
+  if(on("sym")){
+    ctx.strokeStyle=LAYER_COLORS.sym; ctx.lineWidth=1.8; ctx.setLineDash([4,4]);
+    SYM_PAIRS.forEach(([a,b])=>{
+      ctx.beginPath(); ctx.moveTo(X(P[a]),Y(P[a])); ctx.lineTo(X(P[b]),Y(P[b])); ctx.stroke();
+    });
+    ctx.setLineDash([]);
+  }
+}
+
+/* ---------- 报告渲染 ---------- */
+const METRIC_LABELS=[["sym","对称度"],["third","三庭"],["fifth","五眼"],["eye","眼睛"],
+  ["feat","五官比例"],["jaw","下颌脸型"],["q","测量可信度"]];
+const METRIC_ADVICE={
+  sym:"左右五官略有不对称，轻微的不对称很正常，拍摄角度也会影响",
+  third:"上中下三庭比例略有差异，可通过发型或妆容修饰",
+  fifth:"眼距或眼宽比例略偏离标准，可由妆容、刘海调整",
+  eye:"眼睛条件还有提升空间，眼线、睫毛能增强神采",
+  feat:"鼻嘴比例略可优化，整体协调比单一标准更重要",
+  jaw:"脸型轮廓可通过发型与拍摄角度修饰",
+  q:"照片质量一般，建议自然光、平视、正脸、五官清晰重拍"
+};
+
+function gradeInfo(t){
+  if(t>=95) return ["天花板级","极罕见的综合条件，接近满分仅作为娱乐标尺"];
+  if(t>=90) return ["明星级","五官辨识度和精致度都非常突出"];
+  if(t>=80) return ["顶美","在人群中属于非常亮眼的少数"];
+  if(t>=70) return ["小美","明显好看，上镜有优势"];
+  if(t>=60) return ["很好看","已经高于大多数人的日常观感"];
+  if(t>=50) return ["中等偏上","比大众脸更耐看，具有个人亮点"];
+  if(t>=40) return ["大众脸","正常普通颜值，整体自然顺眼"];
+  if(t>=30) return ["普通偏下","部分比例不占优势，但不代表真实审美结论"];
+  return ["颜值表现偏低","仅代表本次几何测量结果，不给人下定义"];
+}
+
+function addComment(box,warn,text){
+  const c=document.createElement("div"); c.className="cm"+(warn?" warn":"");
+  const icon=warn
+    ? '<svg class="cm-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>'
+    : '<svg class="cm-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+  c.innerHTML=icon+"<span>"+text+"</span>";
+  box.appendChild(c);
+}
+
+function buildComments(data){
+  const {scores,vals}=data;
+  const box=$("comments"); box.innerHTML="";
+  const entries=METRIC_LABELS.filter(([k])=>k!=="q").map(([k,l])=>[k,l,scores[k]]).sort((a,b)=>b[2]-a[2]);
+  const top=entries[0], low=entries[entries.length-1];
+  addComment(box,false, top[2]>=78
+    ? "亮点："+top[1]+"表现突出（"+Math.round(top[2])+"），是整张脸的加分项。"
+    : "整体五官协调自然，给人舒服耐看的感觉。");
+  addComment(box,false,"建议："+METRIC_ADVICE[low[0]]+"。");
+  if(vals.segPct.some(s=>s<0)||Math.abs(vals.yawDeg)>25)
+    addComment(box,true,"照片侧脸或广角畸变严重，当前分数无法反映真实颜值，请正脸平视镜头重拍。");
+  else if(Math.abs(vals.yawDeg)>12)
+    addComment(box,true,"面部有一定偏转（约 "+Math.round(vals.yawDeg)+"°），正脸测量会更准确，建议平视重拍。");
+  if(vals.lum<0.32) addComment(box,true,"照片整体偏暗，建议到光线均匀明亮的地方重拍。");
+  else if(vals.lum>0.78) addComment(box,true,"照片略微过曝，建议避免强光直射。");
+  if(vals.faceSize<0.35) addComment(box,true,"人脸在画面中占比较小，建议靠近拍摄让五官更清晰。");
+  else if(vals.faceSize>0.92) addComment(box,true,"人脸离镜头过近，建议稍微拉远，避免广角变形。");
+}
+
+function render(data){
+  const {scores,total,vals}=data;
+  const circ=2*Math.PI*42;
+  const arc=$("ringArc");
+  arc.style.transition="stroke-dashoffset .9s ease";
+  arc.setAttribute("stroke-dasharray",circ.toFixed(1));
+  arc.setAttribute("stroke-dashoffset",circ.toFixed(1));
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    arc.setAttribute("stroke-dashoffset",(circ*(1-clamp(total,0,100)/100)).toFixed(1));
+  }));
+  $("totalNum").textContent=total;
+  const [g,gs]=gradeInfo(total);
+  $("grade").textContent=g; $("gradeSub").textContent=gs;
+
+  const m=$("metrics"); m.innerHTML="";
+  METRIC_LABELS.forEach(([k,label])=>{
+    const row=document.createElement("div"); row.className="mt";
+    row.innerHTML='<div class="mt-top"><span class="mt-name">'+label+'</span><span class="mt-val">'+
+      Math.round(scores[k])+'</span></div><div class="bar"><i></i></div>';
+    m.appendChild(row);
+    requestAnimationFrame(()=>{ row.querySelector(".bar i").style.width=clamp(scores[k],0,100)+"%"; });
+  });
+
+  const pct=x=>Math.round(x*100);
+  const readouts=[
+    ["三庭比例", vals.thirdPct.map(pct).join(" : "), "上:中:下，理想 33:33:34"],
+    ["眼角倾斜", vals.tilt.toFixed(1)+"°", "外眼角微高于内眼角更有神"],
+    ["眼裂长宽比", vals.eyeRatio.toFixed(2), "理想约 2.8~3.2"],
+    ["面宽高比 FWHR", vals.fwhr.toFixed(2), "常见 1.85~2.05"],
+    ["脸型", vals.faceShape, "面宽/面长 = "+vals.faceRatio.toFixed(2)],
+    ["面部偏航", vals.yawDeg.toFixed(1)+"°", "正脸越接近 0 越准"],
+    ["鼻宽/内眼距", vals.noseRatio.toFixed(2), "理想约 1.0"],
+    ["嘴宽/瞳孔距", vals.mouthRatio.toFixed(2), "理想约 1.1~1.3"]
+  ];
+  const r=$("readouts"); r.innerHTML="";
+  readouts.forEach(([k,v,d])=>{
+    const c=document.createElement("div"); c.className="rd";
+    c.innerHTML='<div class="k">'+k+'</div><div class="v">'+v+'</div><div class="d">'+d+'</div>';
+    r.appendChild(c);
+  });
+  buildComments(data);
+}
+</script>
+</body>
+</html>
