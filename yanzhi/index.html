@@ -120,6 +120,19 @@ body{background:var(--paper);color:var(--text)}
 @media(max-width:880px){.result-grid{grid-template-columns:1fr}.photo-col{border-right:0;border-bottom:1px solid var(--line)}.top{padding:20px 18px}.top h1{font-size:23px}.report-col,.photo-col{padding:14px}}
 @media(max-width:500px){.wrap{padding:12px 10px}.card{border-radius:14px}.top{min-height:98px;align-items:flex-start;flex-direction:column;gap:12px}.top h1{font-size:22px}.drop-inner{padding:34px 14px}.total-box{padding:14px;gap:14px}.ring,.ring svg{width:96px;height:96px}.grade{font-size:21px}.metrics{grid-template-columns:1fr 1fr;gap:8px}.mt{padding:10px}.mt .mt-val{font-size:20px}.sec-note{display:none}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+/* 分享海报 */
+.share-wrap{margin-top:16px;display:flex;justify-content:flex-end}
+.share-btn,.poster-action{min-height:46px;border:0;border-radius:999px;padding:0 20px;font-weight:800;font-size:14px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.share-btn{background:var(--coral);color:#fff;box-shadow:0 8px 20px rgba(217,101,92,.22)}
+.share-btn:hover{background:#c9544c}.share-btn svg{width:18px;height:18px}
+.poster-modal{position:fixed;inset:0;z-index:99;background:rgba(16,30,28,.72);display:none;align-items:center;justify-content:center;padding:18px}
+.poster-modal.show{display:flex}.poster-dialog{width:min(520px,100%);max-height:94vh;background:var(--surface);border-radius:18px;overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.28);display:flex;flex-direction:column}
+.poster-head{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.poster-head strong{color:var(--ink);font-size:16px}.poster-close{width:44px;height:44px;border:0;border-radius:50%;background:#eee9e1;color:var(--ink);font-size:25px;cursor:pointer;line-height:1}
+.poster-preview{background:#e8e2d8;padding:14px;overflow:auto;min-height:0}.poster-preview canvas{display:block;width:100%;height:auto;background:#fff;box-shadow:0 6px 24px rgba(35,52,48,.14)}
+.poster-actions{padding:14px 16px;display:grid;grid-template-columns:1fr 1fr;gap:10px;border-top:1px solid var(--line)}
+.poster-action.primary{background:var(--ink);color:#fff}.poster-action.secondary{background:var(--coral-soft);color:#8d3f39}.poster-tip{grid-column:1/-1;min-height:18px;text-align:center;font-size:12px;color:var(--muted)}
+@media(max-width:500px){.share-wrap{justify-content:stretch}.share-btn{width:100%}.poster-modal{padding:8px}.poster-dialog{max-height:97vh;border-radius:14px}.poster-actions{padding:10px;gap:8px}.poster-action{padding:0 12px;font-size:13px}}
 </style>
 </head>
 <body>
@@ -129,7 +142,7 @@ body{background:var(--paper);color:var(--text)}
     <span class="ptag">本地人脸几何分析 · 照片不离开浏览器</span>
   </div>
   <div class="r">
-    <span class="ver-badge">双审美通道 · v5</span>
+    <span class="ver-badge">本地模型 · v7</span>
   </div>
 </header>
 
@@ -146,7 +159,7 @@ body{background:var(--paper);color:var(--text)}
             <line x1="12" y1="3" x2="12" y2="15"/>
           </svg>
           <p>点击或拖拽，上传一张正脸照片</p>
-          <p class="sub">支持手机拍照 / JPG / PNG；建议自然光、平视、五官清晰</p>
+          <p class="sub">支持手机拍照 / JPG / PNG / WebP；大图自动优化，模型全程站内加载</p>
         </div>
       </div>
       <input type="file" id="file" accept="image/*" hidden>
@@ -188,10 +201,28 @@ body{background:var(--paper);color:var(--text)}
         <div class="readouts" id="readouts"></div>
         <div class="sec-head"><div class="sec-t">分析评语</div></div>
         <div class="comments" id="comments"></div>
+        <div class="share-wrap">
+          <button class="share-btn" id="shareBtn" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5 8.6 10.5"/></svg>
+            生成分享海报
+          </button>
+        </div>
       </div>
     </div>
   </section>
 </main>
+
+<div class="poster-modal" id="posterModal" role="dialog" aria-modal="true" aria-labelledby="posterTitle">
+  <div class="poster-dialog">
+    <div class="poster-head"><strong id="posterTitle">分享海报预览</strong><button class="poster-close" id="posterClose" type="button" aria-label="关闭">×</button></div>
+    <div class="poster-preview"><canvas id="posterCanvas" width="1080" height="1440"></canvas></div>
+    <div class="poster-actions">
+      <button class="poster-action primary" id="savePoster" type="button">保存图片</button>
+      <button class="poster-action secondary" id="copyPoster" type="button">复制到剪贴板</button>
+      <div class="poster-tip" id="posterTip">PNG 海报包含原图与本次分析结果</div>
+    </div>
+  </div>
+</div>
 
 <footer class="foot">
   <b>说明：</b>本工具基于 MediaPipe 478 个人脸关键点与双审美通道几何规则计算，照片全程在浏览器本地处理、不上传。算法会在<b>精致柔和型</b>与<b>英气硬朗型</b>中自动选择更匹配的通道，并使用不依赖发际线的纵向比例、下颌收束度和五官集中度。采用<b>严格颜值标尺</b>：40–50 为大众脸、60 已属好看、70 小美、80 顶美、90 明星级。拍摄角度、光线等不直接扣颜值，仅影响测量可信度。结果为<b>娱乐性质的美学参考</b>，并非科学或专业评价；极端侧脸、广角和夸张表情仍建议用正脸照复核。请仅上传本人或已获授权的照片。
@@ -205,7 +236,7 @@ body{background:var(--paper);color:var(--text)}
    ============================================================ */
 const { FaceLandmarker, FilesetResolver } = window.__MP__;
 const MP_VERSION = "0.10.14";
-const WASM_URL = "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@" + MP_VERSION + "/wasm";
+const WASM_URL = new URL("assets/wasm", location.href).href.replace(/\/$/,"");
 
 /* 关键点索引 */
 const I = {
@@ -241,17 +272,28 @@ function faceShapeName(fr){
   return "长形脸";
 }
 
-let landmarker=null, busy=false;
+let landmarker=null, landmarkerPromise=null, busy=false;
 const $ = id => document.getElementById(id);
 
 async function ensureLandmarker(){
   if(landmarker) return landmarker;
-  const fileset = await FilesetResolver.forVisionTasks(WASM_URL);
-  landmarker = await FaceLandmarker.createFromOptions(fileset, {
-    baseOptions:{ modelAssetPath:"assets/face_landmarker.task", delegate:"GPU" },
-    runningMode:"IMAGE", numFaces:1
-  });
-  return landmarker;
+  if(landmarkerPromise) return landmarkerPromise;
+  landmarkerPromise=(async()=>{
+    const fileset=await FilesetResolver.forVisionTasks(WASM_URL);
+    const baseOptions={modelAssetPath:"assets/face_landmarker.task"};
+    try{
+      landmarker=await FaceLandmarker.createFromOptions(fileset,{
+        baseOptions:{...baseOptions,delegate:"GPU"},runningMode:"IMAGE",numFaces:1
+      });
+    }catch(gpuError){
+      console.warn("GPU 初始化失败，自动切换 CPU",gpuError);
+      landmarker=await FaceLandmarker.createFromOptions(fileset,{
+        baseOptions,runningMode:"IMAGE",numFaces:1
+      });
+    }
+    return landmarker;
+  })();
+  try{return await landmarkerPromise;}catch(e){landmarkerPromise=null;throw e;}
 }
 
 /* ---------- 上传交互 ---------- */
@@ -267,33 +309,49 @@ drop.addEventListener("drop", e=>{
 function setStatus(msg,cls){ status.textContent=msg||""; status.className="status"+(cls?" "+cls:""); }
 function handleFile(file){
   if(busy) return;
-  if(!file.type.startsWith("image/")){ setStatus("请选择图片文件（JPG/PNG）","err"); return; }
+  const name=(file.name||"").toLowerCase();
+  if(!file.type.startsWith("image/")){setStatus("请选择图片文件（JPG / PNG / WebP）","err");return;}
+  if(/\.(heic|heif)$/.test(name)||/heic|heif/.test(file.type)){
+    setStatus("当前浏览器不能稳定读取 HEIC/HEIF，请先在相册中导出为 JPG 或 PNG","err");return;
+  }
+  if(file.size>35*1024*1024){setStatus("图片超过 35MB，请压缩或截屏后再上传","err");return;}
   const url=URL.createObjectURL(file);
-  img.onload=()=>{ URL.revokeObjectURL(url); runAnalysis(file); };
-  img.onerror=()=>setStatus("图片加载失败","err");
-  setStatus("正在加载图片…");
+  img.onload=()=>{URL.revokeObjectURL(url);runAnalysis(file);};
+  img.onerror=()=>{URL.revokeObjectURL(url);setStatus("图片解码失败，请改用 JPG / PNG / WebP，或将原图截屏后上传","err");};
+  setStatus("正在读取图片…");
   img.src=url;
+}
+
+async function createAnalysisImage(){
+  const maxSide=1600,nw=img.naturalWidth,nh=img.naturalHeight;
+  if(Math.max(nw,nh)<=maxSide) return img;
+  const scale=maxSide/Math.max(nw,nh),canvas=document.createElement("canvas");
+  canvas.width=Math.max(1,Math.round(nw*scale));canvas.height=Math.max(1,Math.round(nh*scale));
+  const cx=canvas.getContext("2d",{alpha:false});cx.drawImage(img,0,0,canvas.width,canvas.height);
+  return canvas;
 }
 
 /* ---------- 检测主流程 ---------- */
 async function runAnalysis(){
   busy=true;
   try{
-    setStatus("正在加载人脸检测模型（首次约需数秒）…");
+    setStatus("正在加载本地人脸模型（首次约需数秒）…");
     const lm=await ensureLandmarker();
-    setStatus("正在检测人脸关键点…");
+    setStatus("正在优化图片并检测人脸关键点…");
     await new Promise(r=>requestAnimationFrame(r));
-    const res=lm.detect(img);
+    const analysisImage=await createAnalysisImage();
+    const res=lm.detect(analysisImage);
     if(!res.faceLandmarks || !res.faceLandmarks.length){
-      setStatus("没有检测到人脸，请换一张正脸、五官清晰的照片","err"); busy=false; return;
+      setStatus("没有检测到清晰人脸：请使用单人、无遮挡、五官完整的照片","err");busy=false;return;
     }
     const norm=res.faceLandmarks[0];
-    const natW=img.naturalWidth, natH=img.naturalHeight;
-    const P0=norm.map(l=>({x:l.x*natW, y:l.y*natH, z:l.z}));
+    const natW=img.naturalWidth,natH=img.naturalHeight;
+    const P0=norm.map(l=>({x:l.x*natW,y:l.y*natH,z:l.z}));
     const roll=Math.atan2(P0[I.chin].x-P0[I.hair].x, P0[I.chin].y-P0[I.hair].y);
     const cx=P0[I.ntip].x, cy=P0[I.ntip].y;
     const P=P0.map(p=>rotatePt(p,cx,cy,roll));
     const data=measure(P,P0,natW,natH,norm,roll);
+    data.roll=roll;data.rotCx=cx;data.rotCy=cy;
     window.__lastData=data;
     /* 先显示结果以拿到真实显示尺寸，再绘制测量线 */
     setStatus("分析完成","ok");
@@ -309,8 +367,13 @@ async function runAnalysis(){
     $("resultCard").scrollIntoView({behavior:"smooth"});
   }catch(e){
     console.error(e);
-    setStatus("分析失败："+(e&&e.message?e.message:e),"err");
-  }finally{ busy=false; }
+    const msg=e&&e.message?e.message:String(e||"");
+    if(/fetch|wasm|network|Failed to load|createFromOptions/i.test(msg))
+      setStatus("本地人脸模型加载失败，请刷新重试；若仍失败，请清理浏览器缓存或换用最新版 Chrome/Edge","err");
+    else if(/memory|allocation|out of bounds/i.test(msg))
+      setStatus("设备内存不足，请关闭其他页面或先将图片截屏/压缩后重试","err");
+    else setStatus("分析失败："+msg,"err");
+  }finally{busy=false;}
 }
 
 /* ---------- 人脸区域亮度 ---------- */
@@ -491,62 +554,49 @@ function buildLayers(){
 
 function drawLines(data){
   lastData=data;
-  const {P,cw,ch,natW,natH}=data;
+  const {P,P0,cw,ch,natW,natH,roll,rotCx,rotCy}=data;
   const sx=cw/natW, sy=ch/natH;
   const X=p=>p.x*sx, Y=p=>p.y*sy;
+  /* P 是评分用的扶正坐标；P0 是原图坐标。构造于 P 的辅助线必须逆旋转回 P0。 */
+  const U=p=>rotatePt(p,rotCx,rotCy,-roll);
   const ctx=$("draw").getContext("2d");
   ctx.clearRect(0,0,cw,ch);
-  ctx.lineCap="round"; ctx.lineJoin="round";
+  ctx.lineCap="round";ctx.lineJoin="round";
   const on=k=>layerState[k];
+  const line=(a,b)=>{ctx.beginPath();ctx.moveTo(X(a),Y(a));ctx.lineTo(X(b),Y(b));ctx.stroke();};
 
   if(on("oval")){
-    ctx.strokeStyle=LAYER_COLORS.oval; ctx.lineWidth=2.5; ctx.beginPath();
-    OVAL.forEach((k,i)=>{ const p=P[k]; if(i===0) ctx.moveTo(X(p),Y(p)); else ctx.lineTo(X(p),Y(p)); });
-    ctx.closePath(); ctx.stroke();
+    ctx.strokeStyle=LAYER_COLORS.oval;ctx.lineWidth=2.5;ctx.beginPath();
+    OVAL.forEach((k,i)=>{const p=P0[k];if(i===0)ctx.moveTo(X(p),Y(p));else ctx.lineTo(X(p),Y(p));});
+    ctx.closePath();ctx.stroke();
   }
   if(on("mid")){
-    ctx.strokeStyle=LAYER_COLORS.mid; ctx.lineWidth=2; ctx.setLineDash([7,6]);
-    ctx.beginPath(); ctx.moveTo(X(P[I.hair]),Y(P[I.hair]));
-    ctx.lineTo(X(P[I.chin]),Y(P[I.chin])); ctx.stroke(); ctx.setLineDash([]);
+    ctx.strokeStyle=LAYER_COLORS.mid;ctx.lineWidth=2;ctx.setLineDash([7,6]);
+    line(P0[I.hair],P0[I.chin]);ctx.setLineDash([]);
   }
   if(on("third")){
-    ctx.strokeStyle=LAYER_COLORS.third; ctx.lineWidth=2.5;
-    const yBrow=P[I.nasion].y, yNose=P[I.nbase].y;
-    [yBrow,yNose].forEach(y=>{
-      ctx.beginPath();
-      ctx.moveTo(X(P[I.fl])+8,y*sy);
-      ctx.lineTo(X(P[I.fr])-8,y*sy);
-      ctx.stroke();
-    });
+    ctx.strokeStyle=LAYER_COLORS.third;ctx.lineWidth=2.5;
+    [P[I.nasion].y,P[I.nbase].y].forEach(y=>line(U({x:P[I.fl].x,y}),U({x:P[I.fr].x,y})));
   }
   if(on("fifth")){
-    ctx.strokeStyle=LAYER_COLORS.fifth; ctx.lineWidth=2.5;
+    ctx.strokeStyle=LAYER_COLORS.fifth;ctx.lineWidth=2.5;
     const xs=[P[I.fl].x,P[I.lout].x,P[I.lin].x,P[I.rin].x,P[I.rout].x,P[I.fr].x];
-    const y0=P[I.lbot].y+10, y1=y0+13;
-    xs.forEach(x=>{ ctx.beginPath(); ctx.moveTo(x*sx,y0*sy); ctx.lineTo(x*sx,y1*sy); ctx.stroke(); });
-    ctx.beginPath(); ctx.moveTo(xs[0]*sx,(y0+6)*sy); ctx.lineTo(xs[5]*sx,(y0+6)*sy); ctx.stroke();
+    const y0=P[I.lbot].y+10/sy,y1=y0+13/sy;
+    xs.forEach(x=>line(U({x,y:y0}),U({x,y:y1})));
+    line(U({x:xs[0],y:y0+6/sy}),U({x:xs[5],y:y0+6/sy}));
   }
   if(on("eye")){
-    ctx.strokeStyle=LAYER_COLORS.eye; ctx.lineWidth=2.5;
-    [[I.lin,I.lout],[I.rin,I.rout]].forEach(([a,b])=>{
-      ctx.beginPath(); ctx.moveTo(X(P[a]),Y(P[a])); ctx.lineTo(X(P[b]),Y(P[b])); ctx.stroke();
-    });
-    [I.liris,I.riris].forEach(k=>{
-      ctx.fillStyle=LAYER_COLORS.eye; ctx.beginPath();
-      ctx.arc(X(P[k]),Y(P[k]),3.5,0,7); ctx.fill();
-    });
+    ctx.strokeStyle=LAYER_COLORS.eye;ctx.lineWidth=2.5;
+    [[I.lin,I.lout],[I.rin,I.rout]].forEach(([a,b])=>line(P0[a],P0[b]));
+    [I.liris,I.riris].forEach(k=>{ctx.fillStyle=LAYER_COLORS.eye;ctx.beginPath();ctx.arc(X(P0[k]),Y(P0[k]),3.5,0,7);ctx.fill();});
   }
   if(on("feat")){
-    ctx.strokeStyle=LAYER_COLORS.feat; ctx.lineWidth=2.5;
-    ctx.beginPath(); ctx.moveTo(X(P[I.nl]),Y(P[I.nl])); ctx.lineTo(X(P[I.nr]),Y(P[I.nr])); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(X(P[I.ml]),Y(P[I.ml])); ctx.lineTo(X(P[I.mr]),Y(P[I.mr])); ctx.stroke();
+    ctx.strokeStyle=LAYER_COLORS.feat;ctx.lineWidth=2.5;
+    line(P0[I.nl],P0[I.nr]);line(P0[I.ml],P0[I.mr]);
   }
   if(on("sym")){
-    ctx.strokeStyle=LAYER_COLORS.sym; ctx.lineWidth=1.8; ctx.setLineDash([4,4]);
-    SYM_PAIRS.forEach(([a,b])=>{
-      ctx.beginPath(); ctx.moveTo(X(P[a]),Y(P[a])); ctx.lineTo(X(P[b]),Y(P[b])); ctx.stroke();
-    });
-    ctx.setLineDash([]);
+    ctx.strokeStyle=LAYER_COLORS.sym;ctx.lineWidth=1.8;ctx.setLineDash([4,4]);
+    SYM_PAIRS.forEach(([a,b])=>line(P0[a],P0[b]));ctx.setLineDash([]);
   }
 }
 
@@ -648,6 +698,77 @@ function render(data){
   });
   buildComments(data);
 }
+
+/* ---------- 分享海报 ---------- */
+const posterModal=$("posterModal"), posterCanvas=$("posterCanvas"), posterTip=$("posterTip");
+function roundedRect(ctx,x,y,w,h,r){
+  r=Math.min(r,w/2,h/2);ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();
+}
+function fitInside(sw,sh,x,y,w,h){
+  const scale=Math.min(w/sw,h/sh), dw=sw*scale, dh=sh*scale;
+  return {x:x+(w-dw)/2,y:y+(h-dh)/2,w:dw,h:dh};
+}
+function drawPoster(){
+  const data=window.__lastData;if(!data) return false;
+  const ctx=posterCanvas.getContext("2d"), W=1080,H=1440;
+  posterCanvas.width=W;posterCanvas.height=H;
+  ctx.fillStyle="#f5f1ea";ctx.fillRect(0,0,W,H);
+  ctx.fillStyle="#173b38";ctx.fillRect(0,0,W,132);
+  ctx.fillStyle="#d9655c";ctx.fillRect(0,132,W,8);
+  ctx.fillStyle="#ffffff";ctx.font='800 48px "Microsoft YaHei",sans-serif';ctx.fillText("颜值实验室",64,76);
+  ctx.fillStyle="#d8e4df";ctx.font='400 22px "Microsoft YaHei",sans-serif';ctx.fillText("本地几何分析 · 照片不离开浏览器",64,112);
+
+  /* 原图完整等比呈现 */
+  roundedRect(ctx,52,180,976,676,30);ctx.fillStyle="#e8e2d8";ctx.fill();ctx.save();roundedRect(ctx,52,180,976,676,30);ctx.clip();
+  const box=fitInside(img.naturalWidth,img.naturalHeight,52,180,976,676);
+  ctx.fillStyle="#263b38";ctx.fillRect(52,180,976,676);ctx.drawImage(img,box.x,box.y,box.w,box.h);ctx.restore();
+
+  roundedRect(ctx,52,892,976,452,30);ctx.fillStyle="#fffdf8";ctx.fill();
+  ctx.fillStyle="#173b38";ctx.font='900 118px "Microsoft YaHei",sans-serif';ctx.fillText(String(data.total),82,1034);
+  ctx.fillStyle="#74817d";ctx.font='600 22px "Microsoft YaHei",sans-serif';ctx.fillText("严格颜值分 / 100",88,1070);
+  const grade=gradeInfo(data.total)[0];
+  ctx.fillStyle="#d9655c";ctx.font='900 42px "Microsoft YaHei",sans-serif';ctx.fillText(grade,330,972);
+  ctx.fillStyle="#173b38";ctx.font='700 28px "Microsoft YaHei",sans-serif';ctx.fillText(data.vals.beautyStyle,330,1018);
+  ctx.fillStyle="#74817d";ctx.font='400 21px "Microsoft YaHei",sans-serif';ctx.fillText("测量可信度 "+Math.round(data.scores.q)+" · 不计入颜值总分",330,1058);
+
+  const items=METRIC_LABELS.map(([k,label])=>[label,Math.round(data.scores[k])]);
+  const startX=330,startY=1105,colW=218,rowH=82;
+  items.forEach(([label,value],i)=>{
+    const col=i%3,row=Math.floor(i/3),x=startX+col*colW,y=startY+row*rowH;
+    ctx.fillStyle="#74817d";ctx.font='600 19px "Microsoft YaHei",sans-serif';ctx.fillText(label,x,y);
+    ctx.fillStyle="#173b38";ctx.font='900 30px "Microsoft YaHei",sans-serif';ctx.fillText(String(value),x,y+37);
+    ctx.fillStyle="#e6dfd6";ctx.fillRect(x,y+50,168,6);
+    ctx.fillStyle="#d9655c";ctx.fillRect(x,y+50,168*clamp(value,0,100)/100,6);
+  });
+  ctx.fillStyle="#a09a90";ctx.font='500 19px "Microsoft YaHei",sans-serif';ctx.fillText("godweiyang.com/yanzhi",82,1392);
+  ctx.textAlign="right";ctx.fillText("娱乐性质美学参考",998,1392);ctx.textAlign="left";
+  return true;
+}
+function openPoster(){
+  if(!drawPoster()) return;
+  posterTip.textContent="PNG 海报包含原图与本次分析结果";
+  posterModal.classList.add("show");document.body.style.overflow="hidden";
+}
+function closePoster(){posterModal.classList.remove("show");document.body.style.overflow="";}
+function posterBlob(){return new Promise((resolve,reject)=>posterCanvas.toBlob(b=>b?resolve(b):reject(new Error("海报生成失败")),"image/png",1));}
+async function savePosterImage(){
+  try{
+    const blob=await posterBlob(),url=URL.createObjectURL(blob),a=document.createElement("a");
+    a.href=url;a.download="颜值实验室-"+window.__lastData.total+"分.png";document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1500);posterTip.textContent="图片已保存/下载，请到相册或下载目录查看";
+  }catch(e){posterTip.textContent=e.message||"保存失败，请长按预览图保存";}
+}
+async function copyPosterImage(){
+  try{
+    if(!navigator.clipboard||typeof ClipboardItem==="undefined") throw new Error("当前浏览器不支持复制图片");
+    const blob=await posterBlob();await navigator.clipboard.write([new ClipboardItem({"image/png":blob})]);
+    posterTip.textContent="海报已复制到剪贴板";
+  }catch(e){posterTip.textContent=(e.message||"复制失败")+"，可使用“保存图片”";}
+}
+$("shareBtn").addEventListener("click",openPoster);$("posterClose").addEventListener("click",closePoster);
+$("savePoster").addEventListener("click",savePosterImage);$("copyPoster").addEventListener("click",copyPosterImage);
+posterModal.addEventListener("click",e=>{if(e.target===posterModal)closePoster();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&posterModal.classList.contains("show"))closePoster();});
 </script>
 </body>
 </html>
