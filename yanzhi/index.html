@@ -570,9 +570,12 @@ async function runAnalysis(){
       setStatus("深度模型推理失败："+e.message,"err");busy=false;return;
     }
     data.fusion = fusion;
-    data.percentile = Math.round(percentileScore(fusion.finalScore));
+    // V90: 保留连续 float 给 grade/区间，显示才 round
+    data.percentileRaw = percentileScore(fusion.finalScore);
+    data.percentile = Math.round(data.percentileRaw);
     data.labelCal = calibrateScore(fusion.finalScore);
-    data.total = data.percentile;
+    data.totalRaw = data.percentileRaw;
+    data.total = data.percentile; // 显示用整数
     window.__lastData=data;
     /* 先显示结果以拿到真实显示尺寸，再绘制测量线 */
     setStatus("分析完成","ok");
@@ -908,8 +911,10 @@ function render(data){
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
     arc.setAttribute("stroke-dashoffset",(circ*(1-clamp(total,0,100)/100)).toFixed(1));
   }));
+  // V90: grade 用 raw 连续值，显示用 rounded
+  const totalRaw = data.totalRaw ?? total;
   $("totalNum").textContent=total;
-  const [g,gs]=gradeFromPct(total);
+  const [g,gs]=gradeFromPct(totalRaw);
   $("grade").textContent=g; $("gradeSub").textContent="超过约"+total+"%的参考样本 · "+gs;
   // V90: 低可信显示 --，不显示精确分
   const badge=$("fusionBadge"), ib=$("intervalBox");
@@ -992,26 +997,23 @@ async function drawPoster(){
   ctx.fillStyle="#263b38";ctx.fillRect(52,180,976,676);ctx.drawImage(img,box.x,box.y,box.w,box.h);ctx.restore();
 
   roundedRect(ctx,52,892,976,452,30);ctx.fillStyle="#fffdf8";ctx.fill();
-  ctx.fillStyle="#173b38";ctx.font='900 118px "Microsoft YaHei",sans-serif';ctx.fillText(String(data.total),82,1034);
+  // V90: 低可信显示 --
+  const totalShow = data.fusion && data.fusion.tier==='reject' ? '--' : String(data.total);
+  ctx.fillStyle="#173b38";ctx.font='900 118px "Microsoft YaHei",sans-serif';ctx.fillText(totalShow,82,1034);
   ctx.fillStyle="#74817d";ctx.font='600 22px "Microsoft YaHei",sans-serif';ctx.fillText("颜值指数 / 100",88,1070);
-  const grade=gradeFromPct(data.total)[0];
+  const grade=gradeFromPct(data.totalRaw ?? data.total)[0];
   ctx.fillStyle="#d9655c";ctx.font='900 42px "Microsoft YaHei",sans-serif';ctx.fillText(grade,330,972);
-  ctx.fillStyle="#173b38";ctx.font='700 28px "Microsoft YaHei",sans-serif';ctx.fillText(data.vals.beautyStyle,330,1018);
-  ctx.fillStyle="#74817d";ctx.font='400 21px "Microsoft YaHei",sans-serif';ctx.fillText("测量可信度 "+Math.round(data.scores.q)+" · 不计入颜值总分",330,1058);
+  // V90: 简短亮点（普通话，非技术）
+  const brief = data.fusion && data.fusion.tier==='reject'
+    ? "建议正脸重拍以获得更准确结果"
+    : "五官比例和整体协调度表现良好";
+  ctx.fillStyle="#173b38";ctx.font='700 26px "Microsoft YaHei",sans-serif';ctx.fillText(brief,330,1020);
+  ctx.fillStyle="#74817d";ctx.font='400 21px "Microsoft YaHei",sans-serif';ctx.fillText("娱乐性质美学参考",330,1060);
 
-  const items=METRIC_LABELS.map(([k,label])=>[label,Math.round(data.scores[k])]);
-  const startX=330,startY=1105,colW=218,rowH=82;
-  items.forEach(([label,value],i)=>{
-    const col=i%3,row=Math.floor(i/3),x=startX+col*colW,y=startY+row*rowH;
-    ctx.fillStyle="#74817d";ctx.font='600 19px "Microsoft YaHei",sans-serif';ctx.fillText(label,x,y);
-    ctx.fillStyle="#173b38";ctx.font='900 30px "Microsoft YaHei",sans-serif';ctx.fillText(String(value),x,y+37);
-    ctx.fillStyle="#e6dfd6";ctx.fillRect(x,y+50,168,6);
-    ctx.fillStyle="#d9655c";ctx.fillRect(x,y+50,168*clamp(value,0,100)/100,6);
-  });
   /* 页脚与二维码 */
   ctx.fillStyle="#a09a90";ctx.font='500 19px "Microsoft YaHei",sans-serif';
   ctx.fillText("godweiyang.com/yanzhi",82,1432);
-  ctx.fillText("娱乐性质美学参考",82,1470);
+  ctx.fillText("上传正脸照，测测你的颜值指数",82,1470);
   try{
     await ensureQrLib();
     const qr=window.qrcode(0,"M");qr.addData("https://godweiyang.com/yanzhi/");qr.make();
