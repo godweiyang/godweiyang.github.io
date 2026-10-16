@@ -48,8 +48,8 @@ body{background:#eef2f5;font-family:"PingFang SC","Microsoft YaHei","Segoe UI",s
 .canvas-wrap{position:relative;width:100%;border-radius:10px;overflow:hidden;background:#11232e;line-height:0}
 .canvas-wrap img{max-width:100%;height:auto;display:block;margin:0 auto}
 .canvas-wrap canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-.analysis-overlay{position:absolute;inset:0;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(17,35,46,.42);color:#fff;line-height:1.5;text-align:center;font-size:14px;font-weight:800;z-index:3}
-.analysis-overlay.show{display:flex}.analysis-overlay .spin{border-color:rgba(255,255,255,.45);border-top-color:#fff;margin-right:9px}
+.analysis-overlay{position:absolute;inset:0;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(17,35,46,.55);color:#fff;line-height:1.5;text-align:center;font-size:14px;font-weight:800;z-index:3}
+.analysis-overlay.show{display:flex}.analysis-panel{width:min(320px,86%);padding:14px 16px;border-radius:12px;background:rgba(16,47,44,.9);box-shadow:0 8px 28px rgba(0,0,0,.2)}.analysis-title{display:flex;align-items:center;justify-content:center}.analysis-overlay .spin{flex:none;border-color:rgba(255,255,255,.45);border-top-color:#fff;margin-right:9px}.model-progress{display:none;height:7px;margin-top:12px;border-radius:99px;overflow:hidden;background:rgba(255,255,255,.2)}.model-progress.show{display:block}.model-progress i{display:block;width:0;height:100%;border-radius:inherit;background:#fff;transition:width .15s ease}.model-progress-meta{display:none;margin-top:7px;color:#d8e4df;font-size:11px;font-weight:500;font-variant-numeric:tabular-nums}.model-progress-meta.show{display:block}
 .layers{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}
 .lyr{border:1.5px solid #d5dee5;background:#fff;color:#5d6b77;font-size:11.5px;font-weight:700;
   border-radius:20px;padding:5px 12px;cursor:pointer}
@@ -77,14 +77,6 @@ body{background:#eef2f5;font-family:"PingFang SC","Microsoft YaHei","Segoe UI",s
 .mt .bar{height:8px;background:#edf1f4;border-radius:5px;overflow:hidden}
 .mt .bar i{display:block;height:100%;border-radius:5px;
   background:linear-gradient(90deg,#14688f,#1e88b5);width:0;transition:width .6s ease}
-
-/* 读数 */
-.sec-t{font-size:13px;font-weight:800;color:#33414f;margin:16px 2px 8px}
-.readouts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.rd{border:1.5px solid #e7edf3;border-radius:9px;padding:9px 10px;background:#fbfdfe}
-.rd .k{font-size:10.5px;color:#8a97a4;font-weight:700}
-.rd .v{font-size:14px;font-weight:800;color:#17688f;margin-top:3px}
-.rd .d{font-size:10px;color:#9aa7b2;margin-top:2px}
 
 /* 评语 */
 .comments{margin-top:6px;display:flex;flex-direction:column;gap:8px}
@@ -116,12 +108,10 @@ body{background:var(--paper);color:var(--text)}
 .layers{gap:8px;margin-top:12px}.lyr{border:1px solid #cfc8bc;background:#fffdf8;color:#596662;font-size:12px;border-radius:999px;padding:7px 12px;min-height:36px}.lyr.on{border-color:var(--coral);color:#a8453e;background:#fff1ed}.rebtn{border:1px solid var(--ink);background:var(--ink);color:#fff;border-radius:999px;padding:7px 14px;min-height:36px}
 .total-box{gap:20px;padding:18px;border:1px solid #e5bdb6;background:var(--coral-soft);border-radius:16px;margin-bottom:18px}.ring{width:112px;height:112px}.ring svg{width:112px;height:112px}.ring .num b{font-size:38px;color:var(--ink);font-variant-numeric:tabular-nums}.ring .num span{font-size:11px;color:#7e615e}.score-eyebrow{font-size:12px;color:#8d534e;font-weight:750;margin-bottom:5px}.grade{font-size:24px;color:var(--ink)}.grade-sub{font-size:13px;color:#725f5b;max-width:310px}
 .sec-head{display:flex;justify-content:space-between;gap:12px;align-items:end;margin:18px 2px 10px}.sec-t{font-size:15px;color:var(--ink);margin:0}.sec-note{font-size:11px;color:var(--muted)}
-.metrics{padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px}.mt{border:1px solid var(--line);border-radius:13px;padding:12px;background:#fff}.mt .mt-top{align-items:baseline;font-size:13px;margin-bottom:9px}.mt .mt-name{font-weight:800;color:var(--text)}.mt .mt-val{color:var(--coral);font-size:22px;font-weight:900;font-variant-numeric:tabular-nums}.mt .bar{height:5px;background:#ece7df}.mt .bar i{background:var(--coral)}.mt .mt-desc{font-size:10.5px;color:var(--muted);margin-top:8px;line-height:1.45}
-.confidence{display:flex;align-items:center;gap:12px;margin-top:11px;padding:11px 13px;border:1px solid #cbd7d1;background:#f1f6f3;border-radius:12px}.confidence .c-label{font-size:12px;font-weight:800;color:var(--ink)}.confidence .c-copy{font-size:10.5px;color:var(--muted);margin-top:2px}.confidence .c-num{margin-left:auto;font-size:23px;font-weight:900;color:#32715e}.confidence .c-num small{font-size:10px;font-weight:600;color:var(--muted)}
-.readouts{gap:8px}.rd{border:0;border-bottom:1px solid var(--line);border-radius:0;padding:10px 4px;background:transparent}.rd .k{font-size:11px;color:var(--muted)}.rd .v{font-size:15px;color:var(--ink)}.rd .d{color:#9a958b}
+.metrics{padding:0;display:block}.radar-wrap{position:relative;max-width:430px;margin:0 auto;padding:8px 0 2px}.radar-svg{display:block;width:100%;height:auto;overflow:visible}.radar-grid{fill:none;stroke:#ddd8ce;stroke-width:1}.radar-axis{stroke:#e6e0d7;stroke-width:1}.radar-area{fill:rgba(217,101,92,.22);stroke:#d9655c;stroke-width:2.2}.radar-dot{fill:#d9655c;stroke:#fffdf8;stroke-width:2}.radar-label{fill:#243431;font-size:11px;font-weight:800}.radar-value{fill:#d9655c;font-size:12px;font-weight:900;font-variant-numeric:tabular-nums}.radar-note{text-align:center;color:var(--muted);font-size:10.5px;margin-top:2px}
 .cm{border-left:0;background:#f4f6f3;border-radius:11px;padding:10px 12px}.cm .cm-ico{color:#32715e}.cm.warn{border-left:0;background:#fff4df}.foot{color:#827e75}.foot b{color:#5e5a53}
 @media(max-width:880px){.result-grid{grid-template-columns:1fr}.photo-col{border-right:0;border-bottom:1px solid var(--line)}.top{padding:20px 18px}.top h1{font-size:23px}.report-col,.photo-col{padding:14px}}
-@media(max-width:500px){.wrap{padding:12px 10px}.card{border-radius:14px}.top{min-height:98px;align-items:flex-start;flex-direction:column;gap:12px}.top h1{font-size:22px}.drop-inner{padding:34px 14px}.total-box{padding:14px;gap:14px}.ring,.ring svg{width:96px;height:96px}.grade{font-size:21px}.metrics{grid-template-columns:1fr 1fr;gap:8px}.mt{padding:10px}.mt .mt-val{font-size:20px}.sec-note{display:none}}
+@media(max-width:500px){.wrap{padding:12px 10px}.card{border-radius:14px}.top{min-height:98px;align-items:flex-start;flex-direction:column;gap:12px}.top h1{font-size:22px}.drop-inner{padding:34px 14px}.total-box{padding:14px;gap:14px}.ring,.ring svg{width:96px;height:96px}.grade{font-size:21px}.radar-wrap{max-width:360px}.sec-note{display:none}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
 /* 分享海报 */
 .share-wrap{margin-top:16px;display:flex;justify-content:flex-end}
@@ -146,7 +136,7 @@ body{background:var(--paper);color:var(--text)}
     <span class="ptag">照片仅在你的设备上分析，不会上传服务器</span>
   </div>
   <div class="r">
-    <span class="ver-badge">人群百分位校准 · v91</span>
+    <span class="ver-badge">六维雷达 · v92</span>
   </div>
 </header>
 
@@ -163,7 +153,7 @@ body{background:var(--paper);color:var(--text)}
             <line x1="12" y1="3" x2="12" y2="15"/>
           </svg>
           <p>点击或拖拽，上传一张正脸照片</p>
-          <p class="sub">支持 JPG / PNG / WebP；首次分析会自动加载约 67MB 模型，加载后浏览器会缓存</p>
+          <p class="sub">支持 JPG / PNG / WebP；首次分析会下载约 73MB 核心组件，并显示实时进度，之后浏览器通常会缓存</p>
         </div>
       </div>
       <input type="file" id="file" accept="image/*" hidden>
@@ -179,7 +169,7 @@ body{background:var(--paper);color:var(--text)}
         <div class="canvas-wrap" id="canvasWrap">
           <img id="img" alt="人脸照片">
           <canvas id="draw"></canvas>
-          <div class="analysis-overlay" id="analysisOverlay"><span class="spin"></span><span id="analysisOverlayText">图片已上传，正在分析…</span></div>
+          <div class="analysis-overlay" id="analysisOverlay"><div class="analysis-panel"><div class="analysis-title"><span class="spin"></span><span id="analysisOverlayText">图片已上传，正在分析…</span></div><div class="model-progress" id="modelProgress"><i id="modelProgressBar"></i></div><div class="model-progress-meta" id="modelProgressMeta"></div></div></div>
         </div>
         <div class="layers" id="layers"></div>
       </div>
@@ -200,11 +190,8 @@ body{background:var(--paper);color:var(--text)}
             <div id="intervalBox" style="display:none;margin-top:6px;font-size:12px;color:#8a97a4"></div>
           </div>
         </div>
-        <div class="sec-head"><div class="sec-t">六项颜值特征</div><div class="sec-note">特征指数用于计算，不等同于总分</div></div>
+        <div class="sec-head"><div class="sec-t">六项颜值雷达</div><div class="sec-note">越靠近外圈，表示该项在参考样本中相对更突出</div></div>
         <div class="metrics" id="metrics"></div>
-        <div class="confidence" id="confidence"></div>
-        <div class="sec-head"><div class="sec-t">关键比例</div><div class="sec-note">来自 478 个人脸关键点</div></div>
-        <div class="readouts" id="readouts"></div>
         <div class="sec-head"><div class="sec-t">分析评语</div></div>
         <div class="comments" id="comments"></div>
         <div class="share-wrap">
@@ -239,7 +226,7 @@ body{background:var(--paper);color:var(--text)}
 </div>
 
 <footer class="foot">
-  <b>说明：</b>照片仅在你的设备上分析，<b>不会上传服务器</b>。首次分析会自动加载约 67MB 的站内三模型和运行组件，不会弹出下载文件窗口，加载后通常会由浏览器缓存。综合分由三路深度模型融合后，经 5,500 张严格 OOF 参考分布进行连续校准；人脸关键点仅用于姿态、可信度、测量线和六项几何参考。采用<b>连续颜值标尺</b>：20–30 普通偏下、30–40 大众自然、40–50 普通耐看、50–60 中等偏上、60–70 好看、70–80 小美、80–90 顶美、90+ 明星级。结果为娱乐性质美学参考；极端侧脸、广角和夸张表情建议用正脸照复核。请仅上传本人或已获授权的照片。
+  <b>说明：</b>照片仅在你的设备上分析，<b>不会上传服务器</b>。首次分析会下载约 73MB 核心组件，其中三路审美模型约 64MB，并显示实时进度；加载后通常会由浏览器缓存。综合分由三路深度模型融合后，经 5,500 张严格 OOF 参考分布进行连续校准；人脸关键点仅用于姿态、可信度、测量线和六项几何参考。采用<b>连续颜值标尺</b>：20–30 普通偏下、30–40 大众自然、40–50 普通耐看、50–60 中等偏上、60–70 好看、70–80 小美、80–90 顶美、90+ 明星级。结果为娱乐性质美学参考；极端侧脸、广角和夸张表情建议用正脸照复核。请仅上传本人或已获授权的照片。
 </footer>
 
 <!-- MediaPipe（IIFE 隔离，导出 window.__MP__） -->
@@ -308,21 +295,50 @@ function ensureOrtLib(){
 }
 /* ==== V4: 3-ResNet Ensemble (huber FP32 + nima/rank QDQ) ==== */
 let ortSessions = {};
+const MODEL_SPECS = [
+  {name:'huber',path:'model/corrected_huber_fp32.onnx?v=20261016c',bytes:44700306},
+  {name:'nima',path:'model/nima_qdq.onnx?v=20261016c',bytes:11236888},
+  {name:'rank',path:'model/rank_qdq.onnx?v=20261016c',bytes:11236813}
+];
+function formatMiB(bytes){return (bytes/1048576).toFixed(bytes>=10485760?1:2)+' MB';}
+function setModelProgress(loaded,total,label){
+  const wrap=$("modelProgress"),bar=$("modelProgressBar"),meta=$("modelProgressMeta");
+  if(!wrap||!bar||!meta)return;
+  const pct=total>0?Math.max(0,Math.min(100,loaded/total*100)):0;
+  wrap.classList.add("show");meta.classList.add("show");bar.style.width=pct.toFixed(1)+"%";
+  meta.textContent=(label?label+" · ":"")+Math.floor(pct)+"% · "+formatMiB(loaded)+" / "+formatMiB(total);
+}
+function hideModelProgress(){
+  const wrap=$("modelProgress"),meta=$("modelProgressMeta");
+  if(wrap)wrap.classList.remove("show");if(meta)meta.classList.remove("show");
+}
+async function fetchArrayBufferWithProgress(spec,onProgress){
+  const resp=await fetch(spec.path);
+  if(!resp.ok)throw new Error(spec.name+' model download failed: '+resp.status);
+  const expected=spec.bytes;
+  if(!resp.body||!resp.body.getReader){const data=await resp.arrayBuffer();onProgress(data.byteLength,expected);return data;}
+  const reader=resp.body.getReader();let out=new Uint8Array(expected),loaded=0;
+  for(;;){
+    const {done,value}=await reader.read();if(done)break;
+    if(loaded+value.byteLength>out.byteLength){const grown=new Uint8Array(loaded+value.byteLength);grown.set(out);out=grown;}
+    out.set(value,loaded);loaded+=value.byteLength;onProgress(loaded,expected);
+  }
+  return loaded===out.byteLength?out.buffer:out.buffer.slice(0,loaded);
+}
 async function ensureOrtSessions(){
   if (Object.keys(ortSessions).length >= 3) return ortSessions;
   await ensureOrtLib();
-  const models = [
-    ['huber', 'model/corrected_huber_fp32.onnx?v=20261016c'],
-    ['nima', 'model/nima_qdq.onnx?v=20261016c'],
-    ['rank', 'model/rank_qdq.onnx?v=20261016c']
-  ];
-  for (const [name, path] of models) {
-    if (ortSessions[name]) continue;
-    ortSessions[name] = await ort.InferenceSession.create(path, {
-      executionProviders: ['wasm'],
-      graphOptimizationLevel: 'all'
-    });
+  const pending=MODEL_SPECS.filter(s=>!ortSessions[s.name]);
+  const total=pending.reduce((s,x)=>s+x.bytes,0);let completed=0;
+  setStatus("首次使用：正在下载三路审美模型…");setModelProgress(0,total,"模型下载");
+  for(const spec of pending){
+    const buffer=await fetchArrayBufferWithProgress(spec,(loaded)=>setModelProgress(completed+loaded,total,"模型下载"));
+    completed+=buffer.byteLength;setModelProgress(completed,total,"模型下载");
+    setStatus("已下载 "+spec.name.toUpperCase()+"，正在初始化…");
+    ortSessions[spec.name]=await ort.InferenceSession.create(buffer,{executionProviders:['wasm'],graphOptimizationLevel:'all'});
   }
+  setModelProgress(total,total,"下载完成");setStatus("模型已就绪，正在计算颜值分…");
+  await new Promise(r=>setTimeout(r,180));hideModelProgress();
   return ortSessions;
 }
 async function loadFusionParams(){
@@ -568,7 +584,7 @@ function setStatus(msg,cls){
   status.textContent=msg||""; status.className="status"+(cls?" "+cls:"");
   const overlay=$("analysisOverlay"), overlayText=$("analysisOverlayText");
   if(overlayText && msg) overlayText.textContent=msg;
-  if(overlay && (cls==="ok" || cls==="err")) overlay.classList.remove("show");
+  if(overlay && (cls==="ok" || cls==="err")){overlay.classList.remove("show");hideModelProgress();}
 }
 function handleFile(file){
   if(busy) return;
@@ -611,7 +627,7 @@ async function runAnalysis(){
   window.__debugGeo={runId, ts:new Date().toISOString(), loaded:null, featCount:null, finite:null, rawReturn:null, assignedPredGeo:null, fuseInputPredGeo:null, error:null};
   window.__lastData=null;
   try{
-    setStatus("首次分析正在加载三模型（约 67MB），加载后浏览器会缓存…");
+    setStatus("正在准备人脸检测与推理组件…");
     await Promise.all([ensureLandmarker(), loadFusionParams(), loadCalibration(), loadPercentile()]);
     // Startup self-check: verify frozen modules loaded correctly
     if (typeof predictRaw !== 'function') throw new Error('model_histgb.js not loaded');
@@ -1033,6 +1049,25 @@ function buildComments(data){
   else if(vals.faceSize>0.92) addComment(box,true,"人脸离镜头过近，建议稍微拉远，避免广角变形。");
 }
 
+function radarPoint(index,value,cx,cy,r,count=6){
+  const angle=-Math.PI/2+index*Math.PI*2/count,scale=clamp(value,0,100)/100;
+  return [cx+Math.cos(angle)*r*scale,cy+Math.sin(angle)*r*scale];
+}
+function renderRadar(container,scores){
+  const items=METRIC_LABELS.map(([k,label])=>({label,value:Math.round(scores[k])}));
+  const cx=210,cy=166,r=108,count=items.length;
+  const polygon=value=>items.map((_,i)=>radarPoint(i,value,cx,cy,r,count).map(v=>v.toFixed(1)).join(',')).join(' ');
+  const axes=items.map((_,i)=>{const p=radarPoint(i,100,cx,cy,r,count);return `<line class="radar-axis" x1="${cx}" y1="${cy}" x2="${p[0].toFixed(1)}" y2="${p[1].toFixed(1)}"/>`;}).join('');
+  const labels=items.map((item,i)=>{
+    const p=radarPoint(i,134,cx,cy,r,count),c=Math.cos(-Math.PI/2+i*Math.PI*2/count);
+    const anchor=c>.25?'start':c<-.25?'end':'middle';
+    return `<text x="${p[0].toFixed(1)}" y="${(p[1]-3).toFixed(1)}" text-anchor="${anchor}" class="radar-label">${item.label}<tspan x="${p[0].toFixed(1)}" dy="15" class="radar-value">${item.value}</tspan></text>`;
+  }).join('');
+  const points=items.map((item,i)=>radarPoint(i,item.value,cx,cy,r,count).map(v=>v.toFixed(1)).join(',')).join(' ');
+  const dots=items.map((item,i)=>{const p=radarPoint(i,item.value,cx,cy,r,count);return `<circle class="radar-dot" cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="4"/>`;}).join('');
+  container.innerHTML=`<div class="radar-wrap"><svg class="radar-svg" viewBox="0 0 420 330" role="img" aria-label="六项颜值雷达图">${[20,40,60,80,100].map(v=>`<polygon class="radar-grid" points="${polygon(v)}"/>`).join('')}${axes}<polygon class="radar-area" points="${points}"/>${dots}${labels}</svg><div class="radar-note">六项为几何相对表现，不等同于综合颜值分</div></div>`;
+}
+
 function render(data){
   const {scores,total,vals}=data;
   const circ=2*Math.PI*42;
@@ -1065,36 +1100,10 @@ function render(data){
     ib.style.display='none';
   }
 
-  const m=$("metrics"); m.innerHTML="";
-  // 六细分为几何相对表现；显示时向综合分做统一收缩，保留亮点但避免严重脱节。
-  const displayScores={};
-  METRIC_LABELS.forEach(([k])=>{ displayScores[k]=aspectDisplayScore(scores[k],totalRaw); });
-  METRIC_LABELS.forEach(([k,label,desc])=>{
-    const row=document.createElement("div"); row.className="mt";
-    const shown=displayScores[k];
-    row.innerHTML='<div class="mt-top"><span class="mt-name">'+label+'</span><span class="mt-val">'+
-      shown+' <small style="font-size:11px;color:#8a97a4;font-weight:400">'+aspectLabel(shown)+'</small></span></div><div class="bar"><i></i></div><div class="mt-desc">'+desc+'</div>';
-    m.appendChild(row);
-    requestAnimationFrame(()=>{ row.querySelector(".bar i").style.width=clamp(shown,0,100)+"%"; });
-  });
-  const q=Math.round(scores.q);
-  const qText=q>=85?"关键点清晰，测量参考性较高":q>=65?"可供参考，正脸平视会更稳定":"角度或画面条件影响较大，建议重拍后复核";
-  $("confidence").innerHTML='<div><div class="c-label">测量可信度</div><div class="c-copy">'+qText+' · 不计入颜值总分</div></div><div class="c-num">'+q+'<small> / 100</small></div>';
-
-  // 关键比例沿用同一组已取整、收缩后的细分分数。
-  const r=$("readouts"); r.innerHTML="";
-  const readouts = [
-    ["五官对称度", displayScores.sym],
-    ["三庭比例", displayScores.third],
-    ["五眼分布", displayScores.fifth],
-    ["眼部形态", displayScores.eye],
-  ];
-  readouts.forEach(([k,v])=>{
-    const c=document.createElement("div"); c.className="rd";
-    const shown=Math.round(v);
-    c.innerHTML='<div class="k">'+k+'</div><div class="v">'+shown+' <small style="color:#8a97a4;font-weight:400">'+aspectLabel(shown)+'</small></div>';
-    r.appendChild(c);
-  });
+  const m=$("metrics");
+  // 六维雷达与海报共用同一组收缩后的显示分数。
+  const displayScores=getDisplayAspectScores(scores,totalRaw);
+  renderRadar(m,displayScores);
   buildComments(data);
 }
 
@@ -1119,9 +1128,29 @@ function fitInside(sw,sh,x,y,w,h){
   const scale=Math.min(w/sw,h/sh), dw=sw*scale, dh=sh*scale;
   return {x:x+(w-dw)/2,y:y+(h-dh)/2,w:dw,h:dh};
 }
+function drawPosterRadar(ctx,scores,cx,cy,r){
+  const items=METRIC_LABELS.map(([k,label])=>({label,value:Math.round(scores[k])})),count=items.length;
+  ctx.save();ctx.lineJoin="round";
+  [20,40,60,80,100].forEach(level=>{
+    const pts=items.map((_,i)=>radarPoint(i,level,cx,cy,r,count));ctx.beginPath();
+    pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.closePath();ctx.strokeStyle="#ddd8ce";ctx.lineWidth=1;ctx.stroke();
+  });
+  items.forEach((_,i)=>{const p=radarPoint(i,100,cx,cy,r,count);ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(p[0],p[1]);ctx.strokeStyle="#e6e0d7";ctx.stroke();});
+  const pts=items.map((item,i)=>radarPoint(i,item.value,cx,cy,r,count));ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.closePath();ctx.fillStyle="rgba(217,101,92,.24)";ctx.fill();ctx.strokeStyle="#d9655c";ctx.lineWidth=3;ctx.stroke();
+  pts.forEach(p=>{ctx.beginPath();ctx.arc(p[0],p[1],4,0,Math.PI*2);ctx.fillStyle="#d9655c";ctx.fill();});
+  ctx.font='700 17px "Microsoft YaHei",sans-serif';items.forEach((item,i)=>{const p=radarPoint(i,132,cx,cy,r,count),a=-Math.PI/2+i*Math.PI*2/count,c=Math.cos(a);ctx.textAlign=c>.25?"left":c<-.25?"right":"center";ctx.fillStyle="#5c6864";ctx.fillText(item.label+" "+item.value,p[0],p[1]+6);});ctx.restore();
+}
+function buildPosterBrief(data){
+  if(data.fusion&&data.fusion.tier==='reject') return "拍摄角度影响较大 · 建议正脸平视复核";
+  const shown=getDisplayAspectScores(data.scores,data.totalRaw??data.total);
+  const entries=METRIC_LABELS.filter(([k])=>k!=="q").map(([k,label])=>({label,value:shown[k]})).sort((a,b)=>b.value-a.value);
+  const top=entries[0],low=entries[entries.length-1];
+  const lowName=(data.totalRaw??data.total)<20?"低位":"相对弱项";
+  return "亮点："+top.label+" "+top.value+" · "+lowName+"："+low.label+" "+low.value;
+}
 async function drawPoster(){
   const data=window.__lastData;if(!data)return false;
-  const ctx=posterCanvas.getContext("2d"),W=1080,H=1300;
+  const ctx=posterCanvas.getContext("2d"),W=1080,H=1380;
   posterCanvas.width=W;posterCanvas.height=H;
   ctx.fillStyle="#f5f1ea";ctx.fillRect(0,0,W,H);
   ctx.fillStyle="#173b38";ctx.fillRect(0,0,W,132);
@@ -1134,32 +1163,32 @@ async function drawPoster(){
   const box=fitInside(img.naturalWidth,img.naturalHeight,52,168,976,620);
   ctx.fillStyle="#263b38";ctx.fillRect(52,168,976,620);ctx.drawImage(img,box.x,box.y,box.w,box.h);ctx.restore();
 
-  /* 紧凑结果卡 */
-  roundedRect(ctx,52,816,976,250,30);ctx.fillStyle="#fffdf8";ctx.fill();
+  /* 紧凑结果卡：综合分 + 六维雷达 */
+  roundedRect(ctx,52,816,976,330,30);ctx.fillStyle="#fffdf8";ctx.fill();
   const totalShow = data.fusion && data.fusion.tier==='reject' ? '--' : String(data.total);
   ctx.fillStyle="#173b38";ctx.font='900 110px "Microsoft YaHei",sans-serif';ctx.fillText(totalShow,82,946);
   ctx.fillStyle="#74817d";ctx.font='600 22px "Microsoft YaHei",sans-serif';ctx.fillText("颜值指数 / 100",88,986);
   const grade=gradeFromPct(data.totalRaw ?? data.total)[0];
-  ctx.fillStyle="#d9655c";ctx.font='900 42px "Microsoft YaHei",sans-serif';ctx.fillText(grade,330,890);
-  const brief = data.fusion && data.fusion.tier==='reject'
-    ? "建议正脸重拍以获得更准确结果"
-    : "五官比例和整体协调度表现良好";
-  ctx.fillStyle="#173b38";ctx.font='700 26px "Microsoft YaHei",sans-serif';ctx.fillText(brief,330,940);
+  ctx.fillStyle="#d9655c";ctx.font='900 42px "Microsoft YaHei",sans-serif';ctx.fillText(grade,82,1060);
+  const brief=buildPosterBrief(data);
+  ctx.fillStyle="#173b38";ctx.font='700 22px "Microsoft YaHei",sans-serif';ctx.fillText(brief,82,1104);
   const crowd=Math.round(data.crowdPercentileRaw ?? data.crowdPercentile ?? 0);
-  ctx.fillStyle="#74817d";ctx.font='500 21px "Microsoft YaHei",sans-serif';ctx.fillText("超过约 "+crowd+"% 的参考样本 · 娱乐性质美学参考",330,982);
+  ctx.fillStyle="#74817d";ctx.font='500 18px "Microsoft YaHei",sans-serif';ctx.fillText("超过约 "+crowd+"% 的参考样本",82,1134);
+  const posterScores=getDisplayAspectScores(data.scores,data.totalRaw??data.total);
+  drawPosterRadar(ctx,posterScores,760,978,100);
 
   /* 页脚与二维码 */
   ctx.fillStyle="#a09a90";ctx.font='500 19px "Microsoft YaHei",sans-serif';
-  ctx.fillText("godweiyang.com/yanzhi",82,1184);
-  ctx.fillText("上传正脸照，测测你的颜值指数",82,1222);
+  ctx.fillText("godweiyang.com/yanzhi",82,1248);
+  ctx.fillText("上传正脸照，测测你的颜值指数",82,1282);
   try{
     await ensureQrLib();
     const qr=window.qrcode(0,"M");qr.addData("https://godweiyang.com/yanzhi/");qr.make();
     const qrImg=await loadCanvasImage(qr.createDataURL(8,4));
-    roundedRect(ctx,850,1092,168,168,16);ctx.fillStyle="#ffffff";ctx.fill();
-    ctx.imageSmoothingEnabled=false;ctx.drawImage(qrImg,864,1106,140,140);ctx.imageSmoothingEnabled=true;
+    roundedRect(ctx,850,1168,168,168,16);ctx.fillStyle="#ffffff";ctx.fill();
+    ctx.imageSmoothingEnabled=false;ctx.drawImage(qrImg,864,1182,140,140);ctx.imageSmoothingEnabled=true;
     ctx.fillStyle="#74817d";ctx.font='600 16px "Microsoft YaHei",sans-serif';ctx.textAlign="center";
-    ctx.fillText("扫码测测你的颜值",934,1280);ctx.textAlign="left";
+    ctx.fillText("扫码测测你的颜值",934,1354);ctx.textAlign="left";
   }catch(e){
     console.warn("二维码生成失败，保留普通海报",e);
   }
