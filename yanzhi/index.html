@@ -302,20 +302,25 @@ function ensureOrtLib(){
   });
   return ortLoading;
 }
-async function ensureOrtSession(){
-  if (ortSession) return ortSession;
+/* ==== V4: 3-ResNet Ensemble (huber FP32 + nima/rank QDQ) ==== */
+let ortSessions = {};
+let ortProvider = 'wasm';
+async function ensureOrtSessions(){
+  if (Object.keys(ortSessions).length >= 3) return ortSessions;
   await ensureOrtLib();
-  try {
-    ortSession = await ort.InferenceSession.create('model/beauty_resnet18_fp32.onnx?v=20261016a', {
+  const models = [
+    ['huber', 'model/corrected_huber_fp32.onnx?v=20261016c'],
+    ['nima', 'model/nima_qdq.onnx?v=20261016c'],
+    ['rank', 'model/rank_qdq.onnx?v=20261016c']
+  ];
+  for (const [name, path] of models) {
+    if (ortSessions[name]) continue;
+    ortSessions[name] = await ort.InferenceSession.create(path, {
       executionProviders: ['wasm'],
       graphOptimizationLevel: 'all'
     });
-    ortProvider = 'wasm';
-  } catch(e) {
-    console.warn('ORT session failed:', e.message);
-    throw e;
   }
-  return ortSession;
+  return ortSessions;
 }
 async function loadFusionParams(){
   if (fusionParams) return fusionParams;
@@ -334,15 +339,9 @@ async function loadPercentile(){
 }
 /* ECDF percentile (0-100) from native 1-5, monotonic interpolation on frozen 5500 OOF grid */
 function percentileScore(nativeScore){
-  if (!percentileData || !percentileData.grid) return 50;
-  const grid = percentileData.grid;
+  // fuser3 display_map: pct = 15 + (score-1)/4*80
   const x = Math.max(1.0, Math.min(5.0, nativeScore));
-  let lo=0, hi=grid.length-1;
-  if (x<=grid[0].native) return grid[0].percentile;
-  if (x>=grid[grid.length-1].native) return grid[grid.length-1].percentile;
-  while(hi-lo>1){ const mid=(lo+hi)>>1; if(grid[mid].native<=x) lo=mid; else hi=mid; }
-  const t=(x-grid[lo].native)/(grid[hi].native-grid[lo].native||1);
-  return grid[lo].percentile+t*(grid[hi].percentile-grid[lo].percentile);
+  return Math.max(0, Math.min(100, 15 + (x - 1) / 4 * 80));
 }
 function calibrateScore(nativeScore){
   if (!calibrationData || !calibrationData.grid) return Math.max(0, Math.min(93.75, (nativeScore-1)/4*100));
@@ -360,85 +359,86 @@ function computeGeoFeats(norm, natW, natH){
   // Frozen geo contract (geo_extract_contract.js, verified by recovery agent)
   return window.GeoContract.computeGeoFeats(norm, natW, natH);
 }
-async function runDeepInference(imgEl, landmarks){
-  const session = await ensureOrtSession();
+async function runEnsembleInference(imgEl, landmarks){
+  const sessions = await ensureOrtSessions();
   const natW = imgEl.naturalWidth, natH = imgEl.naturalHeight;
-  // Compute bbox from normalized landmarks (0-1) → pixel coords
   let xsMin=1, xsMax=0, ysMin=1, ysMax=0;
   for (const lm of landmarks) {
     if (lm.x<xsMin) xsMin=lm.x; if (lm.x>xsMax) xsMax=lm.x;
     if (lm.y<ysMin) ysMin=lm.y; if (lm.y>ysMax) ysMax=lm.y;
   }
-  // 30% padding, Python int() semantics: all coords Math.floor
   const pw = (xsMax-xsMin)*0.3, ph = (ysMax-ysMin)*0.3;
   let x1 = Math.max(0, Math.floor((xsMin-pw)*natW));
   let y1 = Math.max(0, Math.floor((ysMin-ph)*natH));
   let x2 = Math.min(natW, Math.floor((xsMax+pw)*natW));
   let y2 = Math.min(natH, Math.floor((ysMax+ph)*natH));
   const cropW = x2-x1, cropH = y2-y1;
-  // Crop source pixels
   const c = document.createElement('canvas');
   c.width = cropW; c.height = cropH;
   const ctx = c.getContext('2d');
   ctx.drawImage(imgEl, x1, y1, cropW, cropH, 0, 0, cropW, cropH);
   const cropData = ctx.getImageData(0, 0, cropW, cropH).data;
-  // Build RGB8 source buffer (drop alpha)
   const srcRGB = new Uint8Array(cropW * cropH * 3);
   for (let i = 0, j = 0; i < cropData.length; i += 4, j += 3) {
     srcRGB[j] = cropData[i]; srcRGB[j+1] = cropData[i+1]; srcRGB[j+2] = cropData[i+2];
   }
-  // cvResizeArea: byte-accurate INTER_AREA downsample to 224x224
   const resized224 = window.cvResizeArea ? window.cvResizeArea.resizeArea224(srcRGB, cropW, cropH) : null;
   if (!resized224) throw new Error('cvResizeArea not loaded');
   const mean = [0.485, 0.456, 0.406], std = [0.229, 0.224, 0.225];
   const input = new Float32Array(3*224*224);
-  let sum0=0,sum1=0,sum2=0;
   for (let y=0; y<224; y++) for (let x=0; x<224; x++) {
     const i = (y*224+x)*3;
     input[0*224*224 + y*224 + x] = (resized224[i]/255 - mean[0]) / std[0];
     input[1*224*224 + y*224 + x] = (resized224[i+1]/255 - mean[1]) / std[1];
     input[2*224*224 + y*224 + x] = (resized224[i+2]/255 - mean[2]) / std[2];
-    sum0 += input[0*224*224 + y*224 + x];
-    sum1 += input[1*224*224 + y*224 + x];
-    sum2 += input[2*224*224 + y*224 + x];
   }
   const tensor = new ort.Tensor('float32', input, [1,3,224,224]);
-  const results = await session.run({[session.inputNames[0]]: tensor});
-  const out = results[session.outputNames[0]].data;
-  window.__debugDeep = { bbox:[x1,y1,x2,y2], cropW, cropH, tensorMean:[sum0/(224*224),sum1/(224*224),sum2/(224*224)], pred:out[0] };
-  return out[0];
-}
-function fuseScores(predDeep, predGeo, qConf, yawRatio, qBlur, tier, warnings, qExpression, qCloseup){
-  const fp = fusionParams;
-  if (!fp || !fp.dynamic_fuser) return { finalScore: predDeep, mode: 'deep-only', quality: 0.5, qConf, tier:'low', warnings:[], interval90: fp?.conformal?.half_width_90 || 0.4788 };
-  const dc = fp.dynamic_fuser;
-  // Quality metadata (not gate): uses yawRatio
-  const quality = (qConf/100) * Math.exp(-Math.abs(yawRatio)/45) * (1 - qBlur);
-  // Frozen tier gate: high=dynamic, medium/low=deep-only (matches blind22)
-  if (tier !== 'high') return { finalScore: predDeep, mode: 'deep-only', quality, qConf, tier, warnings:warnings||[], interval90: fp.conformal.half_width_90 };
-  // AUDIT19: q_expression/q_closeup computed from normalized landmarks (passed in)
-  const raw = {
-    pred_deep: predDeep,
-    pred_geo: predGeo,
-    q_conf: qConf/100,
-    q_yaw_deg: yawRatio,
-    q_expression: qExpression,
-    q_closeup: qCloseup,
-    q_blur: qBlur,
-    deep_x_conf: predDeep * qConf/100,
-    geo_x_1mconf: predGeo * (1 - qConf/100)
-  };
-  const fo = dc.feature_order;
-  if (!fo || fo.length !== dc.coef.length) throw new Error('fusion feature_order/coef length mismatch');
-  let fused = dc.intercept;
-  for (let i = 0; i < fo.length; i++) {
-    const name = fo[i];
-    const v = raw[name];
-    if (v === undefined || !isFinite(v)) throw new Error('missing/infinite feature: ' + name);
-    fused += dc.coef[i] * (v - dc.scaler_mean[i]) / dc.scaler_scale[i];
+  const preds = {};
+  for (const [name, session] of Object.entries(sessions)) {
+    const r = await session.run({[session.inputNames[0]]: tensor});
+    preds[name] = r[session.outputNames[0]].data[0];
   }
-  if (!isFinite(fused)) throw new Error('fusion output NaN');
-  return { finalScore: fused, mode: 'dynamic', quality, qConf, tier:'high', warnings:[], interval90: fp.conformal.half_width_90 };
+  window.__debugDeep = { bbox:[x1,y1,x2,y2], cropW, cropH, preds };
+  return preds;
+}
+/* ==== V4: fuser3 三通道加权融合（冻结） ==== */
+const FUSER3 = {
+  coef: { huber: 0.2885522, nima: 0.2490440, rank: 0.4663826 },
+  intercept: -0.0228566,
+  half80: 0.3481,
+  half90: 0.4583
+};
+function fuse3ch(preds){
+  let fused = FUSER3.intercept;
+  fused += FUSER3.coef.huber * preds.huber;
+  fused += FUSER3.coef.nima * preds.nima;
+  fused += FUSER3.coef.rank * preds.rank;
+  const vals = [preds.huber, preds.nima, preds.rank];
+  const spread = Math.max(...vals) - Math.min(...vals);
+  return { finalScore: Math.max(1, Math.min(5, fused)), spread };
+}
+/* ==== V4: 3D pose from facial matrix ==== */
+function eulerFromMatrix(matrix){
+  if (!matrix || !matrix.data || matrix.data.length < 16) return { valid:false };
+  const d = matrix.data;
+  const R = [[d[0],d[4],d[8]],[d[1],d[5],d[9]],[d[2],d[6],d[10]]];
+  let sy = Math.max(-1, Math.min(1, -R[2][0]));
+  const yaw = Math.asin(sy) * 180/Math.PI;
+  const pitch = Math.atan2(R[2][1], R[2][2]) * 180/Math.PI;
+  const roll = -Math.atan2(R[1][0], R[0][0]) * 180/Math.PI;
+  return { yawDeg:yaw, pitchDeg:pitch, rollDeg:roll, valid:true };
+}
+function gate3d(pose){
+  if(!pose.valid) return { tier:'medium', reasons:['matrix_missing'] };
+  const reasons = [];
+  let tier = 'high';
+  if(Math.abs(pose.yawDeg) > 32) { reasons.push('yaw_reject'); tier='reject'; }
+  else if(Math.abs(pose.yawDeg) > 18) { reasons.push('yaw_warn'); tier='medium'; }
+  if(Math.abs(pose.pitchDeg) > 35) { reasons.push('pitch_reject'); tier='reject'; }
+  else if(Math.abs(pose.pitchDeg) > 20) { reasons.push('pitch_warn'); tier = tier==='reject'?'reject':'medium'; }
+  if(Math.abs(pose.rollDeg) > 22) { reasons.push('roll_reject'); tier='reject'; }
+  else if(Math.abs(pose.rollDeg) > 12) { reasons.push('roll_warn'); tier = tier==='reject'?'reject':'medium'; }
+  return { tier, reasons };
 }
 
 async function ensureLandmarker(){
@@ -449,7 +449,8 @@ async function ensureLandmarker(){
     // Fixed CPU delegate: deterministic output, matches training pipeline
     landmarker=await FaceLandmarker.createFromOptions(fileset,{
       baseOptions:{modelAssetPath:"assets/face_landmarker.task",delegate:"CPU"},
-      runningMode:"IMAGE",numFaces:1
+      runningMode:"IMAGE",numFaces:1,
+      outputFacialTransformationMatrixes:true
     });
     return landmarker;
   })();
@@ -548,18 +549,22 @@ async function runAnalysis(){
     }
     /* 深度模型推理 + 融合 + 校准 */
     setStatus("正在运行深度模型推理…");
-    let predDeep=null, fusion=null;
+    let fusion=null;
     try {
-      predDeep = await runDeepInference(img, norm);
-      window.__debugGeo.fuseInputPredGeo = data.predGeo;
-      // AUDIT19: q_expression/q_closeup from original normalized landmarks
-      const lm13 = norm[13], lm14 = norm[14], lm234 = norm[234], lm454 = norm[454];
-      const mouth_open_norm = Math.sqrt((lm13.x-lm14.x)**2 + (lm13.y-lm14.y)**2 + (lm13.z-lm14.z)**2);
-      const face_w_norm = Math.sqrt((lm234.x-lm454.x)**2 + (lm234.y-lm454.y)**2 + (lm234.z-lm454.z)**2);
-      const qExpression = Math.min(1, Math.max(0, mouth_open_norm * 10));
-      const qCloseup = Math.min(1, Math.max(0, (face_w_norm - 0.4) / 0.4));
-      fusion = fuseScores(predDeep, data.predGeo, 100, data.vals.yawRatio, 0, data.tier, data.warnings, qExpression, qCloseup);
-      window.__debugFusion = { qConf:100, yawRatio:data.vals.yawRatio, yawDeg:data.vals.yawDeg, tier:data.tier, warnings:data.warnings, quality:fusion.quality, mode:fusion.mode, finalScore:fusion.finalScore };
+      const preds = await runEnsembleInference(img, norm);
+      // 3D pose from facial transformation matrix
+      const matrix = res.facialTransformationMatrixes ? res.facialTransformationMatrixes[0] : null;
+      const pose = eulerFromMatrix(matrix);
+      const gate = gate3d(pose);
+      window.__debug3d = { yawDeg: pose.yawDeg, pitchDeg: pose.pitchDeg, rollDeg: pose.rollDeg, valid: pose.valid, tier: gate.tier, reasons: gate.reasons };
+      // fuser3: 三通道加权融合
+      const fused = fuse3ch(preds);
+      const pct = percentileScore(fused.finalScore);
+      fusion = { finalScore: fused.finalScore, pct, spread: fused.spread, tier: gate.tier, reasons: gate.reasons, pose };
+      window.__debugFusion = { preds, fused: fused.finalScore, spread: fused.spread, pct, tier: gate.tier, pose };
+    } catch(e) {
+      setStatus("深度模型推理失败："+e.message,"err");busy=false;return;
+    }
     } catch(e) {
       console.warn('Deep/fusion fallback:', e.message);
       if (predDeep !== null && isFinite(predDeep)) {

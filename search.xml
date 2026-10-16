@@ -6302,9 +6302,9 @@
             
             <tag> 博客 </tag>
             
-            <tag> github </tag>
-            
             <tag> hexo </tag>
+            
+            <tag> github </tag>
             
         </tags>
       
@@ -6506,9 +6506,9 @@
       
         <tags>
             
-            <tag> cuda </tag>
-            
             <tag> dynet </tag>
+            
+            <tag> cuda </tag>
             
             <tag> ubuntu </tag>
             
