@@ -1,5 +1,5 @@
 /* sw.js — 颜值实验室正式版 Service Worker */
-const CACHE_NAME = 'yanzhi-v92-20261016a'
+const CACHE_NAME = 'yanzhi-v92.2-20261016c'
 self.addEventListener('install', () => {
   self.skipWaiting()
 })
@@ -8,7 +8,11 @@ self.addEventListener('activate', (event) => {
     caches
       .keys()
       .then((keys) =>
-        Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k))),
+        Promise.all(
+          keys
+            .filter((k) => k !== CACHE_NAME && !k.startsWith('yanzhi-models-'))
+            .map((k) => caches.delete(k)),
+        ),
       )
       .then(() => self.clients.claim()),
   )
@@ -36,8 +40,23 @@ self.addEventListener('fetch', (event) => {
     )
     return
   }
-  // Large binaries: skip SW cache (too big for Cache Storage quota)
-  if (/\.(onnx|wasm|task)$/.test(url.pathname)) return
+  // ONNX models are persisted by the page in a versioned model cache.
+  if (/\.onnx$/.test(url.pathname)) return
+  // Face detector and runtimes: cache-first to avoid recompiling/downloading after reopening.
+  if (/\.(wasm|task)$/.test(url.pathname)) {
+    event.respondWith(
+      caches.open('yanzhi-models-v1').then((cache) =>
+        cache.match(event.request).then((cached) => {
+          if (cached) return cached
+          return fetch(event.request).then((resp) => {
+            if (resp.ok) cache.put(event.request, resp.clone()).catch(() => {})
+            return resp
+          })
+        }),
+      ),
+    )
+    return
+  }
   // Static assets: cache-first
   event.respondWith(
     caches.match(event.request).then((cached) => {

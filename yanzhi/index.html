@@ -278,11 +278,11 @@ function faceShapeName(fr){
   return "长形脸";
 }
 
-let landmarker=null, landmarkerPromise=null, busy=false;
+let landmarker=null, landmarkerPromise=null, landmarkerWarmupStarted=false, busy=false;
 const $ = id => document.getElementById(id);
 
 /* ==== ORT INT8 深度模型 + 融合 + ECDF percentile ==== */
-let ortSession=null, fusionParams=null, calibrationData=null, percentileData=null, ortProvider='wasm', ortLoading=null;
+let ortSession=null, fusionParams=null, calibrationData=null, percentileData=null, ortProvider='wasm', ortLoading=null, modelDownloadActive=false;
 function ensureOrtLib(){
   if (window.ort) return Promise.resolve();
   if (ortLoading) return ortLoading;
@@ -312,6 +312,30 @@ function hideModelProgress(){
   const wrap=$("modelProgress"),meta=$("modelProgressMeta");
   if(wrap)wrap.classList.remove("show");if(meta)meta.classList.remove("show");
 }
+const MODEL_CACHE_NAME='yanzhi-models-v1';
+async function cacheModelBuffer(spec,onProgress){
+  const request=new Request(spec.path,{credentials:'same-origin'});
+  if('caches' in window){
+    try{
+      const cache=await caches.open(MODEL_CACHE_NAME),cached=await cache.match(request);
+      if(cached){
+        setStatus("正在从本地缓存读取 "+spec.name.toUpperCase()+" 模型…");
+        const buffer=await cached.arrayBuffer();
+        if(buffer.byteLength===spec.bytes){onProgress(buffer.byteLength,spec.bytes,'本地缓存');return buffer;}
+        await cache.delete(request);
+      }
+    }catch(e){console.warn('model cache read failed',e);}
+  }
+  const buffer=await fetchArrayBufferWithProgress(spec,(loaded,total)=>onProgress(loaded,total,'模型下载'));
+  if('caches' in window){
+    try{
+      setStatus("正在保存 "+spec.name.toUpperCase()+" 模型到本地缓存…");
+      const cache=await caches.open(MODEL_CACHE_NAME);
+      await cache.put(request,new Response(buffer.slice(0),{headers:{'Content-Type':'application/octet-stream','Content-Length':String(buffer.byteLength)}}));
+    }catch(e){console.warn('model cache write failed',e);}
+  }
+  return buffer;
+}
 async function fetchArrayBufferWithProgress(spec,onProgress){
   const resp=await fetch(spec.path);
   if(!resp.ok)throw new Error(spec.name+' model download failed: '+resp.status);
@@ -330,16 +354,17 @@ async function ensureOrtSessions(){
   await ensureOrtLib();
   const pending=MODEL_SPECS.filter(s=>!ortSessions[s.name]);
   const total=pending.reduce((s,x)=>s+x.bytes,0);let completed=0;
-  setStatus("首次使用：正在下载三路审美模型…");setModelProgress(0,total,"模型下载");
-  for(const spec of pending){
-    const buffer=await fetchArrayBufferWithProgress(spec,(loaded)=>setModelProgress(completed+loaded,total,"模型下载"));
-    completed+=buffer.byteLength;setModelProgress(completed,total,"模型下载");
-    setStatus("已下载 "+spec.name.toUpperCase()+"，正在初始化…");
-    ortSessions[spec.name]=await ort.InferenceSession.create(buffer,{executionProviders:['wasm'],graphOptimizationLevel:'all'});
-  }
-  setModelProgress(total,total,"下载完成");setStatus("模型已就绪，正在计算颜值分…");
-  await new Promise(r=>setTimeout(r,180));hideModelProgress();
-  return ortSessions;
+  modelDownloadActive=true;
+  setStatus("正在检查本地模型缓存…");setModelProgress(0,total,"准备模型");
+  try{
+    for(const spec of pending){
+      const buffer=await cacheModelBuffer(spec,(loaded,_expected,label)=>setModelProgress(completed+loaded,total,label));
+      completed+=buffer.byteLength;setModelProgress(completed,total,"模型下载");
+      ortSessions[spec.name]=await ort.InferenceSession.create(buffer,{executionProviders:['wasm'],graphOptimizationLevel:'all'});
+    }
+    setModelProgress(total,total,"审美模型已就绪");
+    return ortSessions;
+  }finally{modelDownloadActive=false;}
 }
 async function loadFusionParams(){
   if (fusionParams) return fusionParams;
@@ -547,6 +572,7 @@ function gate3d(pose){
 async function ensureLandmarker(){
   if(landmarker) return landmarker;
   if(landmarkerPromise) return landmarkerPromise;
+  landmarkerWarmupStarted=true;
   landmarkerPromise=(async()=>{
     const fileset=await FilesetResolver.forVisionTasks(WASM_URL);
     // Fixed CPU delegate: deterministic output, matches training pipeline
@@ -557,7 +583,11 @@ async function ensureLandmarker(){
     });
     return landmarker;
   })();
-  try{return await landmarkerPromise;}catch(e){landmarkerPromise=null;throw e;}
+  try{return await landmarkerPromise;}catch(e){landmarkerPromise=null;landmarkerWarmupStarted=false;throw e;}
+}
+function warmupLandmarker(){
+  if(landmarkerWarmupStarted||landmarker||busy)return;
+  ensureLandmarker().catch(e=>console.warn("landmarker warmup failed; will retry on upload",e));
 }
 
 /* ---------- 上传交互 ---------- */
@@ -620,6 +650,23 @@ async function createAnalysisImage(){
   return c;
 }
 
+async function waitWithElapsed(promise,label){
+  const started=performance.now();let timer=setInterval(()=>{
+    if(modelDownloadActive)return;
+    const sec=Math.max(1,Math.floor((performance.now()-started)/1000));
+    setStatus(label+"（已等待 "+sec+" 秒）…");
+  },1000);
+  try{return await promise;}finally{clearInterval(timer);}
+}
+async function ensureLandmarkerWithRetry(){
+  try{return await waitWithElapsed(ensureLandmarker(),"正在初始化人脸检测组件");}
+  catch(first){
+    landmarkerPromise=null;landmarker=null;landmarkerWarmupStarted=false;
+    setStatus("人脸检测初始化中断，正在自动重试…");
+    return await waitWithElapsed(ensureLandmarker(),"正在重新初始化人脸检测组件");
+  }
+}
+
 /* ---------- 检测主流程 ---------- */
 async function runAnalysis(){
   busy=true;
@@ -627,14 +674,18 @@ async function runAnalysis(){
   window.__debugGeo={runId, ts:new Date().toISOString(), loaded:null, featCount:null, finite:null, rawReturn:null, assignedPredGeo:null, fuseInputPredGeo:null, error:null};
   window.__lastData=null;
   try{
-    setStatus("正在准备人脸检测与推理组件…");
-    await Promise.all([ensureLandmarker(), loadFusionParams(), loadCalibration(), loadPercentile()]);
+    const landmarkerReady=ensureLandmarkerWithRetry();
+    const sessionReady=ensureOrtSessions();
+    await Promise.all([loadFusionParams(), loadCalibration(), loadPercentile()]);
+    await sessionReady;
+    if(!landmarker){setStatus("审美模型已就绪，正在初始化人脸检测组件…");}
+    const lm=await landmarkerReady;
+    hideModelProgress();
     // Startup self-check: verify frozen modules loaded correctly
     if (typeof predictRaw !== 'function') throw new Error('model_histgb.js not loaded');
     if (!window.GeoContract || typeof window.GeoContract.computeGeoFeats !== 'function') throw new Error('geo_extract_contract.js not loaded');
     if (!window.cvResizeArea || typeof window.cvResizeArea.resizeArea224 !== 'function') throw new Error('cvResizeArea.js not loaded');
     if (!fusionParams || !fusionParams.dynamic_fuser) throw new Error('fusion_params.web.json not loaded');
-    const lm = await ensureLandmarker();
     setStatus("正在优化图片并检测人脸关键点…");
     await new Promise(r=>requestAnimationFrame(r));
     const analysisImage=await createAnalysisImage();
@@ -1235,6 +1286,13 @@ document.addEventListener("keydown",e=>{
   if(e.key!=="Escape")return;
   if(posterModal.classList.contains("show"))closePoster();
   if($("wxSaveModal").classList.contains("show"))closeWxSaver();
+});
+/* 空闲时预热人脸组件，减少首次上传后的WASM编译等待。 */
+window.addEventListener('load',()=>{
+  if(location.protocol==='file:')return;
+  if(navigator.storage&&navigator.storage.persist){navigator.storage.persist().catch(()=>{});}
+  const schedule=window.requestIdleCallback||function(cb){return setTimeout(cb,800);};
+  schedule(()=>warmupLandmarker(),{timeout:2500});
 });
 /* Service Worker 缓存 */
 if('serviceWorker' in navigator && location.protocol !== 'file:'){
