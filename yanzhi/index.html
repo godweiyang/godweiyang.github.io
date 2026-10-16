@@ -304,7 +304,6 @@ function ensureOrtLib(){
 }
 /* ==== V4: 3-ResNet Ensemble (huber FP32 + nima/rank QDQ) ==== */
 let ortSessions = {};
-let ortProvider = 'wasm';
 async function ensureOrtSessions(){
   if (Object.keys(ortSessions).length >= 3) return ortSessions;
   await ensureOrtLib();
