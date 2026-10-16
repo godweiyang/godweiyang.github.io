@@ -413,9 +413,12 @@ function fuse3ch(preds){
   fused += FUSER3.coef.huber * preds.huber;
   fused += FUSER3.coef.nima * preds.nima;
   fused += FUSER3.coef.rank * preds.rank;
+  if(!isFinite(fused)) throw new Error('fuse3ch output NaN');
   const vals = [preds.huber, preds.nima, preds.rank];
   const spread = Math.max(...vals) - Math.min(...vals);
-  return { finalScore: Math.max(1, Math.min(5, fused)), spread };
+  const finalScore = Math.max(1, Math.min(5, fused));
+  if(!Number.isFinite(finalScore) || !Number.isFinite(spread)) throw new Error('fuse3ch non-finite output');
+  return { finalScore, spread, interval80: FUSER3.half80, interval90: FUSER3.half90 };
 }
 /* ==== V4: 3D pose from facial matrix ==== */
 function eulerFromMatrix(matrix){
@@ -560,21 +563,12 @@ async function runAnalysis(){
       // fuser3: 三通道加权融合
       const fused = fuse3ch(preds);
       const pct = percentileScore(fused.finalScore);
-      fusion = { finalScore: fused.finalScore, pct, spread: fused.spread, tier: gate.tier, reasons: gate.reasons, pose };
+      fusion = { finalScore: fused.finalScore, pct, spread: fused.spread, tier: gate.tier, reasons: gate.reasons, pose, interval80: fused.interval80, interval90: fused.interval90 };
       window.__debugFusion = { preds, fused: fused.finalScore, spread: fused.spread, pct, tier: gate.tier, pose };
+      if(!Number.isFinite(fusion.finalScore)) throw new Error('finalScore non-finite');
     } catch(e) {
       setStatus("深度模型推理失败："+e.message,"err");busy=false;return;
     }
-    } catch(e) {
-      console.warn('Deep/fusion fallback:', e.message);
-      if (predDeep !== null && isFinite(predDeep)) {
-        fusion = { finalScore: predDeep, mode: 'deep-only-fallback', quality: 0.5, qConf: data.scores.q, interval90: 0.4788, reason: e.message };
-      } else {
-        // Deep inference failed entirely: use predGeo as last resort, not hardcoded 2.5
-        fusion = { finalScore: data.predGeo, mode: 'geo-only', quality: 0.3, qConf: data.scores.q, interval90: 0.4788, reason: 'deep inference failed: ' + e.message };
-      }
-    }
-    data.predDeep = predDeep;
     data.fusion = fusion;
     data.percentile = Math.round(percentileScore(fusion.finalScore));
     data.labelCal = calibrateScore(fusion.finalScore);
