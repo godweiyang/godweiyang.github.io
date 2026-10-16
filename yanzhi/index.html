@@ -1104,7 +1104,7 @@ function fitInside(sw,sh,x,y,w,h){
 }
 async function drawPoster(){
   const data=window.__lastData;if(!data)return false;
-  const ctx=posterCanvas.getContext("2d"),W=1080,H=1540;
+  const ctx=posterCanvas.getContext("2d"),W=1080,H=1300;
   posterCanvas.width=W;posterCanvas.height=H;
   ctx.fillStyle="#f5f1ea";ctx.fillRect(0,0,W,H);
   ctx.fillStyle="#173b38";ctx.fillRect(0,0,W,132);
@@ -1113,36 +1113,36 @@ async function drawPoster(){
   ctx.fillStyle="#d8e4df";ctx.font='400 22px "Microsoft YaHei",sans-serif';ctx.fillText("照片仅在你的设备上分析，不会上传服务器",64,112);
 
   /* 原图完整等比呈现 */
-  roundedRect(ctx,52,180,976,676,30);ctx.fillStyle="#e8e2d8";ctx.fill();ctx.save();roundedRect(ctx,52,180,976,676,30);ctx.clip();
-  const box=fitInside(img.naturalWidth,img.naturalHeight,52,180,976,676);
-  ctx.fillStyle="#263b38";ctx.fillRect(52,180,976,676);ctx.drawImage(img,box.x,box.y,box.w,box.h);ctx.restore();
+  roundedRect(ctx,52,168,976,620,30);ctx.fillStyle="#e8e2d8";ctx.fill();ctx.save();roundedRect(ctx,52,168,976,620,30);ctx.clip();
+  const box=fitInside(img.naturalWidth,img.naturalHeight,52,168,976,620);
+  ctx.fillStyle="#263b38";ctx.fillRect(52,168,976,620);ctx.drawImage(img,box.x,box.y,box.w,box.h);ctx.restore();
 
-  roundedRect(ctx,52,892,976,452,30);ctx.fillStyle="#fffdf8";ctx.fill();
-  // V90: 低可信显示 --
+  /* 紧凑结果卡 */
+  roundedRect(ctx,52,816,976,250,30);ctx.fillStyle="#fffdf8";ctx.fill();
   const totalShow = data.fusion && data.fusion.tier==='reject' ? '--' : String(data.total);
-  ctx.fillStyle="#173b38";ctx.font='900 118px "Microsoft YaHei",sans-serif';ctx.fillText(totalShow,82,1034);
-  ctx.fillStyle="#74817d";ctx.font='600 22px "Microsoft YaHei",sans-serif';ctx.fillText("颜值指数 / 100",88,1070);
+  ctx.fillStyle="#173b38";ctx.font='900 110px "Microsoft YaHei",sans-serif';ctx.fillText(totalShow,82,946);
+  ctx.fillStyle="#74817d";ctx.font='600 22px "Microsoft YaHei",sans-serif';ctx.fillText("颜值指数 / 100",88,986);
   const grade=gradeFromPct(data.totalRaw ?? data.total)[0];
-  ctx.fillStyle="#d9655c";ctx.font='900 42px "Microsoft YaHei",sans-serif';ctx.fillText(grade,330,972);
-  // V90: 简短亮点（普通话，非技术）
+  ctx.fillStyle="#d9655c";ctx.font='900 42px "Microsoft YaHei",sans-serif';ctx.fillText(grade,330,890);
   const brief = data.fusion && data.fusion.tier==='reject'
     ? "建议正脸重拍以获得更准确结果"
     : "五官比例和整体协调度表现良好";
-  ctx.fillStyle="#173b38";ctx.font='700 26px "Microsoft YaHei",sans-serif';ctx.fillText(brief,330,1020);
-  ctx.fillStyle="#74817d";ctx.font='400 21px "Microsoft YaHei",sans-serif';ctx.fillText("娱乐性质美学参考",330,1060);
+  ctx.fillStyle="#173b38";ctx.font='700 26px "Microsoft YaHei",sans-serif';ctx.fillText(brief,330,940);
+  const crowd=Math.round(data.crowdPercentileRaw ?? data.crowdPercentile ?? 0);
+  ctx.fillStyle="#74817d";ctx.font='500 21px "Microsoft YaHei",sans-serif';ctx.fillText("超过约 "+crowd+"% 的参考样本 · 娱乐性质美学参考",330,982);
 
   /* 页脚与二维码 */
   ctx.fillStyle="#a09a90";ctx.font='500 19px "Microsoft YaHei",sans-serif';
-  ctx.fillText("godweiyang.com/yanzhi",82,1432);
-  ctx.fillText("上传正脸照，测测你的颜值指数",82,1470);
+  ctx.fillText("godweiyang.com/yanzhi",82,1184);
+  ctx.fillText("上传正脸照，测测你的颜值指数",82,1222);
   try{
     await ensureQrLib();
     const qr=window.qrcode(0,"M");qr.addData("https://godweiyang.com/yanzhi/");qr.make();
     const qrImg=await loadCanvasImage(qr.createDataURL(8,4));
-    roundedRect(ctx,850,1360,168,168,16);ctx.fillStyle="#ffffff";ctx.fill();
-    ctx.imageSmoothingEnabled=false;ctx.drawImage(qrImg,864,1374,140,140);ctx.imageSmoothingEnabled=true;
+    roundedRect(ctx,850,1092,168,168,16);ctx.fillStyle="#ffffff";ctx.fill();
+    ctx.imageSmoothingEnabled=false;ctx.drawImage(qrImg,864,1106,140,140);ctx.imageSmoothingEnabled=true;
     ctx.fillStyle="#74817d";ctx.font='600 16px "Microsoft YaHei",sans-serif';ctx.textAlign="center";
-    ctx.fillText("扫码测测你的颜值",934,1532);ctx.textAlign="left";
+    ctx.fillText("扫码测测你的颜值",934,1280);ctx.textAlign="left";
   }catch(e){
     console.warn("二维码生成失败，保留普通海报",e);
   }
