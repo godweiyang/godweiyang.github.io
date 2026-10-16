@@ -26,8 +26,9 @@ body{background:#eef2f5;font-family:"PingFang SC","Microsoft YaHei","Segoe UI",s
 .cbody{padding:16px}
 
 /* 上传 */
+.drop,.drop *{-webkit-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important}
 .drop{border:2px dashed #bcd2dd;border-radius:12px;background:#f8fbfc;cursor:pointer;
-  transition:border-color .15s,background .15s;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+  transition:border-color .15s,background .15s;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .drop:hover,.drop.over{border-color:#1e88b5;background:#f0f8fb}
 .drop-inner{padding:34px 18px;text-align:center}
 .drop-inner svg{width:52px;height:52px;color:#1e88b5}
@@ -533,7 +534,17 @@ async function ensureLandmarker(){
 
 /* ---------- 上传交互 ---------- */
 const drop=$("drop"), fileInput=$("file"), status=$("status"), img=$("img");
-drop.addEventListener("click", ()=>fileInput.click());
+function clearUploadSelection(e){
+  if(e&&e.type==="selectstart") e.preventDefault();
+  const sel=window.getSelection&&window.getSelection();
+  if(sel&&sel.removeAllRanges) sel.removeAllRanges();
+  return false;
+}
+drop.addEventListener("selectstart",clearUploadSelection);
+drop.addEventListener("pointerdown",clearUploadSelection,{passive:true});
+drop.addEventListener("touchstart",clearUploadSelection,{passive:true});
+drop.addEventListener("mousedown",clearUploadSelection);
+drop.addEventListener("click", () => { clearUploadSelection(); fileInput.click(); });
 fileInput.addEventListener("change", e=>{ if(e.target.files[0]) handleFile(e.target.files[0]); });
 ["dragover","dragenter"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add("over");}));
 ["dragleave"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove("over");}));
