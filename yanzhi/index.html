@@ -27,7 +27,7 @@ body{background:#eef2f5;font-family:"PingFang SC","Microsoft YaHei","Segoe UI",s
 
 /* 上传 */
 .drop{border:2px dashed #bcd2dd;border-radius:12px;background:#f8fbfc;cursor:pointer;
-  transition:border-color .15s,background .15s}
+  transition:border-color .15s,background .15s;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .drop:hover,.drop.over{border-color:#1e88b5;background:#f0f8fb}
 .drop-inner{padding:34px 18px;text-align:center}
 .drop-inner svg{width:52px;height:52px;color:#1e88b5}
@@ -47,6 +47,8 @@ body{background:#eef2f5;font-family:"PingFang SC","Microsoft YaHei","Segoe UI",s
 .canvas-wrap{position:relative;width:100%;border-radius:10px;overflow:hidden;background:#11232e;line-height:0}
 .canvas-wrap img{max-width:100%;height:auto;display:block;margin:0 auto}
 .canvas-wrap canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.analysis-overlay{position:absolute;inset:0;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(17,35,46,.42);color:#fff;line-height:1.5;text-align:center;font-size:14px;font-weight:800;z-index:3}
+.analysis-overlay.show{display:flex}.analysis-overlay .spin{border-color:rgba(255,255,255,.45);border-top-color:#fff;margin-right:9px}
 .layers{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}
 .lyr{border:1.5px solid #d5dee5;background:#fff;color:#5d6b77;font-size:11.5px;font-weight:700;
   border-radius:20px;padding:5px 12px;cursor:pointer}
@@ -143,7 +145,7 @@ body{background:var(--paper);color:var(--text)}
     <span class="ptag">照片仅在你的设备上分析，不会上传服务器</span>
   </div>
   <div class="r">
-    <span class="ver-badge">微信分享优化 · v90</span>
+    <span class="ver-badge">人群百分位校准 · v91</span>
   </div>
 </header>
 
@@ -160,7 +162,7 @@ body{background:var(--paper);color:var(--text)}
             <line x1="12" y1="3" x2="12" y2="15"/>
           </svg>
           <p>点击或拖拽，上传一张正脸照片</p>
-          <p class="sub">支持 JPG / PNG / WebP；首次分析会自动加载约 13MB 模型，加载后浏览器会缓存</p>
+          <p class="sub">支持 JPG / PNG / WebP；首次分析会自动加载约 67MB 模型，加载后浏览器会缓存</p>
         </div>
       </div>
       <input type="file" id="file" accept="image/*" hidden>
@@ -176,10 +178,11 @@ body{background:var(--paper);color:var(--text)}
         <div class="canvas-wrap" id="canvasWrap">
           <img id="img" alt="人脸照片">
           <canvas id="draw"></canvas>
+          <div class="analysis-overlay" id="analysisOverlay"><span class="spin"></span><span id="analysisOverlayText">图片已上传，正在分析…</span></div>
         </div>
         <div class="layers" id="layers"></div>
       </div>
-      <div class="report-col">
+      <div class="report-col" id="reportCol">
         <div class="total-box">
           <div class="ring">
             <svg width="96" height="96" viewBox="0 0 96 96">
@@ -235,7 +238,7 @@ body{background:var(--paper);color:var(--text)}
 </div>
 
 <footer class="foot">
-  <b>说明：</b>照片仅在你的设备上分析，<b>不会上传服务器</b>。首次分析会自动加载约 13MB 的站内人脸模型和运行组件，不会弹出下载文件窗口，加载后通常会由浏览器缓存。算法基于 MediaPipe 478 个人脸关键点与双审美通道几何规则，会在<b>精致柔和型</b>与<b>英气硬朗型</b>中自动选择更匹配的通道。采用<b>严格颜值标尺</b>：30–40 大众自然、40–50 普通耐看、50–60 中等偏上、60–70 好看、70–80 小美、80–90 顶美、90+ 明星级。结果为娱乐性质美学参考；极端侧脸、广角和夸张表情建议用正脸照复核。请仅上传本人或已获授权的照片。
+  <b>说明：</b>照片仅在你的设备上分析，<b>不会上传服务器</b>。首次分析会自动加载约 67MB 的站内三模型和运行组件，不会弹出下载文件窗口，加载后通常会由浏览器缓存。综合分由三路深度模型融合后，经 5,500 张严格 OOF 参考分布进行连续校准；人脸关键点仅用于姿态、可信度、测量线和六项几何参考。采用<b>连续颜值标尺</b>：20–30 普通偏下、30–40 大众自然、40–50 普通耐看、50–60 中等偏上、60–70 好看、70–80 小美、80–90 顶美、90+ 明星级。结果为娱乐性质美学参考；极端侧脸、广角和夸张表情建议用正脸照复核。请仅上传本人或已获授权的照片。
 </footer>
 
 <!-- MediaPipe（IIFE 隔离，导出 window.__MP__） -->
@@ -333,14 +336,51 @@ async function loadCalibration(){
 }
 async function loadPercentile(){
   if (percentileData) return percentileData;
-  percentileData = await fetch('model/percentile_lookup.json?v=20261016a').then(r=>r.json());
+  percentileData = await fetch('model/score_display_v91.json?v=20261016v91').then(r=>r.json());
   return percentileData;
 }
-/* ECDF percentile (0-100) from native 1-5, monotonic interpolation on frozen 5500 OOF grid */
+/* V91: final fuser3 native score -> strict 5500 OOF empirical percentile. */
+function crowdPercentile(nativeScore){
+  const nodes = percentileData && percentileData.nodes_p0_to_p100_step_0_1;
+  const x = Math.max(1.0, Math.min(5.0, Number(nativeScore)));
+  if(!nodes || nodes.length<2) return Math.max(0,Math.min(100,15+(x-1)/4*80));
+  if(x<=nodes[0]) return 0;
+  const last=nodes.length-1;
+  if(x>=nodes[last]) return 100;
+  let lo=0, hi=last;
+  while(hi-lo>1){const mid=(lo+hi)>>1;if(nodes[mid]<=x)lo=mid;else hi=mid;}
+  const t=(x-nodes[lo])/(nodes[hi]-nodes[lo]||1);
+  return Math.max(0,Math.min(100,(lo+t)/10));
+}
+function aestheticScoreFromPercentile(percentile){
+  const anchors=(percentileData && percentileData.aesthetic_anchors)||[[0,5],[10,15],[20,22],[30,30],[40,40],[50,50],[60,58],[70,66],[80,75],[90,85],[95,90],[99,97],[100,100]];
+  const p=Math.max(0,Math.min(100,Number(percentile)));
+  if(p<=anchors[0][0]) return anchors[0][1];
+  for(let i=1;i<anchors.length;i++){
+    if(p<=anchors[i][0]){
+      const [p0,s0]=anchors[i-1], [p1,s1]=anchors[i];
+      return s0+(p-p0)/(p1-p0||1)*(s1-s0);
+    }
+  }
+  return anchors[anchors.length-1][1];
+}
+function interpolateAnchors(x,anchors){
+  if(x<=anchors[0][0]) return anchors[0][1];
+  for(let i=1;i<anchors.length;i++){
+    if(x<=anchors[i][0]){
+      const [x0,y0]=anchors[i-1], [x1,y1]=anchors[i];
+      return y0+(x-x0)/(x1-x0||1)*(y1-y0);
+    }
+  }
+  return anchors[anchors.length-1][1];
+}
 function percentileScore(nativeScore){
-  // fuser3 display_map: pct = 15 + (score-1)/4*80
-  const x = Math.max(1.0, Math.min(5.0, nativeScore));
-  return Math.max(0, Math.min(100, 15 + (x - 1) / 4 * 80));
+  const pScore=aestheticScoreFromPercentile(crowdPercentile(nativeScore));
+  const baseAnchors=(percentileData&&percentileData.native_baseline_anchors)||[[1,5],[1.5,22],[2,35],[2.5,45],[3,55],[3.5,65],[4,75],[4.5,88],[5,100]];
+  const base=interpolateAnchors(Math.max(1,Math.min(5,Number(nativeScore))),baseAnchors);
+  // Preserve the intuitive low/mid continuum, while allowing true OOF upper-tail rank to open 80–100.
+  const tailWeight=Math.max(0,Math.min(1,(base-55)/25));
+  return Math.max(5,Math.min(100,base+tailWeight*Math.max(0,pScore-base)));
 }
 function calibrateScore(nativeScore){
   if (!calibrationData || !calibrationData.grid) return Math.max(0, Math.min(93.75, (nativeScore-1)/4*100));
@@ -441,6 +481,16 @@ function aspectLabel(pct){
   if(pct < 80) return "较好";
   return "突出";
 }
+/* 细分项保留几何排序与弱项；当其显著高于综合分时统一收缩，避免误导。 */
+function aspectDisplayScore(rawPct, overallPct){
+  const raw=clamp(Number(rawPct)||0,0,100), overall=clamp(Number(overallPct)||0,0,100);
+  return Math.round(raw<=overall ? raw : overall + 0.5*(raw-overall));
+}
+function getDisplayAspectScores(scores,overallPct){
+  const out={};
+  METRIC_LABELS.forEach(([k])=>{out[k]=aspectDisplayScore(scores[k],overallPct);});
+  return out;
+}
 /* ==== V4: 3D pose from facial matrix ==== */
 function eulerFromMatrix(matrix){
   if (!matrix || !matrix.data || matrix.data.length < 16) return { valid:false };
@@ -460,8 +510,8 @@ function gate3d(pose){
   else if(Math.abs(pose.yawDeg) > 18) { reasons.push('yaw_warn'); tier='medium'; }
   if(Math.abs(pose.pitchDeg) > 35) { reasons.push('pitch_reject'); tier='reject'; }
   else if(Math.abs(pose.pitchDeg) > 20) { reasons.push('pitch_warn'); tier = tier==='reject'?'reject':'medium'; }
-  if(Math.abs(pose.rollDeg) > 22) { reasons.push('roll_reject'); tier='reject'; }
-  else if(Math.abs(pose.rollDeg) > 12) { reasons.push('roll_warn'); tier = tier==='reject'?'reject':'medium'; }
+  if(Math.abs(pose.rollDeg) > 35) { reasons.push('roll_warn'); tier = tier==='reject'?'reject':'medium'; }
+  else if(Math.abs(pose.rollDeg) > 15) { reasons.push('roll_notice'); tier = tier==='reject'?'reject':'medium'; }
   return { tier, reasons };
 }
 
@@ -491,7 +541,12 @@ drop.addEventListener("drop", e=>{
   e.preventDefault(); drop.classList.remove("over");
   if(e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
 });
-function setStatus(msg,cls){ status.textContent=msg||""; status.className="status"+(cls?" "+cls:""); }
+function setStatus(msg,cls){
+  status.textContent=msg||""; status.className="status"+(cls?" "+cls:"");
+  const overlay=$("analysisOverlay"), overlayText=$("analysisOverlayText");
+  if(overlayText && msg) overlayText.textContent=msg;
+  if(overlay && (cls==="ok" || cls==="err")) overlay.classList.remove("show");
+}
 function handleFile(file){
   if(busy) return;
   const name=(file.name||"").toLowerCase();
@@ -501,7 +556,18 @@ function handleFile(file){
   }
   if(file.size>35*1024*1024){setStatus("图片超过 35MB，请压缩或截屏后再上传","err");return;}
   const url=URL.createObjectURL(file);
-  img.onload=()=>{runAnalysis();};
+  img.onload=()=>{
+    /* 先确认上传成功并立即展示原图，再异步加载模型/推理。 */
+    $("resultCard").style.display="block";
+    $("reportCol").style.display="none";
+    $("layers").innerHTML="";
+    const previewCanvas=$("draw"); previewCanvas.width=0; previewCanvas.height=0;
+    $("analysisOverlay").classList.add("show");
+    $("analysisOverlayText").textContent="图片已上传，正在分析…";
+    setStatus("图片已上传，正在加载分析模型…");
+    $("resultCard").scrollIntoView({behavior:"smooth",block:"start"});
+    requestAnimationFrame(()=>runAnalysis());
+  };
   img.onerror=()=>{URL.revokeObjectURL(url);setStatus("图片解码失败，请改用 JPG / PNG / WebP，或将原图截屏后上传","err");};
   setStatus("正在读取图片…");
   img.src=url;
@@ -522,7 +588,7 @@ async function runAnalysis(){
   window.__debugGeo={runId, ts:new Date().toISOString(), loaded:null, featCount:null, finite:null, rawReturn:null, assignedPredGeo:null, fuseInputPredGeo:null, error:null};
   window.__lastData=null;
   try{
-    setStatus("首次分析正在加载模型（约 45MB FP32），加载后浏览器会缓存…");
+    setStatus("首次分析正在加载三模型（约 67MB），加载后浏览器会缓存…");
     await Promise.all([ensureLandmarker(), loadFusionParams(), loadCalibration(), loadPercentile()]);
     // Startup self-check: verify frozen modules loaded correctly
     if (typeof predictRaw !== 'function') throw new Error('model_histgb.js not loaded');
@@ -583,24 +649,28 @@ async function runAnalysis(){
       window.__debug3d = { yawDeg: pose.yawDeg, pitchDeg: pose.pitchDeg, rollDeg: pose.rollDeg, valid: pose.valid, tier: gate.tier, reasons: gate.reasons };
       // fuser3: 三通道加权融合
       const fused = fuse3ch(preds);
-      const pct = percentileScore(fused.finalScore);
-      fusion = { finalScore: fused.finalScore, pct, spread: fused.spread, tier: gate.tier, reasons: gate.reasons, pose, interval80: fused.interval80, interval90: fused.interval90 };
-      window.__debugFusion = { preds, fused: fused.finalScore, spread: fused.spread, pct, tier: gate.tier, pose };
+      const crowdPct = crowdPercentile(fused.finalScore);
+      const aestheticScore = percentileScore(fused.finalScore);
+      fusion = { finalScore: fused.finalScore, pct: aestheticScore, crowdPct, spread: fused.spread, tier: gate.tier, reasons: gate.reasons, pose, interval80: fused.interval80, interval90: fused.interval90 };
+      window.__debugFusion = { preds, fused: fused.finalScore, spread: fused.spread, aestheticScore, crowdPct, tier: gate.tier, pose };
       if(!Number.isFinite(fusion.finalScore)) throw new Error('finalScore non-finite');
     } catch(e) {
       setStatus("深度模型推理失败："+e.message,"err");busy=false;return;
     }
     data.fusion = fusion;
-    // V90: 保留连续 float 给 grade/区间，显示才 round
+    // V91: main score is monotonic aesthetic mapping; crowd percentile stays separate.
+    data.crowdPercentileRaw = crowdPercentile(fusion.finalScore);
+    data.crowdPercentile = Math.round(data.crowdPercentileRaw);
     data.percentileRaw = percentileScore(fusion.finalScore);
     data.percentile = Math.round(data.percentileRaw);
     data.labelCal = calibrateScore(fusion.finalScore);
     data.totalRaw = data.percentileRaw;
-    data.total = data.percentile; // 显示用整数
+    data.total = data.percentile; // display integer
     window.__lastData=data;
     /* 先显示结果以拿到真实显示尺寸，再绘制测量线 */
     setStatus("分析完成","ok");
     $("resultCard").style.display="block";
+    $("reportCol").style.display="block";
     await new Promise(r=>requestAnimationFrame(r));
     await new Promise(r=>requestAnimationFrame(r));
     const cw=img.clientWidth, ch=img.clientHeight;
@@ -884,12 +954,7 @@ const METRIC_ADVICE={
   q:"照片质量一般，建议自然光、平视、正脸、五官清晰重拍"
 };
 
-/* ==== V90: 纯函数 — 可审计、边界回归 ==== */
-function crowdPercentile(nativeScore){
-  // 冻结口径：clamp(15+(native-1)/4*80, 0, 100)
-  const x = Math.max(1.0, Math.min(5.0, nativeScore));
-  return Math.max(0, Math.min(100, 15 + (x - 1) / 4 * 80));
-}
+/* ==== V91: display score and real OOF percentile ==== */
 function gradeFromPct(pct){
   // 9级称号，按未取整原值判定
   if(pct < 20) return ["颜值表现偏低","仅代表本次测量结果，不给人下定义"];
@@ -903,9 +968,9 @@ function gradeFromPct(pct){
   return ["明星级","五官辨识度和精致度都非常突出"];
 }
 function intervalToPct(nativeCenter, halfRaw){
-  // 不确定区间两端用同一恒等映射 + clamp
-  const lo = crowdPercentile(nativeCenter - halfRaw);
-  const hi = crowdPercentile(nativeCenter + halfRaw);
+  // Both uncertainty endpoints pass through the same OOF ECDF + aesthetic mapping.
+  const lo = percentileScore(nativeCenter - halfRaw);
+  const hi = percentileScore(nativeCenter + halfRaw);
   return [lo, hi];
 }
 
@@ -921,16 +986,19 @@ function addComment(box,warn,text){
 function buildComments(data){
   const {scores,vals}=data;
   const box=$("comments"); box.innerHTML="";
-  const entries=METRIC_LABELS.filter(([k])=>k!=="q").map(([k,l])=>[k,l,scores[k]]).sort((a,b)=>b[2]-a[2]);
+  const displayScores=getDisplayAspectScores(scores,data.totalRaw ?? data.total);
+  const entries=METRIC_LABELS.filter(([k])=>k!=="q").map(([k,l])=>[k,l,displayScores[k]]).sort((a,b)=>b[2]-a[2]);
   const top=entries[0], low=entries[entries.length-1];
   addComment(box,false, top[2]>=78
     ? "亮点："+top[1]+"表现突出（"+Math.round(top[2])+"），是整张脸的加分项。"
     : "整体五官协调自然，给人舒服耐看的感觉。");
   addComment(box,false,"建议："+METRIC_ADVICE[low[0]]+"。");
-  if(vals.segPct.some(s=>s<0)||Math.abs(vals.yawDeg)>25)
-    addComment(box,true,"照片侧脸或广角畸变严重，当前分数无法反映真实颜值，请正脸平视镜头重拍。");
-  else if(Math.abs(vals.yawDeg)>12)
-    addComment(box,true,"面部有一定偏转（约 "+Math.round(vals.yawDeg)+"°），正脸测量会更准确，建议平视重拍。");
+  const pose=data.fusion&&data.fusion.pose;
+  const yaw3d=pose&&pose.valid?Math.abs(pose.yawDeg):0;
+  if(vals.segPct.some(s=>s<0)||(pose&&pose.valid&&yaw3d>28))
+    addComment(box,true,"照片偏转较大，当前结果参考性有限，建议正脸平视镜头复核。");
+  else if(pose&&pose.valid&&yaw3d>14)
+    addComment(box,true,"面部有一定偏转（约 "+Math.round(yaw3d)+"°），使用正脸照测量会更稳定。");
   if(vals.lum<0.32) addComment(box,true,"照片整体偏暗，建议到光线均匀明亮的地方重拍。");
   else if(vals.lum>0.78) addComment(box,true,"照片略微过曝，建议避免强光直射。");
   if(vals.faceSize<0.35) addComment(box,true,"人脸在画面中占比较小，建议靠近拍摄让五官更清晰。");
@@ -947,11 +1015,12 @@ function render(data){
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
     arc.setAttribute("stroke-dashoffset",(circ*(1-clamp(total,0,100)/100)).toFixed(1));
   }));
-  // V90: grade 用 raw 连续值，显示用 rounded
+  // V91: grade uses continuous aesthetic score; crowd rank is a separate fact.
   const totalRaw = data.totalRaw ?? total;
   $("totalNum").textContent=total;
   const [g,gs]=gradeFromPct(totalRaw);
-  $("grade").textContent=g; $("gradeSub").textContent="超过约"+total+"%的参考样本 · "+gs;
+  const crowd=Math.round(data.crowdPercentileRaw ?? data.crowdPercentile ?? 0);
+  $("grade").textContent=g; $("gradeSub").textContent="超过约"+crowd+"%的参考样本 · "+gs;
   // V90: 低可信显示 --，不显示精确分
   const badge=$("fusionBadge"), ib=$("intervalBox");
   if(data.fusion && data.fusion.tier==='reject'){
@@ -969,29 +1038,33 @@ function render(data){
   }
 
   const m=$("metrics"); m.innerHTML="";
-  // V90: 六细分 ECDF percentile + 五级短标签
+  // 六细分为几何相对表现；显示时向综合分做统一收缩，保留亮点但避免严重脱节。
+  const displayScores={};
+  METRIC_LABELS.forEach(([k])=>{ displayScores[k]=aspectDisplayScore(scores[k],totalRaw); });
   METRIC_LABELS.forEach(([k,label,desc])=>{
     const row=document.createElement("div"); row.className="mt";
+    const shown=displayScores[k];
     row.innerHTML='<div class="mt-top"><span class="mt-name">'+label+'</span><span class="mt-val">'+
-      Math.round(scores[k])+' <small style="font-size:11px;color:#8a97a4;font-weight:400">'+aspectLabel(scores[k])+'</small></span></div><div class="bar"><i></i></div><div class="mt-desc">'+desc+'</div>';
+      shown+' <small style="font-size:11px;color:#8a97a4;font-weight:400">'+aspectLabel(shown)+'</small></span></div><div class="bar"><i></i></div><div class="mt-desc">'+desc+'</div>';
     m.appendChild(row);
-    requestAnimationFrame(()=>{ row.querySelector(".bar i").style.width=clamp(scores[k],0,100)+"%"; });
+    requestAnimationFrame(()=>{ row.querySelector(".bar i").style.width=clamp(shown,0,100)+"%"; });
   });
   const q=Math.round(scores.q);
   const qText=q>=85?"关键点清晰，测量参考性较高":q>=65?"可供参考，正脸平视会更稳定":"角度或画面条件影响较大，建议重拍后复核";
   $("confidence").innerHTML='<div><div class="c-label">测量可信度</div><div class="c-copy">'+qText+' · 不计入颜值总分</div></div><div class="c-num">'+q+'<small> / 100</small></div>';
 
-  // V90: 六细分 ECDF percentile + 五级短标签
+  // 关键比例沿用同一组已取整、收缩后的细分分数。
   const r=$("readouts"); r.innerHTML="";
   const readouts = [
-    ["五官对称度", scores.sym],
-    ["三庭比例", scores.third],
-    ["五眼分布", scores.fifth],
-    ["眼部形态", scores.eye],
+    ["五官对称度", displayScores.sym],
+    ["三庭比例", displayScores.third],
+    ["五眼分布", displayScores.fifth],
+    ["眼部形态", displayScores.eye],
   ];
   readouts.forEach(([k,v])=>{
     const c=document.createElement("div"); c.className="rd";
-    c.innerHTML='<div class="k">'+k+'</div><div class="v">'+v+' <small style="color:#8a97a4;font-weight:400">'+aspectLabel(v)+'</small></div>';
+    const shown=Math.round(v);
+    c.innerHTML='<div class="k">'+k+'</div><div class="v">'+shown+' <small style="color:#8a97a4;font-weight:400">'+aspectLabel(shown)+'</small></div>';
     r.appendChild(c);
   });
   buildComments(data);
