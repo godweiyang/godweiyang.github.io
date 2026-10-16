@@ -933,28 +933,29 @@ function render(data){
   }
 
   const m=$("metrics"); m.innerHTML="";
-  // V90: 六维 calibration 不可靠，隐藏数字条，仅留标签
+  // V90: 六细分数字显示（待 aspect_calibration.json 校准后替换）
   METRIC_LABELS.forEach(([k,label,desc])=>{
     const row=document.createElement("div"); row.className="mt";
-    row.innerHTML='<div class="mt-top"><span class="mt-name">'+label+'</span><span class="mt-val" style="color:#8a97a4">—</span></div><div class="mt-desc" style="margin-top:4px">'+desc+'</div>';
+    row.innerHTML='<div class="mt-top"><span class="mt-name">'+label+'</span><span class="mt-val">'+
+      Math.round(scores[k])+'</span></div><div class="bar"><i></i></div><div class="mt-desc">'+desc+'</div>';
     m.appendChild(row);
+    requestAnimationFrame(()=>{ row.querySelector(".bar i").style.width=clamp(scores[k],0,100)+"%"; });
   });
   const q=Math.round(scores.q);
   const qText=q>=85?"关键点清晰，测量参考性较高":q>=65?"可供参考，正脸平视会更稳定":"角度或画面条件影响较大，建议重拍后复核";
   $("confidence").innerHTML='<div><div class="c-label">测量可信度</div><div class="c-copy">'+qText+' · 不计入颜值总分</div></div><div class="c-num">'+q+'<small> / 100</small></div>';
 
-  // V90: 六细分 — subscore calibration numeric_valid=false，保守显示 --
-  // 不使用旧手写 0-100 转换标签，避免误导
+  // V90: 六细分数字显示（待 aspect_calibration.json 校准后替换）
   const r=$("readouts"); r.innerHTML="";
   const readouts = [
-    ["五官对称度", "— 暂无可靠参考"],
-    ["三庭比例", "— 暂无可靠参考"],
-    ["五眼分布", "— 暂无可靠参考"],
-    ["眼部形态", "— 暂无可靠参考"],
+    ["五官对称度", Math.round(scores.sym)],
+    ["三庭比例", Math.round(scores.third)],
+    ["五眼分布", Math.round(scores.fifth)],
+    ["眼部形态", Math.round(scores.eye)],
   ];
   readouts.forEach(([k,v])=>{
     const c=document.createElement("div"); c.className="rd";
-    c.innerHTML='<div class="k">'+k+'</div><div class="v" style="color:#8a97a4">'+v+'</div>';
+    c.innerHTML='<div class="k">'+k+'</div><div class="v">'+v+'</div>';
     r.appendChild(c);
   });
   buildComments(data);
