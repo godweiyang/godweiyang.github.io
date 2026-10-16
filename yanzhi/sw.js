@@ -1,5 +1,5 @@
 /* sw.js — 颜值实验室正式版 Service Worker */
-const CACHE_NAME = 'yanzhi-v89-20261016c'
+const CACHE_NAME = 'yanzhi-v90-20261016d'
 self.addEventListener('install', () => {
   self.skipWaiting()
 })

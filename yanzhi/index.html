@@ -143,7 +143,7 @@ body{background:var(--paper);color:var(--text)}
     <span class="ptag">照片仅在你的设备上分析，不会上传服务器</span>
   </div>
   <div class="r">
-    <span class="ver-badge">微信分享优化 · v89</span>
+    <span class="ver-badge">微信分享优化 · v90</span>
   </div>
 </header>
 
@@ -235,7 +235,7 @@ body{background:var(--paper);color:var(--text)}
 </div>
 
 <footer class="foot">
-  <b>说明：</b>照片仅在你的设备上分析，<b>不会上传服务器</b>。首次分析会自动加载约 13MB 的站内人脸模型和运行组件，不会弹出下载文件窗口，加载后通常会由浏览器缓存。算法基于 MediaPipe 478 个人脸关键点与双审美通道几何规则，会在<b>精致柔和型</b>与<b>英气硬朗型</b>中自动选择更匹配的通道。采用<b>严格颜值标尺</b>：40–50 为大众脸、60 已属好看、70 小美、80 顶美、90 明星级。结果为娱乐性质美学参考；极端侧脸、广角和夸张表情建议用正脸照复核。请仅上传本人或已获授权的照片。
+  <b>说明：</b>照片仅在你的设备上分析，<b>不会上传服务器</b>。首次分析会自动加载约 13MB 的站内人脸模型和运行组件，不会弹出下载文件窗口，加载后通常会由浏览器缓存。算法基于 MediaPipe 478 个人脸关键点与双审美通道几何规则，会在<b>精致柔和型</b>与<b>英气硬朗型</b>中自动选择更匹配的通道。采用<b>严格颜值标尺</b>：30–40 大众自然、40–50 普通耐看、50–60 中等偏上、60–70 好看、70–80 小美、80–90 顶美、90+ 明星级。结果为娱乐性质美学参考；极端侧脸、广角和夸张表情建议用正脸照复核。请仅上传本人或已获授权的照片。
 </footer>
 
 <!-- MediaPipe（IIFE 隔离，导出 window.__MP__） -->
@@ -845,16 +845,29 @@ const METRIC_ADVICE={
   q:"照片质量一般，建议自然光、平视、正脸、五官清晰重拍"
 };
 
-function gradeInfo(t){
-  if(t>=95) return ["天花板级","极罕见的综合条件，接近满分仅作为娱乐标尺"];
-  if(t>=90) return ["明星级","五官辨识度和精致度都非常突出"];
-  if(t>=80) return ["顶美","在人群中属于非常亮眼的少数"];
-  if(t>=70) return ["小美","明显好看，上镜有优势"];
-  if(t>=60) return ["很好看","已经高于大多数人的日常观感"];
-  if(t>=50) return ["中等偏上","比大众脸更耐看，具有个人亮点"];
-  if(t>=40) return ["大众脸","正常普通颜值，整体自然顺眼"];
-  if(t>=30) return ["普通偏下","部分比例不占优势，但不代表真实审美结论"];
-  return ["颜值表现偏低","仅代表本次几何测量结果，不给人下定义"];
+/* ==== V90: 纯函数 — 可审计、边界回归 ==== */
+function crowdPercentile(nativeScore){
+  // 冻结口径：clamp(15+(native-1)/4*80, 0, 100)
+  const x = Math.max(1.0, Math.min(5.0, nativeScore));
+  return Math.max(0, Math.min(100, 15 + (x - 1) / 4 * 80));
+}
+function gradeFromPct(pct){
+  // 9级称号，按未取整原值判定
+  if(pct < 20) return ["颜值表现偏低","仅代表本次测量结果，不给人下定义"];
+  if(pct < 30) return ["普通偏下","部分比例不占优势，但不代表真实审美结论"];
+  if(pct < 40) return ["大众自然","正常普通颜值，整体自然顺眼"];
+  if(pct < 50) return ["普通耐看","有个人亮点，属于日常耐看型"];
+  if(pct < 60) return ["中等偏上","比大众脸更耐看，具有个人特色"];
+  if(pct < 70) return ["好看","已经高于大多数人的日常观感"];
+  if(pct < 80) return ["小美","明显好看，上镜有优势"];
+  if(pct < 90) return ["顶美","在人群中属于非常亮眼的少数"];
+  return ["明星级","五官辨识度和精致度都非常突出"];
+}
+function intervalToPct(nativeCenter, halfRaw){
+  // 不确定区间两端用同一恒等映射 + clamp
+  const lo = crowdPercentile(nativeCenter - halfRaw);
+  const hi = crowdPercentile(nativeCenter + halfRaw);
+  return [lo, hi];
 }
 
 function addComment(box,warn,text){
@@ -896,69 +909,49 @@ function render(data){
     arc.setAttribute("stroke-dashoffset",(circ*(1-clamp(total,0,100)/100)).toFixed(1));
   }));
   $("totalNum").textContent=total;
-  const [g,gs]=gradeInfo(total);
-  $("grade").textContent=g; $("gradeSub").textContent="超过约"+total+"%的SCUT同数据集样本 · "+gs;
-  // Fusion badge + percentile interval
+  const [g,gs]=gradeFromPct(total);
+  $("grade").textContent=g; $("gradeSub").textContent="超过约"+total+"%的参考样本 · "+gs;
+  // V90: 低可信显示 --，不显示精确分
   const badge=$("fusionBadge"), ib=$("intervalBox");
-  if(data.fusion){
+  if(data.fusion && data.fusion.tier==='reject'){
+    $("totalNum").textContent='--';
     badge.style.display='inline-block';
-    if(data.fusion.mode==='dynamic'){
-      badge.textContent='动态融合'; badge.style.background='#0f766e'; badge.style.color='#fff';
-      ib.style.display='none';
-    } else {
-      const tierLabel = data.fusion.tier==='low'?'低可信':data.fusion.tier==='medium'?'中等可信':'纯深度';
-      badge.textContent=tierLabel; badge.style.background='#c62828'; badge.style.color='#fff';
-      const lo=Math.round(percentileScore(data.fusion.finalScore-data.fusion.interval90));
-      const hi=Math.round(percentileScore(data.fusion.finalScore+data.fusion.interval90));
-      ib.style.display='block';
-      ib.textContent='90%相对位置区间: '+lo+' ~ '+hi+' · 建议正脸重拍';
-    }
+    badge.textContent='建议重拍'; badge.style.background='#c62828'; badge.style.color='#fff';
+    ib.style.display='none';
+  } else if(data.fusion && data.fusion.tier==='medium'){
+    badge.style.display='inline-block';
+    badge.textContent='结果仅供参考'; badge.style.background='#f0a500'; badge.style.color='#fff';
+    ib.style.display='none';
+  } else {
+    badge.style.display='none';
+    ib.style.display='none';
   }
 
   const m=$("metrics"); m.innerHTML="";
+  // V90: 六维 calibration 不可靠，隐藏数字条，仅留标签
   METRIC_LABELS.forEach(([k,label,desc])=>{
     const row=document.createElement("div"); row.className="mt";
-    row.innerHTML='<div class="mt-top"><span class="mt-name">'+label+'</span><span class="mt-val">'+
-      Math.round(scores[k])+'</span></div><div class="bar"><i></i></div><div class="mt-desc">'+desc+'</div>';
+    row.innerHTML='<div class="mt-top"><span class="mt-name">'+label+'</span><span class="mt-val" style="color:#8a97a4">—</span></div><div class="mt-desc" style="margin-top:4px">'+desc+'</div>';
     m.appendChild(row);
-    requestAnimationFrame(()=>{ row.querySelector(".bar i").style.width=clamp(scores[k],0,100)+"%"; });
   });
   const q=Math.round(scores.q);
   const qText=q>=85?"关键点清晰，测量参考性较高":q>=65?"可供参考，正脸平视会更稳定":"角度或画面条件影响较大，建议重拍后复核";
   $("confidence").innerHTML='<div><div class="c-label">测量可信度</div><div class="c-copy">'+qText+' · 不计入颜值总分</div></div><div class="c-num">'+q+'<small> / 100</small></div>';
 
-  const pct=x=>Math.round(x*100);
-  const readouts=[
-    ["中庭/下庭", (vals.thirdPct[1]/vals.thirdPct[2]).toFixed(2), "不依赖发际线，更少受发型影响"],
-    ["审美通道", vals.beautyStyle, "柔和与硬朗两套规则择优"],
-    ["眼裂长宽比", vals.eyeRatio.toFixed(2), "不同审美通道使用不同目标"],
-    ["下颌收束度", vals.jawTaper.toFixed(2), "柔和与硬朗脸型分别评价"],
-    ["五官集中度", vals.featureConcentration.toFixed(2), "越低表示五官纵向更集中"],
-    ["面部偏航", vals.yawDeg.toFixed(1)+"°", "仅影响可信度，不直接扣颜值"],
-    ["鼻宽/内眼距", vals.noseRatio.toFixed(2), "按命中的审美通道评价"],
-    ["嘴宽/瞳孔距", vals.mouthRatio.toFixed(2), "作为五官协调度参考"]
-  ];
+  // V90: 六细分 — subscore calibration numeric_valid=false，保守显示 --
+  // 不使用旧手写 0-100 转换标签，避免误导
   const r=$("readouts"); r.innerHTML="";
-  readouts.forEach(([k,v,d])=>{
+  const readouts = [
+    ["五官对称度", "— 暂无可靠参考"],
+    ["三庭比例", "— 暂无可靠参考"],
+    ["五眼分布", "— 暂无可靠参考"],
+    ["眼部形态", "— 暂无可靠参考"],
+  ];
+  readouts.forEach(([k,v])=>{
     const c=document.createElement("div"); c.className="rd";
-    c.innerHTML='<div class="k">'+k+'</div><div class="v">'+v+'</div><div class="d">'+d+'</div>';
+    c.innerHTML='<div class="k">'+k+'</div><div class="v" style="color:#8a97a4">'+v+'</div>';
     r.appendChild(c);
   });
-  // 模型分详情（小字，非主指数）
-  if(data.fusion){
-    const detail=document.createElement("div");
-    detail.style.cssText="grid-column:1/-1;font-size:11px;color:#8a97a4;border-top:1px solid #edf1f4;padding-top:8px;margin-top:4px;line-height:1.7";
-    const loCal=calibrateScore(data.fusion.finalScore-data.fusion.interval90).toFixed(1);
-    const hiCal=calibrateScore(data.fusion.finalScore+data.fusion.interval90).toFixed(1);
-    detail.innerHTML='<b style="color:#5d6b77">模型分详情（非主颜值指数）：</b>'+
-      'native='+data.fusion.finalScore.toFixed(2)+'/5 · '+
-      'label-calibrated='+data.labelCal.toFixed(1)+'/93.75';
-    if(data.fusion.mode==='deep-only'){
-      detail.innerHTML+=' · 低可信label-cal区间='+loCal+'~'+hiCal;
-    }
-    detail.innerHTML+=' · 主环为SCUT人群百分位相对排名';
-    r.appendChild(detail);
-  }
   buildComments(data);
 }
 
@@ -1001,7 +994,7 @@ async function drawPoster(){
   roundedRect(ctx,52,892,976,452,30);ctx.fillStyle="#fffdf8";ctx.fill();
   ctx.fillStyle="#173b38";ctx.font='900 118px "Microsoft YaHei",sans-serif';ctx.fillText(String(data.total),82,1034);
   ctx.fillStyle="#74817d";ctx.font='600 22px "Microsoft YaHei",sans-serif';ctx.fillText("颜值指数 / 100",88,1070);
-  const grade=gradeInfo(data.total)[0];
+  const grade=gradeFromPct(data.total)[0];
   ctx.fillStyle="#d9655c";ctx.font='900 42px "Microsoft YaHei",sans-serif';ctx.fillText(grade,330,972);
   ctx.fillStyle="#173b38";ctx.font='700 28px "Microsoft YaHei",sans-serif';ctx.fillText(data.vals.beautyStyle,330,1018);
   ctx.fillStyle="#74817d";ctx.font='400 21px "Microsoft YaHei",sans-serif';ctx.fillText("测量可信度 "+Math.round(data.scores.q)+" · 不计入颜值总分",330,1058);
