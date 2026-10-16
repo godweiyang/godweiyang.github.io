@@ -383,6 +383,18 @@ function percentileScore(nativeScore){
   const tailWeight=Math.max(0,Math.min(1,(base-55)/25));
   return Math.max(5,Math.min(100,base+tailWeight*Math.max(0,pScore-base)));
 }
+function finalDisplayScore(nativeScore,scores){
+  const base=percentileScore(nativeScore), crowd=crowdPercentile(nativeScore);
+  if(!scores||crowd>=12) return base;
+  const geometry=[scores.sym,scores.third,scores.fifth,scores.eye,scores.feat,scores.jaw].filter(Number.isFinite);
+  const weak=geometry.filter(v=>v<20).length;
+  const severe=geometry.filter(v=>v<8).length;
+  // Only release the lower tail when deep rank and several independent geometric signals agree.
+  const evidence=Math.max(0,Math.min(1,(weak-1)/2+severe*0.15));
+  const tail=Math.max(0,Math.min(1,(12-crowd)/8));
+  const target=aestheticScoreFromPercentile(crowd);
+  return Math.max(5,Math.min(100,base-(base-target)*evidence*tail));
+}
 function calibrateScore(nativeScore){
   if (!calibrationData || !calibrationData.grid) return Math.max(0, Math.min(93.75, (nativeScore-1)/4*100));
   const grid = calibrationData.grid;
@@ -661,7 +673,7 @@ async function runAnalysis(){
       // fuser3: 三通道加权融合
       const fused = fuse3ch(preds);
       const crowdPct = crowdPercentile(fused.finalScore);
-      const aestheticScore = percentileScore(fused.finalScore);
+      const aestheticScore = finalDisplayScore(fused.finalScore,data.scores);
       fusion = { finalScore: fused.finalScore, pct: aestheticScore, crowdPct, spread: fused.spread, tier: gate.tier, reasons: gate.reasons, pose, interval80: fused.interval80, interval90: fused.interval90 };
       window.__debugFusion = { preds, fused: fused.finalScore, spread: fused.spread, aestheticScore, crowdPct, tier: gate.tier, pose };
       if(!Number.isFinite(fusion.finalScore)) throw new Error('finalScore non-finite');
@@ -672,7 +684,7 @@ async function runAnalysis(){
     // V91: main score is monotonic aesthetic mapping; crowd percentile stays separate.
     data.crowdPercentileRaw = crowdPercentile(fusion.finalScore);
     data.crowdPercentile = Math.round(data.crowdPercentileRaw);
-    data.percentileRaw = percentileScore(fusion.finalScore);
+    data.percentileRaw = finalDisplayScore(fusion.finalScore,data.scores);
     data.percentile = Math.round(data.percentileRaw);
     data.labelCal = calibrateScore(fusion.finalScore);
     data.totalRaw = data.percentileRaw;
@@ -1000,9 +1012,14 @@ function buildComments(data){
   const displayScores=getDisplayAspectScores(scores,data.totalRaw ?? data.total);
   const entries=METRIC_LABELS.filter(([k])=>k!=="q").map(([k,l])=>[k,l,displayScores[k]]).sort((a,b)=>b[2]-a[2]);
   const top=entries[0], low=entries[entries.length-1];
-  addComment(box,false, top[2]>=78
-    ? "亮点："+top[1]+"表现突出（"+Math.round(top[2])+"），是整张脸的加分项。"
-    : "整体五官协调自然，给人舒服耐看的感觉。");
+  const overall=data.totalRaw ?? data.total;
+  if(overall<20){
+    addComment(box,false,"本次多个指标同时处于参考样本低位，因此综合分相应较低；结果仅代表这张照片。");
+  }else{
+    addComment(box,false, top[2]>=78
+      ? "亮点："+top[1]+"表现突出（"+Math.round(top[2])+"），是整张脸的加分项。"
+      : "整体五官协调自然，给人舒服耐看的感觉。");
+  }
   addComment(box,false,"建议："+METRIC_ADVICE[low[0]]+"。");
   const pose=data.fusion&&data.fusion.pose;
   const yaw3d=pose&&pose.valid?Math.abs(pose.yawDeg):0;
