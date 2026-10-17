@@ -1,5 +1,6 @@
 /* sw.js — 颜值实验室正式版 Service Worker */
-const CACHE_NAME = 'yanzhi-v92.3-20261016d'
+const CACHE_NAME = 'yanzhi-v93-20261018a'
+const RUNTIME_CACHE = 'yanzhi-runtime'
 self.addEventListener('install', () => {
   self.skipWaiting()
 })
@@ -10,7 +11,9 @@ self.addEventListener('activate', (event) => {
       .then((keys) =>
         Promise.all(
           keys
-            .filter((k) => k !== CACHE_NAME && !k.startsWith('yanzhi-models-'))
+            .filter(
+              (k) => k !== CACHE_NAME && k !== RUNTIME_CACHE && !k.startsWith('yanzhi-models-'),
+            )
             .map((k) => caches.delete(k)),
         ),
       )
@@ -45,7 +48,7 @@ self.addEventListener('fetch', (event) => {
   // Face detector and runtimes: cache-first to avoid recompiling/downloading after reopening.
   if (/\.(wasm|task)$/.test(url.pathname)) {
     event.respondWith(
-      caches.open('yanzhi-models-v1').then((cache) =>
+      caches.open(RUNTIME_CACHE).then((cache) =>
         cache.match(event.request).then((cached) => {
           if (cached) return cached
           return fetch(event.request).then((resp) => {

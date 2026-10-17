@@ -153,7 +153,7 @@ body{background:var(--paper);color:var(--text)}
             <line x1="12" y1="3" x2="12" y2="15"/>
           </svg>
           <p>点击或拖拽，上传一张正脸照片</p>
-          <p class="sub">支持 JPG / PNG / WebP；首次分析会下载约 73MB 核心组件，并显示实时进度，之后浏览器通常会缓存</p>
+          <p class="sub">支持 JPG / PNG / WebP；首次分析会下载约 56MB 核心组件（已接入国内加速），并显示实时进度，之后浏览器通常会缓存</p>
         </div>
       </div>
       <input type="file" id="file" accept="image/*" hidden>
@@ -226,9 +226,35 @@ body{background:var(--paper);color:var(--text)}
 </div>
 
 <footer class="foot">
-  <b>说明：</b>照片仅在你的设备上分析，<b>不会上传服务器</b>。首次分析会下载约 73MB 核心组件，其中三路审美模型约 64MB，并显示实时进度；加载后通常会由浏览器缓存。综合分由三路深度模型融合后，经 5,500 张严格 OOF 参考分布进行连续校准；人脸关键点仅用于姿态、可信度、测量线和六项几何参考。采用<b>连续颜值标尺</b>：20–30 普通偏下、30–40 大众自然、40–50 普通耐看、50–60 中等偏上、60–70 好看、70–80 小美、80–90 顶美、90+ 明星级。结果为娱乐性质美学参考；极端侧脸、广角和夸张表情建议用正脸照复核。请仅上传本人或已获授权的照片。
+  <b>说明：</b>照片仅在你的设备上分析，<b>不会上传服务器</b>。首次分析会下载约 56MB 核心组件（模型与推理引擎均接入国内加速），其中三路审美模型约 32MB、推理引擎约 24MB，并显示实时进度；加载后通常会由浏览器缓存。综合分由三路深度模型融合后，经 5,500 张严格 OOF 参考分布进行连续校准；人脸关键点仅用于姿态、可信度、测量线和六项几何参考。采用<b>连续颜值标尺</b>：20–30 普通偏下、30–40 大众自然、40–50 普通耐看、50–60 中等偏上、60–70 好看、70–80 小美、80–90 顶美、90+ 明星级。结果为娱乐性质美学参考；极端侧脸、广角和夸张表情建议用正脸照复核。请仅上传本人或已获授权的照片。
 </footer>
 
+<!-- 兼容被 CDN 压缩（br/gzip）或非标准 MIME 的 wasm：
+     国内 CDN（jsDelivr gcore 等）对 .wasm 返回 Content-Encoding: br，浏览器的
+     WebAssembly.instantiateStreaming 直接喂压缩流会报 "section Code extends past end"。
+     这里统一改为：未压缩 application/wasm 走原生流式；否则读 arrayBuffer（浏览器自动解压）
+     再非流式 WebAssembly.instantiate。对 onnxruntime / MediaPipe 均生效，须在引擎加载前执行。 -->
+<script>
+(function(){
+  if(typeof WebAssembly==='undefined' || typeof WebAssembly.instantiateStreaming!=='function') return;
+  if(WebAssembly.instantiateStreaming.__patched) return;
+  var origIS=WebAssembly.instantiateStreaming.bind(WebAssembly);
+  function patched(source, imports){
+    return Promise.resolve(source).then(function(resp){
+      try{
+        var ce=(resp.headers.get('content-encoding')||'').toLowerCase();
+        var ct=(resp.headers.get('content-type')||'').toLowerCase();
+        if(!ce && ct.indexOf('application/wasm')>=0){
+          return origIS(resp, imports); // 未压缩标准 wasm，保留流式编译
+        }
+      }catch(e){/* 读取头失败则降级 */}
+      return resp.arrayBuffer().then(function(buf){ return WebAssembly.instantiate(buf, imports); });
+    });
+  }
+  patched.__patched=true;
+  WebAssembly.instantiateStreaming=patched;
+})();
+</script>
 <!-- MediaPipe（IIFE 隔离，导出 window.__MP__） -->
 <script src="assets/vision_bundle_browser.js"></script>
 <script src="assets/cvResizeArea.js?v=20261016a"></script>
@@ -241,7 +267,6 @@ body{background:var(--paper);color:var(--text)}
    ============================================================ */
 const { FaceLandmarker, FilesetResolver } = window.__MP__;
 const MP_VERSION = "0.10.14";
-const WASM_URL = new URL("assets/wasm", location.href).href.replace(/\/$/,"");
 const DEBUG = new URLSearchParams(location.search).has('debug');
 
 /* 关键点索引 */
@@ -286,20 +311,83 @@ let ortSession=null, fusionParams=null, calibrationData=null, percentileData=nul
 function ensureOrtLib(){
   if (window.ort) return Promise.resolve();
   if (ortLoading) return ortLoading;
-  ortLoading = new Promise((resolve,reject)=>{
-    const s=document.createElement('script'); s.src='assets/ort/ort.min.js';
-    s.onload=resolve; s.onerror=()=>{ortLoading=null;reject(new Error('ORT runtime load failed'));};
-    document.head.appendChild(s);
-  });
+  ortLoading = (async()=>{
+    const root = await runtimeRoot();
+    // 用精简 wasm-only 入口 ort.wasm.min.js（48KB，非 jsep），配合 5.4MB 的
+    // ort-wasm-simd-threaded.wasm（<jsDelivr 20MB 限制）；而 ort.min.js 是 jsep 构建，
+    // 写死加载 21MB 的 .jsep.wasm，且与非 jsep 二进制不兼容。
+    const ortJsUrl = root + '/ort/ort.wasm.min.js';
+    await new Promise((resolve,reject)=>{
+      const s=document.createElement('script'); s.src=ortJsUrl;
+      s.onload=()=>{
+        // 传目录（末尾 /），ort 自动拼 ort-wasm-simd-threaded.mjs / .wasm（非 jsep）
+        try{ ort.env.wasm.wasmPaths = root + '/ort/'; }catch(e){}
+        resolve();
+      };
+      s.onerror=()=>{ortLoading=null;reject(new Error('ORT runtime load failed'));};
+      document.head.appendChild(s);
+    });
+  })();
   return ortLoading;
 }
-/* ==== V4: 3-ResNet Ensemble (huber FP32 + nima/rank QDQ) ==== */
+/* ==== V4: 3-ResNet Ensemble (all QDQ INT8, v2) ====
+ * 模型托管在公开仓库 godweiyang/storage 的 Release；网页端国内通过 gh-proxy 代理
+ * （带 Access-Control-Allow-Origin，支持 CORS 与 Range），同源 godweiyang.com 作为最终兜底。
+ * APP 端（OkHttp，无 CORS 限制）在原生代码里优先走 Gitee。 */
 let ortSessions = {};
+const MODEL_VERSION = 'v2';
+const GH_STORAGE_RELEASE = 'https://github.com/godweiyang/storage/releases/download/yanzhi-models-' + MODEL_VERSION;
+// 已验证对跨域 fetch 返回 CORS 的加速代理（按实测可用性排序），任一失效自动切下一个
+const GH_PROXY_PREFIXES = ['https://gh-proxy.org/', 'https://gh-proxy.cc/', 'https://gh-proxy.com/'];
 const MODEL_SPECS = [
-  {name:'huber',path:'model/corrected_huber_fp32.onnx?v=20261016c',bytes:44700306},
-  {name:'nima',path:'model/nima_qdq.onnx?v=20261016c',bytes:11236888},
-  {name:'rank',path:'model/rank_qdq.onnx?v=20261016c',bytes:11236813}
+  {name:'huber',file:'corrected_huber_qdq.onnx',bytes:11236812},
+  {name:'nima',file:'nima_qdq.onnx',bytes:11236888},
+  {name:'rank',file:'rank_qdq.onnx',bytes:11236813}
 ];
+MODEL_SPECS.forEach(s=>{
+  s.relPath = 'model/' + s.file;
+  s.urls = GH_PROXY_PREFIXES.map(p => p + GH_STORAGE_RELEASE + '/' + s.file);
+  s.urls.push(new URL(s.relPath, location.href).href); // 同源兜底（godweiyang.com）
+});
+/* 推理引擎（onnxruntime wasm / MediaPipe wasm / landmarker task）体积较大，
+ * 提交到公开仓库 godweiyang/storage 源码树（yanzhi-runtime/，目录结构与同源 assets 一致），
+ * 经 jsDelivr 国内 CDN 加速（gcore 主、fastly 备）：jsDelivr 对 .js/.mjs 返回 application/javascript、
+ * .wasm 返回 application/wasm，满足浏览器对经典脚本与 ES module 的 MIME 强制要求
+ * （GitHub Release 附件统一 octet-stream、raw 为 text/plain，均无法直接执行）。
+ * 为把单文件压到 jsDelivr 20MB 限制内，ort 使用非 jsep 的 simd-threaded wasm（5.4MB，
+ * 纯 CPU wasm 推理无需 jsep/GPU 桥接）。全部不可用则回退同源 assets（MIME 正确）。
+ * 静态小 JS（vision_bundle/cvResizeArea/model_histgb）仍走同源。 */
+// 固定 commit hash（不可变）：一是锁定引擎版本可复现，二是避开 jsDelivr 对 @master 分支
+// 的边缘缓存（更新文件后 gcore 可能长时间返回旧内容）。更新 runtime 后换新 hash 或 tag。
+const RUNTIME_REPO_REF = 'godweiyang/storage@8ac00da00ae376273e712dc1a263b43e7dc423a8/yanzhi-runtime';
+const RUNTIME_CDN_BASES = [
+  'https://gcore.jsdelivr.net/gh/' + RUNTIME_REPO_REF,
+  'https://fastly.jsdelivr.net/gh/' + RUNTIME_REPO_REF
+];
+const SELF_RT_ROOT = new URL('assets/', location.href).href.replace(/\/$/,'');
+let runtimeBasePromise = null;
+function resolveRuntimeBase(){
+  if(runtimeBasePromise) return runtimeBasePromise;
+  runtimeBasePromise = (async()=>{
+    for(const b of RUNTIME_CDN_BASES){
+      try{
+        const ctrl=new AbortController();
+        const timer=setTimeout(()=>ctrl.abort(),6000); // 6 秒内拿到首字节才算可用
+        const r=await fetch(b+'/ort/ort.wasm.min.js',{signal:ctrl.signal,headers:{Range:'bytes=0-1023'}});
+        clearTimeout(timer);
+        const ct=(r.headers.get('content-type')||'').toLowerCase();
+        // 必须是可执行 JS MIME，否则经典脚本/ESM 会被浏览器拒绝
+        if((r.status===200||r.status===206) && ct.includes('javascript')) return b;
+      }catch(e){/* 试下一个 CDN */}
+    }
+    return null; // 加速源全部不可用，回退同源
+  })();
+  return runtimeBasePromise;
+}
+async function runtimeRoot(){
+  const base = await resolveRuntimeBase();
+  return base || SELF_RT_ROOT;
+}
 function formatMiB(bytes){return (bytes/1048576).toFixed(bytes>=10485760?1:2)+' MB';}
 function setModelProgress(loaded,total,label){
   const wrap=$("modelProgress"),bar=$("modelProgressBar"),meta=$("modelProgressMeta");
@@ -312,9 +400,21 @@ function hideModelProgress(){
   const wrap=$("modelProgress"),meta=$("modelProgressMeta");
   if(wrap)wrap.classList.remove("show");if(meta)meta.classList.remove("show");
 }
-const MODEL_CACHE_NAME='yanzhi-models-v1';
+const MODEL_CACHE_NAME='yanzhi-models-v2';
+async function cleanupOldModelCaches(){
+  if(!('caches' in window))return;
+  try{
+    const keys=await caches.keys();
+    await Promise.all(keys.map(k=>{
+      // 仅删除旧版本的模型缓存（v1 等）；当前版本保留，runtime 缓存不在此前缀内
+      if(k.startsWith('yanzhi-models-')&&k!==MODEL_CACHE_NAME)return caches.delete(k);
+      return undefined;
+    }));
+  }catch(e){console.warn('cleanup model cache failed',e);}
+}
 async function cacheModelBuffer(spec,onProgress){
-  const request=new Request(spec.path,{credentials:'same-origin'});
+  // 缓存 key 用稳定的同源逻辑路径，不随实际下载源（gh-proxy 域名）变化，避免多源缓存多份
+  const request=new Request(new URL(spec.relPath,location.href).href,{credentials:'same-origin'});
   if('caches' in window){
     try{
       const cache=await caches.open(MODEL_CACHE_NAME),cached=await cache.match(request);
@@ -326,7 +426,7 @@ async function cacheModelBuffer(spec,onProgress){
       }
     }catch(e){console.warn('model cache read failed',e);}
   }
-  const buffer=await fetchArrayBufferWithProgress(spec,(loaded,total)=>onProgress(loaded,total,'模型下载'));
+  const buffer=await fetchArrayBufferWithProgress(spec,(loaded,total,label)=>onProgress(loaded,total,label));
   if('caches' in window){
     try{
       setStatus("正在保存 "+spec.name.toUpperCase()+" 模型到本地缓存…");
@@ -336,20 +436,49 @@ async function cacheModelBuffer(spec,onProgress){
   }
   return buffer;
 }
+// 多源顺序下载：连接超时或传输停滞即切下一个源，最后走同源兜底
 async function fetchArrayBufferWithProgress(spec,onProgress){
-  const resp=await fetch(spec.path);
-  if(!resp.ok)throw new Error(spec.name+' model download failed: '+resp.status);
-  const expected=spec.bytes;
-  if(!resp.body||!resp.body.getReader){const data=await resp.arrayBuffer();onProgress(data.byteLength,expected);return data;}
-  const reader=resp.body.getReader();let out=new Uint8Array(expected),loaded=0;
-  for(;;){
-    const {done,value}=await reader.read();if(done)break;
-    if(loaded+value.byteLength>out.byteLength){const grown=new Uint8Array(loaded+value.byteLength);grown.set(out);out=grown;}
-    out.set(value,loaded);loaded+=value.byteLength;onProgress(loaded,expected);
+  let lastErr=null;
+  for(let i=0;i<spec.urls.length;i++){
+    const url=spec.urls[i];
+    const isLast=i===spec.urls.length-1;
+    const srcName=isLast?'官方源':('加速源'+(i+1));
+    try{
+      const buffer=await fetchOneModel(url,spec.bytes,(loaded,total)=>onProgress(loaded,total,'模型下载·'+srcName));
+      if(buffer.byteLength===spec.bytes)return buffer;
+      throw new Error(spec.name+' size mismatch '+buffer.byteLength+'/'+spec.bytes);
+    }catch(e){
+      lastErr=e;console.warn('model source failed',srcName,url,e);
+      onProgress(0,spec.bytes,isLast?'官方源重试…':(srcName+' 不可用，切换…'));
+    }
   }
-  return loaded===out.byteLength?out.buffer:out.buffer.slice(0,loaded);
+  throw lastErr||new Error(spec.name+' all model sources failed');
+}
+function fetchOneModel(url,expected,onProgress){
+  return new Promise((resolve,reject)=>{
+    const ctrl=new AbortController();
+    let watchdog=setTimeout(()=>ctrl.abort(),12000); // 12 秒内拿不到响应头即放弃
+    const arm=()=>{clearTimeout(watchdog);watchdog=setTimeout(()=>ctrl.abort(),20000);}; // 传输中 20 秒无数据即放弃
+    fetch(url,{signal:ctrl.signal}).then(async resp=>{
+      if(!resp.ok)throw new Error('HTTP '+resp.status);
+      arm();
+      if(!resp.body||!resp.body.getReader){
+        const data=await resp.arrayBuffer();onProgress(data.byteLength,expected);clearTimeout(watchdog);resolve(data);return;
+      }
+      const reader=resp.body.getReader();let out=new Uint8Array(expected),loaded=0;
+      for(;;){
+        const {done,value}=await reader.read();
+        if(done)break;
+        if(loaded+value.byteLength>out.byteLength){const grown=new Uint8Array(loaded+value.byteLength);grown.set(out);out=grown;}
+        out.set(value,loaded);loaded+=value.byteLength;onProgress(loaded,expected);arm();
+      }
+      clearTimeout(watchdog);
+      resolve(loaded===out.byteLength?out.buffer:out.buffer.slice(0,loaded));
+    }).catch(e=>{clearTimeout(watchdog);reject(e);});
+  });
 }
 async function prepareOrtBuffers(){
+  await cleanupOldModelCaches();
   const pending=MODEL_SPECS.filter(s=>!ortSessions[s.name]);
   const total=pending.reduce((s,x)=>s+x.bytes,0);let completed=0;const prepared=[];
   modelDownloadActive=true;setStatus("正在检查本地模型缓存…");setModelProgress(0,total,"准备模型");
@@ -580,10 +709,13 @@ async function ensureLandmarker(){
   if(landmarker) return landmarker;
   if(landmarkerPromise) return landmarkerPromise;
   landmarkerPromise=(async()=>{
-    const fileset=await FilesetResolver.forVisionTasks(WASM_URL);
+    const root = await runtimeRoot();
+    const wasmDir = root + '/wasm';
+    const fileset=await FilesetResolver.forVisionTasks(wasmDir);
+    const taskPath = root + '/face_landmarker.task';
     // Fixed CPU delegate: deterministic output, matches training pipeline
     landmarker=await FaceLandmarker.createFromOptions(fileset,{
-      baseOptions:{modelAssetPath:"assets/face_landmarker.task",delegate:"CPU"},
+      baseOptions:{modelAssetPath:taskPath,delegate:"CPU"},
       runningMode:"IMAGE",numFaces:1,
       outputFacialTransformationMatrixes:true
     });
