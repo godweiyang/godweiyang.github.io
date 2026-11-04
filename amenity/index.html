@@ -203,11 +203,30 @@ table.cmp tfoot td{font-size:15px;font-weight:900;border-bottom:0}
  .g-name{width:58px}
  .go{margin-left:0;width:100%}
 }
+/* 贝壳公开资料 */
+.housing-tools{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:10px 0;padding:10px 12px;background:#f6fafb;border:1px solid #dbe6ec;border-radius:8px;font-size:13px}
+.housing-tools a{color:#14688f;font-weight:700;text-decoration:none;padding:8px 4px}
+.housing-install{font-size:14px;line-height:1.7;margin:8px 0 14px;color:#46545f}.housing-install summary{cursor:pointer;color:#14688f;font-weight:700}.housing-install a{color:#14688f}
+.beike-pane{margin:8px 14px 14px;padding:12px;border:1px solid #dbe6ec;border-radius:8px;background:#fbfdfe;font-size:13px;line-height:1.7}
+.beike-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.beike-status{color:#6b7a86;overflow-wrap:anywhere}
+.beike-candidate{width:100%;text-align:left;margin-top:8px;padding:10px 12px;background:#fff;border:1px solid #d5dee5;border-radius:8px;cursor:pointer;color:#1c2b36;font-size:13px;line-height:1.6}
+.beike-candidate:hover{border-color:#14688f;background:#f2f8fb}
+.beike-meta{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;margin:12px 0}
+.beike-meta b{color:#14688f}
+.beike-pane a{color:#14688f}
+.beike-pane details{margin-top:8px}
+.beike-list{overflow-x:auto}
+.beike-list table{width:100%;min-width:480px;border-collapse:collapse;text-align:left}
+.beike-list td,.beike-list th{padding:8px;border-bottom:1px solid #e3eaee;white-space:nowrap;font-size:12px}
+.beike-list th{background:#f6fafb}
+.beike-note{font-size:12px;color:#6b7a86;margin-top:8px}
+@media(max-width:860px){.beike-meta{grid-template-columns:1fr}.beike-pane{margin:8px 12px 12px}.housing-tools{font-size:14px}.comm-inp{font-size:16px!important}}
 </style>
 </head>
 <body>
 <div class="top">
-  <h1>小区综合打分 <span class="ver-badge">v7</span></h1>
+  <h1>小区综合打分 <span class="ver-badge">v10</span></h1>
   <div class="r">输入小区，自动统计周边配套并结合小区本体属性<br>交通 / 商业 / 医疗 / 教育 / 环境 / 品质 / 户型 / 性价比，支持多小区对比</div>
 </div>
 <div class="wrap">
@@ -215,6 +234,8 @@ table.cmp tfoot td{font-size:15px;font-weight:900;border-bottom:0}
   <div class="card">
     <div class="ct">选择小区<small>输入名称后点下拉项；可展开补录小区本体信息（选填）</small></div>
     <div class="cbody">
+      <div class="housing-tools"><span id="housingSvc">正在检测独立贝壳服务…</span><a href="http://127.0.0.1:17532/api/housing/connect" target="_blank" rel="noopener">连接贝壳</a><a href="amenity://start">启动贝壳服务</a><a id="housingDownload" href="/medias/files/amenity_service.exe">下载贝壳服务（Windows）</a><a id="housingMacIntel" href="/medias/files/amenity_service_mac_intel.zip" hidden>Mac Intel 版</a></div>
+      <details class="housing-install"><summary>安装说明与其他平台下载</summary><p><a href="/medias/files/amenity_service.exe">Windows</a> · <a href="/medias/files/amenity_service_android.apk">Android 7.0 及以上</a> · <a href="/medias/files/amenity_service_mac_arm64.zip">Mac Apple Silicon</a> · <a href="/medias/files/amenity_service_mac_intel.zip">Mac Intel</a></p><p>电脑首次双击独立服务；在「连接贝壳」页添加连接书签，在贝壳地图和对应城市的小区详情页分别连接并保持打开。Mac 包未做开发者签名与公证，系统可能要求本人在「隐私与安全性」中确认打开。安卓安装自用测试签名 APK 后点「启动」，在 App 内的地图和详情页完成登录，再回评分页操作，无需拖书签；登录和验证码均由本人完成。</p><p>服务只在本机 127.0.0.1:17532 运行，原 LOL 服务不受影响。安卓已通过构建、签名及包内源码检查，尚未验证真机内登录与采集；贝壳访问拒绝时不会绕过，也不会把缺失资料当零分。</p></details>
       <div id="commList"></div>
       <div class="ctl-row">
         <button class="linkbtn" id="btnAdd">+ 添加小区对比</button>
@@ -226,7 +247,7 @@ table.cmp tfoot td{font-size:15px;font-weight:900;border-bottom:0}
         </div>
         <button class="go" id="btnGo">开始综合打分</button>
       </div>
-      <div class="hint">数据来源：高德地图实测周边配套与距离；均价、建成年代、容积率、绿化率、物业费与户型评价由你填写（部分小区参考均价会自动填入），未填写的维度不计入总分，权重自动归一。教育维度仅统计学校距离，不代表学区划分与教学质量。</div>
+      <div class="hint">高德统计周边配套；贝壳地图提供挂牌，小区详情提供容积率、绿化率、建筑资料及代表户型分间。每个小区给八项专项分（100分制）与综合分，多个户型按房型×面积段加权聚合，不逐户型给分。来源、代表性和缺失均展示；人工修正优先。物业费是成本，不等同物业质量。</div>
     </div>
   </div>
 
@@ -262,18 +283,20 @@ table.cmp tfoot td{font-size:15px;font-weight:900;border-bottom:0}
     <div class="cbody rules">
       <b>八大维度与权重：</b>
       <div class="grid2" id="ruleGrid"></div>
-      <b>自动维度：</b>以小区为中心，半径 R 内搜索配套，最近配套位于 R×35% 内系数 1.0、R×70% 内 0.75、R 内 0.5，同类数量小幅补足；环境维度中，距高架/立交桥 200m 内重扣、500m 内半扣。<br>
-      <b>手动维度：</b>房龄（≤5/10/20/30 年分档）、容积率（1.5/2.5/3.5/5 分档）、绿化率（40/30/25% 分档）、户型评价；未填项不参与，权重按已填维度归一。<br>
-      <b>性价比：</b>配套得分与挂牌均价综合，价格越低、配套越好得分越高。<br>
+      <b>自动配套：</b>距离连续衰减 max(0.3, 1−0.85×(d/R)<sup>0.8</sup>)，同类数量边际递减补足。厌恶设施最近距离≤150/400/900/1600m，对应系数0.1/0.45/0.75/0.9，超过1600m为1。<br>
+      <b>小区本体：</b>房龄、容积率、绿化率；电梯仅对已采样7层及以上楼栋、至少3套已知电梯资料作可达性辅助。物业公司、梯户比、建筑类型展示事实，不凭名称评服务。物业费只作为性价比的居住成本，区间不取中点。<br>
+      <b>户型专项：</b>按房型×面积段挂牌构成加权：居住空间窗户35%、卧室朝南20%、厨卫窗户20%、过道占比15%、卫浴配比10%。未知项不冒充无窗；至少3套有效代表、加权覆盖≥60%才自动入分。人工评价可覆盖。只给小区户型专项分，不逐户型给分。<br>
+      <b>分值与缺失：</b>专项为100分制；综合按实际可用子指标权重归一，未查询不计零分，显示权重覆盖。规则为本工具启发式，不是官方评级；挂牌样本不等于全部住宅构成。<br>
+      <b>性价比：</b>只有配套信息与房价同时具备才计算，避免仅凭便宜判定性价比好；配套因子与价格因子各占一半，明确物业费可加居住成本辅助。价格因子为1−log10(clamp(单价,10000,100000)/10000)，是工具固定参考范围，不是市场估值结论。<br>
       <b>等级：</b>90+ 极佳，75–89 优秀，60–74 良好，45–59 一般，&lt;45 不便。教育维度只测学校距离，不代表学区划分与质量；本工具不预测房价走势。
-      <div class="ver-tag">算法版本 v7（看到此标记即为新版，每次打分实时检索）</div>
+      <div class="ver-tag">版本 v10 · 贝壳资料与高德配套分开标注来源；每次打分实时检索配套</div>
     </div>
   </div>
 </div>
 
 <script>window._AMapSecurityConfig={securityJsCode:'4c53a95cbc45792efebe0d3031509cc9'};</script>
 <script src="https://webapi.amap.com/maps?v=2.0&key=8b70196f1df4360442eb5d475c5d0c2e&plugin=AMap.AutoComplete,AMap.PlaceSearch,AMap.Geocoder"></script>
-<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<script src="https://fastly.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 <script>
 // ============ 高德自动采集的子指标 ============
 // t = p.type.split(';')；t[0]大类 t[1]中类 t[2]小类（小类可能带 '|多类' 后缀）
@@ -329,7 +352,7 @@ const DIMS=[
  {key:'medical', name:'医疗', weight:10, subs:[['hospital',7],['pharmacy',3]]},
  {key:'edu', name:'教育', weight:12, subs:[['kindergarten',3],['primary',5],['middle',4]]},
  {key:'env', name:'环境', weight:12, subs:[['park',7],['noise',5]]},
- {key:'quality', name:'小区品质', weight:17, subs:[['year',5],['far',4],['green',4],['property',4]]},
+ {key:'quality', name:'小区品质', weight:17, subs:[['year',5],['far',5],['green',5],['access',2]]},
  {key:'layout', name:'户型', weight:7, subs:[['layout',7]]},
  {key:'value', name:'性价比', weight:8, subs:[['value',8]]},
 ];
@@ -478,10 +501,11 @@ function renderBlocks(){
     <span class="badge" style="background:${['#1565C0','#EF6C00','#2E7D32'][i]}">${['A','B','C'][i]}</span>
     <input class="comm-inp" placeholder="输入小区名，或在地图上点选">
     <button type="button" class="comm-del" title="删除该小区" data-del="${i}">
-     <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M9 3h6l1 2h4v2H4V5h4l1-2zm-3 6h12l-1 12H7L6 9zm4 2v8h2v-8h-2zm4 0v8h2v-8h-2z"/></svg>
+     <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M9 3h6l1 2h4v2H4V5h4l1-2zm-3 6h12l-1 12H7L6 9zm4 2v10h2v-8h-2zm4 0v10h2v-8h-2z"/></svg>
     </button>
    </div>
    <div class="comm-status"></div>
+   <div class="beike-pane"><div class="beike-actions"><button type="button" class="linkbtn" data-beike="${i}">查询贝壳资料</button><span class="beike-status">未查询</span></div><div class="beike-content"></div></div>
    <div class="manual">
     <div class="manual-t">小区本体信息（选填，填得越全，打分越准）</div>
     <div class="mgrid">
@@ -505,6 +529,7 @@ function renderBlocks(){
   el.querySelectorAll('.manual input,.manual select').forEach(x=>{
    if(c.manual[x.dataset.k]!=null)x.value=c.manual[x.dataset.k];
   });
+  renderBeike(i);
  });
 }
 function setStatus(i,html,cls){
@@ -514,6 +539,7 @@ function setStatus(i,html,cls){
 function bindBlocks(){
  document.querySelectorAll('.comm').forEach(el=>{
   const i=+el.dataset.i,inp=el.querySelector('.comm-inp');
+  el.querySelector('[data-beike]').addEventListener('click',()=>queryBeike(i));
   new AMap.AutoComplete({input:inp,city:'全国'},(status,r)=>{
    if(status==='complete'&&r.tips&&r.tips.length){
     // tips[0] 可能是无坐标的文本项：只在有坐标的提示里挑，优先与输入同名
@@ -523,7 +549,7 @@ function bindBlocks(){
     if(t)fillComm(i,{name:t.name,city:t.district?(t.city||t.province):'',lnglat:t.location});
    }
   });
-  inp.addEventListener('change',()=>{comms[i].name=inp.value;saveCache();});
+  inp.addEventListener('change',()=>{const value=inp.value.trim();if(value!==comms[i].name){clearCommunityData(comms[i]);comms[i].lnglat=null;comms[i].name=value;el.querySelectorAll('.manual input,.manual select').forEach(x=>{x.value='';});document.getElementById('results').innerHTML='';document.getElementById('compare').innerHTML='';renderBeike(i);}saveCache();});
   // 兜底：失焦时若名称没定位、或输入文字与已定位名称不符，自动按文字解析
   inp.addEventListener('blur',()=>{
    setTimeout(()=>{
@@ -534,14 +560,14 @@ function bindBlocks(){
    },300);
   });
   el.querySelectorAll('.manual input,.manual select').forEach(x=>{
-   x.addEventListener('input',()=>{comms[i].manual[x.dataset.k]=x.value;saveCache();});
+   x.addEventListener('input',()=>{const c=comms[i];c.manual[x.dataset.k]=x.value;delete (c.autoFields||{})[x.dataset.k];saveCache();refreshScored();});
   });
   el.querySelector('.comm-del').addEventListener('click',()=>removeComm(i));
  });
 }
 function removeComm(i){
  if(commCount<=1){ // 只剩一个时清空，不保留空卡片堆叠
-  Object.assign(comms[0],{name:'',city:'',lnglat:null,am:null,manual:{}});
+  Object.assign(comms[0],{name:'',city:'',lnglat:null,am:null,manual:{},beike:null,beikeMatch:null,autoFields:{}});
   commCount=1;
  }else{
   comms.splice(i,1);commCount--;
@@ -557,30 +583,18 @@ function removeComm(i){
   homeOverlays=[];circleOverlays=[];
  }
 }
-// 尝试用高德详情中的 cost 参考均价自动填充
-function tryCost(c,i){
- const ps=new AMap.PlaceSearch({extensions:'all',pageSize:5,city:c.city||'全国'});
- ps.search(c.name,(status,r)=>{
-  if(status!=='complete'||!r.poiList)return;
-  const hit=r.poiList.pois.find(p=>p.location&&meters(c.lnglat,p.location)<500)||r.poiList.pois[0];
-  const cost=(hit&&(hit.cost||''));const m=(''+cost).replace(/[,，]/g,'').match(/(\d{4,6})/);
-  if(m&&!comms[i].manual.price){
-   comms[i].manual.price=m[1];
-   const inp=document.querySelector(`.comm[data-i="${i}"] [data-k="price"]`);
-   if(inp)inp.value=m[1];
-   setStatus(i,'已定位：'+c.name+'，参考均价已自动填入，可修改','ok');saveCache();
-  }
- });
-}
+// 旧高德 cost 未提供房价语义和来源，不再自动当作小区均价。
+function tryCost(){}
+function clearCommunityData(c){c.dataGeneration=(c.dataGeneration||0)+1;c.am=null;c.manual={};c.beike=null;c.beikeMatch=null;c.autoFields={};c.beikeCandidates=[];c.beikeMessage='未查询';}
 function fillComm(i,d){
- // 重新选了不同的定位：旧的周边分析结果作废，避免点查询时复用错数据
- const old=comms[i].lnglat;
- if(old&&d.lnglat&&(old.getLng()!==d.lnglat.getLng()||old.getLat()!==d.lnglat.getLat()))comms[i].am=null;
- Object.assign(comms[i],d);
- const el=document.querySelector(`.comm[data-i="${i}"]`);
+ const c=comms[i],old=c.lnglat;
+ if(old&&d.lnglat&&meters(old,d.lnglat)>30){clearCommunityData(c);document.getElementById('results').innerHTML='';document.getElementById('compare').innerHTML='';}
+ Object.assign(c,d);
+ const el=document.querySelector(`.comm[data-i="${i}"]`);if(!el)return;
  el.querySelector('.comm-inp').value=d.name;
- setStatus(i,'已定位：'+d.name+'，开始分析后统计周边配套…');
- tryCost(comms[i],i);saveCache();
+ el.querySelectorAll('.manual input,.manual select').forEach(x=>{x.value=c.manual[x.dataset.k]??'';});
+ setStatus(i,'已定位：'+esc(d.name)+'，开始分析后统计周边配套…');
+ renderBeike(i);saveCache();
 }
 // 兜底解析：按名称用 PlaceSearch 找住宅小区 POI
 function resolveByName(kw,i){
@@ -593,10 +607,94 @@ function resolveByName(kw,i){
   if(hit)fillComm(i,{name:hit.name,city:hit.district?(hit.city||hit.province):'',lnglat:hit.location});
  });
 }
+// ---- 贝壳本地服务：凭据只留在用户连接的贝壳页面 ----
+const HOUSING_API='http://127.0.0.1:17532';
+const housingUA=navigator.userAgent+' '+(navigator.platform||'');
+const housingAndroid=/android/i.test(housingUA),housingMac=/macintosh|mac os x/i.test(housingUA);
+const housingDownload=document.getElementById('housingDownload');
+housingDownload.href=housingAndroid?'/medias/files/amenity_service_android.apk':housingMac?'/medias/files/amenity_service_mac_arm64.zip':'/medias/files/amenity_service.exe';
+housingDownload.textContent=housingAndroid?'下载贝壳服务（安卓）':housingMac?'下载贝壳服务（Mac Apple Silicon）':'下载贝壳服务（Windows）';
+if(housingMac)document.getElementById('housingMacIntel').hidden=false;
+let housingState={connected:false,cityId:''};
+function esc(s){return String(s??'').replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));}
+function beikeUrl(s){try{const u=new URL(s);return u.protocol==='https:'&&(u.hostname==='ke.com'||u.hostname.endsWith('.ke.com'))?u.href:'';}catch(e){return '';}}
+async function housingApi(path,body,ms=25000){
+ const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),ms);
+ try{const r=await fetch(HOUSING_API+'/api/housing/'+path,{signal:ctrl.signal,method:body?'POST':'GET',headers:body?{'content-type':'application/json'}:{},body:body?JSON.stringify(body):undefined});
+  const j=await r.json();if(!r.ok||!j.ok)throw new Error(j.error||'本地服务返回异常');return j.data;
+ }catch(e){if(e.name==='AbortError')throw new Error('查询超时，请保持贝壳标签页打开后重试');if(e instanceof TypeError)throw new Error('本地服务未连接或浏览器未允许本地网络访问');throw e;}
+ finally{clearTimeout(timer);}
+}
+async function probeHousing(){
+ const el=document.getElementById('housingSvc');
+ try{housingState=await housingApi('status',null,1800);el.textContent=housingState.connected?(housingState.profileConnected?'本地服务 · 贝壳地图和详情均已连接':'贝壳地图已连接 · 请在小区详情页也点击连接书签'):'本地服务已运行 · 请连接已登录的贝壳页面';}
+ catch(e){housingState={connected:false,cityId:''};el.textContent='独立贝壳服务未运行（与 LOL 服务互不影响）';}
+}
+function renderBeike(i){
+ const c=comms[i],el=document.querySelector(`.comm[data-i="${i}"]`);if(!c||!el)return;
+ const status=el.querySelector('.beike-status'),box=el.querySelector('.beike-content');
+ status.textContent=c.beikeMessage||'未查询';box.innerHTML='';
+ el.querySelector('[data-beike]').disabled=!!c.beikeBusy;
+ if(c.beikeCandidates&&c.beikeCandidates.length){
+  c.beikeCandidates.forEach(hit=>{const b=document.createElement('button');b.type='button';b.className='beike-candidate';
+   const d=c.lnglat?meters(c.lnglat,{lng:hit.lng,lat:hit.lat}):null;
+   b.textContent=hit.name+(hit.alias?' '+hit.alias:'')+' · '+hit.address+(d!=null?' · 距当前定位 '+d+'m':'')+' · 在售 '+(hit.count??'—')+' 套';
+   b.addEventListener('click',()=>selectBeike(i,hit));box.appendChild(b);});return;
+ }
+ const b=c.beike;if(!b)return;const card=b.card,s=b.summary,source=beikeUrl(b.source);
+ const layouts=s.layouts.map(x=>esc(x.name)+' '+x.count+'套').join(' / ')||'暂无户型样本';
+ const components=['daylight','bedroomSouth','wetWindows','circulation','bathroom'];
+ const componentNames={daylight:'居住空间窗户',bedroomSouth:'卧室朝南',wetWindows:'厨卫窗户',circulation:'过道占比',bathroom:'卫浴配比'};
+ const a=b.layoutAnalysis;
+ const part=a?components.map(k=>{const m=a.components[k];return m?componentNames[k]+' · '+m.samples+'套 / 代表权重覆盖 '+Math.round(m.coverage*100)+'%':componentNames[k]+' · 缺失';}).join('；'):'';
+ const evidence=(b.floorplanDetails||[]).map(x=>{const at=x.attributes||{};return `<div class="beike-note">${esc(at['房屋户型']||x.group)} · ${esc(at['户型结构']||'结构未知')} · ${esc(at['梯户比例']||'梯户比未知')} · 电梯${esc(at['配备电梯']||'未知')} · 分间${x.rooms.length}项 · 居住空间未知窗户${x.unknownWindows.length}项 · ${beikeUrl(x.url)?`<a href="${esc(beikeUrl(x.url))}" target="_blank" rel="noopener noreferrer">核对原始户型</a>`:''}</div>`;}).join('');
+ const analysis=a?`<div class="beike-analysis"><b>小区户型专项分析</b><p>${a.eligible?'综合不同房型×面积段的分间数据，已生成小区户型专项分':'当前分间证据不足，户型自动评分暂缺'} · 有效代表 ${a.scoredSamples} 套 / 加权覆盖 ${Math.round(a.coverage*100)}%</p><p>${esc(part)}</p><p>${esc(a.policy||'')}。未知窗户不算无窗；不根据房型数量、面积大小或经纪人“户型好”文案加分。</p><details><summary>查看代表户型证据（不逐户型打分）</summary>${evidence}<p>过道占比≤5%计满、≥20%计零，中间线性插值；卫浴配比为卫数/max(1,⌈室数/2⌉)，上限1。仅解释已获取结构事实，不评价未测方正、承重、噪声或实际日照。</p></details></div>`:'<div class="beike-note">这是旧资料快照，请重新查询以获取基础信息与户型分析。</div>';
+ const groupTable=s.groups?`<details><summary>房型×面积段统计（无逐户型评分）</summary><div class="beike-list"><table><thead><tr><th>房型 / 面积段</th><th>样本</th><th>挂牌占比</th><th>面积中位数</th><th>总价中位数</th><th>单价中位数</th></tr></thead><tbody>${s.groups.map(g=>`<tr><td>${esc(g.name)}</td><td>${g.count}</td><td>${Math.round(g.share*100)}%</td><td>${g.areaMedian??'—'}㎡</td><td>${g.totalMedian??'—'}万</td><td>${g.unitMedian??'—'}元/㎡</td></tr>`).join('')}</tbody></table></div></details>`:'';
+ box.innerHTML=`<div class="beike-meta"><div>贝壳小区 <b>${esc(b.name)}</b></div><div>参考均价 <b>${card.price?Number(card.price).toLocaleString()+' 元/㎡':'暂无'}</b></div><div>建筑年份 <b>${esc(card.yearRange||'暂无')}</b></div><div>建筑类型 <b>${esc(card.buildingType||'暂无')}</b></div><div>楼栋 / 户数 <b>${card.buildings??'—'} 栋 / ${card.households??'—'} 户</b></div><div>挂牌面积 <b>${s.areaMin!=null?s.areaMin+'–'+s.areaMax+' ㎡':'暂无'}</b></div><div>容积率 <b>${card.far??'暂无'}</b></div><div>绿化率 <b>${card.green!=null?card.green+'%':'暂无'}</b></div><div>物业费 <b>${esc(card.feeText||'暂无')}</b></div><div>物业公司 <b>${esc(card.propertyCompany||'暂无')}</b></div></div>
+ ${analysis}${groupTable}
+ <div><b>户型样本</b> ${layouts}</div><div>朝南 ${s.southCount} 套 / 南北朝向 ${s.northSouthCount} 套（按挂牌朝向，不代表实测通透）</div>
+ <details><summary>查看 ${s.sampleCount} 套挂牌房源</summary><div class="beike-list"><table><thead><tr><th>户型</th><th>面积</th><th>朝向</th><th>挂牌总价</th><th>挂牌单价</th><th>来源</th></tr></thead><tbody>${b.listings.map(r=>`<tr><td>${esc(r.layout||'—')}</td><td>${r.area??'—'}㎡</td><td>${esc(r.orientation||'—')}</td><td>${r.totalPrice??'—'}万</td><td>${r.unitPrice??'—'}元/㎡</td><td>${beikeUrl(r.url)?`<a href="${esc(beikeUrl(r.url))}" target="_blank" rel="noopener noreferrer">贝壳详情</a>`:'—'}</td></tr>`).join('')}</tbody></table></div></details>
+ <div class="beike-note">${esc(b.fetchedAt)} · 已读取 ${b.pages} 页 / 去重 ${s.sampleCount} 套 / 平台在售 ${b.total??'—'} 套${b.truncated?' · 尚有分页，当前为样本':''}。${source?`<a href="${esc(source)}" target="_blank" rel="noopener noreferrer">小区来源</a>`:''}<br>基础详情：${b.profileStatus==='ok'?'已获取':b.profileStatus==='failed'?'获取失败':'需在小区详情页点击连接书签后刷新'}。${esc((b.warnings||[]).join('；'))} 挂牌样本不代表全部户型或成交价；物业费区间仅展示，不擅取单值。</div>`;
+}
+async function queryBeike(i){
+ const c=comms[i],el=document.querySelector(`.comm[data-i="${i}"]`);if(!c||!el||c.beikeBusy)return;
+ const name=el.querySelector('.comm-inp').value.trim(),generation=c.dataGeneration||0;if(!name){c.beikeMessage='请先填写小区名称';renderBeike(i);return;}
+ c.beikeBusy=true;c.beikeMessage='正在查询贝壳候选…';c.beikeCandidates=[];renderBeike(i);
+ try{await probeHousing();if(!housingState.connected)throw new Error('请先点击「连接贝壳」，在已登录的贝壳地图标签页连接独立服务；安卓可在贝壳服务 App 内打开地图和详情');
+  if(c.beikeMatch){const hit=c.beikeMatch;if(hit.cityId!==housingState.cityId)throw new Error('贝壳城市已变，请重新选择对应小区');await fetchBeikeData(c,hit);}
+  else{const result=await housingApi('search',{name,cityId:housingState.cityId});if(!comms.includes(c)||(c.dataGeneration||0)!==generation)return;
+   c.beikeCandidates=result.items;c.beikeMessage=result.items.length?'请核对名称、分期与地址后选择；不会自动取第一项':'贝壳未匹配到在售小区，请检查城市、别名；不代表没有房源';}
+ }catch(e){c.beikeMessage=e.message;}
+ finally{c.beikeBusy=false;const current=comms.indexOf(c);if(current>=0)renderBeike(current);}
+}
+async function selectBeike(i,hit){
+ const c=comms[i];if(!c||c.beikeBusy)return;const generation=c.dataGeneration||0;c.beikeBusy=true;c.beikeMessage='正在获取基础资料与代表户型…';renderBeike(i);
+ try{const d=await housingApi('detail',hit,425000);if(!comms.includes(c)||(c.dataGeneration||0)!==generation)return;
+  if(c.beikeMatch&&c.beikeMatch.id!==hit.id)clearCommunityData(c);
+  c.beikeMatch=hit;
+  // 已有高德坐标保留；从贝壳起步时用转换坐标并显式标注来源。
+  if(!c.lnglat){c.lnglat=new AMap.LngLat(hit.lng,hit.lat);c.city=hit.address;c.name=hit.name;setStatus(i,'已选贝壳小区：'+esc(hit.name)+' · '+esc(hit.coordinateSource||'BD-09 转 GCJ-02')+'，请核对地图位置');}
+  applyBeike(c,d);
+ }catch(e){c.beikeMessage=e.message;}
+ finally{c.beikeBusy=false;const current=comms.indexOf(c);if(current>=0){renderBeike(current);const el=document.querySelector(`.comm[data-i="${current}"]`);el.querySelector('.comm-inp').value=c.name;saveCache();refreshScored();}}
+}
+async function fetchBeikeData(c,hit){const generation=c.dataGeneration||0,d=await housingApi('detail',hit,425000);if(comms.includes(c)&&(c.dataGeneration||0)===generation)applyBeike(c,d);}
+function applyBeike(c,d){
+ c.beike=d;c.beikeCandidates=[];c.autoFields=c.autoFields||{};
+ ['price','year','far','green','fee'].forEach(key=>{const v=d.card[key],auto=c.autoFields[key],wasAuto=auto!=null&&String(auto)===String(c.manual[key]);if(v==null&&wasAuto){delete c.manual[key];delete c.autoFields[key];}else if(v!=null&&(c.manual[key]==null||c.manual[key]===''||wasAuto)){c.manual[key]=String(v);c.autoFields[key]=String(v);}});
+ c.beikeMessage='贝壳资料已更新 · 仅补空值，人工修改优先';
+ const i=comms.indexOf(c),el=document.querySelector(`.comm[data-i="${i}"]`);
+ if(el)el.querySelectorAll('.manual input,.manual select').forEach(x=>{x.value=c.manual[x.dataset.k]??'';});
+ saveCache();
+}
+function refreshScored(){const valid=comms.slice(0,commCount).filter(c=>c.lnglat&&(c.am||c.beike));if(valid.length)renderResults(valid,false);}
+setInterval(probeHousing,5000);probeHousing();
+
 // ---- 本地缓存（只缓存表单与定位，分析结果不缓存，每次重新检索）----
 function saveCache(){
  try{localStorage.setItem('amenity-form-v4',JSON.stringify(comms.slice(0,commCount).map(c=>({
-  name:c.name,city:c.city,lng:c.lnglat?c.lnglat.getLng():null,la:c.lnglat?c.lnglat.getLat():null,manual:c.manual
+  name:c.name,city:c.city,lng:c.lnglat?c.lnglat.getLng():null,la:c.lnglat?c.lnglat.getLat():null,manual:c.manual,
+  beike:c.beike||null,beikeMatch:c.beikeMatch||null,autoFields:c.autoFields||{}
  }))));}catch(e){}
 }
 function loadCache(){
@@ -610,7 +708,8 @@ function loadCache(){
   if(!a||!a.length)return;
   commCount=a.length;
   a.forEach((x,i)=>{
-   comms[i]={name:x.name,city:x.city,lnglat:x.lng?new AMap.LngLat(x.lng,x.la):null,am:null,manual:x.manual||{}};
+   comms[i]={name:x.name,city:x.city,lnglat:x.lng?new AMap.LngLat(x.lng,x.la):null,am:null,manual:x.manual||{},
+    beike:x.beike||null,beikeMatch:x.beikeMatch||null,autoFields:x.autoFields||{},beikeMessage:x.beike?'已恢复贝壳资料快照，查询可刷新':'未查询'};
   });
  }catch(e){}
 }
@@ -619,37 +718,44 @@ function scoreComm(c){
  const f={};
  if(c.am)AM_CATS.forEach(k=>{if(!c.am[k.key].fail)f[k.key]=c.am[k.key].f;});
  const m=c.manual;
- if(m.year){const age=new Date().getFullYear()-m.year;
-  f.year=age<=5?1:age<=10?.9:age<=20?.7:age<=30?.5:.35;}
- if(m.far)f.far=m.far<=1.5?1:m.far<=2.5?.9:m.far<=3.5?.7:m.far<=5?.5:.35;
- if(m.green)f.green=m.green>=40?1:m.green>=30?.85:m.green>=25?.7:.5;
- // 物业费：高物业费通常对应高端物业与维护水平，纳入品质
- if(m.property){const pf=+m.property;
-  f.property=pf>=6?1:pf>=4?.9:pf>=2.5?.75:pf>=1.2?.6:.45;}
- if(m.layout)f.layout=+m.layout;
+ const validNumber=(key,min,max)=>{const raw=m[key];if(raw==null||String(raw).trim()==='')return null;const n=Number(raw);return Number.isFinite(n)&&n>=min&&n<=max?n:null;};
+ const year=validNumber('year',1800,new Date().getFullYear()),far=validNumber('far',.01,30),green=validNumber('green',0,100);
+ if(year!=null){const age=new Date().getFullYear()-year;f.year=age<=5?1:age<=10?.9:age<=20?.7:age<=30?.5:.35;}
+ if(far!=null)f.far=far<=1.5?1:far<=2.5?.9:far<=3.5?.7:far<=5?.5:.35;
+ if(green!=null)f.green=green>=40?1:green>=30?.85:green>=25?.7:.5;
+ // 物业费不是服务质量证据；小区品质使用房龄、容积率、绿化率，电梯只作可达性辅助。
+ const detailed=c.beike?.floorplanDetails||[];
+ const elevatorKnown=detailed.filter(x=>Number((x.attributes?.['所在楼层']||'').match(/共(\d+)层/)?.[1])>=7).map(x=>x.attributes?.['配备电梯']).filter(x=>x==='有'||x==='无');
+ if(elevatorKnown.length>=3)f.access=elevatorKnown.filter(x=>x==='有').length/elevatorKnown.length;
+ if(validNumber('layout',0,1)!=null)f.layout=+m.layout;
+ else if(c.beike?.layoutAnalysis?.eligible)f.layout=c.beike.layoutAnalysis.factor;
  // 性价比
  const autoKeys=AM_CATS.map(x=>x.key).filter(k=>f[k]!=null);
  const autoW={'subway':14,'bus':6,'mall':6,'market':4,'vege':4,'hospital':7,'pharmacy':3,
   'kindergarten':3,'primary':5,'middle':4,'park':7,'noise':5};
  const wsum0=autoKeys.reduce((s,k)=>s+autoW[k],0);
  const amenityPct=wsum0?autoKeys.reduce((s,k)=>s+f[k]*autoW[k],0)/wsum0:null;
- if(m.price){
+ if(validNumber('price',1,1000000)!=null&&amenityPct!=null){
   const p=Math.max(10000,Math.min(100000,+m.price));
   const priceF=1-(Math.log(p)-Math.log(10000))/(Math.log(100000)-Math.log(10000));
-  f.value=amenityPct==null?priceF:.5*amenityPct+.5*priceF;
+  const valueInputs=[[priceF,.5],[amenityPct,.5]];
+  // 物业费用是成本，不等同品质。只接受明确单值；区间不擅自取中点。
+  if(validNumber('fee',0,100)!=null)valueInputs.push([1/(1+Number(m.fee)/4),.1]);
+  const usable=valueInputs.filter(x=>x[0]!=null);f.value=usable.reduce((s,x)=>s+x[0]*x[1],0)/usable.reduce((s,x)=>s+x[1],0);
  }
  // 没填均价时性价比维度留空，不参与打分
  // 汇总
+ const sourceCoverage=k=>k==='layout'&&!m.layout?(c.beike?.layoutAnalysis?.coverage||0):1;
  const groups=[];let earned=0,covered=0;
  for(const d of DIMS){
   const avail=d.subs.filter(s=>f[s[0]]!=null);
-  if(!avail.length){groups.push({...d,score:null,factor:null});continue;}
-  const wsum=avail.reduce((s,x)=>s+x[1],0);
-  const fac=avail.reduce((s,x)=>s+f[x[0]]*x[1],0)/wsum;
-  groups.push({...d,score:Math.round(d.weight*fac),factor:fac});
-  earned+=d.weight*fac;covered+=d.weight;
+  if(!avail.length){groups.push({...d,score:null,factor:null,coverage:0});continue;}
+  const wsum=avail.reduce((s,x)=>s+x[1]*sourceCoverage(x[0]),0);
+  const fac=avail.reduce((s,x)=>s+f[x[0]]*x[1]*sourceCoverage(x[0]),0)/wsum;
+  groups.push({...d,score:Math.round(fac*100),factor:fac,coverage:wsum/d.weight});
+  earned+=avail.reduce((s,x)=>s+f[x[0]]*x[1]*sourceCoverage(x[0]),0);covered+=wsum;
  }
- return {total:Math.round(earned/covered*100),groups,f};
+ return {total:covered?Math.round(earned/covered*100):0,coverage:covered,groups,f};
 }
 // ---- 执行 ----
 let analyzeCancelled=false;
@@ -658,7 +764,7 @@ function openProgModal(todo){
  list.innerHTML=todo.map(t=>`
   <div class="prog-row" data-i="${t.i}">
    <div class="pr-top"><span class="pr-dot" style="background:${t.col}"></span>
-    <span class="pr-name">${t.c.name}</span>
+    <span class="pr-name">${esc(t.c.name)}</span>
     <span class="pr-num">0/${AM_CATS.length}</span></div>
    <div class="ptrack"><i style="background:${t.col}"></i></div>
   </div>`).join('');
@@ -769,21 +875,21 @@ function ringSVG(p){
  <text x="65" y="63" text-anchor="middle" font-size="30" font-weight="700" fill="#16202B">${p}</text>
  <text x="65" y="83" text-anchor="middle" font-size="13" fill="${col}">${g}</text></svg></div>`;
 }
-function renderResults(valid){
+function renderResults(valid,scroll=true){
  const box=document.getElementById('results');box.innerHTML='';
  if(valid.length===1){
   const c=valid[0],r=scoreComm(c),col='#1565C0';
   const covered=r.groups.filter(d=>d.score!=null).length;
   const card=document.createElement('div');card.className='card result';
   card.innerHTML=`
-   <div class="rhead"><span class="dot" style="background:${col}"></span><b>${c.name}</b>
+   <div class="rhead"><span class="dot" style="background:${col}"></span><b>${esc(c.name)}</b>
     <span style="color:#8A94A3;font-size:12px">${c.manual.price?Number(c.manual.price).toLocaleString()+' 元/㎡':''}</span></div>
-   <div style="color:#8A94A3;font-size:12px;margin:2px 0 8px">已覆盖 ${covered}/8 个维度${covered<8?'，补全小区本体信息后更准':''}</div>
+    <div style="color:#8A94A3;font-size:12px;margin:8px 16px">已覆盖 ${covered}/8 个维度 · 可用指标权重 ${r.coverage.toFixed(1)}%${r.coverage<60?' · 当前综合分仅为已采集部分，不能作完整小区排名':''}</div>
    <div class="rtop">${ringSVG(r.total)}
     <div class="dims">${r.groups.map(d=>`
       <div class="dimrow"><span>${d.name}</span>
        <div class="track"><i style="width:${d.factor==null?0:d.factor*100}%;background:${col}"></i></div>
-       <b>${d.score==null?'—':d.score}</b></div>`).join('')}</div></div>`;
+       <b>${d.score==null?'—':d.score}</b></div><div class="beike-note" style="margin:0 0 4px 75px">${d.score==null?'数据暂缺':('指标覆盖 '+Math.round((d.coverage||0)*100)+'%')}</div>`).join('')}</div></div>`;
   box.appendChild(card);
  }else{
   // 多小区：一张汇总卡（总分横向对比）+ 一张雷达图，差距一目了然
@@ -792,9 +898,9 @@ function renderResults(valid){
   sum.innerHTML=`<h3>综合得分对比</h3><div class="sumgrid">${scored.map(x=>{
    const [g]=grade(x.r.total);
    return `<div class="sumcell"><span class="dot" style="background:${x.col}"></span>
-    <div class="sum-name">${x.c.name}</div>
+    <div class="sum-name">${esc(x.c.name)}</div>
     <div class="sum-total" style="color:${x.col}">${x.r.total}</div>
-    <div class="sum-grade">${g}</div></div>`;}).join('')}</div>`;
+    <div class="sum-grade">${g} · 指标覆盖 ${x.r.coverage.toFixed(1)}%</div></div>`;}).join('')}</div>`;
   box.appendChild(sum);
   const radar=document.createElement('div');radar.className='card';
   radar.innerHTML=`<h3>八维度雷达对比</h3>
@@ -804,7 +910,7 @@ function renderResults(valid){
   setTimeout(()=>drawRadar(scored),60);
  }
  if(valid.length>1)renderCompare(valid);
- document.getElementById('results').scrollIntoView({behavior:'smooth'});
+ if(scroll)window.scrollTo({top:window.scrollY+box.getBoundingClientRect().top-12,behavior:'smooth'});
 }
 let radarInst=null;
 function drawRadar(scored){
@@ -826,18 +932,24 @@ function renderCompare(valid){
  const t=document.getElementById('compare');
  const scored=valid.map(c=>({c,r:scoreComm(c)}));
  let html=`<div class="card"><h3>多小区对比</h3><div class="ctable"><table>
-  <thead><tr><th>维度</th>${scored.map((x,i)=>`<th style="color:${['#1565C0','#EF6C00','#2E7D32'][i]}">${x.c.name.length>8?x.c.name.slice(0,8)+'…':x.c.name}</th>`).join('')}</tr></thead><tbody>
+  <thead><tr><th>维度</th>${scored.map((x,i)=>`<th style="color:${['#1565C0','#EF6C00','#2E7D32'][i]}">${esc(x.c.name.length>8?x.c.name.slice(0,8)+'…':x.c.name)}</th>`).join('')}</tr></thead><tbody>
   <tr><td><b>综合得分</b></td>${scored.map(x=>`<td><b style="font-size:17px">${x.r.total}</b></td>`).join('')}</tr>`;
  DIMS.forEach(d=>{
   html+=`<tr><td>${d.name}</td>${scored.map(x=>{
    const g=x.r.groups.find(z=>z.key===d.key);
-   return `<td>${g.score==null?'—':g.score}<span style="color:#B6BFCB;font-size:11px">/${d.weight}</span></td>`;}).join('')}</tr>`;
+   return `<td>${g.score==null?'—':g.score}<span style="color:#B6BFCB;font-size:11px">/100</span></td>`;}).join('')}</tr>`;
  });
  html+=`<tr><td>均价(元/㎡)</td>${scored.map(x=>`<td>${x.c.manual.price?Number(x.c.manual.price).toLocaleString():'—'}</td>`).join('')}</tr>`;
  html+=`<tr><td>建成年份</td>${scored.map(x=>`<td>${x.c.manual.year||'—'}</td>`).join('')}</tr>`;
  html+=`<tr><td>绿化率</td>${scored.map(x=>`<td>${x.c.manual.green?x.c.manual.green+'%':'—'}</td>`).join('')}</tr>`;
  html+=`<tr><td>容积率</td>${scored.map(x=>`<td>${x.c.manual.far||'—'}</td>`).join('')}</tr>`;
- html+=`<tr><td>物业费</td>${scored.map(x=>`<td>${x.c.manual.fee?x.c.manual.fee+'元':'—'}</td>`).join('')}</tr>`;
+ html+=`<tr><td>物业费</td>${scored.map(x=>`<td>${x.c.manual.fee?x.c.manual.fee+'元/㎡·月':esc(x.c.beike?.card.feeText||'—')}</td>`).join('')}</tr>`;
+ html+=`<tr><td>挂牌户型样本</td>${scored.map(x=>`<td>${x.c.beike?x.c.beike.summary.layouts.map(z=>esc(z.name)+' '+z.count+'套').join(' / ')||'暂无':'未查询'}</td>`).join('')}</tr>`;
+ html+=`<tr><td>挂牌面积（㎡）</td>${scored.map(x=>{const s=x.c.beike?.summary;return `<td>${s?.areaMin!=null?s.areaMin+'–'+s.areaMax:'—'}</td>`;}).join('')}</tr>`;
+ html+=`<tr><td>建筑类型 / 年份区间</td>${scored.map(x=>`<td>${x.c.beike?esc(x.c.beike.card.buildingType)+' / '+esc(x.c.beike.card.yearRange):'—'}</td>`).join('')}</tr>`;
+ html+=`<tr><td>贝壳采样 / 平台在售</td>${scored.map(x=>`<td>${x.c.beike?x.c.beike.summary.sampleCount+' / '+(x.c.beike.total??'—')+(x.c.beike.truncated?'（截断样本）':''):'未查询'}</td>`).join('')}</tr>`;
+ html+=`<tr><td>有效指标权重覆盖</td>${scored.map(x=>`<td>${x.r.coverage.toFixed(1)}%</td>`).join('')}</tr>`;
+ html+=`<tr><td>户型证据覆盖 / 有效代表</td>${scored.map(x=>`<td>${x.c.beike?.layoutAnalysis?Math.round(x.c.beike.layoutAnalysis.coverage*100)+'% / '+x.c.beike.layoutAnalysis.scoredSamples+'套':'未查询'}</td>`).join('')}</tr>`;
  html+='</tbody></table></div></div>';
  t.innerHTML=html;
 }
