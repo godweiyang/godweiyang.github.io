@@ -26,9 +26,9 @@ body{
   font-size:17px;-webkit-font-smoothing:antialiased;
 }
 button{font:inherit;cursor:pointer}
-.stage-wrap{display:flex;justify-content:center;overflow:hidden}
+.stage-wrap{display:flex;justify-content:center;align-items:flex-start;overflow:hidden}
 .stage{
-  width:520px;background:var(--bg);position:relative;
+  flex:0 0 auto;width:520px;background:var(--bg);position:relative;
   transform-origin:top center;
   box-shadow:0 0 0 1px rgba(0,0,0,.03);
 }
@@ -696,7 +696,8 @@ main{position:relative;height:720px;padding:0}
   function fit(){
     var stage = document.getElementById('stage');
     var wrap = stage.parentElement;
-    var s = Math.min(1, window.innerWidth / 520);
+    var avail = wrap.clientWidth || window.innerWidth || 390;
+    var s = Math.min(1, avail / 520);
     stage.style.transform = 'scale(' + s + ')';
     wrap.style.height = (stage.offsetHeight * s) + 'px';
   }
