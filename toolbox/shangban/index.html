@@ -101,25 +101,53 @@ main{position:relative;height:720px;padding:0}
   .dl-item:last-child{grid-column:auto}
 }
 
-.sheet-mask{position:fixed;inset:0;background:rgba(20,25,32,.45);display:none;align-items:center;justify-content:center;padding:20px;z-index:20}
+.sheet-mask{position:fixed;inset:0;background:rgba(20,25,32,.45);display:none;align-items:center;justify-content:center;padding:16px;z-index:20}
 .sheet-mask[data-open="true"]{display:flex}
-.sheet{width:100%;max-width:396px;background:var(--bg);border-radius:12px;padding:24px;box-shadow:0 18px 50px rgba(0,0,0,.22)}
-.sheet h2{font-size:20px;margin:0 0 6px}
-.sheet p.hint{font-size:13px;color:var(--sub);margin:0 0 14px;line-height:1.6}
-.field{margin-top:10px}
-.field label{display:block;font-size:14px;color:var(--sub);margin-bottom:6px}
-.field input{
-  width:100%;font:inherit;font-size:17px;padding:9px 11px;border:1px solid #DCE5EC;border-radius:6px;background:#fff;color:var(--ink);
+.sheet{
+  width:100%;max-width:430px;max-height:94vh;overflow-y:auto;
+  background:var(--bg);border-radius:2px;padding:24px 26px 18px;
+  box-shadow:0 18px 50px rgba(0,0,0,.22);
 }
-.field input:focus{outline:2px solid #6684B0;outline-offset:1px}
-.sheet-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
-.sheet-actions button{font-size:15px;padding:9px 20px;border-radius:8px;border:1px solid #DCE5EC;background:#fff;color:var(--ink)}
-.sheet-actions .primary{background:#244D91;border-color:#244D91;color:#fff}
-.err{color:#B23A2A;font-size:13px;margin-top:10px;min-height:18px}
+.sheet h2{font-size:27px;font-weight:700;margin:0 0 8px;letter-spacing:0}
+.sheet .hint{font-size:13px;color:#6E6E66;margin:0;line-height:1.7}
+.sheet .formula{font-size:13px;color:#6E6E66;margin:12px 0 0;line-height:1.7}
+.field{margin-top:12px}
+.field>label{display:block;font-size:14px;color:var(--ink);margin-bottom:6px}
+.field input[type=text],.field input:not([type]),.field textarea{
+  width:100%;font:inherit;font-size:15px;padding:7px 10px;
+  border:1px solid #C9C9C1;border-radius:0;background:#fff;color:var(--ink);
+}
+.field input:focus,.field textarea:focus{outline:2px solid #6684B0;outline-offset:-1px}
+.field textarea{resize:vertical;line-height:1.6;min-height:56px}
+.field textarea.tall{height:128px}
+.checkline{margin-top:14px;display:flex;align-items:center;gap:8px;font-size:14px;color:var(--ink)}
+.checkline input{width:15px;height:15px;accent-color:#244D91;margin:0}
+.more-toggle{
+  display:flex;align-items:center;gap:9px;width:100%;text-align:left;
+  background:transparent;border:0;padding:0;margin-top:16px;
+  font-size:14px;color:var(--ink);
+}
+.more-toggle .circle{
+  width:19px;height:19px;flex:none;border:1.4px solid #4A4A44;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:10px;color:#4A4A44;
+  line-height:1;
+}
+.more{display:none;margin-top:10px}
+.more.open{display:block}
+.more .weeklabel{font-size:14px;color:var(--ink)}
+.week-row{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px}
+.week-row label{display:flex;align-items:center;gap:6px;font-size:14px}
+.week-row input{width:14px;height:14px;accent-color:#244D91;margin:0}
+.tiny{font-size:13px;color:#6E6E66;line-height:1.7;margin:10px 0 0}
+.sheet-foot{font-size:13px;color:#6E6E66;line-height:1.75;margin:20px 0 0}
+.err{color:#B23A2A;font-size:13px;margin-top:8px;min-height:0}
+.sheet-actions{display:flex;justify-content:flex-end;gap:12px;margin-top:12px}
+.sheet-actions button{
+  font-size:16px;height:37px;padding:0 18px;border-radius:0;border:0;
+}
+.sheet-actions #cancel{background:#E8E8E2;color:var(--ink);width:68px;padding:0}
+.sheet-actions .primary{background:#1B4A9C;color:#fff;width:98px;padding:0}
 
-@media(max-width:560px){
-  .stage{transform-origin:top center}
-}
 @media(prefers-reduced-motion:reduce){.fill{transition:none}}
 </style>
 </head>
@@ -143,7 +171,7 @@ main{position:relative;height:720px;padding:0}
       <h2 class="status" id="status">上班中</h2>
       <div class="countdown" id="countdown"></div>
       <div class="label">今日已赚</div>
-      <div class="earned" id="earned">¥ 0.00</div>
+      <div class="earned" id="earned">¥--</div>
       <div class="rate" id="rate"></div>
       <div class="msg" id="msg"></div>
       <button class="timer" id="timer" type="button">关闭计时器</button>
@@ -152,7 +180,7 @@ main{position:relative;height:720px;padding:0}
       <div class="bar"><div class="fill" id="fill"></div></div>
       <div class="hr"></div>
       <div class="month-label">本月累计</div>
-      <div class="month" id="month">¥ 0.00</div>
+      <div class="month" id="month">¥--</div>
       <div class="month-note">已过的日子按满勤补算。本月只计已赚，不含亏损。</div>
       <div class="foot1" id="foot1"></div>
       <div class="foot2" id="foot2"></div>
@@ -171,7 +199,7 @@ main{position:relative;height:720px;padding:0}
         <rect x="3" y="4" width="18" height="12" rx="2"/>
         <path d="M8 20h8M12 16v4"/>
       </svg>
-      <span class="dl-text"><strong>Windows</strong><small>免安装 exe · 26 KB</small></span>
+      <span class="dl-text"><strong>Windows</strong><small>免安装 exe · 36 KB</small></span>
     </a>
     <a class="dl-item" href="downloads/shangban-mac.zip" download="上班鼓励器-mac.zip">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
@@ -180,12 +208,12 @@ main{position:relative;height:720px;padding:0}
       </svg>
       <span class="dl-text"><strong>macOS</strong><small>Intel / Apple 芯片 · 203 KB</small></span>
     </a>
-    <a class="dl-item" href="https://gitee.com/godweiyang/storage/releases/download/toolbox-v1.9.63/ToolBox-v1.9.63.apk" rel="noopener">
+    <a class="dl-item" href="https://gitee.com/godweiyang/storage/releases/download/toolbox-v1.9.64/ToolBox-v1.9.64.apk" rel="noopener">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
         <rect x="7" y="3" width="10" height="18" rx="2"/>
         <path d="M11 18h2"/>
       </svg>
-      <span class="dl-text"><strong>Android</strong><small>ToolBox v1.9.63 · 45 MB</small></span>
+      <span class="dl-text"><strong>Android</strong><small>ToolBox v1.9.64 · 45 MB</small></span>
     </a>
   </div>
   <p class="dl-note">安卓版也集成在 ToolBox 里，更新走应用内检查；镜像失效时可到 <a href="https://github.com/godweiyang/ToolBox/releases/latest" rel="noopener">GitHub Releases</a> 下载。</p>
@@ -195,15 +223,36 @@ main{position:relative;height:720px;padding:0}
 
 <div class="sheet-mask" id="mask" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
   <div class="sheet">
-    <h2 id="sheet-title">工资与时间</h2>
-    <p class="hint">月薪按 21.75 个工作日折算，只需设置这三项。</p>
-    <div class="field"><label for="salary">税前月薪（元）</label><input id="salary" inputmode="decimal" autocomplete="off"></div>
-    <div class="field"><label for="start">上班时间（HH:mm）</label><input id="start" inputmode="numeric" autocomplete="off"></div>
-    <div class="field"><label for="end">下班时间（HH:mm）</label><input id="end" inputmode="numeric" autocomplete="off"></div>
+    <h2 id="sheet-title">工资与工作安排</h2>
+    <p class="hint">仅在本机保存。收入是按设置计算的估算值，不代表实发工资。</p>
+    <p class="formula">月薪固定 ÷ 21.75 天，再 ÷ 每日有效工时。</p>
+
+    <div class="field"><label for="f-salary">月薪（元）</label><input id="f-salary" inputmode="decimal" autocomplete="off"></div>
+    <div class="field"><label for="f-start">上班时间（HH:mm）</label><input id="f-start" inputmode="numeric" autocomplete="off" value="09:00"></div>
+    <div class="field"><label for="f-end">下班时间（HH:mm，仅当天班次）</label><input id="f-end" inputmode="numeric" autocomplete="off" value="18:00"></div>
+
+    <label class="checkline"><input type="checkbox" id="f-break" checked> 扣除午休工时（午休不计收入）</label>
+
+    <div class="field"><label for="f-breakstart">午休开始（HH:mm）</label><input id="f-breakstart" inputmode="numeric" autocomplete="off" value="12:00"></div>
+    <div class="field"><label for="f-breakend">午休结束（HH:mm）</label><input id="f-breakend" inputmode="numeric" autocomplete="off" value="13:30"></div>
+
+    <button class="more-toggle" id="more-toggle" type="button">
+      <span class="circle" id="more-arrow">▾</span><span>更多设置 · 工作日 / 参考价格（可选）</span>
+    </button>
+    <div class="more" id="more">
+      <div class="weeklabel">每周工作日（默认周一至周五，不影响21.75折算）</div>
+      <div class="week-row" id="week-row"></div>
+      <div class="field"><label for="f-off">休假日期（YYYY-MM-DD，逗号或换行分隔）</label><textarea id="f-off"></textarea></div>
+      <div class="field"><label for="f-extra">补班日期（YYYY-MM-DD，逗号或换行分隔）</label><textarea id="f-extra"></textarea></div>
+      <div class="field"><label for="f-rewards">日常用品参考价（每行：名称 | 价格，2–100行）</label><textarea id="f-rewards" class="tall"></textarea></div>
+      <p class="tiny">这些是可编辑的参考价，不是市场报价。物品目标逐档比较，不累计消费。</p>
+    </div>
+
+    <p class="sheet-foot">过去工作日按满勤估算；今天按有效工时。月累计是按21.75折算的估算收入，不保证等于整月工资。<br>关闭计时器仅暂停显示，不扣减收入。</p>
     <div class="err" id="err"></div>
     <div class="sheet-actions">
       <button type="button" id="cancel">取消</button>
-      <button type="button" class="primary" id="save">保存</button>
+      <button type="button" class="primary" id="save">保存设置</button>
     </div>
   </div>
 </div>
@@ -212,7 +261,7 @@ main{position:relative;height:720px;padding:0}
 (function(){
   'use strict';
   var WORK_DAYS = 21.75;
-  var REWARDS = [
+  var REWARDS_DEFAULT = [
     ['一瓶矿泉水',2],['一包纸巾',3],['一个包子',4],['一盒牛奶',5],['一瓶可乐',6],
     ['一袋面包',8],['一份早餐',10],['一支牙刷',12],['一杯奶茶',18],['一支牙膏',20],
     ['一杯咖啡',25],['一瓶洗洁精',30],['一顿午餐',35],['一袋洗衣液',45],['一把雨伞',59],
@@ -223,164 +272,439 @@ main{position:relative;height:720px;padding:0}
     ['一辆电动自行车',8999],['一台高配电脑',12999],['一台洗烘套装',15999],['一套客厅家具',19999],
     ['一套厨房电器',24999],['一套全屋家电',39999],['一套全屋家具',59999]
   ];
-  var KEY='godweiyang.work-encourager.settings.v1';
-  var settings={salary:10000,start:'09:00',end:'18:00'};
-  var running=true;
-  var timer=null;
+  var WEEK_NAMES = ['周日','周一','周二','周三','周四','周五','周六'];
+  var KEY = 'godweiyang.work-encourager.settings.v1';
+
+  function defaults(){
+    return {
+      configured:false,
+      salaryMode:'Monthly',
+      rewards:null,
+      salary:2812.275,
+      start:'09:00',
+      end:'18:00',
+      breakEnabled:true,
+      breakStart:'12:00',
+      breakEnd:'13:30',
+      weekdays:[1,2,3,4,5],
+      offDates:[],
+      extraDates:[],
+      itemName:'一件T恤',
+      itemPrice:129
+    };
+  }
+  var settings = defaults();
+  var running = true;
+  var timer = null;
 
   function parseTime(s){
-    var m=/^(\d{1,2}):(\d{2})$/.exec(String(s||'').trim().replace('：',':'));
-    if(!m)return null;
-    var h=+m[1],mi=+m[2];
-    if(h<0||h>23||mi<0||mi>59)return null;
+    var m = /^(\d{1,2}):(\d{2})$/.exec(String(s||'').trim().replace('：',':'));
+    if(!m) return null;
+    var h = +m[1], mi = +m[2];
+    if(h<0||h>23||mi<0||mi>59) return null;
     return h*60+mi;
   }
   function hhmm(min){
-    var h=Math.floor(min/60),m=min%60;
+    var h = Math.floor(min/60), m = min%60;
     return (h<10?'0':'')+h+':'+(m<10?'0':'')+m;
   }
+  function pad(n){return (n<10?'0':'')+n;}
+  function ymd(d){
+    return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+  }
+  function todayKey(d){
+    return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  }
+
+  function normalize(raw){
+    var s = defaults();
+    if(!raw || typeof raw !== 'object') return s;
+    var keys = Object.keys(raw);
+    var looksOld = raw.configured === undefined;
+    if(typeof raw.salary === 'number' && isFinite(raw.salary)) s.salary = raw.salary;
+    if(parseTime(raw.start) !== null) s.start = hhmm(parseTime(raw.start));
+    if(parseTime(raw.end) !== null) s.end = hhmm(parseTime(raw.end));
+    if(typeof raw.breakEnabled === 'boolean') s.breakEnabled = raw.breakEnabled;
+    if(parseTime(raw.breakStart) !== null) s.breakStart = hhmm(parseTime(raw.breakStart));
+    if(parseTime(raw.breakEnd) !== null) s.breakEnd = hhmm(parseTime(raw.breakEnd));
+    if(Array.isArray(raw.weekdays)) s.weekdays = raw.weekdays.filter(function(v){return v>=0&&v<=6;});
+    if(Array.isArray(raw.offDates)) s.offDates = raw.offDates.slice();
+    if(Array.isArray(raw.extraDates)) s.extraDates = raw.extraDates.slice();
+    if(Array.isArray(raw.rewards)) s.rewards = raw.rewards.map(function(it){
+      return {name:String(it[0]!==undefined?it[0]:''), price:Number(it[1]!==undefined?it[1]:0)};
+    });
+    if(typeof raw.itemName === 'string') s.itemName = raw.itemName;
+    if(typeof raw.itemPrice === 'number') s.itemPrice = raw.itemPrice;
+    s.configured = looksOld ? keys.length > 0 : !!raw.configured;
+    return s;
+  }
+
   function load(){
     try{
-      var raw=localStorage.getItem(KEY);
-      if(!raw)return;
-      var v=JSON.parse(raw);
-      if(typeof v.salary==='number'&&v.salary>=0)settings.salary=v.salary;
-      if(parseTime(v.start)!==null)settings.start=hhmm(parseTime(v.start));
-      if(parseTime(v.end)!==null)settings.end=hhmm(parseTime(v.end));
+      var raw = localStorage.getItem(KEY);
+      if(!raw) return;
+      settings = normalize(JSON.parse(raw));
     }catch(e){}
   }
   function persist(){
-    try{localStorage.setItem(KEY,JSON.stringify(settings));}catch(e){}
+    try{
+      var plain = {
+        configured: settings.configured,
+        salaryMode: settings.salaryMode,
+        rewards: settings.rewards ? settings.rewards.map(function(it){return [it.name, it.price];}) : null,
+        salary: settings.salary,
+        start: settings.start,
+        end: settings.end,
+        breakEnabled: settings.breakEnabled,
+        breakStart: settings.breakStart,
+        breakEnd: settings.breakEnd,
+        weekdays: settings.weekdays,
+        offDates: settings.offDates,
+        extraDates: settings.extraDates,
+        itemName: settings.itemName,
+        itemPrice: settings.itemPrice
+      };
+      localStorage.setItem(KEY, JSON.stringify(plain));
+    }catch(e){}
   }
 
-  function money(n){return n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',');}
-  function duration(sec){
-    if(sec<0)sec=0;
-    var total=Math.ceil(sec);
-    var h=Math.floor(total/3600),m=Math.floor((total%3600)/60);
-    return h+' 小时 '+m+' 分';
+  function rewards(){
+    return settings.rewards && settings.rewards.length ? settings.rewards : REWARDS_DEFAULT.map(function(it){
+      return {name:it[0], price:it[1]};
+    });
   }
-  function week(d){
-    return ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'][d.getDay()];
-  }
-  function pad(n){return (n<10?'0':'')+n;}
 
-  function compute(now){
-    var start=parseTime(settings.start),end=parseTime(settings.end);
-    if(end<=start)end=start+60;
-    var total=(end-start)*60;
-    var dayStart=new Date(now.getFullYear(),now.getMonth(),now.getDate(),Math.floor(start/60),start%60,0);
-    var dayEnd=new Date(now.getFullYear(),now.getMonth(),now.getDate(),Math.floor(end/60),end%60,0);
-    var worked,remain,status;
-    if(now<dayStart){status='还没上班';worked=0;remain=total;}
-    else if(now>=dayEnd){status='已下班';worked=total;remain=0;}
-    else {status='上班中';worked=(now-dayStart)/1000;remain=(dayEnd-now)/1000;}
-    if(worked<0)worked=0; if(worked>total)worked=total;
-    var fullDay=settings.salary/WORK_DAYS;
-    var speed=settings.salary/WORK_DAYS/total;
-    var earned=Math.round(worked*speed*100)/100;
-    var workday=now.getDay()!==0&&now.getDay()!==6;
-    var month=0;
-    var d=new Date(now.getFullYear(),now.getMonth(),1);
-    while(d<new Date(now.getFullYear(),now.getMonth(),now.getDate())){
-      if(d.getDay()!==0&&d.getDay()!==6)month+=fullDay;
+  function isWorkday(date){
+    var key = ymd(date);
+    if(settings.extraDates.indexOf(key) >= 0) return true;
+    if(settings.offDates.indexOf(key) >= 0) return false;
+    return settings.weekdays.indexOf(date.getDay()) >= 0;
+  }
+
+  function totalSeconds(){
+    var a = parseTime(settings.start), b = parseTime(settings.end);
+    var sec = (b-a)*60;
+    if(settings.breakEnabled){
+      var bs = parseTime(settings.breakStart), be = parseTime(settings.breakEnd);
+      sec -= (be-bs)*60;
+    }
+    return sec;
+  }
+
+  function monthDays(now){
+    var count = 0;
+    var d = new Date(now.getFullYear(), now.getMonth(), 1);
+    var stop = todayKey(now);
+    while(d < stop){
+      if(isWorkday(d)) count++;
       d.setDate(d.getDate()+1);
     }
-    if(workday)month+=earned;
-    var next=null;
-    for(var i=0;i<REWARDS.length;i++){if(REWARDS[i][1]>earned){next=REWARDS[i];break;}}
-    var msg;
-    if(!next) msg='今天赚的钱，已经能把最贵的那件赚回来了。';
-    else msg='再过 '+duration((next[1]-earned)/speed)+'，'+next[0]+'就赚回来了。';
-    return {
-      status:status,worked:worked,total:total,remain:remain,
-      progress:total?worked/total:0,
-      earned:earned,hourly:settings.salary/WORK_DAYS/(total/3600),
-      speed:speed,month:month,fullDay:fullDay,msg:msg,
-      next:next
-    };
+    return count;
   }
 
-  var el={};
+  function compute(now){
+    var fullDay = settings.salary / WORK_DAYS;
+    var total = totalSeconds();
+    var hourly = total > 0 ? fullDay / total * 3600 : 0;
+    var rate = hourly / 3600;
+    var work = isWorkday(now);
+    var days = monthDays(now);
+    var r = {
+      status:'', worked:0, total:total, remain:0, progress:0,
+      hourly:hourly, earned:0, monthEarned:0, fullDay:fullDay, speed:0
+    };
+    if(!work){
+      r.status = '休息日';
+      r.monthEarned = days * fullDay;
+      return r;
+    }
+    var a = parseTime(settings.start), b = parseTime(settings.end);
+    var aSec = a * 60, bSec = b * 60;
+    var t = now.getHours()*3600 + now.getMinutes()*60 + now.getSeconds();
+    var bs = parseTime(settings.breakStart), be = parseTime(settings.breakEnd);
+    var bsSec = bs * 60, beSec = be * 60;
+    if(t < aSec){
+      r.status = '还未上班';
+      r.remain = bSec - t;
+      r.earned = 0;
+      r.speed = 0;
+    }else if(t >= bSec){
+      r.status = '已下班';
+      r.worked = total;
+      r.remain = 0;
+      r.progress = 1;
+      r.earned = fullDay;
+      r.speed = 0;
+    }else if(settings.breakEnabled && t >= bsSec && t < beSec){
+      r.status = '午休中';
+      r.worked = bsSec - aSec;
+      r.remain = total - r.worked;
+      r.progress = total > 0 ? r.worked / total : 0;
+      r.earned = rate * r.worked;
+      r.speed = 0;
+    }else{
+      r.status = '上班中';
+      var w = t - aSec;
+      if(settings.breakEnabled && t > bsSec){
+        w -= Math.min(t, beSec) - bsSec;
+      }
+      if(w < 0) w = 0;
+      if(w > total) w = total;
+      r.worked = w;
+      r.remain = total - w;
+      r.progress = total > 0 ? w / total : 0;
+      r.earned = rate * w;
+      r.speed = rate;
+    }
+    r.monthEarned = r.earned + days * fullDay;
+    return r;
+  }
+
+  function duration(sec){
+    if(!isFinite(sec) || sec < 0) return '待计算';
+    var t = Math.floor(sec);
+    var h = Math.floor(t/3600), m = Math.floor((t%3600)/60), s = t%60;
+    return h+'小时'+m+'分'+s+'秒';
+  }
+  function f2(n){ return Number(n).toFixed(2); }
+  function f4(n){ return Number(n).toFixed(4); }
+  function f1(n){ return Number(n).toFixed(1); }
+
+  function nextReward(earned){
+    var list = rewards();
+    for(var i=0;i<list.length;i++){ if(list[i].price > earned) return list[i]; }
+    return null;
+  }
+
+  function purchasingMessage(r){
+    var next = nextReward(r.earned);
+    if(!next) return '';
+    var sec = r.speed > 0 ? (next.price - r.earned) / r.speed : 0;
+    if(sec < 0) sec = 0;
+    var t = Math.floor(sec);
+    var h = Math.floor(t/3600), m = Math.floor((t%3600)/60);
+    return '再过 ' + h + ' 小时 ' + m + ' 分，' + next.name + '就赚回来了。';
+  }
+
+  var el = {};
   ['clock','status','countdown','earned','rate','msg','timer','progress-text','hours','fill','month','foot1','foot2'].forEach(function(id){
-    el[id]=document.getElementById(id);
+    el[id] = document.getElementById(id);
   });
 
   function render(){
-    var now=new Date();
-    var r=compute(now);
-    el.clock.textContent=now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日 '+week(now)+'  '+pad(now.getHours())+':'+pad(now.getMinutes())+':'+pad(now.getSeconds());
-    el.status.textContent=r.status;
-    el.countdown.textContent = r.status==='上班中' ? '距离下班还有 '+duration(r.remain)
-      : r.status==='还没上班' ? '今天 '+settings.start+' 开始上班'
-      : '今天的班已经上完了';
-    el.earned.textContent='¥ '+money(r.earned);
-    el.rate.textContent='时薪 ¥ '+money(r.hourly);
-    el.msg.textContent=r.msg;
-    var pct=Math.round(r.progress*100); if(pct>100)pct=100;
-    el['progress-text'].textContent='今天已经过了 '+pct+'%';
-    el.hours.textContent=settings.start+' - '+settings.end;
-    el.fill.style.width=(r.progress*100).toFixed(2)+'%';
-    el.month.textContent='¥ '+money(r.month);
-    el.foot1.textContent='时薪 ¥ '+money(r.hourly)+' · 每秒 ¥ '+r.speed.toFixed(4);
-    el.foot2.textContent='全天满勤 ¥ '+money(r.fullDay);
+    var now = new Date();
+    var r = compute(now);
+    el.clock.textContent = ymd(now) + '  ' + WEEK_NAMES[now.getDay()] + '  ' + pad(now.getHours())+':'+pad(now.getMinutes())+':'+pad(now.getSeconds());
+    el.status.textContent = running ? r.status : '计时器已关闭';
+    if(!running){
+      el.countdown.textContent = '已暂停刷新，开启后按当前时间重算';
+    }else if(r.status === '还未上班'){
+      el.countdown.textContent = '距离上班还有  ' + duration(r.remain);
+    }else if(r.status === '休息日'){
+      el.countdown.textContent = '今天好好休息，下一次上班再继续';
+    }else if(r.status === '已下班'){
+      el.countdown.textContent = '今日工作已结束，辛苦了';
+    }else{
+      el.countdown.textContent = '距离下班还有  ' + duration(r.remain);
+    }
+
+    if(settings.configured){
+      el.earned.textContent = '¥' + f4(r.earned);
+      el.rate.textContent = '当前赚钱速度  ¥' + f4(r.speed) + ' / 秒';
+      el.msg.textContent = purchasingMessage(r);
+      el.month.textContent = '¥' + f4(r.monthEarned);
+      el.foot1.textContent = '时薪 ¥' + f2(r.hourly);
+      el.foot2.textContent = '今日满勤可得 ¥' + f2(r.fullDay);
+    }else{
+      el.earned.textContent = '¥--';
+      el.rate.textContent = '当前赚钱速度  ¥-- / 秒';
+      el.msg.textContent = '';
+      el.month.textContent = '¥--';
+      el.foot1.textContent = '时薪 ¥--';
+      el.foot2.textContent = '今日满勤可得 ¥--';
+    }
+
+    el['progress-text'].textContent = '今日工时进度 ' + f1(r.progress * 100) + '%';
+    el.hours.textContent = '已工作 ' + f2(r.worked/3600) + ' / ' + f2(r.total/3600) + ' 小时';
+    el.fill.style.width = (r.progress * 100).toFixed(2) + '%';
   }
 
   function tick(){ if(running) render(); }
 
-  el.timer.addEventListener('click',function(){
-    running=!running;
-    el.timer.textContent=running?'关闭计时器':'开启计时器';
-    if(running)render();
+  el.timer.addEventListener('click', function(){
+    running = !running;
+    el.timer.textContent = running ? '关闭计时器' : '开启计时器';
+    if(running){
+      render();
+    }else{
+      var now = new Date();
+      var r = compute(now);
+      el.status.textContent = '计时器已关闭';
+      el.countdown.textContent = '已暂停刷新，开启后按当前时间重算';
+    }
   });
 
-  var mask=document.getElementById('mask');
-  var salary=document.getElementById('salary');
-  var start=document.getElementById('start');
-  var end=document.getElementById('end');
-  var err=document.getElementById('err');
+  var mask = document.getElementById('mask');
+  var more = document.getElementById('more');
+  var moreArrow = document.getElementById('more-arrow');
+  var weekRow = document.getElementById('week-row');
+  var fSalary = document.getElementById('f-salary');
+  var fStart = document.getElementById('f-start');
+  var fEnd = document.getElementById('f-end');
+  var fBreak = document.getElementById('f-break');
+  var fBs = document.getElementById('f-breakstart');
+  var fBe = document.getElementById('f-breakend');
+  var fOff = document.getElementById('f-off');
+  var fExtra = document.getElementById('f-extra');
+  var fRewards = document.getElementById('f-rewards');
+  var err = document.getElementById('err');
+  var weekBoxes = [];
+
+  (function buildWeek(){
+    var names = ['周一','周二','周三','周四','周五','周六','周日'];
+    for(var i=0;i<7;i++){
+      var label = document.createElement('label');
+      var box = document.createElement('input');
+      box.type = 'checkbox';
+      box.value = String((i+1)%7);
+      label.appendChild(box);
+      label.appendChild(document.createTextNode(names[i]));
+      weekRow.appendChild(label);
+      weekBoxes.push(box);
+    }
+  })();
+
+  function updateBreakInputs(){
+    var on = fBreak.checked;
+    fBs.disabled = !on;
+    fBe.disabled = !on;
+    fBs.style.opacity = on ? '1' : '.55';
+    fBe.style.opacity = on ? '1' : '.55';
+  }
+  fBreak.addEventListener('change', updateBreakInputs);
 
   function openSheet(){
-    salary.value=String(settings.salary);
-    start.value=settings.start;
-    end.value=settings.end;
-    err.textContent='';
-    mask.dataset.open='true';
-    setTimeout(function(){salary.focus();},0);
+    fSalary.value = String(settings.salary);
+    fStart.value = settings.start;
+    fEnd.value = settings.end;
+    fBreak.checked = settings.breakEnabled;
+    fBs.value = settings.breakStart;
+    fBe.value = settings.breakEnd;
+    fOff.value = settings.offDates.join('\n');
+    fExtra.value = settings.extraDates.join('\n');
+    fRewards.value = rewards().map(function(it){ return it.name + ' | ' + it.price; }).join('\n');
+    for(var i=0;i<weekBoxes.length;i++){
+      weekBoxes[i].checked = settings.weekdays.indexOf(Number(weekBoxes[i].value)) >= 0;
+    }
+    more.classList.remove('open');
+    moreArrow.textContent = '▾';
+    updateBreakInputs();
+    err.textContent = '';
+    mask.dataset.open = 'true';
+    setTimeout(function(){ fSalary.focus(); }, 0);
   }
-  function closeSheet(){mask.dataset.open='false';}
-  document.getElementById('open-settings').addEventListener('click',openSheet);
-  document.getElementById('cancel').addEventListener('click',closeSheet);
-  mask.addEventListener('click',function(e){if(e.target===mask)closeSheet();});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&mask.dataset.open==='true')closeSheet();});
+  function closeSheet(){ mask.dataset.open = 'false'; }
 
-  document.getElementById('save').addEventListener('click',function(){
-    var s=parseFloat(String(salary.value).trim());
-    if(!isFinite(s)||s<0){err.textContent='月薪请填一个不小于 0 的数字。';return;}
-    var a=parseTime(start.value),b=parseTime(end.value);
-    if(a===null){err.textContent='上班时间请按 09:00 这样的格式填写。';return;}
-    if(b===null){err.textContent='下班时间请按 18:00 这样的格式填写。';return;}
-    if(b<=a){err.textContent='下班时间要晚于上班时间。';return;}
-    settings.salary=s;
-    settings.start=hhmm(a);
-    settings.end=hhmm(b);
+  document.getElementById('open-settings').addEventListener('click', openSheet);
+  document.getElementById('cancel').addEventListener('click', closeSheet);
+  mask.addEventListener('click', function(e){ if(e.target === mask) closeSheet(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && mask.dataset.open === 'true') closeSheet(); });
+  document.getElementById('more-toggle').addEventListener('click', function(){
+    var open = more.classList.toggle('open');
+    moreArrow.textContent = open ? '▴' : '▾';
+  });
+
+  function fail(msg){ err.textContent = msg; return false; }
+
+  function readDates(text){
+    var raw = String(text || '').split(/[,\uFF0C;\uFF1B\r\n]+/);
+    var out = [];
+    for(var i=0;i<raw.length;i++){
+      var v = raw[i].trim();
+      if(!v) continue;
+      if(!/^\d{4}-\d{2}-\d{2}$/.test(v)) throw new Error('例外日期必须为 YYYY-MM-DD，例如 2026-11-02。');
+      var y = +v.slice(0,4), mo = +v.slice(5,7), da = +v.slice(8,10);
+      var d = new Date(y, mo-1, da);
+      if(d.getFullYear()!==y || d.getMonth()!==mo-1 || d.getDate()!==da) throw new Error('例外日期必须为 YYYY-MM-DD，例如 2026-11-02。');
+      out.push(v);
+    }
+    return out;
+  }
+
+  function readRewards(text){
+    var lines = String(text || '').split(/[\r\n]+/).filter(function(s){ return s.trim().length > 0; });
+    if(lines.length < 2 || lines.length > 100) throw new Error('请设置 2–100 个物品价格档位。');
+    var out = [], names = {};
+    for(var i=0;i<lines.length;i++){
+      var line = lines[i].trim();
+      var at = line.indexOf('|');
+      if(at < 0) at = line.indexOf('｜');
+      if(at < 0) throw new Error('每个物品名称需为 1–12 字，价格需大于 0 且不超过 100000000。');
+      var name = line.slice(0, at).trim();
+      var price = parseFloat(line.slice(at+1).trim());
+      if(!name || name.length > 12) throw new Error('每个物品名称需为 1–12 字，价格需大于 0 且不超过 100000000。');
+      if(!isFinite(price) || price <= 0 || price > 100000000) throw new Error('每个物品名称需为 1–12 字，价格需大于 0 且不超过 100000000。');
+      if(names[name]) throw new Error('物品名称不能重复。');
+      names[name] = true;
+      out.push({name:name, price:price});
+    }
+    return out;
+  }
+
+  document.getElementById('save').addEventListener('click', function(){
+    err.textContent = '';
+    var salary = parseFloat(String(fSalary.value).trim());
+    if(!isFinite(salary)) return fail('请填写有效工资，使用小数点表示小数。');
+    if(salary <= 0 || salary > 100000000) return fail('工资必须大于 0，且不超过 100000000。');
+    var a = parseTime(fStart.value), b = parseTime(fEnd.value);
+    if(a === null || (String(fStart.value).trim() && a === null)) return fail('时间必须为 HH:mm，例如 09:00。');
+    if(a === null) return fail('时间必须为 HH:mm，例如 09:00。');
+    if(b === null) return fail('时间必须为 HH:mm，例如 09:00。');
+    if(b <= a) return fail('下班时间必须晚于上班时间；当前版本只支持当天班次，不支持跨夜。');
+    var bs = parseTime(fBs.value), be = parseTime(fBe.value);
+    var breakOn = fBreak.checked;
+    if(breakOn){
+      if(bs === null || be === null) return fail('时间必须为 HH:mm，例如 09:00。');
+      if(bs < a || be > b || be <= bs) return fail('午休必须位于班次内，且结束晚于开始。');
+    }
+    var weeks = [];
+    for(var i=0;i<weekBoxes.length;i++) if(weekBoxes[i].checked) weeks.push(Number(weekBoxes[i].value));
+    if(!weeks.length) return fail('至少选择一个工作日。');
+    var off, extra, list;
+    try{ off = readDates(fOff.value); }catch(e){ return fail(e.message); }
+    try{ extra = readDates(fExtra.value); }catch(e){ return fail(e.message); }
+    for(var j=0;j<off.length;j++){ if(extra.indexOf(off[j]) >= 0) return fail('同一日期不能同时标记为休假和补班。'); }
+    try{ list = readRewards(fRewards.value); }catch(e){ return fail(e.message); }
+
+    settings.configured = true;
+    settings.salaryMode = 'Monthly';
+    settings.salary = salary;
+    settings.start = hhmm(a);
+    settings.end = hhmm(b);
+    settings.breakEnabled = breakOn;
+    settings.breakStart = hhmm(bs === null ? parseTime(settings.breakStart) : bs);
+    settings.breakEnd = hhmm(be === null ? parseTime(settings.breakEnd) : be);
+    settings.weekdays = weeks;
+    settings.offDates = off;
+    settings.extraDates = extra;
+    settings.rewards = list;
     persist();
     closeSheet();
     render();
   });
 
   function fit(){
-    var stage=document.getElementById('stage');
-    var wrap=stage.parentElement;
-    var s=Math.min(1,window.innerWidth/520);
-    stage.style.transform='scale('+s+')';
-    wrap.style.height=(stage.offsetHeight*s)+'px';
+    var stage = document.getElementById('stage');
+    var wrap = stage.parentElement;
+    var s = Math.min(1, window.innerWidth / 520);
+    stage.style.transform = 'scale(' + s + ')';
+    wrap.style.height = (stage.offsetHeight * s) + 'px';
   }
 
   load();
   render();
-  timer=setInterval(tick,1000);
-  window.addEventListener('resize',fit);
+  timer = setInterval(tick, 1000);
+  window.addEventListener('resize', fit);
   fit();
 })();
 </script>
