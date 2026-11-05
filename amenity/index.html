@@ -249,11 +249,62 @@ table.cmp tfoot td{font-size:15px;font-weight:600;border-bottom:0}
 .toast{position:fixed;left:50%;bottom:34px;transform:translateX(-50%) translateY(8px);background:rgba(28,43,54,.94);color:#fff;font-size:13px;padding:9px 16px;border-radius:8px;z-index:1200;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;max-width:calc(100% - 40px);text-align:center}
 .toast.on{opacity:1;transform:translateX(-50%)}
 @media(max-width:860px){.beike-meta{grid-template-columns:1fr}.beike-pane{margin:8px 12px 12px}.housing-tools{font-size:14px}.comm-inp{font-size:16px!important}}
+
+/* ===== unslop v16：评估报告方向 ===== */
+body{background:#f6f3ec;color:#20242a;font-family:"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif}
+.top{background:transparent;min-height:0;padding:30px 30px 6px;color:#20242a;gap:16px}
+.top h1{font-size:34px;font-weight:500;letter-spacing:-.01em}
+.top .r{color:#7a7264;font-size:13px}
+.ver-badge{background:#e9e2d0;color:#6b6455;font-weight:500;border-radius:999px;padding:3px 10px}
+.wrap{gap:20px;padding:18px 30px 56px;max-width:1440px}
+.card{background:#fffdf8;border-radius:14px;border:1px solid #e9e2d2;box-shadow:0 1px 2px rgba(40,35,20,.04),0 10px 28px rgba(40,35,20,.05)}
+.ct{background:transparent;color:#20242a;border-bottom:1px solid #e9e2d2;border-radius:0;padding:18px 22px 10px;font-size:13px;font-weight:600;letter-spacing:.04em}
+.ct small{color:#8a8474;letter-spacing:0}
+.cbody{padding:16px 22px 22px}
+.comm-head{background:#faf6ec}
+.comm-head input,.fld input,.fld select{background:#fffdf8;border-color:#d9d2bd}
+.comm-head input:focus,.fld input:focus,.fld select:focus{border-color:#20242a;box-shadow:0 0 0 2px rgba(32,36,42,.06)}
+.seg{background:#eee7d6;border-radius:8px}
+.seg .s.on,.seg button.active{background:#20242a;color:#fff;border-radius:7px}
+.go{background:#20242a;border-radius:10px;font-weight:500}
+.go:hover{background:#000}
+.sum-total{font-family:Georgia,"Songti SC","STSong",serif;font-weight:500;font-size:36px}
+.ring .num b{font-family:Georgia,"Songti SC","STSong",serif;font-weight:500}
+.prog-row .ptrack i,.prog-overall .ptrack i{background:#20242a}
+.g-bar i{background:#8a94a0}
+.g-main.best{background:#f2ecdc;border-radius:8px}
+.score-card.win{border-color:#20242a;box-shadow:0 0 0 2px rgba(32,36,42,.08)}
+.sc-head{background:#faf6ec}
+.sc-meta .tag{background:#20242a;font-weight:500;border-radius:4px}
+table.cmp th,table.cmp td,.ctable th,.ctable td{border-color:#e9e2d2}
+table.cmp th,.ctable th{background:#faf6ec;color:#6b6455;font-weight:500}
+.housing-tools{background:#faf6ec;border-color:#e2dbc8}
+.hs-btn{color:#20242a;border-color:#cfc8b2}
+.hs-btn:hover{border-color:#20242a;background:#f3eee0}
+.hs-btn.primary{background:#20242a;color:#fff;border-color:#20242a}
+.hs-btn.primary:hover{filter:none;background:#000}
+.hs-cmd{background:#faf6ec;border-color:#e2dbc8}
+.hs-cmd button{color:#20242a;border-color:#cfc8b2}
+.hs-cmd button:hover{background:#f3eee0}
+.beike-pane{background:#faf6ec;border-color:#e2dbc8}
+.beike-next{background:#f4eee0;border-color:#d9d2bd}
+.beike-next button{color:#20242a;border-color:#cfc8b2}
+.linkbtn{color:#156a91}
+.hs-os{color:#6b6455}
+.card h3{font-weight:600}
+@media(max-width:860px){
+ .top{padding:22px 16px 4px}
+ .top h1{font-size:24px}
+ .wrap{padding:12px;gap:16px}
+ .ct{padding:14px 16px 8px}
+ .cbody{padding:12px 16px 16px}
+}
+
 </style>
 </head>
 <body>
 <div class="top">
-  <h1>小区综合打分 <span class="ver-badge">v15</span></h1>
+  <h1>小区综合打分 <span class="ver-badge">v16</span></h1>
   <div class="r">输入小区，自动统计周边配套并结合小区本体属性<br>交通 / 商业 / 医疗 / 教育 / 环境 / 品质 / 户型 / 性价比，支持多小区对比</div>
 </div>
 <div class="wrap">
@@ -316,7 +367,7 @@ table.cmp tfoot td{font-size:15px;font-weight:600;border-bottom:0}
       <b>分值与缺失：</b>专项为100分制；综合按实际可用子指标权重归一，未查询不计零分，显示权重覆盖。规则为本工具启发式，不是官方评级；挂牌样本不等于全部住宅构成。<br>
       <b>性价比：</b>只有配套信息与房价同时具备才计算，避免仅凭便宜判定性价比好；配套因子与价格因子各占一半，明确物业费可加居住成本辅助。价格因子为1−log10(clamp(单价,10000,100000)/10000)，是工具固定参考范围，不是市场估值结论。<br>
       <b>等级：</b>90+ 极佳，75–89 优秀，60–74 良好，45–59 一般，&lt;45 不便。教育维度只测学校距离，不代表学区划分与质量；本工具不预测房价走势。
-      <div class="ver-tag">版本 v15 · 视觉收敛为纯色与克制字重；连接仍在任意城市站页面完成</div>
+      <div class="ver-tag">版本 v16 · 评估报告式纸感重排：去深色带、ink 主按钮、衬线大数字</div>
     </div>
   </div>
 </div>
