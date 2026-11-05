@@ -221,7 +221,13 @@ table.cmp tfoot td{font-size:15px;font-weight:900;border-bottom:0}
 .hs-btn[hidden]{display:none}
 .housing-tools.hs-live .hs-aux{display:none}
 .housing-install{font-size:14px;line-height:1.7;margin:8px 0 14px;color:#46545f}
-@media(max-width:640px){.hs-state{flex:1 1 100%}.housing-tools{gap:7px}.hs-btn{flex:1 1 0;padding:8px 10px}}.housing-install summary{cursor:pointer;color:#14688f;font-weight:700}.housing-install a{color:#14688f}
+.hs-cmd{display:flex;align-items:center;gap:8px;margin:9px 0 6px;padding:8px 10px;border:1px solid #dbe6ec;border-radius:8px;background:#f6fafc}
+.hs-cmd code{flex:1 1 auto;min-width:0;overflow-x:auto;white-space:nowrap;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12.5px;color:#1c2b36}
+.hs-cmd button{flex:none;border:1px solid #14688f;background:#fff;color:#14688f;font-size:12.5px;font-weight:700;padding:5px 10px;border-radius:6px;cursor:pointer;font-family:inherit}
+.hs-cmd button:hover{background:#eaf5fb}
+.hs-cmd-note{font-size:13px;color:#6b7a86}
+.hs-cmd-note code{font-family:ui-monospace,Menlo,Consolas,monospace;background:#eef3f7;padding:1px 5px;border-radius:4px;font-size:12px;overflow-wrap:anywhere}
+@media(max-width:640px){.hs-state{flex:1 1 100%}.housing-tools{gap:7px}.hs-btn{flex:1 1 0;padding:8px 10px}.hs-cmd{flex-wrap:wrap}.hs-cmd code{flex:1 1 100%;white-space:normal;overflow-wrap:anywhere}.hs-cmd button{flex:1 1 100%;padding:8px 10px}}.housing-install summary{cursor:pointer;color:#14688f;font-weight:700}.housing-install a{color:#14688f}
 .beike-pane{margin:8px 14px 14px;padding:12px;border:1px solid #dbe6ec;border-radius:8px;background:#fbfdfe;font-size:13px;line-height:1.7}
 .beike-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .beike-status{color:#6b7a86;overflow-wrap:anywhere}
@@ -246,7 +252,7 @@ table.cmp tfoot td{font-size:15px;font-weight:900;border-bottom:0}
 </head>
 <body>
 <div class="top">
-  <h1>小区综合打分 <span class="ver-badge">v11</span></h1>
+  <h1>小区综合打分 <span class="ver-badge">v12</span></h1>
   <div class="r">输入小区，自动统计周边配套并结合小区本体属性<br>交通 / 商业 / 医疗 / 教育 / 环境 / 品质 / 户型 / 性价比，支持多小区对比</div>
 </div>
 <div class="wrap">
@@ -255,7 +261,7 @@ table.cmp tfoot td{font-size:15px;font-weight:900;border-bottom:0}
     <div class="ct">选择小区<small>输入名称后点下拉项；可展开补录小区本体信息（选填）</small></div>
     <div class="cbody">
       <div class="housing-tools"><span class="hs-state"><span class="hs-dot wait" id="housingDot"></span><span id="housingSvc">正在检测本机贝壳服务…</span></span><button type="button" class="hs-btn primary" id="housingConnect">连接贝壳</button><a class="hs-btn hs-aux" id="housingStart" href="amenity://start">启动服务</a><a class="hs-btn hs-aux" id="housingDownload" href="/medias/files/amenity_service.exe">下载服务</a><a class="hs-btn" id="housingMacIntel" href="/medias/files/amenity_service_mac_intel.zip" hidden>Mac Intel 版</a></div>
-      <details class="housing-install"><summary>安装方式与各平台下载</summary><p><a href="/medias/files/amenity_service.exe">Windows</a> · <a href="/medias/files/amenity_service_android.apk">Android 7.0 及以上</a> · <a href="/medias/files/amenity_service_mac_arm64.zip">Mac Apple Silicon</a> · <a href="/medias/files/amenity_service_mac_intel.zip">Mac Intel</a></p><p>Windows 双击即用，浏览器首次允许本机访问即可；Mac 打开 amenity_service.app（未签名，需在「隐私与安全性」中允许）；Android 安装后点「启动」，在 App 内的地图与详情页登录后自动连接，无需额外操作。</p><p>服务只在本机 127.0.0.1:17532 运行。贝壳资料只在本人已登录的页面内读取公开小区与挂牌信息，遇到登录、验证码或拒绝访问不会绕过；缺少的资料显示为缺失，不计零分。</p></details>
+      <details class="housing-install"><summary>安装方式与各平台下载</summary><p><a href="/medias/files/amenity_service.exe">Windows</a> · <a href="/medias/files/amenity_service_android.apk">Android 7.0 及以上</a> · <a href="/medias/files/amenity_service_mac_arm64.zip">Mac Apple Silicon</a> · <a href="/medias/files/amenity_service_mac_intel.zip">Mac Intel</a></p><div class="hs-cmd"><code id="macInstallCmd">curl -fsSL https://godweiyang.com/medias/files/install_amenity_mac.sh | bash</code><button type="button" id="macInstallCopy">复制命令</button></div><p class="hs-cmd-note">Mac 推荐这行命令：终端粘贴执行，脚本会按芯片自动选包、装进「应用程序」、去掉隔离标记并启动，不用再去「隐私与安全性」里手动允许。手动安装则下载解压后执行 <code>xattr -cr amenity_service.app</code>，再打开 App 一次。</p><p>Windows 双击即用，浏览器首次允许本机访问即可；Android 安装后点「启动」，在 App 内的地图与详情页登录后自动连接，无需额外操作。</p><p>服务只在本机 127.0.0.1:17532 运行。贝壳资料只在本人已登录的页面内读取公开小区与挂牌信息，遇到登录、验证码或拒绝访问不会绕过；缺少的资料显示为缺失，不计零分。</p></details>
       <div id="commList"></div>
       <div class="ctl-row">
         <button class="linkbtn" id="btnAdd">+ 添加小区对比</button>
@@ -309,7 +315,7 @@ table.cmp tfoot td{font-size:15px;font-weight:900;border-bottom:0}
       <b>分值与缺失：</b>专项为100分制；综合按实际可用子指标权重归一，未查询不计零分，显示权重覆盖。规则为本工具启发式，不是官方评级；挂牌样本不等于全部住宅构成。<br>
       <b>性价比：</b>只有配套信息与房价同时具备才计算，避免仅凭便宜判定性价比好；配套因子与价格因子各占一半，明确物业费可加居住成本辅助。价格因子为1−log10(clamp(单价,10000,100000)/10000)，是工具固定参考范围，不是市场估值结论。<br>
       <b>等级：</b>90+ 极佳，75–89 优秀，60–74 良好，45–59 一般，&lt;45 不便。教育维度只测学校距离，不代表学区划分与质量；本工具不预测房价走势。
-      <div class="ver-tag">版本 v11 · 贝壳资料与高德配套分开标注来源；每次打分实时检索配套</div>
+      <div class="ver-tag">版本 v12 · 贝壳资料与高德配套分开标注来源；每次打分实时检索配套</div>
     </div>
   </div>
 </div>
@@ -648,6 +654,14 @@ function openConnect(){
  window.open(HOUSING_API+'/api/housing/connect','_blank','noopener');
 }
 document.getElementById('housingConnect').addEventListener('click',openConnect);
+const macInstallCopy=document.getElementById('macInstallCopy');
+if(macInstallCopy)macInstallCopy.addEventListener('click',async()=>{
+ const t=document.getElementById('macInstallCmd').textContent.trim();
+ try{await navigator.clipboard.writeText(t);toast('安装命令已复制');return;}catch(e){}
+ const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();
+ try{document.execCommand('copy');toast('安装命令已复制');}catch(_){toast('复制失败，请手动选中命令');}
+ ta.remove();
+});
 function scheduleProbe(){
  clearTimeout(probeTimer);
  probeTimer=setTimeout(probeHousing,housingState.connected&&housingState.profileConnected?6000:2500);
@@ -669,9 +683,10 @@ async function probeHousing(){
   }
  }catch(e){
   housingState={connected:false,cityId:''};lastMapConnected=lastProfileConnected=false;
-  el.textContent='本机服务未运行 · 下载后双击打开，再点「连接贝壳」';
+  el.textContent=housingMac?'本机服务未运行 · 展开「安装方式」粘贴一行命令即可':housingAndroid?'本机服务未运行 · 装好 App 后点「启动」':'本机服务未运行 · 下载后双击打开，再点「连接贝壳」';
   dot.className='hs-dot off';
   document.querySelector('.housing-tools').classList.remove('hs-live');
+  if(housingMac)document.querySelector('.housing-install').open=true;
  }
  scheduleProbe();
 }
