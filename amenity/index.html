@@ -300,11 +300,70 @@ table.cmp th,.ctable th{background:#faf6ec;color:#6b6455;font-weight:500}
  .cbody{padding:12px 16px 16px}
 }
 
+
+/* ===== unslop v17：编辑式报告版式 ===== */
+body{background:#f6f3ec}
+.wrap{max-width:1180px;padding:0 40px 80px;gap:0}
+.top{padding:64px 0 28px;display:block}
+.top h1{font-family:Georgia,"Songti SC","STSong",serif;font-size:46px;font-weight:500;letter-spacing:-.015em;line-height:1.1;margin-bottom:10px}
+.top .r{text-align:right;font-size:12px;color:#8a8474;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;position:absolute;right:40px;top:80px;line-height:1.8}
+.ver-badge{position:absolute;right:40px;top:56px;background:transparent;color:#8a8474;font-family:ui-monospace,Menlo,monospace;border:1px solid #d9d2bd}
+.card{background:transparent;border:0;border-radius:0;box-shadow:none;border-bottom:1px solid #e2dcc8;padding:32px 0}
+.card:last-child{border-bottom:0}
+.ct{background:transparent;border:0;border-bottom:0;padding:0 0 14px;font-size:12px;font-weight:600;letter-spacing:.06em;color:#6b6455;display:flex;align-items:baseline;gap:12px}
+.ct::before{content:"";width:24px;height:1px;background:#6b6455;flex:none;transform:translateY(-3px)}
+.ct small{font-size:11px;letter-spacing:0;color:#a8a294;font-weight:400}
+.cbody{padding:8px 0 0}
+.card h3{font-family:Georgia,"Songti SC",serif;font-size:22px;font-weight:500;padding:0 0 8px}
+.sumgrid{gap:0;padding:0;border-top:1px solid #e9e2d2}
+.sumcell{border:0;border-radius:0;background:transparent;border-right:1px solid #e9e2d2;padding:18px 16px;text-align:left}
+.sumcell:last-child{border-right:0}
+.sumcell .dot{display:none}
+.sum-name{font-size:11px;color:#8a8474;font-weight:500;min-height:0;justify-content:flex-start;margin-bottom:8px}
+.sum-total{font-family:Georgia,"Songti SC",serif;font-size:40px;font-weight:500;line-height:1}
+.sum-grade{font-size:11px;color:#a8a294;margin-top:6px}
+.comm{border:1px solid #d9d2bd;border-radius:10px}
+.comm-head{background:transparent;padding:12px 14px}
+.badge{border-radius:6px;font-weight:500}
+.seg{background:transparent;border:1px solid #d9d2bd;border-radius:999px;padding:3px}
+.seg .s{height:30px;border-radius:999px;font-weight:500;font-size:12px}
+.seg .s.on,.seg button.active{background:#20242a;color:#fff}
+.go{height:44px;border-radius:999px;padding:0 32px;font-size:14px;font-weight:500;letter-spacing:.02em}
+.ring{width:110px;height:110px}
+.ring .num b{font-size:34px}
+.score-card{border:1px solid #d9d2bd;border-radius:12px;background:#fffdf8}
+.sc-head{background:transparent;border-bottom:1px solid #e9e2d2}
+table.cmp th,table.cmp td,.ctable th,.ctable td{padding:12px 14px}
+table.cmp th,.ctable th{background:transparent;border-bottom:1px solid #20242a;font-weight:600;color:#20242a;font-size:11px}
+table.cmp tfoot td{font-family:Georgia,serif;font-size:18px}
+.housing-tools{border-radius:10px;border:1px solid #e2dcc8}
+.hs-btn{border-radius:999px}
+.hs-btn.primary{border-radius:999px}
+.hs-cmd{border-radius:8px}
+.beike-pane{border-radius:10px}
+#map{border-radius:12px;border:1px solid #e2dcc8}
+.map-legend{border-top:1px solid #e9e2d2}
+.empty{padding:48px 16px}
+@media(max-width:860px){
+ .top{padding:36px 0 20px}
+ .top h1{font-size:30px}
+ .top .r{position:static;text-align:left;margin-top:12px}
+ .ver-badge{position:static;margin-left:10px}
+ .wrap{padding:0 18px 48px}
+ .card{padding:24px 0}
+ .sumcell{border-right:0;border-bottom:1px solid #e9e2d2}
+}
+
+
+/* v17 对齐修正 */
+.top{max-width:1180px;margin:0 auto;padding:64px 40px 28px}
+.top .r{right:max(40px,calc(50vw - 590px))}
+.ver-badge{right:max(40px,calc(50vw - 590px))}
 </style>
 </head>
 <body>
 <div class="top">
-  <h1>小区综合打分 <span class="ver-badge">v16</span></h1>
+  <h1>小区综合打分 <span class="ver-badge">v17</span></h1>
   <div class="r">输入小区，自动统计周边配套并结合小区本体属性<br>交通 / 商业 / 医疗 / 教育 / 环境 / 品质 / 户型 / 性价比，支持多小区对比</div>
 </div>
 <div class="wrap">
@@ -367,7 +426,7 @@ table.cmp th,.ctable th{background:#faf6ec;color:#6b6455;font-weight:500}
       <b>分值与缺失：</b>专项为100分制；综合按实际可用子指标权重归一，未查询不计零分，显示权重覆盖。规则为本工具启发式，不是官方评级；挂牌样本不等于全部住宅构成。<br>
       <b>性价比：</b>只有配套信息与房价同时具备才计算，避免仅凭便宜判定性价比好；配套因子与价格因子各占一半，明确物业费可加居住成本辅助。价格因子为1−log10(clamp(单价,10000,100000)/10000)，是工具固定参考范围，不是市场估值结论。<br>
       <b>等级：</b>90+ 极佳，75–89 优秀，60–74 良好，45–59 一般，&lt;45 不便。教育维度只测学校距离，不代表学区划分与质量；本工具不预测房价走势。
-      <div class="ver-tag">版本 v16 · 评估报告式纸感重排：去深色带、ink 主按钮、衬线大数字</div>
+      <div class="ver-tag">版本 v17 · 编辑式报告版式：拆卡片 chrome、衬线标题与发丝分节</div>
     </div>
   </div>
 </div>
