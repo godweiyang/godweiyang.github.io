@@ -204,9 +204,24 @@ table.cmp tfoot td{font-size:15px;font-weight:900;border-bottom:0}
  .go{margin-left:0;width:100%}
 }
 /* 贝壳公开资料 */
-.housing-tools{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:10px 0;padding:10px 12px;background:#f6fafb;border:1px solid #dbe6ec;border-radius:8px;font-size:13px}
-.housing-tools a{color:#14688f;font-weight:700;text-decoration:none;padding:8px 4px}
-.housing-install{font-size:14px;line-height:1.7;margin:8px 0 14px;color:#46545f}.housing-install summary{cursor:pointer;color:#14688f;font-weight:700}.housing-install a{color:#14688f}
+.housing-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:10px 0;padding:9px 12px;background:#f6fafb;border:1px solid #dbe6ec;border-radius:9px;font-size:12.5px}
+.hs-dot{width:9px;height:9px;border-radius:50%;flex:none;background:#b9c5ce}
+.hs-dot.wait{background:#1e88b5;animation:hsPulse 1.5s ease-in-out infinite}
+.hs-dot.ok{background:#2e7d32;box-shadow:0 0 0 3px rgba(46,125,50,.13)}
+.hs-dot.half{background:#ef6c00;box-shadow:0 0 0 3px rgba(239,108,0,.12)}
+.hs-dot.off{background:#c62828}
+@keyframes hsPulse{0%,100%{opacity:1}50%{opacity:.3}}
+.housing-tools #housingSvc{color:#46545f;min-width:0;line-height:1.5}
+.hs-state{display:inline-flex;align-items:center;gap:7px;min-width:0;flex:1 1 auto}
+.hs-btn{flex:none;border:1px solid #d5dee5;background:#fff;color:#14688f;font-size:12.5px;font-weight:700;
+  padding:6px 12px;border-radius:7px;cursor:pointer;text-decoration:none;line-height:1.4;font-family:inherit;white-space:nowrap}
+.hs-btn:hover{border-color:#14688f;background:#f2f8fb}
+.hs-btn.primary{background:linear-gradient(90deg,#14688f,#1e88b5);border-color:transparent;color:#fff;box-shadow:0 2px 8px rgba(20,104,143,.24)}
+.hs-btn.primary:hover{filter:brightness(1.06)}
+.hs-btn[hidden]{display:none}
+.housing-tools.hs-live .hs-aux{display:none}
+.housing-install{font-size:14px;line-height:1.7;margin:8px 0 14px;color:#46545f}
+@media(max-width:640px){.hs-state{flex:1 1 100%}.housing-tools{gap:7px}.hs-btn{flex:1 1 0;padding:8px 10px}}.housing-install summary{cursor:pointer;color:#14688f;font-weight:700}.housing-install a{color:#14688f}
 .beike-pane{margin:8px 14px 14px;padding:12px;border:1px solid #dbe6ec;border-radius:8px;background:#fbfdfe;font-size:13px;line-height:1.7}
 .beike-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .beike-status{color:#6b7a86;overflow-wrap:anywhere}
@@ -221,12 +236,17 @@ table.cmp tfoot td{font-size:15px;font-weight:900;border-bottom:0}
 .beike-list td,.beike-list th{padding:8px;border-bottom:1px solid #e3eaee;white-space:nowrap;font-size:12px}
 .beike-list th{background:#f6fafb}
 .beike-note{font-size:12px;color:#6b7a86;margin-top:8px}
+.beike-next{margin-top:10px;padding:10px 12px;border:1px dashed #cfe0e9;border-radius:8px;background:#f4fafd;font-size:12px;color:#46545f;line-height:1.7}
+.beike-next button{margin-left:6px;border:1px solid #14688f;background:#fff;color:#14688f;font-size:12px;font-weight:700;padding:5px 10px;border-radius:6px;cursor:pointer}
+.beike-next button:hover{background:#eaf5fb}
+.toast{position:fixed;left:50%;bottom:34px;transform:translateX(-50%) translateY(8px);background:rgba(28,43,54,.94);color:#fff;font-size:13px;padding:9px 16px;border-radius:8px;z-index:1200;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;max-width:calc(100% - 40px);text-align:center}
+.toast.on{opacity:1;transform:translateX(-50%)}
 @media(max-width:860px){.beike-meta{grid-template-columns:1fr}.beike-pane{margin:8px 12px 12px}.housing-tools{font-size:14px}.comm-inp{font-size:16px!important}}
 </style>
 </head>
 <body>
 <div class="top">
-  <h1>小区综合打分 <span class="ver-badge">v10</span></h1>
+  <h1>小区综合打分 <span class="ver-badge">v11</span></h1>
   <div class="r">输入小区，自动统计周边配套并结合小区本体属性<br>交通 / 商业 / 医疗 / 教育 / 环境 / 品质 / 户型 / 性价比，支持多小区对比</div>
 </div>
 <div class="wrap">
@@ -234,8 +254,8 @@ table.cmp tfoot td{font-size:15px;font-weight:900;border-bottom:0}
   <div class="card">
     <div class="ct">选择小区<small>输入名称后点下拉项；可展开补录小区本体信息（选填）</small></div>
     <div class="cbody">
-      <div class="housing-tools"><span id="housingSvc">正在检测独立贝壳服务…</span><a href="http://127.0.0.1:17532/api/housing/connect" target="_blank" rel="noopener">连接贝壳</a><a href="amenity://start">启动贝壳服务</a><a id="housingDownload" href="/medias/files/amenity_service.exe">下载贝壳服务（Windows）</a><a id="housingMacIntel" href="/medias/files/amenity_service_mac_intel.zip" hidden>Mac Intel 版</a></div>
-      <details class="housing-install"><summary>安装说明与其他平台下载</summary><p><a href="/medias/files/amenity_service.exe">Windows</a> · <a href="/medias/files/amenity_service_android.apk">Android 7.0 及以上</a> · <a href="/medias/files/amenity_service_mac_arm64.zip">Mac Apple Silicon</a> · <a href="/medias/files/amenity_service_mac_intel.zip">Mac Intel</a></p><p>电脑首次双击独立服务；在「连接贝壳」页添加连接书签，在贝壳地图和对应城市的小区详情页分别连接并保持打开。Mac 包未做开发者签名与公证，系统可能要求本人在「隐私与安全性」中确认打开。安卓安装自用测试签名 APK 后点「启动」，在 App 内的地图和详情页完成登录，再回评分页操作，无需拖书签；登录和验证码均由本人完成。</p><p>服务只在本机 127.0.0.1:17532 运行，原 LOL 服务不受影响。安卓已通过构建、签名及包内源码检查，尚未验证真机内登录与采集；贝壳访问拒绝时不会绕过，也不会把缺失资料当零分。</p></details>
+      <div class="housing-tools"><span class="hs-state"><span class="hs-dot wait" id="housingDot"></span><span id="housingSvc">正在检测本机贝壳服务…</span></span><button type="button" class="hs-btn primary" id="housingConnect">连接贝壳</button><a class="hs-btn hs-aux" id="housingStart" href="amenity://start">启动服务</a><a class="hs-btn hs-aux" id="housingDownload" href="/medias/files/amenity_service.exe">下载服务</a><a class="hs-btn" id="housingMacIntel" href="/medias/files/amenity_service_mac_intel.zip" hidden>Mac Intel 版</a></div>
+      <details class="housing-install"><summary>安装方式与各平台下载</summary><p><a href="/medias/files/amenity_service.exe">Windows</a> · <a href="/medias/files/amenity_service_android.apk">Android 7.0 及以上</a> · <a href="/medias/files/amenity_service_mac_arm64.zip">Mac Apple Silicon</a> · <a href="/medias/files/amenity_service_mac_intel.zip">Mac Intel</a></p><p>Windows 双击即用，浏览器首次允许本机访问即可；Mac 打开 amenity_service.app（未签名，需在「隐私与安全性」中允许）；Android 安装后点「启动」，在 App 内的地图与详情页登录后自动连接，无需额外操作。</p><p>服务只在本机 127.0.0.1:17532 运行。贝壳资料只在本人已登录的页面内读取公开小区与挂牌信息，遇到登录、验证码或拒绝访问不会绕过；缺少的资料显示为缺失，不计零分。</p></details>
       <div id="commList"></div>
       <div class="ctl-row">
         <button class="linkbtn" id="btnAdd">+ 添加小区对比</button>
@@ -289,7 +309,7 @@ table.cmp tfoot td{font-size:15px;font-weight:900;border-bottom:0}
       <b>分值与缺失：</b>专项为100分制；综合按实际可用子指标权重归一，未查询不计零分，显示权重覆盖。规则为本工具启发式，不是官方评级；挂牌样本不等于全部住宅构成。<br>
       <b>性价比：</b>只有配套信息与房价同时具备才计算，避免仅凭便宜判定性价比好；配套因子与价格因子各占一半，明确物业费可加居住成本辅助。价格因子为1−log10(clamp(单价,10000,100000)/10000)，是工具固定参考范围，不是市场估值结论。<br>
       <b>等级：</b>90+ 极佳，75–89 优秀，60–74 良好，45–59 一般，&lt;45 不便。教育维度只测学校距离，不代表学区划分与质量；本工具不预测房价走势。
-      <div class="ver-tag">版本 v10 · 贝壳资料与高德配套分开标注来源；每次打分实时检索配套</div>
+      <div class="ver-tag">版本 v11 · 贝壳资料与高德配套分开标注来源；每次打分实时检索配套</div>
     </div>
   </div>
 </div>
@@ -610,25 +630,69 @@ function resolveByName(kw,i){
 // ---- 贝壳本地服务：凭据只留在用户连接的贝壳页面 ----
 const HOUSING_API='http://127.0.0.1:17532';
 const housingUA=navigator.userAgent+' '+(navigator.platform||'');
-const housingAndroid=/android/i.test(housingUA),housingMac=/macintosh|mac os x/i.test(housingUA);
+const housingAndroid=/android/i.test(housingUA),housingMac=/macintosh|mac os x/i.test(housingUA),housingWin=/windows/i.test(housingUA);
 const housingDownload=document.getElementById('housingDownload');
 housingDownload.href=housingAndroid?'/medias/files/amenity_service_android.apk':housingMac?'/medias/files/amenity_service_mac_arm64.zip':'/medias/files/amenity_service.exe';
-housingDownload.textContent=housingAndroid?'下载贝壳服务（安卓）':housingMac?'下载贝壳服务（Mac Apple Silicon）':'下载贝壳服务（Windows）';
+housingDownload.textContent=housingAndroid?'下载服务（安卓）':housingMac?'下载服务（Mac Apple Silicon）':'下载服务（Windows）';
 if(housingMac)document.getElementById('housingMacIntel').hidden=false;
-let housingState={connected:false,cityId:''};
+if(!housingWin)document.getElementById('housingStart').hidden=true;
+let housingState={connected:false,cityId:''},lastMapConnected=false,lastProfileConnected=false,probeTimer=0;
+let toastEl=null,toastTimer=0;
+function toast(msg){
+ if(!toastEl){toastEl=document.createElement('div');toastEl.className='toast';document.body.appendChild(toastEl);}
+ toastEl.textContent=msg;toastEl.classList.add('on');clearTimeout(toastTimer);
+ toastTimer=setTimeout(()=>toastEl.classList.remove('on'),2600);
+}
+function openConnect(){
+ if(housingState.connected&&housingState.profileConnected){toast('贝壳通道已就绪，无需再连接');return;}
+ window.open(HOUSING_API+'/api/housing/connect','_blank','noopener');
+}
+document.getElementById('housingConnect').addEventListener('click',openConnect);
+function scheduleProbe(){
+ clearTimeout(probeTimer);
+ probeTimer=setTimeout(probeHousing,housingState.connected&&housingState.profileConnected?6000:2500);
+}
+async function probeHousing(){
+ const el=document.getElementById('housingSvc'),dot=document.getElementById('housingDot');
+ try{
+  const st=await housingApi('status',null,1800);
+  const wasMap=lastMapConnected,wasProfile=lastProfileConnected;
+  housingState=st;lastMapConnected=!!st.connected;lastProfileConnected=!!st.profileConnected;
+  const city=st.cityName?' · '+st.cityName:'';
+  document.querySelector('.housing-tools').classList.add('hs-live');
+  if(!st.connected){el.textContent='本机服务已运行'+city+' · 等待连接贝壳页面';dot.className='hs-dot wait';}
+  else if(!st.profileConnected){el.textContent='地图已连接'+city+' · 打开小区详情页点一次同一按钮，可补容积率与户型';dot.className='hs-dot half';}
+  else{el.textContent='贝壳通道就绪'+city+' · 查询会自动补齐资料';dot.className='hs-dot ok';}
+  if((!wasMap&&st.connected)||(!wasProfile&&st.profileConnected)){
+   if(!wasProfile&&st.profileConnected)comms.forEach(c=>{c.profileRefresh=false;});
+   flushPending();
+  }
+ }catch(e){
+  housingState={connected:false,cityId:''};lastMapConnected=lastProfileConnected=false;
+  el.textContent='本机服务未运行 · 下载后双击打开，再点「连接贝壳」';
+  dot.className='hs-dot off';
+  document.querySelector('.housing-tools').classList.remove('hs-live');
+ }
+ scheduleProbe();
+}
+function flushPending(){
+ comms.slice(0,commCount).forEach(c=>{
+  if(!c||c.beikeBusy)return;const i=comms.indexOf(c);if(i<0)return;
+  if(c.pendingQuery&&!c.beike){c.pendingQuery=false;queryBeike(i);return;}
+  if(housingState.profileConnected&&c.beike&&c.beike.profileStatus==='not_connected'&&c.beikeMatch&&!c.profileRefresh){
+   c.profileRefresh=true;
+   fetchBeikeData(c,c.beikeMatch).then(()=>{const k=comms.indexOf(c);if(k>=0){renderBeike(k);saveCache();refreshScored();}}).catch(()=>{});
+  }
+ });
+}
 function esc(s){return String(s??'').replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));}
 function beikeUrl(s){try{const u=new URL(s);return u.protocol==='https:'&&(u.hostname==='ke.com'||u.hostname.endsWith('.ke.com'))?u.href:'';}catch(e){return '';}}
 async function housingApi(path,body,ms=25000){
  const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),ms);
  try{const r=await fetch(HOUSING_API+'/api/housing/'+path,{signal:ctrl.signal,method:body?'POST':'GET',headers:body?{'content-type':'application/json'}:{},body:body?JSON.stringify(body):undefined});
   const j=await r.json();if(!r.ok||!j.ok)throw new Error(j.error||'本地服务返回异常');return j.data;
- }catch(e){if(e.name==='AbortError')throw new Error('查询超时，请保持贝壳标签页打开后重试');if(e instanceof TypeError)throw new Error('本地服务未连接或浏览器未允许本地网络访问');throw e;}
+ }catch(e){if(e.name==='AbortError')throw new Error('查询超时，请保持贝壳标签页打开后重试');if(e instanceof TypeError)throw new Error('未检测到本机贝壳服务，请先打开服务程序');throw e;}
  finally{clearTimeout(timer);}
-}
-async function probeHousing(){
- const el=document.getElementById('housingSvc');
- try{housingState=await housingApi('status',null,1800);el.textContent=housingState.connected?(housingState.profileConnected?'本地服务 · 贝壳地图和详情均已连接':'贝壳地图已连接 · 请在小区详情页也点击连接书签'):'本地服务已运行 · 请连接已登录的贝壳页面';}
- catch(e){housingState={connected:false,cityId:''};el.textContent='独立贝壳服务未运行（与 LOL 服务互不影响）';}
 }
 function renderBeike(i){
  const c=comms[i],el=document.querySelector(`.comm[data-i="${i}"]`);if(!c||!el)return;
@@ -654,13 +718,24 @@ function renderBeike(i){
  ${analysis}${groupTable}
  <div><b>户型样本</b> ${layouts}</div><div>朝南 ${s.southCount} 套 / 南北朝向 ${s.northSouthCount} 套（按挂牌朝向，不代表实测通透）</div>
  <details><summary>查看 ${s.sampleCount} 套挂牌房源</summary><div class="beike-list"><table><thead><tr><th>户型</th><th>面积</th><th>朝向</th><th>挂牌总价</th><th>挂牌单价</th><th>来源</th></tr></thead><tbody>${b.listings.map(r=>`<tr><td>${esc(r.layout||'—')}</td><td>${r.area??'—'}㎡</td><td>${esc(r.orientation||'—')}</td><td>${r.totalPrice??'—'}万</td><td>${r.unitPrice??'—'}元/㎡</td><td>${beikeUrl(r.url)?`<a href="${esc(beikeUrl(r.url))}" target="_blank" rel="noopener noreferrer">贝壳详情</a>`:'—'}</td></tr>`).join('')}</tbody></table></div></details>
- <div class="beike-note">${esc(b.fetchedAt)} · 已读取 ${b.pages} 页 / 去重 ${s.sampleCount} 套 / 平台在售 ${b.total??'—'} 套${b.truncated?' · 尚有分页，当前为样本':''}。${source?`<a href="${esc(source)}" target="_blank" rel="noopener noreferrer">小区来源</a>`:''}<br>基础详情：${b.profileStatus==='ok'?'已获取':b.profileStatus==='failed'?'获取失败':'需在小区详情页点击连接书签后刷新'}。${esc((b.warnings||[]).join('；'))} 挂牌样本不代表全部户型或成交价；物业费区间仅展示，不擅取单值。</div>`;
+ <div class="beike-note">${esc(b.fetchedAt)} · 已读取 ${b.pages} 页 / 去重 ${s.sampleCount} 套 / 平台在售 ${b.total??'—'} 套${b.truncated?' · 尚有分页，当前为样本':''}。${source?`<a href="${esc(source)}" target="_blank" rel="noopener noreferrer">小区来源</a>`:''}<br>基础详情：${b.profileStatus==='ok'?'已获取':b.profileStatus==='failed'?'读取失败':'未连接详情页，容积率与绿化率暂缺'}。${esc((b.warnings||[]).join('；'))} 挂牌样本不代表全部户型或成交价；物业费区间仅展示，不擅取单值。</div>`;
+ const src=beikeUrl(b.source);
+ if(b.profileStatus!=='ok'&&src){
+  const next=document.createElement('div');next.className='beike-next';
+  next.innerHTML=(b.profileStatus==='failed'?'资料页读取失败，可再试一次。':'容积率、绿化率与户型还没补齐。')+
+   ` 打开 <a href="${esc(src)}" target="_blank" rel="noopener noreferrer">贝壳小区页</a>，在该页点一次同一个「连接贝壳」按钮；回到本页会自动更新，无需重新查询。`;
+  box.appendChild(next);
+ }
 }
 async function queryBeike(i){
  const c=comms[i],el=document.querySelector(`.comm[data-i="${i}"]`);if(!c||!el||c.beikeBusy)return;
  const name=el.querySelector('.comm-inp').value.trim(),generation=c.dataGeneration||0;if(!name){c.beikeMessage='请先填写小区名称';renderBeike(i);return;}
  c.beikeBusy=true;c.beikeMessage='正在查询贝壳候选…';c.beikeCandidates=[];renderBeike(i);
- try{await probeHousing();if(!housingState.connected)throw new Error('请先点击「连接贝壳」，在已登录的贝壳地图标签页连接独立服务；安卓可在贝壳服务 App 内打开地图和详情');
+ try{await probeHousing();
+  if(!housingState.connected){
+   c.pendingQuery=true;c.beikeMessage='已打开连接页：连好后会自动查询，无需回来再点';
+   renderBeike(i);openConnect();return;
+  }
   if(c.beikeMatch){const hit=c.beikeMatch;if(hit.cityId!==housingState.cityId)throw new Error('贝壳城市已变，请重新选择对应小区');await fetchBeikeData(c,hit);}
   else{const result=await housingApi('search',{name,cityId:housingState.cityId});if(!comms.includes(c)||(c.dataGeneration||0)!==generation)return;
    c.beikeCandidates=result.items;c.beikeMessage=result.items.length?'请核对名称、分期与地址后选择；不会自动取第一项':'贝壳未匹配到在售小区，请检查城市、别名；不代表没有房源';}
@@ -688,7 +763,7 @@ function applyBeike(c,d){
  saveCache();
 }
 function refreshScored(){const valid=comms.slice(0,commCount).filter(c=>c.lnglat&&(c.am||c.beike));if(valid.length)renderResults(valid,false);}
-setInterval(probeHousing,5000);probeHousing();
+probeHousing();
 
 // ---- 本地缓存（只缓存表单与定位，分析结果不缓存，每次重新检索）----
 function saveCache(){
