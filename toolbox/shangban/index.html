@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>上班鼓励器 · 韦阳的博客</title>
+<meta name="description" content="上班鼓励器：把今天的工资换算成看得见的日常物件，只显示现在最接近的一件。">
+<link rel="canonical" href="https://godweiyang.com/toolbox/shangban/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%23244D91'/%3E%3Cpath d='M20 7c1 8 12 11 9 20-2 7-13 7-17 1-3-5 0-10 2-12-1 5 4 7 4 3 2-3 1-7 2-12z' fill='none' stroke='white' stroke-width='1.9'/%3E%3C/svg%3E">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#F8F8F5;
+  --ink:#2C2D2B;
+  --sub:#64655F;
+  --line:#E5E5E0;
+  --blue:#203C70;
+  --earned:#9C3F27;
+  --cardline:#E1E1DB;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:"Microsoft YaHei UI","Microsoft YaHei",-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;
+  font-size:17px;-webkit-font-smoothing:antialiased;
+}
+button{font:inherit;cursor:pointer}
+.stage-wrap{display:flex;justify-content:center;overflow:hidden}
+.stage{
+  width:520px;background:var(--bg);position:relative;
+  transform-origin:top center;
+  box-shadow:0 0 0 1px rgba(0,0,0,.03);
+}
+.topbar{
+  height:70px;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 25px 0 22px;
+}
+.brand{display:flex;align-items:center;gap:14px;min-width:0}
+.brand svg{width:30px;height:30px;flex:none}
+.brand h1{font-size:21px;font-weight:600;margin:0;white-space:nowrap}
+.set-btn{
+  display:flex;align-items:center;gap:7px;background:transparent;border:0;
+  padding:5px 8px;color:var(--sub);border-radius:8px;font-size:18px;
+}
+.set-btn:hover{background:#EDEDE8}
+.set-btn .gear{font-size:20px;line-height:1}
+main{position:relative;height:720px;padding:0}
+.clock{position:absolute;left:28px;right:28px;top:24px;font-size:19px;line-height:1.35}
+.status{position:absolute;left:28px;right:28px;top:74px;margin:0;font-size:33px;font-weight:500;color:var(--blue);line-height:1.35}
+.countdown{position:absolute;left:28px;right:28px;top:128px;font-size:21px;line-height:1.5}
+.label{position:absolute;left:28px;top:187px;font-size:18px;color:var(--sub)}
+.earned{
+  position:absolute;left:28px;right:24px;top:209px;
+  font-family:Consolas,"Courier New",monospace;font-size:48px;line-height:1.15;color:var(--earned);
+  white-space:nowrap;
+}
+.rate{position:absolute;left:28px;right:28px;top:278px;font-size:18px}
+.msg{position:absolute;left:28px;right:28px;top:318px;font-size:17px;line-height:1.7}
+.timer{
+  position:absolute;left:28px;right:28px;top:358px;height:55px;
+  background:#141920;color:#fff;border:0;border-radius:8px;
+  font-size:20px;font-weight:600;
+}
+.timer:active{opacity:.85}
+.progress-text{position:absolute;left:28px;top:442px;font-size:18px;color:var(--sub)}
+.hours{position:absolute;left:28px;top:476px;font-size:18px}
+.bar{position:absolute;left:28px;right:28px;top:510px;height:8px;background:#E9E9E3;border-radius:2px;overflow:hidden}
+.fill{height:100%;width:0;background:#244C88;border-radius:2px;transition:width .4s ease}
+.hr{position:absolute;left:28px;right:28px;top:542px;border-top:1px solid var(--cardline)}
+.month-label{position:absolute;left:28px;top:568px;font-size:18px;color:var(--sub)}
+.month{position:absolute;right:28px;top:558px;font-family:Consolas,"Courier New",monospace;font-size:26px;font-weight:700;color:var(--blue)}
+.month-note{position:absolute;left:28px;right:28px;top:604px;font-size:15px;color:#686A62;line-height:1.6}
+.foot1{position:absolute;left:28px;right:28px;top:662px;font-size:16px;color:#62645C}
+.foot2{position:absolute;left:28px;right:28px;top:691px;font-size:16px;color:#62645C}
+.back{display:block;text-align:center;color:#8A8B84;font-size:14px;text-decoration:none;padding:18px 0 26px}
+.back:hover{color:var(--blue)}
+
+.sheet-mask{position:fixed;inset:0;background:rgba(20,25,32,.45);display:none;align-items:center;justify-content:center;padding:20px;z-index:20}
+.sheet-mask[data-open="true"]{display:flex}
+.sheet{width:100%;max-width:396px;background:var(--bg);border-radius:12px;padding:24px;box-shadow:0 18px 50px rgba(0,0,0,.22)}
+.sheet h2{font-size:20px;margin:0 0 6px}
+.sheet p.hint{font-size:13px;color:var(--sub);margin:0 0 14px;line-height:1.6}
+.field{margin-top:10px}
+.field label{display:block;font-size:14px;color:var(--sub);margin-bottom:6px}
+.field input{
+  width:100%;font:inherit;font-size:17px;padding:9px 11px;border:1px solid #DCE5EC;border-radius:6px;background:#fff;color:var(--ink);
+}
+.field input:focus{outline:2px solid #6684B0;outline-offset:1px}
+.sheet-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
+.sheet-actions button{font-size:15px;padding:9px 20px;border-radius:8px;border:1px solid #DCE5EC;background:#fff;color:var(--ink)}
+.sheet-actions .primary{background:#244D91;border-color:#244D91;color:#fff}
+.err{color:#B23A2A;font-size:13px;margin-top:10px;min-height:18px}
+
+@media(max-width:560px){
+  .stage{transform-origin:top center}
+}
+@media(prefers-reduced-motion:reduce){.fill{transition:none}}
+</style>
+</head>
+<body>
+<div class="stage-wrap">
+  <div class="stage" id="stage">
+    <div class="topbar">
+      <div class="brand">
+        <svg viewBox="0 0 40 40" aria-hidden="true">
+          <rect width="40" height="40" rx="8" fill="#244D91"/>
+          <path d="M20 7c1 8 12 11 9 20-2 7-13 7-17 1-3-5 0-10 2-12-1 5 4 7 4 3 2-3 1-7 2-12z" fill="none" stroke="#fff" stroke-width="1.9"/>
+        </svg>
+        <h1>上班鼓励器</h1>
+      </div>
+      <button class="set-btn" id="open-settings" type="button" aria-label="设置">
+        <span class="gear" aria-hidden="true">&#9881;</span><span>设置</span>
+      </button>
+    </div>
+    <main>
+      <div class="clock" id="clock"></div>
+      <h2 class="status" id="status">上班中</h2>
+      <div class="countdown" id="countdown"></div>
+      <div class="label">今日已赚</div>
+      <div class="earned" id="earned">¥ 0.00</div>
+      <div class="rate" id="rate"></div>
+      <div class="msg" id="msg"></div>
+      <button class="timer" id="timer" type="button">关闭计时器</button>
+      <div class="progress-text" id="progress-text"></div>
+      <div class="hours" id="hours"></div>
+      <div class="bar"><div class="fill" id="fill"></div></div>
+      <div class="hr"></div>
+      <div class="month-label">本月累计</div>
+      <div class="month" id="month">¥ 0.00</div>
+      <div class="month-note">已过的日子按满勤补算。本月只计已赚，不含亏损。</div>
+      <div class="foot1" id="foot1"></div>
+      <div class="foot2" id="foot2"></div>
+    </main>
+    <a class="back" href="https://godweiyang.com/toolbox/">← 返回工具箱</a>
+  </div>
+</div>
+
+<div class="sheet-mask" id="mask" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+  <div class="sheet">
+    <h2 id="sheet-title">工资与时间</h2>
+    <p class="hint">月薪按 21.75 个工作日折算，只需设置这三项。</p>
+    <div class="field"><label for="salary">税前月薪（元）</label><input id="salary" inputmode="decimal" autocomplete="off"></div>
+    <div class="field"><label for="start">上班时间（HH:mm）</label><input id="start" inputmode="numeric" autocomplete="off"></div>
+    <div class="field"><label for="end">下班时间（HH:mm）</label><input id="end" inputmode="numeric" autocomplete="off"></div>
+    <div class="err" id="err"></div>
+    <div class="sheet-actions">
+      <button type="button" id="cancel">取消</button>
+      <button type="button" class="primary" id="save">保存</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var WORK_DAYS = 21.75;
+  var REWARDS = [
+    ['一瓶矿泉水',2],['一包纸巾',3],['一个包子',4],['一盒牛奶',5],['一瓶可乐',6],
+    ['一袋面包',8],['一份早餐',10],['一支牙刷',12],['一杯奶茶',18],['一支牙膏',20],
+    ['一杯咖啡',25],['一瓶洗洁精',30],['一顿午餐',35],['一袋洗衣液',45],['一把雨伞',59],
+    ['一个保温杯',79],['一瓶洗发水',99],['一件T恤',129],['一个充电宝',159],['一个电热水壶',199],
+    ['一套床单',299],['一双运动鞋',399],['一个电饭煲',499],['一副蓝牙耳机',699],['一台微波炉',899],
+    ['一把办公椅',1199],['一台显示器',1499],['一台扫地机器人',1999],['一台洗衣机',2499],['一台冰箱',2999],
+    ['一部手机',3999],['一台电视',4999],['一张床和床垫',5999],['一套沙发',6999],['一台笔记本',7999],
+    ['一辆电动自行车',8999],['一台高配电脑',12999],['一台洗烘套装',15999],['一套客厅家具',19999],
+    ['一套厨房电器',24999],['一套全屋家电',39999],['一套全屋家具',59999]
+  ];
+  var KEY='godweiyang.work-encourager.settings.v1';
+  var settings={salary:10000,start:'09:00',end:'18:00'};
+  var running=true;
+  var timer=null;
+
+  function parseTime(s){
+    var m=/^(\d{1,2}):(\d{2})$/.exec(String(s||'').trim().replace('：',':'));
+    if(!m)return null;
+    var h=+m[1],mi=+m[2];
+    if(h<0||h>23||mi<0||mi>59)return null;
+    return h*60+mi;
+  }
+  function hhmm(min){
+    var h=Math.floor(min/60),m=min%60;
+    return (h<10?'0':'')+h+':'+(m<10?'0':'')+m;
+  }
+  function load(){
+    try{
+      var raw=localStorage.getItem(KEY);
+      if(!raw)return;
+      var v=JSON.parse(raw);
+      if(typeof v.salary==='number'&&v.salary>=0)settings.salary=v.salary;
+      if(parseTime(v.start)!==null)settings.start=hhmm(parseTime(v.start));
+      if(parseTime(v.end)!==null)settings.end=hhmm(parseTime(v.end));
+    }catch(e){}
+  }
+  function persist(){
+    try{localStorage.setItem(KEY,JSON.stringify(settings));}catch(e){}
+  }
+
+  function money(n){return n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',');}
+  function duration(sec){
+    if(sec<0)sec=0;
+    var total=Math.ceil(sec);
+    var h=Math.floor(total/3600),m=Math.floor((total%3600)/60);
+    return h+' 小时 '+m+' 分';
+  }
+  function week(d){
+    return ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'][d.getDay()];
+  }
+  function pad(n){return (n<10?'0':'')+n;}
+
+  function compute(now){
+    var start=parseTime(settings.start),end=parseTime(settings.end);
+    if(end<=start)end=start+60;
+    var total=(end-start)*60;
+    var dayStart=new Date(now.getFullYear(),now.getMonth(),now.getDate(),Math.floor(start/60),start%60,0);
+    var dayEnd=new Date(now.getFullYear(),now.getMonth(),now.getDate(),Math.floor(end/60),end%60,0);
+    var worked,remain,status;
+    if(now<dayStart){status='还没上班';worked=0;remain=total;}
+    else if(now>=dayEnd){status='已下班';worked=total;remain=0;}
+    else {status='上班中';worked=(now-dayStart)/1000;remain=(dayEnd-now)/1000;}
+    if(worked<0)worked=0; if(worked>total)worked=total;
+    var fullDay=settings.salary/WORK_DAYS;
+    var speed=settings.salary/WORK_DAYS/total;
+    var earned=Math.round(worked*speed*100)/100;
+    var workday=now.getDay()!==0&&now.getDay()!==6;
+    var month=0;
+    var d=new Date(now.getFullYear(),now.getMonth(),1);
+    while(d<new Date(now.getFullYear(),now.getMonth(),now.getDate())){
+      if(d.getDay()!==0&&d.getDay()!==6)month+=fullDay;
+      d.setDate(d.getDate()+1);
+    }
+    if(workday)month+=earned;
+    var next=null;
+    for(var i=0;i<REWARDS.length;i++){if(REWARDS[i][1]>earned){next=REWARDS[i];break;}}
+    var msg;
+    if(!next) msg='今天赚的钱，已经能把最贵的那件赚回来了。';
+    else msg='再过 '+duration((next[1]-earned)/speed)+'，'+next[0]+'就赚回来了。';
+    return {
+      status:status,worked:worked,total:total,remain:remain,
+      progress:total?worked/total:0,
+      earned:earned,hourly:settings.salary/WORK_DAYS/(total/3600),
+      speed:speed,month:month,fullDay:fullDay,msg:msg,
+      next:next
+    };
+  }
+
+  var el={};
+  ['clock','status','countdown','earned','rate','msg','timer','progress-text','hours','fill','month','foot1','foot2'].forEach(function(id){
+    el[id]=document.getElementById(id);
+  });
+
+  function render(){
+    var now=new Date();
+    var r=compute(now);
+    el.clock.textContent=now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日 '+week(now)+'  '+pad(now.getHours())+':'+pad(now.getMinutes())+':'+pad(now.getSeconds());
+    el.status.textContent=r.status;
+    el.countdown.textContent = r.status==='上班中' ? '距离下班还有 '+duration(r.remain)
+      : r.status==='还没上班' ? '今天 '+settings.start+' 开始上班'
+      : '今天的班已经上完了';
+    el.earned.textContent='¥ '+money(r.earned);
+    el.rate.textContent='时薪 ¥ '+money(r.hourly);
+    el.msg.textContent=r.msg;
+    var pct=Math.round(r.progress*100); if(pct>100)pct=100;
+    el['progress-text'].textContent='今天已经过了 '+pct+'%';
+    el.hours.textContent=settings.start+' - '+settings.end;
+    el.fill.style.width=(r.progress*100).toFixed(2)+'%';
+    el.month.textContent='¥ '+money(r.month);
+    el.foot1.textContent='时薪 ¥ '+money(r.hourly)+' · 每秒 ¥ '+r.speed.toFixed(4);
+    el.foot2.textContent='全天满勤 ¥ '+money(r.fullDay);
+  }
+
+  function tick(){ if(running) render(); }
+
+  el.timer.addEventListener('click',function(){
+    running=!running;
+    el.timer.textContent=running?'关闭计时器':'开启计时器';
+    if(running)render();
+  });
+
+  var mask=document.getElementById('mask');
+  var salary=document.getElementById('salary');
+  var start=document.getElementById('start');
+  var end=document.getElementById('end');
+  var err=document.getElementById('err');
+
+  function openSheet(){
+    salary.value=String(settings.salary);
+    start.value=settings.start;
+    end.value=settings.end;
+    err.textContent='';
+    mask.dataset.open='true';
+    setTimeout(function(){salary.focus();},0);
+  }
+  function closeSheet(){mask.dataset.open='false';}
+  document.getElementById('open-settings').addEventListener('click',openSheet);
+  document.getElementById('cancel').addEventListener('click',closeSheet);
+  mask.addEventListener('click',function(e){if(e.target===mask)closeSheet();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&mask.dataset.open==='true')closeSheet();});
+
+  document.getElementById('save').addEventListener('click',function(){
+    var s=parseFloat(String(salary.value).trim());
+    if(!isFinite(s)||s<0){err.textContent='月薪请填一个不小于 0 的数字。';return;}
+    var a=parseTime(start.value),b=parseTime(end.value);
+    if(a===null){err.textContent='上班时间请按 09:00 这样的格式填写。';return;}
+    if(b===null){err.textContent='下班时间请按 18:00 这样的格式填写。';return;}
+    if(b<=a){err.textContent='下班时间要晚于上班时间。';return;}
+    settings.salary=s;
+    settings.start=hhmm(a);
+    settings.end=hhmm(b);
+    persist();
+    closeSheet();
+    render();
+  });
+
+  function fit(){
+    var stage=document.getElementById('stage');
+    var wrap=stage.parentElement;
+    var s=Math.min(1,window.innerWidth/520);
+    stage.style.transform='scale('+s+')';
+    wrap.style.height=(stage.offsetHeight*s)+'px';
+  }
+
+  load();
+  render();
+  timer=setInterval(tick,1000);
+  window.addEventListener('resize',fit);
+  fit();
+})();
+</script>
+</body>
+</html>
