@@ -5,8 +5,9 @@
 <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>小区综合打分 · 买房对比工具</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2314688f'/%3E%3Cpath d='M18 44V26l14-10 14 10v18H36V34H28v10z' fill='white'/%3E%3C/svg%3E">
+<meta name="referrer" content="no-referrer">
+<title>上海小区指南 · 打分 / 地图 / 找房 / 房源</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2320242a'/%3E%3Cpath d='M18 44V26l14-10 14 10v18H36V34H28v10z' fill='%23f6f3ec'/%3E%3C/svg%3E">
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
@@ -424,14 +425,269 @@ table.cmp tfoot td{font-family:var(--serif);font-size:18px;font-weight:500;borde
 .comm-meta{display:flex;flex-wrap:wrap;gap:2px 12px;padding:6px 2px 0;
   font-size:11.5px;color:var(--ink2);line-height:1.7}
 .comm-meta .comm-addr{flex:1 1 100%;color:var(--muted);font-size:11px}
+/* ===== v26：功能导航与数据页 ===== */
+.tabs{max-width:1180px;margin:0 auto;padding:0 40px;display:flex;gap:26px;overflow-x:auto;
+  border-bottom:1px solid var(--hair);scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{position:relative;flex:none;border:0;background:transparent;color:var(--muted);
+  font:500 13px/1 inherit;padding:13px 2px 14px;cursor:pointer;letter-spacing:.02em}
+.tab:hover{color:var(--ink2)}
+.tab.active{color:var(--ink)}
+.tab.active::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--ink)}
+.pane{display:none}
+.pane.show{display:block}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;
+  padding:34px 0 18px;border-bottom:1px solid var(--hair);flex-wrap:wrap}
+.sec-head .eyebrow{display:block;font:600 10.5px/1 var(--mono);letter-spacing:.12em;
+  color:var(--muted);text-transform:uppercase;margin-bottom:9px}
+.sec-head h2{font-family:var(--serif);font-size:28px;font-weight:500;line-height:1.15;margin:0}
+.sec-head p{font-size:12.5px;color:var(--ink2);line-height:1.7;margin:7px 0 0;max-width:56rem}
+.toolbar{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.toolbar label{display:flex;flex-direction:column;gap:5px;font-size:11px;color:var(--muted)}
+.toolbar select,.toolbar input{height:38px;border:1px solid var(--hair);border-radius:8px;
+  background:var(--surface);color:var(--ink);font-size:13px;padding:0 10px;min-width:118px;outline:none}
+.toolbar select:focus,.toolbar input:focus{border-color:var(--ink)}
+.ghost{height:38px;padding:0 16px;border:1px solid var(--hair);border-radius:8px;
+  background:var(--surface);color:var(--ink);font-size:12.5px;cursor:pointer}
+.ghost:hover{border-color:var(--ink);background:#fff}
+.ghost.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.ghost:disabled{opacity:.45;cursor:wait}
+
+/* 地图页 */
+.map-layout{display:grid;grid-template-columns:minmax(0,1fr) 318px;gap:22px;padding-top:20px}
+.mapbox{width:100%;height:540px;border:1px solid var(--hair);border-radius:12px;overflow:hidden;
+  background:#f0ece2;position:relative}
+.map-side{min-width:0;border-left:1px solid var(--hair);padding-left:20px}
+.map-legend{display:flex;align-items:center;gap:8px;font:11px/1 var(--mono);color:var(--muted);
+  padding:2px 0 16px;border-bottom:1px solid var(--hair2)}
+.map-legend .bar{height:7px;flex:1;border-radius:2px;
+  background:linear-gradient(90deg,#eee5d4,#e4c79d,#c98d52,#9f4b24)}
+.map-legend b{font-weight:500;color:var(--ink2)}
+#mapPanel{padding:16px 0 0}
+.map-place{font-family:var(--serif);font-size:22px;font-weight:500;line-height:1.2;margin:0 0 4px}
+.map-sub{font-size:11.5px;color:var(--muted);margin-bottom:14px}
+.map-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px;margin-bottom:14px}
+.map-stats div{border-top:1px solid var(--hair2);padding-top:8px}
+.map-stats span{display:block;font-size:10.5px;color:var(--muted)}
+.map-stats b{display:block;font-family:var(--mono);font-size:17px;font-weight:500;
+  font-variant-numeric:tabular-nums;margin-top:2px}
+.map-list{display:flex;flex-direction:column;gap:0;margin-top:4px}
+.map-list button{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  border:0;border-top:1px solid var(--hair2);background:transparent;padding:9px 0;
+  text-align:left;font:inherit;color:var(--ink);cursor:pointer}
+.map-list button:hover{color:var(--accent)}
+.map-list button b{font-size:12.5px;font-weight:500}
+.map-list button span{font:11px/1 var(--mono);color:var(--muted);flex:none}
+.map-note{font-size:11px;color:var(--muted);line-height:1.7;margin-top:14px}
+
+/* 找房页 */
+.filters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 18px;
+  padding:22px 0 20px;border-bottom:1px solid var(--hair2)}
+.filters label{display:flex;flex-direction:column;gap:6px}
+.filters span{font-size:11px;color:var(--muted);font-weight:500}
+.filters select{height:40px;border:1px solid var(--hair);border-radius:8px;background:var(--surface);
+  color:var(--ink);font-size:13px;padding:0 10px;outline:none}
+.filters select:focus{border-color:var(--ink)}
+.find-summary{display:flex;align-items:baseline;justify-content:space-between;gap:16px;
+  padding:16px 0 14px;flex-wrap:wrap}
+.find-summary b{font-family:var(--serif);font-size:24px;font-weight:500}
+.find-summary .note{font-size:11.5px;color:var(--muted);line-height:1.6}
+.find-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.find-card{display:grid;grid-template-columns:142px minmax(0,1fr);min-width:0;
+  border:1px solid var(--hair);border-radius:12px;background:var(--surface);overflow:hidden;
+  transition:border-color .15s var(--ease)}
+.find-card:hover{border-color:#c9c1ad}
+.find-media{position:relative;min-height:172px;background:#e9e3d4;overflow:hidden}
+.find-media img{width:100%;height:100%;object-fit:cover;display:block;position:absolute;inset:0}
+.find-fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:4px;font-family:var(--serif);font-size:34px;color:#9c927e}
+.find-fallback::after{content:"暂无实景图";font-family:var(--sans);font-size:10px;letter-spacing:.04em;
+  color:#a69b86}
+.find-body{padding:14px 14px 12px;min-width:0}
+.find-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.find-name{font-family:var(--serif);font-size:19px;font-weight:500;line-height:1.2;margin:0;
+  overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.find-sub{font-size:10.5px;color:var(--muted);margin:4px 0 10px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.find-money{display:flex;align-items:baseline;gap:6px;margin-bottom:8px}
+.find-money b{font:500 21px/1 var(--mono);color:var(--bad);font-variant-numeric:tabular-nums}
+.find-money span{font-size:10.5px;color:var(--muted)}
+.find-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px 10px;
+  border-top:1px solid var(--hair2);padding-top:9px;margin-top:2px}
+.find-facts div{min-width:0}
+.find-facts span{display:block;font-size:10px;color:var(--muted)}
+.find-facts b{display:block;font:500 12.5px/1.3 var(--mono);color:var(--ink2);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.find-actions{display:flex;gap:6px;margin-top:11px}
+.find-actions button{flex:1;height:32px;border:1px solid var(--hair);border-radius:7px;
+  background:transparent;color:var(--ink);font-size:11.5px;cursor:pointer}
+.find-actions button:hover{background:var(--hair2)}
+.find-more{display:block;margin:22px auto 0}
+.empty-state{padding:48px 0;text-align:center;color:var(--muted);font-size:13px;line-height:1.8}
+
+/* 房源页 */
+.ls-head{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;align-items:end;
+  padding:34px 0 18px;border-bottom:1px solid var(--hair)}
+.ls-head h2{font-family:var(--serif);font-size:28px;font-weight:500;margin:0 0 6px}
+.ls-head p{font-size:12px;color:var(--ink2);line-height:1.7;margin:0}
+.ls-search{position:relative}
+.ls-search .comm-inp-wrap{flex:initial}
+.ls-search input{width:100%;height:42px;border:1px solid var(--hair);border-radius:9px;
+  background:var(--surface);padding:0 12px;font-size:14px;outline:none}
+.ls-search input:focus{border-color:var(--ink)}
+.ls-body{padding-top:20px}
+.ls-hero{display:grid;grid-template-columns:300px minmax(0,1fr);gap:24px;align-items:start}
+.ls-photo{position:relative;height:230px;border-radius:12px;overflow:hidden;background:#e9e3d4}
+.ls-photo img{width:100%;height:100%;object-fit:cover;display:block;position:absolute;inset:0}
+.ls-hero h2{font-family:var(--serif);font-size:30px;font-weight:500;line-height:1.15;margin:0 0 4px}
+.ls-hero .sub{font-size:12px;color:var(--muted);margin-bottom:14px}
+.ls-price{font:500 25px/1 var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+.ls-price small{font-size:11px;color:var(--muted);font-family:inherit;font-weight:400;margin-left:6px}
+.ls-actions{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.ls-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 18px;
+  border-top:1px solid var(--hair2);margin-top:18px;padding-top:14px}
+.ls-metrics div{border-bottom:1px solid var(--hair2);padding:0 0 12px;margin-bottom:12px}
+.ls-metrics span{display:block;font-size:10.5px;color:var(--muted)}
+.ls-metrics b{display:block;font:500 19px/1.2 var(--mono);font-variant-numeric:tabular-nums;
+  margin-top:5px}
+.ls-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:22px}
+.ls-block{border-top:1px solid var(--hair);padding-top:16px;min-width:0}
+.ls-block h3{font-family:var(--serif);font-size:20px;font-weight:500;margin:0 0 12px}
+.bar-row{display:grid;grid-template-columns:78px minmax(0,1fr) 36px;align-items:center;
+  gap:9px;margin:7px 0;font-size:11.5px;color:var(--ink2)}
+.bar-row .bar{height:6px;background:var(--hair2);border-radius:2px;overflow:hidden}
+.bar-row .bar i{display:block;height:100%;background:#9d7b55;border-radius:2px}
+.bar-row b{font:11px/1 var(--mono);text-align:right;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.chip{display:inline-flex;align-items:center;border:1px solid var(--hair);border-radius:5px;
+  padding:3px 7px;font-size:10.5px;color:var(--ink2);background:var(--surface)}
+.chip b{font:500 10.5px/1 var(--mono);color:var(--muted);margin-left:5px}
+.ls-samples{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+.sample{display:grid;grid-template-columns:88px minmax(0,1fr);gap:10px;border:1px solid var(--hair2);
+  border-radius:9px;overflow:hidden;background:var(--surface);text-decoration:none;color:var(--ink)}
+.sample:hover{border-color:var(--hair)}
+.sample-pic{height:88px;background:#e9e3d4;position:relative}
+.sample-pic img{width:100%;height:100%;object-fit:cover;display:block}
+.sample-body{padding:8px 8px 7px;min-width:0}
+.sample-body b{display:block;font-size:12px;font-weight:500;line-height:1.4;
+  overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.sample-body span{display:block;font-size:10.5px;color:var(--muted);margin-top:3px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sample-price{font:500 13px/1 var(--mono);color:var(--bad);margin-top:5px}
+.sample-tags{display:flex;gap:3px;flex-wrap:wrap;margin-top:4px}
+.sample-tags i{font-style:normal;font-size:9.5px;color:var(--muted);background:var(--hair2);
+  border-radius:3px;padding:1px 4px}
+.ls-empty{padding:60px 0;text-align:center;color:var(--muted);line-height:1.8;font-size:13px}
+
+/* 发现页 */
+.discover-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:26px;
+  padding-top:24px;align-items:start}
+.blind{border:1px solid var(--hair);border-radius:14px;overflow:hidden;background:var(--surface)}
+.blind-media{position:relative;height:310px;background:#e9e3d4}
+.blind-media img{width:100%;height:100%;object-fit:cover;display:block;position:absolute;inset:0}
+.blind-body{padding:20px 22px 22px}
+.blind-kicker{font:600 10.5px/1 var(--mono);letter-spacing:.1em;color:var(--muted);
+  text-transform:uppercase;margin-bottom:8px}
+.blind-name{font-family:var(--serif);font-size:34px;font-weight:500;line-height:1.1;margin:0 0 4px}
+.blind-sub{font-size:11.5px;color:var(--muted);margin-bottom:14px}
+.blind-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;
+  border-top:1px solid var(--hair2);padding-top:12px;margin-bottom:16px}
+.blind-facts span{display:block;font-size:10px;color:var(--muted)}
+.blind-facts b{display:block;font:500 16px/1.2 var(--mono);color:var(--ink);margin-top:3px}
+.blind-actions{display:flex;gap:8px;flex-wrap:wrap}
+.blind-actions button{height:36px;padding:0 15px;border:1px solid var(--hair);border-radius:8px;
+  background:transparent;color:var(--ink);font-size:12px;cursor:pointer}
+.blind-actions button:hover{background:var(--hair2)}
+.blind-actions .primary{background:var(--ink);border-color:var(--ink);color:#fff}
+.blind-actions .primary:hover{background:#000}
+.disc-side{display:flex;flex-direction:column;gap:22px;min-width:0}
+.disc-block{border-top:1px solid var(--hair);padding-top:15px}
+.disc-block h3{font-family:var(--serif);font-size:21px;font-weight:500;margin:0 0 6px}
+.disc-block p{font-size:11.5px;color:var(--ink2);line-height:1.7;margin:0 0 12px}
+.alt-list{display:flex;flex-direction:column;gap:0}
+.alt-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;
+  border:0;border-top:1px solid var(--hair2);padding:10px 0;background:transparent;
+  text-align:left;font:inherit;color:var(--ink);cursor:pointer;width:100%}
+.alt-row:hover{color:var(--accent)}
+.alt-row:first-child{border-top:0}
+.alt-row b{display:block;font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis}
+.alt-row span{display:block;font-size:10px;color:var(--muted);margin-top:2px}
+.alt-row .price{font:500 13px/1 var(--mono);color:var(--bad);text-align:right}
+.alt-row .price small{display:block;font:10px/1.4 var(--mono);color:var(--muted);margin-top:3px}
+.daily-board{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px}
+.daily-item{border-top:1px solid var(--hair2);padding-top:8px}
+.daily-item span{display:block;font-size:10px;color:var(--muted)}
+.daily-item b{display:block;font-family:var(--serif);font-size:16px;font-weight:500;
+  margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* 通用弹窗 */
+.alt-dialog{width:100%;max-width:680px;background:var(--surface);border:1px solid var(--hair);
+  border-radius:14px;overflow:hidden}
+.alt-dialog .dlg-head{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:18px 22px;border-bottom:1px solid var(--hair2)}
+.alt-dialog h3{font-family:var(--serif);font-size:22px;font-weight:500;margin:0}
+.dlg-close{width:32px;height:32px;border:0;border-radius:7px;background:transparent;
+  color:var(--muted);font-size:20px;cursor:pointer;line-height:1}
+.dlg-close:hover{background:var(--hair2);color:var(--ink)}
+.alt-dialog .dlg-body{padding:8px 22px 18px;max-height:66vh;overflow:auto}
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(10px);
+  background:var(--ink);color:#fff;font-size:12.5px;padding:9px 16px;border-radius:7px;
+  opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;z-index:950}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.top .r time{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+@media(max-width:960px){
+ .map-layout{grid-template-columns:1fr}
+ .map-side{border-left:0;border-top:1px solid var(--hair);padding-left:0;padding-top:18px}
+ .mapbox{height:460px}
+ .ls-head{grid-template-columns:1fr}
+ .ls-search{max-width:420px}
+ .ls-hero{grid-template-columns:220px minmax(0,1fr)}
+ .discover-grid{grid-template-columns:1fr}
+ .find-list{grid-template-columns:1fr}
+}
+@media(max-width:640px){
+ .top{padding:34px 20px 6px}
+ .top h1{font-size:34px}
+ .top .r{text-align:left}
+ .tabs{padding:0 20px;gap:22px}
+ .wrap{padding:12px 20px 64px}
+ .sec-head{padding:26px 0 14px}
+ .sec-head h2{font-size:24px}
+ .toolbar{width:100%}
+ .toolbar label{flex:1;min-width:120px}
+ .toolbar select{width:100%;min-width:0}
+ .mapbox{height:380px}
+ .filters{grid-template-columns:1fr 1fr;gap:12px}
+ .find-card{grid-template-columns:1fr}
+ .find-media{height:176px}
+ .ls-hero{grid-template-columns:1fr}
+ .ls-photo{height:200px}
+ .ls-grid,.ls-samples{grid-template-columns:1fr}
+ .blind-media{height:230px}
+ .blind-name{font-size:28px}
+ .blind-facts{grid-template-columns:1fr 1fr}
+ .sample{grid-template-columns:76px minmax(0,1fr)}
+ .sample-pic{height:76px}
+ .alt-dialog .dlg-body{padding:8px 16px 16px}
+}
 </style>
 </head>
 <body>
 <div class="top">
-  <h1>小区综合打分 <span class="ver-badge">v25</span></h1>
-  <div class="r">输入小区，自动统计周边配套并给出综合分<br>支持多小区对比</div>
+  <h1>上海小区指南 <span class="ver-badge">v26</span></h1>
+  <div class="r">12,112 个上海小区 · 本地资料<br>数据更新 <time id="topDate" datetime="2026-11-08">2026-11-08</time> · 打分 / 地图 / 找房 / 房源 / 发现</div>
 </div>
+<nav class="tabs" id="tabs" aria-label="功能导航">
+  <button class="tab active" data-tab="score" type="button">打分</button>
+  <button class="tab" data-tab="map" type="button">地图</button>
+  <button class="tab" data-tab="find" type="button">找房</button>
+  <button class="tab" data-tab="listings" type="button">房源</button>
+  <button class="tab" data-tab="discover" type="button">发现</button>
+</nav>
 <div class="wrap">
+  <section class="pane show" id="pane-score" data-pane="score">
   <!-- 输入卡片 -->
   <div class="card">
     <div class="ct">选择小区<small>输入小区名，本地库即时匹配；也可以在地图上点</small></div>
@@ -461,22 +717,6 @@ table.cmp tfoot td{font-family:var(--serif);font-size:18px;font-weight:500;borde
   <div id="results"></div>
   <div id="compare"></div>
 
-  <!-- 分析进度弹窗 -->
-  <div class="modal-mask" id="progMask">
-    <div class="card prog-dialog">
-      <h3>正在分析周边配套</h3>
-      <div class="prog-sub">高德地图实时检索，每个小区 12 类配套</div>
-      <div id="progList"></div>
-      <div class="prog-overall">
-        <div class="po-top"><span>总进度</span><b id="progPct">0%</b></div>
-        <div class="ptrack"><i id="progOverallBar"></i></div>
-      </div>
-      <div class="prog-actions">
-        <button type="button" class="prog-cancel" id="progCancel">取消分析</button>
-      </div>
-    </div>
-  </div>
-
   <!-- 规则卡片 -->
   <div class="card">
     <div class="ct">评分规则</div>
@@ -486,10 +726,121 @@ table.cmp tfoot td{font-family:var(--serif);font-size:18px;font-weight:500;borde
       <b>自动配套：</b>按距离连续衰减，越近越高；同类设施边际递减。<br>
       <b>缺失与口径：</b>没查到的项不计零分，按已获取指标的权重归一；户型只在证据足够时入分，不逐户型打分。<br>
       <b>等级：</b>90+ 极佳，75–89 优秀，60–74 良好，45–59 一般，&lt;45 不便。规则为启发式，不是官方评级，也不预测房价。
-      </details><div class="ver-tag">版本 v25 · 本地收录上海 12,112 个小区，无需登录</div>
+      </details><div class="ver-tag">版本 v26 · 本地收录上海 12,112 个小区，无需登录</div>
+    </div>
+  </div>
+  </section>
+
+  <section class="pane" id="pane-map" data-pane="map">
+    <div class="sec-head">
+      <div><span class="eyebrow">Price map</span><h2>板块价格热力</h2>
+        <p>颜色代表板块均价，圈越大小区越多。点板块看它在各区的价格位置。</p></div>
+      <div class="toolbar">
+        <label>区<select id="mapDistrict"><option value="all">全部</option></select></label>
+        <label>看<select id="mapMetric"><option value="avg">均价</option><option value="count">小区数</option></select></label>
+        <button class="ghost on" id="mapSubway" type="button">地铁站</button>
+      </div>
+    </div>
+    <div class="map-layout">
+      <div id="exploreMap" class="mapbox"></div>
+      <aside class="map-side">
+        <div class="map-legend" id="mapLegend"><span>低</span><i class="bar"></i><b id="mapLegendMax">—</b><span>高</span></div>
+        <div id="mapPanel"><div class="empty-state">正在读取板块数据…</div></div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="pane" id="pane-find" data-pane="find">
+    <div class="sec-head">
+      <div><span class="eyebrow">Find by budget</span><h2>按预算找小区</h2>
+        <p>先用总价、户型和地铁距离收窄范围，再看它在板块里贵不贵。</p></div>
+      <button class="ghost" id="findReset" type="button">重置条件</button>
+    </div>
+    <div class="filters">
+      <label><span>总价</span><select id="fBudget">
+        <option value="all">不限</option><option value="0-300">300 万以内</option>
+        <option value="300-500">300–500 万</option><option value="500-800">500–800 万</option>
+        <option value="800-1200">800–1200 万</option><option value="1200-99999">1200 万以上</option>
+      </select></label>
+      <label><span>户型</span><select id="fRooms">
+        <option value="all">不限</option><option value="1">1 室</option><option value="2">2 室</option>
+        <option value="3">3 室</option><option value="4+">4 室及以上</option>
+      </select></label>
+      <label><span>面积</span><select id="fArea">
+        <option value="all">不限</option><option value="0-70">70㎡ 以下</option>
+        <option value="70-100">70–100㎡</option><option value="100-140">100–140㎡</option>
+        <option value="140-999">140㎡ 以上</option>
+      </select></label>
+      <label><span>地铁</span><select id="fSubway">
+        <option value="all">不限</option><option value="500">500m 内</option>
+        <option value="800">800m 内</option><option value="1200">1.2km 内</option>
+      </select></label>
+      <label><span>区</span><select id="fDistrict"><option value="all">全部</option></select></label>
+      <label><span>排序</span><select id="fSort">
+        <option value="hot">在售房源多</option><option value="total">总价从低到高</option><option value="unit">单价从低到高</option>
+        <option value="subway">离地铁最近</option><option value="year">建成年代最新</option>
+        <option value="pct">板块内价格分位低</option>
+      </select></label>
+    </div>
+    <div class="find-summary"><div><b id="findCount">—</b> <span style="font-size:12px;color:var(--muted)">个小区可选</span></div>
+      <div class="note" id="findNote">总价按在售房源中位数估算；没有房源摘要的小区按均价 × 90㎡ 估算。</div></div>
+    <div id="findList" class="find-list"></div>
+    <button class="ghost find-more" id="findMore" type="button" style="display:none">再看 30 个</button>
+  </section>
+
+  <section class="pane" id="pane-listings" data-pane="listings">
+    <div class="ls-head">
+      <div><span class="eyebrow">Listings</span><h2>房源与价格结构</h2>
+        <p>在售、在租、户型分布和租金回报率，都来自本地保存的房源摘要。</p></div>
+      <div class="ls-search"><div class="comm-inp-wrap"><input id="lsInput" placeholder="搜索小区，查看房源结构" autocomplete="off"><div class="comm-sug" id="lsSug"></div></div></div>
+    </div>
+    <div id="lsBody" class="ls-body"><div class="empty-state">正在读取房源数据…</div></div>
+  </section>
+
+  <section class="pane" id="pane-discover" data-pane="discover">
+    <div class="sec-head">
+      <div><span class="eyebrow">Discover</span><h2>今天看一个没听过的小区</h2>
+        <p>随机抽一个本地收录的小区，看看它的价格、房龄和位置；也可以生成一张分享卡。</p></div>
+      <button class="ghost" id="blindNew" type="button">换一个</button>
+    </div>
+    <div class="discover-grid">
+      <article class="blind" id="blindCard"><div class="empty-state">正在抽取…</div></article>
+      <aside class="disc-side">
+        <div class="disc-block"><h3>同板块平替</h3>
+          <p id="altDesc">同商圈里总价更低、条件接近的小区。</p>
+          <div class="alt-list" id="blindAlt"></div></div>
+        <div class="disc-block"><h3>今日价格分位</h3>
+          <p>按商圈内单价分位，低分位代表相对便宜。</p>
+          <div class="daily-board" id="dailyBoard"></div></div>
+      </aside>
+    </div>
+  </section>
+</div>
+
+<!-- 分析进度弹窗 -->
+<div class="modal-mask" id="progMask">
+  <div class="card prog-dialog">
+    <h3>正在分析周边配套</h3>
+    <div class="prog-sub">高德地图实时检索，每个小区 12 类配套</div>
+    <div id="progList"></div>
+    <div class="prog-overall">
+      <div class="po-top"><span>总进度</span><b id="progPct">0%</b></div>
+      <div class="ptrack"><i id="progOverallBar"></i></div>
+    </div>
+    <div class="prog-actions">
+      <button type="button" class="prog-cancel" id="progCancel">取消分析</button>
     </div>
   </div>
 </div>
+
+<!-- 平替弹窗 -->
+<div class="modal-mask" id="altMask">
+  <div class="alt-dialog">
+    <div class="dlg-head"><h3 id="altTitle">同板块平替</h3><button class="dlg-close" id="altClose" type="button" aria-label="关闭">×</button></div>
+    <div class="dlg-body"><div id="altBody"></div></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
 
 <script>window._AMapSecurityConfig={securityJsCode:'4c53a95cbc45792efebe0d3031509cc9'};</script>
 <script src="https://webapi.amap.com/maps?v=2.0&key=8b70196f1df4360442eb5d475c5d0c2e&plugin=AMap.PlaceSearch"></script>
@@ -796,7 +1147,10 @@ function fillComm(i,d){
  renderMeta(i);saveCache();
 }
 // ---- 本地小区库（静态收录，访客不需要登录任何账号）----
-const COMMUNITY_URL='data/communities.json?v=25';
+const COMMUNITY_URL='data/communities.json?v=26';
+const GEO_URL='data/geo.json?v=26';
+const STATS_URL='data/listing-stats.json?v=26';
+const SAMPLES_URL='data/listing-samples.json?v=26';
 let COMMUNITIES=[],COMM_READY=false,COMM_LOADING=false,COMM_ERROR='';
 
 function bd09ToGcj02(lng,lat){
@@ -812,6 +1166,8 @@ function loadMeta(){
   if(!m)return;
   const d=document.getElementById('dataDate');
   if(d&&m.updatedAt){d.textContent=m.updatedAt;d.setAttribute('datetime',m.updatedAt);}
+  const td=document.getElementById('topDate');
+  if(td&&m.updatedAt){td.textContent=m.updatedAt;td.setAttribute('datetime',m.updatedAt);}
   const c=document.getElementById('dataCount');
   if(c&&m.count)c.textContent=Number(m.count).toLocaleString();
  }).catch(()=>{});
@@ -842,6 +1198,7 @@ function loadCommunities(){
    }
   });
   refreshAllStatus();
+  dataReady();
  }).catch(e=>{
   COMM_LOADING=false;COMM_ERROR=e.message||'加载失败';refreshAllStatus();
  });
@@ -940,7 +1297,496 @@ function toast(msg){
  toastTimer=setTimeout(()=>toastEl.classList.remove('on'),2600);
 }
 
+// ================= v26：多入口数据页 =================
+let activeTab='score';
+let GEO=null,GEO_READY=false,GEO_PROMISE=null;
+let STATS=null,SAMPLES=null,STATS_READY=false,STATS_PROMISE=null;
+let exploreMap=null,exploreOverlays=[],areaBorder=null,currentArea=null,mapMetric='avg',showSubway=true;
+let findState={budget:'all',rooms:'all',area:'all',subway:'all',district:'all',sort:'hot',limit:30};
+let lsSelected=null,blindCurrent=null,blindOffset=0;
 
+function fmtNum(n,digits=0){
+ if(n==null||!isFinite(+n))return '—';
+ return Number(n).toLocaleString('zh-CN',{minimumFractionDigits:digits,maximumFractionDigits:digits});
+}
+function fmtDist(v){
+ if(v==null||!isFinite(+v))return '—';
+ const n=+v;
+ return n<1000?Math.round(n)+'m':(n/1000).toFixed(n<10000?1:0)+'km';
+}
+function statsFor(id){return STATS&&STATS.communities?STATS.communities[id]:null;}
+function communityById(id){return COMMUNITIES.find(x=>x.id===id);}
+function parseCounts(s){
+ const o={};(s||'').split('|').forEach(kv=>{const p=kv.split(':');if(p[0])o[p[0]]=+p[1]||0;});return o;
+}
+function cleanText(s){return String(s||'').replace(/\u8d1d\u58f3\u4f18\u9009|\u8d1d\u58f3|\u94fe\u5bb6/g,'').replace(/\s*\|\s*$/,'').trim();}
+
+function addToCompare(x){
+ if(!x){toast('没有可加入的小区');return;}
+ const same=comms.findIndex(c=>c&&c.dataId===x.id);
+ if(same>=0){switchTab('score');toast('已在对比中：'+x.name);return;}
+ let slot=comms.findIndex((c,i)=>i<commCount&&!c.dataId);
+ if(slot<0){
+  if(commCount>=3){toast('最多同时对比 3 个小区');return;}
+  commCount++;renderBlocks();slot=commCount-1;
+ }
+ fillComm(slot,{dataset:x});
+ switchTab('score');
+ toast('已加入对比：'+['A','B','C'][slot]);
+}
+
+function switchTab(name){
+ const pane=document.getElementById('pane-'+name);if(!pane)return;
+ activeTab=name;
+ document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));
+ document.querySelectorAll('.pane').forEach(p=>p.classList.toggle('show',p.dataset.pane===name));
+ if(name==='map'){
+  ensureGeo().then(()=>{initExploreMap();renderExplore();return ensureStats();}).then(()=>renderAreaPanel(currentArea)).catch(()=>{});
+ }else if(name==='find'){
+  ensureStats().then(()=>renderFind()).catch(()=>renderFind());
+ }else if(name==='listings'){
+  ensureStats().then(()=>{renderListingDefault();}).catch(()=>renderListingDefault());
+ }else if(name==='discover'){
+  ensureStats().then(()=>{if(!blindCurrent)renderBlind();}).catch(()=>renderBlind());
+ }else if(name==='score'&&map){
+  setTimeout(()=>map.resize(),80);
+ }
+ if(window.scrollY>80)window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function ensureStats(){
+ if(STATS_READY)return Promise.resolve(STATS);
+ if(STATS_PROMISE)return STATS_PROMISE;
+ STATS_PROMISE=(async()=>{
+  let s={updatedAt:'',summary:{},communities:{}},sp={samples:{}};
+  try{const r=await fetch(STATS_URL);if(r.ok)s=await r.json();}catch(e){}
+  try{const r=await fetch(SAMPLES_URL);if(r.ok)sp=await r.json();}catch(e){}
+  STATS=s;SAMPLES=sp;STATS_READY=true;return s;
+ })();
+ return STATS_PROMISE;
+}
+
+function ensureGeo(){
+ if(GEO_READY)return Promise.resolve(GEO);
+ if(GEO_PROMISE)return GEO_PROMISE;
+ GEO_PROMISE=fetch(GEO_URL).then(r=>{
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  return r.json();
+ }).then(g=>{
+  GEO=g;GEO_READY=true;fillDistrictSelects();return g;
+ });
+ return GEO_PROMISE;
+}
+
+function fillDistrictSelects(){
+ if(!COMM_READY&&!GEO_READY)return;
+ let ds=[];
+ if(GEO_READY&&GEO.districts&&GEO.districts.length)ds=GEO.districts.map(d=>d.name);
+ else ds=[...new Set(COMMUNITIES.map(x=>x.district).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'zh'));
+ const mapSel=document.getElementById('mapDistrict'),fSel=document.getElementById('fDistrict');
+ [mapSel,fSel].forEach(sel=>{
+  if(!sel)return;
+  const old=sel.value;
+  sel.innerHTML='<option value="all">全部</option>'+ds.map(d=>`<option value="${esc(d)}">${esc(d)}</option>`).join('');
+  if([...sel.options].some(o=>o.value===old))sel.value=old;
+ });
+}
+
+function polyPath(border){
+ return (border||[]).map(p=>{const g=bd09ToGcj02(+p[0],+p[1]);return [g[0],g[1]];});
+}
+function initExploreMap(){
+ if(exploreMap||typeof AMap==='undefined')return;
+ exploreMap=new AMap.Map('exploreMap',{zoom:11,center:[121.4737,31.2304],viewMode:'2D',
+  mapStyle:'amap://styles/whitesmoke'});
+}
+function clearExplore(){
+ if(!exploreMap)return;
+ exploreMap.remove(exploreOverlays);exploreOverlays=[];
+ if(areaBorder){exploreMap.remove(areaBorder);areaBorder=null;}
+}
+function bubbleColor(v,min,max,metric){
+ const t=Math.max(0,Math.min(1,(v-min)/((max-min)||1)));
+ const stops=metric==='avg'?[[238,229,212],[228,199,157],[201,141,82],[159,75,36]]:[[219,228,224],[167,196,197],[82,151,161],[21,106,145]];
+ const seg=Math.min(stops.length-2,Math.floor(t*(stops.length-1)));
+ const k=t-seg/(stops.length-1);
+ const a=stops[seg],b=stops[seg+1];
+ return `rgb(${Math.round(a[0]+(b[0]-a[0])*k)},${Math.round(a[1]+(b[1]-a[1])*k)},${Math.round(a[2]+(b[2]-a[2])*k)})`;
+}
+function renderExplore(){
+ if(!GEO_READY||!GEO||!exploreMap)return;
+ clearExplore();
+ const districtVal=document.getElementById('mapDistrict')?.value||'all';
+ const biz=(GEO.bizcircles||[]).filter(b=>districtVal==='all'||b.district===districtVal);
+ const districtPolys=[];
+ (GEO.districts||[]).forEach(d=>{
+  const path=polyPath(d.border);if(path.length<3)return;
+  const p=new AMap.Polygon({path,strokeColor:'#cfc6b4',strokeWeight:1,strokeOpacity:.85,
+   fillColor:'#fffdf8',fillOpacity:.02,zIndex:10});
+  districtPolys.push(p);exploreOverlays.push(p);
+  if(d.center){
+   const g=bd09ToGcj02(+d.center[0],+d.center[1]);
+   const t=new AMap.Text({text:d.name,position:g,anchor:'center',zIndex:120,
+    style:{'background-color':'transparent','border':'none','color':'#8a8474','font-size':'11px','padding':'0'}});
+   exploreOverlays.push(t);
+  }
+ });
+ const vals=biz.map(b=>mapMetric==='avg'?(+b.avg||0):(+b.count||0)).filter(v=>v>0);
+ const min=vals.length?Math.min(...vals):0,max=vals.length?Math.max(...vals):1;
+ const maxCount=Math.max(1,...biz.map(b=>(+b.count||0)));
+ biz.forEach(b=>{
+  if(!b.center)return;
+  const g=bd09ToGcj02(+b.center[0],+b.center[1]);
+  const val=mapMetric==='avg'?(+b.avg||0):(+b.count||0);
+  const m=new AMap.CircleMarker({center:g,radius:Math.max(5,Math.min(21,5+Math.sqrt((+b.count||0)/maxCount)*16)),
+   strokeColor:'#fffdf8',strokeWeight:1,strokeOpacity:.9,fillColor:bubbleColor(val,min,max,mapMetric),
+   fillOpacity:.62,zIndex:50,clickable:true,bubble:true});
+  m.on('click',()=>selectArea(b));
+  exploreOverlays.push(m);
+ });
+ if(showSubway&&GEO.subway&&GEO.subway.stations){
+  GEO.subway.stations.forEach(s=>{
+   const g=bd09ToGcj02(+s.lng,+s.lat);
+   const c=new AMap.CircleMarker({center:g,radius:2.5,strokeColor:'#fffdf8',strokeWeight:1,
+    fillColor:'#156a91',fillOpacity:.75,zIndex:70});
+   exploreOverlays.push(c);
+  });
+ }
+ exploreMap.add(exploreOverlays);
+ if(districtVal!=='all'&&districtPolys.length)exploreMap.setFitView(districtPolys,false,[40,40,40,40]);
+ else exploreMap.setZoomAndCenter(11,[121.4737,31.2304]);
+ const legendMax=document.getElementById('mapLegendMax');
+ if(legendMax)legendMax.textContent=mapMetric==='avg'?fmtNum(max)+' 元/㎡':fmtNum(max)+' 个';
+ renderAreaPanel(null);
+}
+function selectArea(area){
+ currentArea=area;
+ if(areaBorder&&exploreMap){exploreMap.remove(areaBorder);areaBorder=null;}
+ if(area&&area.border&&exploreMap){
+  areaBorder=new AMap.Polygon({path:polyPath(area.border),strokeColor:'#20242a',strokeWeight:1.5,
+   fillColor:'#20242a',fillOpacity:.04,zIndex:80});
+  exploreMap.add(areaBorder);
+  if(area.center){const g=bd09ToGcj02(+area.center[0],+area.center[1]);exploreMap.setZoomAndCenter(13,g);}
+ }
+ renderAreaPanel(area);
+}
+function renderAreaPanel(area){
+ const el=document.getElementById('mapPanel');if(!el)return;
+ if(!area){
+  const top=(GEO.bizcircles||[]).slice().sort((a,b)=>(+b.count||0)-(+a.count||0)).slice(0,6);
+  el.innerHTML=`<h3 class="map-place">上海 · 17 个区</h3>
+   <div class="map-sub">${GEO.bizcircles.length} 个商圈 · ${fmtNum(COMMUNITIES.length||12112)} 个小区</div>
+   <div class="map-stats"><div><span>在售房源</span><b>${STATS_READY?fmtNum(STATS.summary.sale):'—'}</b></div>
+    <div><span>在租房源</span><b>${STATS_READY?fmtNum(STATS.summary.rent):'—'}</b></div></div>
+   <div class="map-note">点一个商圈，看看它的均价和同板块小区。颜色越深单价越高。</div>
+   <div class="map-list">${top.map(b=>`<button type="button" data-area="${esc(b.id)}"><b>${esc(b.name)}</b><span>${fmtNum(b.avg)} 元/㎡</span></button>`).join('')}</div>`;
+  el.querySelectorAll('[data-area]').forEach(b=>b.addEventListener('click',()=>{
+   const hit=(GEO.bizcircles||[]).find(x=>x.id===b.dataset.area);if(hit)selectArea(hit);
+  }));
+  return;
+ }
+ const homes=COMMUNITIES.filter(x=>x.biz===area.name).sort((a,b)=>(b.sell||0)-(a.sell||0)).slice(0,7);
+ el.innerHTML=`<h3 class="map-place">${esc(area.name)}</h3>
+  <div class="map-sub">${esc(area.district||'')} · ${area.count||0} 个小区</div>
+  <div class="map-stats"><div><span>板块均价</span><b>${fmtNum(area.avg)}</b></div>
+   <div><span>中位单价</span><b>${fmtNum(area.median)}</b></div>
+   <div><span>价格区间</span><b>${area.p25==null?'—':fmtNum(area.p25)+'–'+fmtNum(area.p75)}</b></div>
+   <div><span>收录小区</span><b>${fmtNum(area.count)}</b></div></div>
+  <div class="map-note">在售套数最多的小区</div>
+  <div class="map-list">${homes.length?homes.map(x=>`<button type="button" data-add="${esc(x.id)}"><b>${esc(x.name)}</b><span>${x.sell||0} 套</span></button>`).join(''):'<div class="map-note">这个商圈暂无小区明细</div>'}</div>`;
+}
+
+function saleTotal(x){
+ const s=statsFor(x.id);
+ if(s&&s.sale&&s.sale.mt)return s.sale.mt;
+ if(x.price)return Math.round(+x.price*90/10000);
+ return null;
+}
+function hasRoom(rooms,key){
+ const c=parseCounts(rooms);
+ if(key==='4+')return Object.keys(c).some(k=>(k==='4+'||+k>=4)&&c[k]>0);
+ return (c[key]||0)>0;
+}
+function inRange(v,a,b){return v!=null&&v>=a&&v<=b;}
+function findMatches(){
+ if(!COMM_READY)return [];
+ const budget=findState.budget,rooms=findState.rooms,area=findState.area,sub=findState.subway;
+ const out=[];
+ for(const x of COMMUNITIES){
+  const st=statsFor(x.id),total=saleTotal(x);
+  if(budget!=='all'){
+   const [a,b]=budget.split('-').map(Number);
+   if(total==null||total<a||total>=b)continue;
+  }
+  if(rooms!=='all'){
+   if(!st||!st.sale||!hasRoom(st.sale.rooms,rooms))continue;
+  }
+  if(area!=='all'){
+   const [a,b]=area.split('-').map(Number);
+   if(!st||!st.sale||!inRange(st.sale.ma,a,b))continue;
+  }
+  if(sub!=='all'){
+   if(x.sd==null||+x.sd>+sub)continue;
+  }
+  if(findState.district!=='all'&&x.district!==findState.district)continue;
+  out.push(x);
+ }
+ const sort=findState.sort;
+ out.sort((a,b)=>{
+  if(sort==='hot')return (+b.sell||0)-(+a.sell||0);
+  if(sort==='unit')return (+a.price||1e9)-(+b.price||1e9);
+  if(sort==='subway')return (+a.sd||1e9)-(+b.sd||1e9);
+  if(sort==='year')return (+b.year||0)-(+a.year||0);
+  if(sort==='pct')return (+a.pct||999)-(+b.pct||999);
+  return (+saleTotal(a)||1e9)-(+saleTotal(b)||1e9);
+ });
+ return out;
+}
+function renderFind(){
+ const list=document.getElementById('findList');if(!list)return;
+ if(!COMM_READY){list.innerHTML='<div class="empty-state">正在加载小区库…</div>';return;}
+ const all=findMatches();
+ const shown=all.slice(0,findState.limit);
+ document.getElementById('findCount').textContent=fmtNum(all.length);
+ document.getElementById('findNote').textContent=STATS_READY?'总价按在售房源中位数；没有房源摘要的小区按均价 × 90㎡ 估算。':'房源摘要还在读取，先用均价估算总价。';
+ list.innerHTML=shown.length?shown.map(x=>{
+  const st=statsFor(x.id),s=st&&st.sale,total=saleTotal(x),exact=s&&s.mt;
+  const totalTxt=total==null?'—':(exact?'':'~')+fmtNum(total)+' 万';
+  const year=x.year?(x.yearEnd?x.year+'–'+x.yearEnd:x.year):'—';
+  const sub=x.st?x.st+(x.sd!=null?' · '+fmtDist(x.sd):''):'—';
+  return `<article class="find-card">
+   <div class="find-media">${x.img?`<img src="${esc(x.img)}" alt="${esc(x.name)}" loading="lazy">`:`<div class="find-fallback">${esc(x.name.slice(0,1))}</div>`}</div>
+   <div class="find-body">
+    <div class="find-top"><h3 class="find-name">${esc(x.name)}</h3></div>
+    <div class="find-sub">${esc(x.district||'')} · ${esc(x.biz||'')}</div>
+    <div class="find-money"><b>${totalTxt}</b><span>${x.price?fmtNum(x.price)+' 元/㎡':'暂无单价'}</span></div>
+    <div class="find-facts"><div><span>建成年</span><b>${esc(year)}</b></div><div><span>最近地铁</span><b>${esc(sub)}</b></div><div><span>板块分位</span><b>${x.pct==null?'—':x.pct+'%'}</b></div></div>
+    <div class="find-actions">
+     <button type="button" data-act="add" data-id="${esc(x.id)}">加入对比</button>
+     <button type="button" data-act="alt" data-id="${esc(x.id)}">找平替</button>
+     <button type="button" data-act="listing" data-id="${esc(x.id)}">看房源</button>
+    </div>
+   </div></article>`;
+ }).join(''):'<div class="empty-state">没有同时满足这些条件的小区，放宽一项试试。</div>';
+ const more=document.getElementById('findMore');
+ if(more)more.style.display=all.length>findState.limit?'block':'none';
+}
+
+function openAlt(x){
+ if(!x)return;
+ let pool=COMMUNITIES.filter(y=>y.id!==x.id&&y.price&&y.biz===x.biz&&+y.price<+x.price*0.95);
+ if(pool.length<3)pool=COMMUNITIES.filter(y=>y.id!==x.id&&y.price&&y.district===x.district&&+y.price<+x.price*0.95);
+ pool.sort((a,b)=>(+a.price||0)-(+b.price||0));
+ pool=pool.slice(0,7);
+ document.getElementById('altTitle').textContent='同板块平替 · '+x.name;
+ document.getElementById('altBody').innerHTML=pool.length?pool.map(y=>`
+  <button type="button" class="alt-row" data-add="${esc(y.id)}">
+   <div><b>${esc(y.name)}</b><span>${esc(y.district||'')} · ${esc(y.biz||'')} · ${y.sell||0} 套在售</span></div>
+   <div class="price">${fmtNum(y.price)}<small>元/㎡</small></div>
+  </button>`).join(''):'<div class="empty-state">这个板块暂时没有更便宜的小区。</div>';
+ document.getElementById('altMask').classList.add('show');
+}
+
+function renderListingDefault(){
+ if(!COMM_READY)return;
+ if(lsSelected){renderListing(lsSelected);return;}
+ const top=COMMUNITIES.slice().sort((a,b)=>(b.sell||0)-(a.sell||0))[0];
+ if(top)setListing(top);
+}
+function setListing(x){
+ lsSelected=x;
+ const inp=document.getElementById('lsInput');if(inp)inp.value=x.name;
+ renderListing(x);
+}
+function renderListing(x){
+ const box=document.getElementById('lsBody');if(!box||!x)return;
+ const st=statsFor(x.id),sale=st&&st.sale,rent=st&&st.rent;
+ const samp=SAMPLES&&SAMPLES.samples?SAMPLES.samples[x.id]:null;
+ const metrics=`<div class="ls-metrics">
+  <div><span>在售</span><b>${x.sell||(sale?sale.n:0)} 套</b></div>
+  <div><span>总价中位</span><b>${sale&&sale.mt?fmtNum(sale.mt)+' 万':'—'}</b></div>
+  <div><span>单价中位</span><b>${sale&&sale.mu?fmtNum(sale.mu)+' 元/㎡':'—'}</b></div>
+  <div><span>在租</span><b>${x.rent||(rent?rent.n:0)} 套</b></div>
+  <div><span>租金中位</span><b>${rent&&rent.mr?fmtNum(rent.mr)+' 元/月':'—'}</b></div>
+  <div><span>毛租金回报</span><b>${st&&st.yield?st.yield+'%':'—'}</b></div>
+ </div>`;
+ const rooms=parseCounts(sale&&sale.rooms),maxR=Math.max(1,...Object.values(rooms));
+ const bars=Object.keys(rooms).length?Object.keys(rooms).sort((a,b)=>(+a||9)-(+b||9)).map(k=>`
+  <div class="bar-row"><span>${k==='4+'?'4 室+':k+' 室'}</span><div class="bar"><i style="width:${Math.round(rooms[k]/maxR*100)}%"></i></div><b>${rooms[k]}</b></div>`).join(''):'<div class="map-note">暂无户型分布</div>';
+ const tags=(sale&&sale.tags)?sale.tags.split('|').map(v=>{const p=v.split(':');return `<span class="chip">${esc(p[0])}<b>${p[1]||''}</b></span>`;}).join(''):'';
+ const sampleHtml=(arr)=>arr&&arr.length?`<div class="ls-samples">${arr.map(c=>{
+  const inner=`<div class="sample-pic">${c.img?`<img src="${esc(c.img)}" alt="" loading="lazy">`:''}</div>
+   <div class="sample-body"><b>${esc(cleanText(c.title)||cleanText(c.desc))}</b><span>${esc(cleanText(c.desc))}</span>
+   <div class="sample-price">${esc(c.price||'')}</div><div class="sample-tags">${(c.tags||[]).filter(t=>!/\u8d1d\u58f3|\u94fe\u5bb6/.test(t)).map(t=>`<i>${esc(t)}</i>`).join('')}</div></div>`;
+  return c.url?`<a class="sample" href="${esc(c.url)}" target="_blank" rel="noopener">${inner}</a>`:`<div class="sample">${inner}</div>`;
+ }).join('')}</div>`:'<div class="map-note">这个小区暂存样例，统计仍可用。</div>';
+ box.innerHTML=`<div class="ls-hero">
+  <div class="ls-photo">${x.img?`<img src="${esc(x.img)}" alt="${esc(x.name)}">`:`<div class="find-fallback">${esc(x.name.slice(0,1))}</div>`}</div>
+  <div><h2>${esc(x.name)}</h2><div class="sub">${esc(x.district||'')} · ${esc(x.biz||'')} · ${esc(x.addr||'')}</div>
+   <div class="ls-price">${x.price?fmtNum(x.price):'—'}<small>元/㎡ 参考均价</small></div>
+   <div class="ls-actions"><button class="ghost" type="button" data-act="add" data-id="${esc(x.id)}">加入对比</button>
+    <button class="ghost" type="button" data-act="alt" data-id="${esc(x.id)}">同板块平替</button></div>
+   ${metrics}</div></div>
+  <div class="ls-grid">
+   <div class="ls-block"><h3>在售户型分布</h3>${bars}</div>
+   <div class="ls-block"><h3>在售房源标签</h3>${tags?`<div class="chips">${tags}</div>`:'<div class="map-note">暂无标签统计</div>'}</div>
+   <div class="ls-block"><h3>在售样例</h3>${sampleHtml(samp&&samp.sale)}</div>
+   <div class="ls-block"><h3>在租样例</h3>${sampleHtml(samp&&samp.rent)}</div>
+  </div>`;
+}
+
+function dailyHash(){
+ const d=new Date();
+ return `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+}
+function pickBlind(offset=0){
+ const pool=COMMUNITIES.filter(x=>x.img&&x.price);
+ if(!pool.length)return COMMUNITIES[0]||null;
+ let h=0;const s=dailyHash();
+ for(let i=0;i<s.length;i++)h=(h*31+ +s[i])%100000;
+ return pool[(h+offset)%pool.length];
+}
+function renderBlind(){
+ if(!COMM_READY){document.getElementById('blindCard').innerHTML='<div class="empty-state">正在加载小区库…</div>';return;}
+ blindCurrent=pickBlind(blindOffset);const x=blindCurrent;if(!x)return;
+ const st=statsFor(x.id),sale=st&&st.sale;
+ const alt=COMMUNITIES.filter(y=>y.id!==x.id&&y.price&&y.biz===x.biz&&+y.price<+x.price*0.95).sort((a,b)=>(+a.price||0)-(+b.price||0)).slice(0,4);
+ const sameBiz=COMMUNITIES.filter(y=>y.biz===x.biz&&y.pct!=null).sort((a,b)=>(+a.pct||999)-(+b.pct||999)).slice(0,5);
+ document.getElementById('blindCard').innerHTML=`
+  <div class="blind-media">${x.img?`<img src="${esc(x.img)}" alt="${esc(x.name)}">`:`<div class="find-fallback">${esc(x.name.slice(0,1))}</div>`}</div>
+  <div class="blind-body"><div class="blind-kicker">今日小区</div><h2 class="blind-name">${esc(x.name)}</h2>
+   <div class="blind-sub">${esc(x.district||'')} · ${esc(x.biz||'')} · ${esc(x.addr||'')}</div>
+   <div class="blind-facts"><div><span>参考均价</span><b>${x.price?fmtNum(x.price):'—'}</b></div>
+    <div><span>建成年</span><b>${x.year||'—'}</b></div><div><span>最近地铁</span><b>${x.sd!=null?fmtDist(x.sd):'—'}</b></div>
+    <div><span>板块分位</span><b>${x.pct==null?'—':x.pct+'%'}</b></div>
+    <div><span>在售</span><b>${x.sell||(sale?sale.n:0)} 套</b></div><div><span>在租</span><b>${x.rent||0} 套</b></div></div>
+   <div class="blind-actions"><button class="primary" type="button" data-act="add" data-id="${esc(x.id)}">加入对比</button>
+    <button type="button" data-act="listing" data-id="${esc(x.id)}">看房源结构</button>
+    <button type="button" data-act="share" data-id="${esc(x.id)}">保存分享卡</button></div></div>`;
+ document.getElementById('altDesc').textContent=alt.length?`同商圈里比 ${x.name} 便宜的小区。`:'这个商圈暂时没有更便宜的收录小区。';
+ document.getElementById('blindAlt').innerHTML=alt.length?alt.map(y=>`
+  <button type="button" class="alt-row" data-add="${esc(y.id)}"><div><b>${esc(y.name)}</b><span>${esc(y.biz||'')} · ${y.sell||0} 套在售</span></div><div class="price">${fmtNum(y.price)}<small>元/㎡</small></div></button>`).join(''):'<div class="empty-state">暂无平替</div>';
+ document.getElementById('dailyBoard').innerHTML=sameBiz.map(y=>`<div class="daily-item"><span>${esc(y.name)}</span><b>${y.pct}%</b></div>`).join('')||'<div class="empty-state">暂无分位</div>';
+}
+
+function shareCard(x){
+ if(!x)return;
+ const c=document.createElement('canvas');c.width=900;c.height=1120;
+ const g=c.getContext('2d');
+ g.fillStyle='#f6f3ec';g.fillRect(0,0,c.width,c.height);
+ g.fillStyle='#20242a';g.fillRect(56,56,c.width-112,2);
+ g.fillStyle='#8a8474';g.font='500 20px ui-monospace, monospace';g.fillText('上海小区指南 · 今日小区',56,110);
+ g.fillStyle='#20242a';g.font='500 64px Georgia, "Songti SC", serif';
+ let name=x.name;if(name.length>10)name=name.slice(0,10)+'…';g.fillText(name,56,220);
+ g.fillStyle='#6b6455';g.font='400 22px "PingFang SC", sans-serif';
+ g.fillText(`${x.district||''} · ${x.biz||''}`,56,268);
+ g.fillStyle='#20242a';g.font='500 72px Georgia, "Songti SC", serif';
+ g.fillText(x.price?fmtNum(x.price):'—',56,390);
+ g.fillStyle='#8a8474';g.font='400 18px "PingFang SC", sans-serif';g.fillText('参考均价 元/㎡',56,424);
+ const rows=[['建成年',x.year||'—'],['最近地铁',x.st||'—'],['地铁距离',x.sd!=null?fmtDist(x.sd):'—'],['板块价格分位',x.pct==null?'—':x.pct+'%'],['在售套数',String(x.sell||0)],['在租套数',String(x.rent||0)]];
+ rows.forEach((r,i)=>{
+  const col=i%2,row=Math.floor(i/2),left=56+col*400,top=500+row*104;
+  g.fillStyle='#8a8474';g.font='400 16px "PingFang SC", sans-serif';g.fillText(r[0],left,top);
+  g.fillStyle='#20242a';g.font='500 30px ui-monospace, monospace';g.fillText(r[1],left,top+38);
+ });
+ g.strokeStyle='#e2dcc8';g.lineWidth=1;g.beginPath();g.moveTo(56,860);g.lineTo(c.width-56,860);g.stroke();
+ g.fillStyle='#6b6455';g.font='400 17px "PingFang SC", sans-serif';g.fillText('数据来自本地收录，价格与房源为参考口径，不构成交易建议。',56,910);
+ g.fillStyle='#8a8474';g.font='400 16px ui-monospace, monospace';g.fillText(`更新 ${STATS&&STATS.updatedAt?STATS.updatedAt:'2026-11-08'} · godweiyang.com/amenity`,56,950);
+ c.toBlob(blob=>{
+  const url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download='小区盲盒-'+x.name+'.png';a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),2000);toast('分享卡已保存');
+ },'image/png');
+}
+
+function setupTabs(){
+ document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>switchTab(b.dataset.tab)));
+ const mapPanel=document.getElementById('mapPanel');
+ if(mapPanel)mapPanel.addEventListener('click',e=>{
+  const add=e.target.closest('[data-add]');
+  if(add){const x=communityById(add.dataset.add);if(x)addToCompare(x);}
+ });
+ const findList=document.getElementById('findList');
+ if(findList)findList.addEventListener('click',e=>{
+  const b=e.target.closest('button[data-act]');if(!b)return;
+  const x=communityById(b.dataset.id);if(!x)return;
+  if(b.dataset.act==='add')addToCompare(x);
+  else if(b.dataset.act==='alt')openAlt(x);
+  else if(b.dataset.act==='listing'){switchTab('listings');setListing(x);}
+ });
+ [['fBudget','budget'],['fRooms','rooms'],['fArea','area'],['fSubway','subway'],['fDistrict','district'],['fSort','sort']].forEach(([id,key])=>{
+  const el=document.getElementById(id);
+  if(el)el.addEventListener('change',()=>{findState[key]=el.value;findState.limit=30;renderFind();});
+ });
+ const reset=document.getElementById('findReset');
+ if(reset)reset.addEventListener('click',()=>{
+  findState={budget:'all',rooms:'all',area:'all',subway:'all',district:'all',sort:'hot',limit:30};
+  ['fBudget','fRooms','fArea','fSubway','fDistrict','fSort'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='all';});
+  const sort=document.getElementById('fSort');if(sort)sort.value='hot';renderFind();
+ });
+ const more=document.getElementById('findMore');
+ if(more)more.addEventListener('click',()=>{findState.limit+=30;renderFind();});
+ const mapSel=document.getElementById('mapDistrict');
+ if(mapSel)mapSel.addEventListener('change',()=>{currentArea=null;renderExplore();});
+ const met=document.getElementById('mapMetric');
+ if(met)met.addEventListener('change',()=>{mapMetric=met.value;renderExplore();});
+ const sub=document.getElementById('mapSubway');
+ if(sub)sub.addEventListener('click',()=>{showSubway=!showSubway;sub.classList.toggle('on',showSubway);renderExplore();});
+ const lsBody=document.getElementById('lsBody');
+ if(lsBody)lsBody.addEventListener('click',e=>{
+  const b=e.target.closest('button[data-act]');if(!b)return;
+  const x=communityById(b.dataset.id);if(!x)return;
+  if(b.dataset.act==='add')addToCompare(x);
+  else if(b.dataset.act==='alt')openAlt(x);
+ });
+ const blind=document.getElementById('blindCard');
+ if(blind)blind.addEventListener('click',e=>{
+  const b=e.target.closest('button[data-act]');if(!b)return;
+  const x=communityById(b.dataset.id);if(!x)return;
+  if(b.dataset.act==='add')addToCompare(x);
+  else if(b.dataset.act==='listing'){switchTab('listings');setListing(x);}
+  else if(b.dataset.act==='share')shareCard(x);
+ });
+ const altList=document.getElementById('blindAlt');
+ if(altList)altList.addEventListener('click',e=>{
+  const b=e.target.closest('[data-add]');if(b){const x=communityById(b.dataset.add);if(x)addToCompare(x);}
+ });
+ const altBody=document.getElementById('altBody');
+ if(altBody)altBody.addEventListener('click',e=>{
+  const b=e.target.closest('[data-add]');if(b){const x=communityById(b.dataset.add);if(x){document.getElementById('altMask').classList.remove('show');addToCompare(x);}}
+ });
+ const altClose=document.getElementById('altClose');
+ if(altClose)altClose.addEventListener('click',()=>document.getElementById('altMask').classList.remove('show'));
+ const altMask=document.getElementById('altMask');
+ if(altMask)altMask.addEventListener('click',e=>{if(e.target===altMask)altMask.classList.remove('show');});
+ const blindNew=document.getElementById('blindNew');
+ if(blindNew)blindNew.addEventListener('click',()=>{blindOffset++;renderBlind();});
+ const lsInput=document.getElementById('lsInput'),lsSug=document.getElementById('lsSug');
+ if(lsInput&&lsSug){
+  const paint=()=>{
+   const q=lsInput.value.trim();
+   if(!q||!COMM_READY){lsSug.classList.remove('show');lsSug.innerHTML='';return;}
+   const hits=matchCommunities(q);
+   if(!hits.length){lsSug.innerHTML='<div class="sug-empty">没有匹配的小区</div>';lsSug.classList.add('show');return;}
+   lsSug.innerHTML=hits.map((x,k)=>`<button type="button" class="sug-item" data-k="${k}"><b>${esc(x.name)}</b><span>${esc(x.district||'')} · ${x.sell||0} 套在售${x.price?' · '+fmtNum(x.price)+' 元/㎡':''}</span></button>`).join('');
+   lsSug.classList.add('show');
+   lsSug.querySelectorAll('.sug-item').forEach((b,k)=>b.addEventListener('mousedown',ev=>{
+    ev.preventDefault();lsSug.classList.remove('show');setListing(hits[k]);
+   }));
+  };
+  lsInput.addEventListener('input',paint);lsInput.addEventListener('focus',paint);
+  lsInput.addEventListener('blur',()=>setTimeout(()=>lsSug.classList.remove('show'),160));
+  lsInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();const hits=matchCommunities(lsInput.value);if(hits.length){lsSug.classList.remove('show');setListing(hits[0]);}}});
+ }
+}
+
+function dataReady(){
+ fillDistrictSelects();
+ if(activeTab==='find')ensureStats().then(()=>renderFind()).catch(()=>renderFind());
+ if(activeTab==='listings'&&!lsSelected)ensureStats().then(()=>renderListingDefault()).catch(()=>renderListingDefault());
+ if(activeTab==='discover'&&!blindCurrent)ensureStats().then(()=>renderBlind()).catch(()=>renderBlind());
+ if(activeTab==='map'&&GEO_READY){renderExplore();ensureStats().then(()=>renderAreaPanel(currentArea)).catch(()=>{});}
+}
 
 // ---- 本地缓存（只缓存表单与定位，分析结果不缓存，每次重新检索）----
 function saveCache(){
@@ -1220,6 +2066,7 @@ document.getElementById('btnAdd').addEventListener('click',()=>{
  if(commCount>=3)return;commCount++;renderBlocks();
 });
 document.getElementById('btnGo').addEventListener('click',runAll);
+setupTabs();
 loadMeta();
 loadCommunities();
 </script>
