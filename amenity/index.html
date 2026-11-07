@@ -392,20 +392,27 @@ table.cmp tfoot td{font-family:var(--serif);font-size:18px;font-weight:500;borde
 .comm-head{border-color:var(--hair)}
 .comm-head:focus-within{border-color:var(--ink);box-shadow:0 0 0 3px rgba(32,36,42,.06)}
 .comm-del{width:28px;height:28px}
+
+/* v22：规则与口径折叠 */
+.rules-box summary{cursor:pointer;font-size:12.5px;color:var(--ink2);margin-bottom:12px}
+.rules-box[open] summary{margin-bottom:16px}
+.rules-box summary::marker{color:var(--muted)}
+.beike-analysis details{margin-top:8px}
+.beike-analysis details summary{cursor:pointer;font-size:12px;color:var(--ink2)}
 </style>
 </head>
 <body>
 <div class="top">
-  <h1>小区综合打分 <span class="ver-badge">v21</span></h1>
-  <div class="r">输入小区，自动统计周边配套并结合小区本体属性<br>交通 / 商业 / 医疗 / 教育 / 环境 / 品质 / 户型 / 性价比，支持多小区对比</div>
+  <h1>小区综合打分 <span class="ver-badge">v23</span></h1>
+  <div class="r">输入小区，自动统计周边配套并给出综合分<br>支持多小区对比</div>
 </div>
 <div class="wrap">
   <!-- 输入卡片 -->
   <div class="card">
-    <div class="ct">选择小区<small>输入名称后点下拉项；可展开补录小区本体信息（选填）</small></div>
+    <div class="ct">选择小区<small>输入小区名，或在地图上点选</small></div>
     <div class="cbody">
       <div class="housing-tools"><span class="hs-state"><span class="hs-dot wait" id="housingDot"></span><span id="housingSvc">正在检测本机贝壳服务…</span></span><button type="button" class="hs-btn primary" id="housingConnect">连接贝壳</button><a class="hs-btn hs-aux" id="housingStart" href="amenity://start">启动服务</a><a class="hs-btn hs-aux" id="housingDownload" href="/medias/files/amenity_service.exe">下载服务</a><a class="hs-btn" id="housingMacIntel" href="/medias/files/amenity_service_mac_intel.zip" hidden>Mac Intel 版</a></div>
-      <details class="housing-install"><summary>安装方式与各平台下载</summary><p><a href="/medias/files/amenity_service.exe">Windows</a> · <a href="/medias/files/amenity_service_android.apk">Android 7.0 及以上</a> · <a href="/medias/files/amenity_service_mac_arm64.zip">Mac Apple Silicon</a> · <a href="/medias/files/amenity_service_mac_intel.zip">Mac Intel</a></p><div class="hs-cmd"><span class="hs-os">Windows</span><code id="winInstallCmd">powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://godweiyang.com/medias/files/install_amenity_windows.ps1 | iex"</code><button type="button" id="winInstallCopy">复制命令</button></div><div class="hs-cmd"><span class="hs-os">macOS</span><code id="macInstallCmd">curl -fsSL https://godweiyang.com/medias/files/install_amenity_mac.sh | bash</code><button type="button" id="macInstallCopy">复制命令</button></div><p class="hs-cmd-note">推荐用上面这行命令装：Windows 开 PowerShell、Mac 开「终端」粘贴执行即可，脚本会先停旧服务、下载最新版、去掉系统的安全标记再启动，不用点「仍要运行」，也不用去「隐私与安全性」里手动允许。手动安装则下载后双击 exe 一次；Mac 解压后执行 <code>xattr -cr amenity_service.app</code> 再打开 App。</p><p>Android 安装后点「启动」，在 App 内的地图与详情页登录后自动连接，无需额外操作。</p><p>服务只在本机 127.0.0.1:17532 运行。贝壳资料只在本人已登录的页面内读取公开小区与挂牌信息，遇到登录、验证码或拒绝访问不会绕过；缺少的资料显示为缺失，不计零分。</p></details>
+      <details class="housing-install"><summary>安装方式与各平台下载</summary><p><a href="/medias/files/amenity_service.exe">Windows</a> · <a href="/medias/files/amenity_service_android.apk">Android 7.0+</a> · <a href="/medias/files/amenity_service_mac_arm64.zip">Mac Apple Silicon</a> · <a href="/medias/files/amenity_service_mac_intel.zip">Mac Intel</a></p><div class="hs-cmd"><span class="hs-os">Windows</span><code id="winInstallCmd">powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://godweiyang.com/medias/files/install_amenity_windows.ps1 | iex"</code><button type="button" id="winInstallCopy">复制命令</button></div><div class="hs-cmd"><span class="hs-os">macOS</span><code id="macInstallCmd">curl -fsSL https://godweiyang.com/medias/files/install_amenity_mac.sh | bash</code><button type="button" id="macInstallCopy">复制命令</button></div><p class="hs-cmd-note">复制这行命令粘贴执行即可：自动关旧服务、更新版本、去掉系统安全标记，不用手动点「仍要运行」。Android 装完点「启动」。</p></details>
       <div id="commList"></div>
       <div class="ctl-row">
         <button class="linkbtn" id="btnAdd">+ 添加小区对比</button>
@@ -417,13 +424,13 @@ table.cmp tfoot td{font-family:var(--serif);font-size:18px;font-weight:500;borde
         </div>
         <button class="go" id="btnGo">开始综合打分</button>
       </div>
-      <div class="hint">高德统计周边配套；贝壳地图提供挂牌，小区详情提供容积率、绿化率、建筑资料及代表户型分间。每个小区给八项专项分（100分制）与综合分，多个户型按房型×面积段加权聚合，不逐户型给分。来源、代表性和缺失均展示；人工修正优先。物业费是成本，不等同物业质量。</div>
+      <div class="hint">配套来自高德，小区资料来自贝壳；没查到的项不计分。</div>
     </div>
   </div>
 
   <!-- 地图卡片 -->
   <div class="card">
-    <div class="ct">位置与配套分布<small>彩色圆点为各类配套，点击查看名称与距离</small></div>
+    <div class="ct">位置与配套分布<small>点击圆点查看名称与距离</small></div>
     <div id="map"></div>
   </div>
 
@@ -449,17 +456,14 @@ table.cmp tfoot td{font-family:var(--serif);font-size:18px;font-weight:500;borde
 
   <!-- 规则卡片 -->
   <div class="card">
-    <div class="ct">评分规则<small>纯规则计算，结果可复现</small></div>
-    <div class="cbody rules">
+    <div class="ct">评分规则</div>
+    <div class="cbody rules"><details class="rules-box"><summary>评分规则与计算方式</summary>
       <b>八大维度与权重：</b>
       <div class="grid2" id="ruleGrid"></div>
-      <b>自动配套：</b>距离连续衰减 max(0.3, 1−0.85×(d/R)<sup>0.8</sup>)，同类数量边际递减补足。厌恶设施最近距离≤150/400/900/1600m，对应系数0.1/0.45/0.75/0.9，超过1600m为1。<br>
-      <b>小区本体：</b>房龄、容积率、绿化率；电梯仅对已采样7层及以上楼栋、至少3套已知电梯资料作可达性辅助。物业公司、梯户比、建筑类型展示事实，不凭名称评服务。物业费只作为性价比的居住成本，区间不取中点。<br>
-      <b>户型专项：</b>按房型×面积段挂牌构成加权：居住空间窗户35%、卧室朝南20%、厨卫窗户20%、过道占比15%、卫浴配比10%。未知项不冒充无窗；至少3套有效代表、加权覆盖≥60%才自动入分。人工评价可覆盖。只给小区户型专项分，不逐户型给分。<br>
-      <b>分值与缺失：</b>专项为100分制；综合按实际可用子指标权重归一，未查询不计零分，显示权重覆盖。规则为本工具启发式，不是官方评级；挂牌样本不等于全部住宅构成。<br>
-      <b>性价比：</b>只有配套信息与房价同时具备才计算，避免仅凭便宜判定性价比好；配套因子与价格因子各占一半，明确物业费可加居住成本辅助。价格因子为1−log10(clamp(单价,10000,100000)/10000)，是工具固定参考范围，不是市场估值结论。<br>
-      <b>等级：</b>90+ 极佳，75–89 优秀，60–74 良好，45–59 一般，&lt;45 不便。教育维度只测学校距离，不代表学区划分与质量；本工具不预测房价走势。
-      <div class="ver-tag">版本 v21 · 边框对齐：小区输入行单框、右边缘统一</div>
+      <b>自动配套：</b>按距离连续衰减，越近越高；同类设施边际递减。<br>
+      <b>缺失与口径：</b>没查到的项不计零分，按已获取指标的权重归一；户型只在证据足够时入分，不逐户型打分。<br>
+      <b>等级：</b>90+ 极佳，75–89 优秀，60–74 良好，45–59 一般，&lt;45 不便。规则为启发式，不是官方评级，也不预测房价。
+      </details><div class="ver-tag">版本 v23 · 简化：资料自动补全、文案压缩</div>
     </div>
   </div>
 </div>
@@ -676,19 +680,7 @@ function renderBlocks(){
    </div>
    <div class="comm-status"></div>
    <div class="beike-pane"><div class="beike-actions"><button type="button" class="linkbtn" data-beike="${i}">查询贝壳资料</button><span class="beike-status">未查询</span></div><div class="beike-content"></div></div>
-   <div class="manual">
-    <div class="manual-t">小区本体信息（选填，填得越全，打分越准）</div>
-    <div class="mgrid">
-     <label class="fld"><span>挂牌均价（元/㎡）</span><input type="number" inputmode="numeric" data-k="price"></label>
-     <label class="fld"><span>建成年份</span><input type="number" inputmode="numeric" data-k="year"></label>
-     <label class="fld"><span>容积率</span><input type="number" step="0.1" inputmode="decimal" data-k="far"></label>
-     <label class="fld"><span>绿化率（%）</span><input type="number" inputmode="numeric" data-k="green"></label>
-     <label class="fld"><span>物业费（元/㎡·月）</span><input type="number" step="0.1" inputmode="decimal" data-k="fee"></label>
-     <label class="fld"><span>户型评价</span>
-      <select data-k="layout"><option value="">未评价</option><option value="1">好</option>
-      <option value=".75">一般</option><option value=".5">差</option></select></label>
-    </div>
-   </div>`;
+`;
   box.appendChild(el);
  }
  bindBlocks();
@@ -765,6 +757,11 @@ function fillComm(i,d){
  el.querySelectorAll('.manual input,.manual select').forEach(x=>{x.value=c.manual[x.dataset.k]??'';});
  setStatus(i,'已定位：'+esc(d.name)+'，开始分析后统计周边配套…');
  renderBeike(i);saveCache();
+ // 自动补全：已连接直接查；未连接则挂起，等服务连上后自动跑，不再让用户点一次
+ if(!c.beike&&!c.beikeBusy){
+  if(housingState.connected&&housingState.profileConnected){queryBeike(i);}
+  else{c.pendingQuery=true;c.beikeMessage='连接贝壳后自动补全资料';renderBeike(i);}
+ }
 }
 // 兜底解析：按名称用 PlaceSearch 找住宅小区 POI
 function resolveByName(kw,i){
@@ -874,7 +871,7 @@ function renderBeike(i){
  const a=b.layoutAnalysis;
  const part=a?components.map(k=>{const m=a.components[k];return m?componentNames[k]+' · '+m.samples+'套 / 代表权重覆盖 '+Math.round(m.coverage*100)+'%':componentNames[k]+' · 缺失';}).join('；'):'';
  const evidence=(b.floorplanDetails||[]).map(x=>{const at=x.attributes||{};return `<div class="beike-note">${esc(at['房屋户型']||x.group)} · ${esc(at['户型结构']||'结构未知')} · ${esc(at['梯户比例']||'梯户比未知')} · 电梯${esc(at['配备电梯']||'未知')} · 分间${x.rooms.length}项 · 居住空间未知窗户${x.unknownWindows.length}项 · ${beikeUrl(x.url)?`<a href="${esc(beikeUrl(x.url))}" target="_blank" rel="noopener noreferrer">核对原始户型</a>`:''}</div>`;}).join('');
- const analysis=a?`<div class="beike-analysis"><b>小区户型专项分析</b><p>${a.eligible?'综合不同房型×面积段的分间数据，已生成小区户型专项分':'当前分间证据不足，户型自动评分暂缺'} · 有效代表 ${a.scoredSamples} 套 / 加权覆盖 ${Math.round(a.coverage*100)}%</p><p>${esc(part)}</p><p>${esc(a.policy||'')}。未知窗户不算无窗；不根据房型数量、面积大小或经纪人“户型好”文案加分。</p><details><summary>查看代表户型证据（不逐户型打分）</summary>${evidence}<p>过道占比≤5%计满、≥20%计零，中间线性插值；卫浴配比为卫数/max(1,⌈室数/2⌉)，上限1。仅解释已获取结构事实，不评价未测方正、承重、噪声或实际日照。</p></details></div>`:'<div class="beike-note">这是旧资料快照，请重新查询以获取基础信息与户型分析。</div>';
+ const analysis=a?`<div class="beike-analysis"><b>小区户型专项分析</b><p>${a.eligible?'综合不同房型×面积段的分间数据，已生成小区户型专项分':'当前分间证据不足，户型自动评分暂缺'} · 有效代表 ${a.scoredSamples} 套 / 加权覆盖 ${Math.round(a.coverage*100)}%</p><details><summary>统计口径</summary><p>${esc(part)}</p><p>${esc(a.policy||'')}。未知窗户不算无窗；不按房型数量或经纪人文案加分。</p></details><details><summary>查看代表户型证据（不逐户型打分）</summary>${evidence}<p>过道占比≤5%计满、≥20%计零，中间线性插值；卫浴配比为卫数/max(1,⌈室数/2⌉)，上限1。仅解释已获取结构事实，不评价未测方正、承重、噪声或实际日照。</p></details></div>`:'<div class="beike-note">这是旧资料快照，请重新查询以获取基础信息与户型分析。</div>';
  const groupTable=s.groups?`<details><summary>房型×面积段统计（无逐户型评分）</summary><div class="beike-list"><table><thead><tr><th>房型 / 面积段</th><th>样本</th><th>挂牌占比</th><th>面积中位数</th><th>总价中位数</th><th>单价中位数</th></tr></thead><tbody>${s.groups.map(g=>`<tr><td>${esc(g.name)}</td><td>${g.count}</td><td>${Math.round(g.share*100)}%</td><td>${g.areaMedian??'—'}㎡</td><td>${g.totalMedian??'—'}万</td><td>${g.unitMedian??'—'}元/㎡</td></tr>`).join('')}</tbody></table></div></details>`:'';
  box.innerHTML=`<div class="beike-meta"><div>贝壳小区 <b>${esc(b.name)}</b></div><div>参考均价 <b>${card.price?Number(card.price).toLocaleString()+' 元/㎡':'暂无'}</b></div><div>建筑年份 <b>${esc(card.yearRange||'暂无')}</b></div><div>建筑类型 <b>${esc(card.buildingType||'暂无')}</b></div><div>楼栋 / 户数 <b>${card.buildings??'—'} 栋 / ${card.households??'—'} 户</b></div><div>挂牌面积 <b>${s.areaMin!=null?s.areaMin+'–'+s.areaMax+' ㎡':'暂无'}</b></div><div>容积率 <b>${card.far??'暂无'}</b></div><div>绿化率 <b>${card.green!=null?card.green+'%':'暂无'}</b></div><div>物业费 <b>${esc(card.feeText||'暂无')}</b></div><div>物业公司 <b>${esc(card.propertyCompany||'暂无')}</b></div></div>
  ${analysis}${groupTable}
