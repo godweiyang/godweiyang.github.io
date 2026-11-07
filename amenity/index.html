@@ -560,7 +560,7 @@ const COLORS={subway:'#E53935',bus:'#FB8C00',hospital:'#8E24AA',pharmacy:'#F0629
 let commCount=1;
 const comms=[];   // {name,city,lnglat,am:{},manual:{}}
 const catMarkers={};
-let homeOverlays=[], circleOverlays=[];
+let homeOverlays=[], circleOverlays=[], pickOverlay=null;
 const infoWin=new AMap.InfoWindow({offset:new AMap.Pixel(0,-8)});
 
 const map=new AMap.Map('map',{zoom:13,center:[121.4737,31.2304],viewMode:'2D'});
@@ -759,11 +759,20 @@ function removeComm(i){
   map.remove([...Object.values(catMarkers)].flat());
   map.remove(homeOverlays);map.remove(circleOverlays);
   homeOverlays=[];circleOverlays=[];
+  if(pickOverlay){map.remove(pickOverlay);pickOverlay=null;}
  }
 }
 // 旧高德 cost 未提供房价语义和来源，不再自动当作小区均价。
 function tryCost(){}
 function clearCommunityData(c){c.dataGeneration=(c.dataGeneration||0)+1;c.am=null;c.manual={};c.dataset=null;c.dataId=null;c.autoFields={};}
+function showPick(i,c){
+ if(pickOverlay){map.remove(pickOverlay);pickOverlay=null;}
+ if(!c.lnglat)return;
+ pickOverlay=new AMap.Marker({position:c.lnglat,
+  content:`<div class="home-pin" style="background:#20242A">${['A','B','C'][i]}</div>`,
+  offset:new AMap.Pixel(-11,-13),zIndex:210});
+ map.add(pickOverlay);map.setZoomAndCenter(15,c.lnglat);
+}
 function fillComm(i,d){
  const c=comms[i];
  if(c.lnglat&&d.lnglat&&meters(c.lnglat,d.lnglat)>30){
@@ -781,8 +790,8 @@ function fillComm(i,d){
  }
  const el=document.querySelector(`.comm[data-i="${i}"]`);if(!el)return;
  el.querySelector('.comm-inp').value=c.name||'';
- if(c.lnglat&&!c.am)map.setZoomAndCenter(15,c.lnglat);
- setStatus(i,'已匹配：'+esc(c.name)+(c.dataset?' · '+(c.dataset.sell||0)+' 套在售':''));
+ if(c.lnglat&&!c.am)showPick(i,c);
+ setStatus(i,'已匹配本地资料');
  renderMeta(i);saveCache();
 }
 // ---- 本地小区库（静态收录，访客不需要登录任何账号）----
@@ -815,10 +824,10 @@ function loadCommunities(){
     const hit=COMMUNITIES.find(x=>x.id===c.dataId);
     if(hit){c.dataset=hit;c.lnglat=new AMap.LngLat(hit.gcjLng,hit.gcjLat);
      c.manual=Object.assign({},c.manual||{}, {price:String(hit.price||''),year:String(hit.year||'')});
-     if(!c.am)map.setZoomAndCenter(15,c.lnglat);
+     if(!c.am)showPick(i,c);
      const el=document.querySelector(`.comm[data-i="${i}"]`);
      if(el)el.querySelector('.comm-inp').value=c.name;
-     setStatus(i,'已匹配：'+esc(c.name)+' · '+(hit.sell||0)+' 套在售');}
+     setStatus(i,'已匹配本地资料');}
    }
   });
   refreshAllStatus();
@@ -1077,6 +1086,7 @@ document.getElementById('progCancel').addEventListener('click',()=>{
 function drawMap(valid){
  map.remove([...Object.values(catMarkers)].flat());Object.values(catMarkers).length=0;
  map.remove(homeOverlays);map.remove(circleOverlays);homeOverlays=[];circleOverlays=[];
+ if(pickOverlay){map.remove(pickOverlay);pickOverlay=null;}
  const colors=['#1565C0','#EF6C00','#2E7D32'];
  valid.forEach((c,i)=>{
   homeOverlays.push(new AMap.Marker({position:c.lnglat,
