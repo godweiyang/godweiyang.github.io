@@ -399,11 +399,18 @@ table.cmp tfoot td{font-family:var(--serif);font-size:18px;font-weight:500;borde
 .rules-box summary::marker{color:var(--muted)}
 .beike-analysis details{margin-top:8px}
 .beike-analysis details summary{cursor:pointer;font-size:12px;color:var(--ink2)}
+
+/* v24：安装命令收进按钮 */
+.hs-install-row{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0 10px}
+.hs-copy{height:34px;padding:0 16px;border:1px solid var(--hair);border-radius:999px;
+  background:var(--surface);color:var(--ink);font-size:13px;cursor:pointer;
+  transition:border-color .15s,background .15s}
+.hs-copy:hover{border-color:var(--ink);background:#fff}
 </style>
 </head>
 <body>
 <div class="top">
-  <h1>小区综合打分 <span class="ver-badge">v23</span></h1>
+  <h1>小区综合打分 <span class="ver-badge">v24</span></h1>
   <div class="r">输入小区，自动统计周边配套并给出综合分<br>支持多小区对比</div>
 </div>
 <div class="wrap">
@@ -412,7 +419,7 @@ table.cmp tfoot td{font-family:var(--serif);font-size:18px;font-weight:500;borde
     <div class="ct">选择小区<small>输入小区名，或在地图上点选</small></div>
     <div class="cbody">
       <div class="housing-tools"><span class="hs-state"><span class="hs-dot wait" id="housingDot"></span><span id="housingSvc">正在检测本机贝壳服务…</span></span><button type="button" class="hs-btn primary" id="housingConnect">连接贝壳</button><a class="hs-btn hs-aux" id="housingStart" href="amenity://start">启动服务</a><a class="hs-btn hs-aux" id="housingDownload" href="/medias/files/amenity_service.exe">下载服务</a><a class="hs-btn" id="housingMacIntel" href="/medias/files/amenity_service_mac_intel.zip" hidden>Mac Intel 版</a></div>
-      <details class="housing-install"><summary>安装方式与各平台下载</summary><p><a href="/medias/files/amenity_service.exe">Windows</a> · <a href="/medias/files/amenity_service_android.apk">Android 7.0+</a> · <a href="/medias/files/amenity_service_mac_arm64.zip">Mac Apple Silicon</a> · <a href="/medias/files/amenity_service_mac_intel.zip">Mac Intel</a></p><div class="hs-cmd"><span class="hs-os">Windows</span><code id="winInstallCmd">powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://godweiyang.com/medias/files/install_amenity_windows.ps1 | iex"</code><button type="button" id="winInstallCopy">复制命令</button></div><div class="hs-cmd"><span class="hs-os">macOS</span><code id="macInstallCmd">curl -fsSL https://godweiyang.com/medias/files/install_amenity_mac.sh | bash</code><button type="button" id="macInstallCopy">复制命令</button></div><p class="hs-cmd-note">复制这行命令粘贴执行即可：自动关旧服务、更新版本、去掉系统安全标记，不用手动点「仍要运行」。Android 装完点「启动」。</p></details>
+      <details class="housing-install"><summary>安装方式与各平台下载</summary><p><a href="/medias/files/amenity_service.exe">Windows</a> · <a href="/medias/files/amenity_service_android.apk">Android 7.0+</a> · <a href="/medias/files/amenity_service_mac_arm64.zip">Mac Apple Silicon</a> · <a href="/medias/files/amenity_service_mac_intel.zip">Mac Intel</a></p><div class="hs-install-row"><button type="button" class="hs-copy" id="winInstallCopy">复制 Windows 安装命令</button><button type="button" class="hs-copy" id="macInstallCopy">复制 macOS 安装命令</button></div><code id="winInstallCmd" hidden>powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://godweiyang.com/medias/files/install_amenity_windows.ps1 | iex"</code><code id="macInstallCmd" hidden>curl -fsSL https://godweiyang.com/medias/files/install_amenity_mac.sh | bash</code><p class="hs-cmd-note">点复制按钮粘到 PowerShell / 终端执行即可：自动关旧服务、更新版本、去掉系统安全标记，不用手动点「仍要运行」。Android 装完点「启动」。</p></details>
       <div id="commList"></div>
       <div class="ctl-row">
         <button class="linkbtn" id="btnAdd">+ 添加小区对比</button>
@@ -463,7 +470,7 @@ table.cmp tfoot td{font-family:var(--serif);font-size:18px;font-weight:500;borde
       <b>自动配套：</b>按距离连续衰减，越近越高；同类设施边际递减。<br>
       <b>缺失与口径：</b>没查到的项不计零分，按已获取指标的权重归一；户型只在证据足够时入分，不逐户型打分。<br>
       <b>等级：</b>90+ 极佳，75–89 优秀，60–74 良好，45–59 一般，&lt;45 不便。规则为启发式，不是官方评级，也不预测房价。
-      </details><div class="ver-tag">版本 v23 · 简化：资料自动补全、文案压缩</div>
+      </details><div class="ver-tag">版本 v24 · 简化：资料自动补全、命令收进按钮</div>
     </div>
   </div>
 </div>
