@@ -92,6 +92,7 @@ body{background:var(--bg);color:var(--ink);
 .go:hover{background:#000}
 .go:disabled{opacity:.5;cursor:wait}
 .hint{font-size:12px;color:var(--muted);margin-top:14px;line-height:1.7}
+.hint time{font-family:var(--mono);color:var(--ink2);font-variant-numeric:tabular-nums}
 
 /* 汇总小格 */
 .sumgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
@@ -446,7 +447,7 @@ table.cmp tfoot td{font-family:var(--serif);font-size:18px;font-weight:500;borde
         </div>
         <button class="go" id="btnGo">开始综合打分</button>
       </div>
-      <div class="hint">小区资料来自本地收录的 12,112 个上海小区，不需要登录任何账号；周边配套按需调用高德。</div>
+      <div class="hint">小区资料来自本地收录的 <span id="dataCount">12,112</span> 个上海小区，数据更新于 <time id="dataDate" datetime="2026-11-08">2026-11-08</time>；不需要登录任何账号；周边配套按需调用高德。</div>
     </div>
   </div>
 
@@ -804,6 +805,16 @@ function bd09ToGcj02(lng,lat){
  const z=Math.sqrt(x*x+y*y)-0.00002*Math.sin(y*xPI);
  const t=Math.atan2(y,x)-0.000003*Math.cos(x*xPI);
  return [z*Math.cos(t),z*Math.sin(t)];
+}
+
+function loadMeta(){
+ fetch('data/meta.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(m=>{
+  if(!m)return;
+  const d=document.getElementById('dataDate');
+  if(d&&m.updatedAt){d.textContent=m.updatedAt;d.setAttribute('datetime',m.updatedAt);}
+  const c=document.getElementById('dataCount');
+  if(c&&m.count)c.textContent=Number(m.count).toLocaleString();
+ }).catch(()=>{});
 }
 
 function loadCommunities(){
@@ -1209,8 +1220,8 @@ document.getElementById('btnAdd').addEventListener('click',()=>{
  if(commCount>=3)return;commCount++;renderBlocks();
 });
 document.getElementById('btnGo').addEventListener('click',runAll);
+loadMeta();
 loadCommunities();
-document.getElementById('btnGo').addEventListener('click',runAll);
 </script>
 </body>
 </html>
