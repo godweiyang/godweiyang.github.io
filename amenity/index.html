@@ -336,11 +336,67 @@ table.cmp tfoot td{font-family:var(--serif);font-size:18px;font-weight:500;borde
   .hs-cmd code{flex:1 1 100%;white-space:normal;overflow-wrap:anywhere}
   .hs-cmd button{flex:1 1 100%;padding:9px 12px}
 }
+
+/* ===== v19：边框层级与对齐修正 ===== */
+/* 小节标签与内容左对齐：去掉短横线缩进 */
+.ct{padding-left:0;gap:0}
+.ct::before{display:none}
+
+/* 小区块：去掉外层大圆角框，改成用发丝线分段的条目 */
+.comm{border:0;border-radius:0;background:transparent;overflow:visible;
+  margin-bottom:0;padding:20px 0 8px;border-top:1px solid var(--hair2)}
+.comm:first-child{border-top:0;padding-top:0}
+.comm-head{padding:0 0 12px;border-bottom:0}
+.comm-status{padding:8px 0 2px}
+.beike-pane{margin:12px 0 0;padding:14px 16px;border:1px solid var(--hair);
+  border-radius:10px;background:var(--surface)}
+.manual{padding:16px 0 0;margin-top:16px;border-top:1px solid var(--hair2)}
+.manual-t{margin:0 0 12px}
+
+/* 贝壳连接条：状态条，不再是一个浮框 */
+.housing-tools{border:0;border-radius:0;background:transparent;
+  border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);
+  padding:12px 0;margin:0 0 20px;gap:12px}
+.hs-btn{border-radius:999px}
+.hs-cmd{border-radius:10px;margin:10px 0 8px}
+.housing-install{padding-left:0}
+
+/* 地图：裁到圆角内 */
+#map{overflow:hidden;border-radius:12px}
+.map-legend{padding:12px 0 0}
+
+/* 结果卡与表格保持单层框 */
+.score-card{border-radius:12px}
+.cmp-wrap,.ctable{border-radius:0}
+
+/* ===== v20：对齐与裁切收尾 ===== */
+.ct{gap:10px;font-size:13px}
+.ct small{font-size:11.5px}
+/* 安装命令：换行显示，不再横向裁切 */
+.hs-cmd{box-sizing:border-box;width:100%;align-items:flex-start}
+.hs-cmd code{white-space:normal;overflow-wrap:anywhere;word-break:break-word;
+  overflow-x:visible;line-height:1.7}
+.hs-cmd button{flex:none;margin-left:auto;align-self:center}
+/* 小区字母块统一墨色，去掉彩虹色 */
+.badge{background:var(--ink)!important;border-radius:6px}
+/* 盒模型与边框对齐 */
+.comm,.comm-head,.cbody,.housing-tools,#map,.beike-pane,.manual,.manual .mgrid,
+.hs-cmd,.sumcell,.score-card,.cmp-wrap,.ctable{box-sizing:border-box}
+#map{width:100%}
+
+/* ===== v21：小区输入行单框化，右边缘与内容对齐 ===== */
+.comm-head{border:1px solid var(--hair);border-radius:10px;
+  background:var(--surface);padding:6px 10px;gap:10px}
+.comm-head input{border:0;background:transparent;box-shadow:none;height:36px;padding:0 6px}
+.comm-head input:focus{box-shadow:none;border:0}
+.comm-head{border-color:var(--hair)}
+.comm-head:focus-within{border-color:var(--ink);box-shadow:0 0 0 3px rgba(32,36,42,.06)}
+.comm-del{width:28px;height:28px}
 </style>
 </head>
 <body>
 <div class="top">
-  <h1>小区综合打分 <span class="ver-badge">v18</span></h1>
+  <h1>小区综合打分 <span class="ver-badge">v21</span></h1>
   <div class="r">输入小区，自动统计周边配套并结合小区本体属性<br>交通 / 商业 / 医疗 / 教育 / 环境 / 品质 / 户型 / 性价比，支持多小区对比</div>
 </div>
 <div class="wrap">
@@ -403,7 +459,7 @@ table.cmp tfoot td{font-family:var(--serif);font-size:18px;font-weight:500;borde
       <b>分值与缺失：</b>专项为100分制；综合按实际可用子指标权重归一，未查询不计零分，显示权重覆盖。规则为本工具启发式，不是官方评级；挂牌样本不等于全部住宅构成。<br>
       <b>性价比：</b>只有配套信息与房价同时具备才计算，避免仅凭便宜判定性价比好；配套因子与价格因子各占一半，明确物业费可加居住成本辅助。价格因子为1−log10(clamp(单价,10000,100000)/10000)，是工具固定参考范围，不是市场估值结论。<br>
       <b>等级：</b>90+ 极佳，75–89 优秀，60–74 良好，45–59 一般，&lt;45 不便。教育维度只测学校距离，不代表学区划分与质量；本工具不预测房价走势。
-      <div class="ver-tag">版本 v18 · 按 unslop 九遍流程重制：纸墨色板 / 4px 间距 / 衬线数字 / 胶囊控件 / 圆环结果</div>
+      <div class="ver-tag">版本 v21 · 边框对齐：小区输入行单框、右边缘统一</div>
     </div>
   </div>
 </div>
