@@ -2244,7 +2244,8 @@ function posterFooter(g,H,center){
  posterQR(g,qx,qy,qr);
  g.textAlign='right';g.fillStyle=POSTER_COLORS.muted;g.font='500 11px '+POSTER_MONO;
  g.fillText('扫码打开',qx-12,qy+qr/2+4);
- g.textAlign='left';g.fillText(`${center||'上海'} · 社区档案`,64,H-54);
+ g.textAlign='center';g.fillStyle=POSTER_COLORS.muted;g.font='500 11px '+POSTER_MONO;
+ g.fillText(`${center||'上海'} · 社区档案`,g.canvas.width/2,H-54);g.textAlign='left';
 }
 
 function drawSinglePoster(item){
