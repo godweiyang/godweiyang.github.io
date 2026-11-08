@@ -2286,10 +2286,10 @@ function drawSinglePoster(item){
  return cv;
 }
 
-function posterKV(g,label,value,x,y,w){
+function posterKV(g,label,value,x,y,w,size){
  g.fillStyle=POSTER_COLORS.muted;g.font='500 11px '+POSTER_SANS;g.fillText(label,x,y);
- g.fillStyle=POSTER_COLORS.cream;g.font='500 18px '+POSTER_MONO;g.textAlign='right';
- g.fillText(posterClip(g,value,w-88),x+w,y+1);g.textAlign='left';
+ g.fillStyle=POSTER_COLORS.cream;g.font='500 '+(size||18)+'px '+POSTER_MONO;g.textAlign='right';
+ g.fillText(posterClip(g,value,w-82),x+w,y+1);g.textAlign='left';
 }
 function posterRadarMulti(g,cx,cy,radius,list,legendX){
  const axes=DIMS.filter(dim=>list.some(item=>{
@@ -2353,12 +2353,12 @@ function posterRadarMulti(g,cx,cy,radius,list,legendX){
    if(vals.length>1){const s=Math.max(...vals)-Math.min(...vals);if(s>spread){spread=s;spreadName=dim.name;}}
   });
   g.fillStyle=POSTER_COLORS.muted;g.font='400 11px '+POSTER_SANS;
-  g.fillText('越靠外越强；三条线分离越大，差异越明显。',lx,ly+3*36+16);
+  g.fillText('越靠外越强；线距越大，差异越明显。',lx,ly+list.length*36+16);
   if(spreadName){
    g.fillStyle=POSTER_COLORS.dim;g.font='500 10px '+POSTER_MONO;
-   g.fillText('最大分差',lx,ly+3*36+50);
+   g.fillText('最大分差',lx,ly+list.length*36+50);
    g.fillStyle=POSTER_COLORS.cream;g.font='500 22px '+POSTER_MONO;
-   g.fillText(spreadName+'  '+spread,lx,ly+3*36+72);
+   g.fillText(spreadName+'  '+spread,lx,ly+list.length*36+72);
   }
  }else{
   list.forEach((item,i)=>{
@@ -2376,11 +2376,12 @@ function drawComparePoster(list){
  const g=cv.getContext('2d');
  g.fillStyle=POSTER_COLORS.bg;g.fillRect(0,0,W,H);
  posterHeader(g,W,`对照档案 · ${n} 个小区`,'并排比较');
- g.fillStyle=POSTER_COLORS.cream;g.font='600 54px '+POSTER_SERIF;
- g.fillText('同城对照',64,158);
+ g.fillStyle=POSTER_COLORS.cream;g.font='600 60px '+POSTER_SERIF;
+ g.fillText('同城对照',64,162);
  g.fillStyle=POSTER_COLORS.muted;g.font='400 14px '+POSTER_SANS;
  g.fillText('同一套九维口径，横向看分数、房价、房龄和位置差异',64,190);
- const top=230,cardH=330,colW=952/n;
+ const top=230,cardH=n===2?300:324,colW=952/n;
+ const sectionY=n===2?560:584;
  posterRound(g,64,top,952,cardH,10,POSTER_COLORS.panel,POSTER_COLORS.line);
  list.forEach((item,i)=>{
   const x0=64+i*colW,d=item.x,r=item.r,[gname]=grade(r.total);
@@ -2388,61 +2389,83 @@ function drawComparePoster(list){
   g.fillStyle=POSTER_SERIES[i%3];g.fillRect(x0+14,top,40,3);
   g.textAlign='right';g.fillStyle=POSTER_SERIES[i%3];g.font='500 11px '+POSTER_MONO;
   g.fillText('0'+(i+1),x0+colW-14,top+26);g.textAlign='left';
-  g.fillStyle=POSTER_COLORS.cream;g.font='500 24px '+POSTER_SERIF;
-  g.fillText(posterClip(g,cName(item),colW-28),x0+14,top+40);
+  g.fillStyle=POSTER_COLORS.cream;g.font='500 '+(n===2?26:23)+'px '+POSTER_SERIF;
+  g.fillText(posterClip(g,cName(item),colW-28),x0+14,top+42);
   g.fillStyle=POSTER_COLORS.muted;g.font='400 11px '+POSTER_SANS;
-  g.fillText(posterClip(g,`${d.district||''} · ${d.biz||''}`,colW-28),x0+14,top+62);
-  g.fillStyle=POSTER_SERIES[i%3];g.font='600 46px '+POSTER_SERIF;
-  g.fillText(String(r.total),x0+14,top+128);
-  g.fillStyle=POSTER_COLORS.dim;g.font='500 11px '+POSTER_MONO;
-  g.fillText('/100',x0+14+g.measureText(String(r.total)).width+4,top+128);
+  g.fillText(posterClip(g,`${d.district||''} · ${d.biz||''}`,colW-28),x0+14,top+66);
+  const scoreFont=n===2?64:54,scoreY=top+(n===2?142:136);
+  g.fillStyle=POSTER_SERIES[i%3];g.font='600 '+scoreFont+'px '+POSTER_SERIF;
+  const sw=g.measureText(String(r.total)).width;
+  g.fillText(String(r.total),x0+14,scoreY);
+  g.fillStyle=POSTER_COLORS.dim;g.font='500 12px '+POSTER_MONO;
+  g.fillText('/100',x0+14+sw+7,scoreY);
   g.fillStyle=POSTER_COLORS.cream;g.font='500 16px '+POSTER_SANS;
-  g.fillText(gname,x0+14,top+154);
+  g.fillText(gname,x0+14,scoreY+30);
   const info=centerInfo(d);
-  posterKV(g,'参考均价',d.price?fmtNum(d.price)+' 元/㎡':'—',x0+14,top+198,colW-28);
-  posterKV(g,'建成年',d.year?(d.yearEnd?d.year+'–'+d.yearEnd:String(d.year)):'—',x0+14,top+232,colW-28);
-  posterKV(g,'最近地铁',d.st||'—',x0+14,top+266,colW-28);
-  posterKV(g,'距市中心',info?info.km.toFixed(1)+' km · '+info.band:'—',x0+14,top+300,colW-28);
+  if(n===2){
+   const fw=(colW-36)/2,fy=top+200;
+   posterKV(g,'参考均价',d.price?fmtNum(d.price)+' 元/㎡':'—',x0+14,fy,fw,16);
+   posterKV(g,'建成年',d.year?(d.yearEnd?d.year+'–'+d.yearEnd:String(d.year)):'—',x0+22+fw,fy,fw,16);
+   posterKV(g,'最近地铁',d.st||'—',x0+14,fy+34,fw,16);
+   posterKV(g,'距市中心',info?info.km.toFixed(1)+'km · '+info.band:'—',x0+22+fw,fy+34,fw,15);
+  }else{
+   const fy=top+196;
+   posterKV(g,'参考均价',d.price?fmtNum(d.price)+' 元/㎡':'—',x0+14,fy,colW-28);
+   posterKV(g,'建成年',d.year?(d.yearEnd?d.year+'–'+d.yearEnd:String(d.year)):'—',x0+14,fy+28,colW-28);
+   posterKV(g,'最近地铁',d.st||'—',x0+14,fy+56,colW-28);
+   posterKV(g,'距市中心',info?info.km.toFixed(1)+' km · '+info.band:'—',x0+14,fy+84,colW-28);
+  }
  });
- posterSection(g,'02 / 九维对照',590);
- const axisX=220,axisW=700;
- g.fillStyle=POSTER_COLORS.dim;g.font='500 10px '+POSTER_MONO;g.fillText('维度',64,626);
+ posterSection(g,'02 / 九维对照',sectionY);
+ const axisX=220,axisW=700,headerY=sectionY+36,rowY=sectionY+70;
+ g.fillStyle=POSTER_COLORS.dim;g.font='500 10px '+POSTER_MONO;g.fillText('维度',64,headerY);
  list.forEach((item,i)=>{
   const x0=axisX+i*240;
-  g.fillStyle=POSTER_SERIES[i%3];g.fillRect(x0,617,7,7);
-  g.fillStyle=POSTER_COLORS.cream;g.font='500 10px '+POSTER_SANS;
-  g.fillText('0'+(i+1)+' '+posterClip(g,cName(item),190),x0+12,626);
+  g.fillStyle=POSTER_SERIES[i%3];g.fillRect(x0,headerY-9,7,7);
+  g.fillStyle=POSTER_COLORS.cream;g.font='500 11px '+POSTER_SANS;
+  g.fillText('0'+(i+1)+' '+posterClip(g,cName(item),170),x0+12,headerY);
+  g.textAlign='right';g.fillStyle=POSTER_SERIES[i%3];g.font='500 10px '+POSTER_MONO;
+  g.fillText(String(item.r.total),x0+226,headerY);g.textAlign='left';
+ });
+ let spread=0,spreadName='',spreadKey='';
+ DIMS.forEach(dim=>{
+  const vals=list.map(item=>{const z=item.r.groups.find(z=>z.key===dim.key);return z&&z.score!=null?z.score:null;}).filter(v=>v!=null);
+  if(vals.length>1){const s=Math.max(...vals)-Math.min(...vals);if(s>spread){spread=s;spreadName=dim.name;spreadKey=dim.key;}}
  });
  DIMS.forEach((dim,j)=>{
-  const y=660+j*55;
-  if(j%2===1){g.fillStyle='rgba(255,255,255,.018)';g.fillRect(64,y-22,952,55);}
+  const y=rowY+j*54,isMax=dim.key===spreadKey;
+  if(isMax){g.fillStyle='rgba(198,161,91,.06)';g.fillRect(64,y-20,952,54);g.fillStyle=POSTER_COLORS.accent;g.fillRect(64,y-20,2,54);}
+  else if(j%2===1){g.fillStyle='rgba(255,255,255,.018)';g.fillRect(64,y-22,952,54);}
   g.strokeStyle=POSTER_COLORS.line;g.beginPath();g.moveTo(64,y-20);g.lineTo(1016,y-20);g.stroke();
-  g.fillStyle=POSTER_COLORS.muted;g.font='500 13px '+POSTER_SANS;g.fillText(dim.name,64,y+30);
+  g.fillStyle=isMax?POSTER_COLORS.accent:POSTER_COLORS.muted;g.font='500 '+(n===2?14:13)+'px '+POSTER_SANS;g.fillText(dim.name,64,y+28);
+  const laneH=7,laneGap=n===2?13:9,blockH=n*laneH+(n-1)*laneGap,startY=y-Math.round(blockH/2)+6;
   list.forEach((item,i)=>{
-   const gy=y+5+i*11,gg=item.r.groups.find(z=>z.key===dim.key);
+   const gy=startY+i*(laneH+laneGap),gg=item.r.groups.find(z=>z.key===dim.key);
    const val=gg&&gg.score!=null?gg.score:null;
-   g.fillStyle='#1b252a';g.fillRect(axisX,gy,axisW,5);
+   g.fillStyle='#1b252a';g.fillRect(axisX,gy,axisW,laneH);
    if(val!=null){
-    const bw=Math.max(5,Math.round(axisW*val/100));
-    g.fillStyle=POSTER_SERIES[i%3];g.fillRect(axisX,gy,bw,5);
-    g.beginPath();g.arc(axisX+bw,gy+2.5,2.6,0,Math.PI*2);g.fillStyle=POSTER_SERIES[i%3];g.fill();
+    const bw=Math.max(6,Math.round(axisW*val/100));
+    g.fillStyle=POSTER_SERIES[i%3];g.fillRect(axisX,gy,bw,laneH);
+    g.beginPath();g.arc(axisX+bw,gy+laneH/2,3.2,0,Math.PI*2);g.fillStyle=POSTER_SERIES[i%3];g.fill();
    }
-   g.fillStyle=val==null?POSTER_COLORS.dim:POSTER_COLORS.cream;g.font='500 12px '+POSTER_MONO;
-   g.textAlign='right';g.fillText(val==null?'—':String(val),1000,gy+5);g.textAlign='left';
+   g.fillStyle=POSTER_SERIES[i%3];g.fillRect(968,gy+2,4,4);
+   g.fillStyle=val==null?POSTER_COLORS.dim:POSTER_COLORS.cream;g.font='500 '+(n===2?16:13)+'px '+POSTER_MONO;
+   g.textAlign='right';g.fillText(val==null?'—':String(val),986,gy+7);g.textAlign='left';
   });
  });
  const best=[...list].sort((a,b)=>b.r.total-a.r.total)[0];
  const worst=[...list].sort((a,b)=>a.r.total-b.r.total)[0];
- posterSection(g,'03 / 轮廓对照',1180);
- posterRadarMulti(g,360,1290,92,list,560);
- posterSection(g,'04 / 差异摘要',1430);
- const boxes=[['最高分',cName(best)+' '+best.r.total],['最低分',cName(worst)+' '+worst.r.total],['覆盖',`${Math.round(best.r.coverage)}% / ${Math.round(worst.r.coverage)}%`]];
- boxes.forEach(([label,value],i)=>{
-  const x0=64+i*316;
-  posterRound(g,x0,1454,300,72,8,POSTER_COLORS.panel,POSTER_COLORS.line);
-  g.fillStyle=POSTER_COLORS.dim;g.font='500 11px '+POSTER_SANS;g.fillText(label,x0+12,1476);
-  g.fillStyle=POSTER_COLORS.cream;g.font='500 18px '+POSTER_SANS;
-  g.fillText(posterClip(g,value,276),x0+12,1504);
+ posterSection(g,'03 / 轮廓对照',n===2?1120:1145);
+ posterRadarMulti(g,360,n===2?1245:1275,100,list,560);
+ posterSection(g,'04 / 差异摘要',1410);
+ posterRound(g,64,1430,952,96,10,POSTER_COLORS.panel,POSTER_COLORS.line);
+ const cells=[['领先',cName(best)+' '+best.r.total],['最大分差',spreadName?spreadName+' '+spread:'—'],['覆盖',`${Math.round(best.r.coverage)}% / ${Math.round(worst.r.coverage)}%`]];
+ cells.forEach(([label,value],i)=>{
+  const x0=64+i*317;
+  if(i){g.strokeStyle=POSTER_COLORS.line;g.lineWidth=1;g.beginPath();g.moveTo(x0,1448);g.lineTo(x0,1508);g.stroke();}
+  g.fillStyle=POSTER_COLORS.dim;g.font='500 10px '+POSTER_MONO;g.fillText(label,x0+14,1454);
+  g.fillStyle=POSTER_COLORS.cream;g.font='500 19px '+POSTER_SANS;
+  g.fillText(posterClip(g,value,286),x0+14,1484);
  });
  posterFooter(g,H,'上海');
  return cv;
