@@ -820,11 +820,59 @@ table.cmp tfoot td{font-family:var(--serif);font-size:18px;font-weight:500;borde
  .sample-pic{height:76px}
  .alt-dialog .dlg-body{padding:8px 16px 16px}
 }
+
+/* ===== v28：评分海报 ===== */
+.result-share{display:flex;align-items:center;justify-content:space-between;gap:14px;
+  margin:14px 0 0;padding:14px 16px;border:1px solid var(--hair);border-radius:10px;
+  background:var(--surface);min-width:0}
+.result-share .rs-text{min-width:0}
+.result-share .rs-text b{display:block;font-size:14px;font-weight:500;color:var(--ink)}
+.result-share .rs-text span{display:block;margin-top:3px;font-size:11px;color:var(--muted);line-height:1.5}
+.result-share button{flex:none;height:40px;padding:0 18px;border:1px solid var(--ink);
+  border-radius:7px;background:var(--ink);color:#fffdf8;font-size:13px;cursor:pointer;
+  transition:background .16s var(--ease),transform .16s var(--ease)}
+.result-share button:hover{background:#3a4147}
+.result-share button:active{transform:scale(.98)}
+.poster-mask{position:fixed;inset:0;z-index:130;background:rgba(9,14,16,.84);display:none;
+  align-items:center;justify-content:center;padding:18px}
+.poster-mask.show{display:flex}
+.poster-dialog{width:min(560px,100%);max-height:95vh;background:#12181c;border:1px solid #2a363a;
+  border-radius:16px;display:flex;flex-direction:column;overflow:hidden;
+  box-shadow:0 28px 80px rgba(0,0,0,.45)}
+.poster-head{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:13px 16px;border-bottom:1px solid #293438}
+.poster-head .poster-eyebrow{display:block;font:600 9px/1 var(--mono);letter-spacing:.12em;
+  color:#859494;margin-bottom:5px}
+.poster-head strong{display:block;font-family:var(--serif);font-size:19px;font-weight:500;color:#f4efe4}
+.poster-close{width:40px;height:40px;flex:none;border:1px solid #354246;border-radius:50%;
+  background:transparent;color:#f4efe4;font-size:21px;line-height:1;cursor:pointer}
+.poster-close:hover{background:#1e282c}
+.poster-preview{background:#0b1114;padding:14px;overflow:auto;min-height:0}
+.poster-preview img{display:block;width:100%;height:auto;background:#12181c}
+.poster-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:13px 16px 15px;
+  border-top:1px solid #293438;background:#12181c}
+.poster-actions button{min-height:44px;border-radius:7px;font-size:13px;cursor:pointer;
+  transition:background .16s var(--ease),transform .16s var(--ease)}
+.poster-actions button:active{transform:scale(.98)}
+.poster-actions .poster-download{border:1px solid #d4a15f;background:#d4a15f;color:#12181c}
+.poster-actions .poster-download:hover{background:#e0b273}
+.poster-actions .poster-copy{border:1px solid #3a4a4e;background:#1b2529;color:#f4efe4}
+.poster-actions .poster-copy:hover{background:#263238}
+.poster-tip{grid-column:1/-1;min-height:16px;text-align:center;font-size:11px;line-height:1.5;color:#9aa7a7}
+@media(max-width:640px){
+ .result-share{align-items:flex-start;flex-direction:column}
+ .result-share button{width:100%}
+ .poster-mask{padding:8px}
+ .poster-dialog{max-height:97vh;border-radius:12px}
+ .poster-preview{padding:8px}
+ .poster-actions{padding:10px}
+ .poster-actions button{font-size:12px}
+}
 </style>
 </head>
 <body>
 <div class="top">
-  <h1>上海小区指南 <span class="ver-badge">v27</span></h1>
+  <h1>上海小区指南 <span class="ver-badge">v28</span></h1>
   <div class="r">12,112 个上海小区 · 本地资料<br>数据更新 <time id="topDate" datetime="2026-11-08">2026-11-08</time></div>
 </div>
 <nav class="tabs" id="tabs" aria-label="功能导航">
@@ -871,12 +919,13 @@ table.cmp tfoot td{font-family:var(--serif);font-size:18px;font-weight:500;borde
   <div class="card">
     <div class="ct">评分规则</div>
     <div class="cbody rules"><details class="rules-box"><summary>评分规则与计算方式</summary>
-      <b>八大维度与权重：</b>
+      <b>九大维度与权重：</b>
       <div class="grid2" id="ruleGrid"></div>
       <b>自动配套：</b>按距离连续衰减，越近越高；同类设施边际递减。<br>
+      <b>区位：</b>按到人民广场、陆家嘴、徐家汇、静安寺四个市中心的最近直线距离连续衰减；只代表地理接近度，不替代实际通勤。<br>
       <b>缺失与口径：</b>没查到的项不计零分，按已获取指标的权重归一；户型只在证据足够时入分，不逐户型打分。<br>
       <b>等级：</b>90+ 极佳，75–89 优秀，60–74 良好，45–59 一般，&lt;45 不便。规则为启发式，不是官方评级，也不预测房价。
-      </details><div class="ver-tag">版本 v26 · 本地收录上海 12,112 个小区，无需登录</div>
+      </details><div class="ver-tag">版本 v28 · 本地收录上海 12,112 个小区，无需登录</div>
     </div>
   </div>
   </section>
@@ -1082,6 +1131,22 @@ table.cmp tfoot td{font-family:var(--serif);font-size:18px;font-weight:500;borde
 </div>
 <div class="toast" id="toast"></div>
 
+<!-- 评分海报弹窗 -->
+<div class="poster-mask" id="scorePosterMask" role="dialog" aria-modal="true" aria-labelledby="scorePosterTitle">
+  <div class="poster-dialog">
+    <div class="poster-head">
+      <div><span class="poster-eyebrow">RESIDENCE POSTER</span><strong id="scorePosterTitle">小区评分海报</strong></div>
+      <button class="poster-close" id="scorePosterClose" type="button" aria-label="关闭">×</button>
+    </div>
+    <div class="poster-preview"><img id="scorePosterImg" alt="小区评分海报"></div>
+    <div class="poster-actions">
+      <button class="poster-download" id="scorePosterDownload" type="button">下载 PNG</button>
+      <button class="poster-copy" id="scorePosterCopy" type="button">复制图片</button>
+      <div class="poster-tip" id="scorePosterTip">电脑端可复制或下载；手机端可长按预览图保存</div>
+    </div>
+  </div>
+</div>
+
 <script>window._AMapSecurityConfig={securityJsCode:'4c53a95cbc45792efebe0d3031509cc9'};</script>
 <script src="https://webapi.amap.com/maps?v=2.0&key=8b70196f1df4360442eb5d475c5d0c2e&plugin=AMap.PlaceSearch"></script>
 <script src="https://fastly.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
@@ -1133,14 +1198,15 @@ const AM_CATS=[
    return /化工厂|垃圾处理|垃圾转运|垃圾场|垃圾站|变电站|殡仪馆|污水处理|加油站|加气站|工厂/.test(n);
   }, tier:()=>1},
 ];
-// ============ 八大维度（权重合计100）============
+// ============ 九大维度（权重合计100）============
 const DIMS=[
- {key:'traffic', name:'交通', weight:20, subs:[['subway',14],['bus',6]]},
- {key:'commerce', name:'商业', weight:14, subs:[['mall',6],['market',4],['vege',4]]},
- {key:'medical', name:'医疗', weight:10, subs:[['hospital',7],['pharmacy',3]]},
- {key:'edu', name:'教育', weight:12, subs:[['kindergarten',3],['primary',5],['middle',4]]},
- {key:'env', name:'环境', weight:12, subs:[['park',7],['noise',5]]},
- {key:'quality', name:'小区品质', weight:17, subs:[['year',5],['far',5],['green',5],['access',2]]},
+ {key:'traffic', name:'交通', weight:18, subs:[['subway',13],['bus',5]]},
+ {key:'location', name:'区位', weight:8, subs:[['center',8]]},
+ {key:'commerce', name:'商业', weight:13, subs:[['mall',5],['market',4],['vege',4]]},
+ {key:'medical', name:'医疗', weight:9, subs:[['hospital',6],['pharmacy',3]]},
+ {key:'edu', name:'教育', weight:11, subs:[['kindergarten',3],['primary',5],['middle',3]]},
+ {key:'env', name:'环境', weight:11, subs:[['park',6],['noise',5]]},
+ {key:'quality', name:'小区品质', weight:15, subs:[['year',5],['far',4],['green',4],['access',2]]},
  {key:'layout', name:'户型', weight:7, subs:[['layout',7]]},
  {key:'value', name:'性价比', weight:8, subs:[['value',8]]},
 ];
@@ -1948,6 +2014,511 @@ function shareCard(x){
  },'image/png');
 }
 
+/* ================= v28：评分海报 ================= */
+const POSTER_SERIF='Georgia, "Songti SC", "Noto Serif SC", serif';
+const POSTER_SANS='"PingFang SC","Microsoft YaHei",sans-serif';
+const POSTER_MONO='ui-monospace,"SFMono-Regular",Menlo,monospace';
+const POSTER_COLORS={bg:'#12181c',panel:'#192227',line:'#2c383c',cream:'#f4efe4',
+ muted:'#9aa7a7',dim:'#718080',accent:'#d4a15f',good:'#8aa79e',bad:'#c07b6e'};
+const POSTER_SERIES=['#d4a15f','#8aa79e','#c07b6e'];
+const POSTER_SUBS=[['subway','地铁'],['bus','公交'],['mall','商场'],['market','超市'],
+ ['vege','菜场'],['hospital','医院'],['pharmacy','药店'],['park','公园'],
+ ['kindergarten','幼儿园'],['primary','小学'],['middle','中学'],['noise','噪音源']];
+const POSTER_QR=new Image();
+let POSTER_QR_CANVAS=null;
+POSTER_QR.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANwAAADcAQMAAAAhlF3CAAAABlBMVEX///8AAABVwtN+AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABY0lEQVRYheWYsRXDIAxE5eciJSMwikcjo3kUj0BJ4WfldMLOS+IqpVCRZ/g0vnAnsMjftShrx6PqE7+pPnxK11Bwtbd97JOqSMFUxYAKlJFgVm0YTxRo2aDQPmNRUDgd3OIrFRkV8r9/At7KFx52OxyCbWIJUW+8EgD27CMsK+3wE4zR4VWWCRAlV7mp4JAKNYrC/Nea2ox2IIzJSHDL2qDBYbYX6/Yys/cPBNH3EAmnHZRJyOijHUaBJgrG1gSLJSO3ic2WUBB22FLj0Y61JQQhlp7BOAZE3MEOXSF2e3lnQiSY/e39aKdniYswCrzs4FGIy4yvLCPB7If8fqMzOxhUChYHnmXQ7JChgsz6wcLDbgBmn+0Ev9a+g3EMuJoUvNtTE0BXqKdmHHjZwaon4eFfrwaE3gWRhLy+X91hLMi7/Sap9YQIBt0Ok/e2RXt9f+CIDf3ZFSpKhXwjfAdjYPh3vQADilJgtRO+VQAAAABJRU5ErkJggg==';
+
+function posterRound(g,x,y,w,h,r,fill,stroke){
+ r=Math.min(r,w/2,h/2);
+ g.beginPath();
+ g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);
+ g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath();
+ if(fill){g.fillStyle=fill;g.fill();}
+ if(stroke){g.strokeStyle=stroke;g.lineWidth=1;g.stroke();}
+}
+function posterClip(g,text,maxW){
+ let s=String(text==null?'':text);
+ if(g.measureText(s).width<=maxW)return s;
+ while(s.length&&g.measureText(s+'…').width>maxW)s=s.slice(0,-1);
+ return s+'…';
+}
+function posterWrap(g,text,x,y,maxW,lineH,maxLines){
+ const chars=String(text||'').split(''),lines=[];let line='';
+ for(const ch of chars){
+  if(g.measureText(line+ch).width>maxW){
+   lines.push(line);
+   if(lines.length>=maxLines-1){line=ch;break;}
+   line=ch;
+  }else line+=ch;
+ }
+ if(line)lines.push(line);
+ if(!lines.length)lines.push('');
+ if(lines.length>maxLines)lines.length=maxLines;
+ lines.forEach((l,i)=>g.fillText(l,x,y+i*lineH));
+}
+function posterSectionAt(g,label,x,y){
+ g.textAlign='left';
+ g.fillStyle=POSTER_COLORS.accent;g.fillRect(x,y-11,20,2);
+ g.fillStyle=POSTER_COLORS.muted;g.font='600 11px '+POSTER_MONO;
+ g.fillText(label,x+28,y-5);
+}
+function posterSection(g,label,y){
+ posterSectionAt(g,label,64,y);
+}
+function posterHeader(g,W,kicker,right){
+ g.fillStyle=POSTER_COLORS.accent;g.fillRect(0,0,W,6);
+ g.fillStyle=POSTER_COLORS.cream;g.font='600 14px '+POSTER_MONO;
+ g.fillText(kicker,64,54);
+ g.textAlign='right';g.fillStyle=POSTER_COLORS.muted;g.font='500 12px '+POSTER_MONO;
+ g.fillText(right,1016,54);g.textAlign='left';
+ g.strokeStyle=POSTER_COLORS.line;g.lineWidth=1;
+ g.beginPath();g.moveTo(64,80);g.lineTo(1016,80);g.stroke();
+}
+function posterDateText(){
+ return (STATS&&STATS.updatedAt)?String(STATS.updatedAt):'2026-11-08';
+}
+function posterQR(g,x,y,size){
+ if(!POSTER_QR_CANVAS&&POSTER_QR.complete&&POSTER_QR.naturalWidth){
+  const s=220,tmp=document.createElement('canvas');tmp.width=s;tmp.height=s;
+  const c=tmp.getContext('2d');c.drawImage(POSTER_QR,0,0,s,s);
+  const data=c.getImageData(0,0,s,s).data;
+  let minX=s,maxX=0,minY=s,maxY=0;
+  for(let py=0;py<s;py++)for(let px=0;px<s;px++){
+   const i=(py*s+px)*4;
+   if(data[i]<120){if(px<minX)minX=px;if(px>maxX)maxX=px;if(py<minY)minY=py;if(py>maxY)maxY=py;}
+  }
+  if(maxX<=minX||maxY<=minY)return;
+  const out=document.createElement('canvas');out.width=out.height=s;
+  const o=out.getContext('2d');o.fillStyle=POSTER_COLORS.cream;o.fillRect(0,0,s,s);
+  const pad=8,scale=(s-2*pad)/Math.max(maxX-minX+1,maxY-minY+1);
+  o.fillStyle=POSTER_COLORS.bg;
+  for(let py=minY;py<=maxY;py++)for(let px=minX;px<=maxX;px++){
+   const i=(py*s+px)*4;
+   if(data[i]<120)o.fillRect(Math.floor(pad+(px-minX)*scale),Math.floor(pad+(py-minY)*scale),Math.ceil(scale+.4),Math.ceil(scale+.4));
+  }
+  POSTER_QR_CANVAS=out;
+ }
+ if(POSTER_QR_CANVAS){g.imageSmoothingEnabled=true;g.drawImage(POSTER_QR_CANVAS,x,y,size,size);g.imageSmoothingEnabled=true;return;}
+ if(!POSTER_QR.complete||!POSTER_QR.naturalWidth)return;
+ g.imageSmoothingEnabled=false;
+ g.drawImage(POSTER_QR,x,y,size,size);
+ g.imageSmoothingEnabled=true;
+}
+function posterX(c){
+ return (c&&c.dataset)||communityById(c&&c.dataId)||{};
+}
+function posterScored(valid){
+ return valid.slice(0,3).map(c=>{
+  const x=posterX(c);
+  if(x&&!c.dataset)c.dataset=x;
+  return {c,x,r:scoreComm(c)};
+ });
+}
+function posterRing(g,cx,cy,r,total,gname){
+ g.save();
+ g.lineWidth=7;g.strokeStyle=POSTER_COLORS.line;
+ g.beginPath();g.arc(cx,cy,r,-Math.PI/2,Math.PI*1.5);g.stroke();
+ g.strokeStyle=POSTER_COLORS.accent;
+ g.beginPath();g.arc(cx,cy,r,-Math.PI/2,-Math.PI/2+Math.max(0,Math.min(100,total))/100*Math.PI*2);g.stroke();
+ g.fillStyle=POSTER_COLORS.cream;g.font='600 58px '+POSTER_SERIF;g.textAlign='center';
+ g.fillText(String(total),cx,cy+20);
+ g.fillStyle=POSTER_COLORS.dim;g.font='500 12px '+POSTER_MONO;g.fillText('/ 100',cx,cy+42);
+ g.fillStyle=POSTER_COLORS.accent;g.font='500 19px '+POSTER_SANS;g.fillText(gname,cx,cy+r+27);
+ g.restore();g.textAlign='left';
+}
+function posterFactGrid(g,x,top){
+ const info=centerInfo(x);
+ const facts=[
+  ['参考均价',x.price?fmtNum(x.price):'—'],
+  ['建成年',x.year||'—'],
+  ['最近地铁',x.st||'—'],
+  ['地铁距离',x.sd!=null?fmtDist(x.sd):'—'],
+  ['板块分位',x.pct==null?'—':x.pct+'%'],
+  ['在售套数',String(x.sell||0)],
+  ['在租套数',String(x.rent||0)],
+  ['距市中心',info?info.km.toFixed(1)+' km':'—']
+ ];
+ facts.forEach(([label,value],i)=>{
+  const col=i%4,row=Math.floor(i/4),x0=64+col*244,y0=top+row*62;
+  if(col){g.strokeStyle=POSTER_COLORS.line;g.lineWidth=1;g.beginPath();g.moveTo(x0-24,top-8);g.lineTo(x0-24,top+94);g.stroke();}
+  g.fillStyle=POSTER_COLORS.dim;g.font='500 11px '+POSTER_SANS;g.fillText(label,x0,y0);
+  g.fillStyle=POSTER_COLORS.cream;g.font='500 24px '+POSTER_MONO;
+  g.fillText(posterClip(g,value,218),x0,y0+29);
+ });
+}
+function posterDimGrid(g,r,top){
+ r.groups.forEach((d,i)=>{
+  const x=64+(i%3)*316,y=top+Math.floor(i/3)*128,w=300,h=112;
+  posterRound(g,x,y,w,h,9,POSTER_COLORS.panel,POSTER_COLORS.line);
+  g.fillStyle=POSTER_COLORS.muted;g.font='500 14px '+POSTER_SANS;g.fillText(d.name,x+14,y+29);
+  g.fillStyle=d.score==null?POSTER_COLORS.dim:POSTER_COLORS.cream;
+  g.font='600 31px '+POSTER_SERIF;g.textAlign='right';
+  g.fillText(d.score==null?'—':String(d.score),x+w-14,y+32);g.textAlign='left';
+  posterRound(g,x+14,y+h-24,w-28,8,4,'#1b252a',POSTER_COLORS.line);
+  const f=d.factor==null?0:Math.max(0,Math.min(1,d.factor));
+  const col=d.key==='location'?POSTER_COLORS.good:POSTER_COLORS.accent;
+  if(f>0){const bw=Math.max(8,Math.round((w-28)*f));posterRound(g,x+14,y+h-24,bw,8,4,col);g.beginPath();g.arc(x+14+bw,y+h-20,3,0,Math.PI*2);g.fillStyle=col;g.fill();}
+ });
+}
+function posterDimList(g,r,x,top,w){
+ r.groups.forEach((d,i)=>{
+  const y=top+i*52;
+  if(i){g.strokeStyle=POSTER_COLORS.line;g.lineWidth=1;g.beginPath();g.moveTo(x,y-4);g.lineTo(x+w,y-4);g.stroke();}
+  g.fillStyle=POSTER_COLORS.muted;g.font='500 13px '+POSTER_SANS;g.fillText(d.name,x,y+18);
+  g.fillStyle=d.score==null?POSTER_COLORS.dim:POSTER_COLORS.cream;
+  g.font='600 22px '+POSTER_MONO;g.textAlign='right';
+  g.fillText(d.score==null?'—':String(d.score),x+w-4,y+20);g.textAlign='left';
+  const barW=w-72;
+  posterRound(g,x,y+29,barW,5,2.5,'#1b252a',POSTER_COLORS.line);
+  const f=d.factor==null?0:Math.max(0,Math.min(1,d.factor));
+  const col=d.key==='location'?POSTER_COLORS.good:POSTER_COLORS.accent;
+  if(f>0){const bw=Math.max(6,Math.round(barW*f));g.fillStyle=col;g.fillRect(x,y+29,bw,5);g.beginPath();g.arc(x+bw,y+31.5,2.6,0,Math.PI*2);g.fillStyle=col;g.fill();}
+ });
+}
+function posterSubChips(g,item,top){
+ const c=item.c;
+ POSTER_SUBS.forEach(([key,label],i)=>{
+  let v='—';
+  if(c.am&&c.am[key]&&!c.am[key].fail)v=String((c.am[key].arr||[]).length);
+  const x=64+(i%6)*158,y=top+Math.floor(i/6)*48,w=150,h=40;
+  posterRound(g,x,y,w,h,6,'#182125',POSTER_COLORS.line);
+  g.fillStyle=POSTER_COLORS.muted;g.font='500 11px '+POSTER_SANS;g.fillText(label,x+10,y+25);
+  g.fillStyle=v==='—'?POSTER_COLORS.dim:POSTER_COLORS.cream;
+  g.font='500 14px '+POSTER_MONO;g.textAlign='right';
+  g.fillText(v,x+w-10,y+25);g.textAlign='left';
+ });
+}
+function posterRadar(g,cx,cy,radius,groups){
+ const items=groups.map(d=>({label:d.name,value:d.score==null?0:d.score}));
+ const n=items.length;if(!n)return;
+ const point=(i,v)=>{
+  const a=-Math.PI/2+i*Math.PI*2/n;
+  return [cx+Math.cos(a)*radius*v/100,cy+Math.sin(a)*radius*v/100];
+ };
+ [25,50,75,100].forEach(level=>{
+  g.beginPath();
+  items.forEach((_,i)=>{const p=point(i,level);i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]);});
+  g.closePath();g.strokeStyle=POSTER_COLORS.line;g.lineWidth=1;g.stroke();
+ });
+ items.forEach((_,i)=>{const p=point(i,100);g.beginPath();g.moveTo(cx,cy);g.lineTo(p[0],p[1]);g.strokeStyle=POSTER_COLORS.line;g.stroke();});
+ g.beginPath();items.forEach((item,i)=>{const p=point(i,item.value);i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]);});
+ g.closePath();g.fillStyle='rgba(212,161,95,.20)';g.fill();
+ g.strokeStyle=POSTER_COLORS.accent;g.lineWidth=2;g.stroke();
+ items.forEach((item,i)=>{const p=point(i,item.value);g.beginPath();g.arc(p[0],p[1],3,0,Math.PI*2);g.fillStyle=POSTER_COLORS.accent;g.fill();});
+ g.font='500 11px '+POSTER_SANS;
+ items.forEach((item,i)=>{
+  const a=-Math.PI/2+i*Math.PI*2/n,p=point(i,118),c=Math.cos(a);
+  g.textAlign=c>.25?'left':c<-.25?'right':'center';
+  g.fillStyle=POSTER_COLORS.muted;
+  g.fillText(item.label+' '+item.value,p[0],p[1]+4);
+ });
+ g.textAlign='left';
+}
+function posterBrief(r){
+ const dims=r.groups.filter(d=>d.score!=null).sort((a,b)=>b.score-a.score);
+ if(!dims.length)return '周边数据不足，暂不能给出完整画像';
+ const top=dims[0],low=dims[dims.length-1];
+ if(top.key===low.key)return `各维度较均衡，综合 ${r.total} 分`;
+ return `长板：${top.name} ${top.score} · 短板：${low.name} ${low.score}`;
+}
+function posterConclusion(g,r,x,y,maxW){
+ posterSectionAt(g,'05 / 一句话',x,y);
+ g.fillStyle=POSTER_COLORS.cream;g.font='500 21px '+POSTER_SANS;
+ posterWrap(g,posterBrief(r),x,y+34,maxW,31,2);
+ g.fillStyle=POSTER_COLORS.muted;g.font='400 12px '+POSTER_SANS;
+ const cov=Math.round(r.coverage);
+ posterWrap(g,`已覆盖 ${r.groups.filter(d=>d.score!=null).length}/${r.groups.length} 个维度 · 指标覆盖 ${cov}%${cov<60?'；仅为已采集部分，不作完整排名':''}`,x,y+101,maxW,19,3);
+}
+function posterFooter(g,H,center){
+ g.textAlign='left';
+ const lineY=H-152;
+ g.strokeStyle=POSTER_COLORS.line;g.lineWidth=1;
+ g.beginPath();g.moveTo(64,lineY);g.lineTo(1016,lineY);g.stroke();
+ g.fillStyle=POSTER_COLORS.muted;g.font='400 12px '+POSTER_SANS;
+ posterWrap(g,'数据来自本地收录，价格为参考口径，不构成交易建议；评分为启发式，不是官方评级。',64,H-118,760,18,2);
+ g.fillStyle=POSTER_COLORS.dim;g.font='500 11px '+POSTER_MONO;
+ g.fillText(`更新 ${posterDateText()} · godweiyang.com/amenity`,64,H-78);
+ const qr=108,qx=1016-qr,qy=H-qr-32;
+ g.strokeStyle=POSTER_COLORS.line;g.lineWidth=1;
+ g.strokeRect(qx-3,qy-3,qr+6,qr+6);
+ posterQR(g,qx,qy,qr);
+ g.textAlign='right';g.fillStyle=POSTER_COLORS.muted;g.font='500 11px '+POSTER_MONO;
+ g.fillText('扫码打开',qx-12,qy+qr/2+4);
+ g.textAlign='left';g.fillText(`${center||'上海'} · 社区档案`,64,H-54);
+}
+
+function drawSinglePoster(item){
+ const W=1080,H=1520;
+ const cv=document.createElement('canvas');cv.width=W;cv.height=H;
+ const g=cv.getContext('2d');
+ const {c,x,r}=item;
+ g.fillStyle=POSTER_COLORS.bg;g.fillRect(0,0,W,H);
+ posterHeader(g,W,'社区档案','档案 01');
+ g.fillStyle=POSTER_COLORS.cream;g.font='600 68px '+POSTER_SERIF;
+ g.fillText(posterClip(g,c.name||'—',620),64,174);
+ g.fillStyle=POSTER_COLORS.muted;g.font='400 20px '+POSTER_SANS;
+ g.fillText(`${x.district||''} · ${x.biz||''}`,64,214);
+ g.fillStyle=POSTER_COLORS.dim;g.font='400 14px '+POSTER_SANS;
+ g.fillText(posterClip(g,x.addr||'地址未收录',620),64,244);
+ const [gname]=grade(r.total);
+ posterRing(g,885,190,78,r.total,gname);
+ g.textAlign='right';g.fillStyle=POSTER_COLORS.muted;g.font='500 13px '+POSTER_MONO;
+ g.fillText(`指标覆盖 ${Math.round(r.coverage)}%`,1016,312);
+ g.fillStyle=r.coverage<60?POSTER_COLORS.bad:POSTER_COLORS.dim;
+ g.font='400 11px '+POSTER_SANS;g.fillText(r.coverage<60?'仅为已采集部分':'九维评分',1016,332);
+ g.textAlign='left';
+ g.strokeStyle=POSTER_COLORS.line;g.beginPath();g.moveTo(64,352);g.lineTo(1016,352);g.stroke();
+ posterFactGrid(g,x,382);
+ posterSection(g,'02 / 九维评分',520);
+ posterDimList(g,r,64,548,480);
+ posterSectionAt(g,'03 / 轮廓',600,520);
+ posterRadar(g,800,770,160,r.groups.filter(d=>d.score!=null));
+ posterSection(g,'04 / 周边配套（2km 内）',1040);
+ posterSubChips(g,item,1066);
+ posterConclusion(g,r,64,1196,880);
+ posterFooter(g,H,'上海');
+ return cv;
+}
+
+function posterKV(g,label,value,x,y,w){
+ g.fillStyle=POSTER_COLORS.muted;g.font='500 11px '+POSTER_SANS;g.fillText(label,x,y);
+ g.fillStyle=POSTER_COLORS.cream;g.font='500 18px '+POSTER_MONO;g.textAlign='right';
+ g.fillText(posterClip(g,value,w-88),x+w,y+1);g.textAlign='left';
+}
+function posterRadarMulti(g,cx,cy,radius,list,legendX){
+ const axes=DIMS.filter(dim=>list.some(item=>{
+  const z=item.r.groups.find(z=>z.key===dim.key);
+  return z&&z.score!=null;
+ }));
+ if(!axes.length)return;
+ const n=axes.length;
+ const point=(i,v)=>{
+  const a=-Math.PI/2+i*Math.PI*2/n;
+  return [cx+Math.cos(a)*radius*v/100,cy+Math.sin(a)*radius*v/100];
+ };
+ [25,50,75,100].forEach(level=>{
+  g.beginPath();
+  axes.forEach((_,i)=>{const p=point(i,level);i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]);});
+  g.closePath();g.strokeStyle=POSTER_COLORS.line;g.lineWidth=1;g.stroke();
+ });
+ axes.forEach((_,i)=>{const p=point(i,100);g.beginPath();g.moveTo(cx,cy);g.lineTo(p[0],p[1]);g.strokeStyle=POSTER_COLORS.line;g.stroke();});
+ list.forEach((item,idx)=>{
+  const color=POSTER_SERIES[idx%3];
+  g.beginPath();
+  axes.forEach((dim,i)=>{
+   const z=item.r.groups.find(z=>z.key===dim.key);
+   const p=point(i,z&&z.score!=null?z.score:0);
+   i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]);
+  });
+  g.closePath();g.globalAlpha=.10;g.fillStyle=color;g.fill();g.globalAlpha=1;
+  g.strokeStyle=color;g.lineWidth=2;g.stroke();
+  axes.forEach((dim,i)=>{
+   const z=item.r.groups.find(z=>z.key===dim.key);
+   const p=point(i,z&&z.score!=null?z.score:0);
+   g.beginPath();g.arc(p[0],p[1],3,0,Math.PI*2);g.fillStyle=color;g.fill();
+  });
+ });
+ g.font='500 11px '+POSTER_SANS;
+ axes.forEach((dim,i)=>{
+  const a=-Math.PI/2+i*Math.PI*2/n,p=point(i,120),c=Math.cos(a);
+  g.textAlign=c>.25?'left':c<-.25?'right':'center';
+  g.fillStyle=POSTER_COLORS.muted;
+  g.fillText(dim.name,p[0],p[1]+4);
+ });
+ g.textAlign='left';
+ const lx=legendX||cx+radius+54,ly=cy-radius+8;
+ if(legendX){
+  g.fillStyle=POSTER_COLORS.dim;g.font='500 10px '+POSTER_MONO;
+  g.fillText('图例',lx,ly-14);
+  g.strokeStyle=POSTER_COLORS.line;g.lineWidth=1;
+  g.beginPath();g.moveTo(lx,ly-4);g.lineTo(1016,ly-4);g.stroke();
+  list.forEach((item,i)=>{
+   const rowY=ly+i*36;
+   g.fillStyle=POSTER_SERIES[i%3];g.fillRect(lx,rowY-8,8,8);
+   g.fillStyle=POSTER_COLORS.cream;g.font='500 12px '+POSTER_SANS;
+   g.fillText(posterClip(g,cName(item),300),lx+16,rowY);
+   g.fillStyle=POSTER_COLORS.dim;g.font='500 11px '+POSTER_MONO;
+   g.textAlign='right';g.fillText(String(item.r.total),1016,rowY);g.textAlign='left';
+   g.strokeStyle=POSTER_COLORS.line;g.beginPath();g.moveTo(lx,rowY+16);g.lineTo(1016,rowY+16);g.stroke();
+  });
+  let spread=0,spreadName='';
+  DIMS.forEach(dim=>{
+   const vals=list.map(item=>{const z=item.r.groups.find(z=>z.key===dim.key);return z&&z.score!=null?z.score:null;}).filter(v=>v!=null);
+   if(vals.length>1){const s=Math.max(...vals)-Math.min(...vals);if(s>spread){spread=s;spreadName=dim.name;}}
+  });
+  g.fillStyle=POSTER_COLORS.muted;g.font='400 11px '+POSTER_SANS;
+  g.fillText('越靠外越强；三条线分离越大，差异越明显。',lx,ly+3*36+16);
+  if(spreadName){
+   g.fillStyle=POSTER_COLORS.dim;g.font='500 10px '+POSTER_MONO;
+   g.fillText('最大分差',lx,ly+3*36+50);
+   g.fillStyle=POSTER_COLORS.cream;g.font='500 22px '+POSTER_MONO;
+   g.fillText(spreadName+'  '+spread,lx,ly+3*36+72);
+  }
+ }else{
+  list.forEach((item,i)=>{
+   g.fillStyle=POSTER_SERIES[i%3];g.fillRect(lx,ly+i*34-10,8,8);
+   g.fillStyle=POSTER_COLORS.cream;g.font='500 12px '+POSTER_SANS;
+   g.fillText(posterClip(g,cName(item),154),lx+16,ly+i*34);
+   g.fillStyle=POSTER_COLORS.dim;g.font='500 11px '+POSTER_MONO;
+   g.fillText(String(item.r.total),lx+174,ly+i*34);
+  });
+ }
+}
+function drawComparePoster(list){
+ const n=list.length,W=1080,H=1760;
+ const cv=document.createElement('canvas');cv.width=W;cv.height=H;
+ const g=cv.getContext('2d');
+ g.fillStyle=POSTER_COLORS.bg;g.fillRect(0,0,W,H);
+ posterHeader(g,W,`对照档案 · ${n} 个小区`,'并排比较');
+ g.fillStyle=POSTER_COLORS.cream;g.font='600 54px '+POSTER_SERIF;
+ g.fillText('同城对照',64,158);
+ g.fillStyle=POSTER_COLORS.muted;g.font='400 14px '+POSTER_SANS;
+ g.fillText('同一套九维口径，横向看分数、房价、房龄和位置差异',64,190);
+ const top=230,cardH=330,colW=952/n;
+ posterRound(g,64,top,952,cardH,10,POSTER_COLORS.panel,POSTER_COLORS.line);
+ list.forEach((item,i)=>{
+  const x0=64+i*colW,d=item.x,r=item.r,[gname]=grade(r.total);
+  if(i){g.strokeStyle=POSTER_COLORS.line;g.lineWidth=1;g.beginPath();g.moveTo(x0,top+18);g.lineTo(x0,top+cardH-18);g.stroke();}
+  g.fillStyle=POSTER_SERIES[i%3];g.fillRect(x0+14,top,40,3);
+  g.textAlign='right';g.fillStyle=POSTER_SERIES[i%3];g.font='500 11px '+POSTER_MONO;
+  g.fillText('0'+(i+1),x0+colW-14,top+26);g.textAlign='left';
+  g.fillStyle=POSTER_COLORS.cream;g.font='500 24px '+POSTER_SERIF;
+  g.fillText(posterClip(g,cName(item),colW-28),x0+14,top+40);
+  g.fillStyle=POSTER_COLORS.muted;g.font='400 11px '+POSTER_SANS;
+  g.fillText(posterClip(g,`${d.district||''} · ${d.biz||''}`,colW-28),x0+14,top+62);
+  g.fillStyle=POSTER_SERIES[i%3];g.font='600 46px '+POSTER_SERIF;
+  g.fillText(String(r.total),x0+14,top+128);
+  g.fillStyle=POSTER_COLORS.dim;g.font='500 11px '+POSTER_MONO;
+  g.fillText('/100',x0+14+g.measureText(String(r.total)).width+4,top+128);
+  g.fillStyle=POSTER_COLORS.cream;g.font='500 16px '+POSTER_SANS;
+  g.fillText(gname,x0+14,top+154);
+  const info=centerInfo(d);
+  posterKV(g,'参考均价',d.price?fmtNum(d.price)+' 元/㎡':'—',x0+14,top+198,colW-28);
+  posterKV(g,'建成年',d.year?(d.yearEnd?d.year+'–'+d.yearEnd:String(d.year)):'—',x0+14,top+232,colW-28);
+  posterKV(g,'最近地铁',d.st||'—',x0+14,top+266,colW-28);
+  posterKV(g,'距市中心',info?info.km.toFixed(1)+' km · '+info.band:'—',x0+14,top+300,colW-28);
+ });
+ posterSection(g,'02 / 九维对照',590);
+ const axisX=220,axisW=700;
+ g.fillStyle=POSTER_COLORS.dim;g.font='500 10px '+POSTER_MONO;g.fillText('维度',64,626);
+ list.forEach((item,i)=>{
+  const x0=axisX+i*240;
+  g.fillStyle=POSTER_SERIES[i%3];g.fillRect(x0,617,7,7);
+  g.fillStyle=POSTER_COLORS.cream;g.font='500 10px '+POSTER_SANS;
+  g.fillText('0'+(i+1)+' '+posterClip(g,cName(item),190),x0+12,626);
+ });
+ DIMS.forEach((dim,j)=>{
+  const y=660+j*55;
+  if(j%2===1){g.fillStyle='rgba(255,255,255,.018)';g.fillRect(64,y-22,952,55);}
+  g.strokeStyle=POSTER_COLORS.line;g.beginPath();g.moveTo(64,y-20);g.lineTo(1016,y-20);g.stroke();
+  g.fillStyle=POSTER_COLORS.muted;g.font='500 13px '+POSTER_SANS;g.fillText(dim.name,64,y+30);
+  list.forEach((item,i)=>{
+   const gy=y+5+i*11,gg=item.r.groups.find(z=>z.key===dim.key);
+   const val=gg&&gg.score!=null?gg.score:null;
+   g.fillStyle='#1b252a';g.fillRect(axisX,gy,axisW,5);
+   if(val!=null){
+    const bw=Math.max(5,Math.round(axisW*val/100));
+    g.fillStyle=POSTER_SERIES[i%3];g.fillRect(axisX,gy,bw,5);
+    g.beginPath();g.arc(axisX+bw,gy+2.5,2.6,0,Math.PI*2);g.fillStyle=POSTER_SERIES[i%3];g.fill();
+   }
+   g.fillStyle=val==null?POSTER_COLORS.dim:POSTER_COLORS.cream;g.font='500 12px '+POSTER_MONO;
+   g.textAlign='right';g.fillText(val==null?'—':String(val),1000,gy+5);g.textAlign='left';
+  });
+ });
+ const best=[...list].sort((a,b)=>b.r.total-a.r.total)[0];
+ const worst=[...list].sort((a,b)=>a.r.total-b.r.total)[0];
+ posterSection(g,'03 / 轮廓对照',1180);
+ posterRadarMulti(g,360,1290,92,list,560);
+ posterSection(g,'04 / 差异摘要',1430);
+ const boxes=[['最高分',cName(best)+' '+best.r.total],['最低分',cName(worst)+' '+worst.r.total],['覆盖',`${Math.round(best.r.coverage)}% / ${Math.round(worst.r.coverage)}%`]];
+ boxes.forEach(([label,value],i)=>{
+  const x0=64+i*316;
+  posterRound(g,x0,1454,300,72,8,POSTER_COLORS.panel,POSTER_COLORS.line);
+  g.fillStyle=POSTER_COLORS.dim;g.font='500 11px '+POSTER_SANS;g.fillText(label,x0+12,1476);
+  g.fillStyle=POSTER_COLORS.cream;g.font='500 18px '+POSTER_SANS;
+  g.fillText(posterClip(g,value,276),x0+12,1504);
+ });
+ posterFooter(g,H,'上海');
+ return cv;
+}
+function cName(item){
+ const s=String(item&&item.c&&item.c.name||'未命名');
+ return s.length>12?s.slice(0,12)+'…':s;
+}
+function drawScorePoster(list){
+ return list.length>1?drawComparePoster(list):drawSinglePoster(list[0]);
+}
+
+let scorePosterBlob=null,scorePosterUrl=null,scorePosterName='小区评分';
+function appendResultShare(box,valid){
+ const el=document.createElement('div');el.className='result-share';
+ el.innerHTML=`<div class="rs-text"><b>把这次打分带走</b><span>生成一张信息完整的 PNG 海报，可复制到聊天框，也可下载保存。</span></div>
+  <button type="button" id="scorePosterBtn">海报分享</button>`;
+ box.appendChild(el);
+ const btn=el.querySelector('#scorePosterBtn');
+ if(btn)btn.addEventListener('click',()=>openScorePoster(valid));
+}
+function openScorePoster(valid){
+ if(!valid||!valid.length)return;
+ const tip=document.getElementById('scorePosterTip');
+ const mask=document.getElementById('scorePosterMask');
+ const img=document.getElementById('scorePosterImg');
+ if(tip)tip.textContent='正在生成海报…';
+ try{
+  const list=posterScored(valid);
+  const cv=drawScorePoster(list);
+  scorePosterName=list.length>1?'小区对照-'+list.length+'盘':(list[0].c.name||'小区评分');
+  cv.toBlob(blob=>{
+   if(!blob){if(tip)tip.textContent='海报生成失败，请重试';return;}
+   if(scorePosterUrl)URL.revokeObjectURL(scorePosterUrl);
+   scorePosterBlob=blob;scorePosterUrl=URL.createObjectURL(blob);
+   if(img)img.src=scorePosterUrl;
+   if(mask)mask.classList.add('show');
+   if(tip)tip.textContent='电脑端可复制或下载；手机端可长按预览图保存';
+  },'image/png');
+ }catch(e){
+  if(tip)tip.textContent='海报生成失败：'+(e&&e.message?e.message:e);
+  toast('海报生成失败');
+ }
+}
+function closeScorePoster(){
+ const mask=document.getElementById('scorePosterMask');
+ if(mask)mask.classList.remove('show');
+}
+function downloadScorePoster(){
+ if(!scorePosterBlob)return;
+ const a=document.createElement('a'),url=URL.createObjectURL(scorePosterBlob);
+ a.href=url;a.download=(scorePosterName||'小区评分').replace(/[\\/:*?"<>|]/g,'')+'.png';
+ document.body.appendChild(a);a.click();a.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),5000);
+ toast('海报已开始下载');
+}
+async function copyScorePoster(){
+ const tip=document.getElementById('scorePosterTip');
+ if(!scorePosterBlob)return;
+ try{
+  if(!navigator.clipboard||typeof ClipboardItem==='undefined')throw new Error('当前浏览器不支持复制图片');
+  await navigator.clipboard.write([new ClipboardItem({'image/png':scorePosterBlob})]);
+  if(tip)tip.textContent='已复制到剪贴板，去聊天框 Ctrl+V 粘贴即可';
+  toast('海报已复制');
+ }catch(e){
+  downloadScorePoster();
+  if(tip)tip.textContent='当前浏览器不支持复制图片，已改为下载 PNG';
+ }
+}
+function setupScorePoster(){
+ const mask=document.getElementById('scorePosterMask');
+ if(!mask)return;
+ const close=document.getElementById('scorePosterClose');
+ const down=document.getElementById('scorePosterDownload');
+ const copy=document.getElementById('scorePosterCopy');
+ if(close)close.addEventListener('click',closeScorePoster);
+ if(down)down.addEventListener('click',downloadScorePoster);
+ if(copy)copy.addEventListener('click',copyScorePoster);
+ mask.addEventListener('click',e=>{if(e.target===mask)closeScorePoster();});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&mask.classList.contains('show'))closeScorePoster();});
+}
+
 /* ================= v27：决策与洞察 ================= */
 function median(vals){
  const a=vals.filter(v=>v!=null&&isFinite(+v)).map(Number).sort((x,y)=>x-y);
@@ -1971,6 +2542,27 @@ function kmBetween(a,b){
  const rad=Math.PI/180,dlat=(lat2-lat1)*rad,dlng=(lng2-lng1)*rad;
  const h=Math.sin(dlat/2)**2+Math.cos(lat1*rad)*Math.cos(lat2*rad)*Math.sin(dlng/2)**2;
  return 2*6371*Math.asin(Math.min(1,Math.sqrt(h)));
+}
+// 市区不是单点：取四个主要就业/商业中心里最近的一个，避免把徐家汇、陆家嘴一带误判成“远郊”
+const CITY_CENTERS=[[121.4737,31.2304],[121.5064,31.2454],[121.4372,31.1949],[121.4454,31.2232]];
+function cityCenterKm(pt){
+ let best=null;
+ CITY_CENTERS.forEach(c=>{
+  const d=kmBetween(pt,c);
+  if(best==null||d<best)best=d;
+ });
+ return best;
+}
+function ringBand(km){
+ if(km==null||!isFinite(+km))return '—';
+ const d=+km;
+ return d<=5?'内环带':d<=10?'中环带':d<=18?'外环带':'外环外';
+}
+function centerInfo(x){
+ const p=x?gcjPoint(x):null;
+ if(!p)return null;
+ const km=cityCenterKm(p);
+ return {km,band:ringBand(km)};
 }
 function totalArea(x){
  const s=statsFor(x.id);
@@ -2559,6 +3151,9 @@ function scoreComm(c){
  if(year!=null){const age=new Date().getFullYear()-year;f.year=age<=5?1:age<=10?.9:age<=20?.7:age<=30?.5:.35;}
  if(far!=null)f.far=far<=1.5?1:far<=2.5?.9:far<=3.5?.7:far<=5?.5:.35;
  if(green!=null)f.green=green>=40?1:green>=30?.85:green>=25?.7:.5;
+ // 区位：到最近市中心的直线距离，只作地理接近度，不等同通勤时间。
+ const center=centerInfo(c.dataset);
+ if(center){const d=center.km;f.center=d<=3?1:d<=5?.95:d<=8?.86:d<=12?.74:d<=18?.6:d<=25?.44:.3;}
  // 物业费不是服务质量证据；小区品质使用房龄、容积率、绿化率，电梯只作可达性辅助。
  const detailed=c.beike?.floorplanDetails||[];
  const elevatorKnown=detailed.filter(x=>Number((x.attributes?.['所在楼层']||'').match(/共(\d+)层/)?.[1])>=7).map(x=>x.attributes?.['配备电梯']).filter(x=>x==='有'||x==='无');
@@ -2721,11 +3316,12 @@ function renderResults(valid,scroll=true){
  if(valid.length===1){
   const c=valid[0],r=scoreComm(c),col='#1565C0';
   const covered=r.groups.filter(d=>d.score!=null).length;
+  const info=c.dataset?centerInfo(c.dataset):null;
   const card=document.createElement('div');card.className='card result';
   card.innerHTML=`
    <div class="rhead"><span class="dot" style="background:${col}"></span><b>${esc(c.name)}</b>
     <span style="color:#8A94A3;font-size:12px">${c.manual.price?Number(c.manual.price).toLocaleString()+' 元/㎡':''}</span></div>
-    <div style="color:#8A94A3;font-size:12px;margin:8px 16px">已覆盖 ${covered}/${r.groups.length} 个维度 · 可用指标权重 ${r.coverage.toFixed(1)}%${r.coverage<60?' · 当前综合分仅为已采集部分，不能作完整小区排名':''}</div>
+    <div style="color:#8A94A3;font-size:12px;margin:8px 16px">已覆盖 ${covered}/${r.groups.length} 个维度 · 可用指标权重 ${r.coverage.toFixed(1)}%${info?` · 距最近市中心 ${info.km.toFixed(1)} km（${info.band}）`:''}${r.coverage<60?' · 当前综合分仅为已采集部分，不能作完整小区排名':''}</div>
    <div class="rtop">${ringSVG(r.total)}
     <div class="dims">${r.groups.filter(d=>d.score!=null).map(d=>`
       <div class="dimrow"><span>${d.name}</span>
@@ -2745,12 +3341,13 @@ function renderResults(valid,scroll=true){
   box.appendChild(sum);
   const radar=document.createElement('div');radar.className='card';
   const axes=DIMS.filter(d=>scored.some(x=>{const g=x.r.groups.find(z=>z.key===d.key);return g&&g.score!=null;}));
-  radar.innerHTML=`<h3>${axes.length} 维度雷达对比</h3>
+  radar.innerHTML=`<h3>${axes.length} 维有数据 · 雷达对比</h3>
    <div id="radarChart" style="width:100%;height:380px"></div>
    <div class="radar-note" style="color:#8A94A3;font-size:11.5px;margin-top:4px">各轴为该维度得分率（0–100）；本地数据未覆盖的维度不入图</div>`;
   box.appendChild(radar);
   setTimeout(()=>drawRadar(scored,axes),60);
  }
+ appendResultShare(box,valid);
  if(valid.length>1)renderCompare(valid);
  if(scroll)window.scrollTo({top:window.scrollY+box.getBoundingClientRect().top-12,behavior:'smooth'});
 }
@@ -2806,6 +3403,7 @@ document.getElementById('btnAdd').addEventListener('click',()=>{
 document.getElementById('btnGo').addEventListener('click',runAll);
 setupTabs();
 setupDecisionInsight();
+setupScorePoster();
 loadMeta();
 loadCommunities();
 </script>
