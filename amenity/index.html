@@ -1492,6 +1492,10 @@ function loadCommunities(){
    return x;
   });
   COMM_READY=true;COMM_LOADING=false;
+  const ae=document.activeElement;
+  if(ae&&ae.classList&&ae.classList.contains('comm-inp')){
+   ae.dispatchEvent(new Event('input',{bubbles:true}));
+  }
   comms.slice(0,commCount).forEach((c,i)=>{
    if(c&&c.dataId&&!c.dataset){
     const hit=COMMUNITIES.find(x=>x.id===c.dataId);
@@ -1558,7 +1562,8 @@ function bindSuggest(i,inp){
  const wrap=inp.closest('.comm-inp-wrap'),box=wrap.querySelector('.comm-sug');
  function paint(){
   const q=inp.value.trim();
-  if(!q||!COMM_READY){box.classList.remove('show');box.innerHTML='';return;}
+  if(!q){box.classList.remove('show');box.innerHTML='';return;}
+  if(!COMM_READY){box.innerHTML='<div class="sug-empty">正在加载本地小区库，请稍候…</div>';box.classList.add('show');return;}
   const hits=matchCommunities(q);
   if(!hits.length){box.innerHTML='<div class="sug-empty">没有匹配的小区</div>';box.classList.add('show');return;}
   box.innerHTML=hits.map((x,k)=>`<button type="button" class="sug-item" data-k="${k}">
